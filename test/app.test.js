@@ -20,12 +20,12 @@ describe('Feathers application tests', () => {
   before(function(done) {
     server = app.listen(port);
     server.once('listening', () => done());
-    debug('before: done')
+    debug('before: done');
   });
 
   after(function(done) {
     server.close(done);
-    debug('after: done')
+    debug('after: done');
   });
 
   it('starts and shows the index page', async () => {
