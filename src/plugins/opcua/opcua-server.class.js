@@ -23,7 +23,7 @@ class OpcuaServer {
    * @param app {Object}
    * @param params {Object}
    */
-  constructor(app, params) {
+  constructor(app, params = {}) {
     const paramsDefault = {
       port: 26543,
       nodeset_filename: [
@@ -63,6 +63,9 @@ class OpcuaServer {
         await this.opcuaServer.shutdown();
         console.log('OPC-UA server terminated');
       });
+
+      // OPC-UA server created.
+      console.log('OPC-UA server created');
     } catch (err) {
       const errTxt = 'Error while creating the OPS-UA server:';
       console.log(errTxt, err);
@@ -93,7 +96,7 @@ class OpcuaServer {
   /**
    * Shutdown opc-ua server
    */
-  async shutdown() {
+  shutdown() {
     if (!this.opcuaServer) return;
     try {
       this.opcuaServer.shutdown();

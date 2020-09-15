@@ -20,7 +20,7 @@ class OpcuaClient {
    * @param app {Object}
    * @param params {Object}
    */
-  constructor(app, params) {
+  constructor(app, params = {}) {
     const paramsDefault = {
       port: '26543',
       hostname: os.hostname().toLowerCase(),
@@ -115,7 +115,7 @@ class OpcuaClient {
     if (!this.opcuaClient) return;
     try {
       this.session = await this.opcuaClient.createSession();
-      console.log(chalk.yellow('Session created'));
+      console.log(chalk.yellow('Session created for OPC-UA client'));
     } catch (err) {
       const errTxt = 'Error while create session the OPS-UA client:';
       console.log(errTxt, err);
@@ -190,7 +190,7 @@ class OpcuaClient {
   * Subscription create
   */
   subscriptionCreate() {
-    if (!this.opcuaClient) return;
+    if (!this.session) return;
     try {
       this.subscription = ClientSubscription.create(this.session, this.params.subscription.create);
 
