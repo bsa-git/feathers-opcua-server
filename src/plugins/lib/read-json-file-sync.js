@@ -1,5 +1,4 @@
 const fs = require('fs');
-
 const { join } = require('path');
 const doesFileExist = require('./does-file-exist');
 
