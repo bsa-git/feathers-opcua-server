@@ -2,7 +2,7 @@ const assert = require('assert');
 const axios = require('axios');
 const url = require('url');
 const app = require('../src/app');
-const debug = require('debug')('app:app.test');
+const debug = require('debug')('app:test.app');
 
 const isDebug = false;
 

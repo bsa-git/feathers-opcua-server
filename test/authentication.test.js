@@ -1,6 +1,6 @@
 const assert = require('assert');
 const app = require('../src/app');
-const debug = require('debug')('app:authentication.test');
+const debug = require('debug')('app:test.authentication');
 
 const isDebug = false;
 
