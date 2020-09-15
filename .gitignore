@@ -107,6 +107,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # Others
+.nyc_output
 data/
 test/data
 .env
