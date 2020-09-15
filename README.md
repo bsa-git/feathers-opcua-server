@@ -1,6 +1,6 @@
 # feathers-opcua-server
 
-> A FeathersJS OPC-UA application
+> A FeathersJS OPC-UA application.
 
 ## About
 
