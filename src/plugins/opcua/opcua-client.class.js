@@ -60,7 +60,7 @@ class OpcuaClient {
   /**
    * Create opc-ua client
    */
-  clientCreate() {
+  create() {
     try {
       // Create OPCUAClient
       this.opcuaClient = OPCUAClient.create({
@@ -81,7 +81,7 @@ class OpcuaClient {
   /**
    * Connect opc-ua client to server
    */
-  async clientConnect() {
+  async connect() {
     if (!this.opcuaClient) return;
     try {
       await this.opcuaClient.connect(this.endpointUrl);
@@ -96,7 +96,7 @@ class OpcuaClient {
   /**
   * Client disconnect
   */
-  async clientDisconnect() {
+  async disconnect() {
     if (!this.opcuaClient) return;
     try {
       await this.opcuaClient.disconnect();
