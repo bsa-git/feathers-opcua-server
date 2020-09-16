@@ -1,4 +1,5 @@
 const assert = require('assert');
+
 const app = require('../../src/app');
 const { OpcuaServer, OpcuaClient } = require('../../src/plugins/opcua');
 const debug = require('debug')('app:test.opcua');
