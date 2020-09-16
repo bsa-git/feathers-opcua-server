@@ -12,6 +12,7 @@ const {
 } = require('node-opcua');
 const os = require('os');
 const loMerge = require('lodash/merge');
+const chalk = require('chalk');
 
 const debug = require('debug')('app:plugins.opcua-server.class');
 const isLog = false;
@@ -50,7 +51,6 @@ class OpcuaServer {
       // Let create an instance of OPCUAServer
       this.opcuaServer = new OPCUAServer({
         port: this.params.port,  // the port of the listening socket of the server
-
         nodeset_filename: this.params.nodeset_filename,
         buidIfo: this.params.buidIfo
       });
@@ -61,11 +61,11 @@ class OpcuaServer {
 
       process.on('SIGINT', async () => {
         await this.opcuaServer.shutdown();
-        console.log('OPC-UA server terminated');
+        console.log(chalk.yellow('Server terminated'));
       });
 
       // OPC-UA server created.
-      console.log('OPC-UA server created');
+      console.log(chalk.yellow('Server created'));
     } catch (err) {
       const errTxt = 'Error while creating the OPS-UA server:';
       console.log(errTxt, err);
@@ -80,8 +80,8 @@ class OpcuaServer {
     if (!this.opcuaServer) return;
     try {
       await this.opcuaServer.start();
-
-      console.log('Server is now listening ... ( press CTRL+C to stop) ');
+      console.log(chalk.yellow('Server started'));
+      console.log(chalk.yellow('Server is now listening ...'));
       this.opcuaServer.endpoints[0].endpointDescriptions().forEach(function (endpoint) {
         if(isLog) inspector('plugins.opcua-server.class::start:', endpoint);
         if(isDebug) debug(endpoint.endpointUrl, endpoint.securityMode.toString(), endpoint.securityPolicyUri.toString());
@@ -100,7 +100,7 @@ class OpcuaServer {
     if (!this.opcuaServer) return;
     try {
       this.opcuaServer.shutdown();
-      console.log('OPC-UA server terminated');
+      console.log(chalk.yellow('Server terminated'));
     } catch (err) {
       const errTxt = 'Error while start the OPS-UA server:';
       console.log(errTxt, err);

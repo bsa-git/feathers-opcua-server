@@ -1,14 +1,25 @@
 const assert = require('assert');
 
 const app = require('../../src/app');
-const { OpcuaServer, OpcuaClient } = require('../../src/plugins/opcua');
+const { OpcuaServer, OpcuaClient, pause } = require('../../src/plugins');
+// const util = require('../../src/plugins/lib/util');
 const debug = require('debug')('app:test.opcua');
 
 const isDebug = true;
-
 let opcuaServer = null, opcuaClient = null;
 
-describe('<<===== OPC-UA: Test =====>>', () => {
+/**
+ * Call back function for subscription monitor
+ * @param {String} nameNodeId 
+ * @param {*} value 
+ */
+const cbSubscriptionMonitor = async (nameNodeId, value) => {
+  const itemNodeId = opcuaClient.params.nodeIds.find(item => item.name === nameNodeId);
+  if(isDebug) debug('cbSubscriptionMonitor.itemNodeId:', itemNodeId);
+  console.log(` Temperature = ${value}`)
+};
+
+describe('<<=== OPC-UA: Test ===>>', () => {
 
   before(async () => {
     try {
@@ -41,28 +52,7 @@ describe('<<===== OPC-UA: Test =====>>', () => {
   it('OPC-UA client created', async () => {
     assert.ok(opcuaClient, 'OPCUA client not created');
   });
-  describe('<<===== OPC-UA: RUN =====>>', function () {
-    it('OPC-UA server start', async () => {
-      try {
-        await opcuaServer.create();
-        await opcuaServer.start();
-        assert.ok(true, 'OPC-UA server start');
-      } catch (error) {
-        const { response } = error;
-        assert.fail(`Should never get here: ${error.message}`);
-      }
-    });
-
-    it('OPC-UA server shutdown', async () => {
-      try {
-        opcuaServer.shutdown()
-        assert.ok(true, 'OPC-UA server shutdown');
-      } catch (error) {
-        const { response } = error;
-        assert.fail(`Should never get here: ${error.message}`);
-      }
-    });
-
+  describe('<<=== OPC-UA: RUN ===>>', function () {
     it('OPC-UA server start', async () => {
       try {
         await opcuaServer.create();
@@ -90,46 +80,6 @@ describe('<<===== OPC-UA: Test =====>>', () => {
         // opcuaClient.clientCreate();
         await opcuaClient.clientConnect();
         assert.ok(true, 'OPC-UA client connect');
-      } catch (error) {
-        const { response } = error;
-        assert.fail(`Should never get here: ${error.message}`);
-      }
-    });
-
-    it('OPC-UA client disconnect', async () => {
-      try {
-        await opcuaClient.clientDisconnect();
-        assert.ok(true, 'OPC-UA client disconnect');
-      } catch (error) {
-        const { response } = error;
-        assert.fail(`Should never get here: ${error.message}`);
-      }
-    });
-
-    it('OPC-UA client connect', async () => {
-      try {
-        await opcuaClient.clientConnect();
-        assert.ok(true, 'OPC-UA client connect');
-      } catch (error) {
-        const { response } = error;
-        assert.fail(`Should never get here: ${error.message}`);
-      }
-    });
-
-    it('OPC-UA client session create', async () => {
-      try {
-        await opcuaClient.sessionCreate();
-        assert.ok(true, 'OPC-UA client session create');
-      } catch (error) {
-        const { response } = error;
-        assert.fail(`Should never get here: ${error.message}`);
-      }
-    });
-
-    it('OPC-UA client session close', async () => {
-      try {
-        await opcuaClient.sessionClose()
-        assert.ok(true, 'OPC-UA client session close');
       } catch (error) {
         const { response } = error;
         assert.fail(`Should never get here: ${error.message}`);
@@ -179,8 +129,19 @@ describe('<<===== OPC-UA: Test =====>>', () => {
       }
     });
 
+    it('OPC-UA client subscription monitor', async () => {
+      try {
+        await opcuaClient.subscriptionMonitor('temperature', cbSubscriptionMonitor);
+        assert.ok(true, 'OPC-UA client subscription monitor');
+      } catch (error) {
+        const { response } = error;
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
     it('OPC-UA client subscription terminate', async () => {
       try {
+        await pause(1000);
         await opcuaClient.subscriptionTerminate();
         assert.ok(true, 'OPC-UA client subscription terminate');
       } catch (error) {
@@ -189,10 +150,30 @@ describe('<<===== OPC-UA: Test =====>>', () => {
       }
     });
 
-    it('OPC-UA client subscription create', async () => {
+    it('OPC-UA client session close', async () => {
       try {
-        await opcuaClient.subscriptionCreate();
-        assert.ok(true, 'OPC-UA client subscription create');
+        await opcuaClient.sessionClose()
+        assert.ok(true, 'OPC-UA client session close');
+      } catch (error) {
+        const { response } = error;
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client disconnect', async () => {
+      try {
+        await opcuaClient.clientDisconnect();
+        assert.ok(true, 'OPC-UA client disconnect');
+      } catch (error) {
+        const { response } = error;
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA server shutdown', async () => {
+      try {
+        opcuaServer.shutdown()
+        assert.ok(true, 'OPC-UA server shutdown');
       } catch (error) {
         const { response } = error;
         assert.fail(`Should never get here: ${error.message}`);

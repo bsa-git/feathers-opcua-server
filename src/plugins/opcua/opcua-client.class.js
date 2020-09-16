@@ -24,7 +24,7 @@ class OpcuaClient {
     const paramsDefault = {
       port: '26543',
       hostname: os.hostname().toLowerCase(),
-      nodeIds: [{ name: 'temperature', nodeId: 'ns=1;s=Temperature', attributeId: AttributeIds.value }],
+      nodeIds: [{ name: 'temperature', nodeId: 'ns=1;s=Temperature', attributeId: AttributeIds.Value }],
       endpoint_must_exist: false,
       connectionStrategy: {
         maxRetry: 2,
@@ -69,7 +69,7 @@ class OpcuaClient {
       });
 
       // Retrying connection
-      this.opcuaClient.on('backoff', (retry) => console.log('Retrying to connect to: ', this.endpointUrl, ' attempt: ', retry));
+      this.opcuaClient.on('backoff', (retry) => console.log(chalk.yellow('Retrying to connect to:'), this.endpointUrl, ' attempt: ', retry));
 
     } catch (err) {
       const errTxt = 'Error while creating the OPS-UA client:';
@@ -85,7 +85,7 @@ class OpcuaClient {
     if (!this.opcuaClient) return;
     try {
       await this.opcuaClient.connect(this.endpointUrl);
-      console.log(' Connected to ', chalk.cyan(this.endpointUrl));
+      console.log(chalk.yellow('Client connected to:'), chalk.cyan(this.endpointUrl));
     } catch (err) {
       const errTxt = 'Error while connect the OPS-UA client:';
       console.log(errTxt, err);
@@ -100,7 +100,7 @@ class OpcuaClient {
     if (!this.opcuaClient) return;
     try {
       await this.opcuaClient.disconnect();
-      console.log(' Disconnect from ', chalk.cyan(this.endpointUrl));
+      console.log(chalk.yellow('Client disconnect from:'), chalk.cyan(this.endpointUrl));
     } catch (err) {
       const errTxt = 'Error while client disconnect the OPS-UA client:';
       console.log(errTxt, err);
@@ -115,7 +115,7 @@ class OpcuaClient {
     if (!this.opcuaClient) return;
     try {
       this.session = await this.opcuaClient.createSession();
-      console.log(chalk.yellow('Session created for OPC-UA client'));
+      console.log(chalk.yellow('Client session created'));
     } catch (err) {
       const errTxt = 'Error while create session the OPS-UA client:';
       console.log(errTxt, err);
@@ -131,7 +131,7 @@ class OpcuaClient {
     try {
       await this.session.close();
       this.session = null;
-      console.log(chalk.yellow('Session closed'));
+      console.log(chalk.yellow('Client session closed'));
     } catch (err) {
       const errTxt = 'Error while create session the OPS-UA client:';
       console.log(errTxt, err);
@@ -195,9 +195,9 @@ class OpcuaClient {
       this.subscription = ClientSubscription.create(this.session, this.params.subscription.create);
 
       this.subscription
-        .on('started', () => console.log('subscription started - subscriptionId=', this.subscription.subscriptionId))
-        .on('keepalive', () => console.log('keepalive'))
-        .on('terminated', () => console.log('subscription terminated'));
+        .on('started', () => console.log(chalk.yellow('Client subscription started.') + ' SubscriptionId=', this.subscription.subscriptionId))
+        .on('keepalive', () => console.log(chalk.yellow('Client subscription keepalive')))
+        .on('terminated', () => console.log(chalk.yellow('Client subscription terminated')));
     } catch (err) {
       const errTxt = 'Error while subscription create the OPS-UA client:';
       console.log(errTxt, err);
@@ -212,7 +212,6 @@ class OpcuaClient {
     if (!this.subscription) return;
     try {
       await this.subscription.terminate();
-      console.log('Subscription terminated');
     } catch (err) {
       const errTxt = 'Error while subscription terminate the OPS-UA client:';
       console.log(errTxt, err);
