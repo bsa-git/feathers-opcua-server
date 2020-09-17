@@ -2,10 +2,9 @@ const assert = require('assert');
 
 const app = require('../../src/app');
 const { OpcuaServer, OpcuaClient, pause } = require('../../src/plugins');
-// const util = require('../../src/plugins/lib/util');
 const debug = require('debug')('app:test.opcua');
 
-const isDebug = true;
+const isDebug = false;
 let server = null, client = null;
 let opcuaServer = null, opcuaClient = null;
 
@@ -52,10 +51,10 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     }
   });
 
-  it('OPC-UA server created', async () => {
+  it('Server object created', async () => {
     assert.ok(server, 'OPCUA server not created');
   });
-  it('OPC-UA client created', async () => {
+  it('Client object created', async () => {
     assert.ok(client, 'OPCUA client not created');
   });
   describe('<<=== OPC-UA: RUN ===>>', function () {
@@ -108,6 +107,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA client session browse', async () => {
       try {
         let browseResult = await client.sessionBrowse('RootFolder');
+        // debug('OPC-UA client session browse::browseResult:', browseResult);
         browseResult = browseResult.references.map((r) => r.browseName.toString()).join(',');
         // Objects,Types,Views
         assert.ok(browseResult === 'Objects,Types,Views', 'OPC-UA client session browse');

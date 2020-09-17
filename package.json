@@ -29,6 +29,7 @@
     "mocha": "npm run clean && cross-env NODE_ENV=test DEBUG=app:* mocha test/ --recursive --exit",
     "mocha:debug": "npm run clean && cross-env NODE_ENV=test DEBUG=app:* mocha test-debug/ --recursive --exit",
     "eslint": "eslint src/. test/. --config .eslintrc.json",
+    "eslint-fix": "eslint --fix src/. test/. --config .eslintrc.json",
     "clean": "shx rm -rf test/data/*.db",
     "shx": "shx rm test/data/*.db",
     "dev": "cross-env NODE_ENV=development DEBUG=app:* nodemon src/",

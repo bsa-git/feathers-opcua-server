@@ -8,6 +8,7 @@ const {
   nodesets,
   // StatusCodes,
   VariantArrayType,
+  standardUnits,
   // ServerEngine
 } = require('node-opcua');
 const os = require('os');
@@ -27,6 +28,7 @@ class OpcuaServer {
   constructor(app, params = {}) {
     const paramsDefault = {
       port: 26543,
+      isOnSignInt: false,
       nodeset_filename: [
         nodesets.standard,
         nodesets.di
@@ -59,10 +61,12 @@ class OpcuaServer {
 
       this.constructAddressSpace();
 
-      process.on('SIGINT', async () => {
-        await this.opcuaServer.shutdown();
-        console.log(chalk.yellow('Server terminated'));
-      });
+      if (this.params.isOnSignInt) {
+        process.on('SIGINT', async () => {
+          await this.opcuaServer.shutdown();
+          console.log(chalk.yellow('Server terminated'));
+        });
+      }
 
       // OPC-UA server created.
       console.log(chalk.yellow('Server created'));
@@ -80,11 +84,17 @@ class OpcuaServer {
     if (!this.opcuaServer) return;
     try {
       await this.opcuaServer.start();
-      console.log(chalk.yellow('Server started'));
-      console.log(chalk.yellow('Server is now listening ...'));
+
+
+      // console.log(" the primary server endpoint url is ", endpointUrl );
+
+      // console.log(chalk.yellow('Server started'));
+      const endpointUrl = this.opcuaServer.endpoints[0].endpointDescriptions()[0].endpointUrl;
+      console.log(chalk.yellow('Server started and now listening ...'), 'EndPoint URL:', chalk.cyan(endpointUrl));
+      // console.log(chalk.yellow('The primary server endpoint url is'), endpointUrl);
       this.opcuaServer.endpoints[0].endpointDescriptions().forEach(function (endpoint) {
-        if(isLog) inspector('plugins.opcua-server.class::start:', endpoint);
-        if(isDebug) debug(endpoint.endpointUrl, endpoint.securityMode.toString(), endpoint.securityPolicyUri.toString());
+        if (isLog) inspector('plugins.opcua-server.class::start:', endpoint);
+        if (isDebug) debug(endpoint.endpointUrl, endpoint.securityMode.toString(), endpoint.securityPolicyUri.toString());
       });
     } catch (err) {
       const errTxt = 'Error while start the OPS-UA server:';
@@ -117,8 +127,9 @@ class OpcuaServer {
       const addressSpace = this.opcuaServer.engine.addressSpace;
       const namespace = addressSpace.getOwnNamespace();
 
-      // we create a new folder under RootFolder
+      //=== addFolder => "MyDevice" ===//
       const myDevice = namespace.addFolder('ObjectsFolder', {
+        // we create a new folder 'MyDevice' under RootFolder
         browseName: 'MyDevice'
       });
 
@@ -182,7 +193,33 @@ class OpcuaServer {
           }
         }
       });
-      if(isLog) inspector('plugins.opcua-server.class::nodeVariable4:', nodeVariable4);
+      // if(isLog) inspector('plugins.opcua-server.class::nodeVariable4:', nodeVariable4);
+
+      //=== addObject => "Vessel Device" ===//
+      const vesselDevice = namespace.addObject({
+        browseName: "Vessel Device",
+        organizedBy: addressSpace.rootFolder.objects
+      });
+
+      const vesselPressure = namespace.addAnalogDataItem({
+        browseName: "Pressure Vessel Device",
+        engineeringUnitsRange: {
+          low: 0,
+          high: 10.0
+        },
+        engineeringUnits: standardUnits.bar,
+        componentOf: vesselDevice
+      });
+      
+      addressSpace.installHistoricalDataNode(vesselPressure);
+      // simulate pressure change
+      let t = 0;
+      setInterval(function () {
+        let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
+        vesselPressure.setValueFromSource({ dataType: "Double", value: value });
+        t = t + 1;
+      }, 200);
+
     } catch (err) {
       const errTxt = 'Error while construct address space OPC-UA server:';
       console.log(errTxt, err);
