@@ -58,6 +58,10 @@ class OpcuaServer {
       });
 
       await this.opcuaServer.initialize();
+      if(isDebug) debug("certificateFile = ", this.opcuaServer.certificateFile);
+      if(isDebug) debug("privateKeyFile  = ", this.opcuaServer.privateKeyFile);
+      if(isDebug) debug("rejected folder = ", this.opcuaServer.serverCertificateManager.rejectedFolder);
+      if(isDebug) debug("trusted  folder = ", this.opcuaServer.serverCertificateManager.trustedFolder);
 
       this.constructAddressSpace();
 
@@ -210,7 +214,7 @@ class OpcuaServer {
         engineeringUnits: standardUnits.bar,
         componentOf: vesselDevice
       });
-      
+
       addressSpace.installHistoricalDataNode(vesselPressure);
       // simulate pressure change
       let t = 0;
