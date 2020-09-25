@@ -1,7 +1,15 @@
 const assert = require('assert');
 
 const app = require('../../src/app');
-const { OpcuaServer, OpcuaClient, pause } = require('../../src/plugins');
+const { OpcuaServer, OpcuaClient, pause, getDateTimeSeparately } = require('../../src/plugins');
+const chalk = require('chalk');
+const moment = require('moment');
+const {
+  // Variant,
+  DataType,
+  // VariantArrayType,
+  AttributeIds
+} = require('node-opcua');
 const debug = require('debug')('app:test.opcua');
 
 const isDebug = false;
@@ -15,8 +23,10 @@ let opcuaServer = null, opcuaClient = null;
  */
 const cbSubscriptionMonitor = async (nameNodeId, value) => {
   const itemNodeId = client.params.nodeIds.find(item => item.name === nameNodeId);
-  if(isDebug) debug('cbSubscriptionMonitor.itemNodeId:', itemNodeId);
-  console.log(` Temperature = ${value}`)
+  if (isDebug) debug('cbSubscriptionMonitor.itemNodeId:', itemNodeId);
+  console.log(chalk.green(`${nameNodeId}:`), chalk.cyan(value));
+
+  // console.log(` Temperature = ${value}`)
 };
 
 describe('<<=== OPC-UA: Test ===>>', () => {
@@ -29,21 +39,20 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       client = new OpcuaClient(app);
       debug('OPCUA - Test::before: Done');
     } catch (error) {
-      const { response } = error;
-      console.error('OPCUA - Test::before.error', response)
+      console.error('OPCUA - Test::before.error:', error.message);
     }
   });
 
   after(async () => {
     try {
-      
+
       if (client === null && opcuaClient === null) return;
       opcuaClient = null;
-      client = null
-      
+      client = null;
+
       if (server === null && opcuaServer === null) return;
       opcuaServer = null;
-      server = null
+      server = null;
 
       debug('OPCUA - Test::after: Done');
     } catch (error) {
@@ -62,11 +71,10 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       try {
         await server.create();
         await server.start();
-        opcuaServer = server.opcuaServer; 
+        opcuaServer = server.opcuaServer;
         // debug('serverInfo', server.opcuaServer.serverInfo);
         assert.ok(true, 'OPC-UA server start');
       } catch (error) {
-        const { response } = error;
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
@@ -79,7 +87,6 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         // debug('servers', servers);
         assert.ok(true, 'OPC-UA client create');
       } catch (error) {
-        const { response } = error;
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
@@ -89,7 +96,6 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         await client.connect();
         assert.ok(true, 'OPC-UA client connect');
       } catch (error) {
-        const { response } = error;
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
@@ -99,20 +105,18 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         await client.sessionCreate();
         assert.ok(true, 'OPC-UA client session create');
       } catch (error) {
-        const { response } = error;
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
 
     it('OPC-UA client session browse', async () => {
       try {
-        let browseResult = await client.sessionBrowse('RootFolder');
-        // debug('OPC-UA client session browse::browseResult:', browseResult);
-        browseResult = browseResult.references.map((r) => r.browseName.toString()).join(',');
-        // Objects,Types,Views
-        assert.ok(browseResult === 'Objects,Types,Views', 'OPC-UA client session browse');
+        let browseResult = null;
+        browseResult = await client.sessionBrowse('ObjectsFolder');// RootFolder|ObjectsFolder|browseObjectsFolder
+        browseResult = browseResult[0].references.map((r) => r.browseName.name).join(',');
+        console.log(chalk.green('sessionBrowse.folder:'), chalk.cyan(browseResult));
+        assert.ok(browseResult, 'OPC-UA client session browse');
       } catch (error) {
-        const { response } = error;
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
@@ -120,10 +124,60 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA client session read', async () => {
       try {
         let readResult = null;
-        readResult = await client.sessionRead('temperature');
+        readResult = await client.sessionRead('pressureVesselDevice', AttributeIds.value);
+        console.log(chalk.green('pressureVesselDevice:'), chalk.cyan(readResult[0].value.value));
         assert.ok(readResult, 'OPC-UA client session read');
       } catch (error) {
-        const { response } = error;
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client session read variable value', async () => {
+      try {
+        let readResult = null;
+        // Read pressureVesselDevice
+        readResult = await client.sessionReadVariableValue(['pressureVesselDevice']);
+        console.log(chalk.green('pressureVesselDevice:'), chalk.cyan(readResult[0].value.value));
+        assert.ok(readResult, 'OPC-UA client session read');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client session history value', async () => {
+      try {
+        let readResult = null;
+
+        // Read pressureVesselDevice
+        const start = moment.utc().format();
+        const dt = getDateTimeSeparately();
+        dt.minutes = dt.minutes + 1;
+        const end = moment.utc(Object.values(dt)).format();
+
+        readResult = await client.sessionReadHistoryValues('pressureVesselDevice', start, end);
+        if (readResult.length && readResult.values.length) {
+          console.log(chalk.green('pressureVesselDeviceHist:'), chalk.cyan(readResult[0].values[0].value));
+        }
+        assert.ok(readResult, 'OPC-UA client session history value');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client session write single node value', async () => {
+      try {
+        let statusCode = null, readResult = null;
+        let variantValue = {
+          dataType: DataType.String,
+          value: 'Stored value',
+        };
+        statusCode = await client.sessionWriteSingleNode('variableForWrite', variantValue);
+        console.log(chalk.green('variableForWrite.statusCode:'), chalk.cyan(statusCode.name));
+        readResult = await client.sessionRead('variableForWrite');
+        console.log(chalk.green('variableForWrite.readResult:'), chalk.cyan(`'${readResult[0].value.value}'`));
+
+        assert.ok(readResult[0].value.value === variantValue.value, 'OPC-UA client session write single node value');
+      } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
@@ -133,17 +187,17 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         await client.subscriptionCreate();
         assert.ok(true, 'OPC-UA client subscription create');
       } catch (error) {
-        const { response } = error;
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
 
     it('OPC-UA client subscription monitor', async () => {
       try {
+        await client.subscriptionMonitor('pressureVesselDevice', cbSubscriptionMonitor);
+        await client.subscriptionMonitor('percentageMemoryUsed', cbSubscriptionMonitor);
         await client.subscriptionMonitor('temperature', cbSubscriptionMonitor);
         assert.ok(true, 'OPC-UA client subscription monitor');
       } catch (error) {
-        const { response } = error;
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
@@ -154,17 +208,15 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         await client.subscriptionTerminate();
         assert.ok(true, 'OPC-UA client subscription terminate');
       } catch (error) {
-        const { response } = error;
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
 
     it('OPC-UA client session close', async () => {
       try {
-        await client.sessionClose()
+        await client.sessionClose();
         assert.ok(true, 'OPC-UA client session close');
       } catch (error) {
-        const { response } = error;
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
@@ -174,17 +226,15 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         await client.disconnect();
         assert.ok(true, 'OPC-UA client disconnect');
       } catch (error) {
-        const { response } = error;
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
 
     it('OPC-UA server shutdown', async () => {
       try {
-        server.shutdown()
+        server.shutdown();
         assert.ok(true, 'OPC-UA server shutdown');
       } catch (error) {
-        const { response } = error;
         assert.fail(`Should never get here: ${error.message}`);
       }
     });

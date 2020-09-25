@@ -1,5 +1,6 @@
 
 const { join } = require('path');
+const moment = require('moment');
 const debug = require('debug')('app:util');
 const appRoot = join(__dirname, '../../../');
 
@@ -41,6 +42,29 @@ const waitTimeout = function (fn, cb = null, delay = 0) {
       clearInterval(timerId);
     }
   }, _delay);
+};
+
+/**
+ * Get date time separately
+ * e.g. { year: 2020, month: 9, date: 22, hours: 13, minutes: 31, seconds: 10 }
+ * @param {*} dt 
+ * @param {*} isUtc 
+ * @returns {Object}
+ */
+const getDateTimeSeparately = function name(dt = undefined, isUtc = true) {
+  if(isUtc){
+    dt = moment.utc(dt);
+  }else{
+    dt = moment(dt);
+  }
+  return {
+    year: dt.year(), 
+    month: dt.month() + 1, 
+    date: dt.date(), 
+    hours: dt.hours(), 
+    minutes: dt.minutes(), 
+    seconds: dt.seconds()
+  };
 };
 
 /**
@@ -322,6 +346,7 @@ module.exports = {
   delayTime,
   pause,
   waitTimeout,
+  getDateTimeSeparately,
   stripSlashes,
   stripSpecific,
   getCapitalizeStr,

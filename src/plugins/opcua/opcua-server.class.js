@@ -1,6 +1,6 @@
 const errors = require('@feathersjs/errors');
 const moment = require('moment');
-const { inspector } = require('../lib');
+// const { inspector } = require('../lib');
 const {
   OPCUAServer,
   Variant,
@@ -9,14 +9,13 @@ const {
   // StatusCodes,
   VariantArrayType,
   standardUnits,
-  // ServerEngine
 } = require('node-opcua');
 const os = require('os');
 const loMerge = require('lodash/merge');
 const chalk = require('chalk');
 
 const debug = require('debug')('app:plugins.opcua-server.class');
-const isLog = false;
+// const isLog = true;
 const isDebug = false;
 
 class OpcuaServer {
@@ -58,10 +57,10 @@ class OpcuaServer {
       });
 
       await this.opcuaServer.initialize();
-      if(isDebug) debug("certificateFile = ", this.opcuaServer.certificateFile);
-      if(isDebug) debug("privateKeyFile  = ", this.opcuaServer.privateKeyFile);
-      if(isDebug) debug("rejected folder = ", this.opcuaServer.serverCertificateManager.rejectedFolder);
-      if(isDebug) debug("trusted  folder = ", this.opcuaServer.serverCertificateManager.trustedFolder);
+      if(isDebug) debug('certificateFile = ', this.opcuaServer.certificateFile);
+      if(isDebug) debug('privateKeyFile  = ', this.opcuaServer.privateKeyFile);
+      if(isDebug) debug('rejected folder = ', this.opcuaServer.serverCertificateManager.rejectedFolder);
+      if(isDebug) debug('trusted  folder = ', this.opcuaServer.serverCertificateManager.trustedFolder);
 
       this.constructAddressSpace();
 
@@ -88,16 +87,10 @@ class OpcuaServer {
     if (!this.opcuaServer) return;
     try {
       await this.opcuaServer.start();
-
-
-      // console.log(" the primary server endpoint url is ", endpointUrl );
-
-      // console.log(chalk.yellow('Server started'));
       const endpointUrl = this.opcuaServer.endpoints[0].endpointDescriptions()[0].endpointUrl;
       console.log(chalk.yellow('Server started and now listening ...'), 'EndPoint URL:', chalk.cyan(endpointUrl));
-      // console.log(chalk.yellow('The primary server endpoint url is'), endpointUrl);
       this.opcuaServer.endpoints[0].endpointDescriptions().forEach(function (endpoint) {
-        if (isLog) inspector('plugins.opcua-server.class::start:', endpoint);
+        // if (isLog) inspector('plugins.opcua-server.class::start:', endpoint);
         if (isDebug) debug(endpoint.endpointUrl, endpoint.securityMode.toString(), endpoint.securityPolicyUri.toString());
       });
     } catch (err) {
@@ -157,6 +150,7 @@ class OpcuaServer {
 
       const nodeVariable2 = namespace.addVariable({
         componentOf: myDevice,
+        nodeId: 's=MyVariable2',
         browseName: 'MyVariable2',
         dataType: 'String',
       });
@@ -167,6 +161,7 @@ class OpcuaServer {
 
       const nodeVariable3 = namespace.addVariable({
         componentOf: myDevice,
+        nodeId: 's=MyVariable3',
         browseName: 'MyVariable3',
         dataType: 'Double',
         arrayDimensions: [3],
@@ -182,7 +177,7 @@ class OpcuaServer {
       });
 
 
-      const nodeVariable4 = namespace.addVariable({
+      this.opcuaServer.nodeVariable4 = namespace.addVariable({
         componentOf: myDevice,
         nodeId: 'b=1020ffab',
         browseName: 'Percentage Memory Used',
@@ -197,16 +192,24 @@ class OpcuaServer {
           }
         }
       });
-      // if(isLog) inspector('plugins.opcua-server.class::nodeVariable4:', nodeVariable4);
+
+      this.opcuaServer.nodeVariableForWrite = namespace.addVariable({
+        componentOf: myDevice,
+        nodeId: 's=VariableForWrite',
+        browseName: 'VariableForWrite',
+        dataType: 'String',
+      });
+
 
       //=== addObject => "Vessel Device" ===//
       const vesselDevice = namespace.addObject({
-        browseName: "Vessel Device",
+        browseName: 'VesselDevice',
         organizedBy: addressSpace.rootFolder.objects
       });
 
       const vesselPressure = namespace.addAnalogDataItem({
-        browseName: "Pressure Vessel Device",
+        browseName: 'Pressure Vessel Device',
+        nodeId: 's=PressureVesselDevice',
         engineeringUnitsRange: {
           low: 0,
           high: 10.0
@@ -220,7 +223,7 @@ class OpcuaServer {
       let t = 0;
       setInterval(function () {
         let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
-        vesselPressure.setValueFromSource({ dataType: "Double", value: value });
+        vesselPressure.setValueFromSource({ dataType: 'Double', value: value });
         t = t + 1;
       }, 200);
 
