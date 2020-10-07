@@ -6,9 +6,10 @@ const {
   Variant,
   DataType,
   nodesets,
-  // StatusCodes,
+  StatusCodes,
   VariantArrayType,
   standardUnits,
+  makeAccessLevelFlag
 } = require('node-opcua');
 const os = require('os');
 const loMerge = require('lodash/merge');
@@ -28,6 +29,9 @@ class OpcuaServer {
     const paramsDefault = {
       port: 26543,
       isOnSignInt: false,
+      maxAllowedSessionNumber: 10,
+      maxConnectionsPerEndpoint: 10,
+      isAuditing: false,
       nodeset_filename: [
         nodesets.standard,
         nodesets.di
@@ -57,10 +61,10 @@ class OpcuaServer {
       });
 
       await this.opcuaServer.initialize();
-      if(isDebug) debug('certificateFile = ', this.opcuaServer.certificateFile);
-      if(isDebug) debug('privateKeyFile  = ', this.opcuaServer.privateKeyFile);
-      if(isDebug) debug('rejected folder = ', this.opcuaServer.serverCertificateManager.rejectedFolder);
-      if(isDebug) debug('trusted  folder = ', this.opcuaServer.serverCertificateManager.trustedFolder);
+      if (isDebug) debug('certificateFile = ', this.opcuaServer.certificateFile);
+      if (isDebug) debug('privateKeyFile  = ', this.opcuaServer.privateKeyFile);
+      if (isDebug) debug('rejected folder = ', this.opcuaServer.serverCertificateManager.rejectedFolder);
+      if (isDebug) debug('trusted  folder = ', this.opcuaServer.serverCertificateManager.trustedFolder);
 
       this.constructAddressSpace();
 
@@ -93,6 +97,14 @@ class OpcuaServer {
         // if (isLog) inspector('plugins.opcua-server.class::start:', endpoint);
         if (isDebug) debug(endpoint.endpointUrl, endpoint.securityMode.toString(), endpoint.securityPolicyUri.toString());
       });
+      const endpoints = this.opcuaServer.endpoints[0].endpointDescriptions().map(endpoint => {
+        return {
+          endpointUrl: endpoint.endpointUrl,
+          securityMode: endpoint.securityMode.toString(),
+          securityPolicyUri: endpoint.securityPolicyUri.toString()
+        };
+      });
+      return endpoints;
     } catch (err) {
       const errTxt = 'Error while start the OPS-UA server:';
       console.log(errTxt, err);
@@ -127,7 +139,8 @@ class OpcuaServer {
       //=== addFolder => "MyDevice" ===//
       const myDevice = namespace.addFolder('ObjectsFolder', {
         // we create a new folder 'MyDevice' under RootFolder
-        browseName: 'MyDevice'
+        browseName: 'MyDevice',
+        nodeId: 's=MyDevice',
       });
 
       // now let's add first variable in folder
@@ -136,8 +149,9 @@ class OpcuaServer {
 
       this.opcuaServer.nodeVariable1 = namespace.addVariable({
         componentOf: myDevice,
-        nodeId: 's=Temperature',
-        browseName: 'Temperature',
+        nodeId: 's=MyDevice.Temperature',
+        browseName: 'MyDevice.Temperature',
+        displayName: 'Temperature',
         dataType: 'Double',
         value: {
           get: () => {
@@ -150,8 +164,9 @@ class OpcuaServer {
 
       const nodeVariable2 = namespace.addVariable({
         componentOf: myDevice,
-        nodeId: 's=MyVariable2',
-        browseName: 'MyVariable2',
+        nodeId: 's=MyDevice.MyVariable2',
+        browseName: 'MyDevice.MyVariable2',
+        displayName: 'My variable2',
         dataType: 'String',
       });
       nodeVariable2.setValueFromSource({
@@ -161,8 +176,9 @@ class OpcuaServer {
 
       const nodeVariable3 = namespace.addVariable({
         componentOf: myDevice,
-        nodeId: 's=MyVariable3',
-        browseName: 'MyVariable3',
+        nodeId: 's=MyDevice.MyVariable3',
+        browseName: 'MyDevice.MyVariable3',
+        displayName: 'My variable3',
         dataType: 'Double',
         arrayDimensions: [3],
         accessLevel: 'CurrentRead | CurrentWrite',
@@ -179,13 +195,13 @@ class OpcuaServer {
 
       this.opcuaServer.nodeVariable4 = namespace.addVariable({
         componentOf: myDevice,
-        nodeId: 'b=1020ffab',
-        browseName: 'Percentage Memory Used',
+        nodeId: 's=MyDevice.PercentageMemoryUsed',
+        browseName: 'MyDevice.PercentageMemoryUsed',
+        displayName: 'Percentage Memory Used',
         dataType: 'Double',
         minimumSamplingInterval: 1000,
         value: {
           get: () => {
-            // const value = process.memoryUsage().heapUsed / 1000000;
             const percentageMemUsed = 1.0 - (os.freemem() / os.totalmem());
             const value = percentageMemUsed * 100;
             return new Variant({ dataType: DataType.Double, value: value });
@@ -195,21 +211,72 @@ class OpcuaServer {
 
       this.opcuaServer.nodeVariableForWrite = namespace.addVariable({
         componentOf: myDevice,
-        nodeId: 's=VariableForWrite',
-        browseName: 'VariableForWrite',
+        nodeId: 's=MyDevice.VariableForWrite',
+        browseName: 'MyDevice.VariableForWrite',
+        displayName: 'Variable for write',
         dataType: 'String',
+      });
+
+      const method = namespace.addMethod(myDevice, {
+
+        nodeId: 's=MyDevice.SumMethod',
+        browseName: 'MyDevice.SumMethod',
+        displayName: 'Sum method',
+
+        inputArguments: [
+          {
+            name: 'number1',
+            description: { text: 'first item' },
+            dataType: DataType.UInt32
+          }, {
+            name: 'number2',
+            description: { text: 'second item' },
+            dataType: DataType.UInt32
+          }
+        ],
+
+        outputArguments: [{
+          name: 'SumResult',
+          description: { text: 'sum of numbers' },
+          dataType: DataType.UInt32,
+          valueRank: 1
+        }]
+      });
+
+      // optionally, we can adjust userAccessLevel attribute 
+      method.outputArguments.userAccessLevel = makeAccessLevelFlag('CurrentRead');
+      method.inputArguments.userAccessLevel = makeAccessLevelFlag('CurrentRead');
+
+      method.bindMethod((inputArguments, context, callback) => {
+
+        const number1 = inputArguments[0].value;
+        const number2 = inputArguments[1].value;
+        let sum = number1 + number2;
+
+        // console.log('Run metod Sum:', sum);
+
+        const callMethodResult = {
+          statusCode: StatusCodes.Good,
+          outputArguments: [{
+            dataType: DataType.UInt32,
+            value: sum
+          }]
+        };
+        callback(null, callMethodResult);
       });
 
 
       //=== addObject => "Vessel Device" ===//
       const vesselDevice = namespace.addObject({
         browseName: 'VesselDevice',
+        displayName: 'Vessel device',
         organizedBy: addressSpace.rootFolder.objects
       });
 
       const vesselPressure = namespace.addAnalogDataItem({
-        browseName: 'Pressure Vessel Device',
-        nodeId: 's=PressureVesselDevice',
+        nodeId: 's=VesselDevice.PressureVesselDevice',
+        browseName: 'VesselDevice.PressureVesselDevice',
+        displayName: 'Vessel device',
         engineeringUnitsRange: {
           low: 0,
           high: 10.0
