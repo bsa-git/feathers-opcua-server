@@ -114,6 +114,16 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
+    it('OPC-UA client session read namespace array', async () => {
+      try {
+        const result = await client.sessionReadNamespaceArray();
+        console.log(chalk.green('sessionReadNamespaceArray:'), chalk.cyan(`[ ${result} ]`));
+        assert.ok(true, 'OPC-UA client session create');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
     it('OPC-UA client session browse', async () => {
       try {
         let browseResult = null;
@@ -232,6 +242,33 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
+    it('OPC-UA client session write node value', async () => {
+      try {
+        let statusCodes = [], readResult = null;
+        const valuesToWrite = [
+          {
+            attributeId: AttributeIds.Value,
+            value: {
+              statusCode: StatusCodes.Good,
+              value: {
+                dataType: DataType.String,
+                value: 'Stored value2'
+              }
+            }
+          }
+        ];
+
+        statusCodes = await client.sessionWrite('MyDevice.VariableForWrite', valuesToWrite);
+        console.log(chalk.green('MyDevice::variableForWrite.statusCode:'), chalk.cyan(statusCodes[0].name));
+        readResult = await client.sessionRead('MyDevice.VariableForWrite');
+        console.log(chalk.green('MyDevice::variableForWrite.readResult:'), chalk.cyan(`'${readResult[0].value.value}'`));
+
+        assert.ok(readResult[0].value.value === valuesToWrite[0].value.value.value, 'OPC-UA client session write node value');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
     it('OPC-UA client session call method', async () => {
       try {
         let callResults = [];
@@ -255,6 +292,25 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
+    it('OPC-UA client session get method argument definition', async () => {
+      let argumentsDefinition = [];
+      try {
+        argumentsDefinition = await client.sessionGetArgumentDefinition('MyDevice.SumMethod');
+        argumentsDefinition.inputArguments.forEach(argument => {
+          console.log(chalk.green('MyDevice::SumMethod.inputArgument.name:'), chalk.cyan(argument.name));
+          console.log(chalk.green('MyDevice::SumMethod.inputArgument.description:'), chalk.cyan(argument.description.text));
+        });
+        argumentsDefinition.outputArguments.forEach(argument => {
+          console.log(chalk.green('MyDevice::SumMethod.outputArgument.name:'), chalk.cyan(argument.name));
+          console.log(chalk.green('MyDevice::SumMethod.outputArgument.description:'), chalk.cyan(argument.description.text));
+        });
+
+        assert.ok(argumentsDefinition, 'OPC-UA client session get method argument definition');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
     it('OPC-UA client subscription create', async () => {
       try {
         await client.subscriptionCreate();
@@ -269,6 +325,17 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         await client.subscriptionMonitor('VesselDevice.PressureVesselDevice', cbSubscriptionMonitor);
         await client.subscriptionMonitor('MyDevice.PercentageMemoryUsed', cbSubscriptionMonitor);
         await client.subscriptionMonitor('MyDevice.Temperature', cbSubscriptionMonitor);
+        assert.ok(true, 'OPC-UA client subscription monitor');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client subscription get monitored items', async () => {
+      try {
+        const monitoredItems = await client.sessionGetMonitoredItems(client.subscription.subscriptionId);
+        console.log(chalk.green('getMonitoredItems.clientHandles:'), chalk.cyan(monitoredItems.clientHandles));
+        console.log(chalk.green('getMonitoredItems.serverHandles:'), chalk.cyan(monitoredItems.serverHandles));
         assert.ok(true, 'OPC-UA client subscription monitor');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);

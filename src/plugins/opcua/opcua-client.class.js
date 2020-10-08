@@ -143,6 +143,7 @@ class OpcuaClient {
     try {
       this.session = await this.opcuaClient.createSession();
       console.log(chalk.yellow('Client session created'));
+      if (isLog) inspector('plugins.opcua-client.class::sessionCreate.info:', this.sessionToString());
     } catch (err) {
       const errTxt = 'Error while create session the OPS-UA client:';
       console.log(errTxt, err);
@@ -159,6 +160,39 @@ class OpcuaClient {
       await this.session.close();
       this.session = null;
       console.log(chalk.yellow('Client session closed'));
+    } catch (err) {
+      const errTxt = 'Error while create session the OPS-UA client:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+ * Session to string
+ * @returns {String}
+ */
+  sessionToString() {
+    if (!this.session) return;
+    try {
+      return this.session.toString();
+    } catch (err) {
+      const errTxt = 'Error while Session to string:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * Read namespace array for session
+   * @returns {Promise<string[]}
+   */
+  async sessionReadNamespaceArray() {
+    if (!this.session) return;
+    try {
+      const result = await this.session.readNamespaceArray();
+      if (isLog) inspector('plugins.opcua-client.class::sessionReadNamespaceArray.result:', result);
+      // inspector('plugins.opcua-client.class::sessionReadNamespaceArray.result:', result);
+      return result;
     } catch (err) {
       const errTxt = 'Error while create session the OPS-UA client:';
       console.log(errTxt, err);
@@ -241,6 +275,11 @@ class OpcuaClient {
     }
   }
 
+  /**
+   * Session translate browse path
+   * @param {String|Array} browsePaths 
+   * @returns {Promise<Array>}
+   */
   async sessionTranslateBrowsePath(browsePaths) {
     let result = [];
     if (!this.session) return;
@@ -481,10 +520,29 @@ class OpcuaClient {
   }
 
   /**
+   * Get monitored items for subscription
+   * @param {UInt32} subscriptionId 
+   * @returns {Promise<MonitoredItemData>}
+   */
+  async sessionGetMonitoredItems(subscriptionId) {
+    if (!this.session) return;
+    try {
+      const monitoredItems = await this.session.getMonitoredItems(subscriptionId);
+      if (isLog) inspector('plugins.opcua-client.class::subscriptionGetMonitoredItems.monitoredItems:', monitoredItems);
+      // inspector('plugins.opcua-client.class::subscriptionGetMonitoredItems.monitoredItems:', monitoredItems);
+      return monitoredItems;
+    } catch (err) {
+      const errTxt = 'Error while subscription get monitored items:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
    * Session write single node
    * @param {String} nameNodeId 
    * @param {Variant} variantValue 
-   * @returns {StatusCode}
+   * @returns {Promise<StatusCode>}
    */
   async sessionWriteSingleNode(nameNodeId, variantValue) {
     if (!this.session) return;
@@ -496,6 +554,79 @@ class OpcuaClient {
       return statusCode;
     } catch (err) {
       const errTxt = 'Error while subscription monitor the OPS-UA client:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * 
+   * @example :
+   *
+   *     const nodesToWrite = [
+   *     {
+   *          nodeId: "ns=1;s=SetPoint1",
+   *          attributeId: opcua.AttributeIds.Value,
+   *          value: {
+   *             statusCode: Good,
+   *             value: {
+   *               dataType: opcua.DataType.Double,
+   *               value: 100.0
+   *             }
+   *          }
+   *     },
+   *     {
+   *          nodeId: "ns=1;s=SetPoint2",
+   *          attributeIds opcua.AttributeIds.Value,
+   *          value: {
+   *             statusCode: Good,
+   *             value: {
+   *               dataType: opcua.DataType.Double,
+   *               value: 45.0
+   *             }
+   *          }
+   *     }
+   *     ];
+   * 
+   *     const statusCodes = await session.write(nodesToWrite);
+   * 
+   * @param {String|Object|Array} nameNodeIds 
+   * @param {Array<Variant>} valuesToWrite 
+   * @returns {Promise<Array<StatusCode>>}
+   */
+  async sessionWrite(nameNodeIds, valuesToWrite = []) {
+    let statusCodes = [], itemNodeId = null, itemNodeIds = [];
+    if (!this.session) return;
+    try {
+      if (Array.isArray(nameNodeIds)) {
+        nameNodeIds.forEach((nameNodeId, index) => {
+          if (isString(nameNodeId)) {
+            itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
+            if (itemNodeId) {
+              itemNodeIds.push(Object.assign({ nodeId: itemNodeId.nodeId }, valuesToWrite[index]));
+            }
+          } else {
+            itemNodeIds.push(nameNodeId);
+          }
+        });
+      } else {
+        if (isString(nameNodeIds)) {
+          itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeIds);
+          if (itemNodeId) {
+            itemNodeIds.push(Object.assign({ nodeId: itemNodeId.nodeId }, valuesToWrite[0]));
+          }
+        } else {
+          itemNodeIds.push(nameNodeIds);
+        }
+      }
+
+      if (itemNodeIds.length) {
+        statusCodes = await this.session.write(itemNodeIds);
+      }
+      if (isLog) inspector('plugins.opcua-client.class::sessionWrite.statusCodes:', statusCodes);
+      return statusCodes;
+    } catch (err) {
+      const errTxt = 'Error while session call method:';
       console.log(errTxt, err);
       throw new errors.GeneralError(`${errTxt} "${err.message}"`);
     }
@@ -525,7 +656,7 @@ class OpcuaClient {
    * });
    * ```
    * 
-   * @param {String|Object|Array} nameNodeId 
+   * @param {String|Object|Array} nameNodeIds 
    * @param {Array<Variant>} inputArguments 
    * @returns {Promise<CallMethodResult[]>}
    */
@@ -558,11 +689,32 @@ class OpcuaClient {
       if (itemNodeIds.length) {
         result = await this.session.call(itemNodeIds);
       }
-      if (isLog) inspector('plugins.opcua-client.class::sessionBrowse.result:', result);
+      if (isLog) inspector('plugins.opcua-client.class::sessionCallMethod.result:', result);
       // inspector('plugins.opcua-client.class::sessionCallMethod.result:', result);
       return result;
     } catch (err) {
       const errTxt = 'Error while session call method:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+ * Get arguments definition for session
+ * @param {String} nameNodeId 
+ * @returns {Promise<ArgumentDefinition>}
+ */
+  async sessionGetArgumentDefinition(nameNodeId) {
+    if (!this.session) return;
+    try {
+      const itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
+      const methodId = itemNodeId ? itemNodeId.methodId : nameNodeId;
+      const argumentsDefinition = await this.session.getArgumentDefinition(methodId);
+      if (isLog) inspector('plugins.opcua-client.class::sessionGetArgumentDefinition.argumentsDefinition:', argumentsDefinition);
+      // inspector('plugins.opcua-client.class::sessionGetArgumentDefinition.argumentsDefinition:', argumentsDefinition);
+      return argumentsDefinition;
+    } catch (err) {
+      const errTxt = 'Error while subscription get monitored items:';
       console.log(errTxt, err);
       throw new errors.GeneralError(`${errTxt} "${err.message}"`);
     }
@@ -604,18 +756,21 @@ class OpcuaClient {
   /**
   * Subscription monitor
   * @param {String} nameNodeId
-  * @param {Function} cb
   * e.g. 'temperature'
+  * @param {Function} cb
+  * @param {UInt32} attributeId
+  * 
   */
-  async subscriptionMonitor(nameNodeId, cb) {
+  async subscriptionMonitor(nameNodeId, cb, attributeId = undefined) {
     if (!this.subscription) return;
     try {
       const itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
       const nodeId = itemNodeId ? itemNodeId.nodeId : nameNodeId;
+      attributeId = attributeId ? attributeId : AttributeIds.Value;
       const monitoredItem = await this.subscription.monitor(
         {
           nodeId,
-          attributeId: AttributeIds.Value
+          attributeId
         },
         this.params.subscription.monitor,
         this.params.subscription.timestampsToReturn
