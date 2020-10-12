@@ -2,7 +2,7 @@
 
 > A FeathersJS OPC-UA application
 
-## About.
+## About
 
 This project uses [Feathers](http://feathersjs.com), a framework for real-time applications and REST APIs. It contains the OPC-UA application created in [node-opcua on GitHub](https://github.com/node-opcua).
 
