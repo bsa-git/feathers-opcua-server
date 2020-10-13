@@ -1,4 +1,16 @@
-// const { Service } = require('feathers-nedb');
+const { OpcuaServer, OpcuaClient, pause, getDateTimeSeparately, isObject, inspector } = require('../../plugins');
+const chalk = require('chalk');
+const moment = require('moment');
+const {
+  // Variant,
+  DataType,
+  // VariantArrayType,
+  AttributeIds,
+  StatusCodes,
+} = require('node-opcua');
+const debug = require('debug')('app:service.opcua-servers');
+const isDebug = false;
+const isLog = false;
 
 class OpcuaServers {
   constructor(options, app) {
@@ -17,14 +29,29 @@ class OpcuaServers {
   }
 
   async create (data) {
-    const opcuaServer = {
-      id: data.id,
-      params: data.params
+    
+    try {
+      // Create OPC-UA server
+      const server = new OpcuaServer(this.app, data.params);
+      const opcuaServer = {
+        id: data.id,
+        srv: server
+      }
+  
+      this.opcuaServers.push(opcuaServer);
+
+      // Server create and start
+      await server.create();
+      await server.start();
+      // const endpoints = await server.start();
+      // console.log(chalk.green('opcuaServer.securityMode'), chalk.cyan(endpoints[0].securityMode));
+      // console.log(chalk.green('opcuaServer.securityPolicyUri'), chalk.cyan(endpoints[0].securityPolicyUri));
+      
+      return opcuaServer;
+    } catch (error) {
+      console.log(chalk.red('service.opcua-servers::create.error'), chalk.cyan(error.message));
+      throw error;
     }
-
-    this.opcuaServers.push(opcuaServer);
-
-    return opcuaServer;
   }
 
   async update(id, data, params) {
@@ -35,8 +62,17 @@ class OpcuaServers {
 
   }
 
+  // OPC-UA server shutdown
   async remove(id, params) {
-    
+    try {
+      const server = this.opcuaServers.find(srv => srv.id === id);
+      if(server){
+        server.shutdown();
+      }
+    } catch (error) {
+      console.log(chalk.red('service.opcua-servers::remove.error'), chalk.cyan(error.message));
+      throw error;
+    }
   }
 
   // setup(app, path) {
