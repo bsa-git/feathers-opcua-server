@@ -1,16 +1,16 @@
-const { OpcuaServer, OpcuaClient, pause, getDateTimeSeparately, isObject, inspector } = require('../../plugins');
+const { OpcuaServer } = require('../../plugins');
 const chalk = require('chalk');
-const moment = require('moment');
-const {
-  // Variant,
-  DataType,
-  // VariantArrayType,
-  AttributeIds,
-  StatusCodes,
-} = require('node-opcua');
-const debug = require('debug')('app:service.opcua-servers');
-const isDebug = false;
-const isLog = false;
+// const moment = require('moment');
+// const {
+// Variant,
+// DataType,
+// VariantArrayType,
+// AttributeIds,
+// StatusCodes,
+// } = require('node-opcua');
+// const debug = require('debug')('app:service.opcua-servers');
+// const isDebug = false;
+// const isLog = false;
 
 class OpcuaServers {
   constructor(options, app) {
@@ -19,25 +19,25 @@ class OpcuaServers {
     this.opcuaServers = [];
   }
 
-  async find () {
+  async find() {
     // Just return all our messages
     return this.opcuaServers;
   }
 
-  async get(id, params) {
+  async get(id) {
     return this.opcuaServers.find(srv => srv.id === id);
   }
 
-  async create (data) {
-    
+  async create(data) {
+
     try {
       // Create OPC-UA server
       const server = new OpcuaServer(this.app, data.params);
       const opcuaServer = {
         id: data.id,
         srv: server
-      }
-  
+      };
+
       this.opcuaServers.push(opcuaServer);
 
       // Server create and start
@@ -46,7 +46,7 @@ class OpcuaServers {
       // const endpoints = await server.start();
       // console.log(chalk.green('opcuaServer.securityMode'), chalk.cyan(endpoints[0].securityMode));
       // console.log(chalk.green('opcuaServer.securityPolicyUri'), chalk.cyan(endpoints[0].securityPolicyUri));
-      
+
       return opcuaServer;
     } catch (error) {
       console.log(chalk.red('service.opcua-servers::create.error'), chalk.cyan(error.message));
@@ -54,19 +54,19 @@ class OpcuaServers {
     }
   }
 
-  async update(id, data, params) {
+  // async update(id, data, params) {
 
-  }
+  // }
 
-  async patch(id, data, params) {
+  // async patch(id, data, params) {
 
-  }
+  // }
 
   // OPC-UA server shutdown
-  async remove(id, params) {
+  async remove(id) {
     try {
       const server = this.opcuaServers.find(srv => srv.id === id);
-      if(server){
+      if (server) {
         server.shutdown();
       }
     } catch (error) {
