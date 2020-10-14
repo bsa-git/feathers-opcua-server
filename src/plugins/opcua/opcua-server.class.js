@@ -1,20 +1,22 @@
 const errors = require('@feathersjs/errors');
 const moment = require('moment');
-const { inspector } = require('../lib');
+// const { inspector } = require('../lib');
 const {
   OPCUAServer,
   Variant,
   DataType,
   nodesets,
-  // StatusCodes,
+  StatusCodes,
   VariantArrayType,
-  // ServerEngine
+  standardUnits,
+  makeAccessLevelFlag
 } = require('node-opcua');
 const os = require('os');
 const loMerge = require('lodash/merge');
+const chalk = require('chalk');
 
 const debug = require('debug')('app:plugins.opcua-server.class');
-const isLog = false;
+// const isLog = true;
 const isDebug = false;
 
 class OpcuaServer {
@@ -26,6 +28,10 @@ class OpcuaServer {
   constructor(app, params = {}) {
     const paramsDefault = {
       port: 26543,
+      isOnSignInt: false,
+      maxAllowedSessionNumber: 10,
+      maxConnectionsPerEndpoint: 10,
+      isAuditing: false,
       nodeset_filename: [
         nodesets.standard,
         nodesets.di
@@ -50,22 +56,27 @@ class OpcuaServer {
       // Let create an instance of OPCUAServer
       this.opcuaServer = new OPCUAServer({
         port: this.params.port,  // the port of the listening socket of the server
-
         nodeset_filename: this.params.nodeset_filename,
         buidIfo: this.params.buidIfo
       });
 
       await this.opcuaServer.initialize();
+      if (isDebug) debug('certificateFile = ', this.opcuaServer.certificateFile);
+      if (isDebug) debug('privateKeyFile  = ', this.opcuaServer.privateKeyFile);
+      if (isDebug) debug('rejected folder = ', this.opcuaServer.serverCertificateManager.rejectedFolder);
+      if (isDebug) debug('trusted  folder = ', this.opcuaServer.serverCertificateManager.trustedFolder);
 
       this.constructAddressSpace();
 
-      process.on('SIGINT', async () => {
-        await this.opcuaServer.shutdown();
-        console.log('OPC-UA server terminated');
-      });
+      if (this.params.isOnSignInt) {
+        process.on('SIGINT', async () => {
+          await this.opcuaServer.shutdown();
+          console.log(chalk.yellow('Server terminated'));
+        });
+      }
 
       // OPC-UA server created.
-      console.log('OPC-UA server created');
+      console.log(chalk.yellow('Server created'));
     } catch (err) {
       const errTxt = 'Error while creating the OPS-UA server:';
       console.log(errTxt, err);
@@ -80,12 +91,20 @@ class OpcuaServer {
     if (!this.opcuaServer) return;
     try {
       await this.opcuaServer.start();
-
-      console.log('Server is now listening ... ( press CTRL+C to stop) ');
+      const endpointUrl = this.opcuaServer.endpoints[0].endpointDescriptions()[0].endpointUrl;
+      console.log(chalk.yellow('Server started and now listening ...'), 'EndPoint URL:', chalk.cyan(endpointUrl));
       this.opcuaServer.endpoints[0].endpointDescriptions().forEach(function (endpoint) {
-        if(isLog) inspector('plugins.opcua-server.class::start:', endpoint);
-        if(isDebug) debug(endpoint.endpointUrl, endpoint.securityMode.toString(), endpoint.securityPolicyUri.toString());
+        // if (isLog) inspector('plugins.opcua-server.class::start:', endpoint);
+        if (isDebug) debug(endpoint.endpointUrl, endpoint.securityMode.toString(), endpoint.securityPolicyUri.toString());
       });
+      const endpoints = this.opcuaServer.endpoints[0].endpointDescriptions().map(endpoint => {
+        return {
+          endpointUrl: endpoint.endpointUrl,
+          securityMode: endpoint.securityMode.toString(),
+          securityPolicyUri: endpoint.securityPolicyUri.toString()
+        };
+      });
+      return endpoints;
     } catch (err) {
       const errTxt = 'Error while start the OPS-UA server:';
       console.log(errTxt, err);
@@ -100,7 +119,7 @@ class OpcuaServer {
     if (!this.opcuaServer) return;
     try {
       this.opcuaServer.shutdown();
-      console.log('OPC-UA server terminated');
+      console.log(chalk.yellow('Server terminated'));
     } catch (err) {
       const errTxt = 'Error while start the OPS-UA server:';
       console.log(errTxt, err);
@@ -117,9 +136,11 @@ class OpcuaServer {
       const addressSpace = this.opcuaServer.engine.addressSpace;
       const namespace = addressSpace.getOwnNamespace();
 
-      // we create a new folder under RootFolder
+      //=== addFolder => "MyDevice" ===//
       const myDevice = namespace.addFolder('ObjectsFolder', {
-        browseName: 'MyDevice'
+        // we create a new folder 'MyDevice' under RootFolder
+        browseName: 'MyDevice',
+        nodeId: 's=MyDevice',
       });
 
       // now let's add first variable in folder
@@ -128,8 +149,9 @@ class OpcuaServer {
 
       this.opcuaServer.nodeVariable1 = namespace.addVariable({
         componentOf: myDevice,
-        nodeId: 's=Temperature',
-        browseName: 'Temperature',
+        nodeId: 's=MyDevice.Temperature',
+        browseName: 'MyDevice.Temperature',
+        displayName: 'Temperature',
         dataType: 'Double',
         value: {
           get: () => {
@@ -142,7 +164,9 @@ class OpcuaServer {
 
       const nodeVariable2 = namespace.addVariable({
         componentOf: myDevice,
-        browseName: 'MyVariable2',
+        nodeId: 's=MyDevice.MyVariable2',
+        browseName: 'MyDevice.MyVariable2',
+        displayName: 'My variable2',
         dataType: 'String',
       });
       nodeVariable2.setValueFromSource({
@@ -152,7 +176,9 @@ class OpcuaServer {
 
       const nodeVariable3 = namespace.addVariable({
         componentOf: myDevice,
-        browseName: 'MyVariable3',
+        nodeId: 's=MyDevice.MyVariable3',
+        browseName: 'MyDevice.MyVariable3',
+        displayName: 'My variable3',
         dataType: 'Double',
         arrayDimensions: [3],
         accessLevel: 'CurrentRead | CurrentWrite',
@@ -167,22 +193,107 @@ class OpcuaServer {
       });
 
 
-      const nodeVariable4 = namespace.addVariable({
+      this.opcuaServer.nodeVariable4 = namespace.addVariable({
         componentOf: myDevice,
-        nodeId: 'b=1020ffab',
-        browseName: 'Percentage Memory Used',
+        nodeId: 's=MyDevice.PercentageMemoryUsed',
+        browseName: 'MyDevice.PercentageMemoryUsed',
+        displayName: 'Percentage Memory Used',
         dataType: 'Double',
         minimumSamplingInterval: 1000,
         value: {
           get: () => {
-            // const value = process.memoryUsage().heapUsed / 1000000;
             const percentageMemUsed = 1.0 - (os.freemem() / os.totalmem());
             const value = percentageMemUsed * 100;
             return new Variant({ dataType: DataType.Double, value: value });
           }
         }
       });
-      if(isLog) inspector('plugins.opcua-server.class::nodeVariable4:', nodeVariable4);
+
+      this.opcuaServer.nodeVariableForWrite = namespace.addVariable({
+        componentOf: myDevice,
+        nodeId: 's=MyDevice.VariableForWrite',
+        browseName: 'MyDevice.VariableForWrite',
+        displayName: 'Variable for write',
+        dataType: 'String',
+      });
+
+      const method = namespace.addMethod(myDevice, {
+
+        nodeId: 's=MyDevice.SumMethod',
+        browseName: 'MyDevice.SumMethod',
+        displayName: 'Sum method',
+
+        inputArguments: [
+          {
+            name: 'number1',
+            description: { text: 'first item' },
+            dataType: DataType.UInt32
+          }, {
+            name: 'number2',
+            description: { text: 'second item' },
+            dataType: DataType.UInt32
+          }
+        ],
+
+        outputArguments: [{
+          name: 'SumResult',
+          description: { text: 'sum of numbers' },
+          dataType: DataType.UInt32,
+          valueRank: 1
+        }]
+      });
+
+      // optionally, we can adjust userAccessLevel attribute 
+      method.outputArguments.userAccessLevel = makeAccessLevelFlag('CurrentRead');
+      method.inputArguments.userAccessLevel = makeAccessLevelFlag('CurrentRead');
+
+      method.bindMethod((inputArguments, context, callback) => {
+
+        const number1 = inputArguments[0].value;
+        const number2 = inputArguments[1].value;
+        let sum = number1 + number2;
+
+        // console.log('Run metod Sum:', sum);
+
+        const callMethodResult = {
+          statusCode: StatusCodes.Good,
+          outputArguments: [{
+            dataType: DataType.UInt32,
+            value: sum
+          }]
+        };
+        callback(null, callMethodResult);
+      });
+
+
+      //=== addObject => "Vessel Device" ===//
+      const vesselDevice = namespace.addObject({
+        browseName: 'VesselDevice',
+        displayName: 'Vessel device',
+        organizedBy: addressSpace.rootFolder.objects
+      });
+
+      const vesselPressure = namespace.addAnalogDataItem({
+        nodeId: 's=VesselDevice.PressureVesselDevice',
+        browseName: 'VesselDevice.PressureVesselDevice',
+        displayName: 'Vessel device',
+        engineeringUnitsRange: {
+          low: 0,
+          high: 10.0
+        },
+        engineeringUnits: standardUnits.bar,
+        componentOf: vesselDevice
+      });
+
+      addressSpace.installHistoricalDataNode(vesselPressure);
+      // simulate pressure change
+      let t = 0;
+      setInterval(function () {
+        let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
+        vesselPressure.setValueFromSource({ dataType: 'Double', value: value });
+        t = t + 1;
+      }, 200);
+
     } catch (err) {
       const errTxt = 'Error while construct address space OPC-UA server:';
       console.log(errTxt, err);

@@ -1,18 +1,72 @@
 const errors = require('@feathersjs/errors');
-const { inspector } = require('../lib');
+const { inspector, isString } = require('../lib');
 const {
   OPCUAClient,
   ClientSubscription,
   AttributeIds,
   TimestampsToReturn,
+  BrowseDirection,
+  // Variant,
+  // StatusCodes
 } = require('node-opcua');
 const os = require('os');
 const chalk = require('chalk');
 const loMerge = require('lodash/merge');
+// const moment = require('moment');
 
 const debug = require('debug')('app:plugins.opcua-client.class');
 const isLog = false;
 const isDebug = false;
+
+/**
+ * Params default
+ */
+const paramsDefault = {
+  port: '26543',
+  hostname: os.hostname().toLowerCase(),
+  endpointUrl: '',
+  nodeIds: [
+    { name: 'MyDevice.Temperature', nodeId: 'ns=1;s=MyDevice.Temperature' },
+    { name: 'MyDevice.MyVariable2', nodeId: 'ns=1;s=MyDevice.MyVariable2' },
+    { name: 'MyDevice.MyVariable3', nodeId: 'ns=1;s=MyDevice.MyVariable3' },
+    { name: 'MyDevice.PercentageMemoryUsed', nodeId: 'ns=1;s=MyDevice.PercentageMemoryUsed' },
+    { name: 'MyDevice.VariableForWrite', nodeId: 'ns=1;s=MyDevice.VariableForWrite' },
+    { name: 'MyDevice.SumMethod', objectId: 'ns=1;s=MyDevice', methodId: 'ns=1;s=MyDevice.SumMethod' },
+    { name: 'VesselDevice.PressureVesselDevice', nodeId: 'ns=1;s=VesselDevice.PressureVesselDevice' },
+    {
+      name: 'browseObjectsFolder', browseDescriptions: {
+        nodeId: 'ObjectsFolder',
+        referenceTypeId: 'Organizes',
+        browseDirection: BrowseDirection.Inverse,
+        includeSubtypes: true,
+        nodeClassMask: 0,
+        resultMask: 63
+      }
+    },
+  ],
+  endpoint_must_exist: false,
+  connectionStrategy: {
+    maxRetry: 2,
+    initialDelay: 2000,
+    maxDelay: 10 * 1000
+  },
+  subscription: {
+    create: {
+      requestedPublishingInterval: 1000,
+      requestedLifetimeCount: 10,
+      requestedMaxKeepAliveCount: 2,
+      maxNotificationsPerPublish: 10,
+      publishingEnabled: true,
+      priority: 10
+    },
+    monitor: {
+      samplingInterval: 1000,
+      discardOldest: true,
+      queueSize: 10
+    },
+    timestampsToReturn: TimestampsToReturn.Both
+  }
+};
 
 class OpcuaClient {
   /**
@@ -21,46 +75,19 @@ class OpcuaClient {
    * @param params {Object}
    */
   constructor(app, params = {}) {
-    const paramsDefault = {
-      port: '26543',
-      hostname: os.hostname().toLowerCase(),
-      nodeIds: [{ name: 'temperature', nodeId: 'ns=1;s=Temperature', attributeId: AttributeIds.value }],
-      endpoint_must_exist: false,
-      connectionStrategy: {
-        maxRetry: 2,
-        initialDelay: 2000,
-        maxDelay: 10 * 1000
-      },
-      subscription: {
-        create: {
-          requestedPublishingInterval: 1000,
-          requestedLifetimeCount: 10,
-          requestedMaxKeepAliveCount: 2,
-          maxNotificationsPerPublish: 10,
-          publishingEnabled: true,
-          priority: 10
-        },
-        monitor: {
-          samplingInterval: 1000,
-          discardOldest: true,
-          queueSize: 10
-        },
-        timestampsToReturn: TimestampsToReturn.Both
-      }
-    };
     this.params = loMerge(paramsDefault, params);
-    // this.app = Object.assign({}, app);
     this.app = app;
-    this.endpointUrl = `opc.tcp://${this.params.hostname}:${this.params.port}`;
+    this.endpointUrl = this.endpointUrl ? this.endpointUrl : `opc.tcp://${this.params.hostname}:${this.params.port}`;
     this.opcuaClient = null;
     this.session = null;
     this.subscription = null;
+    if (isDebug) debug('OpcuaClient created - OK');
   }
 
   /**
    * Create opc-ua client
    */
-  clientCreate() {
+  create() {
     try {
       // Create OPCUAClient
       this.opcuaClient = OPCUAClient.create({
@@ -69,7 +96,7 @@ class OpcuaClient {
       });
 
       // Retrying connection
-      this.opcuaClient.on('backoff', (retry) => console.log('Retrying to connect to: ', this.endpointUrl, ' attempt: ', retry));
+      this.opcuaClient.on('backoff', (retry) => console.log(chalk.yellow('Retrying to connect to:'), this.endpointUrl, ' attempt: ', retry));
 
     } catch (err) {
       const errTxt = 'Error while creating the OPS-UA client:';
@@ -81,11 +108,11 @@ class OpcuaClient {
   /**
    * Connect opc-ua client to server
    */
-  async clientConnect() {
+  async connect() {
     if (!this.opcuaClient) return;
     try {
       await this.opcuaClient.connect(this.endpointUrl);
-      console.log(' Connected to ', chalk.cyan(this.endpointUrl));
+      console.log(chalk.yellow('Client connected to:'), chalk.cyan(this.endpointUrl));
     } catch (err) {
       const errTxt = 'Error while connect the OPS-UA client:';
       console.log(errTxt, err);
@@ -96,11 +123,11 @@ class OpcuaClient {
   /**
   * Client disconnect
   */
-  async clientDisconnect() {
+  async disconnect() {
     if (!this.opcuaClient) return;
     try {
       await this.opcuaClient.disconnect();
-      console.log(' Disconnect from ', chalk.cyan(this.endpointUrl));
+      console.log(chalk.yellow('Client disconnect from:'), chalk.cyan(this.endpointUrl));
     } catch (err) {
       const errTxt = 'Error while client disconnect the OPS-UA client:';
       console.log(errTxt, err);
@@ -115,7 +142,8 @@ class OpcuaClient {
     if (!this.opcuaClient) return;
     try {
       this.session = await this.opcuaClient.createSession();
-      console.log(chalk.yellow('Session created for OPC-UA client'));
+      console.log(chalk.yellow('Client session created'));
+      if (isLog) inspector('plugins.opcua-client.class::sessionCreate.info:', this.sessionToString());
     } catch (err) {
       const errTxt = 'Error while create session the OPS-UA client:';
       console.log(errTxt, err);
@@ -131,7 +159,40 @@ class OpcuaClient {
     try {
       await this.session.close();
       this.session = null;
-      console.log(chalk.yellow('Session closed'));
+      console.log(chalk.yellow('Client session closed'));
+    } catch (err) {
+      const errTxt = 'Error while create session the OPS-UA client:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+ * Session to string
+ * @returns {String}
+ */
+  sessionToString() {
+    if (!this.session) return;
+    try {
+      return this.session.toString();
+    } catch (err) {
+      const errTxt = 'Error while Session to string:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * Read namespace array for session
+   * @returns {Promise<string[]}
+   */
+  async sessionReadNamespaceArray() {
+    if (!this.session) return;
+    try {
+      const result = await this.session.readNamespaceArray();
+      if (isLog) inspector('plugins.opcua-client.class::sessionReadNamespaceArray.result:', result);
+      // inspector('plugins.opcua-client.class::sessionReadNamespaceArray.result:', result);
+      return result;
     } catch (err) {
       const errTxt = 'Error while create session the OPS-UA client:';
       console.log(errTxt, err);
@@ -141,18 +202,97 @@ class OpcuaClient {
 
   /**
    * Session browse
-   * @param {String} path 
-   * e.g. 'RootFolder'
-   * @returns {*}
+   * 
+   * @example
+   *
+   * ``` javascript
+   * await session.browse([ "RootFolder", "ObjectsFolder"]) {
+   *       assert(browseResults.length === 2);
+   * });
+   * ```
+   * 
+   *  @example
+     * ``` javascript
+     * const browseDescriptions = [
+     * {
+     *   nodeId: "ObjectsFolder",
+     *   referenceTypeId: "Organizes",
+     *   browseDirection: BrowseDirection.Inverse,
+     *   includeSubtypes: true,
+     *   nodeClassMask: 0,
+     *   resultMask: 63
+     * },
+     * // {...}
+     * ]
+     *  await session.browse(browseDescriptions) {
+     *
+     *   });
+     * ```
+   * 
+   * @param {String|Array} nameNodeIds 
+   * e.g. 'browseObjectsFolder'|['browseObjectsFolder', 'browseObjectsFolder2']
+   * @returns {Promise<Array>}
    */
-  async sessionBrowse(path) {
+  async sessionBrowse(nameNodeIds) {
+    let result = [], itemNodeId = null, itemNodeIds = [];
     if (!this.session) return;
     try {
-      const browseResult = await this.session.browse(path);
-      if (isDebug) debug('sessionBrowse.path:', path);
-      // if (isLog) inspector('sessionBrowse.browseResult:', browseResult.references);
-      if (isLog) console.log(browseResult.references.map((r) => r.browseName.toString()).join('\n'));
-      return browseResult;
+      if (Array.isArray(nameNodeIds)) {
+        nameNodeIds.forEach(nameNodeId => {
+          if (isString(nameNodeId)) {
+            itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
+            if (itemNodeId) {
+              itemNodeIds.push(itemNodeId.browseDescriptions);
+            } else {
+              itemNodeIds.push(nameNodeId);
+            }
+          } else {
+            itemNodeIds.push(nameNodeId);
+          }
+        });
+      } else {
+        if (isString(nameNodeIds)) {
+          itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeIds);
+          if (itemNodeId) {
+            itemNodeIds.push(itemNodeId.browseDescriptions);
+          } else {
+            itemNodeIds.push(nameNodeIds);
+          }
+        } else {
+          itemNodeIds.push(nameNodeIds);
+        }
+      }
+
+      if (itemNodeIds.length) {
+        result = await this.session.browse(itemNodeIds);
+      }
+      if (isLog) inspector('plugins.opcua-client.class::sessionBrowse.result:', result);
+      return result;
+    } catch (err) {
+      const errTxt = 'Error while session browse the OPS-UA client:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * Session translate browse path
+   * @param {String|Array} browsePaths 
+   * @returns {Promise<Array>}
+   */
+  async sessionTranslateBrowsePath(browsePaths) {
+    let result = [];
+    if (!this.session) return;
+    try {
+      if (!Array.isArray(browsePaths)) {
+        browsePaths = [browsePaths];
+      }
+      if (browsePaths.length) {
+        result = await this.session.translateBrowsePath(browsePaths);
+      }
+      if (isLog) inspector('plugins.opcua-client.class::sessionTranslateBrowsePath.result:', result);
+      // inspector('plugins.opcua-client.class::sessionTranslateBrowsePath.result:', result);
+      return result;
     } catch (err) {
       const errTxt = 'Error while session browse the OPS-UA client:';
       console.log(errTxt, err);
@@ -162,25 +302,419 @@ class OpcuaClient {
 
   /**
    * Session read
-   * @param {String} nameNodeId 
-   * e.g. 'temperature'
-   * @returns {String}
+   * 
+   * @example
+   *
+   *   ``` javascript
+   *   const nodesToRead = [
+   *        {
+   *             nodeId:      "ns=2;s=Furnace_1.Temperature",
+   *             attributeId: AttributeIds.BrowseName
+   *        }
+   *   ];
+   *   await session.read(nodesToRead) {
+   *     ...
+   *   });
+   *   ```
+   * 
+   * @param {String|Array} nameNodeIds 
+   * e.g. 'temperature'| ['temperature', 'pressureVesselDevice']
+   * @param {Number} attributeId 
+   * e.g. AttributeIds.BrowseName
+   * @param {Number} maxAge 
+   * @returns {Promise<Array>}
    */
-  async sessionRead(nameNodeId) {
-    let result = '';
+  async sessionRead(nameNodeIds, attributeId = 0, maxAge = 0) {
+    let result = [], itemNodeId = null, itemNodeIds = [], dataValues;
     if (!this.session) return;
     try {
-      const itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
-      if (itemNodeId) {
-        if (isLog) inspector('plugins.opcua-client.class::sessionRead.itemNodeId:', itemNodeId);
-        const dataValue = await this.session.read({ nodeId: itemNodeId.nodeId, attributeId: itemNodeId.attributeId });
-        if (isDebug) debug('sessionRead.dataValue:', dataValue.value.value.toString());
-        result = dataValue.value.value.toString();
-        return result;
+      if (Array.isArray(nameNodeIds)) {
+        nameNodeIds.forEach(nameNodeId => {
+          itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
+          if (itemNodeId) {
+            itemNodeIds.push({ nodeId: itemNodeId.nodeId, attributeId: attributeId ? attributeId : AttributeIds.Value });
+          } else {
+            itemNodeIds.push({ nodeId: nameNodeId, attributeId: attributeId ? attributeId : AttributeIds.Value });
+          }
+        });
+      } else {
+        itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeIds);
+        if (itemNodeId) {
+          itemNodeIds.push({ nodeId: itemNodeId.nodeId, attributeId: attributeId ? attributeId : AttributeIds.Value });
+        } else {
+          itemNodeIds.push({ nodeId: nameNodeIds, attributeId: attributeId ? attributeId : AttributeIds.Value });
+        }
+        nameNodeIds = [nameNodeIds];
       }
+
+      if (itemNodeIds.length) {
+        if (maxAge) {
+          dataValues = await this.session.read(itemNodeIds, maxAge);
+        } else {
+          dataValues = await this.session.read(itemNodeIds);
+        }
+
+        dataValues.forEach((item, index) => item.nameNodeId = nameNodeIds[index]);
+        result = dataValues;
+      }
+      if (isLog) inspector('plugins.opcua-client.class::sessionRead.result:', result);
+      // inspector('plugins.opcua-client.class::sessionRead.result:', result);
       return result;
     } catch (err) {
       const errTxt = 'Error while session read the OPS-UA client:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * Session read all attributes
+   * 
+   * @example
+   *
+   *  ``` javascript
+     *  session.readAllAttributes("ns=2;s=Furnace_1.Temperature",function(err,data) {
+     *    if(data.statusCode === StatusCodes.Good) {
+     *      console.log(" nodeId      = ",data.nodeId.toString());
+     *      console.log(" browseName  = ",data.browseName.toString());
+     *      console.log(" description = ",data.description.toString());
+     *      console.log(" value       = ",data.value.toString()));
+     *    }
+     *  });
+     *  ```
+   * 
+   * @param {String|Array} nameNodeIds 
+   * e.g. 'temperature'| ['temperature', 'pressureVesselDevice']
+   * @returns {void}
+   */
+  sessionReadAllAttributes(nameNodeIds, callback) {
+    let itemNodeId = null, itemNodeIds = [];
+    if (!this.session) return;
+    try {
+      if (Array.isArray(nameNodeIds)) {
+        nameNodeIds.forEach(nameNodeId => {
+          itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
+          if (itemNodeId) {
+            itemNodeIds.push(itemNodeId.nodeId);
+          } else {
+            itemNodeIds.push(nameNodeId);
+          }
+        });
+      } else {
+        itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeIds);
+        if (itemNodeId) {
+          itemNodeIds.push(itemNodeId.nodeId);
+        } else {
+          itemNodeIds.push(nameNodeIds);
+        }
+      }
+
+      if (itemNodeIds.length) {
+        this.session.readAllAttributes(itemNodeIds, callback);
+      }
+    } catch (err) {
+      const errTxt = 'Error while session read the OPS-UA client:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+  * Session read variable value
+  * @param {String|Array} nameNodeIds 
+  * e.g. 'temperature'| ['temperature', 'pressureVesselDevice']
+  * @returns {Promise<Array>}
+  */
+  async sessionReadVariableValue(nameNodeIds) {
+    let result = [], itemNodeId = null, itemNodeIds = [], dataValues;
+    if (!this.session) return;
+    try {
+      if (Array.isArray(nameNodeIds)) {
+        nameNodeIds.forEach(nameNodeId => {
+          itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
+          if (itemNodeId) {
+            itemNodeIds.push(itemNodeId.nodeId);
+          } else {
+            itemNodeIds.push(nameNodeId);
+          }
+        });
+      } else {
+        itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeIds);
+        if (itemNodeId) {
+          itemNodeIds.push(itemNodeId.nodeId);
+        } else {
+          itemNodeIds.push(nameNodeIds);
+        }
+        nameNodeIds = [nameNodeIds];
+      }
+
+      if (itemNodeIds.length) {
+        dataValues = await this.session.readVariableValue(itemNodeIds);
+        dataValues.forEach((item, index) => item.nameNodeId = nameNodeIds[index]);
+        result = dataValues;
+      }
+      if (isLog) inspector('plugins.opcua-client.class::sessionReadVariableValue.result:', result);
+      return result;
+    } catch (err) {
+      const errTxt = 'Error while session read the OPS-UA client:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * Session read history values
+   * @param {String|Array} nameNodeIds 
+   * e.g. 'temperature'| ['temperature', 'pressureVesselDevice']
+   * @param {String} start 
+   * @param {String} end 
+   * @param {Boolean} statusGood 
+   * @return {Promise<Array>}
+   */
+  async sessionReadHistoryValues(nameNodeIds, start, end, statusGood = false) {
+    let result = [], itemNodeId = null, itemNodeIds = [], dataValues;
+    if (!this.session) return;
+    try {
+      if (Array.isArray(nameNodeIds)) {
+        nameNodeIds.forEach(nameNodeId => {
+          itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
+          if (itemNodeId) {
+            itemNodeIds.push(itemNodeId.nodeId);
+          } else {
+            itemNodeIds.push(nameNodeId);
+          }
+        });
+      } else {
+        itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeIds);
+        if (itemNodeId) {
+          itemNodeIds.push(itemNodeId.nodeId);
+        } else {
+          itemNodeIds.push(nameNodeIds);
+        }
+        nameNodeIds = [nameNodeIds];
+      }
+
+      if (itemNodeIds.length) {
+        dataValues = await this.session.readHistoryValue(itemNodeIds, start, end);
+        dataValues.forEach((item, index) => item.nameNodeId = nameNodeIds[index]);
+        if (statusGood) {
+          dataValues = dataValues.filter(val => val.statusCode.name === 'Good');
+          dataValues = dataValues.map(item => {
+            return {
+              nameNodeId: item.nameNodeId,
+              values: item.historyData.dataValues.filter(dataValue => dataValue.statusCode.name === 'Good')
+            };
+          });
+          result = dataValues;
+        } else {
+          result = dataValues;
+        }
+      }
+      if (isLog) inspector('plugins.opcua-client.class::sessionReadHistoryValue.result:', result);
+      return result;
+    } catch (err) {
+      const errTxt = 'Error while session read the OPS-UA client:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * Get monitored items for subscription
+   * @param {UInt32} subscriptionId 
+   * @returns {Promise<MonitoredItemData>}
+   */
+  async sessionGetMonitoredItems(subscriptionId) {
+    if (!this.session) return;
+    try {
+      const monitoredItems = await this.session.getMonitoredItems(subscriptionId);
+      if (isLog) inspector('plugins.opcua-client.class::subscriptionGetMonitoredItems.monitoredItems:', monitoredItems);
+      // inspector('plugins.opcua-client.class::subscriptionGetMonitoredItems.monitoredItems:', monitoredItems);
+      return monitoredItems;
+    } catch (err) {
+      const errTxt = 'Error while subscription get monitored items:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * Session write single node
+   * @param {String} nameNodeId 
+   * @param {Variant} variantValue 
+   * @returns {Promise<StatusCode>}
+   */
+  async sessionWriteSingleNode(nameNodeId, variantValue) {
+    if (!this.session) return;
+    try {
+      const itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
+      const nodeId = itemNodeId ? itemNodeId.nodeId : nameNodeId;
+      const statusCode = await this.session.writeSingleNode(nodeId, variantValue);
+      if (isLog) inspector('plugins.opcua-client.class::sessionWriteSingleNode.statusCode:', statusCode);
+      return statusCode;
+    } catch (err) {
+      const errTxt = 'Error while subscription monitor the OPS-UA client:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * 
+   * @example :
+   *
+   *     const nodesToWrite = [
+   *     {
+   *          nodeId: "ns=1;s=SetPoint1",
+   *          attributeId: opcua.AttributeIds.Value,
+   *          value: {
+   *             statusCode: Good,
+   *             value: {
+   *               dataType: opcua.DataType.Double,
+   *               value: 100.0
+   *             }
+   *          }
+   *     },
+   *     {
+   *          nodeId: "ns=1;s=SetPoint2",
+   *          attributeIds opcua.AttributeIds.Value,
+   *          value: {
+   *             statusCode: Good,
+   *             value: {
+   *               dataType: opcua.DataType.Double,
+   *               value: 45.0
+   *             }
+   *          }
+   *     }
+   *     ];
+   * 
+   *     const statusCodes = await session.write(nodesToWrite);
+   * 
+   * @param {String|Object|Array} nameNodeIds 
+   * @param {Array<Variant>} valuesToWrite 
+   * @returns {Promise<Array<StatusCode>>}
+   */
+  async sessionWrite(nameNodeIds, valuesToWrite = []) {
+    let statusCodes = [], itemNodeId = null, itemNodeIds = [];
+    if (!this.session) return;
+    try {
+      if (Array.isArray(nameNodeIds)) {
+        nameNodeIds.forEach((nameNodeId, index) => {
+          if (isString(nameNodeId)) {
+            itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
+            if (itemNodeId) {
+              itemNodeIds.push(Object.assign({ nodeId: itemNodeId.nodeId }, valuesToWrite[index]));
+            }
+          } else {
+            itemNodeIds.push(nameNodeId);
+          }
+        });
+      } else {
+        if (isString(nameNodeIds)) {
+          itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeIds);
+          if (itemNodeId) {
+            itemNodeIds.push(Object.assign({ nodeId: itemNodeId.nodeId }, valuesToWrite[0]));
+          }
+        } else {
+          itemNodeIds.push(nameNodeIds);
+        }
+      }
+
+      if (itemNodeIds.length) {
+        statusCodes = await this.session.write(itemNodeIds);
+      }
+      if (isLog) inspector('plugins.opcua-client.class::sessionWrite.statusCodes:', statusCodes);
+      return statusCodes;
+    } catch (err) {
+      const errTxt = 'Error while session call method:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * 
+   * @example :
+   *
+   * ```javascript
+   * const methodsToCall = [ {
+   *     objectId: 'ns=2;i=12',
+   *     methodId: 'ns=2;i=13',
+   *     inputArguments: [
+   *         new Variant({...}),
+   *         new Variant({...}),
+   *     ]
+   * }];
+   * session.call(methodsToCall,function(err,callResutls) {
+   *    if (!err) {
+   *         const callResult = callResutls[0];
+   *         console.log(' statusCode = ',rep.statusCode);
+   *         console.log(' inputArgumentResults[0] = ',callResult.inputArgumentResults[0].toString());
+   *         console.log(' inputArgumentResults[1] = ',callResult.inputArgumentResults[1].toString());
+   *         console.log(' outputArgument[0]       = ',callResult.outputArgument[0].toString()); // array of variant
+   *    }
+   * });
+   * ```
+   * 
+   * @param {String|Object|Array} nameNodeIds 
+   * @param {Array<Variant>} inputArguments 
+   * @returns {Promise<CallMethodResult[]>}
+   */
+  async sessionCallMethod(nameNodeIds, inputArguments = []) {
+    let result = [], itemNodeId = null, itemNodeIds = [];
+    if (!this.session) return;
+    try {
+      if (Array.isArray(nameNodeIds)) {
+        nameNodeIds.forEach((nameNodeId, index) => {
+          if (isString(nameNodeId)) {
+            itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
+            if (itemNodeId) {
+              itemNodeIds.push({ objectId: itemNodeId.objectId, methodId: itemNodeId.methodId, inputArguments: inputArguments[index] });
+            }
+          } else {
+            itemNodeIds.push(nameNodeId);
+          }
+        });
+      } else {
+        if (isString(nameNodeIds)) {
+          itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeIds);
+          if (itemNodeId) {
+            itemNodeIds.push({ objectId: itemNodeId.objectId, methodId: itemNodeId.methodId, inputArguments });
+          }
+        } else {
+          itemNodeIds.push(nameNodeIds);
+        }
+      }
+
+      if (itemNodeIds.length) {
+        result = await this.session.call(itemNodeIds);
+      }
+      if (isLog) inspector('plugins.opcua-client.class::sessionCallMethod.result:', result);
+      // inspector('plugins.opcua-client.class::sessionCallMethod.result:', result);
+      return result;
+    } catch (err) {
+      const errTxt = 'Error while session call method:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+ * Get arguments definition for session
+ * @param {String} nameNodeId 
+ * @returns {Promise<ArgumentDefinition>}
+ */
+  async sessionGetArgumentDefinition(nameNodeId) {
+    if (!this.session) return;
+    try {
+      const itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
+      const methodId = itemNodeId ? itemNodeId.methodId : nameNodeId;
+      const argumentsDefinition = await this.session.getArgumentDefinition(methodId);
+      if (isLog) inspector('plugins.opcua-client.class::sessionGetArgumentDefinition.argumentsDefinition:', argumentsDefinition);
+      // inspector('plugins.opcua-client.class::sessionGetArgumentDefinition.argumentsDefinition:', argumentsDefinition);
+      return argumentsDefinition;
+    } catch (err) {
+      const errTxt = 'Error while subscription get monitored items:';
       console.log(errTxt, err);
       throw new errors.GeneralError(`${errTxt} "${err.message}"`);
     }
@@ -195,9 +729,9 @@ class OpcuaClient {
       this.subscription = ClientSubscription.create(this.session, this.params.subscription.create);
 
       this.subscription
-        .on('started', () => console.log('subscription started - subscriptionId=', this.subscription.subscriptionId))
-        .on('keepalive', () => console.log('keepalive'))
-        .on('terminated', () => console.log('subscription terminated'));
+        .on('started', () => console.log(chalk.yellow('Client subscription started.') + ' SubscriptionId=', this.subscription.subscriptionId))
+        .on('keepalive', () => console.log(chalk.yellow('Client subscription keepalive')))
+        .on('terminated', () => console.log(chalk.yellow('Client subscription terminated')));
     } catch (err) {
       const errTxt = 'Error while subscription create the OPS-UA client:';
       console.log(errTxt, err);
@@ -212,7 +746,6 @@ class OpcuaClient {
     if (!this.subscription) return;
     try {
       await this.subscription.terminate();
-      console.log('Subscription terminated');
     } catch (err) {
       const errTxt = 'Error while subscription terminate the OPS-UA client:';
       console.log(errTxt, err);
@@ -223,27 +756,31 @@ class OpcuaClient {
   /**
   * Subscription monitor
   * @param {String} nameNodeId
-  * @param {Function} cb
   * e.g. 'temperature'
+  * @param {Function} cb
+  * @param {UInt32} attributeId
+  * 
   */
-  async subscriptionMonitor(nameNodeId, cb) {
+  async subscriptionMonitor(nameNodeId, cb, attributeId = undefined) {
     if (!this.subscription) return;
     try {
       const itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
-      if (itemNodeId) {
-        if (isLog) inspector('plugins.opcua-client.class::subscriptionMonitor.itemNodeId:', itemNodeId);
-        const monitoredItem = await this.subscription.monitor(
-          {
-            nodeId: itemNodeId.nodeId,
-            attributeId: itemNodeId.attributeId
-          },
-          this.params.subscription.monitor,
-          this.params.subscription.timestampsToReturn
-        );
+      const nodeId = itemNodeId ? itemNodeId.nodeId : nameNodeId;
+      attributeId = attributeId ? attributeId : AttributeIds.Value;
+      const monitoredItem = await this.subscription.monitor(
+        {
+          nodeId,
+          attributeId
+        },
+        this.params.subscription.monitor,
+        this.params.subscription.timestampsToReturn
+      );
+      if (isLog) inspector('plugins.opcua-client.class::subscriptionMonitor.monitoredItem:', monitoredItem);
 
-        // monitoredItem.on("changed", (dataValue) => console.log(` Temperature = ${dataValue.value.value.toString()}`));
-        monitoredItem.on('changed', (dataValue) => cb(nameNodeId, dataValue.value.value.toString()));
-      }
+      monitoredItem.on('changed', (dataValue) => {
+        if (isLog) inspector(`plugins.opcua-client.class::subscriptionMonitor.${nameNodeId}:`, dataValue);
+        cb(nameNodeId, dataValue);
+      });
     } catch (err) {
       const errTxt = 'Error while subscription monitor the OPS-UA client:';
       console.log(errTxt, err);
