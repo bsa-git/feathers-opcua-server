@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const moment = require('moment');
-// const { inspector } = require('../lib');
+const { inspector } = require('../lib');
 const {
   OPCUAServer,
   Variant,
@@ -16,7 +17,7 @@ const loMerge = require('lodash/merge');
 const chalk = require('chalk');
 
 const debug = require('debug')('app:plugins.opcua-server.class');
-// const isLog = true;
+const isLog = true;
 const isDebug = false;
 
 class OpcuaServer {

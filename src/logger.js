@@ -5,6 +5,7 @@ const logger = createLogger({
   // To see more detailed errors, change this to 'debug'
   level: 'info',
   format: format.combine(
+    format.colorize(),
     format.splat(),
     format.simple()
   ),

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const { inspector, isString } = require('../lib');
 const {
@@ -6,13 +7,13 @@ const {
   AttributeIds,
   TimestampsToReturn,
   BrowseDirection,
-  // Variant,
-  // StatusCodes
+  Variant,
+  StatusCodes
 } = require('node-opcua');
 const os = require('os');
 const chalk = require('chalk');
 const loMerge = require('lodash/merge');
-// const moment = require('moment');
+const moment = require('moment');
 
 const debug = require('debug')('app:plugins.opcua-client.class');
 const isLog = false;
