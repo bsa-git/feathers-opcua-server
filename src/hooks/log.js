@@ -1,27 +1,47 @@
+/* eslint-disable no-unused-vars */
+const {getItems, replaceItems} = require('feathers-hooks-common');
+const {AuthServer, isTrue, HookHelper, getLogMessage} = require('../plugins');
+const debug = require('debug')('app:hooks.log');
 
-// A hook that logs service method before, after and error
-// See https://github.com/winstonjs/winston for documentation
-// about the logger.
-const { inspector } = require('../plugins');
-const logger = require('../logger');
-
+const isDebug = false;
 const isLog = false;
 
-// To see more detailed messages, uncomment the following line:
-// logger.level = 'debug';
+module.exports = function (isTest = false) {
+  return async context => {
 
-module.exports = function () {
-  return context => {
-    // This debugs the service call and a stringified version of the hook context
-    // You can customize the message (and logger) to your needs
-    logger.debug(`${context.type} app.service('${context.path}').${context.method}()`);
+    // Get the record(s) from context.data (before), context.result.data or context.result (after).
+    // getItems always returns an array to simplify your processing.
+    let records = getItems(context);
 
-    if (isLog) {
-      logger.debug('Hook Context', inspector('hook::log. context:', context));
+    // Create HookHelper object
+    const hookHelper = new HookHelper(context);
+    // Show debug info
+    hookHelper.showDebugInfo('', isLog);
+    hookHelper.showDebugError();
+
+    // hookHelper.showDebugInfo('authentication.remove.after', true);
+
+    // Is log msg enable
+    const isLogMsgEnable = isTest ||
+        isTrue(process.env.LOGMSG_ENABLE) &&
+        hookHelper.app.get('env') !== 'test' &&
+        (hookHelper.contextProvider ||
+          hookHelper.isMask('authentication.remove.after') ||
+          hookHelper.contextError
+        );
+
+    if(isLogMsgEnable){
+      // // Get log message
+      // const logMsg = await getLogMessage(context);
+      // // Save log message
+      // if(logMsg){
+      //   if(isDebug) debug('logMsg:', logMsg);
+      //   await hookHelper.createItem('log-messages', logMsg);
+      // }
     }
-
-    if (context.error) {
-      logger.error(context.error.stack);
-    }
+    // Place the modified records back in the context.
+    replaceItems(context, records);
+    // Best practice: hooks should always return the context.
+    return context;
   };
 };

@@ -26,6 +26,11 @@ const createOpcuaClient = async (app, data) => {
     id: data.id,
     client
   };
+  client.create();
+  await client.connect();
+  await client.sessionCreate();
+  client.subscriptionCreate();
+  
   return opcuaClient;
 };
 
@@ -33,9 +38,9 @@ const createOpcuaClient = async (app, data) => {
  * Opcua clients class
  */
 class OpcuaClients {
-  constructor(options, app) {
+
+  setup(app, path) {
     this.app = app;
-    this.options = options || {};
     this.opcuaClients = [];
   }
 
@@ -75,10 +80,13 @@ class OpcuaClients {
     try {
       const opcuaClient = this.opcuaClients.find(srv => srv.id === id);
       if (opcuaClient) {
-        // opcuaClient.client.shutdown();
+        await opcuaClient.client.subscriptionTerminate();
+        await opcuaClient.client.subscriptionTerminate();
+        await opcuaClient.client.sessionClose();
+        await opcuaClient.client.disconnect();
       }
     } catch (error) {
-      console.log(chalk.red('service.opcua-servers::remove.error'), chalk.cyan(error.message));
+      console.log(chalk.red('service.opcua-clients::remove.error'), chalk.cyan(error.message));
       throw error;
     }
   }

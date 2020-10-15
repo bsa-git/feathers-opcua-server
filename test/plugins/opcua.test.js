@@ -311,9 +311,10 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
-    it('OPC-UA client subscription create', async () => {
+    it('OPC-UA client subscription create', () => {
       try {
-        await client.subscriptionCreate();
+        // await client.subscriptionCreate();
+        client.subscriptionCreate();
         assert.ok(true, 'OPC-UA client subscription create');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);

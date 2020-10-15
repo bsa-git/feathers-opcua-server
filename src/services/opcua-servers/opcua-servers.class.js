@@ -40,9 +40,9 @@ const createOpcuaServer = async (app, data) => {
 };
 
 class OpcuaServers {
-  constructor(options, app) {
+
+  setup(app, path) {
     this.app = app;
-    this.options = options || {};
     this.opcuaServers = [];
   }
 
@@ -90,10 +90,6 @@ class OpcuaServers {
       throw error;
     }
   }
-
-  // setup(app, path) {
-  //   this.app = app;
-  // }
 }
 
 exports.OpcuaServers = OpcuaServers;

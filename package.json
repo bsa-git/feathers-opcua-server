@@ -53,6 +53,7 @@
     "debug": "^4.1.1",
     "dotenv": "^8.2.0",
     "dotenv-webpack": "^1.8.0",
+    "feathers-hooks-common": "^5.0.4",
     "feathers-nedb": "^5.1.0",
     "helmet": "^3.22.0",
     "moment": "^2.27.0",
