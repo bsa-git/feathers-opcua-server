@@ -247,8 +247,7 @@ class HookHelper {
   getPickRecords(fn) {
     let _records;
     if(Array.isArray(this.contextRecords)){
-      this.contextRecords.forEach(record => fn(record));
-      _records = records.map(record => fn(record));
+      _records = this.contextRecords.map(record => fn(record));
     }else {
       _records = fn(this.contextRecords);
     }
