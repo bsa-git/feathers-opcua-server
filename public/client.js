@@ -96,7 +96,7 @@ const addUser = user => {
   // eslint-disable-next-line no-undef
   const userList = document.querySelector('.user-list');
 
-  if(userList) {
+  if (userList) {
     // Add the user to the list
     userList.innerHTML += `<li>
       <a class="block relative" href="#">
@@ -124,7 +124,7 @@ const addMessage = message => {
   const text = escape(message.text);
   // eslint-disable-next-line no-undef
   const createdAt = moment(message.createdAt).format('MMM Do, hh:mm:ss');
-  if(chat) {
+  if (chat) {
     chat.innerHTML += `<div class="message flex flex-row">
       <img src="${user.avatar}" alt="${user.name || user.email}" class="avatar">
       <div class="message-wrapper">
@@ -143,8 +143,9 @@ const addMessage = message => {
 
 // Show the login page
 const showLogin = (error) => {
+  if (error) console.error('Error:', error.message);
   // eslint-disable-next-line no-undef
-  if(document.querySelectorAll('.login').length && error) {
+  if (document.querySelectorAll('.login').length && error) {
     // eslint-disable-next-line no-undef
     document.querySelector('.heading').insertAdjacentHTML('beforeend', `<p>There was an error: ${error.message}</p>`);
   } else {
@@ -191,7 +192,7 @@ const getCredentials = () => {
 // Log in either using the given email/password or the token from storage
 const login = async credentials => {
   try {
-    if(!credentials) {
+    if (!credentials) {
       // Try to authenticate using an existing token
       await client.reAuthenticate();
     } else {
@@ -204,7 +205,7 @@ const login = async credentials => {
 
     // If successful, show the chat page
     showChat();
-  } catch(error) {
+  } catch (error) {
     // If we got an error, show the login page
     showLogin(error);
   }
@@ -223,18 +224,22 @@ const addEventListener = (selector, event, handler) => {
 addEventListener('#signup', 'click', async () => {
   // For signup, create a new user and then log them in
   const credentials = getCredentials();
-
-  // First create the user
-  await client.service('users').create(credentials);
-  // If successful log them in
-  await login(credentials);
+  try {
+    // First create the user
+    await client.service('users').create(credentials);
+    // If successful log them in
+    await login(credentials);
+  } catch (error) {
+    // If we got an error, show the login page
+    showLogin(error);
+  }
 });
 
 // "Login" button click handler
 addEventListener('#login', 'click', async () => {
-  const user = getCredentials();
+  const credentials = getCredentials();
 
-  await login(user);
+  await login(credentials);
 });
 
 // "Logout" button click handler
