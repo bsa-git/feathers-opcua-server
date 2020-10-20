@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-const {inspector} = require('../lib');
+const moment = require('moment');
+const { inspector } = require('../lib');
 const HookHelper = require('./hook-helper.class');
 
 const isLog = false;
@@ -17,6 +18,25 @@ const baseNormalize = async (record) => {
 };
 
 /**
+ * Created at normalize
+ * @param {Object} record
+ */
+const createdAtNormalize = (record) => {
+  if (!record) return;
+  record.createdAt = moment().utc().valueOf();
+  record.updatedAt = record.createdAt;
+};
+
+/**
+ * Updated at normalize
+ * @param {Object} record
+ */
+const updatedAtNormalize = (record) => {
+  if (!record) return;
+  record.updatedAt = moment().utc().valueOf();
+};
+
+/**
  * Context normalize
  * @param context
  * @return {Promise<HookHelper>}
@@ -24,9 +44,21 @@ const baseNormalize = async (record) => {
 module.exports = async function contextNormalize(context) {
   // Create HookHelper object
   const hh = new HookHelper(context);
-  // Run base normalize
   if (hh.contextType === 'before' || hh.contextType === 'after') {
     await hh.forEachRecords(baseNormalize);
+  }
+
+  // Run normalize createdAt/updatedAt
+  switch (`${hh.contextMethod}.${hh.contextType}`) {
+    case 'create.before':
+      await hh.forEachRecords(createdAtNormalize);
+      break;
+    case 'update.before':
+    case 'patch.before':  
+      await hh.forEachRecords(updatedAtNormalize);
+      break;
+    default:
+      break;
   }
   return hh.contextRecords;
 };

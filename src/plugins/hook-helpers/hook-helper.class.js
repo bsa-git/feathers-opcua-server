@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 const loMerge = require('lodash/merge');
-const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
+const { checkContext, getItems, replaceItems } = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
 // const {inspector, isObject} = require('../lib');
-const {inspector, isObject} = require('../lib');
+const { inspector, isObject } = require('../lib');
 const chalk = require('chalk');
-const debug = require('debug')('app:hook-helper.class');
+const debug = require('debug')('app:plugin.hook-helper.class');
 
 const isLog = false;
 const isDebug = false;
@@ -35,13 +35,13 @@ class HookHelper {
     // context.type is a read only property with the hook type (one of before, after or error)
     this.contextType = this.context.type;
     // context.params is a writeable property that contains the service method parameters
-    this.contextParams = this.context.params? this.context.params : null;
+    this.contextParams = this.context.params ? this.context.params : null;
     // Get the authenticated user.
-    this.contextUser = (this.contextParams && this.contextParams.user)? this.contextParams.user : null;
+    this.contextUser = (this.contextParams && this.contextParams.user) ? this.contextParams.user : null;
     // Get context.params.authenticated
-    this.contextAuthenticated = this.contextParams && this.contextParams.authenticated? this.contextParams.authenticated : null;
+    this.contextAuthenticated = this.contextParams && this.contextParams.authenticated ? this.contextParams.authenticated : null;
     // Get contextParams.payload
-    this.contextPayload = this.contextParams && this.contextParams.payload? this.contextParams.payload : null;
+    this.contextPayload = this.contextParams && this.contextParams.payload ? this.contextParams.payload : null;
     // Get the record(s) from context.data (before), context.result.data or context.result (after).
     // getItems always returns an array to simplify your processing.
     this.contextRecords = getItems(this.context);
@@ -51,7 +51,7 @@ class HookHelper {
     // It is only available in after hooks.
     this.contextResult = this.context.result ? this.context.result : null;
     // Get contextResult.accessToken
-    this.contextAccessToken = this.contextResult && this.contextResult.accessToken? this.contextResult.accessToken : '';
+    this.contextAccessToken = this.contextResult && this.contextResult.accessToken ? this.contextResult.accessToken : '';
     // context.dispatch is a writeable, optional property and contains a "safe" version of the data that should be sent to any client.
     // If context.dispatch has not been set context.result will be sent to the client instead
     this.contextDispatch = this.context.dispatch ? this.context.dispatch : null;
@@ -62,9 +62,6 @@ class HookHelper {
     this.contextError = this.context.error ? this.context.error : null;
     // Get provider
     this.contextProvider = this.contextParams && this.contextParams.provider ? this.contextParams.provider : '';
-    // Get normalize hook context
-    // this.hookContext = getHookContext(this.context);
-    this.hookContext = HookHelper.getHookContext(this.context);
   }
 
 
@@ -79,19 +76,32 @@ class HookHelper {
 
   /**
    * Show debug info
-   * @param mask // 'authentication.create.after'
-   * @param show
+   * @param {String} mask // 'authentication.create.after'
+   * @param {Boolean} show
+   * @param {Boolean} isConn
    */
-  showDebugInfo(mask = '', show = true) {
+  showDebugInfo(mask = '', show = true, isConn = false) {
     if (this.contextError) return;
     if (mask) {
       const maskItems = mask.split('.');
-      if (show && (maskItems[0] === this.contextPath) && (maskItems[1] === this.contextMethod) && (maskItems[2] === this.contextType)) {
-        inspector(`showDebugInfo::${mask}:`, this.hookContext);
+      if (maskItems.length === 1) {// {'authentication'|'*'}
+        if (show && (maskItems[0] === this.contextPath || maskItems[0] === '*')) {
+          inspector(`showDebugInfo::${mask}:`, HookHelper.getHookContext(this.context, isConn));
+        }
+      }
+      if (maskItems.length === 2) {// {'authentication.create'|'*.create'|'authentication.*'}
+        if (show && (maskItems[0] === this.contextPath || maskItems[0] === '*') && (maskItems[1] === this.contextMethod || maskItems[1] === '*')) {
+          inspector(`showDebugInfo::${mask}:`, HookHelper.getHookContext(this.context, isConn));
+        }
+      }
+      if (maskItems.length === 3) {// {'authentication.create.after'|'*.create.after'|'authentication.*.after'}
+        if (show && (maskItems[0] === this.contextPath || maskItems[0] === '*') && (maskItems[1] === this.contextMethod || maskItems[1] === '*') && (maskItems[2] === this.contextType)) {
+          inspector(`showDebugInfo::${mask}:`, HookHelper.getHookContext(this.context, isConn));
+        }
       }
     } else {
       if (show) {
-        inspector('showDebugInfo:', this.hookContext);
+        inspector('showDebugInfo:', HookHelper.getHookContext(this.context, isConn));
       }
     }
   }
@@ -166,50 +176,55 @@ class HookHelper {
    */
   getContextId() {
     let contextId;
-    if(isObject(this.contextId)){
+    if (isObject(this.contextId)) {
       const idField = HookHelper.getIdField(this.contextId);
       contextId = this.contextId[idField];
-    }else {
+    } else {
       contextId = this.contextId;
     }
     return contextId;
   }
 
-  static getHookContext(context) {
+  /**
+   * Get hook context
+   * @param {Object} context 
+   * @param {Boolean} isConn 
+   * @returns {Object}
+   */
+  static getHookContext(context, isConn = false) {
     let target = {};
-    let {path, method, type, params, id, data, result, /*dispatch,*/ statusCode, grapql} = context;
+    let { path, method, type, params, id, data, result, statusCode } = Object.assign({}, context);
+    // let {} = params;
 
     if (path) target.path = path;
     if (method) target.method = method;
     if (type) target.type = type;
     if (params) {
-      if (params.connection) {
-        delete params.connection;
+      target.params = {};
+
+      let { user, authenticated, provider, query, connection } = params;
+
+      if (user) {
+        target.params.user = user;
       }
-      target.params = params;
+      if (authenticated) {
+        target.params.authenticated = authenticated;
+      }
+      target.params.provider = provider ? provider : '';
+      if (query && Object.keys(query).length > 0) {
+        target.params.query = query;
+      }
+      if (isConn && connection && Object.keys(connection).length > 0) {
+        target.params.connection = connection;
+      }
     }
     if (id) target.id = id;
     if (data && type === 'before') target.data = data;
     if (result) target.result = result;
-    // if (dispatch) target.dispatch = dispatch;
     if (statusCode) target.statusCode = statusCode;
-    // if (error) target.error = error;
-    if (grapql) target.grapql = grapql;
     return Object.assign({}, target);
   }
 
-  static getGraphQLContext(context) {
-    let target = {};
-    let {batchLoaders, cache, provider, authenticated, pagination, user,} = context;
-
-    if (batchLoaders) target.batchLoaders = batchLoaders;
-    if (cache) target.cache = cache;
-    if (provider) target.provider = provider;
-    if (authenticated) target.authenticated = authenticated;
-    if (pagination) target.pagination = pagination;
-    if (user) target.user = user;
-    return Object.assign({}, target);
-  }
 
   /**
    * Merge items
@@ -219,9 +234,9 @@ class HookHelper {
    */
   static mergeItems(records, source = {}) {
     let _records;
-    if(Array.isArray(records)){
+    if (Array.isArray(records)) {
       _records = records.map(record => Object.assign({}, record, source));
-    }else {
+    } else {
       _records = Object.assign({}, records, source);
     }
     return _records;
@@ -232,9 +247,9 @@ class HookHelper {
    * @param source {Object}
    */
   mergeRecords(source = {}) {
-    if(Array.isArray(this.contextRecords)){
+    if (Array.isArray(this.contextRecords)) {
       this.contextRecords.forEach(record => Object.assign(record, source));
-    }else {
+    } else {
       Object.assign(this.contextRecords, source);
     }
   }
@@ -246,9 +261,9 @@ class HookHelper {
    */
   getPickRecords(fn) {
     let _records;
-    if(Array.isArray(this.contextRecords)){
+    if (Array.isArray(this.contextRecords)) {
       _records = this.contextRecords.map(record => fn(record));
-    }else {
+    } else {
       _records = fn(this.contextRecords);
     }
     return _records;
@@ -262,12 +277,12 @@ class HookHelper {
   async forEachRecords(fn) {
     // const _fn = fn.bind(this);
     const _recordHandle = async record => await fn(record);
-    if(Array.isArray(this.contextRecords)){
+    if (Array.isArray(this.contextRecords)) {
       for (let i = 0; i < this.contextRecords.length; i++) {
         const record = this.contextRecords[i];
         await _recordHandle(record);
       }
-    }else {
+    } else {
       await fn(this.contextRecords);
     }
   }
@@ -276,7 +291,7 @@ class HookHelper {
    * Replace records for context
    * @return {HookHelper}
    */
-  replaceRecordsForContext(){
+  replaceRecordsForContext() {
     // Place the modified records back in the context.
     replaceItems(this.context, this.contextRecords);
     return this;
@@ -308,7 +323,7 @@ class HookHelper {
   async findItems(path = '', query = {}) {
     const service = this.app.service(path);
     if (service) {
-      let findResults = await service.find({query: query});
+      let findResults = await service.find({ query: query });
       findResults = (query['$limit'] === 0) ? findResults.total : findResults.data;
       if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
       return findResults;
@@ -327,8 +342,8 @@ class HookHelper {
     const service = this.app.service(path);
     if (service) {
       // const newQuery = Object.assign(query, {$limit: null});
-      const newQuery = loMerge(query, {$limit: null});
-      let findResults = await service.find({query: newQuery});
+      const newQuery = loMerge(query, { $limit: null });
+      let findResults = await service.find({ query: newQuery });
       findResults = findResults.data;
       if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(newQuery)}).findResults:`, findResults);
       return findResults;
@@ -347,8 +362,8 @@ class HookHelper {
     const service = this.app.service(path);
     if (service) {
       // const newQuery = Object.assign(query, {$limit: 0});
-      const newQuery = loMerge(query, {$limit: 0});
-      let findResults = await service.find({query: newQuery});
+      const newQuery = loMerge(query, { $limit: 0 });
+      let findResults = await service.find({ query: newQuery });
       findResults = findResults.total;
       if (isDebug) inspector(`getCountItems(path='${path}', query=${JSON.stringify(newQuery)}).findResults:`, findResults);
       return findResults;
@@ -366,7 +381,7 @@ class HookHelper {
   async removeItems(path = '', query = {}) {
     const service = this.app.service(path);
     if (service) {
-      const removeResults = await service.remove(null, {query: query});
+      const removeResults = await service.remove(null, { query: query });
       if (isLog) inspector(`removeItems(path='${path}', query=${JSON.stringify(query)}).removeResults:`, removeResults);
       return removeResults;
     } else {
@@ -401,7 +416,7 @@ class HookHelper {
   async patchItems(path = '', data = {}, query = {}) {
     const service = this.app.service(path);
     if (service) {
-      const patchResults = await service.patch(null, data, {query: query});
+      const patchResults = await service.patch(null, data, { query: query });
       if (isLog) inspector(`patchItems(path='${path}', data=${JSON.stringify(data)}, query=${JSON.stringify(query)}).patchResults:`, patchResults);
       return patchResults;
     } else {
@@ -447,20 +462,20 @@ class HookHelper {
    * @return {Promise.<void>}
    */
   async restrictMaxRows(servicePath = '', maxRows = -1) {
-    let findResults = await this.findItems(servicePath, {$limit: 0});
+    let findResults = await this.findItems(servicePath, { $limit: 0 });
     if (isDebug) debug(`after.log-messages.create: (${findResults}) records have been find from the "${servicePath}" service`);
     if (findResults > maxRows) {
-      if(!this.contextRecords) throw new errors.BadRequest('Value of "restrictMaxRows:contextRecords" must not be empty.');
+      if (!this.contextRecords) throw new errors.BadRequest('Value of "restrictMaxRows:contextRecords" must not be empty.');
       const idField = HookHelper.getIdField(this.contextRecords);
       findResults = await this.findItems(servicePath, {
         $limit: null,
         $skip: maxRows,
-        $sort: {createdAt: -1},
+        $sort: { createdAt: -1 },
         $select: [idField]
       });
       findResults = findResults.map(item => item[idField]);
       if (isDebug) debug('findResults:', findResults.length, findResults);
-      let removeResults = await this.removeItems(servicePath, {[idField]: {$in: findResults}});
+      let removeResults = await this.removeItems(servicePath, { [idField]: { $in: findResults } });
       if (isDebug) debug('removeResults:', removeResults.length, removeResults);
       return removeResults;
     }
@@ -471,7 +486,7 @@ class HookHelper {
    * @param query
    * @return {Promise.<void>}
    */
-  async validateUnique(servicePath = '', query = {}){
+  async validateUnique(servicePath = '', query = {}) {
     let results = await this.getCountItems(servicePath, query);
     if (isDebug) debug(`validateUnique(servicePath='${servicePath}', query=${JSON.stringify(query)}).results:`, results);
     // debug(`validateUnique(servicePath='${servicePath}', query=${JSON.stringify(query)}).results:`, results);

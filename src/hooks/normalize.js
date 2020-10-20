@@ -20,6 +20,8 @@ module.exports = function (options = {}) {
     records = await contextNormalize(context);
     if(isLog) inspector('hooks.normalize::records:', records);
 
+    // hh.showDebugInfo('messages', true);
+    
     // Place the modified records back in the context.
     replaceItems(context, records);
 

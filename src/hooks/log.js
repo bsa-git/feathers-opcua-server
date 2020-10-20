@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const {getItems, replaceItems} = require('feathers-hooks-common');
-const {AuthServer, isTrue, HookHelper, getLogMessage} = require('../plugins');
+const {isTrue, HookHelper, getLogMessage} = require('../plugins');
 const debug = require('debug')('app:hooks.log');
 
 const isDebug = false;
@@ -14,21 +14,24 @@ module.exports = function (isTest = false) {
     let records = getItems(context);
 
     // Create HookHelper object
-    const hookHelper = new HookHelper(context);
+    const hh = new HookHelper(context);
     // Show debug info
-    hookHelper.showDebugInfo('', isLog);
-    hookHelper.showDebugError();
+    hh.showDebugInfo('', isLog);
+    hh.showDebugError();
 
-    // hookHelper.showDebugInfo('authentication.remove.after', true);
+    // hh.showDebugInfo('authentication.remove.after', true);
+    // hh.showDebugInfo('messages', true);
 
     // Is log msg enable
     const isLogMsgEnable = isTest ||
         isTrue(process.env.LOGMSG_ENABLE) &&
-        hookHelper.app.get('env') !== 'test' &&
-        (hookHelper.contextProvider ||
-          hookHelper.isMask('authentication.remove.after') ||
-          hookHelper.contextError
+        hh.app.get('env') !== 'test' &&
+        (!!hh.contextProvider ||
+          hh.isMask('authentication.remove.after') ||
+          !!hh.contextError
         );
+
+    if(isDebug) debug('isLogMsgEnable:', isLogMsgEnable);    
 
     if(isLogMsgEnable){
       // // Get log message
