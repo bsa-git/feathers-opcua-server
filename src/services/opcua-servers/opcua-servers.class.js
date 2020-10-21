@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-const { OpcuaServer } = require('../../plugins');
+const errors = require('@feathersjs/errors');
+const { OpcuaServer, inspector } = require('../../plugins');
 const chalk = require('chalk');
 const moment = require('moment');
 const {
@@ -14,27 +15,44 @@ const isDebug = false;
 const isLog = false;
 
 /**
- * Create opcua client
- * @param {Application} app 
+ * Execute service action
+ * @param {Object} service 
  * @param {Object} data 
- * @returns {Object}
  */
-const createOpcuaServer = async (app, data) => {
+const executeAction = async (service, data) => {
+  let server, opcuaServer;
   try {
-    // Create OPC-UA server
-    const server = new OpcuaServer(app, data.params);
-    const opcuaServer = {
-      id: data.id,
-      server
-    };
-
-    // Server create and start
-    await server.create();
-    await server.start();
-
-    return opcuaServer;
+    // Run service action
+    switch (`${data.action}`) {
+    case 'create':
+      // Create OPC-UA server
+      server = new OpcuaServer(service.app, data.params);
+      opcuaServer = {
+        id: data.id,
+        server,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt
+      };
+      // Server create and start
+      await server.create();
+      await server.start();
+      service.opcuaServers.push(opcuaServer);
+      break;
+    case 'shutdown':
+      // Shutdown OPC-UA server
+      opcuaServer = service.get(data.id);
+      opcuaServer.server.shutdown();
+      break;
+    case 'start':
+      // Start OPC-UA server
+      opcuaServer = service.get(data.id);
+      opcuaServer.server.start();
+      break;
+    default:
+      throw new errors.BadRequest(`No such action - '${data.action}'`);
+    }
   } catch (error) {
-    console.log(chalk.red('service.opcua-servers::create.error'), chalk.cyan(error.message));
+    console.log(chalk.red('service.opcua-servers::executeAction.error'), chalk.cyan(error.message));
     throw error;
   }
 };
@@ -52,39 +70,37 @@ class OpcuaServers {
   }
 
   async get(id, params) {
-    return this.opcuaServers.find(srv => srv.id === id);
+    const opcuaServer = this.opcuaServers.find(srv => srv.id === id);
+    if (!opcuaServer) {
+      throw new errors.BadRequest(`No opcua server found for this id = '${id}' in the server list`);
+    }
+    return opcuaServer;
   }
 
   async create(data, params) {
     try {
-      if (Array.isArray(data)) {
-        return Promise.all(data.map(current => this.create(current, params)));
-      }
-      // Create OPC-UA server
-      const opcuaServer = await createOpcuaServer(this.app, data);
-      this.opcuaServers.push(opcuaServer);
+      await executeAction(this, data);
       return data;
     } catch (error) {
-      console.log(chalk.red('service.opcua-clients::create.error'), chalk.cyan(error.message));
+      console.log(chalk.red('service.opcua-servers::create.error'), chalk.cyan(error.message));
       throw error;
     }
   }
 
   async update(id, data, params) {
-
+    return { data };
   }
 
   async patch(id, data, params) {
-
+    return { data };
   }
 
   // OPC-UA server shutdown
   async remove(id, params) {
     try {
-      const opcuaServer = this.opcuaServers.find(srv => srv.id === id);
-      if (opcuaServer) {
-        opcuaServer.server.shutdown();
-      }
+      const opcuaServer = this.get(id);
+      opcuaServer.server.shutdown();
+      return { id };
     } catch (error) {
       console.log(chalk.red('service.opcua-servers::remove.error'), chalk.cyan(error.message));
       throw error;

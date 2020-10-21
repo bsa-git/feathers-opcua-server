@@ -24,13 +24,15 @@ const createOpcuaClient = async (app, data) => {
   const client = new OpcuaClient(app, data.params);
   const opcuaClient = {
     id: data.id,
-    client
+    client,
+    createdAt: data.createdAt,
+    updatedAt: data.updatedAt
   };
   client.create();
   await client.connect();
   await client.sessionCreate();
   client.subscriptionCreate();
-  
+
   return opcuaClient;
 };
 

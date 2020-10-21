@@ -50,15 +50,15 @@ module.exports = async function contextNormalize(context) {
 
   // Run normalize createdAt/updatedAt
   switch (`${hh.contextMethod}.${hh.contextType}`) {
-    case 'create.before':
-      await hh.forEachRecords(createdAtNormalize);
-      break;
-    case 'update.before':
-    case 'patch.before':  
-      await hh.forEachRecords(updatedAtNormalize);
-      break;
-    default:
-      break;
+  case 'create.before':
+    await hh.forEachRecords(createdAtNormalize);
+    break;
+  case 'update.before':
+  case 'patch.before':  
+    await hh.forEachRecords(updatedAtNormalize);
+    break;
+  default:
+    break;
   }
   return hh.contextRecords;
 };

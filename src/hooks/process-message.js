@@ -14,7 +14,7 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
     const text = context.data.text.substring(0, 400);
 
     // Update the original data (so that people can't submit additional stuff)
-    updateData = {
+    const updateData = {
       text,
       // Set the user id
       userId: user._id,
