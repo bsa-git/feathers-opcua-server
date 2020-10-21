@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+const errors = require('@feathersjs/errors');
 const { OpcuaClient } = require('../../plugins');
 const chalk = require('chalk');
 const moment = require('moment');
@@ -37,6 +38,43 @@ const createOpcuaClient = async (app, data) => {
 };
 
 /**
+ * Execute service action
+ * @param {Object} service 
+ * @param {Object} data 
+ */
+const executeAction = async (service, data) => {
+  let client, opcuaClient;
+  try {
+    // Run client action
+    switch (`${data.action}`) {
+    case 'create':
+      // Create OPC-UA client
+      client = new OpcuaClient(service.app, data.params);
+      opcuaClient = {
+        id: data.id,
+        client,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt
+      };
+      client.create();
+      await client.connect();
+      await client.sessionCreate();
+      client.subscriptionCreate();
+      break;
+    case 'shutdown':
+      break;
+    case 'start':
+      break;
+    default:
+      throw new errors.BadRequest(`No such action - '${data.action}'`);
+    }
+  } catch (error) {
+    console.log(chalk.red('service.opcua-servers::executeAction.error'), chalk.cyan(error.message));
+    throw error;
+  }
+};
+
+/**
  * Opcua clients class
  */
 class OpcuaClients {
@@ -52,17 +90,16 @@ class OpcuaClients {
   }
 
   async get(id, params) {
-    return this.opcuaClients.find(client => client.id === id);
+    const opcuaClient = this.opcuaClients.find(client => client.id === id);
+    if (!opcuaClient) {
+      throw new errors.BadRequest(`No opcua client found for this id = '${id}' in the client list`);
+    }
+    return opcuaClient;
   }
 
   async create(data, params) {
     try {
-      if (Array.isArray(data)) {
-        return Promise.all(data.map(current => this.create(current, params)));
-      }
-      // Create OPC-UA client
-      const opcuaClient = await createOpcuaClient(this.app, data);
-      this.opcuaClients.push(opcuaClient);
+      await executeAction(this, data);
       return data;
     } catch (error) {
       console.log(chalk.red('service.opcua-clients::create.error'), chalk.cyan(error.message));
@@ -80,13 +117,12 @@ class OpcuaClients {
 
   async remove(id, params) {
     try {
-      const opcuaClient = this.opcuaClients.find(srv => srv.id === id);
-      if (opcuaClient) {
-        await opcuaClient.client.subscriptionTerminate();
-        await opcuaClient.client.subscriptionTerminate();
-        await opcuaClient.client.sessionClose();
-        await opcuaClient.client.disconnect();
-      }
+      const opcuaClient = this.get(id);
+      await opcuaClient.client.subscriptionTerminate();
+      await opcuaClient.client.subscriptionTerminate();
+      await opcuaClient.client.sessionClose();
+      await opcuaClient.client.disconnect();
+      return { id };
     } catch (error) {
       console.log(chalk.red('service.opcua-clients::remove.error'), chalk.cyan(error.message));
       throw error;
