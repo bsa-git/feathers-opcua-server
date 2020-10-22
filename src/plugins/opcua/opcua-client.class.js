@@ -15,6 +15,9 @@ const chalk = require('chalk');
 const loMerge = require('lodash/merge');
 const moment = require('moment');
 
+// const certificateFile ="../packages/node-opcua-samples/certificates/client_selfsigned_cert_2048.pem";
+// const privateKeyFile ="../packages/node-opcua-samples/certificates/client_key_2048.pem";
+
 const debug = require('debug')('app:plugins.opcua-client.class');
 const isLog = false;
 const isDebug = false;
@@ -191,7 +194,7 @@ class OpcuaClient {
     if (!this.session) return;
     try {
       const result = await this.session.readNamespaceArray();
-      if (isLog) inspector('plugins.opcua-client.class::sessionReadNamespaceArray.result:', result);
+      if (isLog) inspector('plugin.opcua-client.class::sessionReadNamespaceArray.result:', result);
       // inspector('plugins.opcua-client.class::sessionReadNamespaceArray.result:', result);
       return result;
     } catch (err) {
@@ -561,6 +564,7 @@ class OpcuaClient {
   }
 
   /**
+   * Session write
    * 
    * @example :
    *
@@ -634,6 +638,7 @@ class OpcuaClient {
   }
 
   /**
+   * Session call method
    * 
    * @example :
    *
@@ -702,6 +707,7 @@ class OpcuaClient {
 
   /**
  * Get arguments definition for session
+ * 
  * @param {String} nameNodeId 
  * @returns {Promise<ArgumentDefinition>}
  */
@@ -756,6 +762,7 @@ class OpcuaClient {
 
   /**
   * Subscription monitor
+  * 
   * @param {String} nameNodeId
   * e.g. 'temperature'
   * @param {Function} cb

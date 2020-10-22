@@ -1,5 +1,5 @@
+/* eslint-disable no-unused-vars */
 const assert = require('assert');
-
 const app = require('../../src/app');
 const { OpcuaServer, OpcuaClient, pause, getDateTimeSeparately, isObject, inspector } = require('../../src/plugins');
 const chalk = require('chalk');
@@ -49,14 +49,11 @@ describe('<<=== OPC-UA: Test ===>>', () => {
 
   after(async () => {
     try {
+      if(opcuaClient !== null) opcuaClient = null;
+      if(client !== null) client = null;
 
-      if (client === null && opcuaClient === null) return;
-      opcuaClient = null;
-      client = null;
-
-      if (server === null && opcuaServer === null) return;
-      opcuaServer = null;
-      server = null;
+      if(opcuaServer !== null) opcuaServer = null;
+      if(server !== null) server = null;
 
       debug('OPCUA - Test::after: Done');
     } catch (error) {
