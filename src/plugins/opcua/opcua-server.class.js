@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const moment = require('moment');
-const { inspector } = require('../lib');
+const { inspector, appRoot } = require('../lib');
 const {
   OPCUAServer,
   Variant,
@@ -12,6 +12,7 @@ const {
   standardUnits,
   makeAccessLevelFlag
 } = require('node-opcua');
+const opcuaDefaultServerOptions = require(`${appRoot}/src/api/app/opcua/OPCUAServerOptions`);
 const os = require('os');
 const loMerge = require('lodash/merge');
 const chalk = require('chalk');
@@ -27,24 +28,9 @@ class OpcuaServer {
    * @param params {Object}
    */
   constructor(app, params = {}) {
-    const paramsDefault = {
-      port: 26543,
-      isOnSignInt: false,
-      maxAllowedSessionNumber: 10,
-      maxConnectionsPerEndpoint: 10,
-      isAuditing: false,
-      nodeset_filename: [
-        nodesets.standard,
-        nodesets.di
-      ],
-      buidIfo: {
-        productName: 'NodeOPCUA Server',
-        buildNumber: moment().format('X'),
-        buildDate: moment().format()
-      }
-    };
-    this.params = loMerge(paramsDefault, params);
-    // this.app = Object.assign({}, app);
+    // Set process.on to event 'SIGINT'
+    this.isOnSignInt = false;
+    this.params = loMerge(opcuaDefaultServerOptions, params);
     this.app = app;
     this.opcuaServer = null;
   }
@@ -58,7 +44,7 @@ class OpcuaServer {
       this.opcuaServer = new OPCUAServer({
         port: this.params.port,  // the port of the listening socket of the server
         nodeset_filename: this.params.nodeset_filename,
-        buidIfo: this.params.buidIfo
+        buildInfo: this.params.buildInfo
       });
 
       await this.opcuaServer.initialize();
@@ -69,7 +55,7 @@ class OpcuaServer {
 
       this.constructAddressSpace();
 
-      if (this.params.isOnSignInt) {
+      if (this.isOnSignInt) {
         process.on('SIGINT', async () => {
           await this.opcuaServer.shutdown();
           console.log(chalk.yellow('Server terminated'));
@@ -120,6 +106,43 @@ class OpcuaServer {
     try {
       this.opcuaServer.shutdown();
       console.log(chalk.yellow('Server terminated'));
+    } catch (err) {
+      const errTxt = 'Error while start the OPS-UA server:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * Get server info
+   */
+  getServerInfo() {
+    if (!this.opcuaServer) return;
+    try {
+      let applicationUri, serverInfo = this.opcuaServer.serverInfo, _serverInfo = {};
+      applicationUri = serverInfo.applicationUri;
+      _serverInfo.applicationUri = applicationUri;
+      _serverInfo.productUri = serverInfo.productUri;
+      _serverInfo.applicationName = serverInfo.applicationName.text;
+      _serverInfo.applicationType = serverInfo.applicationType;
+      _serverInfo.gatewayServerUri = serverInfo.gatewayServerUri;
+      _serverInfo.discoveryProfileUri = serverInfo.discoveryProfileUri;
+      _serverInfo.discoveryUrls = serverInfo.discoveryUrls;
+      return _serverInfo; //Object.assign({}, _serverInfo);
+    } catch (err) {
+      const errTxt = 'Error while start the OPS-UA server:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * Get server info
+   */
+  getBuildInfo() {
+    if (!this.opcuaServer) return;
+    try {
+      return this.opcuaServer.buildInfo;
     } catch (err) {
       const errTxt = 'Error while start the OPS-UA server:';
       console.log(errTxt, err);

@@ -73,7 +73,13 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         await server.create();
         const endpoints = await server.start();
         opcuaServer = server.opcuaServer;
+        // serverInfo
+        inspector('OPC-UA server start::serverInfo:', server.getServerInfo());
+        // buildInfo
+        inspector('OPC-UA server start::buildInfo:', server.getBuildInfo());
+        // server.securityMode
         console.log(chalk.green('server.securityMode'), chalk.cyan(endpoints[0].securityMode));
+        // server.securityPolicyUri
         console.log(chalk.green('server.securityPolicyUri'), chalk.cyan(endpoints[0].securityPolicyUri));
         assert.ok(true, 'OPC-UA server start');
       } catch (error) {
