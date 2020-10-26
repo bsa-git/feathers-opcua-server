@@ -19,20 +19,6 @@ const isLog = false;
 let server = null, client = null;
 let opcuaServer = null, opcuaClient = null;
 
-/**
- * Call back function for subscription monitor
- * @param {String} nameNodeId 
- * @param {*} value 
- */
-const cbSubscriptionMonitor = async (nameNodeId, dataValue) => {
-  const itemNodeId = client.params.nodeIds.find(item => item.name === nameNodeId);
-  const nodeId = itemNodeId ? itemNodeId.nodeId : nameNodeId;
-  if (isDebug) debug('cbSubscriptionMonitor.nodeId:', nodeId);
-  console.log(chalk.green(`${nameNodeId}:`), chalk.cyan(dataValue.value.value.toString()));
-
-  // console.log(` Temperature = ${value}`)
-};
-
 describe('<<=== OPC-UA: Test ===>>', () => {
 
   before(async () => {
@@ -73,15 +59,31 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         await server.create();
         const endpoints = await server.start();
         opcuaServer = server.opcuaServer;
-        // serverInfo
-        inspector('OPC-UA server start::serverInfo:', server.getServerInfo());
-        // buildInfo
-        inspector('OPC-UA server start::buildInfo:', server.getBuildInfo());
         // server.securityMode
         console.log(chalk.green('server.securityMode'), chalk.cyan(endpoints[0].securityMode));
         // server.securityPolicyUri
         console.log(chalk.green('server.securityPolicyUri'), chalk.cyan(endpoints[0].securityPolicyUri));
         assert.ok(true, 'OPC-UA server start');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA server get serverInfo', async () => {
+      try {
+        // serverInfo
+        inspector('OPC-UA server get serverInfo:', server.getServerInfo());
+        assert.ok(true, 'OPC-UA server get serverInfo');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA server get buildInfo', async () => {
+      try {
+        // buildInfo
+        inspector('OPC-UA server get buildInfo:', server.getBuildInfo());
+        assert.ok(true, 'OPC-UA server get buildInfo');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
       }
@@ -130,6 +132,126 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
+    it('OPC-UA server get bytesWritten', async () => {
+      try {
+        // bytesWritten
+        console.log(chalk.green('bytesWritten:'), chalk.cyan(server.getBytesWritten()));
+        assert.ok(true, 'OPC-UA server get bytesWritten');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA server get bytesRead', async () => {
+      try {
+        // bytesWritten
+        console.log(chalk.green('bytesRead:'), chalk.cyan(server.getBytesRead()));
+        assert.ok(true, 'OPC-UA server get bytesRead');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA server get transactionsCount', async () => {
+      try {
+        // bytesWritten
+        console.log(chalk.green('transactionsCount:'), chalk.cyan(server.getTransactionsCount()));
+        assert.ok(true, 'OPC-UA server get transactionsCount');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA server get currentChannelCount', async () => {
+      try {
+        // bytesWritten
+        console.log(chalk.green('currentChannelCount:'), chalk.cyan(server.getCurrentChannelCount()));
+        assert.ok(true, 'OPC-UA server get currentChannelCount');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA server get currentSubscriptionCount', async () => {
+      try {
+        // bytesWritten
+        console.log(chalk.green('currentSubscriptionCount:'), chalk.cyan(server.getCurrentSubscriptionCount()));
+        assert.ok(true, 'OPC-UA server get currentSubscriptionCount');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA server get rejectedSessionCount', async () => {
+      try {
+        // bytesWritten
+        console.log(chalk.green('rejectedSessionCount:'), chalk.cyan(server.getRejectedSessionCount()));
+        assert.ok(true, 'OPC-UA server get rejectedSessionCount');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA server get rejectedRequestsCount', async () => {
+      try {
+        // bytesWritten
+        console.log(chalk.green('rejectedRequestsCount:'), chalk.cyan(server.getRejectedRequestsCount()));
+        assert.ok(true, 'OPC-UA server get rejectedRequestsCount');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA server get sessionAbortCount', async () => {
+      try {
+        // bytesWritten
+        console.log(chalk.green('sessionAbortCount:'), chalk.cyan(server.getSessionAbortCount()));
+        assert.ok(true, 'OPC-UA server get sessionAbortCount');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA server get publishingIntervalCount', async () => {
+      try {
+        // bytesWritten
+        console.log(chalk.green('publishingIntervalCount:'), chalk.cyan(server.getPublishingIntervalCount()));
+        assert.ok(true, 'OPC-UA server get publishingIntervalCount');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA server get currentSessionCount', async () => {
+      try {
+        // bytesWritten
+        console.log(chalk.green('currentSessionCount:'), chalk.cyan(server.getCurrentSessionCount()));
+        assert.ok(true, 'OPC-UA server get currentSessionCount');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA server is initialized', async () => {
+      try {
+        // bytesWritten
+        console.log(chalk.green('isInitialized:'), chalk.cyan(server.isInitialized()));
+        assert.ok(true, 'OPC-UA server is initialized');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA server is auditing', async () => {
+      try {
+        // bytesWritten
+        console.log(chalk.green('isAuditing:'), chalk.cyan(server.isAuditing()));
+        assert.ok(true, 'OPC-UA server is auditing');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
 
     it('OPC-UA client session close', async () => {
       try {
@@ -151,7 +273,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
 
     it('OPC-UA server shutdown', async () => {
       try {
-        server.shutdown();
+        await server.shutdown();
         assert.ok(true, 'OPC-UA server shutdown');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);

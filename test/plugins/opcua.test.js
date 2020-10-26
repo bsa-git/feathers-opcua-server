@@ -370,7 +370,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
 
     it('OPC-UA server shutdown', async () => {
       try {
-        server.shutdown();
+        await server.shutdown();
         assert.ok(true, 'OPC-UA server shutdown');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);

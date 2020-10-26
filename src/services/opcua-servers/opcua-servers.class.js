@@ -41,7 +41,7 @@ const executeAction = async (service, data) => {
     case 'shutdown':
       // Shutdown OPC-UA server
       opcuaServer = service.get(data.id);
-      opcuaServer.server.shutdown();
+      await opcuaServer.server.shutdown(data.timeout ? data.timeout : 0);
       break;
     case 'start':
       // Start OPC-UA server

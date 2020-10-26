@@ -1,6 +1,6 @@
 
 /* eslint-disable no-unused-vars */
-const {readJsonFileSync, appRoot} = require('../../../plugins/lib');
+const {readJsonFileSync, appRoot} = require('../../plugins/lib');
 const {
   SecurityPolicy,
   MessageSecurityMode,

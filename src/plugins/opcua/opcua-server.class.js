@@ -12,7 +12,7 @@ const {
   standardUnits,
   makeAccessLevelFlag
 } = require('node-opcua');
-const opcuaDefaultServerOptions = require(`${appRoot}/src/api/app/opcua/OPCUAServerOptions`);
+const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/OPCUAServerOptions`);
 const os = require('os');
 const loMerge = require('lodash/merge');
 const chalk = require('chalk');
@@ -37,7 +37,27 @@ class OpcuaServer {
 
   /**
    * Create opc-ua server
-   */
+   * Initialize the server by installing default node set.
+   *
+   * and instruct the server to listen to its endpoints.
+   *
+   * ```javascript
+   * const server = new OPCUAServer();
+   * await server.initialize();
+   *
+   * // default server namespace is now initialized
+   * // it is a good time to create life instance objects
+   * const namespace = server.engine.addressSpace.getOwnNamespace();
+   * namespace.addObject({
+   *     browseName: "SomeObject",
+   *     organizedBy: server.engine.addressSpace.rootFolder.objects
+   * });
+   *
+   * // the addressSpace is now complete
+   * // let's now start listening to clients
+   * await server.start();
+   * ```
+ */
   async create() {
     try {
       // Let create an instance of OPCUAServer
@@ -73,6 +93,7 @@ class OpcuaServer {
 
   /**
    * Start opc-ua server
+   * Initiate the server by starting all its endpoints
    */
   async start() {
     if (!this.opcuaServer) return;
@@ -100,11 +121,26 @@ class OpcuaServer {
 
   /**
    * Shutdown opc-ua server
+   * shutdown all server endpoints
+   * @method shutdown
+   * @param  timeout the timeout (in ms) before the server is actually shutdown
+   *
+   * @example
+   *
+   * ```javascript
+   *    // shutdown immediately
+   *    server.shutdown(function(err) {
+   *    });
+   *    // shutdown within 10 seconds
+   *    server.shutdown(10000,function(err) {
+   *    });
+   *   ``` 
    */
-  shutdown() {
+  async shutdown(timeout = 0) {
     if (!this.opcuaServer) return;
     try {
-      this.opcuaServer.shutdown();
+      if (timeout) await this.opcuaServer.shutdown(timeout);
+      else await this.opcuaServer.shutdown();
       console.log(chalk.yellow('Server terminated'));
     } catch (err) {
       const errTxt = 'Error while start the OPS-UA server:';
@@ -148,6 +184,90 @@ class OpcuaServer {
       console.log(errTxt, err);
       throw new errors.GeneralError(`${errTxt} "${err.message}"`);
     }
+  }
+
+  /**
+  * total number of bytes written  by the server since startup
+  */
+  getBytesWritten() {
+    return this.opcuaServer.bytesWritten;
+  }
+
+  /**
+  * total number of bytes read  by the server since startup
+  */
+  getBytesRead() {
+    return this.opcuaServer.bytesRead;
+  }
+
+  /**
+  * Number of transactions processed by the server since startup
+  */
+  getTransactionsCount() {
+    return this.opcuaServer.transactionsCount;
+  }
+
+  /**
+  * the number of connected channel on all existing end points
+  */
+  getCurrentChannelCount() {
+    return this.opcuaServer.currentChannelCount;
+  }
+
+  /**
+  * The number of active subscriptions from all sessions
+  */
+  getCurrentSubscriptionCount() {
+    return this.opcuaServer.currentSubscriptionCount;
+  }
+
+  /**
+  * the number of session activation requests that have been rejected
+  */
+  getRejectedSessionCount() {
+    return this.opcuaServer.rejectedSessionCount;
+  }
+
+  /**
+  * the number of request that have been rejected
+  */
+  getRejectedRequestsCount() {
+    return this.opcuaServer.rejectedRequestsCount;
+  }
+
+  /**
+  * the number of sessions that have been aborted
+  */
+  getSessionAbortCount() {
+    return this.opcuaServer.sessionAbortCount;
+  }
+
+  /**
+  * the publishing interval count
+  */
+  getPublishingIntervalCount() {
+    return this.opcuaServer.publishingIntervalCount;
+  }
+
+  /**
+  * the number of sessions currently active
+  */
+  getCurrentSessionCount() {
+    return this.opcuaServer.currentSessionCount;
+  }
+
+  /**
+  *  true if the server has been initialized
+  */
+  isInitialized() {
+    return this.opcuaServer.initialized;
+  }
+
+  /**
+  *  is the server auditing
+  */
+  isAuditing() {
+    return this.opcuaServer.isAuditing;
   }
 
   /**
