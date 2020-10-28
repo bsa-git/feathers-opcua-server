@@ -1,0 +1,72 @@
+{
+  "objects": [
+    {
+      "browseName": "MyDevice",
+      "displayName": "My Device"
+    },
+    {
+      "browseName": "VesselDevice",
+      "displayName": "Vessel Device"
+    }
+  ],
+  "variables": [
+    {
+      "browseName": "MyDevice.Temperature",
+      "displayName": "Temperature",
+      "type": "simple",
+      "dataType": "Double",
+      "variableGetType": "get",
+      "getter": "temperatureSimulate1"
+    },
+    {
+      "browseName": "MyDevice.MyVariable2",
+      "displayName": "My Variable2",
+      "type": "simple",
+      "dataType": "String",
+      "variableGetType": "valueFromSource",
+      "getter": "valueFromSource1"
+    },
+    {
+      "browseName": "MyDevice.MyVariable3",
+      "displayName": "My Variable3",
+      "type": "simple",
+      "dataType": "String",
+      "variableGetType": "valueFromSource",
+      "getter": "valueFromSource2",
+      "valueParams": {
+        "arrayDimensions": [3],
+        "accessLevel": "CurrentRead | CurrentWrite",
+        "userAccessLevel": "CurrentRead | CurrentWrite",
+        "valueRank": 1
+      }
+    },
+    {
+      "browseName": "MyDevice.PercentageMemoryUsed",
+      "displayName": "Percentage Memory Used",
+      "type": "simple",
+      "dataType": "Double",
+      "variableGetType": "get",
+      "getter": "percentageMemUsed",
+      "valueParams": {
+        "minimumSamplingInterval": 1000
+      }
+    },
+    {
+      "browseName": "MyDevice.VariableForWrite",
+      "displayName": "Variable For Write",
+      "type": "write",
+      "dataType": "String"
+    },
+    {
+      "browseName": "MyDevice.PercentageMemoryUsed",
+      "displayName": "Percentage Memory Used",
+      "type": "simple",
+      "dataType": "Double",
+      "variableGetType": "get",
+      "getter": "percentageMemUsed",
+      "valueParams": {
+        "minimumSamplingInterval": 1000
+      }
+    }
+  ]
+}
