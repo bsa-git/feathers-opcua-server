@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
 const app = require('../../src/app');
-const { OpcuaServer, OpcuaClient, pause, getDateTimeSeparately, isObject, inspector } = require('../../src/plugins');
+const { OpcuaServer, OpcuaClient, appRoot, inspector } = require('../../src/plugins');
 const chalk = require('chalk');
 const moment = require('moment');
 const {
@@ -12,6 +12,7 @@ const {
   StatusCodes,
   makeBrowsePath
 } = require('node-opcua');
+const AddressSpaceParams = require(`${appRoot}/src/api/opcua/AddressSpaceTestOptions.json`);
 const debug = require('debug')('app:test.opcua');
 const isDebug = false;
 const isLog = false;
@@ -57,6 +58,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server start', async () => {
       try {
         await server.create();
+        server.constructAddressSpace(AddressSpaceParams);
         const endpoints = await server.start();
         opcuaServer = server.opcuaServer;
         // server.securityMode

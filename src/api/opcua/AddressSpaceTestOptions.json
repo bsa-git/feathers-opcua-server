@@ -13,6 +13,7 @@
     {
       "browseName": "MyDevice.Temperature",
       "displayName": "Temperature",
+      "ObjectBrowseName": "MyDevice",
       "type": "simple",
       "dataType": "Double",
       "variableGetType": "get",
@@ -21,6 +22,7 @@
     {
       "browseName": "MyDevice.MyVariable2",
       "displayName": "My Variable2",
+      "ObjectBrowseName": "MyDevice",
       "type": "simple",
       "dataType": "String",
       "variableGetType": "valueFromSource",
@@ -29,6 +31,7 @@
     {
       "browseName": "MyDevice.MyVariable3",
       "displayName": "My Variable3",
+      "ObjectBrowseName": "MyDevice",
       "type": "simple",
       "dataType": "String",
       "variableGetType": "valueFromSource",
@@ -43,6 +46,7 @@
     {
       "browseName": "MyDevice.PercentageMemoryUsed",
       "displayName": "Percentage Memory Used",
+      "ObjectBrowseName": "MyDevice",
       "type": "simple",
       "dataType": "Double",
       "variableGetType": "get",
@@ -54,18 +58,57 @@
     {
       "browseName": "MyDevice.VariableForWrite",
       "displayName": "Variable For Write",
+      "ObjectBrowseName": "MyDevice",
       "type": "write",
       "dataType": "String"
     },
     {
-      "browseName": "MyDevice.PercentageMemoryUsed",
-      "displayName": "Percentage Memory Used",
-      "type": "simple",
+      "browseName": "VesselDevice.PressureVesselDevice",
+      "displayName": "Pressure Vessel Device",
+      "ObjectBrowseName": "VesselDevice",
+      "type": "analog",
       "dataType": "Double",
-      "variableGetType": "get",
-      "getter": "percentageMemUsed",
+      "variableGetType": "valueFromSource",
+      "getter": "valueFromSource3",
       "valueParams": {
-        "minimumSamplingInterval": 1000
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10.0
+        },
+        "engineeringUnits": "bar"
+      },
+      "hist": true
+    }
+  ],
+  "methods": [
+    {
+      "browseName": "MyDevice.SumMethod",
+      "displayName": "Sum Method",
+      "ObjectBrowseName": "MyDevice",
+      "bindMethod": "sumMethod",
+      "inputArguments": [
+        {
+          "name": "number1",
+          "description": { "text": "first item" },
+          "dataType": "UInt32"
+        }, 
+        {
+          "name": "number2",
+          "description": { "text": "second item" },
+          "dataType": "UInt32"
+        }
+      ],
+      "outputArguments": [
+        {
+          "name": "SumResult",
+          "description": { "text": "sum of numbers" },
+          "dataType": "UInt32",
+          "valueRank": 1
+        }
+      ],
+      "userAccessLevel": {
+        "inputArguments": "CurrentRead",
+        "outputArguments": "CurrentRead"
       }
     }
   ]

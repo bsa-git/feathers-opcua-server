@@ -73,7 +73,7 @@ class OpcuaServer {
       if (isDebug) debug('rejected folder = ', this.opcuaServer.serverCertificateManager.rejectedFolder);
       if (isDebug) debug('trusted  folder = ', this.opcuaServer.serverCertificateManager.trustedFolder);
 
-      this.constructAddressSpace();
+      // this.constructAddressSpace();
 
       if (this.isOnSignInt) {
         process.on('SIGINT', async () => {
@@ -270,10 +270,59 @@ class OpcuaServer {
     return this.opcuaServer.isAuditing;
   }
 
+  constructAddressSpace(params = {}) {
+    try {
+      if (!this.opcuaServer) return;
+      const addressSpace = this.opcuaServer.engine.addressSpace;
+      const namespace = addressSpace.getOwnNamespace();
+      // params.forEach()
+      if (params.objects.length) {
+        params.objects.forEach(o => {
+          // addObject
+          const object = namespace.addObject({
+            browseName: o.browseName,
+            displayName: o.displayName,
+            organizedBy: addressSpace.rootFolder.objects
+          });
+          if (params.variables.length) {
+            const variables = params.variables.filter(v => v.ObjectBrowseName === o.browseName);
+            if (variables) {
+              variables.forEach(v => {
+                // addVariable browseName
+                if (v.browseName === 'MyDevice.Temperature') {
+                  namespace.addVariable({
+                    componentOf: object,
+                    nodeId: `s=${v.browseName}`,
+                    browseName: v.browseName,
+                    displayName: v.displayName,
+                    dataType: v.dataType,
+                    value: {
+                      get: () => {
+                        const variable1 = 10.0;
+                        const t = new Date() / 10000.0;
+                        const value = variable1 + 10.0 * Math.sin(t);
+                        return new Variant({ dataType: DataType.Double, value: value });
+                      }
+                    }
+                  });
+                }
+              });
+            }
+          }
+        });
+        console.log(chalk.yellow('Server constructed address space'));
+      }
+
+    } catch (err) {
+      const errTxt = 'Error while construct address space OPC-UA server:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
   /**
   * Construct address space
   */
-  constructAddressSpace() {
+  constructAddressSpace_() {
     if (!this.opcuaServer) return;
     try {
       const addressSpace = this.opcuaServer.engine.addressSpace;
