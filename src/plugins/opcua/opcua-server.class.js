@@ -13,6 +13,7 @@ const {
   makeAccessLevelFlag
 } = require('node-opcua');
 const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/OPCUAServerOptions`);
+
 const os = require('os');
 const loMerge = require('lodash/merge');
 const chalk = require('chalk');
@@ -270,12 +271,18 @@ class OpcuaServer {
     return this.opcuaServer.isAuditing;
   }
 
-  constructAddressSpace(params = {}) {
+  /**
+   * Construct AddressSpace
+   * @param {Object} params 
+   * @param {Object} getters 
+   */
+  constructAddressSpace(params = {}, getters = {}) {
     try {
+      let addedVariable;
       if (!this.opcuaServer) return;
       const addressSpace = this.opcuaServer.engine.addressSpace;
       const namespace = addressSpace.getOwnNamespace();
-      // params.forEach()
+      // Add objects
       if (params.objects.length) {
         params.objects.forEach(o => {
           // addObject
@@ -284,27 +291,76 @@ class OpcuaServer {
             displayName: o.displayName,
             organizedBy: addressSpace.rootFolder.objects
           });
+          // Add variables
           if (params.variables.length) {
             const variables = params.variables.filter(v => v.ObjectBrowseName === o.browseName);
             if (variables) {
               variables.forEach(v => {
                 // addVariable browseName
                 if (v.browseName === 'MyDevice.Temperature') {
-                  namespace.addVariable({
+                  let varParams = {
                     componentOf: object,
                     nodeId: `s=${v.browseName}`,
                     browseName: v.browseName,
                     displayName: v.displayName,
                     dataType: v.dataType,
-                    value: {
-                      get: () => {
-                        const variable1 = 10.0;
-                        const t = new Date() / 10000.0;
-                        const value = variable1 + 10.0 * Math.sin(t);
-                        return new Variant({ dataType: DataType.Double, value: value });
+                  };
+                  if (v.valueParams) {
+                    // Value params merge 
+                    loMerge(varParams, v.valueParams);
+                    // Value of engineeringUnits param merge 
+                    loMerge(varParams, v.valueParams.engineeringUnits ? standardUnits[v.valueParams.engineeringUnits] : {});
+                  }
+                  if (v.variableGetType === 'get') {
+                    // Value get func merge 
+                    loMerge(varParams, { value: { get: () => { return getters[v.getter](v.getterParams ? v.getterParams : {}); } } });
+                  }
+                  // namespace.addAnalogDataItem  namespace.addVariable
+                  if(v.type === 'analog'){
+                    addedVariable = namespace.addAnalogDataItem(varParams);
+                  }else{
+                    addedVariable = namespace.addVariable(varParams);
+                  }
+
+                  if (v.variableGetType === 'valueFromSource') {
+
+                  }
+
+
+                  /*
+                  switch (v.type) {
+                    case 'simple':
+                      if (v.variableGetType === 'get') {
+                        namespace.addVariable({
+                          componentOf: object,
+                          nodeId: `s=${v.browseName}`,
+                          browseName: v.browseName,
+                          displayName: v.displayName,
+                          dataType: v.dataType,
+                          value: {
+                            get: () => {
+                              return getters[v.getter](v.getterParams ? v.getterParams : {});
+                            }
+                          }
+                        });
                       }
-                    }
-                  });
+                      break;
+                    case 'analog':
+
+                      break;
+                    case 'write':
+                      namespace.addVariable({
+                        componentOf: object,
+                        nodeId: `s=${v.browseName}`,
+                        browseName: v.browseName,
+                        displayName: v.displayName,
+                        dataType: v.dataType,
+                      });
+                      break;
+                    default:
+                      break;
+                  }
+                  */
                 }
               });
             }

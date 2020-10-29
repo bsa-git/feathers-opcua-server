@@ -2,6 +2,7 @@
 const assert = require('assert');
 const app = require('../../src/app');
 const { OpcuaServer, OpcuaClient, appRoot, inspector } = require('../../src/plugins');
+const addressSpaceGetters = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-getters`);
 const chalk = require('chalk');
 const moment = require('moment');
 const {
@@ -58,7 +59,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server start', async () => {
       try {
         await server.create();
-        server.constructAddressSpace(AddressSpaceParams);
+        server.constructAddressSpace(AddressSpaceParams, addressSpaceGetters);
         const endpoints = await server.start();
         opcuaServer = server.opcuaServer;
         // server.securityMode
@@ -126,8 +127,8 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       try {
         let readResult = null;
         // Read pressureVesselDevice
-        readResult = await client.sessionReadVariableValue(['VesselDevice.PressureVesselDevice']);
-        console.log(chalk.green('pressureVesselDevice:'), chalk.cyan(readResult[0].value.value));
+        readResult = await client.sessionReadVariableValue(['MyDevice.Temperature']);
+        console.log(chalk.green('MyDevice.Temperature:'), chalk.cyan(readResult[0].value.value));
         assert.ok(readResult, 'OPC-UA client session read');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);

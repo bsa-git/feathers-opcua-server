@@ -17,7 +17,8 @@
       "type": "simple",
       "dataType": "Double",
       "variableGetType": "get",
-      "getter": "temperatureSimulate1"
+      "getter": "valueSimulate1",
+      "getterParams": { "value": 100 }
     },
     {
       "browseName": "MyDevice.MyVariable2",
@@ -26,7 +27,8 @@
       "type": "simple",
       "dataType": "String",
       "variableGetType": "valueFromSource",
-      "getter": "valueFromSource1"
+      "getter": "valueFromSource1",
+      "getterParams": { "value": "https://leanpub.com/b/nodejsbundle" }
     },
     {
       "browseName": "MyDevice.MyVariable3",
@@ -36,6 +38,7 @@
       "dataType": "String",
       "variableGetType": "valueFromSource",
       "getter": "valueFromSource2",
+      "getterParams": { "value": [10.12345, 20.12345, 30.12345] },
       "valueParams": {
         "arrayDimensions": [3],
         "accessLevel": "CurrentRead | CurrentWrite",
@@ -56,13 +59,6 @@
       }
     },
     {
-      "browseName": "MyDevice.VariableForWrite",
-      "displayName": "Variable For Write",
-      "ObjectBrowseName": "MyDevice",
-      "type": "write",
-      "dataType": "String"
-    },
-    {
       "browseName": "VesselDevice.PressureVesselDevice",
       "displayName": "Pressure Vessel Device",
       "ObjectBrowseName": "VesselDevice",
@@ -78,6 +74,13 @@
         "engineeringUnits": "bar"
       },
       "hist": true
+    },
+    {
+      "browseName": "MyDevice.VariableForWrite",
+      "displayName": "Variable For Write",
+      "ObjectBrowseName": "MyDevice",
+      "type": "write",
+      "dataType": "String"
     }
   ],
   "methods": [
