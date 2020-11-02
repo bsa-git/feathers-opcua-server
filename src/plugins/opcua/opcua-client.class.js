@@ -30,13 +30,13 @@ const paramsDefault = {
   hostname: os.hostname().toLowerCase(),
   endpointUrl: '',
   nodeIds: [
-    { name: 'MyDevice.Temperature', nodeId: 'ns=1;s=MyDevice.Temperature' },
-    { name: 'MyDevice.MyVariable2', nodeId: 'ns=1;s=MyDevice.MyVariable2' },
-    { name: 'MyDevice.MyVariable3', nodeId: 'ns=1;s=MyDevice.MyVariable3' },
-    { name: 'MyDevice.PercentageMemoryUsed', nodeId: 'ns=1;s=MyDevice.PercentageMemoryUsed' },
-    { name: 'MyDevice.VariableForWrite', nodeId: 'ns=1;s=MyDevice.VariableForWrite' },
-    { name: 'MyDevice.SumMethod', objectId: 'ns=1;s=MyDevice', methodId: 'ns=1;s=MyDevice.SumMethod' },
-    { name: 'VesselDevice.PressureVesselDevice', nodeId: 'ns=1;s=VesselDevice.PressureVesselDevice' },
+    { name: 'Device1.Temperature', nodeId: 'ns=1;s=Device1.Temperature' },
+    { name: 'Device1.Variable2', nodeId: 'ns=1;s=Device1.Variable2' },
+    { name: 'Device1.Variable3', nodeId: 'ns=1;s=Device1.Variable3' },
+    { name: 'Device1.PercentageMemoryUsed', nodeId: 'ns=1;s=Device1.PercentageMemoryUsed' },
+    { name: 'Device1.VariableForWrite', nodeId: 'ns=1;s=Device1.VariableForWrite' },
+    { name: 'Device1.SumMethod', objectId: 'ns=1;s=Device1', methodId: 'ns=1;s=Device1.SumMethod' },
+    { name: 'Device2.PressureVesselDevice', nodeId: 'ns=1;s=Device2.PressureVesselDevice' },
     {
       name: 'browseObjectsFolder', browseDescriptions: {
         nodeId: 'ObjectsFolder',

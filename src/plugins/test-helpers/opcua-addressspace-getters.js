@@ -8,6 +8,7 @@ const {
   standardUnits,
   makeAccessLevelFlag,
 } = require('node-opcua');
+const { Console } = require('console');
 
 /**
  * Simulate for value
@@ -28,11 +29,8 @@ function valueSimulate1(params = {}) {
  */
 function valueFromSource1(params = {}) {
   const defValue = 'https://leanpub.com/node-opcuabyexample';
-  const value = `Learn Node-OPCUA ! Read ${params.value ? params.value : defValue}`
-  return {
-    dataType: DataType.String,
-    value
-  }
+  const value = `Learn Node-OPCUA ! Read ${params.value ? params.value : defValue}`;
+  return value;
 }
 
 /**
@@ -42,13 +40,29 @@ function valueFromSource1(params = {}) {
  */
 function valueFromSource2(params = {}) {
   const defValue = [1.0, 2.0, 3.0];
-  const value = params.value ? params.value : defValue
-  return {
-    dataType: DataType.Double,
-    arrayType: VariantArrayType.Array,
-    value
-  }
-};
+  const value = params.value ? params.value : defValue;
+  return value;
+}
+
+/**
+ * Get hist value from source
+ * @param {Object} params 
+ * @param {Object} addedValue 
+ */
+function histValueFromSource(params = {}, addedValue) {
+  // simulate pressure change
+  const _t = 0;
+  const _interval = 200;
+  let t = params.t ? params.t : _t;
+  let interval = params.interval ? params.interval :_interval;
+  setInterval(function () {
+    let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
+    console.log('histValueFromSource.value:', value);
+    addedValue.setValueFromSource({ dataType: 'Double', value: value });
+    t = t + 1;
+  }, interval);
+
+}
 
 /**
  * Get percentage memory used
@@ -58,12 +72,13 @@ function percentageMemUsed() {
   const percentageMemUsed = 1.0 - (os.freemem() / os.totalmem());
   const value = percentageMemUsed * 100;
   return new Variant({ dataType: DataType.Double, value: value });
-};
+}
 
 
 module.exports = {
   valueSimulate1,
   valueFromSource1,
   valueFromSource2,
+  histValueFromSource,
   percentageMemUsed
 };

@@ -293,11 +293,17 @@ class OpcuaServer {
           });
           // Add variables
           if (params.variables.length) {
-            const variables = params.variables.filter(v => v.ObjectBrowseName === o.browseName);
+            const variables = params.variables.filter(v => v.variableOwnerName === o.browseName);
             if (variables) {
               variables.forEach(v => {
                 // addVariable browseName
-                if (v.browseName === 'MyDevice.Temperature') {
+                if (v.browseName === 'Device1.Temperature' ||
+                  v.browseName === 'Device1.Variable2' ||
+                  v.browseName === 'Device1.Variable3' ||
+                  v.browseName === 'Device1.PercentageMemoryUsed' ||
+                  v.browseName === 'Device1.VariableForWrite' ||
+                  v.browseName === 'Device2.PressureVesselDevice'
+                ) {//
                   let varParams = {
                     componentOf: object,
                     nodeId: `s=${v.browseName}`,
@@ -315,16 +321,39 @@ class OpcuaServer {
                     // Value get func merge 
                     loMerge(varParams, { value: { get: () => { return getters[v.getter](v.getterParams ? v.getterParams : {}); } } });
                   }
-                  // namespace.addAnalogDataItem  namespace.addVariable
-                  if(v.type === 'analog'){
+                  if (isDebug) debug('constructAddressSpace.varParams:', varParams);
+                  // Add variables
+                  if (v.type === 'analog') {
                     addedVariable = namespace.addAnalogDataItem(varParams);
-                  }else{
+                  } else {
                     addedVariable = namespace.addVariable(varParams);
                   }
 
+                  // Value from source
                   if (v.variableGetType === 'valueFromSource') {
-
+                    // If a variable has history
+                    if (v.hist) {
+                      addressSpace.installHistoricalDataNode(addedVariable);
+                      let getterParams = v.getterParams ? v.getterParams : {}; 
+                      getters[v.getter](getterParams, addedVariable);
+                    } else {
+                      let valueFromSourceParams = loMerge({}, v.valueFromSourceParams);
+                      if (valueFromSourceParams.dataType) {
+                        const dataType = DataType[valueFromSourceParams.dataType];
+                        loMerge(valueFromSourceParams, { dataType });
+                      }
+                      if (valueFromSourceParams.arrayType) {
+                        const arrayType = VariantArrayType[valueFromSourceParams.arrayType];
+                        loMerge(valueFromSourceParams, { arrayType });
+                      }
+                      // Value get func merge 
+                      let valueFromSource = getters[v.getter](v.getterParams ? v.getterParams : {});
+                      loMerge(valueFromSourceParams, { value: valueFromSource });
+                      if (isDebug) debug('constructAddressSpace.valueFromSourceParams:', valueFromSourceParams);
+                      addedVariable.setValueFromSource(valueFromSourceParams);
+                    }
                   }
+
 
 
                   /*
