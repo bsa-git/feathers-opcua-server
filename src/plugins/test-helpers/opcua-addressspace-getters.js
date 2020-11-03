@@ -8,7 +8,9 @@ const {
   standardUnits,
   makeAccessLevelFlag,
 } = require('node-opcua');
-const { Console } = require('console');
+const debug = require('debug')('app:test-helpers.opcua-addressspace-getters');
+const isDebug = false;
+// const isLog = false;
 
 /**
  * Simulate for value
@@ -57,8 +59,8 @@ function histValueFromSource(params = {}, addedValue) {
   let interval = params.interval ? params.interval :_interval;
   setInterval(function () {
     let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
-    console.log('histValueFromSource.value:', value);
-    addedValue.setValueFromSource({ dataType: 'Double', value: value });
+    if(isDebug) debug('histValueFromSource.value:', value);
+    addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
     t = t + 1;
   }, interval);
 

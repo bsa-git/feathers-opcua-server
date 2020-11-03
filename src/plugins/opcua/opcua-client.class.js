@@ -503,12 +503,6 @@ class OpcuaClient {
         dataValues.forEach((item, index) => item.nameNodeId = nameNodeIds[index]);
         if (statusGood) {
           dataValues = dataValues.filter(val => val.statusCode.name === 'Good');
-          dataValues = dataValues.map(item => {
-            return {
-              nameNodeId: item.nameNodeId,
-              values: item.historyData.dataValues.filter(dataValue => dataValue.statusCode.name === 'Good')
-            };
-          });
           result = dataValues;
         } else {
           result = dataValues;

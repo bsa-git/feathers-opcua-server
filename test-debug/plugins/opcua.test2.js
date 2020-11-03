@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
 const app = require('../../src/app');
-const { OpcuaServer, OpcuaClient, appRoot, inspector, getDateTimeSeparately } = require('../../src/plugins');
+const { OpcuaServer, OpcuaClient, appRoot, inspector, getDateTimeSeparately, pause } = require('../../src/plugins');
 const addressSpaceGetters = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-getters`);
 const chalk = require('chalk');
 const moment = require('moment');
@@ -185,11 +185,24 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         dt.minutes = dt.minutes + 1;
         const end = moment.utc(Object.values(dt)).format();
 
+        // await pause(1000);
+
+        debug('12345');
+
         readResult = await client.sessionReadHistoryValues('Device2.PressureVesselDevice', start, end);
-        if (readResult.length && readResult.values.length) {
-          console.log(chalk.green('PressureVesselDevice:'), chalk.cyan(readResult[0].values[0].value));
+        debug('6789');
+        if (readResult.length && readResult[0].statusCode.name === 'Good') {
+          if(readResult[0].historyData.dataValues.length) {
+            let dataValues = readResult[0].historyData.dataValues;
+            dataValues.forEach(dataValue => {
+              if(dataValue.statusCode.name === 'Good'){
+                console.log(chalk.green('PressureVesselDevice:'), chalk.cyan(`${dataValue.value.value}; Timestamp=${dataValue.sourceTimestamp}`));   
+              }
+            });
+          }
         }
         assert.ok(readResult, 'OPC-UA client session history value');
+        // assert.ok(true, 'OPC-UA client session history value');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
       }
