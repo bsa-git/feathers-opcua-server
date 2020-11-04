@@ -8,7 +8,7 @@ const {
   standardUnits,
   makeAccessLevelFlag,
 } = require('node-opcua');
-const debug = require('debug')('app:test-helpers.opcua-addressspace-getters');
+const debug = require('debug')('app:opcua-addressspace-getters');
 const isDebug = false;
 // const isLog = false;
 

@@ -81,7 +81,7 @@
       "hist": true,
       "variableGetType": "valueFromSource",
       "getter": "histValueFromSource",
-      "getterParams": { "t": 10, "interval": 200 },
+      "getterParams": { "t": 50, "interval": 200 },
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,

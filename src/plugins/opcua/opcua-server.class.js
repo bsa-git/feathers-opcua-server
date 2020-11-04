@@ -276,9 +276,9 @@ class OpcuaServer {
    * @param {Object} params 
    * @param {Object} getters 
    */
-  constructAddressSpace(params = {}, getters = {}) {
+  constructAddressSpace(params = {}, getters = {}, methods = {}) {
     try {
-      let addedVariable;
+      let addedVariable, addedMethod;
       if (!this.opcuaServer) return;
       const addressSpace = this.opcuaServer.engine.addressSpace;
       const namespace = addressSpace.getOwnNamespace();
@@ -294,106 +294,170 @@ class OpcuaServer {
           // Add variables
           if (params.variables.length) {
             const variables = params.variables.filter(v => v.variableOwnerName === o.browseName);
-            if (variables) {
+            if (variables.length) {
               variables.forEach(v => {
-                // addVariable browseName
-                if (v.browseName === 'Device1.Temperature' ||
-                  v.browseName === 'Device1.Variable2' ||
-                  v.browseName === 'Device1.Variable3' ||
-                  v.browseName === 'Device1.PercentageMemoryUsed' ||
-                  v.browseName === 'Device1.VariableForWrite' ||
-                  v.browseName === 'Device2.PressureVesselDevice'
-                ) {//
-                  let varParams = {
-                    componentOf: object,
-                    nodeId: `s=${v.browseName}`,
-                    browseName: v.browseName,
-                    displayName: v.displayName,
-                    dataType: v.dataType,
-                  };
-                  if (v.valueParams) {
-                    // Value params merge 
-                    loMerge(varParams, v.valueParams);
-                    // Value of engineeringUnits param merge 
-                    loMerge(varParams, v.valueParams.engineeringUnits ? standardUnits[v.valueParams.engineeringUnits] : {});
-                  }
-                  if (v.variableGetType === 'get') {
-                    // Value get func merge 
-                    loMerge(varParams, { value: { get: () => { return getters[v.getter](v.getterParams ? v.getterParams : {}); } } });
-                  }
-                  if (isDebug) debug('constructAddressSpace.varParams:', varParams);
-                  // Add variables
-                  if (v.type === 'analog') {
-                    addedVariable = namespace.addAnalogDataItem(varParams);
+                let varParams = {
+                  componentOf: object,
+                  nodeId: `s=${v.browseName}`,
+                  browseName: v.browseName,
+                  displayName: v.displayName,
+                  dataType: v.dataType,
+                };
+                if (v.valueParams) {
+                  // Value params merge 
+                  loMerge(varParams, v.valueParams);
+                  // Value of engineeringUnits param merge 
+                  loMerge(varParams, v.valueParams.engineeringUnits ? standardUnits[v.valueParams.engineeringUnits] : {});
+                }
+                if (v.variableGetType === 'get') {
+                  // Value get func merge 
+                  loMerge(varParams, { value: { get: () => { return getters[v.getter](v.getterParams ? v.getterParams : {}); } } });
+                }
+                if (isDebug) debug('constructAddressSpace.varParams:', varParams);
+                // Add variables
+                if (v.type === 'analog') {
+                  addedVariable = namespace.addAnalogDataItem(varParams);
+                } else {
+                  addedVariable = namespace.addVariable(varParams);
+                }
+
+                // Value from source
+                if (v.variableGetType === 'valueFromSource') {
+                  // If a variable has history
+                  if (v.hist) {
+                    addressSpace.installHistoricalDataNode(addedVariable);
+                    let getterParams = v.getterParams ? v.getterParams : {};
+                    getters[v.getter](getterParams, addedVariable);
                   } else {
-                    addedVariable = namespace.addVariable(varParams);
-                  }
-
-                  // Value from source
-                  if (v.variableGetType === 'valueFromSource') {
-                    // If a variable has history
-                    if (v.hist) {
-                      addressSpace.installHistoricalDataNode(addedVariable);
-                      let getterParams = v.getterParams ? v.getterParams : {}; 
-                      getters[v.getter](getterParams, addedVariable);
-                    } else {
-                      let valueFromSourceParams = loMerge({}, v.valueFromSourceParams);
-                      if (valueFromSourceParams.dataType) {
-                        const dataType = DataType[valueFromSourceParams.dataType];
-                        loMerge(valueFromSourceParams, { dataType });
-                      }
-                      if (valueFromSourceParams.arrayType) {
-                        const arrayType = VariantArrayType[valueFromSourceParams.arrayType];
-                        loMerge(valueFromSourceParams, { arrayType });
-                      }
-                      // Value get func merge 
-                      let valueFromSource = getters[v.getter](v.getterParams ? v.getterParams : {});
-                      loMerge(valueFromSourceParams, { value: valueFromSource });
-                      if (isDebug) debug('constructAddressSpace.valueFromSourceParams:', valueFromSourceParams);
-                      addedVariable.setValueFromSource(valueFromSourceParams);
+                    let valueFromSourceParams = loMerge({}, v.valueFromSourceParams);
+                    if (valueFromSourceParams.dataType) {
+                      const dataType = DataType[valueFromSourceParams.dataType];
+                      loMerge(valueFromSourceParams, { dataType });
                     }
+                    if (valueFromSourceParams.arrayType) {
+                      const arrayType = VariantArrayType[valueFromSourceParams.arrayType];
+                      loMerge(valueFromSourceParams, { arrayType });
+                    }
+                    // Value get func merge 
+                    let valueFromSource = getters[v.getter](v.getterParams ? v.getterParams : {});
+                    loMerge(valueFromSourceParams, { value: valueFromSource });
+                    if (isDebug) debug('constructAddressSpace.valueFromSourceParams:', valueFromSourceParams);
+                    addedVariable.setValueFromSource(valueFromSourceParams);
                   }
-
-
-
-                  /*
-                  switch (v.type) {
-                    case 'simple':
-                      if (v.variableGetType === 'get') {
-                        namespace.addVariable({
-                          componentOf: object,
-                          nodeId: `s=${v.browseName}`,
-                          browseName: v.browseName,
-                          displayName: v.displayName,
-                          dataType: v.dataType,
-                          value: {
-                            get: () => {
-                              return getters[v.getter](v.getterParams ? v.getterParams : {});
-                            }
-                          }
-                        });
-                      }
-                      break;
-                    case 'analog':
-
-                      break;
-                    case 'write':
-                      namespace.addVariable({
-                        componentOf: object,
-                        nodeId: `s=${v.browseName}`,
-                        browseName: v.browseName,
-                        displayName: v.displayName,
-                        dataType: v.dataType,
-                      });
-                      break;
-                    default:
-                      break;
-                  }
-                  */
                 }
               });
             }
           }
+          // Add methods
+          if (params.methods.length) {
+            const methods = params.methods.filter(m => m.variableOwnerName === o.browseName);
+            if (methods.length) {
+              methods.forEach(m => {
+                let methodParams = {
+                  // componentOf: object,
+                  nodeId: `s=${m.browseName}`,
+                  browseName: m.browseName,
+                  displayName: m.displayName,
+                  // dataType: m.dataType,
+                };
+                // Method inputArguments merge 
+                if (m.inputArguments.length) {
+                  m.inputArguments = m.inputArguments.map(arg => {
+                    arg.dataType = DataType[arg.dataType];
+                    return arg;
+                  });
+                  loMerge(methodParams, m.inputArguments);
+                }
+                // Method outputArguments merge 
+                if (m.outputArguments.length) {
+                  m.outputArguments = m.outputArguments.map(arg => {
+                    arg.dataType = DataType[arg.dataType];
+                    return arg;
+                  });
+                  loMerge(methodParams, m.outputArguments);
+                }
+
+                // Add method
+                addedMethod = namespace.addMethod(object, methodParams);
+                // optionally, we can adjust userAccessLevel attribute 
+                // if(m.userAccessLevel && m.userAccessLevel.inputArguments){
+                //   addedMethod.inputArguments.userAccessLevel = makeAccessLevelFlag(m.userAccessLevel.inputArguments);
+                // }
+                // if(m.userAccessLevel && m.userAccessLevel.outputArguments){
+                //   addedMethod.outputArguments.userAccessLevel = makeAccessLevelFlag(m.userAccessLevel.outputArguments);
+                // }
+                // Bind method
+
+                // addedMethod.bindMethod(methods[m.bindMethod]);
+                addedMethod.bindMethod((inputArguments, context, callback) => {
+
+                  const number1 = inputArguments[0].value;
+                  const number2 = inputArguments[1].value;
+                  let sum = number1 + number2;
+
+                  // console.log('Run metod Sum:', sum);
+
+                  const callMethodResult = {
+                    statusCode: StatusCodes.Good,
+                    outputArguments: [{
+                      dataType: DataType.UInt32,
+                      value: sum
+                    }]
+                  };
+                  callback(null, callMethodResult);
+                });
+              });
+            }
+          }
+          /*
+          const method = namespace.addMethod(myDevice, {
+
+        nodeId: 's=MyDevice.SumMethod',
+        browseName: 'MyDevice.SumMethod',
+        displayName: 'Sum method',
+
+        inputArguments: [
+          {
+            name: 'number1',
+            description: { text: 'first item' },
+            dataType: DataType.UInt32
+          }, {
+            name: 'number2',
+            description: { text: 'second item' },
+            dataType: DataType.UInt32
+          }
+        ],
+
+        outputArguments: [{
+          name: 'SumResult',
+          description: { text: 'sum of numbers' },
+          dataType: DataType.UInt32,
+          valueRank: 1
+        }]
+      });
+
+      // optionally, we can adjust userAccessLevel attribute 
+      method.outputArguments.userAccessLevel = makeAccessLevelFlag('CurrentRead');
+      method.inputArguments.userAccessLevel = makeAccessLevelFlag('CurrentRead');
+
+      method.bindMethod((inputArguments, context, callback) => {
+
+        const number1 = inputArguments[0].value;
+        const number2 = inputArguments[1].value;
+        let sum = number1 + number2;
+
+        // console.log('Run metod Sum:', sum);
+
+        const callMethodResult = {
+          statusCode: StatusCodes.Good,
+          outputArguments: [{
+            dataType: DataType.UInt32,
+            value: sum
+          }]
+        };
+        callback(null, callMethodResult);
+      });
+          */
         });
         console.log(chalk.yellow('Server constructed address space'));
       }

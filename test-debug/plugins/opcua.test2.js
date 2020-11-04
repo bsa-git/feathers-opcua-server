@@ -2,9 +2,12 @@
 const assert = require('assert');
 const app = require('../../src/app');
 const { OpcuaServer, OpcuaClient, appRoot, inspector, getDateTimeSeparately, pause } = require('../../src/plugins');
+const AddressSpaceParams = require(`${appRoot}/src/api/opcua/AddressSpaceTestOptions.json`);
 const addressSpaceGetters = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-getters`);
+const addressSpaceMethods = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-methods`);
 const chalk = require('chalk');
 const moment = require('moment');
+
 const {
   // Variant,
   DataType,
@@ -13,7 +16,7 @@ const {
   StatusCodes,
   makeBrowsePath
 } = require('node-opcua');
-const AddressSpaceParams = require(`${appRoot}/src/api/opcua/AddressSpaceTestOptions.json`);
+
 const debug = require('debug')('app:test.opcua');
 const isDebug = false;
 const isLog = false;
@@ -59,7 +62,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server start', async () => {
       try {
         await server.create();
-        server.constructAddressSpace(AddressSpaceParams, addressSpaceGetters);
+        server.constructAddressSpace(AddressSpaceParams, addressSpaceGetters, addressSpaceMethods);
         const endpoints = await server.start();
         opcuaServer = server.opcuaServer;
         // server.securityMode
@@ -185,12 +188,8 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         dt.minutes = dt.minutes + 1;
         const end = moment.utc(Object.values(dt)).format();
 
-        // await pause(1000);
-
-        debug('12345');
-
+        await pause(1000);
         readResult = await client.sessionReadHistoryValues('Device2.PressureVesselDevice', start, end);
-        debug('6789');
         if (readResult.length && readResult[0].statusCode.name === 'Good') {
           if(readResult[0].historyData.dataValues.length) {
             let dataValues = readResult[0].historyData.dataValues;
@@ -203,6 +202,29 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         }
         assert.ok(readResult, 'OPC-UA client session history value');
         // assert.ok(true, 'OPC-UA client session history value');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client session call method', async () => {
+      try {
+        let callResults = [];
+        let inputArguments = [
+          {
+            dataType: DataType.UInt32,
+            value: 2,
+          },
+          {
+            dataType: DataType.UInt32,
+            value: 3,
+          }
+        ];
+        callResults = await client.sessionCallMethod('Device1.SumMethod', inputArguments);
+        console.log(chalk.green('Device1::SumMethod.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
+        console.log(chalk.green('Device1::SumMethod.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));
+
+        assert.ok(callResults, 'OPC-UA client session call method');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
       }

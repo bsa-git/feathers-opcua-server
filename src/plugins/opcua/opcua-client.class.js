@@ -472,10 +472,9 @@ class OpcuaClient {
    * e.g. 'temperature'| ['temperature', 'pressureVesselDevice']
    * @param {String} start 
    * @param {String} end 
-   * @param {Boolean} statusGood 
    * @return {Promise<Array>}
    */
-  async sessionReadHistoryValues(nameNodeIds, start, end, statusGood = false) {
+  async sessionReadHistoryValues(nameNodeIds, start, end) {
     let result = [], itemNodeId = null, itemNodeIds = [], dataValues;
     if (!this.session) return;
     try {
@@ -501,12 +500,7 @@ class OpcuaClient {
       if (itemNodeIds.length) {
         dataValues = await this.session.readHistoryValue(itemNodeIds, start, end);
         dataValues.forEach((item, index) => item.nameNodeId = nameNodeIds[index]);
-        if (statusGood) {
-          dataValues = dataValues.filter(val => val.statusCode.name === 'Good');
-          result = dataValues;
-        } else {
-          result = dataValues;
-        }
+        result = dataValues;
       }
       if (isLog) inspector('plugins.opcua-client.class::sessionReadHistoryValue.result:', result);
       return result;
