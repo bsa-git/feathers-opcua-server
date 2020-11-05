@@ -35,8 +35,10 @@ const paramsDefault = {
     { name: 'Device1.Variable3', nodeId: 'ns=1;s=Device1.Variable3' },
     { name: 'Device1.PercentageMemoryUsed', nodeId: 'ns=1;s=Device1.PercentageMemoryUsed' },
     { name: 'Device1.VariableForWrite', nodeId: 'ns=1;s=Device1.VariableForWrite' },
-    { name: 'Device1.SumMethod', objectId: 'ns=1;s=Device1', methodId: 'ns=1;s=Device1.SumMethod' },
+    { name: 'Device1.SumMethod', objectId: 'ns=1;i=1000', methodId: 'ns=1;s=Device1.SumMethod' },
     { name: 'Device2.PressureVesselDevice', nodeId: 'ns=1;s=Device2.PressureVesselDevice' },
+    // { name: 'Device3.SumMethod', objectId: { identifierType: 1, value: 1014, namespace: 1 }, methodId: 'ns=1;s=Device3.SumMethod' },
+    { name: 'Device3.SumMethod', objectId: 'ns=1;i=1014', methodId: 'ns=1;s=Device3.SumMethod' },
     {
       name: 'browseObjectsFolder', browseDescriptions: {
         nodeId: 'ObjectsFolder',

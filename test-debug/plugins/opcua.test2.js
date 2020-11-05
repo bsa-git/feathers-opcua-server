@@ -207,6 +207,33 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
+    it('OPC-UA client session read all attributes', () => {
+      try {
+        // Read all attributes for temperature
+        client.sessionReadAllAttributes('ns=1;i=1000', function (err, data) {
+          if (err) {
+            inspector('sessionReadAllAttributes.err:', err);
+            assert.fail(`Should never get here: ${err}`);
+          }
+          if (isLog && data) inspector('sessionReadAllAttributes.data:', data);
+          if (data && data.length) {
+            data = data[0];
+            if (data.statusCode === StatusCodes.Good) {
+              console.log(chalk.green('nodeId:'), chalk.cyan(data.nodeId.toString()));
+              console.log(chalk.green('browseName:'), chalk.cyan(data.browseName.name));
+              console.log(chalk.green('displayName:'), chalk.cyan(data.displayName.text));
+              if(data.value){
+                console.log(chalk.green('value:'), chalk.cyan(data.value.toString()));
+              }
+              assert.ok(true, 'OPC-UA client session read all attributes');
+            }
+          }
+        });
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
     it('OPC-UA client session call method', async () => {
       try {
         let callResults = [];
@@ -220,11 +247,15 @@ describe('<<=== OPC-UA: Test ===>>', () => {
             value: 3,
           }
         ];
+        
         callResults = await client.sessionCallMethod('Device1.SumMethod', inputArguments);
-        console.log(chalk.green('Device1::SumMethod.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
-        console.log(chalk.green('Device1::SumMethod.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));
-
-        assert.ok(callResults, 'OPC-UA client session call method');
+        // inspector('test.sessionCallMethod.callResults:', callResults);
+        const statusCode = callResults[0].statusCode.name;
+        console.log(chalk.green('Device1::SumMethod.statusCode:'), chalk.cyan(statusCode));
+        if(statusCode === 'Good'){
+          console.log(chalk.green('Device1::SumMethod.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));
+        }
+        assert.ok(statusCode === 'Good', 'OPC-UA client session call method');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
       }

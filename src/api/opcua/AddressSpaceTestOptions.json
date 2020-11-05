@@ -69,7 +69,7 @@
       "browseName": "Device1.VariableForWrite",
       "displayName": "Variable For Write",
       "variableOwnerName": "Device1",
-      "type": "write",
+      "type": "simple",
       "dataType": "String"
     },
     {
@@ -95,7 +95,7 @@
     {
       "browseName": "Device1.SumMethod",
       "displayName": "Sum Method",
-      "variableOwnerName": "Device1",
+      "methodOwnerName": "Device1",
       "bindMethod": "sumMethod",
       "inputArguments": [
         {

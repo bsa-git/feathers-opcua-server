@@ -274,7 +274,8 @@ class OpcuaServer {
   /**
    * Construct AddressSpace
    * @param {Object} params 
-   * @param {Object} getters 
+   * @param {Object} getters
+   * @param {Object} methods  
    */
   constructAddressSpace(params = {}, getters = {}, methods = {}) {
     try {
@@ -348,17 +349,16 @@ class OpcuaServer {
               });
             }
           }
-          // Add methods
+          // Add methods for object
           if (params.methods.length) {
-            const methods = params.methods.filter(m => m.variableOwnerName === o.browseName);
-            if (methods.length) {
-              methods.forEach(m => {
+            const filterMethods = params.methods.filter(m => m.methodOwnerName === o.browseName);
+            if (filterMethods.length) {
+
+              filterMethods.forEach(m => {
                 let methodParams = {
-                  // componentOf: object,
                   nodeId: `s=${m.browseName}`,
                   browseName: m.browseName,
                   displayName: m.displayName,
-                  // dataType: m.dataType,
                 };
                 // Method inputArguments merge 
                 if (m.inputArguments.length) {
@@ -366,7 +366,7 @@ class OpcuaServer {
                     arg.dataType = DataType[arg.dataType];
                     return arg;
                   });
-                  loMerge(methodParams, m.inputArguments);
+                  loMerge(methodParams, { inputArguments: m.inputArguments });
                 }
                 // Method outputArguments merge 
                 if (m.outputArguments.length) {
@@ -374,267 +374,28 @@ class OpcuaServer {
                     arg.dataType = DataType[arg.dataType];
                     return arg;
                   });
-                  loMerge(methodParams, m.outputArguments);
+                  loMerge(methodParams, { outputArguments: m.outputArguments });
                 }
 
                 // Add method
                 addedMethod = namespace.addMethod(object, methodParams);
+                
                 // optionally, we can adjust userAccessLevel attribute 
-                // if(m.userAccessLevel && m.userAccessLevel.inputArguments){
-                //   addedMethod.inputArguments.userAccessLevel = makeAccessLevelFlag(m.userAccessLevel.inputArguments);
-                // }
-                // if(m.userAccessLevel && m.userAccessLevel.outputArguments){
-                //   addedMethod.outputArguments.userAccessLevel = makeAccessLevelFlag(m.userAccessLevel.outputArguments);
-                // }
+                if(m.userAccessLevel && m.userAccessLevel.inputArguments){
+                  addedMethod.inputArguments.userAccessLevel = makeAccessLevelFlag(m.userAccessLevel.inputArguments);
+                }
+                if(m.userAccessLevel && m.userAccessLevel.outputArguments){
+                  addedMethod.outputArguments.userAccessLevel = makeAccessLevelFlag(m.userAccessLevel.outputArguments);
+                }
+
                 // Bind method
-
-                // addedMethod.bindMethod(methods[m.bindMethod]);
-                addedMethod.bindMethod((inputArguments, context, callback) => {
-
-                  const number1 = inputArguments[0].value;
-                  const number2 = inputArguments[1].value;
-                  let sum = number1 + number2;
-
-                  // console.log('Run metod Sum:', sum);
-
-                  const callMethodResult = {
-                    statusCode: StatusCodes.Good,
-                    outputArguments: [{
-                      dataType: DataType.UInt32,
-                      value: sum
-                    }]
-                  };
-                  callback(null, callMethodResult);
-                });
+                addedMethod.bindMethod(methods[m.bindMethod]);
               });
             }
           }
-          /*
-          const method = namespace.addMethod(myDevice, {
-
-        nodeId: 's=MyDevice.SumMethod',
-        browseName: 'MyDevice.SumMethod',
-        displayName: 'Sum method',
-
-        inputArguments: [
-          {
-            name: 'number1',
-            description: { text: 'first item' },
-            dataType: DataType.UInt32
-          }, {
-            name: 'number2',
-            description: { text: 'second item' },
-            dataType: DataType.UInt32
-          }
-        ],
-
-        outputArguments: [{
-          name: 'SumResult',
-          description: { text: 'sum of numbers' },
-          dataType: DataType.UInt32,
-          valueRank: 1
-        }]
-      });
-
-      // optionally, we can adjust userAccessLevel attribute 
-      method.outputArguments.userAccessLevel = makeAccessLevelFlag('CurrentRead');
-      method.inputArguments.userAccessLevel = makeAccessLevelFlag('CurrentRead');
-
-      method.bindMethod((inputArguments, context, callback) => {
-
-        const number1 = inputArguments[0].value;
-        const number2 = inputArguments[1].value;
-        let sum = number1 + number2;
-
-        // console.log('Run metod Sum:', sum);
-
-        const callMethodResult = {
-          statusCode: StatusCodes.Good,
-          outputArguments: [{
-            dataType: DataType.UInt32,
-            value: sum
-          }]
-        };
-        callback(null, callMethodResult);
-      });
-          */
         });
         console.log(chalk.yellow('Server constructed address space'));
       }
-
-    } catch (err) {
-      const errTxt = 'Error while construct address space OPC-UA server:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
-    }
-  }
-  /**
-  * Construct address space
-  */
-  constructAddressSpace_() {
-    if (!this.opcuaServer) return;
-    try {
-      const addressSpace = this.opcuaServer.engine.addressSpace;
-      const namespace = addressSpace.getOwnNamespace();
-
-      //=== addFolder => "MyDevice" ===//
-      const myDevice = namespace.addFolder('ObjectsFolder', {
-        // we create a new folder 'MyDevice' under RootFolder
-        browseName: 'MyDevice',
-        nodeId: 's=MyDevice',
-      });
-
-      // now let's add first variable in folder
-      // the addVariableInFolder
-      const variable1 = 10.0;
-
-      this.opcuaServer.nodeVariable1 = namespace.addVariable({
-        componentOf: myDevice,
-        nodeId: 's=MyDevice.Temperature',
-        browseName: 'MyDevice.Temperature',
-        displayName: 'Temperature',
-        dataType: 'Double',
-        value: {
-          get: () => {
-            const t = new Date() / 10000.0;
-            const value = variable1 + 10.0 * Math.sin(t);
-            return new Variant({ dataType: DataType.Double, value: value });
-          }
-        }
-      });
-
-      const nodeVariable2 = namespace.addVariable({
-        componentOf: myDevice,
-        nodeId: 's=MyDevice.MyVariable2',
-        browseName: 'MyDevice.MyVariable2',
-        displayName: 'My variable2',
-        dataType: 'String',
-      });
-      nodeVariable2.setValueFromSource({
-        dataType: DataType.String,
-        value: 'Learn Node-OPCUA ! Read https://leanpub.com/node-opcuabyexample'
-      });
-
-      const nodeVariable3 = namespace.addVariable({
-        componentOf: myDevice,
-        nodeId: 's=MyDevice.MyVariable3',
-        browseName: 'MyDevice.MyVariable3',
-        displayName: 'My variable3',
-        dataType: 'Double',
-        arrayDimensions: [3],
-        accessLevel: 'CurrentRead | CurrentWrite',
-        userAccessLevel: 'CurrentRead | CurrentWrite',
-        valueRank: 1
-
-      });
-      nodeVariable3.setValueFromSource({
-        dataType: DataType.Double,
-        arrayType: VariantArrayType.Array,
-        value: [1.0, 2.0, 3.0]
-      });
-
-
-      this.opcuaServer.nodeVariable4 = namespace.addVariable({
-        componentOf: myDevice,
-        nodeId: 's=MyDevice.PercentageMemoryUsed',
-        browseName: 'MyDevice.PercentageMemoryUsed',
-        displayName: 'Percentage Memory Used',
-        dataType: 'Double',
-        minimumSamplingInterval: 1000,
-        value: {
-          get: () => {
-            const percentageMemUsed = 1.0 - (os.freemem() / os.totalmem());
-            const value = percentageMemUsed * 100;
-            return new Variant({ dataType: DataType.Double, value: value });
-          }
-        }
-      });
-
-      this.opcuaServer.nodeVariableForWrite = namespace.addVariable({
-        componentOf: myDevice,
-        nodeId: 's=MyDevice.VariableForWrite',
-        browseName: 'MyDevice.VariableForWrite',
-        displayName: 'Variable for write',
-        dataType: 'String',
-      });
-
-      const method = namespace.addMethod(myDevice, {
-
-        nodeId: 's=MyDevice.SumMethod',
-        browseName: 'MyDevice.SumMethod',
-        displayName: 'Sum method',
-
-        inputArguments: [
-          {
-            name: 'number1',
-            description: { text: 'first item' },
-            dataType: DataType.UInt32
-          }, {
-            name: 'number2',
-            description: { text: 'second item' },
-            dataType: DataType.UInt32
-          }
-        ],
-
-        outputArguments: [{
-          name: 'SumResult',
-          description: { text: 'sum of numbers' },
-          dataType: DataType.UInt32,
-          valueRank: 1
-        }]
-      });
-
-      // optionally, we can adjust userAccessLevel attribute 
-      method.outputArguments.userAccessLevel = makeAccessLevelFlag('CurrentRead');
-      method.inputArguments.userAccessLevel = makeAccessLevelFlag('CurrentRead');
-
-      method.bindMethod((inputArguments, context, callback) => {
-
-        const number1 = inputArguments[0].value;
-        const number2 = inputArguments[1].value;
-        let sum = number1 + number2;
-
-        // console.log('Run metod Sum:', sum);
-
-        const callMethodResult = {
-          statusCode: StatusCodes.Good,
-          outputArguments: [{
-            dataType: DataType.UInt32,
-            value: sum
-          }]
-        };
-        callback(null, callMethodResult);
-      });
-
-
-      //=== addObject => "Vessel Device" ===//
-      const vesselDevice = namespace.addObject({
-        browseName: 'VesselDevice',
-        displayName: 'Vessel device',
-        organizedBy: addressSpace.rootFolder.objects
-      });
-
-      const vesselPressure = namespace.addAnalogDataItem({
-        nodeId: 's=VesselDevice.PressureVesselDevice',
-        browseName: 'VesselDevice.PressureVesselDevice',
-        displayName: 'Vessel device',
-        engineeringUnitsRange: {
-          low: 0,
-          high: 10.0
-        },
-        engineeringUnits: standardUnits.bar,
-        componentOf: vesselDevice
-      });
-
-      addressSpace.installHistoricalDataNode(vesselPressure);
-      // simulate pressure change
-      let t = 0;
-      setInterval(function () {
-        let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
-        vesselPressure.setValueFromSource({ dataType: 'Double', value: value });
-        t = t + 1;
-      }, 200);
-
     } catch (err) {
       const errTxt = 'Error while construct address space OPC-UA server:';
       console.log(errTxt, err);
