@@ -66,9 +66,9 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         const endpoints = await server.start();
         opcuaServer = server.opcuaServer;
         // server.securityMode
-        console.log(chalk.green('server.securityMode'), chalk.cyan(endpoints[0].securityMode));
+        // console.log(chalk.green('server.securityMode'), chalk.cyan(endpoints[0].securityMode));
         // server.securityPolicyUri
-        console.log(chalk.green('server.securityPolicyUri'), chalk.cyan(endpoints[0].securityPolicyUri));
+        // console.log(chalk.green('server.securityPolicyUri'), chalk.cyan(endpoints[0].securityPolicyUri));
         assert.ok(true, 'OPC-UA server start');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);

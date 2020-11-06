@@ -34,6 +34,16 @@ class OpcuaServer {
     this.params = loMerge(opcuaDefaultServerOptions, params);
     this.app = app;
     this.opcuaServer = null;
+    this.currentState = {
+      isCreated: false,
+      isStarted: false,
+      isConstructedAddressSpace: false,
+      paramsAddressSpace: {
+        objects: [],
+        variables: [],
+        methods: []
+      }
+    };
   }
 
   /**
@@ -83,6 +93,7 @@ class OpcuaServer {
         });
       }
 
+      this.currentState.isCreated = true;
       // OPC-UA server created.
       console.log(chalk.yellow('Server created'));
     } catch (err) {
@@ -101,9 +112,10 @@ class OpcuaServer {
     try {
       await this.opcuaServer.start();
       const endpointUrl = this.opcuaServer.endpoints[0].endpointDescriptions()[0].endpointUrl;
+      this.currentState.endpointUrl = endpointUrl;
       console.log(chalk.yellow('Server started and now listening ...'), 'EndPoint URL:', chalk.cyan(endpointUrl));
       this.opcuaServer.endpoints[0].endpointDescriptions().forEach(function (endpoint) {
-        if (isDebug) debug(endpoint.endpointUrl, endpoint.securityMode.toString(), endpoint.securityPolicyUri.toString());
+        if (isDebug) debug('opcuaServer.endpoint:', endpoint.endpointUrl, endpoint.securityMode.toString(), endpoint.securityPolicyUri.toString());
       });
       const endpoints = this.opcuaServer.endpoints[0].endpointDescriptions().map(endpoint => {
         return {
@@ -112,6 +124,8 @@ class OpcuaServer {
           securityPolicyUri: endpoint.securityPolicyUri.toString()
         };
       });
+      this.currentState.endpoints = endpoints;
+      this.currentState.isStarted = true;
       return endpoints;
     } catch (err) {
       const errTxt = 'Error while start the OPS-UA server:';
@@ -142,6 +156,8 @@ class OpcuaServer {
     try {
       if (timeout) await this.opcuaServer.shutdown(timeout);
       else await this.opcuaServer.shutdown();
+      this.currentState.endpoints = null;
+      this.currentState.isStarted = false;
       console.log(chalk.yellow('Server terminated'));
     } catch (err) {
       const errTxt = 'Error while start the OPS-UA server:';
@@ -292,6 +308,13 @@ class OpcuaServer {
             displayName: o.displayName,
             organizedBy: addressSpace.rootFolder.objects
           });
+          // Push object to paramsAddressSpace.objects
+          this.currentState.paramsAddressSpace.objects.push({
+            nodeId: object.nodeId.toString(),
+            browseName: o.browseName,
+            displayName: o.displayName
+          })
+
           // Add variables
           if (params.variables.length) {
             const variables = params.variables.filter(v => v.variableOwnerName === o.browseName);
@@ -314,13 +337,20 @@ class OpcuaServer {
                   // Value get func merge 
                   loMerge(varParams, { value: { get: () => { return getters[v.getter](v.getterParams ? v.getterParams : {}); } } });
                 }
-                if (isDebug) debug('constructAddressSpace.varParams:', varParams);
                 // Add variables
                 if (v.type === 'analog') {
                   addedVariable = namespace.addAnalogDataItem(varParams);
                 } else {
                   addedVariable = namespace.addVariable(varParams);
                 }
+
+                // Push variable to paramsAddressSpace.variables
+                this.currentState.paramsAddressSpace.variables.push(loMerge({
+                  nodeId: addedVariable.nodeId.toString(),
+                  browseName: v.browseName,
+                  displayName: v.displayName,
+                  dataType: v.dataType,
+                }, v.valueParams));
 
                 // Value from source
                 if (v.variableGetType === 'valueFromSource') {
@@ -342,7 +372,6 @@ class OpcuaServer {
                     // Value get func merge 
                     let valueFromSource = getters[v.getter](v.getterParams ? v.getterParams : {});
                     loMerge(valueFromSourceParams, { value: valueFromSource });
-                    if (isDebug) debug('constructAddressSpace.valueFromSourceParams:', valueFromSourceParams);
                     addedVariable.setValueFromSource(valueFromSourceParams);
                   }
                 }
@@ -353,7 +382,6 @@ class OpcuaServer {
           if (params.methods.length) {
             const filterMethods = params.methods.filter(m => m.methodOwnerName === o.browseName);
             if (filterMethods.length) {
-
               filterMethods.forEach(m => {
                 let methodParams = {
                   nodeId: `s=${m.browseName}`,
@@ -379,12 +407,15 @@ class OpcuaServer {
 
                 // Add method
                 addedMethod = namespace.addMethod(object, methodParams);
-                
+
+                // Push method to paramsAddressSpace.methods
+                this.currentState.paramsAddressSpace.methods.push(loMerge(methodParams, { nodeId: addedMethod.nodeId.toString() }));
+
                 // optionally, we can adjust userAccessLevel attribute 
-                if(m.userAccessLevel && m.userAccessLevel.inputArguments){
+                if (m.userAccessLevel && m.userAccessLevel.inputArguments) {
                   addedMethod.inputArguments.userAccessLevel = makeAccessLevelFlag(m.userAccessLevel.inputArguments);
                 }
-                if(m.userAccessLevel && m.userAccessLevel.outputArguments){
+                if (m.userAccessLevel && m.userAccessLevel.outputArguments) {
                   addedMethod.outputArguments.userAccessLevel = makeAccessLevelFlag(m.userAccessLevel.outputArguments);
                 }
 
@@ -394,6 +425,7 @@ class OpcuaServer {
             }
           }
         });
+        this.currentState.isConstructedAddressSpace = true;
         console.log(chalk.yellow('Server constructed address space'));
       }
     } catch (err) {
