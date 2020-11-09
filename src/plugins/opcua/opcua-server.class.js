@@ -16,6 +16,7 @@ const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/OPCUAServerO
 
 const os = require('os');
 const loMerge = require('lodash/merge');
+const loOmit = require('lodash/omit');
 const chalk = require('chalk');
 
 const debug = require('debug')('app:plugins.opcua-server.class');
@@ -35,6 +36,9 @@ class OpcuaServer {
     this.app = app;
     this.opcuaServer = null;
     this.currentState = {
+      port: this.params.port,
+      endpointUrl: '',
+      endpoints: null,
       isCreated: false,
       isStarted: false,
       isConstructedAddressSpace: false,
@@ -313,7 +317,7 @@ class OpcuaServer {
             nodeId: object.nodeId.toString(),
             browseName: o.browseName,
             displayName: o.displayName
-          })
+          });
 
           // Add variables
           if (params.variables.length) {
@@ -349,8 +353,15 @@ class OpcuaServer {
                   nodeId: addedVariable.nodeId.toString(),
                   browseName: v.browseName,
                   displayName: v.displayName,
+                  variableOwnerName: v.variableOwnerName,
                   dataType: v.dataType,
-                }, v.valueParams));
+                  type: v.type,
+                },
+                v.variableGetType? {variableGetType: v.variableGetType} : {}, 
+                v.getter? {getter: v.getter} : {}, 
+                v.getterParams? {getterParams: v.getterParams} : {},  
+                v.valueFromSourceParams? {valueFromSourceParams: v.valueFromSourceParams} : {}, 
+                loOmit(v.valueParams, ['componentOf'])));
 
                 // Value from source
                 if (v.variableGetType === 'valueFromSource') {
@@ -409,7 +420,9 @@ class OpcuaServer {
                 addedMethod = namespace.addMethod(object, methodParams);
 
                 // Push method to paramsAddressSpace.methods
-                this.currentState.paramsAddressSpace.methods.push(loMerge(methodParams, { nodeId: addedMethod.nodeId.toString() }));
+                this.currentState.paramsAddressSpace.methods.push(loMerge(
+                  loOmit(methodParams, ['componentOf', 'propertyOf', 'organizedBy', 'encodingOf']), 
+                  { nodeId: addedMethod.nodeId.toString() }));
 
                 // optionally, we can adjust userAccessLevel attribute 
                 if (m.userAccessLevel && m.userAccessLevel.inputArguments) {
@@ -426,6 +439,7 @@ class OpcuaServer {
           }
         });
         this.currentState.isConstructedAddressSpace = true;
+        inspector('currentState:', this.currentState);
         console.log(chalk.yellow('Server constructed address space'));
       }
     } catch (err) {

@@ -10,6 +10,10 @@ const {
   Variant,
   StatusCodes
 } = require('node-opcua');
+
+const opcuaDefaultClientOptions = require(`${appRoot}/src/api/opcua/OPCUAClientOptions`);
+const opcuaDefaultSubscriptionOptions = require(`${appRoot}/src/api/opcua/ClientSubscriptionOptions.json`);
+
 const os = require('os');
 const chalk = require('chalk');
 const loMerge = require('lodash/merge');
@@ -81,7 +85,7 @@ class OpcuaClient {
    * @param params {Object}
    */
   constructor(app, params = {}) {
-    this.params = loMerge(paramsDefault, params);
+    this.params = loMerge(opcuaDefaultClientOptions, params);
     this.app = app;
     this.endpointUrl = this.endpointUrl ? this.endpointUrl : `opc.tcp://${this.params.hostname}:${this.params.port}`;
     this.opcuaClient = null;
@@ -717,12 +721,28 @@ class OpcuaClient {
     }
   }
 
-  /**
+ /**
   * Subscription create
+  * @method createSubscription
+  * @async
+  *
+  * @example
+  *
+  *    ```js
+  *    const options = {
+  *      requestedPublishingInterval: 100,
+  *      requestedLifetimeCount:      60,
+  *      requestedMaxKeepAliveCount:    10,
+  *      maxNotificationsPerPublish:  1000,
+  *      publishingEnabled:           true,
+  *      priority:                    1
+  *    };
+  *    const subscription = ClientSubscription.create(this.session, options);
+  *    ```
   */
   subscriptionCreate() {
     if (!this.session) return;
-    try {
+    try {// options: CreateSubscriptionRequestLike,
       this.subscription = ClientSubscription.create(this.session, this.params.subscription.create);
 
       this.subscription
