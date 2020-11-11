@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { inspector, isString } = require('../lib');
+const { inspector, isString, getBrowseNameFromNodeId, appRoot } = require('../lib');
 const {
   OPCUAClient,
   ClientSubscription,
@@ -11,12 +11,14 @@ const {
   StatusCodes
 } = require('node-opcua');
 
-const opcuaDefaultClientOptions = require(`${appRoot}/src/api/opcua/OPCUAClientOptions`);
-const opcuaDefaultSubscriptionOptions = require(`${appRoot}/src/api/opcua/ClientSubscriptionOptions.json`);
+const defaultClientOptions = require(`${appRoot}/src/api/opcua/OPCUAClientOptions`);
+const defaultSubscriptionOptions = require(`${appRoot}/src/api/opcua/ClientSubscriptionOptions.json`);
+const { defaultItemToMonitor, defaultRequestedParameters, defaultTimestampsToReturn } = require(`${appRoot}/src/api/opcua/ClientSubscriptionMonitorOptions`);
 
 const os = require('os');
 const chalk = require('chalk');
 const loMerge = require('lodash/merge');
+const loConcat = require('lodash/concat');
 const moment = require('moment');
 
 // const certificateFile ="../packages/node-opcua-samples/certificates/client_selfsigned_cert_2048.pem";
@@ -85,9 +87,9 @@ class OpcuaClient {
    * @param params {Object}
    */
   constructor(app, params = {}) {
-    this.params = loMerge(opcuaDefaultClientOptions, params);
+    this.params = loMerge(defaultClientOptions, params);
     this.app = app;
-    this.endpointUrl = this.endpointUrl ? this.endpointUrl : `opc.tcp://${this.params.hostname}:${this.params.port}`;
+    this.SrvCurrentState = null;
     this.opcuaClient = null;
     this.session = null;
     this.subscription = null;
@@ -100,13 +102,10 @@ class OpcuaClient {
   create() {
     try {
       // Create OPCUAClient
-      this.opcuaClient = OPCUAClient.create({
-        endpoint_must_exist: this.params.endpoint_must_exist,
-        connectionStrategy: this.params.connectionStrategy
-      });
+      this.opcuaClient = OPCUAClient.create(this.params);
 
       // Retrying connection
-      this.opcuaClient.on('backoff', (retry) => console.log(chalk.yellow('Retrying to connect to:'), this.endpointUrl, ' attempt: ', retry));
+      this.opcuaClient.on('backoff', (retry) => console.log(chalk.yellow('Retrying to connect to:'), this.SrvCurrentState.endpointUrl, ' attempt: ', retry));
 
     } catch (err) {
       const errTxt = 'Error while creating the OPS-UA client:';
@@ -117,12 +116,14 @@ class OpcuaClient {
 
   /**
    * Connect opc-ua client to server
+   * @param params {Object}
    */
-  async connect() {
-    if (!this.opcuaClient) return;
+  async connect(params = {}) {
+    if (!this.opcuaClient || !params.endpointUrl) return;
     try {
-      await this.opcuaClient.connect(this.endpointUrl);
-      console.log(chalk.yellow('Client connected to:'), chalk.cyan(this.endpointUrl));
+      await this.opcuaClient.connect(params.endpointUrl);
+      this.SrvCurrentState = params;
+      console.log(chalk.yellow('Client connected to:'), chalk.cyan(params.endpointUrl));
     } catch (err) {
       const errTxt = 'Error while connect the OPS-UA client:';
       console.log(errTxt, err);
@@ -137,7 +138,7 @@ class OpcuaClient {
     if (!this.opcuaClient) return;
     try {
       await this.opcuaClient.disconnect();
-      console.log(chalk.yellow('Client disconnect from:'), chalk.cyan(this.endpointUrl));
+      console.log(chalk.yellow('Client disconnect from:'), chalk.cyan(this.SrvCurrentState.endpointUrl));
     } catch (err) {
       const errTxt = 'Error while client disconnect the OPS-UA client:';
       console.log(errTxt, err);
@@ -187,6 +188,51 @@ class OpcuaClient {
       return this.session.toString();
     } catch (err) {
       const errTxt = 'Error while Session to string:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * Get nodeIds
+   * @param {String|Array<String>} nameNodeIds 
+   * @returns {Array<String>}
+   */
+  getNodeIds(nameNodeIds) {
+    let itemNodeId = null, itemNodeIds = [];
+    if (!this.SrvCurrentState) return null;
+    try {
+      let nodeIds = this.SrvCurrentState.paramsAddressSpace;
+      nodeIds = loConcat(nodeIds.objects, nodeIds.variables, nodeIds.methods);
+      if (Array.isArray(nameNodeIds)) {
+        nameNodeIds.forEach(nameNodeId => {
+          if (isString(nameNodeId)) {
+            itemNodeId = nodeIds.find(item => item.browseName === nameNodeId);
+            if (itemNodeId) {
+              itemNodeIds.push(itemNodeId.nodeId);
+            } else {
+              itemNodeIds.push(nameNodeId);
+            }
+          } else {
+            itemNodeIds.push(nameNodeId);
+          }
+        });
+      } else {
+        if (isString(nameNodeIds)) {
+          itemNodeId = nodeIds.find(item => item.browseName === nameNodeIds);
+          if (itemNodeId) {
+            itemNodeIds.push(itemNodeId.nodeId);
+          } else {
+            itemNodeIds.push(nameNodeIds);
+          }
+        } else {
+          itemNodeIds.push(nameNodeIds);
+        }
+      }
+      if(isDebug) debug('getNodeIds.result:', itemNodeIds);
+      return itemNodeIds;
+    } catch (err) {
+      const errTxt = 'Error while create session the OPS-UA client:';
       console.log(errTxt, err);
       throw new errors.GeneralError(`${errTxt} "${err.message}"`);
     }
@@ -436,34 +482,37 @@ class OpcuaClient {
   * @returns {Promise<Array>}
   */
   async sessionReadVariableValue(nameNodeIds) {
-    let result = [], itemNodeId = null, itemNodeIds = [], dataValues;
+    let result = []; //itemNodeId = null, itemNodeIds = [], dataValues;
     if (!this.session) return;
     try {
-      if (Array.isArray(nameNodeIds)) {
-        nameNodeIds.forEach(nameNodeId => {
-          itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
-          if (itemNodeId) {
-            itemNodeIds.push(itemNodeId.nodeId);
-          } else {
-            itemNodeIds.push(nameNodeId);
-          }
-        });
-      } else {
-        itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeIds);
-        if (itemNodeId) {
-          itemNodeIds.push(itemNodeId.nodeId);
-        } else {
-          itemNodeIds.push(nameNodeIds);
-        }
-        nameNodeIds = [nameNodeIds];
-      }
+      // if (Array.isArray(nameNodeIds)) {
+      //   nameNodeIds.forEach(nameNodeId => {
+      //     itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
+      //     if (itemNodeId) {
+      //       itemNodeIds.push(itemNodeId.nodeId);
+      //     } else {
+      //       itemNodeIds.push(nameNodeId);
+      //     }
+      //   });
+      // } else {
+      //   itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeIds);
+      //   if (itemNodeId) {
+      //     itemNodeIds.push(itemNodeId.nodeId);
+      //   } else {
+      //     itemNodeIds.push(nameNodeIds);
+      //   }
+      //   nameNodeIds = [nameNodeIds];
+      // }
+      const itemNodeIds = this.getNodeIds(nameNodeIds);
+      debug('itemNodeIds:', itemNodeIds);
 
       if (itemNodeIds.length) {
-        dataValues = await this.session.readVariableValue(itemNodeIds);
-        dataValues.forEach((item, index) => item.nameNodeId = nameNodeIds[index]);
-        result = dataValues;
+        // dataValues = await this.session.readVariableValue(itemNodeIds);
+        // dataValues.forEach((item, index) => item.nameNodeId = nameNodeIds[index]);
+        // result = dataValues;
+        result = await this.session.readVariableValue(itemNodeIds);
       }
-      if (isLog) inspector('plugins.opcua-client.class::sessionReadVariableValue.result:', result);
+      if (isLog) inspector('opcua-client.class::sessionReadVariableValue:', result);
       return result;
     } catch (err) {
       const errTxt = 'Error while session read the OPS-UA client:';
@@ -721,7 +770,7 @@ class OpcuaClient {
     }
   }
 
- /**
+  /**
   * Subscription create
   * @method createSubscription
   * @async
@@ -740,10 +789,11 @@ class OpcuaClient {
   *    const subscription = ClientSubscription.create(this.session, options);
   *    ```
   */
-  subscriptionCreate() {
+  subscriptionCreate(options = {}) {
     if (!this.session) return;
-    try {// options: CreateSubscriptionRequestLike,
-      this.subscription = ClientSubscription.create(this.session, this.params.subscription.create);
+    try {
+      const mergeOptions = loMerge(defaultSubscriptionOptions, options);
+      this.subscription = ClientSubscription.create(this.session, mergeOptions);
 
       this.subscription
         .on('started', () => console.log(chalk.yellow('Client subscription started.') + ' SubscriptionId=', this.subscription.subscriptionId))
@@ -771,33 +821,133 @@ class OpcuaClient {
   }
 
   /**
-  * Subscription monitor
-  * 
-  * @param {String} nameNodeId
-  * e.g. 'temperature'
-  * @param {Function} cb
-  * @param {UInt32} attributeId
-  * 
-  */
-  async subscriptionMonitor(nameNodeId, cb, attributeId = undefined) {
+     * Add a monitor item to the subscription
+     *
+     * @method monitor
+     * @async
+     * @param options.itemToMonitor                        {ReadValueId}
+     * @param options.itemToMonitor.nodeId                 {NodeId}
+     * @param options.itemToMonitor.attributeId            {AttributeId}
+     * @param options.itemToMonitor.indexRange             {null|NumericRange}
+     * @param options.itemToMonitor.dataEncoding
+     * @param options.requestedParameters                  {MonitoringParameters}
+     * @param options.requestedParameters.clientHandle     {IntegerId}
+     * @param options.requestedParameters.samplingInterval {Duration}
+     * @param options.requestedParameters.filter           {ExtensionObject|null} EventFilter/DataChangeFilter
+     * @param options.requestedParameters.queueSize        {Counter}
+     * @param options.requestedParameters.discardOldest    {Boolean}
+     * @param options.timestampsToReturn                   {TimestampsToReturn} //{TimestampsToReturnId}
+     * @param  cb                                          {Function} optional done callback
+     * @return {ClientMonitoredItem}
+     *
+     *
+     * Monitoring a simple Value Change
+     * ---------------------------------
+     *
+     * @example:
+     *
+     *   clientSubscription.monitor(
+     *     // itemToMonitor:
+     *     {
+     *       nodeId: "ns=0;i=2258",
+     *       attributeId: AttributeIds.Value,
+     *       indexRange: null,
+     *       dataEncoding: { namespaceIndex: 0, name: null }
+     *     },
+     *     // requestedParameters:
+     *     {
+     *        samplingInterval: 3000,
+     *        filter: null,
+     *        queueSize: 1,
+     *        discardOldest: true
+     *     },
+     *     TimestampsToReturn.Neither
+     *   );
+     *
+     * Monitoring a Value Change With a DataChange  Filter
+     * ---------------------------------------------------
+     *
+     * options.trigger       {DataChangeTrigger} {Status|StatusValue|StatusValueTimestamp}
+     * options.deadbandType  {DeadbandType}      {None|Absolute|Percent}
+     * options.deadbandValue {Double}
+     *
+     * @example:
+     *
+     *   clientSubscription.monitor(
+     *     // itemToMonitor:
+     *     {
+     *       nodeId: "ns=0;i=2258",
+     *       attributeId: AttributeIds.Value,
+     *     },
+     *     // requestedParameters:
+     *     {
+     *        samplingInterval: 3000,
+     *        filter: new DataChangeFilter({
+     *             trigger: DataChangeTrigger.StatusValue,
+     *             deadbandType: DeadbandType.Absolute,
+     *             deadbandValue: 0.1
+     *        }),
+     *        queueSize: 1,
+     *        discardOldest: true
+     *     },
+     *     TimestampsToReturn.Neither
+     *   );
+     *
+     *
+     * Monitoring an Event
+     * -------------------
+     *
+     *  If the monitor attributeId is EventNotifier then the filter must be specified
+     *
+     * @example:
+     *
+     *  var filter =  new EventFilter({
+     *    selectClauses: [
+     *             { browsePath: [ {name: 'ActiveState'  }, {name: 'id'}  ]},
+     *             { browsePath: [ {name: 'ConditionName'}                ]}
+     *    ],
+     *    whereClause: []
+     *  });
+     *
+     *  clientSubscription.monitor(
+     *     // itemToMonitor:
+     *     {
+     *       nodeId: "ns=0;i=2258",
+     *       attributeId: AttributeIds.EventNotifier,
+     *       indexRange: null,
+     *       dataEncoding: { namespaceIndex: 0, name: null }
+     *     },
+     *     // requestedParameters:
+     *     {
+     *        samplingInterval: 3000,
+     *
+     *        filter: filter,
+     *
+     *        queueSize: 1,
+     *        discardOldest: true
+     *     },
+     *     TimestampsToReturn.Neither
+     *   );
+     */
+  async subscriptionMonitor(options = {}, cb) {// itemToMonitor = {}, requestedParameters = {}, timestampsToReturn,
     if (!this.subscription) return;
     try {
-      const itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
-      const nodeId = itemNodeId ? itemNodeId.nodeId : nameNodeId;
-      attributeId = attributeId ? attributeId : AttributeIds.Value;
+      const mergeItemToMonitor = loMerge(defaultItemToMonitor, options.itemToMonitor);
+      const mergeRequestedParameters = options.requestedParameters ? loMerge(defaultRequestedParameters, options.requestedParameters) : defaultRequestedParameters;
+      const mergeTimestampsToReturn = options.timestampsToReturn ? options.timestampsToReturn : defaultTimestampsToReturn;
+
       const monitoredItem = await this.subscription.monitor(
-        {
-          nodeId,
-          attributeId
-        },
-        this.params.subscription.monitor,
-        this.params.subscription.timestampsToReturn
+        mergeItemToMonitor,
+        mergeRequestedParameters,
+        mergeTimestampsToReturn
       );
-      if (isLog) inspector('plugins.opcua-client.class::subscriptionMonitor.monitoredItem:', monitoredItem);
+      if (isLog) inspector('opcua-client.class::subscriptionMonitor.monitoredItem:', monitoredItem);
 
       monitoredItem.on('changed', (dataValue) => {
-        if (isLog) inspector(`plugins.opcua-client.class::subscriptionMonitor.${nameNodeId}:`, dataValue);
-        cb(nameNodeId, dataValue);
+        const nameNodeId = getBrowseNameFromNodeId(mergeItemToMonitor.nodeId);
+        // debug('subscriptionMonitor.nameNodeId:', nameNodeId); 
+        if (isLog) inspector(`opcua-client.class::subscriptionMonitor.${nameNodeId}:`, dataValue);
+        cb(mergeItemToMonitor.nodeId, dataValue);
       });
     } catch (err) {
       const errTxt = 'Error while subscription monitor the OPS-UA client:';

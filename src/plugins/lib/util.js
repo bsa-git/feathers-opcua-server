@@ -106,6 +106,17 @@ const getCapitalizeStr = function (value, prefix = '') {
 };
 
 /**
+ * Get browseName from nodeId
+ * @param nodeId String
+ * e.g. nodeId='ns=1;s=Device1.Temperature' => 'Device1.Temperature'
+ * @return {String}
+ */
+const getBrowseNameFromNodeId = function (nodeId = '') {
+  const browseName = nodeId.split(';')[1].split('=')[1];
+  return browseName;
+};
+
+/**
  * Is true
  * @param value String|Any
  * @return boolean
@@ -350,6 +361,7 @@ module.exports = {
   stripSlashes,
   stripSpecific,
   getCapitalizeStr,
+  getBrowseNameFromNodeId,
   isTrue,
   getNumber,
   getRegex,

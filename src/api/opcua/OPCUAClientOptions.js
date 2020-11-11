@@ -4,11 +4,7 @@ const {
   SecurityPolicy
 } = require('node-opcua');
 
-const connectionStrategy = {
-  maxRetry: 10,
-  initialDelay: 10,
-  maxDelay: 10000
-},
+const defaultConnectionStrategy = require('./ClientConnectionStrategy.json');
 
 module.exports = {
   /**
@@ -19,7 +15,7 @@ module.exports = {
   /**
    *  connection strategy
    */
-  connectionStrategy: connectionStrategy,
+  connectionStrategy: defaultConnectionStrategy,
 
   /**
    * if not specify or set to 0 , token  renewal will happen
@@ -88,5 +84,5 @@ module.exports = {
   /**
    * set to false if the client should accept server endpoint mismatch
    */
-  endpoint_must_exist: false,
-}
+  endpoint_must_exist: false
+};

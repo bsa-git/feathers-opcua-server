@@ -109,7 +109,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
 
     it('OPC-UA client connect', async () => {
       try {
-        await client.connect();
+        await client.connect(server.getCurrentState());
         assert.ok(true, 'OPC-UA client connect');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
