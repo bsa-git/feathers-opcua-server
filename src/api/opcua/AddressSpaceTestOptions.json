@@ -13,7 +13,7 @@
     {
       "browseName": "Device1.Temperature",
       "displayName": "Temperature",
-      "variableOwnerName": "Device1",
+      "ownerName": "Device1",
       "type": "simple",
       "dataType": "Double",
       "variableGetType": "get",
@@ -23,7 +23,7 @@
     {
       "browseName": "Device1.Variable2",
       "displayName": "Variable2",
-      "variableOwnerName": "Device1",
+      "ownerName": "Device1",
       "type": "simple",
       "dataType": "String",
       "variableGetType": "valueFromSource",
@@ -36,7 +36,7 @@
     {
       "browseName": "Device1.Variable3",
       "displayName": "Variable3",
-      "variableOwnerName": "Device1",
+      "ownerName": "Device1",
       "type": "simple",
       "dataType": "Double",
       "variableGetType": "valueFromSource",
@@ -56,7 +56,7 @@
     {
       "browseName": "Device1.PercentageMemoryUsed",
       "displayName": "Percentage Memory Used",
-      "variableOwnerName": "Device1",
+      "ownerName": "Device1",
       "type": "simple",
       "dataType": "Double",
       "variableGetType": "get",
@@ -68,14 +68,14 @@
     {
       "browseName": "Device1.VariableForWrite",
       "displayName": "Variable For Write",
-      "variableOwnerName": "Device1",
+      "ownerName": "Device1",
       "type": "simple",
       "dataType": "String"
     },
     {
       "browseName": "Device2.PressureVesselDevice",
       "displayName": "Pressure Vessel Device",
-      "variableOwnerName": "Device2",
+      "ownerName": "Device2",
       "type": "analog",
       "dataType": "Double",
       "hist": true,
@@ -95,7 +95,7 @@
     {
       "browseName": "Device1.SumMethod",
       "displayName": "Sum Method",
-      "methodOwnerName": "Device1",
+      "ownerName": "Device1",
       "bindMethod": "sumMethod",
       "inputArguments": [
         {

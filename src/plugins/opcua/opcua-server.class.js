@@ -333,7 +333,7 @@ class OpcuaServer {
 
             // Add variables
             if (params.variables.length) {
-              const variables = params.variables.filter(v => v.variableOwnerName === o.browseName);
+              const variables = params.variables.filter(v => v.ownerName === o.browseName);
               if (variables.length) {
                 variables.forEach(v => {
                   // Add only those variables that do not exist in the current state list
@@ -368,7 +368,7 @@ class OpcuaServer {
                       nodeId: addedVariable.nodeId.toString(),
                       browseName: v.browseName,
                       displayName: v.displayName,
-                      variableOwnerName: v.variableOwnerName,
+                      ownerName: v.ownerName,
                       dataType: v.dataType,
                       type: v.type,
                     },
@@ -408,7 +408,7 @@ class OpcuaServer {
 
             // Add methods for object
             if (params.methods.length) {
-              const filterMethods = params.methods.filter(m => m.methodOwnerName === o.browseName);
+              const filterMethods = params.methods.filter(m => m.ownerName === o.browseName);
               if (filterMethods.length) {
                 filterMethods.forEach(m => {
                   // Add only those methods that do not exist in the current state list
@@ -442,7 +442,10 @@ class OpcuaServer {
                     // Push method to paramsAddressSpace.methods
                     this.currentState.paramsAddressSpace.methods.push(loMerge(
                       loOmit(methodParams, ['componentOf', 'propertyOf', 'organizedBy', 'encodingOf']),
-                      { nodeId: addedMethod.nodeId.toString() }));
+                      { 
+                        nodeId: addedMethod.nodeId.toString(),
+                        ownerName: m.ownerName,
+                      }));
                     
                     // optionally, we can adjust userAccessLevel attribute 
                     if (m.userAccessLevel && m.userAccessLevel.inputArguments) {
