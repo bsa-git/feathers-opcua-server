@@ -125,6 +125,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
+    //------------- CLIENT readVariables/writeNodeValue/readHistoryValue -----------------//
 
     it('OPC-UA client session read variables value', async () => {
       try {
@@ -251,6 +252,8 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
+    //------------- CLIENT callMethod -----------------//
+
     it('OPC-UA client session call method', async () => {
       try {
         let statusCode, callResults = [];
@@ -279,10 +282,12 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
+    //------------- SERVER GET -----------------//
+
     it('OPC-UA server get bytesWritten', async () => {
       try {
         // bytesWritten
-        console.log(chalk.green('bytesWritten:'), chalk.cyan(server.getBytesWritten()));
+        console.log(chalk.green('server.bytesWritten:'), chalk.cyan(server.getBytesWritten()));
         assert.ok(true, 'OPC-UA server get bytesWritten');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -292,7 +297,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server get bytesRead', async () => {
       try {
         // bytesWritten
-        console.log(chalk.green('bytesRead:'), chalk.cyan(server.getBytesRead()));
+        console.log(chalk.green('server.bytesRead:'), chalk.cyan(server.getBytesRead()));
         assert.ok(true, 'OPC-UA server get bytesRead');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -302,7 +307,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server get transactionsCount', async () => {
       try {
         // bytesWritten
-        console.log(chalk.green('transactionsCount:'), chalk.cyan(server.getTransactionsCount()));
+        console.log(chalk.green('server.transactionsCount:'), chalk.cyan(server.getTransactionsCount()));
         assert.ok(true, 'OPC-UA server get transactionsCount');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -312,7 +317,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server get currentChannelCount', async () => {
       try {
         // bytesWritten
-        console.log(chalk.green('currentChannelCount:'), chalk.cyan(server.getCurrentChannelCount()));
+        console.log(chalk.green('server.currentChannelCount:'), chalk.cyan(server.getCurrentChannelCount()));
         assert.ok(true, 'OPC-UA server get currentChannelCount');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -322,7 +327,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server get currentSubscriptionCount', async () => {
       try {
         // bytesWritten
-        console.log(chalk.green('currentSubscriptionCount:'), chalk.cyan(server.getCurrentSubscriptionCount()));
+        console.log(chalk.green('server.currentSubscriptionCount:'), chalk.cyan(server.getCurrentSubscriptionCount()));
         assert.ok(true, 'OPC-UA server get currentSubscriptionCount');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -332,7 +337,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server get rejectedSessionCount', async () => {
       try {
         // bytesWritten
-        console.log(chalk.green('rejectedSessionCount:'), chalk.cyan(server.getRejectedSessionCount()));
+        console.log(chalk.green('server.rejectedSessionCount:'), chalk.cyan(server.getRejectedSessionCount()));
         assert.ok(true, 'OPC-UA server get rejectedSessionCount');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -342,7 +347,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server get rejectedRequestsCount', async () => {
       try {
         // bytesWritten
-        console.log(chalk.green('rejectedRequestsCount:'), chalk.cyan(server.getRejectedRequestsCount()));
+        console.log(chalk.green('server.rejectedRequestsCount:'), chalk.cyan(server.getRejectedRequestsCount()));
         assert.ok(true, 'OPC-UA server get rejectedRequestsCount');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -352,7 +357,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server get sessionAbortCount', async () => {
       try {
         // bytesWritten
-        console.log(chalk.green('sessionAbortCount:'), chalk.cyan(server.getSessionAbortCount()));
+        console.log(chalk.green('server.sessionAbortCount:'), chalk.cyan(server.getSessionAbortCount()));
         assert.ok(true, 'OPC-UA server get sessionAbortCount');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -362,7 +367,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server get publishingIntervalCount', async () => {
       try {
         // bytesWritten
-        console.log(chalk.green('publishingIntervalCount:'), chalk.cyan(server.getPublishingIntervalCount()));
+        console.log(chalk.green('server.publishingIntervalCount:'), chalk.cyan(server.getPublishingIntervalCount()));
         assert.ok(true, 'OPC-UA server get publishingIntervalCount');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -372,7 +377,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server get currentSessionCount', async () => {
       try {
         // bytesWritten
-        console.log(chalk.green('currentSessionCount:'), chalk.cyan(server.getCurrentSessionCount()));
+        console.log(chalk.green('server.currentSessionCount:'), chalk.cyan(server.getCurrentSessionCount()));
         assert.ok(true, 'OPC-UA server get currentSessionCount');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -382,7 +387,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server is initialized', async () => {
       try {
         // bytesWritten
-        console.log(chalk.green('isInitialized:'), chalk.cyan(server.isInitialized()));
+        console.log(chalk.green('server.isInitialized:'), chalk.cyan(server.isInitialized()));
         assert.ok(true, 'OPC-UA server is initialized');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -392,13 +397,59 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server is auditing', async () => {
       try {
         // bytesWritten
-        console.log(chalk.green('isAuditing:'), chalk.cyan(server.isAuditing()));
+        console.log(chalk.green('server.isAuditing:'), chalk.cyan(server.isAuditing()));
         assert.ok(true, 'OPC-UA server is auditing');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
 
+    //------------- SESSION GET -----------------//
+
+    it('OPC-UA client sessionEndpoint', async () => {
+      try {
+        // client.sessionEndpoint()
+        inspector('client.sessionEndpoint:', client.sessionEndpoint());
+        assert.ok(true, 'OPC-UA client sessionEndpoint');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client sessionSubscriptionCount', async () => {
+      try {
+        // client.sessionSubscriptionCount()
+        console.log(chalk.green('client.sessionSubscriptionCount:'), chalk.cyan(client.sessionSubscriptionCount()));
+        assert.ok(true, 'OPC-UA client sessionSubscriptionCount');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client sessionIsReconnecting', async () => {
+      try {
+        // client.isReconnecting()
+        console.log(chalk.green('client.sessionIsReconnecting:'), chalk.cyan(client.sessionIsReconnecting()));
+        assert.ok(true, 'OPC-UA client sessionIsReconnecting');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client sessionGetPublishEngine', async () => {
+      try {
+        const publishEngine = client.sessionGetPublishEngine();
+        console.log(chalk.green('client.publishEngine.activeSubscriptionCount:'), chalk.cyan(publishEngine.activeSubscriptionCount));
+        console.log(chalk.green('client.publishEngine.isSuspended:'), chalk.cyan(publishEngine.isSuspended));
+        console.log(chalk.green('client.publishEngine.nbMaxPublishRequestsAcceptedByServer:'), chalk.cyan(publishEngine.nbMaxPublishRequestsAcceptedByServer));
+        console.log(chalk.green('client.publishEngine.nbPendingPublishRequests:'), chalk.cyan(publishEngine.nbPendingPublishRequests));
+        assert.ok(true, 'OPC-UA client sessionGetPublishEngine');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    //------------- SESSION close/disconnect -----------------//
 
     it('OPC-UA client session close', async () => {
       try {
@@ -418,6 +469,8 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
+    //------------- SERVER shutdown -----------------//
+
     it('OPC-UA server shutdown', async () => {
       try {
         await server.shutdown();
@@ -426,6 +479,8 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
+
+    
 
   });
 });

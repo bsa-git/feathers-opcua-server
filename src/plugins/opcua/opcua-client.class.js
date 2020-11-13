@@ -179,6 +179,15 @@ class OpcuaClient {
   }
 
   /**
+   * Session not created
+   */
+  sessionNotCreated() {
+    const errTxt = 'Session not created';
+    console.log(chalk.red(`ERROR: ${errTxt}`));
+    throw new errors.GeneralError(`${errTxt}`);
+  }
+
+  /**
  * Session to string
  * @returns {String}
  */
@@ -251,7 +260,7 @@ class OpcuaClient {
       let nodeIds = this.SrvCurrentState.paramsAddressSpace;
       nodeIds = loConcat(nodeIds.objects, nodeIds.variables, nodeIds.methods);
       itemNodeId = nodeIds.find(item => item.browseName === nameNodeId);
-      if(!itemNodeId) {
+      if (!itemNodeId) {
         itemNodeId = nodeIds.find(item => item.nodeId === nameNodeId);
       }
       return itemNodeId;
@@ -263,11 +272,124 @@ class OpcuaClient {
   }
 
   /**
+   * Session endpoint
+   * 
+   * endpointUrl               UAString            : opc.tcp://M5-0095488.OSTCHEM.COM.UA:26543
+   * server                    ApplicationDescri   : {
+   applicationUri              UAString            : urn:NodeOPCUA-Server-default
+   productUri                  UAString            : NodeOPCUA-Server
+   applicationName             LocalizedText       : locale=null text=NodeOPCUA
+   applicationType             ApplicationType     : ApplicationType.Server (0)
+   gatewayServerUri            UAString            : 
+   discoveryProfileUri         UAString            : 
+   discoveryUrls               UAString         [] : [ empty ] }
+ serverCertificate             ByteString       BUFFER
+ securityMode                  MessageSecurityMo   : MessageSecurityMode.None (1)
+ securityPolicyUri             UAString            : http://opcfoundation.org/UA/SecurityPolicy#None
+ userIdentityTokens            UserTokenPolicy  [] : [
+   { 0
+     policyId                  UAString            : username_basic256
+     tokenType                 UserTokenType       : UserTokenType.UserName (1)
+     issuedTokenType           UAString            : null
+     issuerEndpointUrl         UAString            : null
+     securityPolicyUri         UAString            : http://opcfoundation.org/UA/SecurityPolicy#Basic256
+   },
+   { 1
+     policyId                  UAString            : username_basic128Rsa15
+     tokenType                 UserTokenType       : UserTokenType.UserName (1)
+     issuedTokenType           UAString            : null
+     issuerEndpointUrl         UAString            : null
+     securityPolicyUri         UAString            : http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15
+   },
+   { 2
+     policyId                  UAString            : username_basic256Sha256
+     tokenType                 UserTokenType       : UserTokenType.UserName (1)
+     issuedTokenType           UAString            : null
+     issuerEndpointUrl         UAString            : null
+     securityPolicyUri         UAString            : http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256
+   },
+   { 3
+     policyId                  UAString            : certificate_basic256
+     tokenType                 UserTokenType       : UserTokenType.UserName (1)
+     issuedTokenType           UAString            : null
+     issuerEndpointUrl         UAString            : null
+     securityPolicyUri         UAString            : http://opcfoundation.org/UA/SecurityPolicy#Basic256
+   },
+   { 4
+     policyId                  UAString            : certificate_basic256Sha256
+     tokenType                 UserTokenType       : UserTokenType.Certificate (2)
+     issuedTokenType           UAString            : null
+     issuerEndpointUrl         UAString            : null
+     securityPolicyUri         UAString            : http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256
+   },
+   { 5
+     policyId                  UAString            : anonymous
+     tokenType                 UserTokenType       : UserTokenType.Anonymous (0)
+     issuedTokenType           UAString            : null
+     issuerEndpointUrl         UAString            : null
+     securityPolicyUri         UAString            : null
+   }
+ ]
+ transportProfileUri           UAString            : http://opcfoundation.org/UA-Profile/Transport/uatcp-uasc-uabinary
+ securityLevel                 Byte                : 1
+  */
+  sessionEndpoint() {
+    if (!this.session) this.sessionNotCreated();
+    const endpoint = this.session.endpoint;
+    return  {
+      endpointUrl: endpoint.endpointUrl,
+      server: {
+        applicationUri: endpoint.server.applicationUri,
+        productUri: endpoint.server.productUri,
+        applicationName: endpoint.server.applicationName.text,
+        applicationType: endpoint.server.applicationType,
+        gatewayServerUri: endpoint.server.gatewayServerUri,
+        discoveryProfileUri: endpoint.server.discoveryProfileUri,
+        discoveryUrls: endpoint.server.discoveryUrls,
+      },
+      serverCertificate: endpoint.serverCertificate,
+      securityMode: endpoint.securityMode,
+      securityPolicyUri: endpoint.securityPolicyUri,
+      userIdentityTokens: endpoint.userIdentityTokens,
+      transportProfileUri: endpoint.transportProfileUri,
+      securityLevel: endpoint.securityLevel
+    };
+  }
+
+  /**
+   * Session subscription count
+   */
+  sessionSubscriptionCount() {
+    if (!this.session) this.sessionNotCreated();
+    const subscriptionCount = this.session.subscriptionCount;
+    return  subscriptionCount;
+  }
+
+  /**
+   * Is reconnecting
+   */
+  sessionIsReconnecting() {
+    if (!this.session) this.sessionNotCreated();
+    const isReconnecting = this.session.isReconnecting;
+    return  isReconnecting;
+  }
+
+  /**
+   * Session get publish engine
+   */
+  sessionGetPublishEngine() {
+    if (!this.session) this.sessionNotCreated();
+    const publishEngine = this.session.getPublishEngine();
+    return  publishEngine;
+  }
+
+  /**
    * Read namespace array for session
+   * @async
    * @returns {Promise<string[]}
    */
   async sessionReadNamespaceArray() {
-    if (!this.session) return;
+    if (!this.session) this.sessionNotCreated();
     try {
       const result = await this.session.readNamespaceArray();
       if (isLog) inspector('plugin.opcua-client.class::sessionReadNamespaceArray.result:', result);
@@ -282,65 +404,74 @@ class OpcuaClient {
 
   /**
    * Session browse
-   * 
+   * @async
+   *
+   * @example
+   *
+   *    ```javascript
+   *    session.browse("RootFolder",function(err,browseResult) {
+   *      if(err) return callback(err);
+   *      console.log(browseResult.toString());
+   *      callback();
+   *    } );
+   *    ```
+   *
+   *
+   * @example
+   *
+   *    ``` javascript
+   *    const browseDescription = {
+   *       nodeId: "ObjectsFolder",
+   *       referenceTypeId: "Organizes",
+   *       browseDirection: BrowseDirection.Inverse,
+   *       includeSubtypes: true,
+   *       nodeClassMask: 0,
+   *       resultMask: 63
+   *    }
+   *    session.browse(browseDescription,function(err, browseResult) {
+   *       if(err) return callback(err);
+   *       console.log(browseResult.toString());
+   *       callback();
+   *    });
+   *    ```
    * @example
    *
    * ``` javascript
-   * await session.browse([ "RootFolder", "ObjectsFolder"]) {
+   * session.browse([ "RootFolder", "ObjectsFolder"],function(err, browseResults) {
    *       assert(browseResults.length === 2);
    * });
    * ```
-   * 
-   *  @example
-     * ``` javascript
-     * const browseDescriptions = [
-     * {
-     *   nodeId: "ObjectsFolder",
-     *   referenceTypeId: "Organizes",
-     *   browseDirection: BrowseDirection.Inverse,
-     *   includeSubtypes: true,
-     *   nodeClassMask: 0,
-     *   resultMask: 63
-     * },
-     * // {...}
-     * ]
-     *  await session.browse(browseDescriptions) {
-     *
-     *   });
-     * ```
-   * 
-   * @param {String|Array} nameNodeIds 
-   * e.g. 'browseObjectsFolder'|['browseObjectsFolder', 'browseObjectsFolder2']
-   * @returns {Promise<Array>}
+   *
+   * @example
+   * ``` javascript
+   * const browseDescriptions = [
+   * {
+   *   nodeId: "ObjectsFolder",
+   *   referenceTypeId: "Organizes",
+   *   browseDirection: BrowseDirection.Inverse,
+   *   includeSubtypes: true,
+   *   nodeClassMask: 0,
+   *   resultMask: 63
+   * },
+   * // {...}
+   * ]
+   *  session.browse(browseDescriptions,function(err, browseResults) {
+   *
+   *   });
+   * ```
+   * @param {String|String[]|Object|Object[]} nameNodeIds 
+   * @returns {Promise<BrowseResult[]>}
    */
   async sessionBrowse(nameNodeIds) {
-    let result = [], itemNodeId = null, itemNodeIds = [];
-    if (!this.session) return;
+    let result = [], itemNodeIds = [];
+    if (!this.session) this.sessionNotCreated();
     try {
       if (Array.isArray(nameNodeIds)) {
         nameNodeIds.forEach(nameNodeId => {
-          if (isString(nameNodeId)) {
-            itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
-            if (itemNodeId) {
-              itemNodeIds.push(itemNodeId.browseDescriptions);
-            } else {
-              itemNodeIds.push(nameNodeId);
-            }
-          } else {
-            itemNodeIds.push(nameNodeId);
-          }
+          itemNodeIds.push(nameNodeId);
         });
       } else {
-        if (isString(nameNodeIds)) {
-          itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeIds);
-          if (itemNodeId) {
-            itemNodeIds.push(itemNodeId.browseDescriptions);
-          } else {
-            itemNodeIds.push(nameNodeIds);
-          }
-        } else {
-          itemNodeIds.push(nameNodeIds);
-        }
+        itemNodeIds.push(nameNodeIds);
       }
 
       if (itemNodeIds.length) {
@@ -357,12 +488,13 @@ class OpcuaClient {
 
   /**
    * Session translate browse path
-   * @param {String|Array} browsePaths 
-   * @returns {Promise<Array>}
+   * @async
+   * @param {BrowsePath|BrowsePath[]} browsePaths 
+   * @returns {Promise<BrowsePathResult[]>}
    */
   async sessionTranslateBrowsePath(browsePaths) {
     let result = [];
-    if (!this.session) return;
+    if (!this.session) this.sessionNotCreated();
     try {
       if (!Array.isArray(browsePaths)) {
         browsePaths = [browsePaths];
@@ -406,7 +538,7 @@ class OpcuaClient {
    */
   async sessionRead(nameNodeIds, attributeId = 0, maxAge = 0) {
     let result = [], itemNodeIds = [], dataValues;
-    if (!this.session) return;
+    if (!this.session) this.sessionNotCreated();
     try {
       // Get nodeIds
       this.getNodeIds(nameNodeIds).forEach((itemNodeId) => {
@@ -454,13 +586,13 @@ class OpcuaClient {
      *  });
      *  ```
    * 
-   * @param {String|Array} nameNodeIds 
+   * @param {String|String[]} nameNodeIds 
    * e.g. 'temperature'| ['temperature', 'pressureVesselDevice']
    * @returns {void}
    */
   sessionReadAllAttributes(nameNodeIds, callback) {
     let itemNodeId = null, itemNodeIds = [];
-    if (!this.session) return;
+    if (!this.session) this.sessionNotCreated();
     try {
       // Get nodeIds
       itemNodeIds = this.getNodeIds(nameNodeIds);
@@ -483,7 +615,7 @@ class OpcuaClient {
   */
   async sessionReadVariableValue(nameNodeIds) {
     let result = [];
-    if (!this.session) return;
+    if (!this.session) this.sessionNotCreated();
     try {
       // Get nodeIds
       const itemNodeIds = this.getNodeIds(nameNodeIds);
@@ -500,16 +632,36 @@ class OpcuaClient {
   }
 
   /**
-   * Session read history values
-   * @param {String|Array} nameNodeIds 
-   * e.g. 'temperature'| ['temperature', 'pressureVesselDevice']
-   * @param {String} start 
-   * @param {String} end 
-   * @return {Promise<Array>}
+   * @method sessionReadHistoryValues
+   * @async
+   *
+   * @example
+   *
+   * ```javascript
+   * //  es5
+   * session.readHistoryValue(
+   *   "ns=5;s=Simulation Examples.Functions.Sine1",
+   *   "2015-06-10T09:00:00.000Z",
+   *   "2015-06-10T09:01:00.000Z", function(err,dataValues) {
+   *
+   * });
+   * ```
+   *
+   * ```javascript
+   * //  es6
+   * const dataValues = await session.readHistoryValue(
+   *   "ns=5;s=Simulation Examples.Functions.Sine1",
+   *   "2015-06-10T09:00:00.000Z",
+   *   "2015-06-10T09:01:00.000Z");
+   * ```
+   * @param {ReadValueIdLike|ReadValueIdLike[]} nameNodeIds   the read value id
+   * @param {String} start   the start time in UTC format
+   * @param {String} end     the end time in UTC format
+   * @return {Promise<HistoryReadResult[]>}
    */
   async sessionReadHistoryValues(nameNodeIds, start, end) {
     let result = [], itemNodeIds = [], dataValues;
-    if (!this.session) return;
+    if (!this.session) this.sessionNotCreated();
     try {
       // Get nodeIds
       itemNodeIds = this.getNodeIds(nameNodeIds);
@@ -533,7 +685,7 @@ class OpcuaClient {
    * @returns {Promise<MonitoredItemData>}
    */
   async sessionGetMonitoredItems(subscriptionId) {
-    if (!this.session) return;
+    if (!this.session) this.sessionNotCreated();
     try {
       const monitoredItems = await this.session.getMonitoredItems(subscriptionId);
       if (isLog) inspector('plugins.opcua-client.class::subscriptionGetMonitoredItems.monitoredItems:', monitoredItems);
@@ -552,7 +704,7 @@ class OpcuaClient {
    * @returns {Promise<StatusCode>}
    */
   async sessionWriteSingleNode(nameNodeId, variantValue) {
-    if (!this.session) return;
+    if (!this.session) this.sessionNotCreated();
     try {
       // Get nodeIds
       const nodeId = this.getNodeIds(nameNodeId)[0];
@@ -604,7 +756,7 @@ class OpcuaClient {
    */
   async sessionWrite(nameNodeIds, valuesToWrite = []) {
     let statusCodes = [], itemNodeIds = [];
-    if (!this.session) return;
+    if (!this.session) this.sessionNotCreated();
     try {
       // Get nodeIds
       this.getNodeIds(nameNodeIds).forEach((itemNodeId, index) => {
@@ -659,7 +811,7 @@ class OpcuaClient {
    */
   async sessionCallMethod(nameNodeIds, inputArguments = []) {
     let result = [], itemNodeIds = [];
-    if (!this.session) return;
+    if (!this.session) this.sessionNotCreated();
     try {
       // Get nodeIds
       this.getNodeIds(nameNodeIds).forEach((itemNodeId, index) => {
@@ -691,7 +843,7 @@ class OpcuaClient {
  * @returns {Promise<ArgumentDefinition>}
  */
   async sessionGetArgumentDefinition(nameNodeId) {
-    if (!this.session) return;
+    if (!this.session) this.sessionNotCreated();
     try {
       const itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
       const methodId = itemNodeId ? itemNodeId.methodId : nameNodeId;
@@ -726,7 +878,7 @@ class OpcuaClient {
   *    ```
   */
   subscriptionCreate(options = {}) {
-    if (!this.session) return;
+    if (!this.session) this.sessionNotCreated();
     try {
       const mergeOptions = loMerge(defaultSubscriptionOptions, options);
       this.subscription = ClientSubscription.create(this.session, mergeOptions);
@@ -746,7 +898,7 @@ class OpcuaClient {
   * Subscription terminate
   */
   async subscriptionTerminate() {
-    if (!this.subscription) return;
+    if (!this.subscription) this.subscriptionNotCreated();
     try {
       await this.subscription.terminate();
     } catch (err) {
@@ -754,6 +906,15 @@ class OpcuaClient {
       console.log(errTxt, err);
       throw new errors.GeneralError(`${errTxt} "${err.message}"`);
     }
+  }
+
+  /**
+   * Subscription not created
+   */
+  subscriptionNotCreated() {
+    const errTxt = 'Subscription not created';
+    console.log(chalk.red(`ERROR: ${errTxt}`));
+    throw new errors.GeneralError(`${errTxt}`);
   }
 
   /**
@@ -866,7 +1027,7 @@ class OpcuaClient {
      *   );
      */
   async subscriptionMonitor(options = {}, cb) {// itemToMonitor = {}, requestedParameters = {}, timestampsToReturn,
-    if (!this.subscription) return;
+    if (!this.subscription) this.subscriptionNotCreated();
     try {
       const mergeItemToMonitor = loMerge(defaultItemToMonitor, options.itemToMonitor);
       const mergeRequestedParameters = options.requestedParameters ? loMerge(defaultRequestedParameters, options.requestedParameters) : defaultRequestedParameters;
