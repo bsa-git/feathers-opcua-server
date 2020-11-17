@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { inspector, isString, getBrowseNameFromNodeId, appRoot } = require('../lib');
+const { inspector, isString, isObject, getBrowseNameFromNodeId, appRoot } = require('../lib');
 const {
   OPCUAClient,
   ClientSubscription,
@@ -14,6 +14,8 @@ const {
 const defaultClientOptions = require(`${appRoot}/src/api/opcua/OPCUAClientOptions`);
 const defaultSubscriptionOptions = require(`${appRoot}/src/api/opcua/ClientSubscriptionOptions.json`);
 const { defaultItemToMonitor, defaultRequestedParameters, defaultTimestampsToReturn } = require(`${appRoot}/src/api/opcua/ClientSubscriptionMonitorOptions`);
+const defaultBrowseDescriptionLike = require(`${appRoot}/src/api/opcua/ClientBrowseDescriptionLike`);
+const defaultReadValueIdOptions = require(`${appRoot}/src/api/opcua/ReadValueIdOptions`);
 
 const os = require('os');
 const chalk = require('chalk');
@@ -336,7 +338,7 @@ class OpcuaClient {
   sessionEndpoint() {
     if (!this.session) this.sessionNotCreated();
     const endpoint = this.session.endpoint;
-    return  {
+    return {
       endpointUrl: endpoint.endpointUrl,
       server: {
         applicationUri: endpoint.server.applicationUri,
@@ -362,7 +364,7 @@ class OpcuaClient {
   sessionSubscriptionCount() {
     if (!this.session) this.sessionNotCreated();
     const subscriptionCount = this.session.subscriptionCount;
-    return  subscriptionCount;
+    return subscriptionCount;
   }
 
   /**
@@ -371,7 +373,7 @@ class OpcuaClient {
   sessionIsReconnecting() {
     if (!this.session) this.sessionNotCreated();
     const isReconnecting = this.session.isReconnecting;
-    return  isReconnecting;
+    return isReconnecting;
   }
 
   /**
@@ -380,7 +382,7 @@ class OpcuaClient {
   sessionGetPublishEngine() {
     if (!this.session) this.sessionNotCreated();
     const publishEngine = this.session.getPublishEngine();
-    return  publishEngine;
+    return publishEngine;
   }
 
   /**
@@ -459,7 +461,7 @@ class OpcuaClient {
    *
    *   });
    * ```
-   * @param {String|String[]|Object|Object[]} nameNodeIds 
+   * @param {String|String[]|BrowseDescriptionLike|BrowseDescriptionLike[]} nameNodeIds 
    * @returns {Promise<BrowseResult[]>}
    */
   async sessionBrowse(nameNodeIds) {
@@ -468,10 +470,18 @@ class OpcuaClient {
     try {
       if (Array.isArray(nameNodeIds)) {
         nameNodeIds.forEach(nameNodeId => {
-          itemNodeIds.push(nameNodeId);
+          if (isObject(nameNodeId)) {
+            itemNodeIds.push(Object.assign(defaultBrowseDescriptionLike, nameNodeId));
+          } else {
+            itemNodeIds.push(nameNodeId);
+          }
         });
       } else {
-        itemNodeIds.push(nameNodeIds);
+        if (isObject(nameNodeIds)) {
+          itemNodeIds.push(Object.assign(defaultBrowseDescriptionLike, nameNodeIds));
+        } else {
+          itemNodeIds.push(itemNodeIds.push(nameNodeIds));
+        }
       }
 
       if (itemNodeIds.length) {
@@ -518,23 +528,24 @@ class OpcuaClient {
    * @example
    *
    *   ``` javascript
-   *   const nodesToRead = [
-   *        {
-   *             nodeId:      "ns=2;s=Furnace_1.Temperature",
-   *             attributeId: AttributeIds.BrowseName
-   *        }
-   *   ];
+   *   const nodesToRead = [{
+   *          nodeId: "ns=2;s=Furnace_1.Temperature",
+   *          attributeId: AttributeIds.BrowseName
+   *        }];
    *   await session.read(nodesToRead) {
    *     ...
    *   });
    *   ```
    * 
-   * @param {String|Array} nameNodeIds 
-   * e.g. 'temperature'| ['temperature', 'pressureVesselDevice']
+   * @param {String|String[]|ReadValueIdLike|ReadValueIdLike[]} nameNodeIds 
+   * e.g. 'Temperature'|
+   * ['Temperature', 'Temperature2']|
+   * { nodeId: "ns=2;s=Temperature", attributeId: AttributeIds.BrowseName }|
+   * [{ nodeId: "ns=2;s=Temperature", attributeId: AttributeIds.Value }, { nodeId: "ns=2;s=Temperature2", attributeId: AttributeIds.BrowseName }]
    * @param {Number} attributeId 
    * e.g. AttributeIds.BrowseName
    * @param {Number} maxAge 
-   * @returns {Promise<Array>}
+   * @returns {Promise<DataValue>}
    */
   async sessionRead(nameNodeIds, attributeId = 0, maxAge = 0) {
     let result = [], itemNodeIds = [], dataValues;
@@ -546,9 +557,9 @@ class OpcuaClient {
           itemNodeIds.push({ nodeId: itemNodeId, attributeId: attributeId ? attributeId : AttributeIds.Value });
         } else {
           if (itemNodeId.attributeId === undefined) {
-            itemNodeIds.push(Object.assign(itemNodeId, { attributeId: attributeId ? attributeId : AttributeIds.Value }));
+            itemNodeIds.push(Object.assign(defaultReadValueIdOptions, itemNodeId, { attributeId: attributeId ? attributeId : AttributeIds.Value }));
           } else {
-            itemNodeIds.push(itemNodeId);
+            itemNodeIds.push(defaultReadValueIdOptions, itemNodeId);
           }
         }
       });
@@ -586,8 +597,8 @@ class OpcuaClient {
      *  });
      *  ```
    * 
-   * @param {String|String[]} nameNodeIds 
-   * e.g. 'temperature'| ['temperature', 'pressureVesselDevice']
+   * @param {String|String[]|NodeIdLike|NodeIdLike[]} nameNodeIds 
+      * e.g. 'Temperature'|['Temperature', 'PressureVesselDevice']|'ns=1;s=Temperature'|['ns=1;s=Temperature', 'ns=1;s=PressureVesselDevice']
    * @returns {void}
    */
   sessionReadAllAttributes(nameNodeIds, callback) {
@@ -609,9 +620,30 @@ class OpcuaClient {
 
   /**
   * Session read variable value
-  * @param {String|Array} nameNodeIds 
-  * e.g. 'temperature'| ['temperature', 'pressureVesselDevice']
-  * @returns {Promise<Array>}
+  * 
+  * @example
+  * ```javascript
+  *  const dataValues = await session.readVariableValue(["ns=1;s=Temperature","ns=1;s=Pressure"]);
+  * ```
+  * 
+  * @param {String|String[]|NodeIdLike|NodeIdLike[]} nameNodeIds 
+  * NodeIdLike = string | NodeId | number;
+  * e.g. 'Temperature'|['Temperature', 'PressureVesselDevice']|'ns=1;s=Temperature'|['ns=1;s=Temperature', 'ns=1;s=PressureVesselDevice']
+  * @returns {Promise<DataValue[]>}
+  * 
+  * const schemaDataValue: StructuredTypeSchema = buildStructuredType({
+    baseType: "BaseUAObject",
+    name: "DataValue",
+
+    fields: [
+        { name: "value", fieldType: "Variant", defaultValue: null },
+        { name: "statusCode", fieldType: "StatusCode", defaultValue: StatusCodes.Good },
+        { name: "sourceTimestamp", fieldType: "DateTime", defaultValue: null },
+        { name: "sourcePicoseconds", fieldType: "UInt16", defaultValue: 0 },
+        { name: "serverTimestamp", fieldType: "DateTime", defaultValue: null },
+        { name: "serverPicoseconds", fieldType: "UInt16", defaultValue: 0 }
+    ]
+});
   */
   async sessionReadVariableValue(nameNodeIds) {
     let result = [];
@@ -651,6 +683,19 @@ class OpcuaClient {
    * //  es6
    * const dataValues = await session.readHistoryValue(
    *   "ns=5;s=Simulation Examples.Functions.Sine1",
+   *   "2015-06-10T09:00:00.000Z",
+   *   "2015-06-10T09:01:00.000Z");
+   * ```
+   * 
+   * ```javascript
+   * //  es6
+   * const dataValues = await session.readHistoryValue(
+   *   [{
+   *  nodeId: "ns=0;i=2258",
+   *  attributeId: AttributeIds.Value,
+   *  indexRange: null,
+   *  dataEncoding: { namespaceIndex: 0, name: null }
+   *}],
    *   "2015-06-10T09:00:00.000Z",
    *   "2015-06-10T09:01:00.000Z");
    * ```
@@ -737,7 +782,7 @@ class OpcuaClient {
    *     },
    *     {
    *          nodeId: "ns=1;s=SetPoint2",
-   *          attributeIds opcua.AttributeIds.Value,
+   *          attributeId opcua.AttributeIds.Value,
    *          value: {
    *             statusCode: Good,
    *             value: {
@@ -750,9 +795,9 @@ class OpcuaClient {
    * 
    *     const statusCodes = await session.write(nodesToWrite);
    * 
-   * @param {String|Object|Array} nameNodeIds 
-   * @param {Array<Variant>} valuesToWrite 
-   * @returns {Promise<Array<StatusCode>>}
+   * @param {String|String[]|Object|Object[]} nameNodeIds 
+   * @param {Variant[]} valuesToWrite 
+   * @returns {Promise<StatusCode[]>}
    */
   async sessionWrite(nameNodeIds, valuesToWrite = []) {
     let statusCodes = [], itemNodeIds = [];
@@ -761,9 +806,17 @@ class OpcuaClient {
       // Get nodeIds
       this.getNodeIds(nameNodeIds).forEach((itemNodeId, index) => {
         if (isString(itemNodeId)) {
-          itemNodeIds.push(Object.assign({ nodeId: itemNodeId }, valuesToWrite[index]));
+          itemNodeIds.push(Object.assign({ nodeId: itemNodeId }, { attributeId: AttributeIds.Value }, valuesToWrite[index]));
         } else {
-          itemNodeIds.push(itemNodeId);
+          if (itemNodeId.nodeId && !itemNodeId.attributeId && !itemNodeId.value) {
+            itemNodeIds.push(Object.assign(itemNodeId, { attributeId: AttributeIds.Value }, valuesToWrite[index]));
+          }
+          if (itemNodeId.nodeId && itemNodeId.attributeId && !itemNodeId.value) {
+            itemNodeIds.push(Object.assign(itemNodeId, valuesToWrite[index]));
+          }
+          if (itemNodeId.nodeId && itemNodeId.attributeId && itemNodeId.value) {
+            itemNodeIds.push(itemNodeId);
+          }
         }
       });
 
@@ -805,7 +858,7 @@ class OpcuaClient {
    * ```
    * 
    * @param {String|Object|Array} nameNodeIds 
-   * @param {Array<Array<Variant>>} inputArguments
+   * @param {Variant[]} inputArguments
    * e.g. [[new Variant({...}), ... new Variant({...})], [new Variant({...}), ... new Variant({...})]] 
    * @returns {Promise<CallMethodResult[]>}
    */
@@ -820,7 +873,17 @@ class OpcuaClient {
           const ownerNodeId = this.getItemNodeId(ownerName).nodeId;
           itemNodeIds.push({ objectId: ownerNodeId, methodId: itemNodeId, inputArguments: inputArguments[index] });
         } else {
-          itemNodeIds.push(itemNodeId);
+          if (itemNodeId.methodId && !itemNodeId.objectId && !itemNodeId.inputArguments) {
+            const ownerName = this.getItemNodeId(itemNodeId.methodId).ownerName;
+            const ownerNodeId = this.getItemNodeId(ownerName).nodeId;
+            itemNodeIds.push(Object.assign(itemNodeId, { objectId: ownerNodeId, inputArguments: inputArguments[index]}));
+          }
+          if (itemNodeId.methodId && itemNodeId.objectId && !itemNodeId.inputArguments) {
+            itemNodeIds.push(Object.assign(itemNodeId, { inputArguments: inputArguments[index]}));
+          }
+          if (itemNodeId.nodeId && itemNodeId.objectId && itemNodeId.inputArguments) {
+            itemNodeIds.push(itemNodeId);
+          }
         }
       });
 
@@ -839,14 +902,13 @@ class OpcuaClient {
   /**
  * Get arguments definition for session
  * 
- * @param {String} nameNodeId 
+ * @param {String|MethodId} nameNodeId 
  * @returns {Promise<ArgumentDefinition>}
  */
   async sessionGetArgumentDefinition(nameNodeId) {
     if (!this.session) this.sessionNotCreated();
     try {
-      const itemNodeId = this.params.nodeIds.find(item => item.name === nameNodeId);
-      const methodId = itemNodeId ? itemNodeId.methodId : nameNodeId;
+      const methodId = this.getItemNodeId(nameNodeId).nodeId;
       const argumentsDefinition = await this.session.getArgumentDefinition(methodId);
       if (isLog) inspector('plugins.opcua-client.class::sessionGetArgumentDefinition.argumentsDefinition:', argumentsDefinition);
       // inspector('plugins.opcua-client.class::sessionGetArgumentDefinition.argumentsDefinition:', argumentsDefinition);

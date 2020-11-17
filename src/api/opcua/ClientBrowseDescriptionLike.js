@@ -4,8 +4,8 @@ const {
 } = require('node-opcua');
 
 module.exports = {
-  nodeId: "ObjectsFolder",
-  referenceTypeId: "Organizes",
+  nodeId: 'ObjectsFolder',
+  referenceTypeId: 'Organizes',
   browseDirection: BrowseDirection.Inverse,
   includeSubtypes: true,
   nodeClassMask: 0,

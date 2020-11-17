@@ -1,7 +1,10 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
 const app = require('../../src/app');
-const { OpcuaServer, OpcuaClient, pause, getDateTimeSeparately, isObject, inspector } = require('../../src/plugins');
+const { OpcuaServer, OpcuaClient, pause, getDateTimeSeparately, isObject, inspector, appRoot} = require('../../src/plugins');
+const AddressSpaceParams = require(`${appRoot}/src/api/opcua/AddressSpaceTestOptions.json`);
+const addressSpaceGetters = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-getters`);
+const addressSpaceMethods = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-methods`);
 const chalk = require('chalk');
 const moment = require('moment');
 const {
@@ -21,16 +24,12 @@ let opcuaServer = null, opcuaClient = null;
 
 /**
  * Call back function for subscription monitor
- * @param {String} nameNodeId 
- * @param {*} value 
+ * @param {String} nodeId 
+ * @param {Object} DataValue 
  */
-const cbSubscriptionMonitor = async (nameNodeId, dataValue) => {
-  const itemNodeId = client.params.nodeIds.find(item => item.name === nameNodeId);
-  const nodeId = itemNodeId ? itemNodeId.nodeId : nameNodeId;
+const cbSubscriptionMonitor = async (nodeId, dataValue) => {
   if (isDebug) debug('cbSubscriptionMonitor.nodeId:', nodeId);
-  console.log(chalk.green(`${nameNodeId}:`), chalk.cyan(dataValue.value.value.toString()));
-
-  // console.log(` Temperature = ${value}`)
+  console.log(chalk.green(`${nodeId}:`), chalk.cyan(dataValue.value.value.toString()));
 };
 
 describe('<<=== OPC-UA: Test ===>>', () => {
@@ -71,6 +70,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server start', async () => {
       try {
         await server.create();
+        server.constructAddressSpace(AddressSpaceParams, addressSpaceGetters, addressSpaceMethods);
         const endpoints = await server.start();
         opcuaServer = server.opcuaServer;
         console.log(chalk.green('server.securityMode'), chalk.cyan(endpoints[0].securityMode));
@@ -95,7 +95,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
 
     it('OPC-UA client connect', async () => {
       try {
-        await client.connect();
+        await client.connect(server.getCurrentState());
         assert.ok(true, 'OPC-UA client connect');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -126,6 +126,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         let browseResult = null;
         const folder = 'RootFolder';
         browseResult = await client.sessionBrowse(folder);// RootFolder|ObjectsFolder|browseObjectsFolder
+        inspector('OPC-UA client session browse.browseResult:', browseResult);
         browseResult = browseResult[0].references.map((r) => r.browseName.name).join(',');
         console.log(chalk.green(`sessionBrowse.${folder}:`), chalk.cyan(browseResult));
         assert.ok(browseResult, 'OPC-UA client session browse');
@@ -155,7 +156,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA client session read', async () => {
       try {
         let readResult = null;
-        readResult = await client.sessionRead('VesselDevice.PressureVesselDevice', AttributeIds.BrowseName);// AttributeIds: BrowseName, Value
+        readResult = await client.sessionRead('Device2.PressureVesselDevice', AttributeIds.BrowseName);// AttributeIds: BrowseName, Value
         const value = readResult[0].value.value;
         console.log(chalk.green('pressureVesselDevice:'), chalk.cyan(isObject(value) ? value.name : value));
         assert.ok(readResult, 'OPC-UA client session read');
@@ -168,7 +169,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       try {
         let readResult = null;
         // Read pressureVesselDevice
-        readResult = await client.sessionReadVariableValue(['VesselDevice.PressureVesselDevice']);
+        readResult = await client.sessionReadVariableValue(['Device2.PressureVesselDevice']);
         console.log(chalk.green('pressureVesselDevice:'), chalk.cyan(readResult[0].value.value));
         assert.ok(readResult, 'OPC-UA client session read');
       } catch (error) {
@@ -179,7 +180,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA client session read all attributes', () => {
       try {
         // Read all attributes for temperature
-        client.sessionReadAllAttributes('MyDevice.Temperature', function (err, data) {
+        client.sessionReadAllAttributes('Device1.Temperature', function (err, data) {
           if (err) {
             inspector('sessionReadAllAttributes.err:', err);
             assert.fail(`Should never get here: ${err}`);
@@ -211,7 +212,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         dt.minutes = dt.minutes + 1;
         const end = moment.utc(Object.values(dt)).format();
 
-        readResult = await client.sessionReadHistoryValues('VesselDevice.PressureVesselDevice', start, end);
+        readResult = await client.sessionReadHistoryValues('Device2.PressureVesselDevice', start, end);
         if (readResult.length && readResult.values.length) {
           console.log(chalk.green('pressureVesselDeviceHist:'), chalk.cyan(readResult[0].values[0].value));
         }
@@ -228,10 +229,10 @@ describe('<<=== OPC-UA: Test ===>>', () => {
           dataType: DataType.String,
           value: 'Stored value',
         };
-        statusCode = await client.sessionWriteSingleNode('MyDevice.VariableForWrite', variantValue);
-        console.log(chalk.green('MyDevice::variableForWrite.statusCode:'), chalk.cyan(statusCode.name));
-        readResult = await client.sessionRead('MyDevice.VariableForWrite');
-        console.log(chalk.green('MyDevice::variableForWrite.readResult:'), chalk.cyan(`'${readResult[0].value.value}'`));
+        statusCode = await client.sessionWriteSingleNode('Device1.VariableForWrite', variantValue);
+        console.log(chalk.green('Device1::variableForWrite.statusCode:'), chalk.cyan(statusCode.name));
+        readResult = await client.sessionRead('Device1.VariableForWrite');
+        console.log(chalk.green('Device1::variableForWrite.readResult:'), chalk.cyan(`'${readResult[0].value.value}'`));
 
         assert.ok(readResult[0].value.value === variantValue.value, 'OPC-UA client session write single node value');
       } catch (error) {
@@ -255,10 +256,10 @@ describe('<<=== OPC-UA: Test ===>>', () => {
           }
         ];
 
-        statusCodes = await client.sessionWrite('MyDevice.VariableForWrite', valuesToWrite);
-        console.log(chalk.green('MyDevice::variableForWrite.statusCode:'), chalk.cyan(statusCodes[0].name));
-        readResult = await client.sessionRead('MyDevice.VariableForWrite');
-        console.log(chalk.green('MyDevice::variableForWrite.readResult:'), chalk.cyan(`'${readResult[0].value.value}'`));
+        statusCodes = await client.sessionWrite('Device1.VariableForWrite', valuesToWrite);
+        console.log(chalk.green('Device1.variableForWrite.statusCode:'), chalk.cyan(statusCodes[0].name));
+        readResult = await client.sessionRead('Device1.VariableForWrite');
+        console.log(chalk.green('Device1.variableForWrite.readResult:'), chalk.cyan(`'${readResult[0].value.value}'`));
 
         assert.ok(readResult[0].value.value === valuesToWrite[0].value.value.value, 'OPC-UA client session write node value');
       } catch (error) {
@@ -279,9 +280,9 @@ describe('<<=== OPC-UA: Test ===>>', () => {
             value: 3,
           }
         ];
-        callResults = await client.sessionCallMethod('MyDevice.SumMethod', inputArguments);
-        console.log(chalk.green('MyDevice::SumMethod.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
-        console.log(chalk.green('MyDevice::SumMethod.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));
+        callResults = await client.sessionCallMethod('Device1.SumMethod', inputArguments);
+        console.log(chalk.green('Device1.SumMethod.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
+        // console.log(chalk.green('Device1.SumMethod.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));
 
         assert.ok(callResults, 'OPC-UA client session call method');
       } catch (error) {
@@ -292,14 +293,14 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA client session get method argument definition', async () => {
       let argumentsDefinition = [];
       try {
-        argumentsDefinition = await client.sessionGetArgumentDefinition('MyDevice.SumMethod');
+        argumentsDefinition = await client.sessionGetArgumentDefinition('Device1.SumMethod');
         argumentsDefinition.inputArguments.forEach(argument => {
-          console.log(chalk.green('MyDevice::SumMethod.inputArgument.name:'), chalk.cyan(argument.name));
-          console.log(chalk.green('MyDevice::SumMethod.inputArgument.description:'), chalk.cyan(argument.description.text));
+          console.log(chalk.green('Device1.SumMethod.inputArgument.name:'), chalk.cyan(argument.name));
+          console.log(chalk.green('Device1.SumMethod.inputArgument.description:'), chalk.cyan(argument.description.text));
         });
         argumentsDefinition.outputArguments.forEach(argument => {
-          console.log(chalk.green('MyDevice::SumMethod.outputArgument.name:'), chalk.cyan(argument.name));
-          console.log(chalk.green('MyDevice::SumMethod.outputArgument.description:'), chalk.cyan(argument.description.text));
+          console.log(chalk.green('Device1.SumMethod.outputArgument.name:'), chalk.cyan(argument.name));
+          console.log(chalk.green('Device1.SumMethod.outputArgument.description:'), chalk.cyan(argument.description.text));
         });
 
         assert.ok(argumentsDefinition, 'OPC-UA client session get method argument definition');
@@ -320,9 +321,9 @@ describe('<<=== OPC-UA: Test ===>>', () => {
 
     it('OPC-UA client subscription monitor', async () => {
       try {
-        await client.subscriptionMonitor('VesselDevice.PressureVesselDevice', cbSubscriptionMonitor);
-        await client.subscriptionMonitor('MyDevice.PercentageMemoryUsed', cbSubscriptionMonitor);
-        await client.subscriptionMonitor('MyDevice.Temperature', cbSubscriptionMonitor);
+        await client.subscriptionMonitor('Device2.PressureVesselDevice', cbSubscriptionMonitor);
+        await client.subscriptionMonitor('Device1.PercentageMemoryUsed', cbSubscriptionMonitor);
+        await client.subscriptionMonitor('Device1.Temperature', cbSubscriptionMonitor);
         assert.ok(true, 'OPC-UA client subscription monitor');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -376,6 +377,5 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
-
   });
 });
