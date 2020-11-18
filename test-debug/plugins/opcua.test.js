@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
 const app = require('../../src/app');
-const { OpcuaServer, OpcuaClient, pause, getDateTimeSeparately, isObject, inspector, appRoot} = require('../../src/plugins');
+const { OpcuaServer, OpcuaClient, pause, getDateTimeSeparately, isObject, inspector, appRoot } = require('../../src/plugins');
 const AddressSpaceParams = require(`${appRoot}/src/api/opcua/AddressSpaceTestOptions.json`);
 const addressSpaceGetters = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-getters`);
 const addressSpaceMethods = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-methods`);
@@ -48,11 +48,11 @@ describe('<<=== OPC-UA: Test ===>>', () => {
 
   after(async () => {
     try {
-      if(opcuaClient !== null) opcuaClient = null;
-      if(client !== null) client = null;
+      if (opcuaClient !== null) opcuaClient = null;
+      if (client !== null) client = null;
 
-      if(opcuaServer !== null) opcuaServer = null;
-      if(server !== null) server = null;
+      if (opcuaServer !== null) opcuaServer = null;
+      if (server !== null) server = null;
 
       debug('OPCUA - Test::after: Done');
     } catch (error) {
@@ -123,12 +123,34 @@ describe('<<=== OPC-UA: Test ===>>', () => {
 
     it('OPC-UA client session browse', async () => {
       try {
-        let browseResult = null;
+        let browseResult = null, browseNames = '', nodeIds = '';
         const folder = 'RootFolder';
-        browseResult = await client.sessionBrowse(folder);// RootFolder|ObjectsFolder|browseObjectsFolder
-        inspector('OPC-UA client session browse.browseResult:', browseResult);
-        browseResult = browseResult[0].references.map((r) => r.browseName.name).join(',');
-        console.log(chalk.green(`sessionBrowse.${folder}:`), chalk.cyan(browseResult));
+        browseResult = await client.sessionBrowse({ nodeId: folder });// RootFolder|ObjectsFolder
+        // inspector('OPC-UA client session browse.browseResult:', browseResult);
+        const statusCode = browseResult[0].statusCode.name;
+        console.log(chalk.green(`sessionBrowse.${folder}.statusCode:`), chalk.cyan(statusCode));
+        browseNames = browseResult[0].references.map((r) => r.browseName.name).join(',');
+        nodeIds = browseResult[0].references.map((r) => r.nodeId.toString()).join(',');
+        console.log(chalk.green(`sessionBrowse.${folder}.browseNames:`), chalk.cyan(browseNames));
+        console.log(chalk.green(`sessionBrowse.${folder}.nodeIds:`), chalk.cyan(nodeIds));
+        assert.ok(browseResult, 'OPC-UA client session browse');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client session browse2', async () => {
+      try {
+        let browseResult = null, browseNames = '', nodeIds = '';
+        const folder = 'ObjectsFolder';
+        browseResult = await client.sessionBrowse(folder);// RootFolder|ObjectsFolder
+        // inspector('OPC-UA client session browse.browseResult:', browseResult);
+        const statusCode = browseResult[0].statusCode.name;
+        console.log(chalk.green(`sessionBrowse.${folder}.statusCode:`), chalk.cyan(statusCode));
+        browseNames = browseResult[0].references.map((r) => r.browseName.name).join(',');
+        nodeIds = browseResult[0].references.map((r) => r.nodeId.toString()).join(',');
+        console.log(chalk.green(`sessionBrowse.${folder}.browseNames:`), chalk.cyan(browseNames));
+        console.log(chalk.green(`sessionBrowse.${folder}.nodeIds:`), chalk.cyan(nodeIds));
         assert.ok(browseResult, 'OPC-UA client session browse');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -137,14 +159,16 @@ describe('<<=== OPC-UA: Test ===>>', () => {
 
     it('OPC-UA client session translate browse path', async () => {
       try {
-        let browseResult = null;
-        const browsePath = makeBrowsePath(
+        let browsePath = null, browseResult = null;
+        browsePath = makeBrowsePath(
           'RootFolder',
           '/Objects/Server.ServerStatus.BuildInfo.ProductName'
         );
         if (isLog) inspector('sessionTranslateBrowsePath.browsePath:', browsePath);
+        // inspector('sessionTranslateBrowsePath.browsePath:', browsePath);
         browseResult = await client.sessionTranslateBrowsePath(browsePath);
         if (isLog) inspector('sessionTranslateBrowsePath.browseResult:', browseResult);
+        // inspector('sessionTranslateBrowsePath.browseResult:', browseResult);
         console.log(chalk.green('sessionTranslateBrowsePath.nodeId:'), chalk.cyan(browseResult[0].targets[0].targetId.toString()));
 
         assert.ok(browseResult, 'OPC-UA client session translate browse path');
@@ -155,10 +179,15 @@ describe('<<=== OPC-UA: Test ===>>', () => {
 
     it('OPC-UA client session read', async () => {
       try {
-        let readResult = null;
+        let readResult = null, value;
         readResult = await client.sessionRead('Device2.PressureVesselDevice', AttributeIds.BrowseName);// AttributeIds: BrowseName, Value
-        const value = readResult[0].value.value;
-        console.log(chalk.green('pressureVesselDevice:'), chalk.cyan(isObject(value) ? value.name : value));
+        value = readResult[0].value.value;
+        console.log(chalk.green('pressureVesselDevice.BrowseName:'), chalk.cyan(isObject(value) ? value.name : value));
+
+        readResult = await client.sessionRead(['Device2.PressureVesselDevice'], AttributeIds.Value);// AttributeIds: BrowseName, Value
+        value = readResult[0].value.value;
+        console.log(chalk.green('pressureVesselDevice.value:'), chalk.cyan(isObject(value) ? value.name : value));
+
         assert.ok(readResult, 'OPC-UA client session read');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -230,9 +259,9 @@ describe('<<=== OPC-UA: Test ===>>', () => {
           value: 'Stored value',
         };
         statusCode = await client.sessionWriteSingleNode('Device1.VariableForWrite', variantValue);
-        console.log(chalk.green('Device1::variableForWrite.statusCode:'), chalk.cyan(statusCode.name));
+        console.log(chalk.green('Device1.variableForWrite.statusCode:'), chalk.cyan(statusCode.name));
         readResult = await client.sessionRead('Device1.VariableForWrite');
-        console.log(chalk.green('Device1::variableForWrite.readResult:'), chalk.cyan(`'${readResult[0].value.value}'`));
+        console.log(chalk.green('Device1.variableForWrite.readResult:'), chalk.cyan(`'${readResult[0].value.value}'`));
 
         assert.ok(readResult[0].value.value === variantValue.value, 'OPC-UA client session write single node value');
       } catch (error) {
@@ -280,9 +309,9 @@ describe('<<=== OPC-UA: Test ===>>', () => {
             value: 3,
           }
         ];
-        callResults = await client.sessionCallMethod('Device1.SumMethod', inputArguments);
+        callResults = await client.sessionCallMethod('Device1.SumMethod', [inputArguments]);
         console.log(chalk.green('Device1.SumMethod.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
-        // console.log(chalk.green('Device1.SumMethod.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));
+        console.log(chalk.green('Device1.SumMethod.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));
 
         assert.ok(callResults, 'OPC-UA client session call method');
       } catch (error) {

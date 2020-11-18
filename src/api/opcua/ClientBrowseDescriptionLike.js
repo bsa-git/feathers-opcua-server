@@ -6,7 +6,7 @@ const {
 module.exports = {
   nodeId: 'ObjectsFolder',
   referenceTypeId: 'Organizes',
-  browseDirection: BrowseDirection.Inverse,
+  browseDirection: BrowseDirection.Forward,
   includeSubtypes: true,
   nodeClassMask: 0,
   resultMask: 63

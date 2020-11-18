@@ -118,9 +118,9 @@ class OpcuaServer {
       const endpointUrl = this.opcuaServer.endpoints[0].endpointDescriptions()[0].endpointUrl;
       this.currentState.endpointUrl = endpointUrl;
       console.log(chalk.yellow('Server started and now listening ...'), 'EndPoint URL:', chalk.cyan(endpointUrl));
-      this.opcuaServer.endpoints[0].endpointDescriptions().forEach(function (endpoint) {
-        if (isDebug) debug('opcuaServer.endpoint:', endpoint.endpointUrl, endpoint.securityMode.toString(), endpoint.securityPolicyUri.toString());
-      });
+      // this.opcuaServer.endpoints[0].endpointDescriptions().forEach(function (endpoint) {
+      //   if (isDebug) debug('opcuaServer.endpoint:', endpoint.endpointUrl, endpoint.securityMode.toString(), endpoint.securityPolicyUri.toString());
+      // });
       const endpoints = this.opcuaServer.endpoints[0].endpointDescriptions().map(endpoint => {
         return {
           endpointUrl: endpoint.endpointUrl,

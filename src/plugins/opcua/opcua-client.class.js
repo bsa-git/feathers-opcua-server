@@ -23,64 +23,9 @@ const loMerge = require('lodash/merge');
 const loConcat = require('lodash/concat');
 const moment = require('moment');
 
-// const certificateFile ="../packages/node-opcua-samples/certificates/client_selfsigned_cert_2048.pem";
-// const privateKeyFile ="../packages/node-opcua-samples/certificates/client_key_2048.pem";
-
 const debug = require('debug')('app:plugins.opcua-client.class');
 const isLog = false;
 const isDebug = false;
-
-/**
- * Params default
- */
-const paramsDefault = {
-  port: '26543',
-  hostname: os.hostname().toLowerCase(),
-  endpointUrl: '',
-  nodeIds: [
-    { name: 'Device1.Temperature', nodeId: 'ns=1;s=Device1.Temperature' },
-    { name: 'Device1.Variable2', nodeId: 'ns=1;s=Device1.Variable2' },
-    { name: 'Device1.Variable3', nodeId: 'ns=1;s=Device1.Variable3' },
-    { name: 'Device1.PercentageMemoryUsed', nodeId: 'ns=1;s=Device1.PercentageMemoryUsed' },
-    { name: 'Device1.VariableForWrite', nodeId: 'ns=1;s=Device1.VariableForWrite' },
-    { name: 'Device1.SumMethod', objectId: 'ns=1;i=1000', methodId: 'ns=1;s=Device1.SumMethod' },
-    { name: 'Device2.PressureVesselDevice', nodeId: 'ns=1;s=Device2.PressureVesselDevice' },
-    // { name: 'Device3.SumMethod', objectId: { identifierType: 1, value: 1014, namespace: 1 }, methodId: 'ns=1;s=Device3.SumMethod' },
-    { name: 'Device3.SumMethod', objectId: 'ns=1;i=1014', methodId: 'ns=1;s=Device3.SumMethod' },
-    {
-      name: 'browseObjectsFolder', browseDescriptions: {
-        nodeId: 'ObjectsFolder',
-        referenceTypeId: 'Organizes',
-        browseDirection: BrowseDirection.Inverse,
-        includeSubtypes: true,
-        nodeClassMask: 0,
-        resultMask: 63
-      }
-    },
-  ],
-  endpoint_must_exist: false,
-  connectionStrategy: {
-    maxRetry: 2,
-    initialDelay: 2000,
-    maxDelay: 10 * 1000
-  },
-  subscription: {
-    create: {
-      requestedPublishingInterval: 1000,
-      requestedLifetimeCount: 10,
-      requestedMaxKeepAliveCount: 2,
-      maxNotificationsPerPublish: 10,
-      publishingEnabled: true,
-      priority: 10
-    },
-    monitor: {
-      samplingInterval: 1000,
-      discardOldest: true,
-      queueSize: 10
-    },
-    timestampsToReturn: TimestampsToReturn.Both
-  }
-};
 
 class OpcuaClient {
   /**
@@ -480,11 +425,12 @@ class OpcuaClient {
         if (isObject(nameNodeIds)) {
           itemNodeIds.push(Object.assign(defaultBrowseDescriptionLike, nameNodeIds));
         } else {
-          itemNodeIds.push(itemNodeIds.push(nameNodeIds));
+          itemNodeIds.push(nameNodeIds);
         }
       }
 
       if (itemNodeIds.length) {
+        // inspector('sessionBrowse.itemNodeIds:', itemNodeIds);
         result = await this.session.browse(itemNodeIds);
       }
       if (isLog) inspector('plugins.opcua-client.class::sessionBrowse.result:', result);
