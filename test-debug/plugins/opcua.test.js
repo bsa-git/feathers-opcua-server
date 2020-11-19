@@ -7,6 +7,7 @@ const addressSpaceGetters = require(`${appRoot}/src/plugins/test-helpers/opcua-a
 const addressSpaceMethods = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-methods`);
 const chalk = require('chalk');
 const moment = require('moment');
+const loRound = require('lodash/round');
 const {
   // Variant,
   DataType,
@@ -179,15 +180,25 @@ describe('<<=== OPC-UA: Test ===>>', () => {
 
     it('OPC-UA client session read', async () => {
       try {
-        let readResult = null, value;
+        let readResult = null, value = null, nameNodeIds = [];
         readResult = await client.sessionRead('Device2.PressureVesselDevice', AttributeIds.BrowseName);// AttributeIds: BrowseName, Value
         value = readResult[0].value.value;
-        console.log(chalk.green('pressureVesselDevice.BrowseName:'), chalk.cyan(isObject(value) ? value.name : value));
+        console.log(chalk.green('pressureVesselDevice.BrowseName:'), chalk.cyan(isObject(value) ? value.name : loRound(value, 3)));
 
-        readResult = await client.sessionRead(['Device2.PressureVesselDevice'], AttributeIds.Value);// AttributeIds: BrowseName, Value
+        readResult = await client.sessionRead([{ nodeId: 'ns=1;s=Device2.PressureVesselDevice', attributeId: AttributeIds.Value }]);
         value = readResult[0].value.value;
-        console.log(chalk.green('pressureVesselDevice.value:'), chalk.cyan(isObject(value) ? value.name : value));
+        console.log(chalk.green('pressureVesselDevice.value:'), chalk.cyan(isObject(value) ? value.name : loRound(value, 3)));
 
+        nameNodeIds = ['Device1.Temperature', 'Device2.PressureVesselDevice'];
+        readResult = await client.sessionRead(nameNodeIds, [AttributeIds.Value, AttributeIds.BrowseName]);
+        // inspector('client.sessionRead.readResult:', readResult);
+        readResult.forEach((item, index) => {
+          if (item.statusCode.name === 'Good') {
+            value = item.value.value;
+            value = item.value.dataType === DataType.QualifiedName ? value.name : loRound(value, 3);
+            console.log(chalk.green(`${nameNodeIds[index]}.value:`), chalk.cyan(value));
+          }
+        });
         assert.ok(readResult, 'OPC-UA client session read');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -196,10 +207,17 @@ describe('<<=== OPC-UA: Test ===>>', () => {
 
     it('OPC-UA client session read variable value', async () => {
       try {
-        let readResult = null;
-        // Read pressureVesselDevice
-        readResult = await client.sessionReadVariableValue(['Device2.PressureVesselDevice']);
-        console.log(chalk.green('pressureVesselDevice:'), chalk.cyan(readResult[0].value.value));
+        let value = null, readResult = null, nameNodeIds = [];
+        // Read variable values
+        nameNodeIds = ['Device1.Temperature', 'Device2.PressureVesselDevice'];
+        readResult = await client.sessionReadVariableValue(nameNodeIds);
+        readResult.forEach((item, index) => {
+          if (item.statusCode.name === 'Good') {
+            value = item.value.value;
+            value = loRound(value, 3);
+            console.log(chalk.green(`${nameNodeIds[index]}.value:`), chalk.cyan(value));
+          }
+        });
         assert.ok(readResult, 'OPC-UA client session read');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -221,7 +239,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
               console.log(chalk.green('nodeId:'), chalk.cyan(data.nodeId.toString()));
               console.log(chalk.green('browseName:'), chalk.cyan(data.browseName.name));
               console.log(chalk.green('displayName:'), chalk.cyan(data.displayName.text));
-              console.log(chalk.green('value:'), chalk.cyan(data.value.toString()));
+              console.log(chalk.green('value:'), chalk.cyan(loRound(data.value, 3)));
               assert.ok(true, 'OPC-UA client session read all attributes');
             }
           }

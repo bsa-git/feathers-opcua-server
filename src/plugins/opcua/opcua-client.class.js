@@ -488,24 +488,32 @@ class OpcuaClient {
    * ['Temperature', 'Temperature2']|
    * { nodeId: "ns=2;s=Temperature", attributeId: AttributeIds.BrowseName }|
    * [{ nodeId: "ns=2;s=Temperature", attributeId: AttributeIds.Value }, { nodeId: "ns=2;s=Temperature2", attributeId: AttributeIds.BrowseName }]
-   * @param {Number} attributeId 
-   * e.g. AttributeIds.BrowseName
+   * @param {Number|Number[]} attributeIds 
+   * e.g. AttributeIds.BrowseName|[AttributeIds.BrowseName, AttributeIds.Value]
    * @param {Number} maxAge 
    * @returns {Promise<DataValue>}
    */
-  async sessionRead(nameNodeIds, attributeId = 0, maxAge = 0) {
+  async sessionRead(nameNodeIds, attributeIds, maxAge = 0) {
     let result = [], itemNodeIds = [], dataValues;
     if (!this.session) this.sessionNotCreated();
     try {
       // Get nodeIds
-      this.getNodeIds(nameNodeIds).forEach((itemNodeId) => {
+      this.getNodeIds(nameNodeIds).forEach((itemNodeId, index) => {
         if (isString(itemNodeId)) {
-          itemNodeIds.push({ nodeId: itemNodeId, attributeId: attributeId ? attributeId : AttributeIds.Value });
+          if(Array.isArray(attributeIds)){
+            itemNodeIds.push({ nodeId: itemNodeId, attributeId: attributeIds[index]? attributeIds[index] : AttributeIds.Value });
+          } else{
+            itemNodeIds.push({ nodeId: itemNodeId, attributeId: attributeIds ? attributeIds : AttributeIds.Value });
+          }
         } else {
           if (itemNodeId.attributeId === undefined) {
-            itemNodeIds.push(Object.assign(defaultReadValueIdOptions, itemNodeId, { attributeId: attributeId ? attributeId : AttributeIds.Value }));
+            if(Array.isArray(attributeIds)){
+              itemNodeIds.push(Object.assign(defaultReadValueIdOptions, itemNodeId, { attributeId: attributeIds[index]? attributeIds[index] : AttributeIds.Value }));
+            }else{
+              itemNodeIds.push(Object.assign(defaultReadValueIdOptions, itemNodeId, { attributeId: attributeIds? attributeIds : AttributeIds.Value }));
+            }
           } else {
-            itemNodeIds.push(defaultReadValueIdOptions, itemNodeId);
+            itemNodeIds.push(Object.assign(defaultReadValueIdOptions, itemNodeId));
           }
         }
       });
@@ -822,10 +830,10 @@ class OpcuaClient {
           if (itemNodeId.methodId && !itemNodeId.objectId && !itemNodeId.inputArguments) {
             const ownerName = this.getItemNodeId(itemNodeId.methodId).ownerName;
             const ownerNodeId = this.getItemNodeId(ownerName).nodeId;
-            itemNodeIds.push(Object.assign(itemNodeId, { objectId: ownerNodeId, inputArguments: inputArguments[index]}));
+            itemNodeIds.push(Object.assign(itemNodeId, { objectId: ownerNodeId, inputArguments: inputArguments[index] }));
           }
           if (itemNodeId.methodId && itemNodeId.objectId && !itemNodeId.inputArguments) {
-            itemNodeIds.push(Object.assign(itemNodeId, { inputArguments: inputArguments[index]}));
+            itemNodeIds.push(Object.assign(itemNodeId, { inputArguments: inputArguments[index] }));
           }
           if (itemNodeId.nodeId && itemNodeId.objectId && itemNodeId.inputArguments) {
             itemNodeIds.push(itemNodeId);
