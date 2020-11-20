@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const {
   AttributeIds,
-  TimestampsToReturn
+  // TimestampsToReturn
 } = require('node-opcua');
 
 const defaultItemToMonitor = {
@@ -18,10 +18,10 @@ const defaultRequestedParameters = {
   discardOldest: true
 };
 
-const defaultTimestampsToReturn = TimestampsToReturn.Neither;
+// const defaultTimestampsToReturn = TimestampsToReturn.Neither;
 
 module.exports = {
   defaultItemToMonitor,
   defaultRequestedParameters,
-  defaultTimestampsToReturn
+  // defaultTimestampsToReturn
 };

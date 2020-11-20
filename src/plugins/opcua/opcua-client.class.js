@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { inspector, isString, isObject, getBrowseNameFromNodeId, appRoot } = require('../lib');
+const { inspector, isString, isObject, appRoot } = require('../lib');
 const {
   OPCUAClient,
   ClientSubscription,
@@ -8,12 +8,12 @@ const {
   TimestampsToReturn,
   BrowseDirection,
   Variant,
-  StatusCodes
+  StatusCodes,
 } = require('node-opcua');
 
 const defaultClientOptions = require(`${appRoot}/src/api/opcua/OPCUAClientOptions`);
 const defaultSubscriptionOptions = require(`${appRoot}/src/api/opcua/ClientSubscriptionOptions.json`);
-const { defaultItemToMonitor, defaultRequestedParameters, defaultTimestampsToReturn } = require(`${appRoot}/src/api/opcua/ClientSubscriptionMonitorOptions`);
+const { defaultItemToMonitor, defaultRequestedParameters } = require(`${appRoot}/src/api/opcua/ClientSubscriptionMonitorOptions`);
 const defaultBrowseDescriptionLike = require(`${appRoot}/src/api/opcua/ClientBrowseDescriptionLike`);
 const defaultReadValueIdOptions = require(`${appRoot}/src/api/opcua/ReadValueIdOptions`);
 
@@ -63,6 +63,7 @@ class OpcuaClient {
 
   /**
    * Connect opc-ua client to server
+   * @async
    * @param params {Object}
    */
   async connect(params = {}) {
@@ -80,6 +81,7 @@ class OpcuaClient {
 
   /**
   * Client disconnect
+  * @async
   */
   async disconnect() {
     if (!this.opcuaClient) return;
@@ -95,6 +97,7 @@ class OpcuaClient {
 
   /**
    * Create session opc-ua client
+   * @async
    */
   async sessionCreate() {
     if (!this.opcuaClient) return;
@@ -111,6 +114,7 @@ class OpcuaClient {
 
   /**
    * Close session opc-ua client
+   * @async
    */
   async sessionClose() {
     if (!this.session) return;
@@ -151,8 +155,9 @@ class OpcuaClient {
 
   /**
    * Get nodeIds
-   * @param {String|Object|Array<String|Object>} nameNodeIds 
-   * @returns {Array<String|Object>}
+   * 
+   * @param {String|Object|String[]|Object[]} nameNodeIds 
+   * @returns {String[]|Object[]}
    */
   getNodeIds(nameNodeIds) {
     let itemNodeId = null, itemNodeIds = [];
@@ -470,6 +475,7 @@ class OpcuaClient {
 
   /**
    * Session read
+   * @async
    * 
    * @example
    *
@@ -500,17 +506,17 @@ class OpcuaClient {
       // Get nodeIds
       this.getNodeIds(nameNodeIds).forEach((itemNodeId, index) => {
         if (isString(itemNodeId)) {
-          if(Array.isArray(attributeIds)){
-            itemNodeIds.push({ nodeId: itemNodeId, attributeId: attributeIds[index]? attributeIds[index] : AttributeIds.Value });
-          } else{
+          if (Array.isArray(attributeIds)) {
+            itemNodeIds.push({ nodeId: itemNodeId, attributeId: attributeIds[index] ? attributeIds[index] : AttributeIds.Value });
+          } else {
             itemNodeIds.push({ nodeId: itemNodeId, attributeId: attributeIds ? attributeIds : AttributeIds.Value });
           }
         } else {
           if (itemNodeId.attributeId === undefined) {
-            if(Array.isArray(attributeIds)){
-              itemNodeIds.push(Object.assign(defaultReadValueIdOptions, itemNodeId, { attributeId: attributeIds[index]? attributeIds[index] : AttributeIds.Value }));
-            }else{
-              itemNodeIds.push(Object.assign(defaultReadValueIdOptions, itemNodeId, { attributeId: attributeIds? attributeIds : AttributeIds.Value }));
+            if (Array.isArray(attributeIds)) {
+              itemNodeIds.push(Object.assign(defaultReadValueIdOptions, itemNodeId, { attributeId: attributeIds[index] ? attributeIds[index] : AttributeIds.Value }));
+            } else {
+              itemNodeIds.push(Object.assign(defaultReadValueIdOptions, itemNodeId, { attributeId: attributeIds ? attributeIds : AttributeIds.Value }));
             }
           } else {
             itemNodeIds.push(Object.assign(defaultReadValueIdOptions, itemNodeId));
@@ -541,18 +547,19 @@ class OpcuaClient {
    * @example
    *
    *  ``` javascript
-     *  session.readAllAttributes("ns=2;s=Furnace_1.Temperature",function(err,data) {
-     *    if(data.statusCode === StatusCodes.Good) {
-     *      console.log(" nodeId      = ",data.nodeId.toString());
-     *      console.log(" browseName  = ",data.browseName.toString());
-     *      console.log(" description = ",data.description.toString());
-     *      console.log(" value       = ",data.value.toString()));
-     *    }
-     *  });
-     *  ```
+   *  session.readAllAttributes("ns=2;s=Furnace_1.Temperature",function(err,data) {
+   *    if(data.statusCode === StatusCodes.Good) {
+   *      console.log(" nodeId      = ",data.nodeId.toString());
+   *      console.log(" browseName  = ",data.browseName.toString());
+   *      console.log(" description = ",data.description.toString());
+   *      console.log(" value       = ",data.value.toString()));
+   *    }
+   *  });
+   *  ```
    * 
    * @param {String|String[]|NodeIdLike|NodeIdLike[]} nameNodeIds 
-      * e.g. 'Temperature'|['Temperature', 'PressureVesselDevice']|'ns=1;s=Temperature'|['ns=1;s=Temperature', 'ns=1;s=PressureVesselDevice']
+   * e.g. 'Temperature'|['Temperature', 'PressureVesselDevice']|'ns=1;s=Temperature'|['ns=1;s=Temperature', 'ns=1;s=PressureVesselDevice']
+   * @param {Function<err, data>} callback 
    * @returns {void}
    */
   sessionReadAllAttributes(nameNodeIds, callback) {
@@ -574,7 +581,7 @@ class OpcuaClient {
 
   /**
   * Session read variable value
-  * 
+  * @async
   * @example
   * ```javascript
   *  const dataValues = await session.readVariableValue(["ns=1;s=Temperature","ns=1;s=Pressure"]);
@@ -680,6 +687,8 @@ class OpcuaClient {
 
   /**
    * Get monitored items for subscription
+   * @async
+   * 
    * @param {UInt32} subscriptionId 
    * @returns {Promise<MonitoredItemData>}
    */
@@ -698,6 +707,8 @@ class OpcuaClient {
 
   /**
    * Session write single node
+   * @async
+   * 
    * @param {String} nameNodeId 
    * @param {Variant} variantValue 
    * @returns {Promise<StatusCode>}
@@ -719,6 +730,7 @@ class OpcuaClient {
 
   /**
    * Session write
+   * @async
    * 
    * @example :
    *
@@ -788,6 +800,7 @@ class OpcuaClient {
 
   /**
    * Session call method
+   * @async
    * 
    * @example :
    *
@@ -855,6 +868,7 @@ class OpcuaClient {
 
   /**
  * Get arguments definition for session
+ * @async
  * 
  * @param {String|MethodId} nameNodeId 
  * @returns {Promise<ArgumentDefinition>}
@@ -877,7 +891,6 @@ class OpcuaClient {
   /**
   * Subscription create
   * @method createSubscription
-  * @async
   *
   * @example
   *
@@ -912,6 +925,8 @@ class OpcuaClient {
 
   /**
   * Subscription terminate
+  * @async
+  * 
   */
   async subscriptionTerminate() {
     if (!this.subscription) this.subscriptionNotCreated();
@@ -938,6 +953,7 @@ class OpcuaClient {
      *
      * @method monitor
      * @async
+     * 
      * @param options.itemToMonitor                        {ReadValueId}
      * @param options.itemToMonitor.nodeId                 {NodeId}
      * @param options.itemToMonitor.attributeId            {AttributeId}
@@ -1042,25 +1058,23 @@ class OpcuaClient {
      *     TimestampsToReturn.Neither
      *   );
      */
-  async subscriptionMonitor(options = {}, cb) {// itemToMonitor = {}, requestedParameters = {}, timestampsToReturn,
+  async subscriptionMonitor(cb, itemToMonitor = {}, requestedParameters = {}, timestampsToReturn = TimestampsToReturn.Neither) {
     if (!this.subscription) this.subscriptionNotCreated();
     try {
-      const mergeItemToMonitor = loMerge(defaultItemToMonitor, options.itemToMonitor);
-      const mergeRequestedParameters = options.requestedParameters ? loMerge(defaultRequestedParameters, options.requestedParameters) : defaultRequestedParameters;
-      const mergeTimestampsToReturn = options.timestampsToReturn ? options.timestampsToReturn : defaultTimestampsToReturn;
+      const nodeId = itemToMonitor.nodeId;
+      const mergeItemToMonitor = loMerge({}, defaultItemToMonitor, itemToMonitor);
+      const mergeRequestedParameters = loMerge({}, defaultRequestedParameters, requestedParameters);
 
       const monitoredItem = await this.subscription.monitor(
         mergeItemToMonitor,
         mergeRequestedParameters,
-        mergeTimestampsToReturn
+        timestampsToReturn
       );
       if (isLog) inspector('opcua-client.class::subscriptionMonitor.monitoredItem:', monitoredItem);
 
       monitoredItem.on('changed', (dataValue) => {
-        const nameNodeId = getBrowseNameFromNodeId(mergeItemToMonitor.nodeId);
-        // debug('subscriptionMonitor.nameNodeId:', nameNodeId); 
-        if (isLog) inspector(`opcua-client.class::subscriptionMonitor.${nameNodeId}:`, dataValue);
-        cb(mergeItemToMonitor.nodeId, dataValue);
+        if (isLog) inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
+        cb(nodeId, dataValue);
       });
     } catch (err) {
       const errTxt = 'Error while subscription monitor the OPS-UA client:';
