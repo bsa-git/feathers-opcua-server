@@ -909,7 +909,7 @@ class OpcuaClient {
   subscriptionCreate(options = {}) {
     if (!this.session) this.sessionNotCreated();
     try {
-      const mergeOptions = loMerge(defaultSubscriptionOptions, options);
+      const mergeOptions = loMerge({}, defaultSubscriptionOptions, options);
       this.subscription = ClientSubscription.create(this.session, mergeOptions);
 
       this.subscription
@@ -947,6 +947,82 @@ class OpcuaClient {
     console.log(chalk.red(`ERROR: ${errTxt}`));
     throw new errors.GeneralError(`${errTxt}`);
   }
+
+  /**
+   * @method subscriptionGetSession
+   * @returns {ClientSessionImpl}
+   */
+  subscriptionGetSession() {
+    if (!this.subscription) this.subscriptionNotCreated();
+    try {
+      return this.subscription.session;
+    } catch (err) {
+      const errTxt = 'Error while subscription get session the OPS-UA client:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * @method subscriptionHasSession
+   * @returns {Boolean}
+   */
+  subscriptionHasSession() {
+    if (!this.subscription) this.subscriptionNotCreated();
+    try {
+      return this.subscription.hasSession;
+    } catch (err) {
+      const errTxt = 'Error while subscription has session the OPS-UA client:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * @method subscriptionIsActive
+   * @returns {Boolean}
+   */
+  subscriptionIsActive() {
+    if (!this.subscription) this.subscriptionNotCreated();
+    try {
+      return this.subscription.isActive;
+    } catch (err) {
+      const errTxt = 'Error while subscription is active the OPS-UA client:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * @method subscriptionToString
+   * @returns {String}
+   */
+  subscriptionToString() {
+    if (!this.subscription) this.subscriptionNotCreated();
+    try {
+      return this.subscription.toString();
+    } catch (err) {
+      const errTxt = 'Error while subscription to string the OPS-UA client:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+
+  /**
+   * @method subscriptionEvaluateRemainingLifetime 
+   * @returns {Number}
+   */
+  subscriptionEvaluateRemainingLifetime() {
+    if (!this.subscription) this.subscriptionNotCreated();
+    try {
+      return this.subscription.evaluateRemainingLifetime();
+    } catch (err) {
+      const errTxt = 'Error while subscription evaluateRemainingLifetime the OPS-UA client:';
+      console.log(errTxt, err);
+      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    }
+  }
+  
 
   /**
      * Add a monitor item to the subscription

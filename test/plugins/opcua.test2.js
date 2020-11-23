@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
 const app = require('../../src/app');
-const { OpcuaServer, OpcuaClient, appRoot, inspector, getDateTimeSeparately, pause } = require('../../src/plugins');
-const AddressSpaceParams = require(`${appRoot}/src/api/opcua/AddressSpaceTestOptions.json`);
+const { OpcuaServer, OpcuaClient, appRoot, inspector } = require('../../src/plugins');
+const AddressSpaceParams = require(`${appRoot}/src/plugins/test-helpers/AddressSpaceTestOptions.json`);
 const addressSpaceGetters = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-getters`);
 const addressSpaceMethods = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-methods`);
 const chalk = require('chalk');
@@ -287,6 +287,77 @@ describe('<<=== OPC-UA: Test2 ===>>', () => {
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
+
+    //------------- START SUBSCRIPTION -------------------//
+    it('OPC-UA client subscription create', () => {
+      try {
+        client.subscriptionCreate();
+        assert.ok(true, 'OPC-UA client subscription create');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client subscription get session', () => {
+      try {
+        const session =  client.subscriptionGetSession();
+        inspector('OPC-UA client subscription get session:', session.toString());
+        assert.ok(session, 'OPC-UA client subscription get session');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client subscription has session', () => {
+      try {
+        const hasSession =  client.subscriptionHasSession();
+        console.log(chalk.green('OPC-UA client subscription has session:'), chalk.cyan(hasSession));
+        assert.ok(hasSession, 'OPC-UA client subscription has session');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client subscription is active', () => {
+      try {
+        const isActive =  client.subscriptionIsActive();
+        console.log(chalk.green('OPC-UA client subscription is active:'), chalk.cyan(isActive));
+        assert.ok(isActive, 'OPC-UA client subscription is active');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client subscription to string', () => {
+      try {
+        const strSubscription =  client.subscriptionToString();
+        inspector('OPC-UA client subscription to string:', strSubscription);
+        assert.ok(strSubscription, 'OPC-UA client subscription to string');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client subscription evaluate remaining lifetime', () => {
+      try {
+        const lifetimeNumber =  client.subscriptionEvaluateRemainingLifetime();
+        console.log(chalk.green('OPC-UA client subscription evaluate remaining lifetime:'), chalk.cyan(lifetimeNumber));
+        assert.ok(true, 'OPC-UA client subscription evaluate remaining lifetime');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client subscription terminate', async () => {
+      try {
+        // await pause(1000);
+        await client.subscriptionTerminate();
+        assert.ok(true, 'OPC-UA client subscription terminate');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
 
     //------------- SESSION close/disconnect -----------------//
 

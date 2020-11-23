@@ -2,7 +2,7 @@
 const assert = require('assert');
 const app = require('../../src/app');
 const { getValueFromNodeId, OpcuaServer, OpcuaClient, pause, getDateTimeSeparately, isObject, inspector, appRoot } = require('../../src/plugins');
-const AddressSpaceParams = require(`${appRoot}/src/api/opcua/AddressSpaceTestOptions.json`);
+const AddressSpaceParams = require(`${appRoot}/src/plugins/test-helpers/AddressSpaceTestOptions.json`);
 const addressSpaceGetters = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-getters`);
 const addressSpaceMethods = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-methods`);
 const chalk = require('chalk');
@@ -70,6 +70,9 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     assert.ok(client, 'OPCUA client not created');
   });
   describe('<<=== OPC-UA: RUN ===>>', function () {
+    
+    //===== SERVER CREATE/SERVER CONSTRUCT ADDRESS SPACE/CLIENT CREATE/CLIENT CONNECT/SESSION CREATE =======//
+    
     it('OPC-UA server start', async () => {
       try {
         await server.create();
@@ -114,6 +117,8 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
+    //============== SESSION READ NAMESPACE ARRAY ====================//
+
     it('OPC-UA client session read namespace array', async () => {
       try {
         const result = await client.sessionReadNamespaceArray();
@@ -123,6 +128,8 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
+
+    //============== SESSION BROWSE ====================//
 
     it('OPC-UA client session browse', async () => {
       try {
@@ -180,33 +187,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
-
-    //=============== ==================
-
-    it('OPC-UA client subscription create', () => {
-      try {
-        client.subscriptionCreate();
-        assert.ok(true, 'OPC-UA client subscription create');
-      } catch (error) {
-        assert.fail(`Should never get here: ${error.message}`);
-      }
-    });
-
-    it('OPC-UA client subscription monitor', async () => {
-      try {
-        const nameNodeIds = ['Device1.Temperature', 'Device2.PressureVesselDevice', 'Device1.PercentageMemoryUsed'];
-        client.getNodeIds(nameNodeIds).forEach(async nodeId => {
-          await client.subscriptionMonitor(cbSubscriptionMonitor, { nodeId });
-        });
-        // await pause(1000);
-        assert.ok(true, 'OPC-UA client subscription monitor');
-      } catch (error) {
-        assert.fail(`Should never get here: ${error.message}`);
-      }
-    });
-
-    //==================================
-
+    //============== SESSION READ VALUES ====================//
 
     it('OPC-UA client session read', async () => {
       try {
@@ -279,6 +260,8 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
+    //============== SESSION HISTORY VALUES ====================//
+
     it('OPC-UA client session history value', async () => {
       try {
         let readResult = null;
@@ -308,6 +291,8 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
+
+    //============== SESSION WRITE VALUE ====================//
 
     it('OPC-UA client session write single node value', async () => {
       try {
@@ -354,6 +339,8 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
+    //============== SESSION CALL METHOD ====================//
+
     it('OPC-UA client session call method', async () => {
       try {
         let callResults = [];
@@ -396,7 +383,29 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
-    
+    //============== START SUBSCRIPTION ====================//
+
+    it('OPC-UA client subscription create', () => {
+      try {
+        client.subscriptionCreate();
+        assert.ok(true, 'OPC-UA client subscription create');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
+
+    it('OPC-UA client subscription monitor', async () => {
+      try {
+        const nameNodeIds = ['Device1.Temperature'];
+        client.getNodeIds(nameNodeIds).forEach(async nodeId => {
+          await client.subscriptionMonitor(cbSubscriptionMonitor, { nodeId });
+        });
+        // await pause(1000);
+        assert.ok(true, 'OPC-UA client subscription monitor');
+      } catch (error) {
+        assert.fail(`Should never get here: ${error.message}`);
+      }
+    });
 
     it('OPC-UA client subscription get monitored items', async () => {
       try {
@@ -418,6 +427,8 @@ describe('<<=== OPC-UA: Test ===>>', () => {
         assert.fail(`Should never get here: ${error.message}`);
       }
     });
+
+    //===== SESSION CLOSE/CLIENT DISCONNECT/SERVER SHUTDOWN =====//
 
     it('OPC-UA client session close', async () => {
       try {

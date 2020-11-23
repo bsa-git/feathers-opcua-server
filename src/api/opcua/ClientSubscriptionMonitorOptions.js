@@ -12,9 +12,9 @@ const defaultItemToMonitor = {
 };
 
 const defaultRequestedParameters = {
-  samplingInterval: 3000,
+  samplingInterval: 100, // depends
   filter: null,
-  queueSize: 1,
+  queueSize: 10, // depends
   discardOldest: true
 };
 
