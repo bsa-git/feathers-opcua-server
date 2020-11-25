@@ -33,6 +33,6 @@ describe('\'messages\' service', () => {
     // `user` has been populated
     if(isDebug) debug('message.user:', message.user);
     if(isDebug) debug('user:', user);
-    assert.deepStrictEqual(message.user, user);
+    assert.strictEqual(message.user.email, user.email);
   });
 });

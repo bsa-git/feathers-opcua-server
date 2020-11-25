@@ -18,7 +18,7 @@ const getGravatar = email => {
 exports.Users = class Users extends Service {
   create (data, params) {
     // This is the information we want from the user signup data
-    const { name, email, password, githubId, googleId  } = data;
+    const { name, email, password, githubId, googleId, createdAt, updatedAt } = data;
     // Get avatar
     const avatar = data.avatar || getGravatar(email);
     // The complete user
@@ -28,7 +28,9 @@ exports.Users = class Users extends Service {
       password,
       githubId,
       googleId,
-      avatar
+      avatar,
+      createdAt,
+      updatedAt
     };
 
     // Call the original `create` method with existing `params` and new data

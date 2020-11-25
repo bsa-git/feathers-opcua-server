@@ -2,6 +2,8 @@
 const moment = require('moment');
 const { inspector } = require('../lib');
 const HookHelper = require('./hook-helper.class');
+const loToPlainObject = require('lodash/toPlainObject');
+const loAssign = require('lodash/assign');
 
 const isLog = false;
 
@@ -12,8 +14,10 @@ const isLog = false;
  */
 const baseNormalize = async (record) => {
   if (!record) return;
-  let _cloneObject = JSON.parse(JSON.stringify(record));
-  Object.assign(record, _cloneObject);
+  // let _cloneObject = JSON.parse(JSON.stringify(record));
+  let _cloneObject = loToPlainObject(record);
+  // Object.assign(record, _cloneObject);
+  loAssign(record, _cloneObject);
   if (isLog) inspector('plugins.contextNormalize::record:', record);
 };
 

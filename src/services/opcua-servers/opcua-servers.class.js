@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { OpcuaServer, inspector } = require('../../plugins');
+const { OpcuaServer, inspector, appRoot } = require('../../plugins');
 const chalk = require('chalk');
 const moment = require('moment');
 const {
@@ -24,36 +24,36 @@ const executeAction = async (service, data) => {
   try {
     // Run service action
     switch (`${data.action}`) {
-    case 'create':
-      // Create OPC-UA server
-      server = new OpcuaServer(service.app, data.params);
-      opcuaServer = {
-        id: data.id,
-        server,
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt
-      };
-      // Server create and start
-      await server.create();
-      await server.start();
-      service.opcuaServers.push(opcuaServer);
-      break;
-    case 'shutdown':
-      // Shutdown OPC-UA server
-      opcuaServer = service.get(data.id);
-      await opcuaServer.server.shutdown(data.timeout ? data.timeout : 0);
-      break;
-    case 'start':
-      // Start OPC-UA server
-      opcuaServer = service.get(data.id);
-      opcuaServer.server.start();
-      break;
-    default:
-      throw new errors.BadRequest(`No such action - '${data.action}'`);
+      case 'create':
+        // Create OPC-UA server
+        server = new OpcuaServer(service.app, data.params);
+        opcuaServer = {
+          id: server.getServerInfo().applicationName,
+          server,
+          createdAt: data.createdAt,
+          updatedAt: data.updatedAt
+        };
+        // Server create
+        await server.create();
+        // Server constructAddressSpace
+        const AddressSpaceParams = require(`${appRoot}${data.paths.options}`);
+        const addressSpaceGetters = require(`${appRoot}${data.paths.getters}`);
+        const addressSpaceMethods = require(`${appRoot}${data.paths.methods}`);
+        server.constructAddressSpace(AddressSpaceParams, addressSpaceGetters, addressSpaceMethods);
+        // Server start
+        await server.start();
+        service.opcuaServers.push(opcuaServer);
+        break;
+      case 'shutdown':
+        // Shutdown OPC-UA server
+        opcuaServer = service.get(data.id);
+        await opcuaServer.server.shutdown(data.timeout ? data.timeout : 0);
+        break;
+      default:
+        throw new errors.BadRequest(`No such action - '${data.action}'`);
     }
   } catch (error) {
-    console.log(chalk.red('service.opcua-servers::executeAction.error'), chalk.cyan(error.message));
-    throw error;
+    throw new errors.BadRequest(`Error for action - '${data.action}'. ${error.message}`);
   }
 };
 
@@ -70,11 +70,20 @@ class OpcuaServers {
   }
 
   async get(id, params) {
-    const opcuaServer = this.opcuaServers.find(srv => srv.id === id);
+    let opcuaServer = null;
+    opcuaServer = this.opcuaServers.find(srv => srv.id === id);
     if (!opcuaServer) {
       throw new errors.BadRequest(`No opcua server found for this id = '${id}' in the server list`);
     }
-    return opcuaServer;
+    if (params.provider) {
+      opcuaServer = {
+        id: opcuaServer.id,
+        server: { currentState: opcuaServer.getCurrentState() },
+        createdAt: opcuaServer.createdAt,
+        updatedAt: opcuaServer.updatedAt
+      }
+    }
+    return opcuaServer
   }
 
   async create(data, params) {

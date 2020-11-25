@@ -36,6 +36,7 @@ class OpcuaServer {
     this.app = app;
     this.opcuaServer = null;
     this.currentState = {
+      id: this.params.serverInfo.applicationName,
       port: this.params.port,
       endpointUrl: '',
       endpoints: null,
@@ -76,11 +77,7 @@ class OpcuaServer {
   async create() {
     try {
       // Let create an instance of OPCUAServer
-      this.opcuaServer = new OPCUAServer({
-        port: this.params.port,  // the port of the listening socket of the server
-        nodeset_filename: this.params.nodeset_filename,
-        buildInfo: this.params.buildInfo
-      });
+      this.opcuaServer = new OPCUAServer(this.params);
 
       await this.opcuaServer.initialize();
       if (isDebug) debug('certificateFile = ', this.opcuaServer.certificateFile);
@@ -183,7 +180,7 @@ class OpcuaServer {
    * Get server info
    */
   getServerInfo() {
-    if (!this.opcuaServer) return;
+    if (!this.opcuaServer) return null;
     try {
       let applicationUri, serverInfo = this.opcuaServer.serverInfo, _serverInfo = {};
       applicationUri = serverInfo.applicationUri;

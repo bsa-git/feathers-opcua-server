@@ -8,6 +8,9 @@ const addressSpaceMethods = require(`${appRoot}/src/plugins/test-helpers/opcua-a
 const chalk = require('chalk');
 const moment = require('moment');
 
+// serverInfo.applicationName = 'NodeOPCUA_380-472-00203826-M52'; // NodeOPCUA_UA-CHERKASSY-AZOT-M52
+// buildInfo.productName
+
 const {
   // Variant,
   DataType,
@@ -29,7 +32,10 @@ describe('<<=== OPC-UA: Test2 ===>>', () => {
   before(async () => {
     try {
       // Create OPC-UA server
-      server = new OpcuaServer(app);
+      server = new OpcuaServer(app, {
+        serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M52' },
+        buildInfo: { productName: '380-472-00203826-M52' }
+      });
       // Create OPC-UA client
       client = new OpcuaClient(app);
       debug('OPCUA - Test2::before: Done');
@@ -300,7 +306,7 @@ describe('<<=== OPC-UA: Test2 ===>>', () => {
 
     it('OPC-UA client subscription get session', () => {
       try {
-        const session =  client.subscriptionGetSession();
+        const session = client.subscriptionGetSession();
         inspector('OPC-UA client subscription get session:', session.toString());
         assert.ok(session, 'OPC-UA client subscription get session');
       } catch (error) {
@@ -310,7 +316,7 @@ describe('<<=== OPC-UA: Test2 ===>>', () => {
 
     it('OPC-UA client subscription has session', () => {
       try {
-        const hasSession =  client.subscriptionHasSession();
+        const hasSession = client.subscriptionHasSession();
         console.log(chalk.green('OPC-UA client subscription has session:'), chalk.cyan(hasSession));
         assert.ok(hasSession, 'OPC-UA client subscription has session');
       } catch (error) {
@@ -320,7 +326,7 @@ describe('<<=== OPC-UA: Test2 ===>>', () => {
 
     it('OPC-UA client subscription is active', () => {
       try {
-        const isActive =  client.subscriptionIsActive();
+        const isActive = client.subscriptionIsActive();
         console.log(chalk.green('OPC-UA client subscription is active:'), chalk.cyan(isActive));
         assert.ok(isActive, 'OPC-UA client subscription is active');
       } catch (error) {
@@ -330,7 +336,7 @@ describe('<<=== OPC-UA: Test2 ===>>', () => {
 
     it('OPC-UA client subscription to string', () => {
       try {
-        const strSubscription =  client.subscriptionToString();
+        const strSubscription = client.subscriptionToString();
         inspector('OPC-UA client subscription to string:', strSubscription);
         assert.ok(strSubscription, 'OPC-UA client subscription to string');
       } catch (error) {
@@ -340,7 +346,7 @@ describe('<<=== OPC-UA: Test2 ===>>', () => {
 
     it('OPC-UA client subscription evaluate remaining lifetime', () => {
       try {
-        const lifetimeNumber =  client.subscriptionEvaluateRemainingLifetime();
+        const lifetimeNumber = client.subscriptionEvaluateRemainingLifetime();
         console.log(chalk.green('OPC-UA client subscription evaluate remaining lifetime:'), chalk.cyan(lifetimeNumber));
         assert.ok(true, 'OPC-UA client subscription evaluate remaining lifetime');
       } catch (error) {
