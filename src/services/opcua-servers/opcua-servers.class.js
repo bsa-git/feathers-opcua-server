@@ -10,6 +10,9 @@ const {
   AttributeIds,
   StatusCodes,
 } = require('node-opcua');
+
+const loRemove = require('lodash/remove');
+
 const debug = require('debug')('app:service.opcua-servers');
 const isDebug = false;
 const isLog = false;
@@ -20,7 +23,7 @@ const isLog = false;
  * @param {Object} data 
  */
 const executeAction = async (service, data) => {
-  let server, opcuaServer;
+  let server, opcuaServer, resultAction;
   try {
     // Run service action
     switch (`${data.action}`) {
@@ -43,15 +46,46 @@ const executeAction = async (service, data) => {
         // Server start
         await server.start();
         service.opcuaServers.push(opcuaServer);
+        // Get resultAction
+        resultAction = {
+          id: opcuaServer.id,
+          data,
+          server: { currentState: opcuaServer.server.getCurrentState() },
+          createdAt: opcuaServer.createdAt,
+          updatedAt: opcuaServer.updatedAt
+        }
         break;
+        case 'start':
+          // Shutdown OPC-UA server
+          opcuaServer = service.get(data.id);
+          // Server start
+          await opcuaServer.server.start();
+          // Get resultAction
+          resultAction = {
+            id: opcuaServer.id,
+            data,
+            server: { currentState: opcuaServer.server.getCurrentState() },
+            createdAt: opcuaServer.createdAt,
+            updatedAt: opcuaServer.updatedAt
+          }
+          break;  
       case 'shutdown':
         // Shutdown OPC-UA server
         opcuaServer = service.get(data.id);
         await opcuaServer.server.shutdown(data.timeout ? data.timeout : 0);
+        // Get resultAction
+        resultAction = {
+          id: opcuaServer.id,
+          data,
+          server: { currentState: opcuaServer.server.getCurrentState() },
+          createdAt: opcuaServer.createdAt,
+          updatedAt: opcuaServer.updatedAt
+        }
         break;
       default:
         throw new errors.BadRequest(`No such action - '${data.action}'`);
     }
+    return resultAction;
   } catch (error) {
     throw new errors.BadRequest(`Error for action - '${data.action}'. ${error.message}`);
   }
@@ -65,8 +99,22 @@ class OpcuaServers {
   }
 
   async find(params) {
+    let opcuaServers, opcuaServer;
     // Just return all our opcuaServers
-    return this.opcuaServers;
+    opcuaServers = this.opcuaServers.map(srv => {
+      if (params.provider) {
+        opcuaServer = {
+          id: srv.id,
+          server: { currentState: srv.server.getCurrentState() },
+          createdAt: srv.createdAt,
+          updatedAt: srv.updatedAt
+        }
+      } else{
+        opcuaServer = srv;
+      }  
+      return opcuaServer;
+    })
+    return opcuaServers;
   }
 
   async get(id, params) {
@@ -78,7 +126,7 @@ class OpcuaServers {
     if (params.provider) {
       opcuaServer = {
         id: opcuaServer.id,
-        server: { currentState: opcuaServer.getCurrentState() },
+        server: { currentState: opcuaServer.server.getCurrentState() },
         createdAt: opcuaServer.createdAt,
         updatedAt: opcuaServer.updatedAt
       }
@@ -88,8 +136,8 @@ class OpcuaServers {
 
   async create(data, params) {
     try {
-      await executeAction(this, data);
-      return data;
+      const resultAction = await executeAction(this, data);
+      return resultAction;
     } catch (error) {
       console.log(chalk.red('service.opcua-servers::create.error'), chalk.cyan(error.message));
       throw error;
@@ -104,12 +152,20 @@ class OpcuaServers {
     return { data };
   }
 
-  // OPC-UA server shutdown
+  // OPC-UA server remove
   async remove(id, params) {
+    let opcuaServer;
     try {
-      const opcuaServer = this.get(id);
-      opcuaServer.server.shutdown();
-      return { id };
+      opcuaServer = this.get(id);
+      await opcuaServer.server.shutdown();
+      opcuaServer = Object.assign({}, {
+        id: opcuaServer.id,
+        server: { currentState: opcuaServer.server.getCurrentState() },
+        createdAt: opcuaServer.createdAt,
+        updatedAt: opcuaServer.updatedAt
+      });
+      loRemove(this.opcuaServers, srv => srv.id === id);
+      return opcuaServer;
     } catch (error) {
       console.log(chalk.red('service.opcua-servers::remove.error'), chalk.cyan(error.message));
       throw error;
