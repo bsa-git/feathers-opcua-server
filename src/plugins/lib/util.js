@@ -19,11 +19,18 @@ const delayTime = function (sec = 1) {
 };
 
 /**
- * Pause
- * @param ms
- * @return {Promise}
- */
-const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
+* Pause
+* @param ms
+* @return {Promise}
+*/
+const pause = function (ms) {
+  return new Promise(function (resolve) {
+    setTimeout(() => {
+      debug(`Pause: ${ms} MSec`);
+      resolve('done!');
+    }, ms);
+  });
+};
 
 /**
  * Awaiting positive completion of a function

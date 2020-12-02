@@ -17,21 +17,16 @@ const getGravatar = email => {
 
 exports.Users = class Users extends Service {
   create (data, params) {
-    // This is the information we want from the user signup data
-    const { name, email, password, githubId, googleId, createdAt, updatedAt } = data;
+    let userData = {};
+
     // Get avatar
-    const avatar = data.avatar || getGravatar(email);
-    // The complete user
-    const userData = {
-      email,
-      name,
-      password,
-      githubId,
-      googleId,
-      avatar,
-      createdAt,
-      updatedAt
-    };
+    const avatar = data.avatar || getGravatar(data.email);
+    data.avatar = avatar;
+    Object.keys(data).forEach(key => {
+      if(data[key]){
+        userData[key] = data[key];
+      }
+    });
 
     // Call the original `create` method with existing `params` and new data
     return super.create(userData, params);

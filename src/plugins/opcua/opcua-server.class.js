@@ -78,6 +78,7 @@ class OpcuaServer {
     try {
       // Let create an instance of OPCUAServer
       this.opcuaServer = new OPCUAServer(this.params);
+      // this.params.port of the listening socket of the server
 
       await this.opcuaServer.initialize();
       if (isDebug) debug('certificateFile = ', this.opcuaServer.certificateFile);
@@ -114,6 +115,8 @@ class OpcuaServer {
       await this.opcuaServer.start();
       const endpointUrl = this.opcuaServer.endpoints[0].endpointDescriptions()[0].endpointUrl;
       this.currentState.endpointUrl = endpointUrl;
+      const port = this.opcuaServer.endpoints[0].port;
+      console.log(chalk.yellow('Server started and now listening ...'), 'Port:', chalk.cyan(port));
       console.log(chalk.yellow('Server started and now listening ...'), 'EndPoint URL:', chalk.cyan(endpointUrl));
       // this.opcuaServer.endpoints[0].endpointDescriptions().forEach(function (endpoint) {
       //   if (isDebug) debug('opcuaServer.endpoint:', endpoint.endpointUrl, endpoint.securityMode.toString(), endpoint.securityPolicyUri.toString());
@@ -127,6 +130,7 @@ class OpcuaServer {
       });
       this.currentState.endpoints = endpoints;
       this.currentState.isStarted = true;
+
       return endpoints;
     } catch (err) {
       const errTxt = 'Error while start the OPS-UA server:';
@@ -160,6 +164,7 @@ class OpcuaServer {
       this.currentState.endpointUrl = '';
       this.currentState.endpoints = null;
       this.currentState.isStarted = false;
+      this.opcuaServer = null;
       console.log(chalk.yellow('Server terminated'));
     } catch (err) {
       const errTxt = 'Error while start the OPS-UA server:';
@@ -182,7 +187,8 @@ class OpcuaServer {
   getServerInfo() {
     if (!this.opcuaServer) return null;
     try {
-      let applicationUri, serverInfo = this.opcuaServer.serverInfo, _serverInfo = {};
+      let applicationUri, _serverInfo = {};
+      const serverInfo = this.opcuaServer.serverInfo;
       applicationUri = serverInfo.applicationUri;
       _serverInfo.applicationUri = applicationUri;
       _serverInfo.productUri = serverInfo.productUri;
