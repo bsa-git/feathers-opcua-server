@@ -41,9 +41,9 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     try {
       // Create OPC-UA server
       server = new OpcuaServer(app, {
-        port:26544, // default - 26543
-        serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M52' },
-        buildInfo: { productName: '380-472-00203826-M52' }
+        port:26544, //  default - 26543, 26544 (opcua.test), 26545 (opcua.test2), 26546 (opcua-clients.test), 26547 (opcua-servers.test),
+        serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5' },
+        buildInfo: { productName: '380-472-00203826-M5' }
       });
       // Create OPC-UA client
       client = new OpcuaClient(app);

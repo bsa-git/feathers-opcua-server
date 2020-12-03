@@ -8,7 +8,7 @@ const addressSpaceMethods = require(`${appRoot}/src/plugins/test-helpers/opcua-a
 const chalk = require('chalk');
 const moment = require('moment');
 
-// serverInfo.applicationName = 'NodeOPCUA_380-472-00203826-M52'; // NodeOPCUA_UA-CHERKASSY-AZOT-M52
+// serverInfo.applicationName = 'NodeOPCUA_380-472-00203826-M5'; // NodeOPCUA_UA-CHERKASSY-AZOT-M5
 // buildInfo.productName
 
 const {
@@ -33,9 +33,9 @@ describe('<<=== OPC-UA: Test2 ===>>', () => {
     try {
       // Create OPC-UA server
       server = new OpcuaServer(app, {
-        port:26545, // default - 26543, 26544 (opcua.test)
-        serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M52' },
-        buildInfo: { productName: '380-472-00203826-M52' }
+        port:26545, // default - 26543, 26544 (opcua.test), 26545 (opcua.test2), 26546 (opcua-clients.test), 26547 (opcua-servers.test),
+        serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5' },
+        buildInfo: { productName: '380-472-00203826-M5' }
       });
       // Create OPC-UA client
       client = new OpcuaClient(app);

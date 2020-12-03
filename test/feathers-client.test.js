@@ -21,9 +21,9 @@ const isLog = false;
 let options = {
   action: 'create',
   params: {
-    port: 26546, // default - 26543, 26544 (opcua.test), 26545 (opcua.test2)
-    serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M52' },
-    buildInfo: { productName: '380-472-00203826-M52' }
+    port: 26543, // default - 26543, 26544 (opcua.test), 26545 (opcua.test2)
+    serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5' },
+    buildInfo: { productName: '380-472-00203826-M5' }
   },
   paths: {
     options: '/src/plugins/test-helpers/AddressSpaceTestOptions.json',

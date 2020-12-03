@@ -99,7 +99,7 @@ const _executeAction = async (service, data) => {
         createdAt: data.createdAt,
         updatedAt: data.updatedAt
       };
-      client.opcuaClients.push(opcuaClient);
+      service.opcuaClients.push(opcuaClient);
       // Get resultAction
       resultAction = data.provider ? Object.assign({}, opcuaClient, {
         client: {
