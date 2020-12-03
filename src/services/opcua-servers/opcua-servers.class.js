@@ -69,7 +69,7 @@ const _executeAction = async (service, data) => {
       };
       service.opcuaServers.push(opcuaServer);
       // Get resultAction
-      resultAction = data.provider? Object.assign({}, opcuaServer, {server: { currentState: opcuaServer.server.getCurrentState() }}) : opcuaServer;
+      resultAction = data.provider ? Object.assign({}, opcuaServer, { server: { currentState: opcuaServer.server.getCurrentState() } }) : opcuaServer;
       break;
     case 'start':
       // Shutdown OPC-UA server
@@ -77,14 +77,14 @@ const _executeAction = async (service, data) => {
       // Server start
       await opcuaServer.server.start();
       // Get resultAction
-      resultAction = data.provider? Object.assign({}, opcuaServer, {server: { currentState: opcuaServer.server.getCurrentState() }}) : opcuaServer;
+      resultAction = data.provider ? Object.assign({}, opcuaServer, { server: { currentState: opcuaServer.server.getCurrentState() } }) : opcuaServer;
       break;
     case 'shutdown':
       // Shutdown OPC-UA server
       opcuaServer = service.get(data.id);
       await opcuaServer.server.shutdown(data.timeout ? data.timeout : 0);
       // Get resultAction
-      resultAction = data.provider? Object.assign({}, opcuaServer, {server: { currentState: opcuaServer.server.getCurrentState() }}) : opcuaServer;
+      resultAction = data.provider ? Object.assign({}, opcuaServer, { server: { currentState: opcuaServer.server.getCurrentState() } }) : opcuaServer;
       break;
     default:
       throw new errors.BadRequest(`No such action - '${data.action}'`);
@@ -161,23 +161,18 @@ class OpcuaServers {
   // OPC-UA server remove
   async remove(id, params) {
     let opcuaServer;
-    try {
-      opcuaServer = await this.get(id);
-      // inspector('Remove the service:', opcuaServer);
-      await opcuaServer.server.shutdown();
-      opcuaServer = Object.assign({}, {
-        id: opcuaServer.id,
-        server: { currentState: opcuaServer.server.getCurrentState() },
-        createdAt: opcuaServer.createdAt,
-        updatedAt: opcuaServer.updatedAt
-      });
+    opcuaServer = await this.get(id);
+    // inspector('Remove the service:', opcuaServer);
+    await opcuaServer.server.shutdown();
+    opcuaServer = Object.assign({}, {
+      id: opcuaServer.id,
+      server: { currentState: opcuaServer.server.getCurrentState() },
+      createdAt: opcuaServer.createdAt,
+      updatedAt: opcuaServer.updatedAt
+    });
 
-      loRemove(this.opcuaServers, srv => srv.id === id);
-      return opcuaServer;
-    } catch (error) {
-      console.log(chalk.red('service.opcua-servers::remove.error'), chalk.cyan(error.message));
-      throw error;
-    }
+    loRemove(this.opcuaServers, srv => srv.id === id);
+    return opcuaServer;
   }
 }
 

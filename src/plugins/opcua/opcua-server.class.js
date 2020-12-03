@@ -98,10 +98,17 @@ class OpcuaServer {
       this.currentState.isCreated = true;
       // OPC-UA server created.
       console.log(chalk.yellow('Server created'));
-    } catch (err) {
-      const errTxt = 'Error while creating the OPS-UA server:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
+  }
+
+  /**
+   * OPC-UA server not created
+   */
+  opcuaServerNotCreated() {
+    if (!this.opcuaServer) {
+      throw new errors.GeneralError('OPC-UA server not created');
     }
   }
 
@@ -110,8 +117,8 @@ class OpcuaServer {
    * Initiate the server by starting all its endpoints
    */
   async start() {
-    if (!this.opcuaServer) return;
     try {
+      this.opcuaServerNotCreated();
       await this.opcuaServer.start();
       const endpointUrl = this.opcuaServer.endpoints[0].endpointDescriptions()[0].endpointUrl;
       this.currentState.endpointUrl = endpointUrl;
@@ -132,10 +139,8 @@ class OpcuaServer {
       this.currentState.isStarted = true;
 
       return endpoints;
-    } catch (err) {
-      const errTxt = 'Error while start the OPS-UA server:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -157,8 +162,8 @@ class OpcuaServer {
    *   ``` 
    */
   async shutdown(timeout = 0) {
-    if (!this.opcuaServer) return;
     try {
+      this.opcuaServerNotCreated();
       if (timeout) await this.opcuaServer.shutdown(timeout);
       else await this.opcuaServer.shutdown();
       this.currentState.endpointUrl = '';
@@ -166,10 +171,8 @@ class OpcuaServer {
       this.currentState.isStarted = false;
       this.opcuaServer = null;
       console.log(chalk.yellow('Server terminated'));
-    } catch (err) {
-      const errTxt = 'Error while start the OPS-UA server:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -185,8 +188,8 @@ class OpcuaServer {
    * Get server info
    */
   getServerInfo() {
-    if (!this.opcuaServer) return null;
     try {
+      this.opcuaServerNotCreated();
       let applicationUri, _serverInfo = {};
       const serverInfo = this.opcuaServer.serverInfo;
       applicationUri = serverInfo.applicationUri;
@@ -198,10 +201,8 @@ class OpcuaServer {
       _serverInfo.discoveryProfileUri = serverInfo.discoveryProfileUri;
       _serverInfo.discoveryUrls = serverInfo.discoveryUrls;
       return _serverInfo; //Object.assign({}, _serverInfo);
-    } catch (err) {
-      const errTxt = 'Error while start the OPS-UA server:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -209,13 +210,11 @@ class OpcuaServer {
    * Get server info
    */
   getBuildInfo() {
-    if (!this.opcuaServer) return;
     try {
+      this.opcuaServerNotCreated();
       return this.opcuaServer.buildInfo;
-    } catch (err) {
-      const errTxt = 'Error while start the OPS-UA server:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -223,84 +222,144 @@ class OpcuaServer {
   * total number of bytes written  by the server since startup
   */
   getBytesWritten() {
-    return this.opcuaServer.bytesWritten;
+    try {
+      this.opcuaServerNotCreated();
+      return this.opcuaServer.bytesWritten;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
   * total number of bytes read  by the server since startup
   */
   getBytesRead() {
-    return this.opcuaServer.bytesRead;
+    try {
+      this.opcuaServerNotCreated();
+      return this.opcuaServer.bytesRead;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
   * Number of transactions processed by the server since startup
   */
   getTransactionsCount() {
-    return this.opcuaServer.transactionsCount;
+    try {
+      this.opcuaServerNotCreated();
+      return this.opcuaServer.transactionsCount;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
   * the number of connected channel on all existing end points
   */
   getCurrentChannelCount() {
-    return this.opcuaServer.currentChannelCount;
+    try {
+      this.opcuaServerNotCreated();
+      return this.opcuaServer.currentChannelCount;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
   * The number of active subscriptions from all sessions
   */
   getCurrentSubscriptionCount() {
-    return this.opcuaServer.currentSubscriptionCount;
+    try {
+      this.opcuaServerNotCreated();
+      return this.opcuaServer.currentSubscriptionCount;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
   * the number of session activation requests that have been rejected
   */
   getRejectedSessionCount() {
-    return this.opcuaServer.rejectedSessionCount;
+    try {
+      this.opcuaServerNotCreated();
+      return this.opcuaServer.rejectedSessionCount;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
   * the number of request that have been rejected
   */
   getRejectedRequestsCount() {
-    return this.opcuaServer.rejectedRequestsCount;
+    try {
+      this.opcuaServerNotCreated();
+      return this.opcuaServer.rejectedRequestsCount;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
   * the number of sessions that have been aborted
   */
   getSessionAbortCount() {
-    return this.opcuaServer.sessionAbortCount;
+    try {
+      this.opcuaServerNotCreated();
+      return this.opcuaServer.sessionAbortCount;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
   * the publishing interval count
   */
   getPublishingIntervalCount() {
-    return this.opcuaServer.publishingIntervalCount;
+    try {
+      this.opcuaServerNotCreated();
+      return this.opcuaServer.publishingIntervalCount;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
   * the number of sessions currently active
   */
   getCurrentSessionCount() {
-    return this.opcuaServer.currentSessionCount;
+    try {
+      this.opcuaServerNotCreated();
+      return this.opcuaServer.currentSessionCount;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
   *  true if the server has been initialized
   */
   isInitialized() {
-    return this.opcuaServer.initialized;
+    try {
+      this.opcuaServerNotCreated();
+      return this.opcuaServer.initialized;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
   *  is the server auditing
   */
   isAuditing() {
-    return this.opcuaServer.isAuditing;
+    try {
+      this.opcuaServerNotCreated();
+      return this.opcuaServer.isAuditing;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
@@ -470,10 +529,8 @@ class OpcuaServer {
         // inspector('currentState:', this.currentState);
         console.log(chalk.yellow('Server constructed address space'));
       }
-    } catch (err) {
-      const errTxt = 'Error while construct address space OPC-UA server:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 }

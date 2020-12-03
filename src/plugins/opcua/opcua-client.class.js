@@ -36,7 +36,7 @@ class OpcuaClient {
   constructor(app, params = {}) {
     this.params = loMerge(defaultClientOptions, params);
     this.app = app;
-    this.SrvCurrentState = null;
+    this.srvCurrentState = null;
     this.opcuaClient = null;
     this.session = null;
     this.subscription = null;
@@ -50,14 +50,19 @@ class OpcuaClient {
     try {
       // Create OPCUAClient
       this.opcuaClient = OPCUAClient.create(this.params);
-
       // Retrying connection
-      this.opcuaClient.on('backoff', (retry) => console.log(chalk.yellow('Retrying to connect to:'), this.SrvCurrentState.endpointUrl, ' attempt: ', retry));
+      this.opcuaClient.on('backoff', (retry) => console.log(chalk.yellow('Retrying to connect to:'), this.srvCurrentState.endpointUrl, ' attempt: ', retry));
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
+  }
 
-    } catch (err) {
-      const errTxt = 'Error while creating the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+  /**
+   * OPC-UA client not created
+   */
+  opcuaClientNotCreated() {
+    if (!this.opcuaClient) {
+      throw new errors.GeneralError('OPC-UA client not created');
     }
   }
 
@@ -67,15 +72,13 @@ class OpcuaClient {
    * @param params {Object}
    */
   async connect(params = {}) {
-    if (!this.opcuaClient || !params.endpointUrl) return;
     try {
+      this.opcuaClientNotCreated();
       await this.opcuaClient.connect(params.endpointUrl);
-      this.SrvCurrentState = params;
+      this.srvCurrentState = params;
       console.log(chalk.yellow('Client connected to:'), chalk.cyan(params.endpointUrl));
-    } catch (err) {
-      const errTxt = 'Error while connect the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -84,14 +87,12 @@ class OpcuaClient {
   * @async
   */
   async disconnect() {
-    if (!this.opcuaClient) return;
     try {
+      this.opcuaClientNotCreated();
       await this.opcuaClient.disconnect();
-      console.log(chalk.yellow('Client disconnect from:'), chalk.cyan(this.SrvCurrentState.endpointUrl));
-    } catch (err) {
-      const errTxt = 'Error while client disconnect the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+      console.log(chalk.yellow('Client disconnect from:'), chalk.cyan(this.srvCurrentState.endpointUrl));
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -100,15 +101,13 @@ class OpcuaClient {
    * @async
    */
   async sessionCreate() {
-    if (!this.opcuaClient) return;
     try {
+      this.opcuaClientNotCreated();
       this.session = await this.opcuaClient.createSession();
       console.log(chalk.yellow('Client session created'));
       if (isLog) inspector('plugins.opcua-client.class::sessionCreate.info:', this.sessionToString());
-    } catch (err) {
-      const errTxt = 'Error while create session the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -117,15 +116,13 @@ class OpcuaClient {
    * @async
    */
   async sessionClose() {
-    if (!this.session) return;
     try {
+      this.sessionNotCreated();
       await this.session.close();
       this.session = null;
       console.log(chalk.yellow('Client session closed'));
-    } catch (err) {
-      const errTxt = 'Error while create session the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -133,9 +130,9 @@ class OpcuaClient {
    * Session not created
    */
   sessionNotCreated() {
-    const errTxt = 'Session not created';
-    console.log(chalk.red(`ERROR: ${errTxt}`));
-    throw new errors.GeneralError(`${errTxt}`);
+    if (!this.session) {
+      throw new errors.GeneralError('Session not created');
+    }
   }
 
   /**
@@ -143,83 +140,11 @@ class OpcuaClient {
  * @returns {String}
  */
   sessionToString() {
-    if (!this.session) return;
     try {
+      this.sessionNotCreated();
       return this.session.toString();
-    } catch (err) {
-      const errTxt = 'Error while Session to string:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
-    }
-  }
-
-  /**
-   * Get nodeIds
-   * 
-   * @param {String|Object|String[]|Object[]} nameNodeIds 
-   * @returns {String[]|Object[]}
-   */
-  getNodeIds(nameNodeIds) {
-    let itemNodeId = null, itemNodeIds = [];
-    if (!this.SrvCurrentState) return null;
-    try {
-      let nodeIds = this.SrvCurrentState.paramsAddressSpace;
-      nodeIds = loConcat(nodeIds.objects, nodeIds.variables, nodeIds.methods);
-      if (Array.isArray(nameNodeIds)) {
-        nameNodeIds.forEach(nameNodeId => {
-          if (isString(nameNodeId)) {
-            itemNodeId = nodeIds.find(item => item.browseName === nameNodeId);
-            if (itemNodeId) {
-              itemNodeIds.push(itemNodeId.nodeId);
-            } else {
-              itemNodeIds.push(nameNodeId);
-            }
-          } else {
-            itemNodeIds.push(nameNodeId);
-          }
-        });
-      } else {
-        if (isString(nameNodeIds)) {
-          itemNodeId = nodeIds.find(item => item.browseName === nameNodeIds);
-          if (itemNodeId) {
-            itemNodeIds.push(itemNodeId.nodeId);
-          } else {
-            itemNodeIds.push(nameNodeIds);
-          }
-        } else {
-          itemNodeIds.push(nameNodeIds);
-        }
-      }
-      if (isDebug) debug('getNodeIds.result:', itemNodeIds);
-      return itemNodeIds;
-    } catch (err) {
-      const errTxt = 'Error while get nodeIds from \'SrvCurrentState.paramsAddressSpace\'';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
-    }
-  }
-
-  /**
-   * Get item nodeId
-   * @param {String>} nameNodeId 
-   * e.g nameNodeId = 'Device1.Temperature'|'ns=1;s=Device1.Temperature'
-   * @returns {Object}
-   */
-  getItemNodeId(nameNodeId) {
-    let itemNodeId = null;
-    if (!this.SrvCurrentState) return null;
-    try {
-      let nodeIds = this.SrvCurrentState.paramsAddressSpace;
-      nodeIds = loConcat(nodeIds.objects, nodeIds.variables, nodeIds.methods);
-      itemNodeId = nodeIds.find(item => item.browseName === nameNodeId);
-      if (!itemNodeId) {
-        itemNodeId = nodeIds.find(item => item.nodeId === nameNodeId);
-      }
-      return itemNodeId;
-    } catch (err) {
-      const errTxt = 'Error while get nodeIds from \'SrvCurrentState.paramsAddressSpace\'';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -286,53 +211,69 @@ class OpcuaClient {
  securityLevel                 Byte                : 1
   */
   sessionEndpoint() {
-    if (!this.session) this.sessionNotCreated();
-    const endpoint = this.session.endpoint;
-    return {
-      endpointUrl: endpoint.endpointUrl,
-      server: {
-        applicationUri: endpoint.server.applicationUri,
-        productUri: endpoint.server.productUri,
-        applicationName: endpoint.server.applicationName.text,
-        applicationType: endpoint.server.applicationType,
-        gatewayServerUri: endpoint.server.gatewayServerUri,
-        discoveryProfileUri: endpoint.server.discoveryProfileUri,
-        discoveryUrls: endpoint.server.discoveryUrls,
-      },
-      serverCertificate: endpoint.serverCertificate,
-      securityMode: endpoint.securityMode,
-      securityPolicyUri: endpoint.securityPolicyUri,
-      userIdentityTokens: endpoint.userIdentityTokens,
-      transportProfileUri: endpoint.transportProfileUri,
-      securityLevel: endpoint.securityLevel
-    };
+    try {
+      this.sessionNotCreated();
+      const endpoint = this.session.endpoint;
+      return {
+        endpointUrl: endpoint.endpointUrl,
+        server: {
+          applicationUri: endpoint.server.applicationUri,
+          productUri: endpoint.server.productUri,
+          applicationName: endpoint.server.applicationName.text,
+          applicationType: endpoint.server.applicationType,
+          gatewayServerUri: endpoint.server.gatewayServerUri,
+          discoveryProfileUri: endpoint.server.discoveryProfileUri,
+          discoveryUrls: endpoint.server.discoveryUrls,
+        },
+        serverCertificate: endpoint.serverCertificate,
+        securityMode: endpoint.securityMode,
+        securityPolicyUri: endpoint.securityPolicyUri,
+        userIdentityTokens: endpoint.userIdentityTokens,
+        transportProfileUri: endpoint.transportProfileUri,
+        securityLevel: endpoint.securityLevel
+      };
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
    * Session subscription count
    */
   sessionSubscriptionCount() {
-    if (!this.session) this.sessionNotCreated();
-    const subscriptionCount = this.session.subscriptionCount;
-    return subscriptionCount;
+    try {
+      this.sessionNotCreated();
+      const subscriptionCount = this.session.subscriptionCount;
+      return subscriptionCount;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
    * Is reconnecting
    */
   sessionIsReconnecting() {
-    if (!this.session) this.sessionNotCreated();
-    const isReconnecting = this.session.isReconnecting;
-    return isReconnecting;
+    try {
+      this.sessionNotCreated();
+      const isReconnecting = this.session.isReconnecting;
+      return isReconnecting;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
    * Session get publish engine
    */
   sessionGetPublishEngine() {
-    if (!this.session) this.sessionNotCreated();
-    const publishEngine = this.session.getPublishEngine();
-    return publishEngine;
+    try {
+      this.sessionNotCreated();
+      const publishEngine = this.session.getPublishEngine();
+      return publishEngine;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
   }
 
   /**
@@ -341,16 +282,14 @@ class OpcuaClient {
    * @returns {Promise<string[]}
    */
   async sessionReadNamespaceArray() {
-    if (!this.session) this.sessionNotCreated();
     try {
+      this.sessionNotCreated();
       const result = await this.session.readNamespaceArray();
       if (isLog) inspector('plugin.opcua-client.class::sessionReadNamespaceArray.result:', result);
       // inspector('plugins.opcua-client.class::sessionReadNamespaceArray.result:', result);
       return result;
-    } catch (err) {
-      const errTxt = 'Error while create session the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -416,8 +355,8 @@ class OpcuaClient {
    */
   async sessionBrowse(nameNodeIds) {
     let result = [], itemNodeIds = [];
-    if (!this.session) this.sessionNotCreated();
     try {
+      this.sessionNotCreated();
       if (Array.isArray(nameNodeIds)) {
         nameNodeIds.forEach(nameNodeId => {
           if (isObject(nameNodeId)) {
@@ -440,10 +379,8 @@ class OpcuaClient {
       }
       if (isLog) inspector('plugins.opcua-client.class::sessionBrowse.result:', result);
       return result;
-    } catch (err) {
-      const errTxt = 'Error while session browse the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -455,8 +392,8 @@ class OpcuaClient {
    */
   async sessionTranslateBrowsePath(browsePaths) {
     let result = [];
-    if (!this.session) this.sessionNotCreated();
     try {
+      this.sessionNotCreated();
       if (!Array.isArray(browsePaths)) {
         browsePaths = [browsePaths];
       }
@@ -466,10 +403,8 @@ class OpcuaClient {
       if (isLog) inspector('plugins.opcua-client.class::sessionTranslateBrowsePath.result:', result);
       // inspector('plugins.opcua-client.class::sessionTranslateBrowsePath.result:', result);
       return result;
-    } catch (err) {
-      const errTxt = 'Error while session browse the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -501,8 +436,8 @@ class OpcuaClient {
    */
   async sessionRead(nameNodeIds, attributeIds, maxAge = 0) {
     let result = [], itemNodeIds = [], dataValues;
-    if (!this.session) this.sessionNotCreated();
     try {
+      this.sessionNotCreated();
       // Get nodeIds
       this.getNodeIds(nameNodeIds).forEach((itemNodeId, index) => {
         if (isString(itemNodeId)) {
@@ -534,10 +469,8 @@ class OpcuaClient {
       }
       if (isLog) inspector('plugins.opcua-client.class::sessionRead.result:', result);
       return result;
-    } catch (err) {
-      const errTxt = 'Error while session read the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -564,18 +497,16 @@ class OpcuaClient {
    */
   sessionReadAllAttributes(nameNodeIds, callback) {
     let itemNodeId = null, itemNodeIds = [];
-    if (!this.session) this.sessionNotCreated();
     try {
+      this.sessionNotCreated();
       // Get nodeIds
       itemNodeIds = this.getNodeIds(nameNodeIds);
 
       if (itemNodeIds.length) {
         this.session.readAllAttributes(itemNodeIds, callback);
       }
-    } catch (err) {
-      const errTxt = 'Error while session read the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -608,8 +539,8 @@ class OpcuaClient {
   */
   async sessionReadVariableValue(nameNodeIds) {
     let result = [];
-    if (!this.session) this.sessionNotCreated();
     try {
+      this.sessionNotCreated();
       // Get nodeIds
       const itemNodeIds = this.getNodeIds(nameNodeIds);
       if (itemNodeIds.length) {
@@ -617,10 +548,8 @@ class OpcuaClient {
       }
       if (isLog) inspector('opcua-client.class::sessionReadVariableValue:', result);
       return result;
-    } catch (err) {
-      const errTxt = 'Error while session read the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -667,8 +596,8 @@ class OpcuaClient {
    */
   async sessionReadHistoryValues(nameNodeIds, start, end) {
     let result = [], itemNodeIds = [], dataValues;
-    if (!this.session) this.sessionNotCreated();
     try {
+      this.sessionNotCreated();
       // Get nodeIds
       itemNodeIds = this.getNodeIds(nameNodeIds);
 
@@ -678,10 +607,8 @@ class OpcuaClient {
       }
       if (isLog) inspector('plugins.opcua-client.class::sessionReadHistoryValue.result:', result);
       return result;
-    } catch (err) {
-      const errTxt = 'Error while session read the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -693,15 +620,13 @@ class OpcuaClient {
    * @returns {Promise<MonitoredItemData>}
    */
   async sessionGetMonitoredItems(subscriptionId) {
-    if (!this.session) this.sessionNotCreated();
     try {
+      this.sessionNotCreated();
       const monitoredItems = await this.session.getMonitoredItems(subscriptionId);
       if (isLog) inspector('plugins.opcua-client.class::subscriptionGetMonitoredItems.monitoredItems:', monitoredItems);
       return monitoredItems;
-    } catch (err) {
-      const errTxt = 'Error while subscription get monitored items:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -714,17 +639,15 @@ class OpcuaClient {
    * @returns {Promise<StatusCode>}
    */
   async sessionWriteSingleNode(nameNodeId, variantValue) {
-    if (!this.session) this.sessionNotCreated();
     try {
+      this.sessionNotCreated();
       // Get nodeIds
       const nodeId = this.getNodeIds(nameNodeId)[0];
       const statusCode = await this.session.writeSingleNode(nodeId, variantValue);
       if (isLog) inspector('plugins.opcua-client.class::sessionWriteSingleNode.statusCode:', statusCode);
       return statusCode;
-    } catch (err) {
-      const errTxt = 'Error while session write single node the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -767,8 +690,8 @@ class OpcuaClient {
    */
   async sessionWrite(nameNodeIds, valuesToWrite = []) {
     let statusCodes = [], itemNodeIds = [];
-    if (!this.session) this.sessionNotCreated();
     try {
+      this.sessionNotCreated();
       // Get nodeIds
       this.getNodeIds(nameNodeIds).forEach((itemNodeId, index) => {
         if (isString(itemNodeId)) {
@@ -791,10 +714,8 @@ class OpcuaClient {
       }
       if (isLog) inspector('plugins.opcua-client.class::sessionWrite.statusCodes:', statusCodes);
       return statusCodes;
-    } catch (err) {
-      const errTxt = 'Error while session call method:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -831,8 +752,8 @@ class OpcuaClient {
    */
   async sessionCallMethod(nameNodeIds, inputArguments = []) {
     let result = [], itemNodeIds = [];
-    if (!this.session) this.sessionNotCreated();
     try {
+      this.sessionNotCreated();
       // Get nodeIds
       this.getNodeIds(nameNodeIds).forEach((itemNodeId, index) => {
         if (isString(itemNodeId)) {
@@ -859,10 +780,8 @@ class OpcuaClient {
       }
       if (isLog) inspector('plugins.opcua-client.class::sessionCallMethod.result:', result);
       return result;
-    } catch (err) {
-      const errTxt = 'Error while session call method:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -874,17 +793,15 @@ class OpcuaClient {
  * @returns {Promise<ArgumentDefinition>}
  */
   async sessionGetArgumentDefinition(nameNodeId) {
-    if (!this.session) this.sessionNotCreated();
     try {
+      this.sessionNotCreated();
       const methodId = this.getItemNodeId(nameNodeId).nodeId;
       const argumentsDefinition = await this.session.getArgumentDefinition(methodId);
       if (isLog) inspector('plugins.opcua-client.class::sessionGetArgumentDefinition.argumentsDefinition:', argumentsDefinition);
       // inspector('plugins.opcua-client.class::sessionGetArgumentDefinition.argumentsDefinition:', argumentsDefinition);
       return argumentsDefinition;
-    } catch (err) {
-      const errTxt = 'Error while subscription get monitored items:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -907,8 +824,8 @@ class OpcuaClient {
   *    ```
   */
   subscriptionCreate(options = {}) {
-    if (!this.session) this.sessionNotCreated();
     try {
+      this.sessionNotCreated();
       const mergeOptions = loMerge({}, defaultSubscriptionOptions, options);
       this.subscription = ClientSubscription.create(this.session, mergeOptions);
 
@@ -916,10 +833,8 @@ class OpcuaClient {
         .on('started', () => console.log(chalk.yellow('Client subscription started.') + ' SubscriptionId=', this.subscription.subscriptionId))
         .on('keepalive', () => console.log(chalk.yellow('Client subscription keepalive')))
         .on('terminated', () => console.log(chalk.yellow('Client subscription terminated')));
-    } catch (err) {
-      const errTxt = 'Error while subscription create the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -929,13 +844,11 @@ class OpcuaClient {
   * 
   */
   async subscriptionTerminate() {
-    if (!this.subscription) this.subscriptionNotCreated();
     try {
+      this.subscriptionNotCreated();
       await this.subscription.terminate();
-    } catch (err) {
-      const errTxt = 'Error while subscription terminate the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -943,9 +856,9 @@ class OpcuaClient {
    * Subscription not created
    */
   subscriptionNotCreated() {
-    const errTxt = 'Subscription not created';
-    console.log(chalk.red(`ERROR: ${errTxt}`));
-    throw new errors.GeneralError(`${errTxt}`);
+    if (!this.subscription) {
+      throw new errors.GeneralError('Subscription not created');
+    }
   }
 
   /**
@@ -953,13 +866,11 @@ class OpcuaClient {
    * @returns {ClientSessionImpl}
    */
   subscriptionGetSession() {
-    if (!this.subscription) this.subscriptionNotCreated();
     try {
+      this.subscriptionNotCreated();
       return this.subscription.session;
-    } catch (err) {
-      const errTxt = 'Error while subscription get session the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -968,13 +879,11 @@ class OpcuaClient {
    * @returns {Boolean}
    */
   subscriptionHasSession() {
-    if (!this.subscription) this.subscriptionNotCreated();
     try {
+      this.subscriptionNotCreated();
       return this.subscription.hasSession;
-    } catch (err) {
-      const errTxt = 'Error while subscription has session the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -983,13 +892,11 @@ class OpcuaClient {
    * @returns {Boolean}
    */
   subscriptionIsActive() {
-    if (!this.subscription) this.subscriptionNotCreated();
     try {
+      this.subscriptionNotCreated();
       return this.subscription.isActive;
-    } catch (err) {
-      const errTxt = 'Error while subscription is active the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -998,13 +905,11 @@ class OpcuaClient {
    * @returns {String}
    */
   subscriptionToString() {
-    if (!this.subscription) this.subscriptionNotCreated();
     try {
+      this.subscriptionNotCreated();
       return this.subscription.toString();
-    } catch (err) {
-      const errTxt = 'Error while subscription to string the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 
@@ -1013,16 +918,14 @@ class OpcuaClient {
    * @returns {Number}
    */
   subscriptionEvaluateRemainingLifetime() {
-    if (!this.subscription) this.subscriptionNotCreated();
     try {
+      this.subscriptionNotCreated();
       return this.subscription.evaluateRemainingLifetime();
-    } catch (err) {
-      const errTxt = 'Error while subscription evaluateRemainingLifetime the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
-  
+
 
   /**
      * Add a monitor item to the subscription
@@ -1135,8 +1038,8 @@ class OpcuaClient {
      *   );
      */
   async subscriptionMonitor(cb, itemToMonitor = {}, requestedParameters = {}, timestampsToReturn = TimestampsToReturn.Neither) {
-    if (!this.subscription) this.subscriptionNotCreated();
     try {
+      this.subscriptionNotCreated();
       const nodeId = itemToMonitor.nodeId;
       const mergeItemToMonitor = loMerge({}, defaultItemToMonitor, itemToMonitor);
       const mergeRequestedParameters = loMerge({}, defaultRequestedParameters, requestedParameters);
@@ -1152,10 +1055,83 @@ class OpcuaClient {
         if (isLog) inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
         cb(nodeId, dataValue);
       });
-    } catch (err) {
-      const errTxt = 'Error while subscription monitor the OPS-UA client:';
-      console.log(errTxt, err);
-      throw new errors.GeneralError(`${errTxt} "${err.message}"`);
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
+  }
+
+  /**
+   * Get nodeIds
+   * 
+   * @param {String|Object|String[]|Object[]} nameNodeIds 
+   * @returns {String[]|Object[]}
+   */
+  getNodeIds(nameNodeIds) {
+    let itemNodeId = null, itemNodeIds = [];
+    if (!this.srvCurrentState) return null;
+    try {
+      let nodeIds = this.srvCurrentState.paramsAddressSpace;
+      if (nodeIds) {
+        nodeIds = loConcat(nodeIds.objects, nodeIds.variables, nodeIds.methods);
+      } else {
+        nodeIds = [];
+      }
+
+      if (Array.isArray(nameNodeIds)) {
+        nameNodeIds.forEach(nameNodeId => {
+          if (isString(nameNodeId)) {
+            itemNodeId = nodeIds.find(item => item.browseName === nameNodeId);
+            if (itemNodeId) {
+              itemNodeIds.push(itemNodeId.nodeId);
+            } else {
+              itemNodeIds.push(nameNodeId);
+            }
+          } else {
+            itemNodeIds.push(nameNodeId);
+          }
+        });
+      } else {
+        if (isString(nameNodeIds)) {
+          itemNodeId = nodeIds.find(item => item.browseName === nameNodeIds);
+          if (itemNodeId) {
+            itemNodeIds.push(itemNodeId.nodeId);
+          } else {
+            itemNodeIds.push(nameNodeIds);
+          }
+        } else {
+          itemNodeIds.push(nameNodeIds);
+        }
+      }
+      if (isDebug) debug('getNodeIds.result:', itemNodeIds);
+      return itemNodeIds;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
+    }
+  }
+
+  /**
+   * Get item nodeId
+   * @param {String>} nameNodeId 
+   * e.g nameNodeId = 'Device1.Temperature'|'ns=1;s=Device1.Temperature'
+   * @returns {Object}
+   */
+  getItemNodeId(nameNodeId) {
+    let itemNodeId = null;
+    if (!this.srvCurrentState) return null;
+    try {
+      let nodeIds = this.srvCurrentState.paramsAddressSpace;
+      if (nodeIds) {
+        nodeIds = loConcat(nodeIds.objects, nodeIds.variables, nodeIds.methods);
+      } else {
+        nodeIds = [];
+      }
+      itemNodeId = nodeIds.find(item => item.browseName === nameNodeId);
+      if (!itemNodeId) {
+        itemNodeId = nodeIds.find(item => item.nodeId === nameNodeId);
+      }
+      return itemNodeId;
+    } catch (error) {
+      throw new errors.GeneralError(error.message);
     }
   }
 }

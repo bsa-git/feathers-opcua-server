@@ -11,7 +11,7 @@ const isDebug = false;
 const isLog = false;
 
 // Options
-let options = {
+let srvData = {
   action: 'create',
   params: {
     port: 26546, // default - 26543, 26544 (opcua.test), 26545 (opcua.test2)
@@ -88,7 +88,7 @@ describe('<<=== OPC-UA: \'opcua-servers\' service ===>>', () => {
     const service = app.service('opcua-servers');
     // service create
     const params = { user: opcuaUser, provider: 'rest', authenticated: true };
-    const opcuaServer = await service.create(options, params);
+    const opcuaServer = await service.create(srvData, params);
     if (isLog) inspector('created the service:', opcuaServer);
     // inspector('created the service:', opcuaServer);
 
@@ -99,7 +99,7 @@ describe('<<=== OPC-UA: \'opcua-servers\' service ===>>', () => {
     const service = app.service('opcua-servers');
     try {
       // service create
-      const opcuaServer = await service.create(options);
+      const opcuaServer = await service.create(srvData);
       assert.ok(false, 'OPC-UA servers: Error in creating an existing service');
     } catch (error) {
       assert.ok(true, 'OPC-UA servers: Error in creating an existing service');
@@ -108,7 +108,7 @@ describe('<<=== OPC-UA: \'opcua-servers\' service ===>>', () => {
 
   it('OPC-UA servers: get the service', async () => {
     const service = app.service('opcua-servers');
-    const id = options.params.serverInfo.applicationName;
+    const id = srvData.params.serverInfo.applicationName;
     // const params = { provider: 'rest' };
     const opcuaServer = await service.get(id);
     if (isLog) inspector('get the service.currentState:', opcuaServer.server.getCurrentState());
@@ -130,7 +130,7 @@ describe('<<=== OPC-UA: \'opcua-servers\' service ===>>', () => {
     try {
       // service remove
       const service = app.service('opcua-servers');
-      const id = options.params.serverInfo.applicationName;
+      const id = srvData.params.serverInfo.applicationName;
       const opcuaServer = await service.remove(id);
       if (isLog) inspector('Remove the service:', opcuaServer);
       // inspector('Remove the service:', opcuaServer);
@@ -146,15 +146,15 @@ describe('<<=== OPC-UA: \'opcua-servers\' service ===>>', () => {
     let opcuaServer;
     // service create
     const service = app.service('opcua-servers');
-    const port = options.params.port + 1;
-    const data = loMerge(options, { params: { port } });
+    const port = srvData.params.port + 1;
+    const data = loMerge(srvData, { params: { port } });
     // inspector('created the service.data:', data);
     opcuaServer = await service.create(data);
     if (isLog) inspector('created the service:', opcuaServer);
     // inspector('created the service:', opcuaServer);
 
     // Get opcuaServer
-    const id = options.params.serverInfo.applicationName;
+    const id = srvData.params.serverInfo.applicationName;
     opcuaServer = await service.get(id);
     if (isLog) inspector('created the service.getCurrentState:', opcuaServer.server.getCurrentState());
     assert.ok(opcuaServer, 'OPC-UA servers: created the service');
@@ -162,11 +162,11 @@ describe('<<=== OPC-UA: \'opcua-servers\' service ===>>', () => {
 
   it('OPC-UA servers: update the service', async () => {
     const service = app.service('opcua-servers');
-    const id = options.params.serverInfo.applicationName;
+    const id = srvData.params.serverInfo.applicationName;
     // get opcuaServer port
     let opcuaServer = await service.get(id);
     let port = opcuaServer.server.getCurrentState().port + 1;
-    const data = loMerge(options, { params: { port } });
+    const data = loMerge(srvData, { params: { port } });
     opcuaServer = await service.update(id, data);
     if (isLog) inspector('Update the service.port:', opcuaServer.server.getCurrentState());
     // inspector('Update the service.port:', opcuaServer.server.getCurrentState());
@@ -176,11 +176,11 @@ describe('<<=== OPC-UA: \'opcua-servers\' service ===>>', () => {
 
   it('OPC-UA servers: patch the service', async () => {
     const service = app.service('opcua-servers');
-    const id = options.params.serverInfo.applicationName;
+    const id = srvData.params.serverInfo.applicationName;
     // get opcuaServer port
     let opcuaServer = await service.get(id);
     let port = opcuaServer.server.getCurrentState().port + 1;
-    const data = loMerge(options, { params: { port } });
+    const data = loMerge(srvData, { params: { port } });
     opcuaServer = await service.patch(id, data);
     if (isLog) inspector('Patch the service.port:', opcuaServer.server.getCurrentState());
     // inspector('Patch the service.port:', opcuaServer.server.getCurrentState());
