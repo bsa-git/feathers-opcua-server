@@ -37,6 +37,16 @@ class OpcuaClient {
     this.params = loMerge(defaultClientOptions, params);
     this.app = app;
     this.srvCurrentState = null;
+    this.currentState = {
+      id: this.params.applicationName,
+      clientName: this.params.clientName,
+      port: null,
+      endpointUrl: '',
+      isCreated: false,
+      isConnect: false,
+      isSessionCreated: false,
+      isSubscriptionCreated: false
+    };
     this.opcuaClient = null;
     this.session = null;
     this.subscription = null;
@@ -52,6 +62,8 @@ class OpcuaClient {
       this.opcuaClient = OPCUAClient.create(this.params);
       // Retrying connection
       this.opcuaClient.on('backoff', (retry) => console.log(chalk.yellow('Retrying to connect to:'), this.srvCurrentState.endpointUrl, ' attempt: ', retry));
+
+      this.currentState.isCreated = true;
     } catch (error) {
       throw new errors.GeneralError(error.message);
     }
@@ -76,6 +88,9 @@ class OpcuaClient {
       this.opcuaClientNotCreated();
       await this.opcuaClient.connect(params.endpointUrl);
       this.srvCurrentState = params;
+      this.currentState.isConnect = true;
+      this.currentState.endpointUrl = params.endpointUrl;
+      this.currentState.port = params.endpointUrl.split(':')[2];
       console.log(chalk.yellow('Client connected to:'), chalk.cyan(params.endpointUrl));
     } catch (error) {
       throw new errors.GeneralError(error.message);
@@ -90,6 +105,9 @@ class OpcuaClient {
     try {
       this.opcuaClientNotCreated();
       await this.opcuaClient.disconnect();
+      this.currentState.isConnect = false;
+      this.currentState.endpointUrl = '';
+      this.currentState.port = null;
       console.log(chalk.yellow('Client disconnect from:'), chalk.cyan(this.srvCurrentState.endpointUrl));
     } catch (error) {
       throw new errors.GeneralError(error.message);
@@ -104,6 +122,7 @@ class OpcuaClient {
     try {
       this.opcuaClientNotCreated();
       this.session = await this.opcuaClient.createSession();
+      this.currentState.isSessionCreated = true;
       console.log(chalk.yellow('Client session created'));
       if (isLog) inspector('plugins.opcua-client.class::sessionCreate.info:', this.sessionToString());
     } catch (error) {
@@ -120,6 +139,7 @@ class OpcuaClient {
       this.sessionNotCreated();
       await this.session.close();
       this.session = null;
+      this.currentState.isSessionCreated = false;
       console.log(chalk.yellow('Client session closed'));
     } catch (error) {
       throw new errors.GeneralError(error.message);
@@ -133,6 +153,26 @@ class OpcuaClient {
     if (!this.session) {
       throw new errors.GeneralError('Session not created');
     }
+  }
+
+  /**
+   * Get current state
+   */
+  getCurrentState() {
+    return this.currentState;
+  }
+
+  /**
+   * Get client info
+   */
+  getClientInfo() {
+    return {
+      currentState: this.currentState,
+      srvCurrentState: this.srvCurrentState,
+      session: this.session ? this.sessionToString() : null,
+      endpoint: this.session ? this.sessionEndpoint() : null,
+      subscription: this.subscription ? this.subscriptionToString() : null,
+    };
   }
 
   /**
@@ -476,6 +516,7 @@ class OpcuaClient {
 
   /**
    * Session read all attributes
+   * @async
    * 
    * @example
    *
@@ -492,19 +533,27 @@ class OpcuaClient {
    * 
    * @param {String|String[]|NodeIdLike|NodeIdLike[]} nameNodeIds 
    * e.g. 'Temperature'|['Temperature', 'PressureVesselDevice']|'ns=1;s=Temperature'|['ns=1;s=Temperature', 'ns=1;s=PressureVesselDevice']
-   * @param {Function<err, data>} callback 
-   * @returns {void}
+   * @returns {NodeAttributes[]}
    */
-  sessionReadAllAttributes(nameNodeIds, callback) {
-    let itemNodeId = null, itemNodeIds = [];
+  async sessionReadAllAttributes(nameNodeIds) {
+    let itemNodeId = null, itemNodeIds = [], result = [];
+    const self = this;
     try {
       this.sessionNotCreated();
       // Get nodeIds
       itemNodeIds = this.getNodeIds(nameNodeIds);
-
       if (itemNodeIds.length) {
-        this.session.readAllAttributes(itemNodeIds, callback);
+        result = await new Promise(function (resolve, reject) {
+          self.session.readAllAttributes(itemNodeIds, function (err, data) {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(data);
+            }
+          });
+        });
       }
+      return result;
     } catch (error) {
       throw new errors.GeneralError(error.message);
     }
@@ -833,6 +882,8 @@ class OpcuaClient {
         .on('started', () => console.log(chalk.yellow('Client subscription started.') + ' SubscriptionId=', this.subscription.subscriptionId))
         .on('keepalive', () => console.log(chalk.yellow('Client subscription keepalive')))
         .on('terminated', () => console.log(chalk.yellow('Client subscription terminated')));
+
+      this.currentState.isSubscriptionCreated = true;
     } catch (error) {
       throw new errors.GeneralError(error.message);
     }
@@ -847,6 +898,7 @@ class OpcuaClient {
     try {
       this.subscriptionNotCreated();
       await this.subscription.terminate();
+      this.currentState.isSubscriptionCreated = false;
     } catch (error) {
       throw new errors.GeneralError(error.message);
     }

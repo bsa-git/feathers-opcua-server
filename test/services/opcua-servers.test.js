@@ -26,7 +26,7 @@ let srvData = {
 };
 
 const userInfo = {
-  email: 'opcua@example.com',
+  email: 'opcua-servers@example.com',
   password: 'supersecret'
 };
 

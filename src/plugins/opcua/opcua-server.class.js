@@ -37,6 +37,7 @@ class OpcuaServer {
     this.opcuaServer = null;
     this.currentState = {
       id: this.params.serverInfo.applicationName,
+      productName: this.params.buildInfo.productName,
       port: this.params.port,
       endpointUrl: '',
       endpoints: null,
@@ -207,7 +208,7 @@ class OpcuaServer {
   }
 
   /**
-   * Get server info
+   * Get server build info
    */
   getBuildInfo() {
     try {

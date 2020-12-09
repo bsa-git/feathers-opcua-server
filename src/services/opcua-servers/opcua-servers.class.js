@@ -32,6 +32,19 @@ const _isOpcuaServer = (service, id) => {
 };
 
 /**
+ * Get server for provider
+ * @param {Object} server 
+ * @returns {Object}
+ */
+const _getServerForProvider = (server) => {
+  return {
+    server: {
+      currentState: server.getCurrentState()
+    }
+  };
+};
+
+/**
  * Execute service action
  * @param {Object} service 
  * @param {Object} data 
@@ -69,7 +82,7 @@ const _executeAction = async (service, data) => {
       };
       service.opcuaServers.push(opcuaServer);
       // Get resultAction
-      resultAction = data.provider ? Object.assign({}, opcuaServer, { server: { currentState: opcuaServer.server.getCurrentState() } }) : opcuaServer;
+      resultAction = data.provider ? Object.assign({}, opcuaServer, _getServerForProvider(opcuaServer.server)) : opcuaServer;
       break;
     case 'start':
       // Shutdown OPC-UA server
@@ -77,14 +90,14 @@ const _executeAction = async (service, data) => {
       // Server start
       await opcuaServer.server.start();
       // Get resultAction
-      resultAction = data.provider ? Object.assign({}, opcuaServer, { server: { currentState: opcuaServer.server.getCurrentState() } }) : opcuaServer;
+      resultAction = data.provider ? Object.assign({}, opcuaServer, _getServerForProvider(opcuaServer.server)) : opcuaServer;
       break;
     case 'shutdown':
       // Shutdown OPC-UA server
       opcuaServer = service.get(data.id);
       await opcuaServer.server.shutdown(data.timeout ? data.timeout : 0);
       // Get resultAction
-      resultAction = data.provider ? Object.assign({}, opcuaServer, { server: { currentState: opcuaServer.server.getCurrentState() } }) : opcuaServer;
+      resultAction = data.provider ? Object.assign({}, opcuaServer, _getServerForProvider(opcuaServer.server)) : opcuaServer;
       break;
     default:
       throw new errors.BadRequest(`No such action - '${data.action}'`);

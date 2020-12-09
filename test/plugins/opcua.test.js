@@ -239,26 +239,21 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       }
     });
 
-    it('OPC-UA client session read all attributes', () => {
+    it('OPC-UA client session read all attributes', async () => {
       try {
+        let readResult;
         // Read all attributes for temperature
-        client.sessionReadAllAttributes('Device1.Temperature', function (err, data) {
-          if (err) {
-            inspector('sessionReadAllAttributes.err:', err);
-            assert.fail(`Should never get here: ${err}`);
+        readResult = await client.sessionReadAllAttributes('Device1.Temperature');
+        if (readResult && readResult.length) {
+          readResult = readResult[0];
+          if (readResult.statusCode === StatusCodes.Good) {
+            console.log(chalk.green('nodeId:'), chalk.cyan(readResult.nodeId.toString()));
+            console.log(chalk.green('browseName:'), chalk.cyan(readResult.browseName.name));
+            console.log(chalk.green('displayName:'), chalk.cyan(readResult.displayName.text));
+            console.log(chalk.green('value:'), chalk.cyan(loRound(readResult.value, 3)));
           }
-          if (isLog && data) inspector('sessionReadAllAttributes.data:', data);
-          if (data && data.length) {
-            data = data[0];
-            if (data.statusCode === StatusCodes.Good) {
-              console.log(chalk.green('nodeId:'), chalk.cyan(data.nodeId.toString()));
-              console.log(chalk.green('browseName:'), chalk.cyan(data.browseName.name));
-              console.log(chalk.green('displayName:'), chalk.cyan(data.displayName.text));
-              console.log(chalk.green('value:'), chalk.cyan(loRound(data.value, 3)));
-              assert.ok(true, 'OPC-UA client session read all attributes');
-            }
-          }
-        });
+        }
+        assert.ok(readResult, 'OPC-UA client session read all attributes');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
       }
