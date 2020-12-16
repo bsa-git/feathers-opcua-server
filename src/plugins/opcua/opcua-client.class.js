@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const { inspector, isString, isObject, appRoot } = require('../lib');
+const { getOpcuaConfig, getSubscriptionHandler } = require('./opcua-helper');
 const {
   OPCUAClient,
   ClientSubscription,
@@ -34,6 +35,9 @@ class OpcuaClient {
    * @param params {Object}
    */
   constructor(app, params = {}) {
+    // Get opcua config
+    const opcuaConfig = getOpcuaConfig(params.applicationName);
+    params.clientName = opcuaConfig.name;
     this.params = loMerge(defaultClientOptions, params);
     this.app = app;
     this.srvCurrentState = null;
@@ -157,9 +161,18 @@ class OpcuaClient {
 
   /**
    * Get current state
+   * @returns {Object}
    */
   getCurrentState() {
     return this.currentState;
+  }
+
+  /**
+   * Get server current state
+   * @returns {Object}
+   */
+  getSrvCurrentState() {
+    return this.srvCurrentState;
   }
 
   /**
@@ -857,6 +870,7 @@ class OpcuaClient {
   /**
   * Subscription create
   * @method createSubscription
+  * @async
   *
   * @example
   *
@@ -872,11 +886,11 @@ class OpcuaClient {
   *    const subscription = ClientSubscription.create(this.session, options);
   *    ```
   */
-  subscriptionCreate(options = {}) {
+  async subscriptionCreate(options = {}) {
     try {
       this.sessionNotCreated();
       const mergeOptions = loMerge({}, defaultSubscriptionOptions, options);
-      this.subscription = ClientSubscription.create(this.session, mergeOptions);
+      this.subscription = await Promise.resolve(ClientSubscription.create(this.session, mergeOptions));
 
       this.subscription
         .on('started', () => console.log(chalk.yellow('Client subscription started.') + ' SubscriptionId=', this.subscription.subscriptionId))
@@ -1089,24 +1103,43 @@ class OpcuaClient {
      *     TimestampsToReturn.Neither
      *   );
      */
-  async subscriptionMonitor(cb, itemToMonitor = {}, requestedParameters = {}, timestampsToReturn = TimestampsToReturn.Neither) {
+  async subscriptionMonitor(cb = null, itemToMonitor = {}, requestedParameters = {}, timestampsToReturn = TimestampsToReturn.Neither) {
+    let subscriptionHandler, subscriptionHandlerName = 'onChangedCommonHandler';
     try {
       this.subscriptionNotCreated();
       const nodeId = itemToMonitor.nodeId;
-      const mergeItemToMonitor = loMerge({}, defaultItemToMonitor, itemToMonitor);
-      const mergeRequestedParameters = loMerge({}, defaultRequestedParameters, requestedParameters);
+      if (this.getItemNodeId(nodeId)) {
+        // Get subscriptionHandlerName
+        const itemNodeId = this.getItemNodeId(nodeId);
+        if (itemNodeId.subscription) {
+          subscriptionHandlerName = itemNodeId.subscription;
+        }
+        // Get subscriptionHandler
+        const id = this.getCurrentState().id;
+        subscriptionHandler = getSubscriptionHandler(id, subscriptionHandlerName);
 
-      const monitoredItem = await this.subscription.monitor(
-        mergeItemToMonitor,
-        mergeRequestedParameters,
-        timestampsToReturn
-      );
-      if (isLog) inspector('opcua-client.class::subscriptionMonitor.monitoredItem:', monitoredItem);
+        // subscription.monitor
+        const mergeItemToMonitor = loMerge({}, defaultItemToMonitor, itemToMonitor);
+        const mergeRequestedParameters = loMerge({}, defaultRequestedParameters, requestedParameters);
 
-      monitoredItem.on('changed', (dataValue) => {
-        if (isLog) inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
-        cb(nodeId, dataValue);
-      });
+        const monitoredItem = await this.subscription.monitor(
+          mergeItemToMonitor,
+          mergeRequestedParameters,
+          timestampsToReturn
+        );
+        if (isLog) inspector('opcua-client.class::subscriptionMonitor.monitoredItem:', monitoredItem);
+
+        // Run subscriptionHandler
+        monitoredItem.on('changed', (dataValue) => {
+          if (isLog) inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
+          if (cb) {
+            cb(itemToMonitor, dataValue);
+          } else {
+            subscriptionHandler(itemToMonitor, dataValue);
+          }
+
+        });
+      }
     } catch (error) {
       throw new errors.GeneralError(error.message);
     }

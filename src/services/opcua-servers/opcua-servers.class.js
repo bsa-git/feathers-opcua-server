@@ -44,6 +44,7 @@ const _getServerForProvider = (server) => {
   };
 };
 
+
 /**
  * Execute service action
  * @param {Object} service 
@@ -53,8 +54,10 @@ const _executeAction = async (service, data) => {
   let server, opcuaServer, resultAction, id;
   let AddressSpaceParams, addressSpaceGetters, addressSpaceMethods;
   try {
-    // inspector('service.opcua-servers.executeAction.app:', service.app);
-    // inspector('service.opcua-servers.executeAction.opcuaServers:', service.opcuaServers);
+    // Get OPC-UA server
+    if (data.action !== 'create') {
+      opcuaServer = await service.get(data.id);
+    }
     // Run service action
     switch (`${data.action}`) {
     case 'create':
@@ -67,10 +70,7 @@ const _executeAction = async (service, data) => {
       // Server create
       await server.create();
       // Server constructAddressSpace
-      AddressSpaceParams = require(`${appRoot}${data.paths.options}`);
-      addressSpaceGetters = require(`${appRoot}${data.paths.getters}`);
-      addressSpaceMethods = require(`${appRoot}${data.paths.methods}`);
-      server.constructAddressSpace(AddressSpaceParams, addressSpaceGetters, addressSpaceMethods);
+      server.constructAddressSpace();
       // Server start
       await server.start();
       // Add opcuaServer to server list
@@ -85,16 +85,12 @@ const _executeAction = async (service, data) => {
       resultAction = data.provider ? Object.assign({}, opcuaServer, _getServerForProvider(opcuaServer.server)) : opcuaServer;
       break;
     case 'start':
-      // Shutdown OPC-UA server
-      opcuaServer = service.get(data.id);
       // Server start
       await opcuaServer.server.start();
       // Get resultAction
       resultAction = data.provider ? Object.assign({}, opcuaServer, _getServerForProvider(opcuaServer.server)) : opcuaServer;
       break;
     case 'shutdown':
-      // Shutdown OPC-UA server
-      opcuaServer = service.get(data.id);
       await opcuaServer.server.shutdown(data.timeout ? data.timeout : 0);
       // Get resultAction
       resultAction = data.provider ? Object.assign({}, opcuaServer, _getServerForProvider(opcuaServer.server)) : opcuaServer;

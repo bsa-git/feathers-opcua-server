@@ -1,0 +1,28 @@
+[
+  {
+    "id": "UA-CHERKASSY-AZOT-M5.TEST1",
+    "name": "380-472-00203826-TEST1",
+    "endpointUrl": "",
+    "srvServiceUrl": "http://localhost:3030",
+    "clientServiceUrl": "http://localhost:3030",
+    "paths": {
+      "options": "/src/plugins/test-helpers/AddressSpaceTestOptions.json",
+      "getters": "/src/plugins/test-helpers/opcua-addressspace-getters",
+      "methods": "/src/plugins/test-helpers/opcua-addressspace-methods",
+      "subscriptions": "/src/plugins/test-helpers/opcua-addressspace-subscriptions"
+    }
+  },
+  {
+    "id": "UA-CHERKASSY-AZOT-M5",
+    "name": "380-472-00203826-M5",
+    "endpointUrl": "",
+    "srvServiceUrl": "http://localhost:3030",
+    "clientServiceUrl": "http://localhost:3030",
+    "paths": {
+      "options": "/src/plugins/test-helpers/AddressSpaceTestOptions.json",
+      "getters": "/src/plugins/test-helpers/opcua-addressspace-getters",
+      "methods": "/src/plugins/test-helpers/opcua-addressspace-methods",
+      "subscriptions": "/src/plugins/test-helpers/opcua-addressspace-subscriptions"
+    }
+  }
+]

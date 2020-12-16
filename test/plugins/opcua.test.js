@@ -2,9 +2,6 @@
 const assert = require('assert');
 const app = require('../../src/app');
 const { getValueFromNodeId, OpcuaServer, OpcuaClient, pause, getDateTimeSeparately, isObject, inspector, appRoot } = require('../../src/plugins');
-const AddressSpaceParams = require(`${appRoot}/src/plugins/test-helpers/AddressSpaceTestOptions.json`);
-const addressSpaceGetters = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-getters`);
-const addressSpaceMethods = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-methods`);
 const chalk = require('chalk');
 const moment = require('moment');
 const loRound = require('lodash/round');
@@ -20,17 +17,27 @@ const debug = require('debug')('app:test.opcua');
 const isDebug = false;
 const isLog = false;
 
+// Options
+const srvParams = {
+  port: 26544, // default - 26543, 26544 (opcua.test), 26545 (opcua.test2), 26546 (opcua-clients.test), 26547 (opcua-servers.test),
+  serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1' },
+};
+
+const clientParams = {
+  applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1',
+};
+
 let server = null, client = null;
 let opcuaServer = null, opcuaClient = null;
 
 /**
  * Call back function for subscription monitor
- * @param {String} nodeId 
+ * @param {Object} params 
  * @param {Object} DataValue 
  */
-const cbSubscriptionMonitor = async (nodeId, dataValue) => {
-  if (isDebug) debug('cbSubscriptionMonitor.nodeId:', nodeId);
-  const browseName = getValueFromNodeId(nodeId);
+const cbSubscriptionMonitor = async (params, dataValue) => {
+  if (isDebug) debug('cbSubscriptionMonitor.nodeId:', params.nodeId);
+  const browseName = getValueFromNodeId(params.nodeId);
   const value = loRound(dataValue.value.value, 3);
   console.log(chalk.green(`subscription::${browseName}:`), chalk.cyan(value));
 };
@@ -40,13 +47,9 @@ describe('<<=== OPC-UA: Test ===>>', () => {
   before(async () => {
     try {
       // Create OPC-UA server
-      server = new OpcuaServer(app, {
-        port:26544, //  default - 26543, 26544 (opcua.test), 26545 (opcua.test2), 26546 (opcua-clients.test), 26547 (opcua-servers.test),
-        serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5' },
-        buildInfo: { productName: '380-472-00203826-M5' }
-      });
+      server = new OpcuaServer(app, srvParams);
       // Create OPC-UA client
-      client = new OpcuaClient(app);
+      client = new OpcuaClient(app, clientParams);
       debug('OPCUA - Test::before: Done');
     } catch (error) {
       console.error('OPCUA - Test::before.error:', error.message);
@@ -80,7 +83,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA server start', async () => {
       try {
         await server.create();
-        server.constructAddressSpace(AddressSpaceParams, addressSpaceGetters, addressSpaceMethods);
+        server.constructAddressSpace();
         const endpoints = await server.start();
         opcuaServer = server.opcuaServer;
         console.log(chalk.green('server.securityMode'), chalk.cyan(endpoints[0].securityMode));
@@ -95,8 +98,6 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       try {
         client.create();
         opcuaClient = client.opcuaClient;
-        // const servers = await opcuaServer.findServers;
-        // debug('servers', servers);
         assert.ok(true, 'OPC-UA client create');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -138,8 +139,8 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA client session browse', async () => {
       try {
         let browseResult = null, browseNames = '', nodeIds = '';
-        const folder = 'RootFolder';
-        browseResult = await client.sessionBrowse({ nodeId: folder });// RootFolder|ObjectsFolder
+        const folder = 'RootFolder';// RootFolder|ObjectsFolder
+        browseResult = await client.sessionBrowse({ nodeId: folder });
         // inspector('OPC-UA client session browse.browseResult:', browseResult);
         const statusCode = browseResult[0].statusCode.name;
         console.log(chalk.green(`sessionBrowse.${folder}.statusCode:`), chalk.cyan(statusCode));
@@ -156,8 +157,8 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA client session browse2', async () => {
       try {
         let browseResult = null, browseNames = '', nodeIds = '';
-        const folder = 'ObjectsFolder';
-        browseResult = await client.sessionBrowse(folder);// RootFolder|ObjectsFolder
+        const folder = 'ObjectsFolder';// RootFolder|ObjectsFolder
+        browseResult = await client.sessionBrowse(folder);
         // inspector('OPC-UA client session browse.browseResult:', browseResult);
         const statusCode = browseResult[0].statusCode.name;
         console.log(chalk.green(`sessionBrowse.${folder}.statusCode:`), chalk.cyan(statusCode));
@@ -384,9 +385,9 @@ describe('<<=== OPC-UA: Test ===>>', () => {
 
     //============== START SUBSCRIPTION ====================//
 
-    it('OPC-UA client subscription create', () => {
+    it('OPC-UA client subscription create', async () => {
       try {
-        client.subscriptionCreate();
+        await client.subscriptionCreate();
         assert.ok(true, 'OPC-UA client subscription create');
       } catch (error) {
         assert.fail(`Should never get here: ${error.message}`);
@@ -397,7 +398,8 @@ describe('<<=== OPC-UA: Test ===>>', () => {
       try {
         const nameNodeIds = ['Device1.Temperature'];
         client.getNodeIds(nameNodeIds).forEach(async nodeId => {
-          await client.subscriptionMonitor(cbSubscriptionMonitor, { nodeId });
+          // await client.subscriptionMonitor(cbSubscriptionMonitor, { nodeId });
+          await client.subscriptionMonitor(null, { nodeId });
         });
         // await pause(1000);
         assert.ok(true, 'OPC-UA client subscription monitor');

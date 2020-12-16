@@ -18,7 +18,8 @@
       "dataType": "Double",
       "variableGetType": "get",
       "getter": "valueSimulate1",
-      "getterParams": { "value": 100 }
+      "getterParams": { "value": 100 },
+      "subscription": "onChangedCommonHandler"
     },
     {
       "browseName": "Device1.Variable2",

@@ -1,11 +1,17 @@
 /* eslint-disable no-unused-vars */
-const { join } = require('path');
-const appRoot = join(__dirname, '../../../');
+const errors = require('@feathersjs/errors');
+const { inspector, appRoot, doesFileExist } = require('../lib');
+const {
+  extractFullyQualifiedDomainName
+} = require('node-opcua');
 const moment = require('moment');
+
 const loToInteger = require('lodash/toInteger');
 const loIsObject = require('lodash/isObject');
 
 const debug = require('debug')('app:opcua-helper');
+const isLog = true;
+const isDebug = false;
 
 /**
  * @method nodeIdToString
@@ -14,7 +20,7 @@ const debug = require('debug')('app:opcua-helper');
  * @returns {String}
  */
 const nodeIdToString = function (nodeId = '') {
-  return loIsObject(nodeId)? nodeId.toString() : nodeId;
+  return loIsObject(nodeId) ? nodeId.toString() : nodeId;
 };
 
 /**
@@ -43,7 +49,7 @@ const getNodeIdType = function (nodeId = '') {
 const getValueFromNodeId = function (nodeId) {
   let value = null;
   nodeId = nodeIdToString(nodeId);
-  if(nodeId){
+  if (nodeId) {
     value = nodeId.split(';')[1].split('=')[1];
   }
   return value;
@@ -59,11 +65,64 @@ const getValueFromNodeId = function (nodeId) {
 const getNameSpaceFromNodeId = function (nodeId = '') {
   let ns = undefined;
   nodeId = nodeIdToString(nodeId);
-  if(nodeId){
+  if (nodeId) {
     ns = nodeId.split(';')[0].split('=')[1];
     ns = loToInteger(ns);
   }
   return ns;
+};
+
+/**
+ * @method getOpcuaConfig
+ * @param {String} id 
+ * @returns {Object}
+ */
+const getOpcuaConfig = function (id) {
+  const opcuaOptions = require(`${appRoot}/src/api/opcua/OPCUA_Config.json`);
+  const opcuaOption = opcuaOptions.find(opt => opt.id === id);
+  return opcuaOption;
+};
+
+/**
+ * @method getSubscriptionHandler
+ * @param {String} id 
+ * @param {String} nameFile 
+ * @returns {Function}
+ */
+const getSubscriptionHandler = function (id, nameFile) {
+  // Get opcuaOption 
+  const opcuaOptions = require(`${appRoot}/src/api/opcua/OPCUA_Config.json`);
+  const opcuaOption = opcuaOptions.find(opt => opt.id === id);
+
+  // Get subscriptionHandler
+  const subscriptionHandlers = require(`${appRoot}${opcuaOption.paths.subscriptions}`);
+  return subscriptionHandlers[nameFile];
+};
+
+/**
+ * @method getServerService
+ * @param {Object} app
+ * @param {String} id 
+ * @returns {Object}
+ */
+const getServerService = function (app = null, id) {
+  let srvService = null;
+  const opcuaConfig = getOpcuaConfig(id);
+  if(! opcuaConfig){
+    throw new errors.BadRequest(`The opcua server already exists for this id = '${id}' in the server list`);
+  }
+  return srvService;
+};
+
+/**
+ * @method getClientService
+ * @param {Object} app
+ * @param {String} id 
+ * @returns {Object}
+ */
+const getClientService = function (app = null, id) {
+  let clientService = null;
+  return clientService;
 };
 
 
@@ -71,5 +130,9 @@ module.exports = {
   nodeIdToString,
   getNodeIdType,
   getValueFromNodeId,
-  getNameSpaceFromNodeId
+  getNameSpaceFromNodeId,
+  getOpcuaConfig,
+  getSubscriptionHandler,
+  getServerService,
+  getClientService
 };

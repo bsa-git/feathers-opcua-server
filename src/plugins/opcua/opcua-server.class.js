@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const moment = require('moment');
-const { inspector, getBrowseNameFromNodeId, appRoot } = require('../lib');
+const { inspector, appRoot, getLocalIpAddress, getIpAddresses, getHostname, getPaseUrl, isIP, getMyIp } = require('../lib');
+const { getOpcuaConfig } = require('./opcua-helper');
 const {
   OPCUAServer,
   Variant,
@@ -10,11 +11,13 @@ const {
   StatusCodes,
   VariantArrayType,
   standardUnits,
-  makeAccessLevelFlag
+  makeAccessLevelFlag,
+  extractFullyQualifiedDomainName
 } = require('node-opcua');
 const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/OPCUAServerOptions`);
 
 const os = require('os');
+// const net = require('net');
 const loMerge = require('lodash/merge');
 const loOmit = require('lodash/omit');
 const chalk = require('chalk');
@@ -22,6 +25,8 @@ const chalk = require('chalk');
 const debug = require('debug')('app:plugins.opcua-server.class');
 const isLog = true;
 const isDebug = false;
+
+
 
 class OpcuaServer {
   /**
@@ -32,6 +37,9 @@ class OpcuaServer {
   constructor(app, params = {}) {
     // Set process.on to event 'SIGINT'
     this.isOnSignInt = false;
+    // Get opcua config
+    const opcuaConfig = getOpcuaConfig(params.serverInfo.applicationName);
+    params.buildInfo = { productName: opcuaConfig.name };
     this.params = loMerge(opcuaDefaultServerOptions, params);
     this.app = app;
     this.opcuaServer = null;
@@ -48,8 +56,19 @@ class OpcuaServer {
         objects: [],
         variables: [],
         methods: []
+      },
+      paths: {
+        options: '',
+        getters: '',
+        methods: '',
+        subscriptions: '',
       }
     };
+    debug('os.hostname:', getHostname());
+    debug('os.getIpAddresses:', getIpAddresses());
+    debug('url.myURL:', getPaseUrl('https://user:pass@sub.example.com:8080/p/a/t/h?query=string#hash'));
+    debug('net.isIp:', isIP(getMyIp()));// 
+    
   }
 
   /**
@@ -99,6 +118,9 @@ class OpcuaServer {
       this.currentState.isCreated = true;
       // OPC-UA server created.
       console.log(chalk.yellow('Server created'));
+
+      debug('extractFullyQualifiedDomainName:', await extractFullyQualifiedDomainName());
+
     } catch (error) {
       throw new errors.GeneralError(error.message);
     }
@@ -369,10 +391,23 @@ class OpcuaServer {
    * @param {Object} getters
    * @param {Object} methods  
    */
-  constructAddressSpace(params = {}, getters = {}, methods = {}) {
+  constructAddressSpace(params = null, getters = null, methods = null) {
     try {
       let addedVariable, addedMethod, object = null;
-      if (!this.opcuaServer) return;
+      this.opcuaServerNotCreated();
+      const id = this.params.serverInfo.applicationName;
+      const opcuaConfig = getOpcuaConfig(id);
+      // Set arguments
+      if (params === null) {
+        params = require(`${appRoot}${opcuaConfig.paths.options}`);
+      }
+      if (getters === null) {
+        getters = require(`${appRoot}${opcuaConfig.paths.getters}`);
+      }
+      if (methods === null) {
+        methods = require(`${appRoot}${opcuaConfig.paths.methods}`);
+      }
+      // Get addressSpace and  namespace
       const addressSpace = this.opcuaServer.engine.addressSpace;
       const namespace = addressSpace.getOwnNamespace();
       // Add objects
@@ -505,11 +540,11 @@ class OpcuaServer {
                     // Push method to paramsAddressSpace.methods
                     this.currentState.paramsAddressSpace.methods.push(loMerge(
                       loOmit(methodParams, ['componentOf', 'propertyOf', 'organizedBy', 'encodingOf']),
-                      { 
+                      {
                         nodeId: addedMethod.nodeId.toString(),
                         ownerName: m.ownerName,
                       }));
-                    
+
                     // optionally, we can adjust userAccessLevel attribute 
                     if (m.userAccessLevel && m.userAccessLevel.inputArguments) {
                       addedMethod.inputArguments.userAccessLevel = makeAccessLevelFlag(m.userAccessLevel.inputArguments);
@@ -527,6 +562,8 @@ class OpcuaServer {
           }
         });
         this.currentState.isConstructedAddressSpace = true;
+        // Set currentState.paths
+        Object.assign(this.currentState.paths, opcuaConfig.paths);
         // inspector('currentState:', this.currentState);
         console.log(chalk.yellow('Server constructed address space'));
       }

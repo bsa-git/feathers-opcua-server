@@ -77,6 +77,7 @@ const _getClientForProvider = (client) => {
   };
 };
 
+
 /**
  * Execute service action
  * @param {Object} service 
@@ -235,8 +236,6 @@ class OpcuaClients {
   }
 
   async find(params) {
-    // Just return all our opcuaClients
-    // return this.opcuaClients;
     let opcuaClients, opcuaClient;
     // Just return all our opcuaServers
     opcuaClients = this.opcuaClients.map(client => {
@@ -293,10 +292,6 @@ class OpcuaClients {
 
   async remove(id, params) {
     let opcuaClient = await this.get(id);
-
-    // const _client = _getClientForProvider(opcuaClient.client);
-    // debug('remove._client:', _client);
-
     if (opcuaClient.client.subscription) {
       await opcuaClient.client.subscriptionTerminate();
     }

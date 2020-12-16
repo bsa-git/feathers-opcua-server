@@ -1,15 +1,9 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
 const app = require('../../src/app');
-const { OpcuaServer, OpcuaClient, appRoot, inspector } = require('../../src/plugins');
-const AddressSpaceParams = require(`${appRoot}/src/plugins/test-helpers/AddressSpaceTestOptions.json`);
-const addressSpaceGetters = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-getters`);
-const addressSpaceMethods = require(`${appRoot}/src/plugins/test-helpers/opcua-addressspace-methods`);
+const { OpcuaServer, OpcuaClient, appRoot, inspector, getOpcuaConfig } = require('../../src/plugins');
 const chalk = require('chalk');
 const moment = require('moment');
-
-// serverInfo.applicationName = 'NodeOPCUA_380-472-00203826-M5'; // NodeOPCUA_UA-CHERKASSY-AZOT-M5
-// buildInfo.productName
 
 const {
   // Variant,
@@ -20,9 +14,19 @@ const {
   makeBrowsePath
 } = require('node-opcua');
 
-const debug = require('debug')('app:test.opcua');
+const debug = require('debug')('app:test.opcua2');
 const isDebug = false;
 const isLog = false;
+
+// Options
+const srvParams = {
+  port: 26545, // default - 26543, 26544 (opcua.test), 26545 (opcua.test2), 26546 (opcua-clients.test), 26547 (opcua-servers.test),
+  serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1' },
+};
+
+const clientParams = {
+  applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1',
+};
 
 let server = null, client = null;
 let opcuaServer = null, opcuaClient = null;
@@ -32,13 +36,9 @@ describe('<<=== OPC-UA: Test2 ===>>', () => {
   before(async () => {
     try {
       // Create OPC-UA server
-      server = new OpcuaServer(app, {
-        port:26545, // default - 26543, 26544 (opcua.test), 26545 (opcua.test2), 26546 (opcua-clients.test), 26547 (opcua-servers.test),
-        serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5' },
-        buildInfo: { productName: '380-472-00203826-M5' }
-      });
+      server = new OpcuaServer(app, srvParams);
       // Create OPC-UA client
-      client = new OpcuaClient(app);
+      client = new OpcuaClient(app, clientParams);
       debug('OPCUA - Test2::before: Done');
     } catch (error) {
       console.error('OPCUA - Test2::before.error:', error.message);
@@ -69,7 +69,7 @@ describe('<<=== OPC-UA: Test2 ===>>', () => {
     it('OPC-UA server start', async () => {
       try {
         await server.create();
-        server.constructAddressSpace(AddressSpaceParams, addressSpaceGetters, addressSpaceMethods);
+        server.constructAddressSpace();
         const endpoints = await server.start();
         opcuaServer = server.opcuaServer;
         assert.ok(true, 'OPC-UA server start');

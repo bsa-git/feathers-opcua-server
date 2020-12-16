@@ -15,13 +15,7 @@ let srvData = {
   action: 'create',
   params: {
     port: 26547, // default - 26543, 26544 (opcua.test), 26545 (opcua.test2), 26546 (opcua-clients.test), 26547 (opcua-servers.test),
-    serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5' },
-    buildInfo: { productName: '380-472-00203826-M5' }
-  },
-  paths: {
-    options: '/src/plugins/test-helpers/AddressSpaceTestOptions.json',
-    getters: '/src/plugins/test-helpers/opcua-addressspace-getters',
-    methods: '/src/plugins/test-helpers/opcua-addressspace-methods',
+    serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1' },
   }
 };
 
@@ -118,7 +112,6 @@ describe('<<=== OPC-UA: \'opcua-servers\' service ===>>', () => {
 
   it('OPC-UA servers: find services', async () => {
     const service = app.service('opcua-servers');
-    // const params = { provider: 'rest' };
     const opcuaServers = await service.find();
     if (isLog) inspector('find services.ids:', opcuaServers.map(srv => srv.id));
     // inspector('find services.ids:', opcuaServers.map(srv => srv.id));

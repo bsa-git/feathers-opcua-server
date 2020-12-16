@@ -24,13 +24,7 @@ const srvData = {
   action: 'create',
   params: {
     port: 26546, // default - 26543, 26544 (opcua.test), 26545 (opcua.test2), 26546 (opcua-clients.test), 26547 (opcua-servers.test),
-    serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5' },
-    buildInfo: { productName: '380-472-00203826-M5' }
-  },
-  paths: {
-    options: '/src/plugins/test-helpers/AddressSpaceTestOptions.json',
-    getters: '/src/plugins/test-helpers/opcua-addressspace-getters',
-    methods: '/src/plugins/test-helpers/opcua-addressspace-methods',
+    serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1' },
   }
 };
 
@@ -38,8 +32,7 @@ const clientData = {
   action: 'create',
   endpointUrl: 'opc.tcp://localhost:26546',
   params: {
-    applicationName: 'UA-CHERKASSY-AZOT-M5',
-    clientName: '380-472-00203826-M5',
+    applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1',
   }
 };
 
@@ -52,12 +45,12 @@ let opcuaUser = null;
 
 /**
  * Call back function for subscription monitor
- * @param {String} nodeId 
+ * @param {Object} params 
  * @param {Object} DataValue 
  */
-const cbSubscriptionMonitor = async (nodeId, dataValue) => {
-  if (isDebug) debug('cbSubscriptionMonitor.nodeId:', nodeId);
-  const browseName = getValueFromNodeId(nodeId);
+const cbSubscriptionMonitor = async (params, dataValue) => {
+  if (isDebug) debug('cbSubscriptionMonitor.nodeId:', params.nodeId);
+  const browseName = getValueFromNodeId(params.nodeId);
   const value = loRound(dataValue.value.value, 3);
   console.log(chalk.green(`subscription::${browseName}:`), chalk.cyan(value));
 };
@@ -67,7 +60,6 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
 
   before(function (done) {
     if (isDebug) debug('before Start!');
-    // debug('before Start!');
     server = app.listen(port);
     server.once('listening', () => {
       setTimeout(() => done(), 500);
@@ -76,7 +68,6 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
 
   after(function (done) {
     if (isDebug) debug('after Start!');
-    // debug('after Start!');
     server.close();
     setTimeout(() => done(), 500);
   });

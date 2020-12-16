@@ -4,7 +4,6 @@ const { join } = require('path');
 
 module.exports = function doesFileExist (path, root = null) {
   path = root ? join(root, path) : path;
-
   try {
     return statSync(path).isFile();
   } catch (err) {
