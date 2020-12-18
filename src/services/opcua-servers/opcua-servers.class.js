@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const { OpcuaServer, inspector, appRoot } = require('../../plugins');
+const { isOpcuaServerInList, getServerForProvider } = require('../../plugins/opcua/opcua-helper');
 const chalk = require('chalk');
 const moment = require('moment');
+
 const {
   Variant,
   DataType,
@@ -18,31 +20,31 @@ const debug = require('debug')('app:service.opcua-servers');
 const isDebug = false;
 const isLog = false;
 
-/**
- * Is opcua server
- * 
- * @param {OpcuaServers} service 
- * @param {String} id 
- * @returns {Boolean}
- */
-const _isOpcuaServer = (service, id) => {
-  let opcuaServer = null;
-  opcuaServer = service.opcuaServers.find(srv => srv.id === id);
-  return !!opcuaServer;
-};
+// /**
+//  * Is opcua server
+//  * 
+//  * @param {OpcuaServers} service 
+//  * @param {String} id 
+//  * @returns {Boolean}
+//  */
+// const _isOpcuaServer = (service, id) => {
+//   let opcuaServer = null;
+//   opcuaServer = service.opcuaServers.find(srv => srv.id === id);
+//   return !!opcuaServer;
+// };
 
-/**
- * Get server for provider
- * @param {Object} server 
- * @returns {Object}
- */
-const _getServerForProvider = (server) => {
-  return {
-    server: {
-      currentState: server.getCurrentState()
-    }
-  };
-};
+// /**
+//  * Get server for provider
+//  * @param {Object} server 
+//  * @returns {Object}
+//  */
+// const _getServerForProvider = (server) => {
+//   return {
+//     server: {
+//       currentState: server.getCurrentState()
+//     }
+//   };
+// };
 
 
 /**
@@ -62,7 +64,7 @@ const _executeAction = async (service, data) => {
     switch (`${data.action}`) {
     case 'create':
       id = data.params.serverInfo.applicationName;
-      if (_isOpcuaServer(service, id)) {
+      if (isOpcuaServerInList(service, id)) {
         throw new errors.BadRequest(`The opcua server already exists for this id = '${id}' in the server list`);
       }
       // Create OPC-UA server
@@ -82,18 +84,18 @@ const _executeAction = async (service, data) => {
       };
       service.opcuaServers.push(opcuaServer);
       // Get resultAction
-      resultAction = data.provider ? Object.assign({}, opcuaServer, _getServerForProvider(opcuaServer.server)) : opcuaServer;
+      resultAction = data.provider ? Object.assign({}, opcuaServer, getServerForProvider(opcuaServer.server)) : opcuaServer;
       break;
     case 'start':
       // Server start
       await opcuaServer.server.start();
       // Get resultAction
-      resultAction = data.provider ? Object.assign({}, opcuaServer, _getServerForProvider(opcuaServer.server)) : opcuaServer;
+      resultAction = data.provider ? Object.assign({}, opcuaServer, getServerForProvider(opcuaServer.server)) : opcuaServer;
       break;
     case 'shutdown':
       await opcuaServer.server.shutdown(data.timeout ? data.timeout : 0);
       // Get resultAction
-      resultAction = data.provider ? Object.assign({}, opcuaServer, _getServerForProvider(opcuaServer.server)) : opcuaServer;
+      resultAction = data.provider ? Object.assign({}, opcuaServer, getServerForProvider(opcuaServer.server)) : opcuaServer;
       break;
     default:
       throw new errors.BadRequest(`No such action - '${data.action}'`);

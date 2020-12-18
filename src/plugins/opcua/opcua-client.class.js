@@ -1104,7 +1104,7 @@ class OpcuaClient {
      *   );
      */
   async subscriptionMonitor(cb = null, itemToMonitor = {}, requestedParameters = {}, timestampsToReturn = TimestampsToReturn.Neither) {
-    let subscriptionHandler, subscriptionHandlerName = 'onChangedCommonHandler';
+    let subscriptionHandler, subscriptionHandlerName = '';
     try {
       this.subscriptionNotCreated();
       const nodeId = itemToMonitor.nodeId;

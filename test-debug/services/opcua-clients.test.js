@@ -2,7 +2,15 @@
 const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port') || 3030;
-const { getValueFromNodeId, inspector, isObject, getDateTimeSeparately, pause } = require('../../src/plugins');
+const { 
+  getServerService, 
+  getClientService, 
+  getValueFromNodeId,  
+  inspector, 
+  isObject, 
+  getDateTimeSeparately, 
+  pause } = require('../../src/plugins');
+
 const chalk = require('chalk');
 const moment = require('moment');
 
@@ -36,24 +44,14 @@ const clientData = {
   }
 };
 
+const id = srvData.params.serverInfo.applicationName;
+
 const userInfo = {
   email: 'opcua-clients@example.com',
   password: 'supersecret'
 };
 
 let opcuaUser = null;
-
-/**
- * Call back function for subscription monitor
- * @param {Object} params 
- * @param {Object} DataValue 
- */
-const cbSubscriptionMonitor = async (params, dataValue) => {
-  if (isDebug) debug('cbSubscriptionMonitor.nodeId:', params.nodeId);
-  const browseName = getValueFromNodeId(params.nodeId);
-  const value = loRound(dataValue.value.value, 3);
-  console.log(chalk.green(`subscription::${browseName}:`), chalk.cyan(value));
-};
 
 describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
   let server;
@@ -72,24 +70,22 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     setTimeout(() => done(), 500);
   });
 
-  it('OPC-UA clients: registered the service', () => {
-    const service = app.service('opcua-clients');
+  it('OPC-UA clients: registered the service', async () => {
+    const service = await getClientService(app, id);
     assert.ok(service, 'OPC-UA clients: registered the service');
   });
 
-  it('OPC-UA servers: registered the service', () => {
-    const service = app.service('opcua-servers');
+  it('OPC-UA servers: registered the service', async () => {
+    const service = await getServerService(app, id);
     assert.ok(service, 'OPC-UA servers: registered the service');
   });
 
   //===== SERVER CREATE/CLIENT CREATE =======//
   it('OPC-UA servers: created the service', async () => {
-    const service = app.service('opcua-servers');
+    const service = await getServerService(app, id);
     // service create
     const opcuaServer = await service.create(srvData);
     if (isLog) inspector('created the service.opcuaServer:', opcuaServer.server.getCurrentState());
-    // inspector('created the service.opcuaServer:', opcuaServer.server.getCurrentState());
-
     assert.ok(opcuaServer, 'OPC-UA servers: created the service');
   });
 
@@ -108,19 +104,18 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
   });
 
   it('OPC-UA clients: created the service', async () => {
-    const service = app.service('opcua-clients');
+    const service = await getClientService(app, id);
     // service create
     const params = { user: opcuaUser, provider: 'rest', authenticated: true };
     const opcuaClient = await service.create(clientData, params);
+    debug('Service mixin.getNodeIds:', await service.getNodeIds(id, ['Device1.Temperature']));
     if (isLog) inspector('created the service.opcuaClient:', opcuaClient);
-    // inspector('created the service.opcuaClient:', opcuaClient);
-
     assert.ok(opcuaClient, 'OPC-UA clients: created the service');
   });
 
   it('OPC-UA clients: Error in creating an existing service', async () => {
-    const service = app.service('opcua-clients');
     try {
+      const service = await getClientService(app, id);
       // service create
       await service.create(clientData);
       assert.ok(false, 'OPC-UA clients: Error in creating an existing service');
@@ -130,32 +125,25 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
   });
 
   it('OPC-UA clients: get the service', async () => {
-    const service = app.service('opcua-clients');
-    const id = clientData.params.applicationName;
+    const service = await getClientService(app, id);
     const opcuaClient = await service.get(id);
     if (isLog) inspector('get the service.currentState:', opcuaClient.client.getCurrentState());
-    // inspector('get the service.currentState:', opcuaClient.client.getCurrentState());
-
     assert.ok(opcuaClient, 'OPC-UA servers: get the service');
   });
 
   it('OPC-UA clients: find services', async () => {
-    const service = app.service('opcua-clients');
+    const service = await getClientService(app, id);
     const opcuaClients = await service.find();
     if (isLog) inspector('find services.ids:', opcuaClients.map(cln => cln.id));
-    // inspector('find services.ids:', opcuaClients.map(cln => cln.id));
-
     assert.ok(opcuaClients.length, 'OPC-UA clients: find services');
   });
 
   it('OPC-UA clients: remove the service', async () => {
     try {
       // service remove
-      const service = app.service('opcua-clients');
-      const id = clientData.params.applicationName;
+      const service = await getClientService(app, id);
       const opcuaClient = await service.remove(id);
       if (isLog) inspector('Remove the service:', opcuaClient);
-      // inspector('Remove the service:', opcuaClient);
       assert.ok(opcuaClient, 'OPC-UA clients: remove the service');
       await service.get(id);
       assert.ok(false, 'OPC-UA clients: remove the service');
@@ -167,7 +155,7 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
   it('OPC-UA clients: created the service', async () => {
     let opcuaClient;
     // service create
-    const service = app.service('opcua-clients');
+    const service = await getClientService(app, id);
     opcuaClient = await service.create(clientData);
     const currentState = opcuaClient.client.getCurrentState();
     if (isLog) inspector('created the service:', currentState);
@@ -176,27 +164,23 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     // Get opcuaClient
     opcuaClient = await service.get(currentState.id);
     if (isDebug) debug('get the service.id:', currentState.id);
-    debug('get the service.id:', currentState.id);
+    // debug('get the service.id:', currentState.id);
     assert.ok(opcuaClient, 'OPC-UA clients: created the service');
   });
 
   it('OPC-UA clients: update the service', async () => {
-    const service = app.service('opcua-clients');
-    const id = clientData.params.applicationName;
+    const service = await getClientService(app, id);
     const opcuaClient = await service.update(id, clientData);
     if (isLog) inspector('Update the clients:', opcuaClient.client.getCurrentState());
     // inspector('Update the clients:', opcuaClient.client.getCurrentState());
-
     assert.ok(opcuaClient, 'OPC-UA clients: update the service');
   });
 
   it('OPC-UA clients: patch the service', async () => {
-    const service = app.service('opcua-clients');
-    const id = clientData.params.applicationName;
+    const service = await getClientService(app, id);
     const opcuaClient = await service.patch(id, clientData);
     if (isLog) inspector('Patch the clients:', opcuaClient.client.getCurrentState());
-    inspector('Patch the clients:', opcuaClient.client.getCurrentState());
-
+    // inspector('Patch the clients:', opcuaClient.client.getCurrentState());
     assert.ok(opcuaClient, 'OPC-UA clients: patch the service');
   });
 
@@ -204,11 +188,11 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
   //============== CLIENT SESSION READ NAMESPACE ARRAY ====================//
 
   it('OPC-UA clients: session read namespace array', async () => {
-    const service = app.service('opcua-clients');
+    const service = await getClientService(app, id);
     // Execute action -> sessionReadNamespaceArray
     const data = {
+      id,
       action: 'sessionReadNamespaceArray',
-      id: clientData.params.applicationName
     };
     const result = await service.create(data);
     console.log(chalk.green('sessionReadNamespaceArray:'), chalk.cyan(`[ ${result} ]`));
@@ -219,13 +203,11 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
 
   it('OPC-UA clients: session browse', async () => {
     let browseResult = null, browseNames = '', nodeIds = '';
-    // const folder = 'RootFolder';
-
-    const service = app.service('opcua-clients');
+    const service = await getClientService(app, id);
     // Execute action -> sessionBrowse
     const data = {
+      id,
       action: 'sessionBrowse',
-      id: clientData.params.applicationName,
       path: 'RootFolder'// RootFolder|ObjectsFolder
     };
     browseResult = await service.create(data);
@@ -241,11 +223,11 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
   });
 
   it('OPC-UA clients: session translate browse path', async () => {
-    const service = app.service('opcua-clients');
+    const service = await getClientService(app, id);
     // Execute action -> sessionTranslateBrowsePath
     const data = {
+      id,
       action: 'sessionTranslateBrowsePath',
-      id: clientData.params.applicationName,
       folder: 'RootFolder',
       path: '/Objects/Server.ServerStatus.BuildInfo.ProductName'
     };
@@ -264,12 +246,11 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
 
   it('OPC-UA clients: session read', async () => {
     let data, readResult = null, value = null;
-
-    const service = app.service('opcua-clients');
+    const service = await getClientService(app, id);
     // Execute action -> sessionRead
     data = {
+      id,
       action: 'sessionRead',
-      id: clientData.params.applicationName,
       nameNodeIds: 'Device2.PressureVesselDevice',
       attributeIds: AttributeIds.BrowseName
     };
@@ -279,8 +260,8 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     console.log(chalk.green('pressureVesselDevice.BrowseName:'), chalk.cyan(isObject(value) ? value.name : loRound(value, 3)));
 
     data = {
+      id,
       action: 'sessionRead',
-      id: clientData.params.applicationName,
       nameNodeIds: { nodeId: 'ns=1;s=Device2.PressureVesselDevice', attributeId: AttributeIds.Value }
     };
     readResult = await service.create(data);
@@ -289,8 +270,8 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     console.log(chalk.green('pressureVesselDevice.value:'), chalk.cyan(isObject(value) ? value.name : loRound(value, 3)));
 
     data = {
+      id,
       action: 'sessionRead',
-      id: clientData.params.applicationName,
       nameNodeIds: ['Device1.Temperature', 'Device2.PressureVesselDevice'],
       attributeIds: [AttributeIds.Value, AttributeIds.BrowseName]
     };
@@ -308,11 +289,11 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
 
   it('OPC-UA clients: session read variable value', async () => {
     let value = null, readResult = null;
-    const service = app.service('opcua-clients');
+    const service = await getClientService(app, id);
     // Execute action -> sessionReadVariableValue
     const data = {
+      id,
       action: 'sessionReadVariableValue',
-      id: clientData.params.applicationName,
       nameNodeIds: ['Device1.Temperature', 'Device2.PressureVesselDevice']
     };
     readResult = await service.create(data);
@@ -328,11 +309,11 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
 
   it('OPC-UA client session read all attributes', async () => {
     let value = null, readResult = null;
-    const service = app.service('opcua-clients');
+    const service = await getClientService(app, id);
     // Execute action -> sessionReadAllAttributes
     const data = {
+      id,
       action: 'sessionReadAllAttributes',
-      id: clientData.params.applicationName,
       nameNodeIds: 'Device1.Temperature',
     };
     readResult = await service.create(data);
@@ -354,7 +335,7 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
 
   it('OPC-UA clients: session history value', async () => {
     let data, readResult = null;
-    const service = app.service('opcua-clients');
+    const service = await getClientService(app, id);
 
     const start = moment.utc().format();
     const dt = getDateTimeSeparately();
@@ -365,8 +346,8 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
 
     // Execute action -> getItemNodeId
     data = {
+      id,
       action: 'getItemNodeId',
-      id: clientData.params.applicationName,
       nameNodeId: 'Device2.PressureVesselDevice',
     };
 
@@ -377,8 +358,8 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     if (readResult) {
       // Execute action -> sessionReadHistoryValues
       data = {
+        id,
         action: 'sessionReadHistoryValues',
-        id: clientData.params.applicationName,
         nameNodeIds: 'Device2.PressureVesselDevice',
         start,
         end
@@ -404,11 +385,11 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
 
   it('OPC-UA clients: session write single node value', async () => {
     let readResult, statusCode = null;
-    const service = app.service('opcua-clients');
+    const service = await getClientService(app, id);
     // Execute action -> sessionWriteSingleNode
     const dataForWrite = {
       action: 'sessionWriteSingleNode',
-      id: clientData.params.applicationName,
+      id,
       nameNodeIds: 'Device1.VariableForWrite',
       value: {
         dataType: DataType.String,
@@ -421,7 +402,7 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     // Execute action -> sessionRead
     const dataForRead = {
       action: 'sessionRead',
-      id: clientData.params.applicationName,
+      id,
       nameNodeIds: 'Device1.VariableForWrite'
     };
     readResult = await service.create(dataForRead);
@@ -432,11 +413,11 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
 
   it('OPC-UA clients: session write node value', async () => {
     let statusCodes = [], readResult = null;
-    const service = app.service('opcua-clients');
+    const service = await getClientService(app, id);
     // Execute action -> sessionWrite
     const dataForWrite = {
       action: 'sessionWrite',
-      id: clientData.params.applicationName,
+      id,
       nameNodeIds: 'Device1.VariableForWrite',
       values: [
         {
@@ -457,7 +438,7 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     // Execute action -> sessionRead
     const dataForRead = {
       action: 'sessionRead',
-      id: clientData.params.applicationName,
+      id,
       nameNodeIds: 'Device1.VariableForWrite'
     };
     readResult = await service.create(dataForRead);
@@ -470,13 +451,13 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
 
   it('OPC-UA clients: session call method', async () => {
     let callResults = [];
-    const service = app.service('opcua-clients');
+    const service = await getClientService(app, id);
     // Execute action -> sessionCallMethod
     const data = {
+      id,
       action: 'sessionCallMethod',
-      id: clientData.params.applicationName,
       nameNodeIds: 'Device1.SumMethod',
-      inputArguments: [
+      inputArguments: [[
         {
           dataType: DataType.UInt32,
           value: 2,
@@ -485,7 +466,7 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
           dataType: DataType.UInt32,
           value: 3,
         }
-      ]
+      ]]
     };
     callResults = await service.create(data);
     console.log(chalk.green('Device1.SumMethod.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
@@ -496,11 +477,11 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
 
   it('OPC-UA clients: session get method argument definition', async () => {
     let argumentsDefinition = [];
-    const service = app.service('opcua-clients');
+    const service = await getClientService(app, id);
     // Execute action -> sessionGetArgumentDefinition
     const data = {
+      id,
       action: 'sessionGetArgumentDefinition',
-      id: clientData.params.applicationName,
       nameNodeIds: 'Device1.SumMethod'
     };
     argumentsDefinition = await service.create(data);
@@ -521,56 +502,58 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
   //============== START SUBSCRIPTION ====================//
 
   it('OPC-UA clients: subscription create', async () => {
-    const service = app.service('opcua-clients');
-    // Execute action -> subscriptionCreate
-    const data = {
-      action: 'subscriptionCreate',
-      id: clientData.params.applicationName,
-    };
-    await service.create(data);
-    // client.subscriptionCreate();
+    const service = await getClientService(app, id);
+    const result = await service.subscriptionCreate(id);
+    if(isLog) inspector('OPC-UA clients: subscription create', result);
     assert.ok(true, 'OPC-UA clients: subscription create');
   });
 
-  // it('OPC-UA client subscription monitor', async () => {
-  //   // const nameNodeIds = ['Device1.Temperature'];
-  //   let data;
-  //   const service = app.service('opcua-clients');
-  //   // Execute action -> subscriptionCreate
-  //   data = {
-  //     action: 'getNodeIds',
-  //     id: clientData.params.applicationName,
-  //     nameNodeIds: ['Device1.Temperature']
-  //   };
-  //   const nodeIds = await service.create(data);
-  //   if (nodeIds.length) {
-  //     nodeIds.forEach(async nodeId => {
+  it('OPC-UA client subscription monitor', async () => {
+    // const nameNodeIds = ['Device1.Temperature'];
+    let data;
+    const service = await getClientService(app, id);
+    // Execute action -> subscriptionCreate
+    data = {
+      id,
+      action: 'getNodeIds',
+      nameNodeIds: ['Device1.Temperature']
+    };
+    const nodeIds = await service.create(data);
+    if (nodeIds.length) {
+      nodeIds.forEach(async nodeId => {
+        // await client.subscriptionMonitor(cbSubscriptionMonitor, { nodeId });
+        data = {
+          id,
+          action: 'subscriptionMonitor',
+          subscriptionHandlerName: 'onChangedCommonHandler',
+          itemToMonitor: { nodeId }
+        };
+        await service.create(data);
+      });
+      // await pause(1000);
+      assert.ok(true, 'OPC-UA client subscription monitor');
+    }
+  });
 
-  //       await client.subscriptionMonitor(cbSubscriptionMonitor, { nodeId });
-  //     });
-  //     // await pause(1000);
-  //     assert.ok(true, 'OPC-UA client subscription monitor');
-  //   }
-  // });
-
-  // it('OPC-UA client subscription get monitored items', async () => {
-  //   const monitoredItems = await client.sessionGetMonitoredItems(client.subscription.subscriptionId);
-  //   console.log(chalk.green('getMonitoredItems.clientHandles:'), chalk.cyan(monitoredItems.clientHandles));
-  //   console.log(chalk.green('getMonitoredItems.serverHandles:'), chalk.cyan(monitoredItems.serverHandles));
-  //   assert.ok(true, 'OPC-UA client subscription monitor');
-  // });
+  it('OPC-UA client subscription get monitored items', async () => {
+    const service = await getClientService(app, id);
+    // Execute action -> sessionGetMonitoredItems
+    const data = {
+      id,
+      action: 'sessionGetMonitoredItems',
+    };
+    const monitoredItems = await service.create(data);
+    // const monitoredItems = await client.sessionGetMonitoredItems(client.subscription.subscriptionId);
+    console.log(chalk.green('getMonitoredItems.clientHandles:'), chalk.cyan(monitoredItems.clientHandles));
+    console.log(chalk.green('getMonitoredItems.serverHandles:'), chalk.cyan(monitoredItems.serverHandles));
+    assert.ok(true, 'OPC-UA client subscription monitor');
+  });
 
   it('OPC-UA clients: subscription terminate', async () => {
-    const service = app.service('opcua-clients');
-    // Execute action -> subscriptionTerminate
-    const data = {
-      action: 'subscriptionTerminate',
-      id: clientData.params.applicationName,
-    };
+    const service = await getClientService(app, id);
     await pause(1000);
-    await service.create(data);
-
-    // await client.subscriptionTerminate();
+    const result = await service.subscriptionTerminate(id);
+    if(isLog) inspector('OPC-UA clients: subscription terminate', result);
     assert.ok(true, 'OPC-UA clients: subscription terminate');
   });
 

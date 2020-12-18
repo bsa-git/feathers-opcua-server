@@ -1,6 +1,12 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const { OpcuaClient, inspector } = require('../../plugins');
+const {
+  isOpcuaClientInList,
+  getClientForProvider,
+  getSrvCurrentState,
+  getSubscriptionHandler
+} = require('../../plugins/opcua/opcua-helper');
 const chalk = require('chalk');
 const moment = require('moment');
 const {
@@ -86,17 +92,18 @@ const _getClientForProvider = (client) => {
 const _executeAction = async (service, data) => {
   let client, opcuaClient, resultAction, id, path;
   let srvCurrentState, isOpcuaServer = false;
-  let fnPromise;
+  let subscriptionHandler;
   try {
+    // Get id
+    id = (data.action === 'create') ? data.params.applicationName : data.id;
     // Get OPC-UA client
     if (data.action !== 'create') {
-      opcuaClient = await service.get(data.id);
+      opcuaClient = await service.get(id);
     }
     // Run client action
     switch (`${data.action}`) {
     case 'create':
-      id = data.params.applicationName;
-      if (_isOpcuaClient(service, id)) {
+      if (isOpcuaClientInList(service, id)) {
         throw new errors.BadRequest(`The opcua client already exists for this id = '${id}' in the client list`);
       }
       // Create OPC-UA client
@@ -105,12 +112,9 @@ const _executeAction = async (service, data) => {
       await client.create();
 
       // Client connect and sessionCreate
-      isOpcuaServer = await _isOpcuaServer(service.app, data);
-      if (isOpcuaServer) {
-        srvCurrentState = await _getSrvCurrentState(service.app, data);
-        await client.connect(srvCurrentState);
-        await client.sessionCreate();
-      }
+      srvCurrentState = await getSrvCurrentState(service.app, id);
+      await client.connect(srvCurrentState);
+      await client.sessionCreate();
 
       // Add opcuaClient to client list
       opcuaClient = {
@@ -120,41 +124,38 @@ const _executeAction = async (service, data) => {
         updatedAt: data.updatedAt
       };
       service.opcuaClients.push(opcuaClient);
-      resultAction = data.provider ? Object.assign({}, opcuaClient, _getClientForProvider(opcuaClient.client)) : opcuaClient;
+      resultAction = data.provider ? Object.assign({}, opcuaClient, getClientForProvider(opcuaClient.client)) : opcuaClient;
       break;
     case 'connect':
       // Client connect
-      isOpcuaServer = await _isOpcuaServer(service.app, data);
-      if (isOpcuaServer) {
-        srvCurrentState = await _getSrvCurrentState(service.app, data);
-        await opcuaClient.client.connect(srvCurrentState);
-      }
-      resultAction = data.provider ? Object.assign({}, opcuaClient, _getClientForProvider(opcuaClient.client)) : opcuaClient;
+      srvCurrentState = await getSrvCurrentState(service.app, id);
+      await opcuaClient.client.connect(srvCurrentState);
+      resultAction = data.provider ? Object.assign({}, opcuaClient, getClientForProvider(opcuaClient.client)) : opcuaClient;
       break;
     case 'disconnect':
       await opcuaClient.client.disconnect();
-      resultAction = data.provider ? Object.assign({}, opcuaClient, _getClientForProvider(opcuaClient.client)) : opcuaClient;
+      resultAction = data.provider ? Object.assign({}, opcuaClient, getClientForProvider(opcuaClient.client)) : opcuaClient;
       break;
     case 'sessionCreate':
       // Client session create
       await opcuaClient.client.sessionCreate();
-      resultAction = data.provider ? Object.assign({}, opcuaClient, _getClientForProvider(opcuaClient.client)) : opcuaClient;
+      resultAction = data.provider ? Object.assign({}, opcuaClient, getClientForProvider(opcuaClient.client)) : opcuaClient;
       break;
     case 'sessionClose':
       // Client session create
       await opcuaClient.client.sessionClose();
       // Get resultAction
-      resultAction = data.provider ? Object.assign({}, opcuaClient, _getClientForProvider(opcuaClient.client)) : opcuaClient;
+      resultAction = data.provider ? Object.assign({}, opcuaClient, getClientForProvider(opcuaClient.client)) : opcuaClient;
       break;
     case 'subscriptionCreate':
       // Client subscription create
       opcuaClient.client.subscriptionCreate();
-      resultAction = data.provider ? Object.assign({}, opcuaClient, _getClientForProvider(opcuaClient.client)) : opcuaClient;
+      resultAction = data.provider ? Object.assign({}, opcuaClient, getClientForProvider(opcuaClient.client)) : opcuaClient;
       break;
     case 'subscriptionTerminate':
       // Client subscription terminate
       await opcuaClient.client.subscriptionTerminate();
-      resultAction = data.provider ? Object.assign({}, opcuaClient, _getClientForProvider(opcuaClient.client)) : opcuaClient;
+      resultAction = data.provider ? Object.assign({}, opcuaClient, getClientForProvider(opcuaClient.client)) : opcuaClient;
       break;
     case 'getNodeIds':
       // Get item nodeId
@@ -207,16 +208,21 @@ const _executeAction = async (service, data) => {
       break;
     case 'sessionCallMethod':
       // Client session call method
-      resultAction = await opcuaClient.client.sessionCallMethod(data.nameNodeIds, [data.inputArguments]);
+      resultAction = await opcuaClient.client.sessionCallMethod(data.nameNodeIds, data.inputArguments);
       break;
     case 'sessionGetArgumentDefinition':
       // Client session get argument definition
       resultAction = await opcuaClient.client.sessionGetArgumentDefinition(data.nameNodeIds);
       break;
+    case 'sessionGetMonitoredItems':
+      // Client session get monitored items
+      resultAction = await opcuaClient.client.sessionGetMonitoredItems(opcuaClient.client.subscription.subscriptionId);
+      break;
     case 'subscriptionMonitor':
       // Client subscription monitor
-      // resultAction = await opcuaClient.client.subscriptionMonitor(data.nameNodeIds);
-      break;  
+      subscriptionHandler = getSubscriptionHandler(data.id, data.subscriptionHandlerName);
+      resultAction = await opcuaClient.client.subscriptionMonitor(subscriptionHandler, data.itemToMonitor, data.requestedParameters, data.timestampsToReturn);
+      break;
     default:// 
       throw new errors.BadRequest(`No such action - '${data.action}'`);
     }
@@ -242,7 +248,7 @@ class OpcuaClients {
       if (params.provider) {
         opcuaClient = {
           id: client.id,
-          client: _getClientForProvider(client.client).client,
+          client: getClientForProvider(client.client).client,
           createdAt: client.createdAt,
           updatedAt: client.updatedAt
         };
@@ -262,7 +268,7 @@ class OpcuaClients {
     if (params.provider) {
       opcuaClient = {
         id: opcuaClient.client.id,
-        client: _getClientForProvider(opcuaClient.client).client,
+        client: getClientForProvider(opcuaClient.client).client,
         createdAt: opcuaClient.client.createdAt,
         updatedAt: opcuaClient.client.updatedAt
       };
@@ -271,9 +277,34 @@ class OpcuaClients {
   }
 
   async create(data, params) {
-    data.provider = params.provider;
-    const resultAction = await _executeAction(this, data);
-    return resultAction;
+    // Get id
+    const id = data.params.applicationName;
+    // data.provider = params.provider;
+    // const resultAction = await _executeAction(this, data);
+
+    if (isOpcuaClientInList(this, id)) {
+      throw new errors.BadRequest(`The opcua client already exists for this id = '${id}' in the client list`);
+    }
+    // Create OPC-UA client
+    const client = new OpcuaClient(this.app, data.params);
+    // Client create
+    await client.create();
+
+    // Client connect and sessionCreate
+    const srvCurrentState = await getSrvCurrentState(this.app, id);
+    await client.connect(srvCurrentState);
+    await client.sessionCreate();
+
+    // Add opcuaClient to client list
+    const opcuaClient = {
+      id,
+      client,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt
+    };
+    this.opcuaClients.push(opcuaClient);
+    const result = params.provider ? Object.assign({}, opcuaClient, getClientForProvider(opcuaClient.client)) : opcuaClient;
+    return result;
   }
 
   async update(id, data, params) {
@@ -302,7 +333,7 @@ class OpcuaClients {
 
     opcuaClient = Object.assign({}, {
       id: opcuaClient.id,
-      client: _getClientForProvider(opcuaClient.client).client,
+      client: getClientForProvider(opcuaClient.client).client,
       createdAt: opcuaClient.createdAt,
       updatedAt: opcuaClient.updatedAt
     });

@@ -409,7 +409,7 @@ const getIpAddresses = function () {
  */
 const getHostname = function () {
   const os = require('os');
-  return os.hostname();
+  return os.hostname().toLowerCase();
 };// url.parse
 
 /**
@@ -417,7 +417,7 @@ const getHostname = function () {
  * @param {String} aUrl
  * @returns {Object}
  */
-const getPaseUrl = function (aUrl) {
+const getParseUrl = function (aUrl) {
   const url = require('url');
   return url.parse(aUrl);
 };
@@ -465,7 +465,7 @@ module.exports = {
   getLocalIpAddress,
   getIpAddresses,
   getHostname,
-  getPaseUrl,
+  getParseUrl,
   isIP,
   getMyIp
 };

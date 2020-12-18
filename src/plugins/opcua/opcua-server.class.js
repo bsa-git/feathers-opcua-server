@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const moment = require('moment');
-const { inspector, appRoot, getLocalIpAddress, getIpAddresses, getHostname, getPaseUrl, isIP, getMyIp } = require('../lib');
+const { inspector, appRoot, getIpAddresses, getHostname, getParseUrl, isIP, getMyIp } = require('../lib');
 const { getOpcuaConfig } = require('./opcua-helper');
 const {
   OPCUAServer,
@@ -12,12 +12,9 @@ const {
   VariantArrayType,
   standardUnits,
   makeAccessLevelFlag,
-  extractFullyQualifiedDomainName
 } = require('node-opcua');
 const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/OPCUAServerOptions`);
 
-const os = require('os');
-// const net = require('net');
 const loMerge = require('lodash/merge');
 const loOmit = require('lodash/omit');
 const chalk = require('chalk');
@@ -64,11 +61,6 @@ class OpcuaServer {
         subscriptions: '',
       }
     };
-    debug('os.hostname:', getHostname());
-    debug('os.getIpAddresses:', getIpAddresses());
-    debug('url.myURL:', getPaseUrl('https://user:pass@sub.example.com:8080/p/a/t/h?query=string#hash'));
-    debug('net.isIp:', isIP(getMyIp()));// 
-    
   }
 
   /**
@@ -118,9 +110,6 @@ class OpcuaServer {
       this.currentState.isCreated = true;
       // OPC-UA server created.
       console.log(chalk.yellow('Server created'));
-
-      debug('extractFullyQualifiedDomainName:', await extractFullyQualifiedDomainName());
-
     } catch (error) {
       throw new errors.GeneralError(error.message);
     }

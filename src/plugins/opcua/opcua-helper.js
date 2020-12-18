@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { inspector, appRoot, doesFileExist } = require('../lib');
+const { inspector, appRoot, getParseUrl, getHostname, getMyIp } = require('../lib');
 const {
   extractFullyQualifiedDomainName
 } = require('node-opcua');
@@ -80,6 +80,9 @@ const getNameSpaceFromNodeId = function (nodeId = '') {
 const getOpcuaConfig = function (id) {
   const opcuaOptions = require(`${appRoot}/src/api/opcua/OPCUA_Config.json`);
   const opcuaOption = opcuaOptions.find(opt => opt.id === id);
+  if(! opcuaOption){
+    throw new errors.BadRequest(`The opcua option not find for this id = '${id}' in the opcua config list`);
+  }
   return opcuaOption;
 };
 
@@ -89,14 +92,13 @@ const getOpcuaConfig = function (id) {
  * @param {String} nameFile 
  * @returns {Function}
  */
-const getSubscriptionHandler = function (id, nameFile) {
+const getSubscriptionHandler = function (id, nameFile = '') {
+  const defaultNameFile = 'onChangedCommonHandler';
   // Get opcuaOption 
-  const opcuaOptions = require(`${appRoot}/src/api/opcua/OPCUA_Config.json`);
-  const opcuaOption = opcuaOptions.find(opt => opt.id === id);
-
+  const opcuaOption = getOpcuaConfig(id);
   // Get subscriptionHandler
   const subscriptionHandlers = require(`${appRoot}${opcuaOption.paths.subscriptions}`);
-  return subscriptionHandlers[nameFile];
+  return subscriptionHandlers[nameFile]? subscriptionHandlers[nameFile] : subscriptionHandlers[defaultNameFile];
 };
 
 /**
@@ -105,11 +107,14 @@ const getSubscriptionHandler = function (id, nameFile) {
  * @param {String} id 
  * @returns {Object}
  */
-const getServerService = function (app = null, id) {
+const getServerService = async function (app = null, id) {
   let srvService = null;
-  const opcuaConfig = getOpcuaConfig(id);
-  if(! opcuaConfig){
-    throw new errors.BadRequest(`The opcua server already exists for this id = '${id}' in the server list`);
+  const opcuaOption = getOpcuaConfig(id);
+  const myPort = app.get('port');
+  const serviceUrl = opcuaOption.srvServiceUrl;
+  const _isMyServiceHost = await isMyServiceHost(serviceUrl, myPort);
+  if(_isMyServiceHost){
+    srvService = app.service('opcua-servers');
   }
   return srvService;
 };
@@ -120,9 +125,107 @@ const getServerService = function (app = null, id) {
  * @param {String} id 
  * @returns {Object}
  */
-const getClientService = function (app = null, id) {
+const getClientService = async function (app = null, id) {
   let clientService = null;
+  const opcuaOption = getOpcuaConfig(id);
+  const myPort = app.get('port');
+  const serviceUrl = opcuaOption.clientServiceUrl;
+  const _isMyServiceHost = await isMyServiceHost(serviceUrl, myPort);
+  if(_isMyServiceHost){
+    clientService = app.service('opcua-clients');
+  }
   return clientService;
+};
+
+/**
+ * @method getSrvCurrentState
+ * Get opcua server currentState
+ * @async
+ * 
+ * @param {Application} app 
+ * @param {String} id 
+ * @returns {Object}
+ */
+const getSrvCurrentState = async (app, id) => {
+  const service = await getServerService(app, id);
+  const opcuaServer = await service.get(id);
+  return opcuaServer.server.currentState;
+};
+
+/**
+ * @method getClientForProvider
+ * @param {Object} client 
+ * @returns {Object}
+ */
+const getClientForProvider = (client) => {
+  return {
+    client: client.getClientInfo()
+  };
+};
+
+/**
+ * @method getServerForProvider
+ * @param {Object} server 
+ * @returns {Object}
+ */
+const getServerForProvider = (server) => {
+  return {
+    server: {
+      currentState: server.getCurrentState()
+    }
+  };
+};
+
+/**
+ * @method isOpcuaServerInList
+ * 
+ * @param {OpcuaServers} service 
+ * @param {String} id 
+ * @returns {Boolean}
+ */
+const isOpcuaServerInList = (service, id) => {
+  let opcuaServer = null;
+  opcuaServer = service.opcuaServers.find(srv => srv.id === id);
+  return !!opcuaServer;
+};
+
+/**
+ * @method isOpcuaClientInList
+ * 
+ * @param {OpcuaClients} service 
+ * @param {String} id 
+ * @returns {Boolean}
+ */
+const isOpcuaClientInList = (service, id) => {
+  let opcuaClient = null;
+  opcuaClient = service.opcuaClients.find(client => client.id === id);
+  return !!opcuaClient;
+};
+
+/**
+ * @method isMyServiceHost
+ * @async
+ * 
+ * @param {String} serviceUrl 
+ * @param {Number} myPort 
+ * @returns {Boolean}
+ */
+const isMyServiceHost = async function (serviceUrl, myPort) {
+  const serviceHostname = getParseUrl(serviceUrl).hostname.toLowerCase();
+  const servicePort = getParseUrl(serviceUrl).port;
+  const myHostname = getHostname();
+  let myDomainName = await extractFullyQualifiedDomainName();
+  myDomainName = myDomainName.toLowerCase();
+  const myIp = getMyIp();
+  if(isDebug) debug('isMyServiceHostname:', {
+    serviceHostname,
+    servicePort,
+    myPort,
+    myHostname,
+    myDomainName,
+    myIp
+  });
+  return (servicePort === myPort) || (serviceHostname === myHostname) || (serviceHostname === myDomainName) || (serviceHostname === 'localhost') || (serviceHostname === myIp);
 };
 
 
@@ -134,5 +237,11 @@ module.exports = {
   getOpcuaConfig,
   getSubscriptionHandler,
   getServerService,
-  getClientService
+  getClientService,
+  getSrvCurrentState,
+  getClientForProvider,
+  getServerForProvider,
+  isOpcuaServerInList,
+  isOpcuaClientInList,
+  isMyServiceHost
 };

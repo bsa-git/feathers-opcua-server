@@ -2,7 +2,8 @@
 const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port') || 3030;
-const { inspector, pause } = require('../../src/plugins');
+const { inspector } = require('../../src/plugins');
+const { getServerService } = require('../../src/plugins/opcua');
 
 const loMerge = require('lodash/merge');
 
@@ -18,6 +19,8 @@ let srvData = {
     serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1' },
   }
 };
+
+const id = srvData.params.serverInfo.applicationName;
 
 const userInfo = {
   email: 'opcua-servers@example.com',
@@ -66,31 +69,27 @@ describe('<<=== OPC-UA: \'opcua-servers\' service ===>>', () => {
     opcuaUser = user;
     opcuaAccessToken = accessToken;
     if (isLog) inspector('Authenticates user:', opcuaUser);
-    inspector('Authenticates user:', opcuaUser);
     if (isLog) inspector('Creates accessToken:', opcuaAccessToken);
-    inspector('Creates accessToken:', opcuaAccessToken);
     assert.ok(accessToken, 'Created access token for user');
     assert.ok(user, 'Includes user in authentication data');
   });
 
-  it('OPC-UA servers: registered the service', () => {
-    const service = app.service('opcua-servers');
+  it('OPC-UA servers: registered the service', async () => {
+    const service = await getServerService(app, id);
     assert.ok(service, 'OPC-UA servers: registered the service');
   });
 
   it('OPC-UA servers: created the service', async () => {
-    const service = app.service('opcua-servers');
+    const service = await getServerService(app, id);
     // service create
     const params = { user: opcuaUser, provider: 'rest', authenticated: true };
     const opcuaServer = await service.create(srvData, params);
     if (isLog) inspector('created the service:', opcuaServer);
-    // inspector('created the service:', opcuaServer);
-
     assert.ok(opcuaServer, 'OPC-UA servers: created the service');
   });
 
   it('OPC-UA servers: Error in creating an existing service', async () => {
-    const service = app.service('opcua-servers');
+    const service = await getServerService(app, id);
     try {
       // service create
       const opcuaServer = await service.create(srvData);
@@ -101,32 +100,25 @@ describe('<<=== OPC-UA: \'opcua-servers\' service ===>>', () => {
   });
 
   it('OPC-UA servers: get the service', async () => {
-    const service = app.service('opcua-servers');
-    const id = srvData.params.serverInfo.applicationName;
-    // const params = { provider: 'rest' };
+    const service = await getServerService(app, id);
     const opcuaServer = await service.get(id);
     if (isLog) inspector('get the service.currentState:', opcuaServer.server.getCurrentState());
-
     assert.ok(opcuaServer, 'OPC-UA servers: get the service');
   });
 
   it('OPC-UA servers: find services', async () => {
-    const service = app.service('opcua-servers');
+    const service = await getServerService(app, id);
     const opcuaServers = await service.find();
     if (isLog) inspector('find services.ids:', opcuaServers.map(srv => srv.id));
-    // inspector('find services.ids:', opcuaServers.map(srv => srv.id));
-
     assert.ok(opcuaServers.length, 'OPC-UA servers: find services');
   });
 
   it('OPC-UA servers: remove the service', async () => {
     try {
       // service remove
-      const service = app.service('opcua-servers');
-      const id = srvData.params.serverInfo.applicationName;
+      const service = await getServerService(app, id);
       const opcuaServer = await service.remove(id);
       if (isLog) inspector('Remove the service:', opcuaServer);
-      // inspector('Remove the service:', opcuaServer);
       assert.ok(opcuaServer, 'OPC-UA servers: remove the service');
       await service.get(id);
       assert.ok(false, 'OPC-UA servers: remove the service');
@@ -138,46 +130,36 @@ describe('<<=== OPC-UA: \'opcua-servers\' service ===>>', () => {
   it('OPC-UA servers: created the service', async () => {
     let opcuaServer;
     // service create
-    const service = app.service('opcua-servers');
+    const service = await getServerService(app, id);
     const port = srvData.params.port + 1;
     const data = loMerge(srvData, { params: { port } });
-    // inspector('created the service.data:', data);
     opcuaServer = await service.create(data);
     if (isLog) inspector('created the service:', opcuaServer);
-    // inspector('created the service:', opcuaServer);
-
     // Get opcuaServer
-    const id = srvData.params.serverInfo.applicationName;
     opcuaServer = await service.get(id);
     if (isLog) inspector('created the service.getCurrentState:', opcuaServer.server.getCurrentState());
     assert.ok(opcuaServer, 'OPC-UA servers: created the service');
   });
 
   it('OPC-UA servers: update the service', async () => {
-    const service = app.service('opcua-servers');
-    const id = srvData.params.serverInfo.applicationName;
+    const service = await getServerService(app, id);
     // get opcuaServer port
     let opcuaServer = await service.get(id);
     let port = opcuaServer.server.getCurrentState().port + 1;
     const data = loMerge(srvData, { params: { port } });
     opcuaServer = await service.update(id, data);
     if (isLog) inspector('Update the service.port:', opcuaServer.server.getCurrentState());
-    // inspector('Update the service.port:', opcuaServer.server.getCurrentState());
-
     assert.ok(opcuaServer, 'OPC-UA servers: update the service');
   });
 
   it('OPC-UA servers: patch the service', async () => {
-    const service = app.service('opcua-servers');
-    const id = srvData.params.serverInfo.applicationName;
+    const service = await getServerService(app, id);
     // get opcuaServer port
     let opcuaServer = await service.get(id);
     let port = opcuaServer.server.getCurrentState().port + 1;
     const data = loMerge(srvData, { params: { port } });
     opcuaServer = await service.patch(id, data);
     if (isLog) inspector('Patch the service.port:', opcuaServer.server.getCurrentState());
-    // inspector('Patch the service.port:', opcuaServer.server.getCurrentState());
-
     assert.ok(opcuaServer, 'OPC-UA servers: patch the service');
   });
 
