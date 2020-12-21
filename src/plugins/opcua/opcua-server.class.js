@@ -91,14 +91,11 @@ class OpcuaServer {
       // Let create an instance of OPCUAServer
       this.opcuaServer = new OPCUAServer(this.params);
       // this.params.port of the listening socket of the server
-
       await this.opcuaServer.initialize();
       if (isDebug) debug('certificateFile = ', this.opcuaServer.certificateFile);
       if (isDebug) debug('privateKeyFile  = ', this.opcuaServer.privateKeyFile);
       if (isDebug) debug('rejected folder = ', this.opcuaServer.serverCertificateManager.rejectedFolder);
       if (isDebug) debug('trusted  folder = ', this.opcuaServer.serverCertificateManager.trustedFolder);
-
-      // this.constructAddressSpace();
 
       if (this.isOnSignInt) {
         process.on('SIGINT', async () => {

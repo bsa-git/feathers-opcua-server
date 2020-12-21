@@ -344,7 +344,7 @@ describe('<<=== OPC-UA: Test ===>>', () => {
     it('OPC-UA client session call method', async () => {
       try {
         let callResults = [];
-        let inputArguments = [
+        let inputArguments = [[
           {
             dataType: DataType.UInt32,
             value: 2,
@@ -353,8 +353,8 @@ describe('<<=== OPC-UA: Test ===>>', () => {
             dataType: DataType.UInt32,
             value: 3,
           }
-        ];
-        callResults = await client.sessionCallMethod('Device1.SumMethod', [inputArguments]);
+        ]];
+        callResults = await client.sessionCallMethod('Device1.SumMethod', inputArguments);
         console.log(chalk.green('Device1.SumMethod.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
         console.log(chalk.green('Device1.SumMethod.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));
 

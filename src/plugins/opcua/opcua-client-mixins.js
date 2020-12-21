@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const { inspector, appRoot } = require('../lib');
-const { getSrvCurrentState, getClientForProvider } = require('./opcua-helper');
+const { getSrvCurrentState, getClientForProvider, getSubscriptionHandler } = require('./opcua-helper');
 
 const {
   Variant,
@@ -118,7 +118,7 @@ module.exports = function opcuaClientMixins(service, path) {
   service.getNodeIds = async function (id, nameNodeIds) {
     const opcuaClient = await service.get(id);
     result = opcuaClient.client.getNodeIds(nameNodeIds);
-    return result
+    return result;
   };
 
   /**
@@ -130,7 +130,7 @@ module.exports = function opcuaClientMixins(service, path) {
   service.getItemNodeId = async function (id, nameNodeIds) {
     const opcuaClient = await service.get(id);
     result = opcuaClient.client.getNodeIds(nameNodeIds);
-    return result
+    return result;
   };
 
   /**
@@ -321,7 +321,8 @@ module.exports = function opcuaClientMixins(service, path) {
    */
   service.subscriptionMonitor = async function (id, subscriptionHandlerName, itemToMonitor, requestedParameters, timestampsToReturn) {
     const opcuaClient = await service.get(id);
-    result = await opcuaClient.client.subscriptionMonitor(subscriptionHandlerName, itemToMonitor, requestedParameters, timestampsToReturn);
+    const subscriptionHandler = getSubscriptionHandler(id, subscriptionHandlerName);
+    result = await opcuaClient.client.subscriptionMonitor(subscriptionHandler, itemToMonitor, requestedParameters, timestampsToReturn);
     return result;
   };
 };

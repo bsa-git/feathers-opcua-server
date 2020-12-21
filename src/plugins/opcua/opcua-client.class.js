@@ -808,7 +808,7 @@ class OpcuaClient {
    * ```
    * 
    * @param {String|Object|Array} nameNodeIds 
-   * @param {Variant[]} inputArguments
+   * @param {Array<Variant[]>} inputArguments
    * e.g. [[new Variant({...}), ... new Variant({...})], [new Variant({...}), ... new Variant({...})]] 
    * @returns {Promise<CallMethodResult[]>}
    */
@@ -1114,9 +1114,6 @@ class OpcuaClient {
         if (itemNodeId.subscription) {
           subscriptionHandlerName = itemNodeId.subscription;
         }
-        // Get subscriptionHandler
-        const id = this.getCurrentState().id;
-        subscriptionHandler = getSubscriptionHandler(id, subscriptionHandlerName);
 
         // subscription.monitor
         const mergeItemToMonitor = loMerge({}, defaultItemToMonitor, itemToMonitor);
@@ -1135,6 +1132,9 @@ class OpcuaClient {
           if (cb) {
             cb(itemToMonitor, dataValue);
           } else {
+            // Get subscriptionHandler
+            const id = this.getCurrentState().id;
+            subscriptionHandler = getSubscriptionHandler(id, subscriptionHandlerName);
             subscriptionHandler(itemToMonitor, dataValue);
           }
 

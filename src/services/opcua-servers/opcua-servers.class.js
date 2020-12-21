@@ -20,32 +20,6 @@ const debug = require('debug')('app:service.opcua-servers');
 const isDebug = false;
 const isLog = false;
 
-// /**
-//  * Is opcua server
-//  * 
-//  * @param {OpcuaServers} service 
-//  * @param {String} id 
-//  * @returns {Boolean}
-//  */
-// const _isOpcuaServer = (service, id) => {
-//   let opcuaServer = null;
-//   opcuaServer = service.opcuaServers.find(srv => srv.id === id);
-//   return !!opcuaServer;
-// };
-
-// /**
-//  * Get server for provider
-//  * @param {Object} server 
-//  * @returns {Object}
-//  */
-// const _getServerForProvider = (server) => {
-//   return {
-//     server: {
-//       currentState: server.getCurrentState()
-//     }
-//   };
-// };
-
 
 /**
  * Execute service action

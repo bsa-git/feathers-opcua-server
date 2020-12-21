@@ -2,13 +2,13 @@
 const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port') || 3030;
-const { 
-  getServerService, 
-  getClientService, 
-  getValueFromNodeId,  
-  inspector, 
-  isObject, 
-  getDateTimeSeparately, 
+const {
+  getServerService,
+  getClientService,
+  getValueFromNodeId,
+  inspector,
+  isObject,
+  getDateTimeSeparately,
   pause } = require('../../src/plugins');
 
 const chalk = require('chalk');
@@ -108,7 +108,7 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     // service create
     const params = { user: opcuaUser, provider: 'rest', authenticated: true };
     const opcuaClient = await service.create(clientData, params);
-    debug('Service mixin.getNodeIds:', await service.getNodeIds(id, ['Device1.Temperature']));
+    // debug('Service mixin.getNodeIds:', await service.getNodeIds(id, ['Device1.Temperature']));
     if (isLog) inspector('created the service.opcuaClient:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: created the service');
   });
@@ -159,12 +159,10 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     opcuaClient = await service.create(clientData);
     const currentState = opcuaClient.client.getCurrentState();
     if (isLog) inspector('created the service:', currentState);
-    // inspector('created the service:', currentState);
 
     // Get opcuaClient
     opcuaClient = await service.get(currentState.id);
     if (isDebug) debug('get the service.id:', currentState.id);
-    // debug('get the service.id:', currentState.id);
     assert.ok(opcuaClient, 'OPC-UA clients: created the service');
   });
 
@@ -172,7 +170,6 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     const service = await getClientService(app, id);
     const opcuaClient = await service.update(id, clientData);
     if (isLog) inspector('Update the clients:', opcuaClient.client.getCurrentState());
-    // inspector('Update the clients:', opcuaClient.client.getCurrentState());
     assert.ok(opcuaClient, 'OPC-UA clients: update the service');
   });
 
@@ -180,7 +177,6 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     const service = await getClientService(app, id);
     const opcuaClient = await service.patch(id, clientData);
     if (isLog) inspector('Patch the clients:', opcuaClient.client.getCurrentState());
-    // inspector('Patch the clients:', opcuaClient.client.getCurrentState());
     assert.ok(opcuaClient, 'OPC-UA clients: patch the service');
   });
 
@@ -189,12 +185,7 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
 
   it('OPC-UA clients: session read namespace array', async () => {
     const service = await getClientService(app, id);
-    // Execute action -> sessionReadNamespaceArray
-    const data = {
-      id,
-      action: 'sessionReadNamespaceArray',
-    };
-    const result = await service.create(data);
+    const result = await service.sessionReadNamespaceArray(id);
     console.log(chalk.green('sessionReadNamespaceArray:'), chalk.cyan(`[ ${result} ]`));
     assert.ok(result, 'OPC-UA client session read namespace array');
   });
@@ -204,39 +195,31 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
   it('OPC-UA clients: session browse', async () => {
     let browseResult = null, browseNames = '', nodeIds = '';
     const service = await getClientService(app, id);
-    // Execute action -> sessionBrowse
-    const data = {
-      id,
-      action: 'sessionBrowse',
-      path: 'RootFolder'// RootFolder|ObjectsFolder
-    };
-    browseResult = await service.create(data);
+    // service.sessionBrowse
+    const path = 'RootFolder';// RootFolder|ObjectsFolder
+    browseResult = await service.sessionBrowse(id, path);
 
     if (isLog) inspector('OPC-UA client session browse.browseResult:', browseResult);
     const statusCode = browseResult[0].statusCode.name;
-    console.log(chalk.green(`sessionBrowse.${data.path}.statusCode:`), chalk.cyan(statusCode));
+    console.log(chalk.green(`sessionBrowse.${path}.statusCode:`), chalk.cyan(statusCode));
     browseNames = browseResult[0].references.map((r) => r.browseName.name).join(',');
     nodeIds = browseResult[0].references.map((r) => r.nodeId.toString()).join(',');
-    console.log(chalk.green(`sessionBrowse.${data.path}.browseNames:`), chalk.cyan(browseNames));
-    console.log(chalk.green(`sessionBrowse.${data.path}.nodeIds:`), chalk.cyan(nodeIds));
+    console.log(chalk.green(`sessionBrowse.${path}.browseNames:`), chalk.cyan(browseNames));
+    console.log(chalk.green(`sessionBrowse.${path}.nodeIds:`), chalk.cyan(nodeIds));
+
     assert.ok(browseResult, 'OPC-UA client session browse');
   });
 
   it('OPC-UA clients: session translate browse path', async () => {
     const service = await getClientService(app, id);
-    // Execute action -> sessionTranslateBrowsePath
-    const data = {
-      id,
-      action: 'sessionTranslateBrowsePath',
-      folder: 'RootFolder',
-      path: '/Objects/Server.ServerStatus.BuildInfo.ProductName'
-    };
-    const browseResult = await service.create(data);
+    // service.sessionTranslateBrowsePath
+    const folder = 'RootFolder';
+    const path = '/Objects/Server.ServerStatus.BuildInfo.ProductName';
+    const browseResult = await service.sessionTranslateBrowsePath(id, folder, path);
 
     if (isLog) inspector('sessionTranslateBrowsePath.browseResult:', browseResult);
-    // inspector('sessionTranslateBrowsePath.browseResult:', browseResult);
-    console.log(chalk.green('sessionTranslateBrowsePath.data.folder:'), chalk.cyan(data.folder));
-    console.log(chalk.green('sessionTranslateBrowsePath.data.path:'), chalk.cyan(data.path));
+    console.log(chalk.green('sessionTranslateBrowsePath.data.folder:'), chalk.cyan(folder));
+    console.log(chalk.green('sessionTranslateBrowsePath.data.path:'), chalk.cyan(path));
     console.log(chalk.green('sessionTranslateBrowsePath.browseResult.nodeId:'), chalk.cyan(browseResult[0].targets[0].targetId.toString()));
 
     assert.ok(browseResult, 'OPC-UA client session translate browse path');
@@ -245,78 +228,63 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
   //============== SESSION READ VALUES ====================//
 
   it('OPC-UA clients: session read', async () => {
-    let data, readResult = null, value = null;
+    let nameNodeIds, attributeIds, readResult = null, value = null;
     const service = await getClientService(app, id);
-    // Execute action -> sessionRead
-    data = {
-      id,
-      action: 'sessionRead',
-      nameNodeIds: 'Device2.PressureVesselDevice',
-      attributeIds: AttributeIds.BrowseName
-    };
-    readResult = await service.create(data);
+    // service.sessionRead
+    nameNodeIds = 'Device2.PressureVesselDevice';
+    attributeIds = AttributeIds.BrowseName;
+    readResult = await service.sessionRead(id, nameNodeIds, attributeIds);
 
     value = readResult[0].value.value;
     console.log(chalk.green('pressureVesselDevice.BrowseName:'), chalk.cyan(isObject(value) ? value.name : loRound(value, 3)));
 
-    data = {
-      id,
-      action: 'sessionRead',
-      nameNodeIds: { nodeId: 'ns=1;s=Device2.PressureVesselDevice', attributeId: AttributeIds.Value }
-    };
-    readResult = await service.create(data);
+    // service.sessionRead
+    nameNodeIds = { nodeId: 'ns=1;s=Device2.PressureVesselDevice', attributeId: AttributeIds.Value };
+    readResult = await service.sessionRead(id, nameNodeIds);
 
     value = readResult[0].value.value;
     console.log(chalk.green('pressureVesselDevice.value:'), chalk.cyan(isObject(value) ? value.name : loRound(value, 3)));
 
-    data = {
-      id,
-      action: 'sessionRead',
-      nameNodeIds: ['Device1.Temperature', 'Device2.PressureVesselDevice'],
-      attributeIds: [AttributeIds.Value, AttributeIds.BrowseName]
-    };
-    readResult = await service.create(data);
+    // service.sessionRead
+    nameNodeIds = ['Device1.Temperature', 'Device2.PressureVesselDevice'];
+    attributeIds = [AttributeIds.Value, AttributeIds.BrowseName];
+    readResult = await service.sessionRead(id, nameNodeIds, attributeIds);
 
     readResult.forEach((item, index) => {
       if (item.statusCode.name === 'Good') {
         value = item.value.value;
         value = item.value.dataType === DataType.QualifiedName ? value.name : loRound(value, 3);
-        console.log(chalk.green(`${data.nameNodeIds[index]}.value:`), chalk.cyan(value));
+        console.log(chalk.green(`${nameNodeIds[index]}.value:`), chalk.cyan(value));
       }
     });
+
     assert.ok(readResult, 'OPC-UA client session read');
   });
 
   it('OPC-UA clients: session read variable value', async () => {
     let value = null, readResult = null;
     const service = await getClientService(app, id);
-    // Execute action -> sessionReadVariableValue
-    const data = {
-      id,
-      action: 'sessionReadVariableValue',
-      nameNodeIds: ['Device1.Temperature', 'Device2.PressureVesselDevice']
-    };
-    readResult = await service.create(data);
+    // service.sessionReadVariableValue
+    const nameNodeIds = ['Device1.Temperature', 'Device2.PressureVesselDevice'];
+    readResult = await service.sessionReadVariableValue(id, nameNodeIds);
+
     readResult.forEach((item, index) => {
       if (item.statusCode.name === 'Good') {
         value = item.value.value;
         value = loRound(value, 3);
-        console.log(chalk.green(`${data.nameNodeIds[index]}.value:`), chalk.cyan(value));
+        console.log(chalk.green(`${nameNodeIds[index]}.value:`), chalk.cyan(value));
       }
     });
+
     assert.ok(readResult, 'OPC-UA client session read');
   });
 
   it('OPC-UA client session read all attributes', async () => {
     let value = null, readResult = null;
     const service = await getClientService(app, id);
-    // Execute action -> sessionReadAllAttributes
-    const data = {
-      id,
-      action: 'sessionReadAllAttributes',
-      nameNodeIds: 'Device1.Temperature',
-    };
-    readResult = await service.create(data);
+    // service.sessionReadAllAttributes
+    readResult = await service.sessionReadAllAttributes(id, 'Device1.Temperature');
+
     if (isLog) inspector('sessionReadAllAttributes.readResult:', readResult);
     // inspector('sessionReadAllAttributes.readResult:', readResult);
     if (readResult && readResult.length) {
@@ -327,7 +295,11 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
         console.log(chalk.green('sessionReadAllAttributes.displayName:'), chalk.cyan(value.displayName.text));
         console.log(chalk.green('sessionReadAllAttributes.value:'), chalk.cyan(loRound(value.value, 3)));
         assert.ok(readResult, 'OPC-UA client session read all attributes');
+      } else {
+        assert.ok(false, 'OPC-UA client session read all attributes');
       }
+    } else {
+      assert.ok(false, 'OPC-UA client session read all attributes');
     }
   });
 
@@ -344,41 +316,38 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
 
     await pause(1500);
 
-    // Execute action -> getItemNodeId
-    data = {
-      id,
-      action: 'getItemNodeId',
-      nameNodeId: 'Device2.PressureVesselDevice',
-    };
+    // service.getItemNodeId
+    readResult = await service.getItemNodeId(id, 'Device2.PressureVesselDevice');
 
-    readResult = await service.create(data);
     if (isLog) inspector('getItemNodeId.readResult:', readResult);
-    // inspector('getItemNodeId.readResult:', readResult);
 
     if (readResult) {
-      // Execute action -> sessionReadHistoryValues
-      data = {
-        id,
-        action: 'sessionReadHistoryValues',
-        nameNodeIds: 'Device2.PressureVesselDevice',
-        start,
-        end
-      };
-      readResult = await service.create(data);
+      // service.sessionReadHistoryValues
+      readResult = await service.sessionReadHistoryValues(id, 'Device2.PressureVesselDevice', start, end);
+
       if (isLog) inspector('sessionReadHistoryValues.readResult:', readResult);
-      // inspector('sessionReadHistoryValues.readResult:', readResult);
       if (readResult.length && readResult[0].statusCode.name === 'Good') {
         if (readResult[0].historyData.dataValues.length) {
           let dataValues = readResult[0].historyData.dataValues;
           dataValues.forEach(dataValue => {
             if (dataValue.statusCode.name === 'Good') {
               console.log(chalk.green('sessionReadHistoryValues.PressureVesselDevice:'), chalk.cyan(`${loRound(dataValue.value.value, 3)}; Timestamp=${dataValue.sourceTimestamp}`));
+              assert.ok(true, 'OPC-UA clients: session history value');
+            } else {
+              assert.ok(false, 'OPC-UA clients: session history value');
             }
           });
+        } else {
+          assert.ok(false, 'OPC-UA clients: session history value');
         }
+      } else {
+        assert.ok(false, 'OPC-UA clients: session history value');
       }
+    } else {
+      assert.ok(false, 'OPC-UA clients: session history value');
     }
-    assert.ok(readResult, 'OPC-UA clients: session history value');
+
+
   });
 
   //============== SESSION WRITE VALUE ====================//
@@ -386,65 +355,45 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
   it('OPC-UA clients: session write single node value', async () => {
     let readResult, statusCode = null;
     const service = await getClientService(app, id);
-    // Execute action -> sessionWriteSingleNode
+    // service.sessionWriteSingleNode
     const dataForWrite = {
-      action: 'sessionWriteSingleNode',
-      id,
-      nameNodeIds: 'Device1.VariableForWrite',
-      value: {
-        dataType: DataType.String,
-        value: 'Stored value',
-      }
+      dataType: DataType.String,
+      value: 'Stored value',
     };
-    statusCode = await service.create(dataForWrite);
+    statusCode = await service.sessionWriteSingleNode(id, 'Device1.VariableForWrite', dataForWrite);
     console.log(chalk.green('Device1.variableForWrite.statusCode:'), chalk.cyan(statusCode.name));
 
-    // Execute action -> sessionRead
-    const dataForRead = {
-      action: 'sessionRead',
-      id,
-      nameNodeIds: 'Device1.VariableForWrite'
-    };
-    readResult = await service.create(dataForRead);
+    // service.sessionRead
+    readResult = await service.sessionRead(id, 'Device1.VariableForWrite');
     console.log(chalk.green('Device1.variableForWrite.readResult:'), chalk.cyan(`'${readResult[0].value.value}'`));
 
-    assert.ok(readResult[0].value.value === dataForWrite.value.value, 'OPC-UA clients: session write single node value');
+    assert.ok(readResult[0].value.value === dataForWrite.value, 'OPC-UA clients: session write single node value');
   });
 
   it('OPC-UA clients: session write node value', async () => {
     let statusCodes = [], readResult = null;
     const service = await getClientService(app, id);
-    // Execute action -> sessionWrite
-    const dataForWrite = {
-      action: 'sessionWrite',
-      id,
-      nameNodeIds: 'Device1.VariableForWrite',
-      values: [
-        {
-          attributeId: AttributeIds.Value,
+    // service.sessionWrite
+    const dataForWrite = [
+      {
+        attributeId: AttributeIds.Value,
+        value: {
+          statusCode: StatusCodes.Good,
           value: {
-            statusCode: StatusCodes.Good,
-            value: {
-              dataType: DataType.String,
-              value: 'Stored value2'
-            }
+            dataType: DataType.String,
+            value: 'Stored value2'
           }
         }
-      ]
-    };
-    statusCodes = await service.create(dataForWrite);
+      }
+    ];
+    statusCodes = await service.sessionWrite(id, 'Device1.VariableForWrite', dataForWrite);
     console.log(chalk.green('Device1.variableForWrite.statusCode:'), chalk.cyan(statusCodes[0].name));
 
-    // Execute action -> sessionRead
-    const dataForRead = {
-      action: 'sessionRead',
-      id,
-      nameNodeIds: 'Device1.VariableForWrite'
-    };
-    readResult = await service.create(dataForRead);
+    // service.sessionRead
+    readResult = await service.sessionRead(id, 'Device1.VariableForWrite');
     console.log(chalk.green('Device1.variableForWrite.readResult:'), chalk.cyan(`'${readResult[0].value.value}'`));
 
-    assert.ok(readResult[0].value.value === dataForWrite.values[0].value.value.value, 'OPC-UA clients: session write node value');
+    assert.ok(readResult[0].value.value === dataForWrite[0].value.value.value, 'OPC-UA clients: session write node value');
   });
 
   //============== SESSION CALL METHOD ====================//
@@ -452,23 +401,18 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
   it('OPC-UA clients: session call method', async () => {
     let callResults = [];
     const service = await getClientService(app, id);
-    // Execute action -> sessionCallMethod
-    const data = {
-      id,
-      action: 'sessionCallMethod',
-      nameNodeIds: 'Device1.SumMethod',
-      inputArguments: [[
-        {
-          dataType: DataType.UInt32,
-          value: 2,
-        },
-        {
-          dataType: DataType.UInt32,
-          value: 3,
-        }
-      ]]
-    };
-    callResults = await service.create(data);
+    // service.sessionCallMethod
+    const inputArguments = [[
+      {
+        dataType: DataType.UInt32,
+        value: 2,
+      },
+      {
+        dataType: DataType.UInt32,
+        value: 3,
+      }
+    ]];
+    callResults = await service.sessionCallMethod(id, 'Device1.SumMethod', inputArguments);
     console.log(chalk.green('Device1.SumMethod.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
     console.log(chalk.green('Device1.SumMethod.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));
 
@@ -478,15 +422,8 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
   it('OPC-UA clients: session get method argument definition', async () => {
     let argumentsDefinition = [];
     const service = await getClientService(app, id);
-    // Execute action -> sessionGetArgumentDefinition
-    const data = {
-      id,
-      action: 'sessionGetArgumentDefinition',
-      nameNodeIds: 'Device1.SumMethod'
-    };
-    argumentsDefinition = await service.create(data);
-
-    // argumentsDefinition = await client.sessionGetArgumentDefinition('Device1.SumMethod');
+    // service.sessionGetArgumentDefinition
+    argumentsDefinition = await service.sessionGetArgumentDefinition(id, 'Device1.SumMethod');
     argumentsDefinition.inputArguments.forEach(argument => {
       console.log(chalk.green('Device1.SumMethod.inputArgument.name:'), chalk.cyan(argument.name));
       console.log(chalk.green('Device1.SumMethod.inputArgument.description:'), chalk.cyan(argument.description.text));
@@ -503,57 +440,45 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
 
   it('OPC-UA clients: subscription create', async () => {
     const service = await getClientService(app, id);
+    // service.subscriptionCreate
     const result = await service.subscriptionCreate(id);
-    if(isLog) inspector('OPC-UA clients: subscription create', result);
+    if (isLog) inspector('OPC-UA clients: subscription create', result);
+    
     assert.ok(true, 'OPC-UA clients: subscription create');
   });
 
   it('OPC-UA client subscription monitor', async () => {
-    // const nameNodeIds = ['Device1.Temperature'];
-    let data;
     const service = await getClientService(app, id);
-    // Execute action -> subscriptionCreate
-    data = {
-      id,
-      action: 'getNodeIds',
-      nameNodeIds: ['Device1.Temperature']
-    };
-    const nodeIds = await service.create(data);
+    // service.getNodeIds
+    const nodeIds = await service.getNodeIds(id, ['Device1.Temperature']);
     if (nodeIds.length) {
       nodeIds.forEach(async nodeId => {
-        // await client.subscriptionMonitor(cbSubscriptionMonitor, { nodeId });
-        data = {
-          id,
-          action: 'subscriptionMonitor',
-          subscriptionHandlerName: 'onChangedCommonHandler',
-          itemToMonitor: { nodeId }
-        };
-        await service.create(data);
+        // service.subscriptionMonitor
+        await service.subscriptionMonitor(id, 'onChangedCommonHandler', { nodeId });
+
       });
-      // await pause(1000);
+
       assert.ok(true, 'OPC-UA client subscription monitor');
     }
   });
 
   it('OPC-UA client subscription get monitored items', async () => {
     const service = await getClientService(app, id);
-    // Execute action -> sessionGetMonitoredItems
-    const data = {
-      id,
-      action: 'sessionGetMonitoredItems',
-    };
-    const monitoredItems = await service.create(data);
-    // const monitoredItems = await client.sessionGetMonitoredItems(client.subscription.subscriptionId);
+    // service.sessionGetMonitoredItems
+    const monitoredItems = await service.sessionGetMonitoredItems(id);
     console.log(chalk.green('getMonitoredItems.clientHandles:'), chalk.cyan(monitoredItems.clientHandles));
     console.log(chalk.green('getMonitoredItems.serverHandles:'), chalk.cyan(monitoredItems.serverHandles));
+
     assert.ok(true, 'OPC-UA client subscription monitor');
   });
 
   it('OPC-UA clients: subscription terminate', async () => {
     const service = await getClientService(app, id);
     await pause(1000);
+    // service.subscriptionTerminate
     const result = await service.subscriptionTerminate(id);
-    if(isLog) inspector('OPC-UA clients: subscription terminate', result);
+    if (isLog) inspector('OPC-UA clients: subscription terminate', result);
+
     assert.ok(true, 'OPC-UA clients: subscription terminate');
   });
 
