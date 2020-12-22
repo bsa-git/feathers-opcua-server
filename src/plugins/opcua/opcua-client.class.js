@@ -183,7 +183,7 @@ class OpcuaClient {
       currentState: this.currentState,
       srvCurrentState: this.srvCurrentState,
       session: this.session ? this.sessionToString() : null,
-      endpoint: this.session ? this.sessionEndpoint() : null,
+      endpoint: this.session && this.session.endpoint ? this.sessionEndpoint() : null,
       subscription: this.subscription ? this.subscriptionToString() : null,
     };
   }
@@ -266,25 +266,29 @@ class OpcuaClient {
   sessionEndpoint() {
     try {
       this.sessionNotCreated();
-      const endpoint = this.session.endpoint;
-      return {
-        endpointUrl: endpoint.endpointUrl,
-        server: {
-          applicationUri: endpoint.server.applicationUri,
-          productUri: endpoint.server.productUri,
-          applicationName: endpoint.server.applicationName.text,
-          applicationType: endpoint.server.applicationType,
-          gatewayServerUri: endpoint.server.gatewayServerUri,
-          discoveryProfileUri: endpoint.server.discoveryProfileUri,
-          discoveryUrls: endpoint.server.discoveryUrls,
-        },
-        serverCertificate: endpoint.serverCertificate,
-        securityMode: endpoint.securityMode,
-        securityPolicyUri: endpoint.securityPolicyUri,
-        userIdentityTokens: endpoint.userIdentityTokens,
-        transportProfileUri: endpoint.transportProfileUri,
-        securityLevel: endpoint.securityLevel
-      };
+      let result = null;
+      const endpoint = (this.session && this.session.endpoint) ? this.session.endpoint : null;
+      if(endpoint){
+        result = {
+          endpointUrl: endpoint.endpointUrl,
+          server: {
+            applicationUri: endpoint.server.applicationUri,
+            productUri: endpoint.server.productUri,
+            applicationName: endpoint.server.applicationName.text,
+            applicationType: endpoint.server.applicationType,
+            gatewayServerUri: endpoint.server.gatewayServerUri,
+            discoveryProfileUri: endpoint.server.discoveryProfileUri,
+            discoveryUrls: endpoint.server.discoveryUrls,
+          },
+          serverCertificate: endpoint.serverCertificate,
+          securityMode: endpoint.securityMode,
+          securityPolicyUri: endpoint.securityPolicyUri,
+          userIdentityTokens: endpoint.userIdentityTokens,
+          transportProfileUri: endpoint.transportProfileUri,
+          securityLevel: endpoint.securityLevel
+        };
+      }
+      return result;
     } catch (error) {
       throw new errors.GeneralError(error.message);
     }

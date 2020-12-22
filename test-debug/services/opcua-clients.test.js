@@ -5,7 +5,7 @@ const port = app.get('port') || 3030;
 const {
   getServerService,
   getClientService,
-  getValueFromNodeId,
+  getSrvCurrentState,
   inspector,
   isObject,
   getDateTimeSeparately,
@@ -180,6 +180,41 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     assert.ok(opcuaClient, 'OPC-UA clients: patch the service');
   });
 
+  //============== CLIENT SESSION-CLOSE / SESSION-CREATE ====================//
+
+  it('OPC-UA clients: session close the service', async () => {
+    const service = await getClientService(app, id);
+    const opcuaClient = await service.sessionClose(id);
+    if (isLog) inspector('Session close the clients:', opcuaClient);
+    assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
+  });
+
+  it('OPC-UA clients: session create the service', async () => {
+    const service = await getClientService(app, id);
+    const opcuaClient = await service.sessionCreate(id);
+    if (isLog) inspector('Session create the clients:', opcuaClient);
+    assert.ok(opcuaClient, 'OPC-UA clients: session create the service');
+  });
+
+  //============== CLIENT-DISCONNECT / CLIENT-CONNECT ====================//
+
+  it('OPC-UA clients: disconnect the service', async () => {
+    const service = await getClientService(app, id);
+    let opcuaClient = await service.sessionClose(id);
+    opcuaClient = await service.disconnect(id);
+    if (isLog) inspector('Session close the clients:', opcuaClient);
+    assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
+  });
+
+  it('OPC-UA clients: connect the service', async () => {
+    const srvCurrentState = await getSrvCurrentState(app, id);
+    // inspector('srvCurrentState:', srvCurrentState);
+    const service = await getClientService(app, id);
+    let opcuaClient = await service.connect(id, srvCurrentState);
+    opcuaClient = await service.sessionCreate(id);
+    if (isLog) inspector('Connect the clients:', opcuaClient);
+    assert.ok(opcuaClient, 'OPC-UA clients: connect the service');
+  });
 
   //============== CLIENT SESSION READ NAMESPACE ARRAY ====================//
 

@@ -20,7 +20,7 @@ const {
 
 const loRemove = require('lodash/remove');
 
-const debug = require('debug')('app:service.opcua-client');
+const debug = require('debug')('app:opcua-client.class');
 const isDebug = false;
 const isLog = false;
 
@@ -37,8 +37,6 @@ class OpcuaClients {
   async create(data, params) {
     // Get id
     const id = data.params.applicationName;
-    // data.provider = params.provider;
-    // const resultAction = await _executeAction(this, data);
 
     if (isOpcuaClientInList(this, id)) {
       throw new errors.BadRequest(`The opcua client already exists for this id = '${id}' in the client list`);

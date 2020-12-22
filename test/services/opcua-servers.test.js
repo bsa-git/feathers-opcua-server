@@ -6,6 +6,7 @@ const { inspector } = require('../../src/plugins');
 const { getServerService } = require('../../src/plugins/opcua');
 
 const loMerge = require('lodash/merge');
+const chalk = require('chalk');
 
 const debug = require('debug')('app:test.opcua-servers');
 const isDebug = false;
@@ -13,7 +14,7 @@ const isLog = false;
 
 // Options
 let srvData = {
-  action: 'create',
+  // action: 'create',
   params: {
     port: 26547, // default - 26543, 26544 (opcua.test), 26545 (opcua.test2), 26546 (opcua-clients.test), 26547 (opcua-servers.test),
     serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1' },
@@ -161,6 +162,63 @@ describe('<<=== OPC-UA: \'opcua-servers\' service ===>>', () => {
     opcuaServer = await service.patch(id, data);
     if (isLog) inspector('Patch the service.port:', opcuaServer.server.getCurrentState());
     assert.ok(opcuaServer, 'OPC-UA servers: patch the service');
+  });
+
+  it('OPC-UA servers: shutdown the service', async () => {
+    const service = await getServerService(app, id);
+    let opcuaServer = await service.get(id);
+    opcuaServer = await service.opcuaServerShutdown(id, 1500);
+    if (isLog) inspector('Shutdown the server:', opcuaServer);
+    assert.ok(opcuaServer, 'OPC-UA servers: shutdown the service');
+  });
+
+  it('OPC-UA servers: create/constructAddressSpace/start the service', async () => {
+    const service = await getServerService(app, id);
+    let port = await service.getCurrentState(id).port + 1;
+    let opcuaServer = await service.get(id);
+    opcuaServer.server.params.port = port;
+    opcuaServer = await service.opcuaServerCreate(id);
+    opcuaServer = await service.constructAddressSpace(id);
+    opcuaServer = await service.opcuaServerStart(id);
+    if (isLog) inspector('Create the server:', opcuaServer);
+    assert.ok(opcuaServer, 'OPC-UA servers: create/constructAddressSpace/start the service');
+  });
+
+  it('OPC-UA servers: properties of service', async () => {
+    const service = await getServerService(app, id);
+    if (isLog) inspector('service.getBuildInfo:', result);
+    let result = await service.getBytesWritten(id);
+    console.log(chalk.greenBright('service.getBytesWritten:'), chalk.cyan(result));
+    result = await service.getBytesRead(id);
+    console.log(chalk.greenBright('service.getBytesRead:'), chalk.cyan(result));
+    result = await service.getTransactionsCount(id);
+    console.log(chalk.greenBright('service.getTransactionsCount:'), chalk.cyan(result));
+    result = await service.getCurrentChannelCount(id);
+    console.log(chalk.greenBright('service.getCurrentChannelCount:'), chalk.cyan(result));
+    result = await service.getCurrentSubscriptionCount(id);
+    console.log(chalk.greenBright('service.getCurrentSubscriptionCount:'), chalk.cyan(result));
+    result = await service.getRejectedSessionCount(id);
+    console.log(chalk.greenBright('service.getRejectedSessionCount:'), chalk.cyan(result));
+    result = await service.getRejectedRequestsCount(id);
+    console.log(chalk.greenBright('service.getRejectedRequestsCount:'), chalk.cyan(result));
+    result = await service.getSessionAbortCount(id);
+    console.log(chalk.greenBright('service.getSessionAbortCount:'), chalk.cyan(result));
+    result = await service.getPublishingIntervalCount(id);
+    console.log(chalk.greenBright('service.getPublishingIntervalCount:'), chalk.cyan(result));
+    result = await service.getCurrentSessionCount(id);
+    console.log(chalk.greenBright('service.getCurrentSessionCount:'), chalk.cyan(result));
+    result = await service.isInitialized(id);
+    console.log(chalk.greenBright('service.isInitialized:'), chalk.cyan(result));
+    result = await service.isAuditing(id);
+    console.log(chalk.greenBright('service.isAuditing:'), chalk.cyan(result));
+    result = await service.getServerInfo(id);
+    inspector('service.getServerInfo:', result);
+    result = await service.getBuildInfo(id);
+    inspector('service.getBuildInfo:', result);
+    result = await service.getCurrentState(id);
+    if (isLog) inspector('service.getCurrentState:', result);
+
+    assert.ok(true, 'OPC-UA servers: properties of service');
   });
 
 });

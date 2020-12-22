@@ -27,12 +27,12 @@ module.exports = function opcuaClientMixins(service, path) {
    * @async
    * 
    * @param {String} id 
+   * @param {Object} params 
    * @returns {Object}
    */
-  service.connect = async function (id) {
-    const srvCurrentState = await getSrvCurrentState(service.app, id);
+  service.connect = async function (id, params) {
     const opcuaClient = await service.get(id);
-    await opcuaClient.client.connect(srvCurrentState);
+    await opcuaClient.client.connect(params);
     result = Object.assign({}, opcuaClient, getClientForProvider(opcuaClient.client));
     return result;
   };

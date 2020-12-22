@@ -134,9 +134,6 @@ class OpcuaServer {
       const port = this.opcuaServer.endpoints[0].port;
       console.log(chalk.yellow('Server started and now listening ...'), 'Port:', chalk.cyan(port));
       console.log(chalk.yellow('Server started and now listening ...'), 'EndPoint URL:', chalk.cyan(endpointUrl));
-      // this.opcuaServer.endpoints[0].endpointDescriptions().forEach(function (endpoint) {
-      //   if (isDebug) debug('opcuaServer.endpoint:', endpoint.endpointUrl, endpoint.securityMode.toString(), endpoint.securityPolicyUri.toString());
-      // });
       const endpoints = this.opcuaServer.endpoints[0].endpointDescriptions().map(endpoint => {
         return {
           endpointUrl: endpoint.endpointUrl,
@@ -179,7 +176,9 @@ class OpcuaServer {
       this.currentState.endpoints = null;
       this.currentState.isStarted = false;
       this.opcuaServer = null;
-      console.log(chalk.yellow('Server terminated'));
+      if (timeout) console.log(chalk.yellow('Server terminated.'), 'Timeout:', chalk.cyan(`${timeout} Msec.`));
+      else console.log(chalk.yellow('Server terminated.'));
+      
     } catch (error) {
       throw new errors.GeneralError(error.message);
     }
@@ -209,7 +208,7 @@ class OpcuaServer {
       _serverInfo.gatewayServerUri = serverInfo.gatewayServerUri;
       _serverInfo.discoveryProfileUri = serverInfo.discoveryProfileUri;
       _serverInfo.discoveryUrls = serverInfo.discoveryUrls;
-      return _serverInfo; //Object.assign({}, _serverInfo);
+      return _serverInfo; 
     } catch (error) {
       throw new errors.GeneralError(error.message);
     }
@@ -229,6 +228,7 @@ class OpcuaServer {
 
   /**
   * total number of bytes written  by the server since startup
+  * @returns {Number}
   */
   getBytesWritten() {
     try {
@@ -241,6 +241,7 @@ class OpcuaServer {
 
   /**
   * total number of bytes read  by the server since startup
+  * @returns {Number}
   */
   getBytesRead() {
     try {
@@ -253,6 +254,7 @@ class OpcuaServer {
 
   /**
   * Number of transactions processed by the server since startup
+  * @returns {Number}
   */
   getTransactionsCount() {
     try {
@@ -265,6 +267,7 @@ class OpcuaServer {
 
   /**
   * the number of connected channel on all existing end points
+  * @returns {Number}
   */
   getCurrentChannelCount() {
     try {
@@ -277,6 +280,7 @@ class OpcuaServer {
 
   /**
   * The number of active subscriptions from all sessions
+  * @returns {Number}
   */
   getCurrentSubscriptionCount() {
     try {
@@ -289,6 +293,7 @@ class OpcuaServer {
 
   /**
   * the number of session activation requests that have been rejected
+  * @returns {Number}
   */
   getRejectedSessionCount() {
     try {
@@ -301,6 +306,7 @@ class OpcuaServer {
 
   /**
   * the number of request that have been rejected
+  * @returns {Number}
   */
   getRejectedRequestsCount() {
     try {
@@ -313,6 +319,7 @@ class OpcuaServer {
 
   /**
   * the number of sessions that have been aborted
+  * @returns {Number}
   */
   getSessionAbortCount() {
     try {
@@ -325,6 +332,7 @@ class OpcuaServer {
 
   /**
   * the publishing interval count
+  * @returns {Number}
   */
   getPublishingIntervalCount() {
     try {
@@ -337,6 +345,7 @@ class OpcuaServer {
 
   /**
   * the number of sessions currently active
+  * @returns {Number}
   */
   getCurrentSessionCount() {
     try {
@@ -349,6 +358,7 @@ class OpcuaServer {
 
   /**
   *  true if the server has been initialized
+  * @returns {Boolean}
   */
   isInitialized() {
     try {
@@ -361,6 +371,7 @@ class OpcuaServer {
 
   /**
   *  is the server auditing
+  * @returns {Boolean}
   */
   isAuditing() {
     try {
