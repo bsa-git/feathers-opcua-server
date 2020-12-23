@@ -1,20 +1,9 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { OpcuaServer, inspector, appRoot } = require('../../plugins');
+const { OpcuaServer } = require('../../plugins');
 const { isOpcuaServerInList, getServerForProvider } = require('../../plugins/opcua/opcua-helper');
-const chalk = require('chalk');
-const moment = require('moment');
-
-const {
-  Variant,
-  DataType,
-  VariantArrayType,
-  AttributeIds,
-  StatusCodes,
-} = require('node-opcua');
 
 const loRemove = require('lodash/remove');
-const loMerge = require('lodash/merge');
 
 const debug = require('debug')('app:opcua-servers.class');
 const isDebug = false;
@@ -36,11 +25,11 @@ class OpcuaServers {
     // Create OPC-UA server
     const server = new OpcuaServer(this.app, data.params);
     // Server create
-    await server.create();
+    await server.opcuaServerCreate();
     // Server constructAddressSpace
     server.constructAddressSpace();
     // Server start
-    await server.start();
+    await server.opcuaServerStart();
     // Add opcuaServer to server list
     const opcuaServer = {
       id: server.getServerInfo().applicationName,
@@ -108,7 +97,7 @@ class OpcuaServers {
   async remove(id, params) {
     let opcuaServer;
     opcuaServer = await this.get(id);
-    await opcuaServer.server.shutdown();
+    await opcuaServer.server.opcuaServerShutdown();
     opcuaServer = Object.assign({}, {
       id: opcuaServer.id,
       server: { currentState: opcuaServer.server.getCurrentState() },

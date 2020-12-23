@@ -14,7 +14,6 @@ const {
 const chalk = require('chalk');
 const moment = require('moment');
 
-const loMerge = require('lodash/merge');
 const loRound = require('lodash/round');
 
 const {
@@ -31,7 +30,7 @@ const isLog = false;
 const srvData = {
   action: 'create',
   params: {
-    port: 26546, // default - 26543, 26544 (opcua.test), 26545 (opcua.test2), 26546 (opcua-clients.test), 26547 (opcua-servers.test),
+    port: 26560, // default - 26543, 26540 (opcua.test), 26550 (opcua.test2), 26560 (opcua-clients.test), 26570 (opcua-servers.test),
     serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1' },
   }
 };
@@ -53,7 +52,7 @@ const userInfo = {
 
 let opcuaUser = null;
 
-describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
+describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
   let server;
 
   before(function (done) {
@@ -90,17 +89,13 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
   });
 
   it('New user: created the service', async () => {
-    try {
-      const service = app.service('users');
-      assert.ok(service, 'Users: registered the service');
-      // service create
-      const newUser = await service.create(userInfo);
-      if (isLog) inspector('Created User service:', newUser);
-      opcuaUser = newUser;
-      assert.ok(newUser, 'newUser: created the service');
-    } catch (error) {
-      assert.ok(false, 'New user: created the service');
-    }
+    const service = app.service('users');
+    assert.ok(service, 'Users: registered the service');
+    // service create
+    const newUser = await service.create(userInfo);
+    if (isLog) inspector('Created User service:', newUser);
+    opcuaUser = newUser;
+    assert.ok(newUser, 'newUser: created the service');
   });
 
   it('OPC-UA clients: created the service', async () => {
@@ -201,7 +196,7 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
   it('OPC-UA clients: disconnect the service', async () => {
     const service = await getClientService(app, id);
     let opcuaClient = await service.sessionClose(id);
-    opcuaClient = await service.disconnect(id);
+    opcuaClient = await service.opcuaClientDisconnect(id);
     if (isLog) inspector('Session close the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
   });
@@ -210,7 +205,7 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     const srvCurrentState = await getSrvCurrentState(app, id);
     // inspector('srvCurrentState:', srvCurrentState);
     const service = await getClientService(app, id);
-    let opcuaClient = await service.connect(id, srvCurrentState);
+    let opcuaClient = await service.opcuaClientConnect(id, srvCurrentState);
     opcuaClient = await service.sessionCreate(id);
     if (isLog) inspector('Connect the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: connect the service');
@@ -349,8 +344,6 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     dt.minutes = dt.minutes + 1;
     const end = moment.utc(Object.values(dt)).format();
 
-    await pause(1500);
-
     // service.getItemNodeId
     readResult = await service.getItemNodeId(id, 'Device2.PressureVesselDevice');
 
@@ -478,11 +471,11 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     // service.subscriptionCreate
     const result = await service.subscriptionCreate(id);
     if (isLog) inspector('OPC-UA clients: subscription create', result);
-    
+
     assert.ok(true, 'OPC-UA clients: subscription create');
   });
 
-  it('OPC-UA client subscription monitor', async () => {
+  it('OPC-UA clients: subscription monitor', async () => {
     const service = await getClientService(app, id);
     // service.getNodeIds
     const nodeIds = await service.getNodeIds(id, ['Device1.Temperature']);
@@ -497,7 +490,7 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     }
   });
 
-  it('OPC-UA client subscription get monitored items', async () => {
+  it('OPC-UA clients: subscription get monitored items', async () => {
     const service = await getClientService(app, id);
     // service.sessionGetMonitoredItems
     const monitoredItems = await service.sessionGetMonitoredItems(id);
@@ -505,6 +498,66 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     console.log(chalk.green('getMonitoredItems.serverHandles:'), chalk.cyan(monitoredItems.serverHandles));
 
     assert.ok(true, 'OPC-UA client subscription monitor');
+  });
+
+  it('OPC-UA clients: properties of service', async () => {
+    const service = await getClientService(app, id);
+
+    let result = await service.sessionSubscriptionCount(id);
+    console.log(chalk.greenBright('client.sessionSubscriptionCount:'), chalk.cyan(result));
+    result = await service.sessionIsReconnecting(id);
+    console.log(chalk.greenBright('client.sessionIsReconnecting:'), chalk.cyan(result));
+    result = await service.getCurrentState(id);
+    inspector('client.getCurrentState:', result);
+    result = await service.sessionToString(id);
+    inspector('client.sessionToString:', result);
+    result = await service.sessionEndpoint(id);
+    if (isLog) inspector('client.sessionEndpoint:', result);
+    result = await service.sessionGetPublishEngine(id);
+    if (isLog) inspector('client.sessionGetPublishEngine:', result);
+    result = await service.getSrvCurrentState(id);
+    if (isLog) inspector('client.getSrvCurrentState:', result);
+    result = await service.getClientInfo(id);
+    if (isLog) inspector('client.getClientInfo:', result);
+
+    assert.ok(true, 'OPC-UA clients: properties of client');
+  });
+
+  it('OPC-UA servers: properties of service', async () => {
+    const service = await getServerService(app, id);
+
+    let result = await service.getBytesWritten(id);
+    console.log(chalk.greenBright('server.getBytesWritten:'), chalk.cyan(result));
+    result = await service.getBytesRead(id);
+    console.log(chalk.greenBright('server.getBytesRead:'), chalk.cyan(result));
+    result = await service.getTransactionsCount(id);
+    console.log(chalk.greenBright('server.getTransactionsCount:'), chalk.cyan(result));
+    result = await service.getCurrentChannelCount(id);
+    console.log(chalk.greenBright('server.getCurrentChannelCount:'), chalk.cyan(result));
+    result = await service.getCurrentSubscriptionCount(id);
+    console.log(chalk.greenBright('server.getCurrentSubscriptionCount:'), chalk.cyan(result));
+    result = await service.getRejectedSessionCount(id);
+    console.log(chalk.greenBright('server.getRejectedSessionCount:'), chalk.cyan(result));
+    result = await service.getRejectedRequestsCount(id);
+    console.log(chalk.greenBright('server.getRejectedRequestsCount:'), chalk.cyan(result));
+    result = await service.getSessionAbortCount(id);
+    console.log(chalk.greenBright('server.getSessionAbortCount:'), chalk.cyan(result));
+    result = await service.getPublishingIntervalCount(id);
+    console.log(chalk.greenBright('server.getPublishingIntervalCount:'), chalk.cyan(result));
+    result = await service.getCurrentSessionCount(id);
+    console.log(chalk.greenBright('server.getCurrentSessionCount:'), chalk.cyan(result));
+    result = await service.isInitialized(id);
+    console.log(chalk.greenBright('server.isInitialized:'), chalk.cyan(result));
+    result = await service.isAuditing(id);
+    console.log(chalk.greenBright('server.isAuditing:'), chalk.cyan(result));
+    result = await service.getServerInfo(id);
+    inspector('server.getServerInfo:', result);
+    result = await service.getBuildInfo(id);
+    inspector('server.getBuildInfo:', result);
+    result = await service.getCurrentState(id);
+    if (isLog) inspector('server.getCurrentState:', result);
+
+    assert.ok(true, 'OPC-UA servers: properties of server');
   });
 
   it('OPC-UA clients: subscription terminate', async () => {
@@ -515,6 +568,29 @@ describe('<<=== OPC-UA: \'opcua-clients\' service ===>>', () => {
     if (isLog) inspector('OPC-UA clients: subscription terminate', result);
 
     assert.ok(true, 'OPC-UA clients: subscription terminate');
+  });
+
+  //===== SESSION CLOSE/CLIENT DISCONNECT/SERVER SHUTDOWN =====//
+
+  it('OPC-UA clients: session close the service', async () => {
+    const service = await getClientService(app, id);
+    const opcuaClient = await service.sessionClose(id);
+    if (isLog) inspector('Session close the clients:', opcuaClient);
+    assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
+  });
+
+  it('OPC-UA clients: disconnect the service', async () => {
+    const service = await getClientService(app, id);
+    const opcuaClient = await service.opcuaClientDisconnect(id);
+    if (isLog) inspector('Session close the clients:', opcuaClient);
+    assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
+  });
+
+  it('OPC-UA servers: shutdown the service', async () => {
+    const service = await getServerService(app, id);
+    const opcuaServer = await service.opcuaServerShutdown(id, 1500);
+    if (isLog) inspector('Shutdown the server:', opcuaServer);
+    assert.ok(opcuaServer, 'OPC-UA servers: shutdown the service');
   });
 
 });

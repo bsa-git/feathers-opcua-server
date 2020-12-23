@@ -1,22 +1,11 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { OpcuaClient, inspector } = require('../../plugins');
+const { OpcuaClient } = require('../../plugins');
 const {
   isOpcuaClientInList,
   getClientForProvider,
   getSrvCurrentState,
-  getSubscriptionHandler
 } = require('../../plugins/opcua/opcua-helper');
-const chalk = require('chalk');
-const moment = require('moment');
-const {
-  Variant,
-  DataType,
-  VariantArrayType,
-  AttributeIds,
-  StatusCodes,
-  makeBrowsePath
-} = require('node-opcua');
 
 const loRemove = require('lodash/remove');
 
@@ -44,11 +33,11 @@ class OpcuaClients {
     // Create OPC-UA client
     const client = new OpcuaClient(this.app, data.params);
     // Client create
-    await client.create();
+    await client.opcuaClientCreate();
 
     // Client connect and sessionCreate
     const srvCurrentState = await getSrvCurrentState(this.app, id);
-    await client.connect(srvCurrentState);
+    await client.opcuaClientConnect(srvCurrentState);
     await client.sessionCreate();
 
     // Add opcuaClient to client list
@@ -120,7 +109,7 @@ class OpcuaClients {
     if (opcuaClient.client.session) {
       await opcuaClient.client.sessionClose();
     }
-    await opcuaClient.client.disconnect();
+    await opcuaClient.client.opcuaClientDisconnect();
 
     opcuaClient = Object.assign({}, {
       id: opcuaClient.id,

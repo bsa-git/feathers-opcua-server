@@ -31,7 +31,7 @@ module.exports = function opcuaServerMixins(service, path) {
    */
   service.opcuaServerCreate = async function (id) {
     const opcuaServer = await service.get(id);
-    await opcuaServer.server.create();
+    await opcuaServer.server.opcuaServerCreate();
     result = Object.assign({}, opcuaServer, getServerForProvider(opcuaServer.server));
     return result;
   };
@@ -45,7 +45,7 @@ module.exports = function opcuaServerMixins(service, path) {
    */
   service.opcuaServerStart = async function (id) {
     const opcuaServer = await service.get(id);
-    await opcuaServer.server.start();
+    await opcuaServer.server.opcuaServerStart();
     result = Object.assign({}, opcuaServer, getServerForProvider(opcuaServer.server));
     return result;
   };
@@ -60,7 +60,7 @@ module.exports = function opcuaServerMixins(service, path) {
    */
   service.opcuaServerShutdown = async function (id, timeout) {
     const opcuaServer = await service.get(id);
-    await opcuaServer.server.shutdown(timeout);
+    await opcuaServer.server.opcuaServerShutdown(timeout);
     result = Object.assign({}, opcuaServer, getServerForProvider(opcuaServer.server));
     return result;
   };

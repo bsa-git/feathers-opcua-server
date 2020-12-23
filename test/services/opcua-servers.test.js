@@ -16,7 +16,7 @@ const isLog = false;
 let srvData = {
   // action: 'create',
   params: {
-    port: 26547, // default - 26543, 26544 (opcua.test), 26545 (opcua.test2), 26546 (opcua-clients.test), 26547 (opcua-servers.test),
+    port: 26570, // default - 26543, 26540 (opcua.test), 26550 (opcua.test2), 26560 (opcua-clients.test), 26570 (opcua-servers.test),
     serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1' },
   }
 };
@@ -30,7 +30,7 @@ const userInfo = {
 
 let opcuaUser = null, opcuaAccessToken = '';
 
-describe('<<=== OPC-UA: \'opcua-servers\' service ===>>', () => {
+describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
   let server;
 
   before(function (done) {
@@ -50,16 +50,12 @@ describe('<<=== OPC-UA: \'opcua-servers\' service ===>>', () => {
   });
 
   it('New user: created the service', async () => {
-    try {
-      const service = app.service('users');
-      assert.ok(service, 'Users: registered the service');
-      // service create
-      const newUser = await service.create(userInfo);
-      if (isLog) inspector('Created User service:', newUser);
-      assert.ok(newUser, 'newUser: created the service');
-    } catch (error) {
-      assert.ok(false, 'New user: created the service');
-    }
+    const service = app.service('users');
+    assert.ok(service, 'Users: registered the service');
+    // service create
+    const newUser = await service.create(userInfo);
+    if (isLog) inspector('Created User service:', newUser);
+    assert.ok(newUser, 'newUser: created the service');
   });
 
   it('authenticates user and creates accessToken', async () => {
@@ -186,39 +182,49 @@ describe('<<=== OPC-UA: \'opcua-servers\' service ===>>', () => {
 
   it('OPC-UA servers: properties of service', async () => {
     const service = await getServerService(app, id);
-    if (isLog) inspector('service.getBuildInfo:', result);
-    let result = await service.getBytesWritten(id);
-    console.log(chalk.greenBright('service.getBytesWritten:'), chalk.cyan(result));
-    result = await service.getBytesRead(id);
-    console.log(chalk.greenBright('service.getBytesRead:'), chalk.cyan(result));
-    result = await service.getTransactionsCount(id);
-    console.log(chalk.greenBright('service.getTransactionsCount:'), chalk.cyan(result));
-    result = await service.getCurrentChannelCount(id);
-    console.log(chalk.greenBright('service.getCurrentChannelCount:'), chalk.cyan(result));
-    result = await service.getCurrentSubscriptionCount(id);
-    console.log(chalk.greenBright('service.getCurrentSubscriptionCount:'), chalk.cyan(result));
-    result = await service.getRejectedSessionCount(id);
-    console.log(chalk.greenBright('service.getRejectedSessionCount:'), chalk.cyan(result));
-    result = await service.getRejectedRequestsCount(id);
-    console.log(chalk.greenBright('service.getRejectedRequestsCount:'), chalk.cyan(result));
-    result = await service.getSessionAbortCount(id);
-    console.log(chalk.greenBright('service.getSessionAbortCount:'), chalk.cyan(result));
-    result = await service.getPublishingIntervalCount(id);
-    console.log(chalk.greenBright('service.getPublishingIntervalCount:'), chalk.cyan(result));
-    result = await service.getCurrentSessionCount(id);
-    console.log(chalk.greenBright('service.getCurrentSessionCount:'), chalk.cyan(result));
-    result = await service.isInitialized(id);
-    console.log(chalk.greenBright('service.isInitialized:'), chalk.cyan(result));
-    result = await service.isAuditing(id);
-    console.log(chalk.greenBright('service.isAuditing:'), chalk.cyan(result));
-    result = await service.getServerInfo(id);
-    inspector('service.getServerInfo:', result);
-    result = await service.getBuildInfo(id);
-    inspector('service.getBuildInfo:', result);
-    result = await service.getCurrentState(id);
-    if (isLog) inspector('service.getCurrentState:', result);
 
-    assert.ok(true, 'OPC-UA servers: properties of service');
+    let result = await service.getBytesWritten(id);
+    console.log(chalk.greenBright('server.getBytesWritten:'), chalk.cyan(result));
+    result = await service.getBytesRead(id);
+    console.log(chalk.greenBright('server.getBytesRead:'), chalk.cyan(result));
+    result = await service.getTransactionsCount(id);
+    console.log(chalk.greenBright('server.getTransactionsCount:'), chalk.cyan(result));
+    result = await service.getCurrentChannelCount(id);
+    console.log(chalk.greenBright('server.getCurrentChannelCount:'), chalk.cyan(result));
+    result = await service.getCurrentSubscriptionCount(id);
+    console.log(chalk.greenBright('server.getCurrentSubscriptionCount:'), chalk.cyan(result));
+    result = await service.getRejectedSessionCount(id);
+    console.log(chalk.greenBright('server.getRejectedSessionCount:'), chalk.cyan(result));
+    result = await service.getRejectedRequestsCount(id);
+    console.log(chalk.greenBright('server.getRejectedRequestsCount:'), chalk.cyan(result));
+    result = await service.getSessionAbortCount(id);
+    console.log(chalk.greenBright('server.getSessionAbortCount:'), chalk.cyan(result));
+    result = await service.getPublishingIntervalCount(id);
+    console.log(chalk.greenBright('server.getPublishingIntervalCount:'), chalk.cyan(result));
+    result = await service.getCurrentSessionCount(id);
+    console.log(chalk.greenBright('server.getCurrentSessionCount:'), chalk.cyan(result));
+    result = await service.isInitialized(id);
+    console.log(chalk.greenBright('server.isInitialized:'), chalk.cyan(result));
+    result = await service.isAuditing(id);
+    console.log(chalk.greenBright('server.isAuditing:'), chalk.cyan(result));
+    result = await service.getServerInfo(id);
+    inspector('server.getServerInfo:', result);
+    result = await service.getBuildInfo(id);
+    inspector('server.getBuildInfo:', result);
+    result = await service.getCurrentState(id);
+    if (isLog) inspector('server.getCurrentState:', result);
+
+    assert.ok(true, 'OPC-UA servers: properties of server');
+  });
+
+  //===== SESSION CLOSE/CLIENT DISCONNECT/SERVER SHUTDOWN =====//
+
+  it('OPC-UA servers: shutdown the service', async () => {
+    const service = await getServerService(app, id);
+    let opcuaServer = await service.get(id);
+    opcuaServer = await service.opcuaServerShutdown(id, 1500);
+    if (isLog) inspector('Shutdown the server:', opcuaServer);
+    assert.ok(opcuaServer, 'OPC-UA servers: shutdown the service');
   });
 
 });

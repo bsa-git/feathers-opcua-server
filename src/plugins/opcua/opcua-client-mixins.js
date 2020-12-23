@@ -23,30 +23,45 @@ let result;
 module.exports = function opcuaClientMixins(service, path) {
 
   /**
-   * @method connect
+   * @method opcuaClientCreate
    * @async
    * 
    * @param {String} id 
    * @param {Object} params 
    * @returns {Object}
    */
-  service.connect = async function (id, params) {
+  service.opcuaClientCreate = async function (id, params) {
     const opcuaClient = await service.get(id);
-    await opcuaClient.client.connect(params);
+    await opcuaClient.client.opcuaClientCreate(params);
     result = Object.assign({}, opcuaClient, getClientForProvider(opcuaClient.client));
     return result;
   };
 
   /**
-   * @method disconnect
+   * @method opcuaClientConnect
+   * @async
+   * 
+   * @param {String} id 
+   * @param {Object} params 
+   * @returns {Object}
+   */
+  service.opcuaClientConnect = async function (id, params) {
+    const opcuaClient = await service.get(id);
+    await opcuaClient.client.opcuaClientConnect(params);
+    result = Object.assign({}, opcuaClient, getClientForProvider(opcuaClient.client));
+    return result;
+  };
+
+  /**
+   * @method opcuaClientDisconnect
    * @async
    * 
    * @param {String} id 
    * @returns {Object}
    */
-  service.disconnect = async function (id) {
+  service.opcuaClientDisconnect = async function (id) {
     const opcuaClient = await service.get(id);
-    await opcuaClient.client.disconnect();
+    await opcuaClient.client.opcuaClientDisconnect();
     result = Object.assign({}, opcuaClient, getClientForProvider(opcuaClient.client));
     return result;
   };
@@ -122,14 +137,121 @@ module.exports = function opcuaClientMixins(service, path) {
   };
 
   /**
-   * Get item nodeId
+   * @method getItemNodeId
+   * @async
+   * 
+   * @param {String} id 
    * @param {String>} nameNodeId 
    * e.g nameNodeId = 'Device1.Temperature'|'ns=1;s=Device1.Temperature'
    * @returns {Object}
    */
-  service.getItemNodeId = async function (id, nameNodeIds) {
+  service.getItemNodeId = async function (id, nameNodeId) {
     const opcuaClient = await service.get(id);
-    result = opcuaClient.client.getNodeIds(nameNodeIds);
+    result = opcuaClient.client.getItemNodeId(nameNodeId);
+    return result;
+  };
+
+  /**
+   * @method getCurrentState
+   * @async
+   * 
+   * @param {String>} id 
+   * @returns {Object}
+   */
+  service.getCurrentState = async function (id) {
+    const opcuaClient = await service.get(id);
+    result = opcuaClient.client.getCurrentState();
+    return result;
+  };
+
+  /**
+   * @method getSrvCurrentState
+   * @async
+   * 
+   * @param {String>} id 
+   * @returns {Object}
+   */
+  service.getSrvCurrentState = async function (id) {
+    const opcuaClient = await service.get(id);
+    result = opcuaClient.client.getSrvCurrentState();
+    return result;
+  };
+
+  /**
+   * @method getClientInfo
+   * @async
+   * 
+   * @param {String>} id 
+   * @returns {Object}
+   */
+  service.getClientInfo = async function (id) {
+    const opcuaClient = await service.get(id);
+    result = opcuaClient.client.getClientInfo();
+    return result;
+  };
+
+  /**
+   * @method sessionToString
+   * @async
+   * 
+   * @param {String>} id 
+   * @returns {Object}
+   */
+  service.sessionToString = async function (id) {
+    const opcuaClient = await service.get(id);
+    result = opcuaClient.client.sessionToString();
+    return result;
+  };
+
+  /**
+   * @method sessionEndpoint
+   * @async
+   * 
+   * @param {String>} id 
+   * @returns {Object}
+   */
+  service.sessionEndpoint = async function (id) {
+    const opcuaClient = await service.get(id);
+    result = opcuaClient.client.sessionEndpoint();
+    return result;
+  };
+
+  /**
+   * @method sessionSubscriptionCount
+   * @async
+   * 
+   * @param {String>} id 
+   * @returns {Object}
+   */
+  service.sessionSubscriptionCount = async function (id) {
+    const opcuaClient = await service.get(id);
+    result = opcuaClient.client.sessionSubscriptionCount();
+    return result;
+  };
+
+  /**
+   * @method sessionIsReconnecting
+   * @async
+   * 
+   * @param {String>} id 
+   * @returns {Object}
+   */
+  service.sessionIsReconnecting = async function (id) {
+    const opcuaClient = await service.get(id);
+    result = opcuaClient.client.sessionIsReconnecting();
+    return result;
+  };
+
+  /**
+   * @method sessionGetPublishEngine
+   * @async
+   * 
+   * @param {String>} id 
+   * @returns {Object}
+   */
+  service.sessionGetPublishEngine = async function (id) {
+    const opcuaClient = await service.get(id);
+    result = opcuaClient.client.sessionGetPublishEngine();
     return result;
   };
 
