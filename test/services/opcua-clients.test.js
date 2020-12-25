@@ -339,21 +339,27 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     let data, readResult = null;
     const service = await getClientService(app, id);
 
-    const start = moment.utc().format();
-    const dt = getDateTimeSeparately();
-    dt.minutes = dt.minutes + 1;
-    const end = moment.utc(Object.values(dt)).format();
-
     // service.getItemNodeId
     readResult = await service.getItemNodeId(id, 'Device2.PressureVesselDevice');
-
     if (isLog) inspector('getItemNodeId.readResult:', readResult);
 
     if (readResult) {
+      // Get start time
+      const start = moment.utc().format();
+      // Save value to history
+      readResult = await service.sessionReadVariableValue(id, 'Device2.PressureVesselDevice');
+      readResult = await service.sessionReadVariableValue(id, 'Device2.PressureVesselDevice');
+      readResult = await service.sessionReadVariableValue(id, 'Device2.PressureVesselDevice');
+
+      await pause(1000);
+      // Get end time
+      const end = moment.utc().format();
+
       // service.sessionReadHistoryValues
       readResult = await service.sessionReadHistoryValues(id, 'Device2.PressureVesselDevice', start, end);
 
       if (isLog) inspector('sessionReadHistoryValues.readResult:', readResult);
+      // inspector('sessionReadHistoryValues.readResult:', readResult);
       if (readResult.length && readResult[0].statusCode.name === 'Good') {
         if (readResult[0].historyData.dataValues.length) {
           let dataValues = readResult[0].historyData.dataValues;

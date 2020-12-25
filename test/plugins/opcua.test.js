@@ -212,14 +212,19 @@ describe('<<=== OPC-UA: Test (opcua.test) ===>>', () => {
     it('OPC-UA client session history value', async () => {
       let readResult = null;
 
-      // Read pressureVesselDevice
-      const start = moment.utc().format();
-      const dt = getDateTimeSeparately();
-      dt.minutes = dt.minutes + 1;
-      const end = moment.utc(Object.values(dt)).format();
-
-      await pause(1000);
       if (client.getItemNodeId('Device2.PressureVesselDevice')) {
+        // Get start time
+        const start = moment.utc().format();
+
+        // Save value to history
+        readResult = await client.sessionReadVariableValue('Device2.PressureVesselDevice');
+        readResult = await client.sessionReadVariableValue('Device2.PressureVesselDevice');
+        readResult = await client.sessionReadVariableValue('Device2.PressureVesselDevice');
+
+        await pause(1000);
+        // Get end time
+        const end = moment.utc().format();
+
         readResult = await client.sessionReadHistoryValues('Device2.PressureVesselDevice', start, end);
         if (readResult.length && readResult[0].statusCode.name === 'Good') {
           if (readResult[0].historyData.dataValues.length) {
@@ -227,12 +232,21 @@ describe('<<=== OPC-UA: Test (opcua.test) ===>>', () => {
             dataValues.forEach(dataValue => {
               if (dataValue.statusCode.name === 'Good') {
                 console.log(chalk.green('PressureVesselDevice:'), chalk.cyan(`${loRound(dataValue.value.value, 3)}; Timestamp=${dataValue.sourceTimestamp}`));
+                assert.ok(readResult, 'OPC-UA client session history value');
+              } else {
+                assert.ok(false, 'OPC-UA client session history value');
               }
             });
+          } else {
+            assert.ok(false, 'OPC-UA client session history value');
           }
+        } else {
+          assert.ok(false, 'OPC-UA client session history value');
         }
+      } else {
+        assert.ok(false, 'OPC-UA client session history value');
       }
-      assert.ok(readResult, 'OPC-UA client session history value');
+
     });
 
     //============== SESSION WRITE VALUE ====================//
