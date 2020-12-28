@@ -1,0 +1,127 @@
+{
+  "objects": [
+    {
+      "browseName": "Device1",
+      "displayName": "Device1"
+    },
+    {
+      "browseName": "Device2",
+      "displayName": "Device2"
+    }
+  ],
+  "variables": [
+    {
+      "browseName": "Device1.Temperature",
+      "displayName": "Temperature",
+      "ownerName": "Device1",
+      "type": "simple",
+      "dataType": "Double",
+      "variableGetType": "get",
+      "getter": "valueSimulate1",
+      "getterParams": { "value": 100 },
+      "subscription": "onChangedCommonHandler"
+    },
+    {
+      "browseName": "Device1.Variable2",
+      "displayName": "Variable2",
+      "ownerName": "Device1",
+      "type": "simple",
+      "dataType": "String",
+      "variableGetType": "valueFromSource",
+      "valueFromSourceParams": {
+        "dataType": "String"
+      },
+      "getter": "valueFromSource1",
+      "getterParams": { "value": "https://leanpub.com/b/nodejsbundle" }
+    },
+    {
+      "browseName": "Device1.Variable3",
+      "displayName": "Variable3",
+      "ownerName": "Device1",
+      "type": "simple",
+      "dataType": "Double",
+      "variableGetType": "valueFromSource",
+      "valueFromSourceParams": {
+        "dataType": "Double",
+        "arrayType": "Array"
+      },
+      "getter": "valueFromSource2",
+      "getterParams": { "value": [10.12345, 20.12345, 30.12345] },
+      "valueParams": {
+        "arrayDimensions": [3],
+        "accessLevel": "CurrentRead | CurrentWrite",
+        "userAccessLevel": "CurrentRead | CurrentWrite",
+        "valueRank": 1
+      }
+    },
+    {
+      "browseName": "Device1.PercentageMemoryUsed",
+      "displayName": "Percentage Memory Used",
+      "ownerName": "Device1",
+      "type": "simple",
+      "dataType": "Double",
+      "variableGetType": "get",
+      "getter": "percentageMemUsed",
+      "valueParams": {
+        "minimumSamplingInterval": 1000
+      }
+    },
+    {
+      "browseName": "Device1.VariableForWrite",
+      "displayName": "Variable For Write",
+      "ownerName": "Device1",
+      "type": "simple",
+      "dataType": "String"
+    },
+    {
+      "browseName": "Device2.PressureVesselDevice",
+      "displayName": "Pressure Vessel Device",
+      "ownerName": "Device2",
+      "type": "analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValueFromSource",
+      "getterParams": { "t": 50, "interval": 200 },
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10.0
+        },
+        "engineeringUnits": "bar"
+      }
+    }
+  ],
+  "methods": [
+    {
+      "browseName": "Device1.SumMethod",
+      "displayName": "Sum Method",
+      "ownerName": "Device1",
+      "bindMethod": "sumMethod",
+      "inputArguments": [
+        {
+          "name": "number1",
+          "description": { "text": "first item" },
+          "dataType": "UInt32"
+        }, 
+        {
+          "name": "number2",
+          "description": { "text": "second item" },
+          "dataType": "UInt32"
+        }
+      ],
+      "outputArguments": [
+        {
+          "name": "SumResult",
+          "description": { "text": "sum of numbers" },
+          "dataType": "UInt32",
+          "valueRank": 1
+        }
+      ],
+      "userAccessLevel": {
+        "inputArguments": "CurrentRead",
+        "outputArguments": "CurrentRead"
+      }
+    }
+  ]
+}

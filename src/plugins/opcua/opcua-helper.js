@@ -75,15 +75,19 @@ const getNameSpaceFromNodeId = function (nodeId = '') {
 /**
  * @method getOpcuaConfig
  * @param {String} id 
- * @returns {Object}
+ * @returns {Object|Array}
  */
-const getOpcuaConfig = function (id) {
+const getOpcuaConfig = function (id = '') {
+  let opcuaOption = null;
   const opcuaOptions = require(`${appRoot}/src/api/opcua/OPCUA_Config.json`);
-  const opcuaOption = opcuaOptions.find(opt => opt.id === id);
-  if(! opcuaOption){
-    throw new errors.BadRequest(`The opcua option not find for this id = '${id}' in the opcua config list`);
+  if (id) {
+    opcuaOption = opcuaOptions.find(opt => opt.id === id);
+    if (!opcuaOption) {
+      throw new errors.BadRequest(`The opcua option not find for this id = '${id}' in the opcua config list`);
+    }
   }
-  return opcuaOption;
+
+  return id ? opcuaOption : opcuaOptions;
 };
 
 /**
@@ -98,7 +102,7 @@ const getSubscriptionHandler = function (id, nameFile = '') {
   const opcuaOption = getOpcuaConfig(id);
   // Get subscriptionHandler
   const subscriptionHandlers = require(`${appRoot}${opcuaOption.paths.subscriptions}`);
-  return subscriptionHandlers[nameFile]? subscriptionHandlers[nameFile] : subscriptionHandlers[defaultNameFile];
+  return subscriptionHandlers[nameFile] ? subscriptionHandlers[nameFile] : subscriptionHandlers[defaultNameFile];
 };
 
 /**
@@ -113,7 +117,7 @@ const getServerService = async function (app = null, id) {
   const myPort = app.get('port');
   const serviceUrl = opcuaOption.srvServiceUrl;
   const _isMyServiceHost = await isMyServiceHost(serviceUrl, myPort);
-  if(_isMyServiceHost){
+  if (_isMyServiceHost) {
     srvService = app.service('opcua-servers');
   }
   return srvService;
@@ -131,7 +135,7 @@ const getClientService = async function (app = null, id) {
   const myPort = app.get('port');
   const serviceUrl = opcuaOption.clientServiceUrl;
   const _isMyServiceHost = await isMyServiceHost(serviceUrl, myPort);
-  if(_isMyServiceHost){
+  if (_isMyServiceHost) {
     clientService = app.service('opcua-clients');
   }
   return clientService;
@@ -217,7 +221,7 @@ const isMyServiceHost = async function (serviceUrl, myPort) {
   let myDomainName = await extractFullyQualifiedDomainName();
   myDomainName = myDomainName.toLowerCase();
   const myIp = getMyIp();
-  if(isDebug) debug('isMyServiceHostname:', {
+  if (isDebug) debug('isMyServiceHostname:', {
     serviceHostname,
     servicePort,
     myPort,

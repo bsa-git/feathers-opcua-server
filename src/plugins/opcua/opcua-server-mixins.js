@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { inspector, appRoot } = require('../lib');
-const { getSrvCurrentState, getServerForProvider } = require('./opcua-helper');
+const { inspector } = require('../lib');
+const { getServerForProvider } = require('./opcua-helper');
 
 const {
   Variant,

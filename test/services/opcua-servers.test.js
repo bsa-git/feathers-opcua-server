@@ -14,10 +14,9 @@ const isLog = false;
 
 // Options
 let srvData = {
-  // action: 'create',
   params: {
     port: 26570, // default - 26543, 26540 (opcua.test), 26550 (opcua.test2), 26560 (opcua-clients.test), 26570 (opcua-servers.test),
-    serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1' },
+    serverInfo: { applicationName: 'ua-cherkassy-azot-test1' },
   }
 };
 

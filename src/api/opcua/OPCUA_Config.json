@@ -1,8 +1,9 @@
 [
   {
-    "id": "UA-CHERKASSY-AZOT-M5.TEST1",
-    "name": "380-472-00203826-TEST1",
+    "id": "ua-cherkassy-azot-test1",
+    "name": "380-472-00203826-test1",
     "endpointUrl": "",
+    "endpointPort": 26560,
     "srvServiceUrl": "http://localhost:3030",
     "clientServiceUrl": "http://localhost:3030",
     "paths": {
@@ -13,16 +14,17 @@
     }
   },
   {
-    "id": "UA-CHERKASSY-AZOT-M5",
-    "name": "380-472-00203826-M5",
+    "id": "ua-cherkassy-azot-m5",
+    "name": "380-472-00203826-m5",
     "endpointUrl": "",
-    "srvServiceUrl": "http://localhost:3030",
-    "clientServiceUrl": "http://localhost:3030",
+    "endpointPort": 26560,
+    "srvServiceUrl": "http://192.168.3.5:3030",
+    "clientServiceUrl": "http://192.168.3.5:3030",
     "paths": {
-      "options": "/src/plugins/test-helpers/AddressSpaceTestOptions.json",
-      "getters": "/src/plugins/test-helpers/opcua-addressspace-getters",
-      "methods": "/src/plugins/test-helpers/opcua-addressspace-methods",
-      "subscriptions": "/src/plugins/test-helpers/opcua-addressspace-subscriptions"
+      "options": "/src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json",
+      "getters": "/src/api/opcua/ua-cherkassy-azot-m5/opcua-addressspace-getters",
+      "methods": "/src/api/opcua/ua-cherkassy-azot-m5/opcua-addressspace-methods",
+      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-m5/opcua-addressspace-subscriptions"
     }
   }
 ]

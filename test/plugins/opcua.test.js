@@ -5,10 +5,10 @@ const { getValueFromNodeId, OpcuaServer, OpcuaClient, pause, getDateTimeSeparate
 const chalk = require('chalk');
 const moment = require('moment');
 const loRound = require('lodash/round');
+const loForEach = require('lodash/forEach');
+
 const {
-  // Variant,
   DataType,
-  // VariantArrayType,
   AttributeIds,
   StatusCodes,
   makeBrowsePath
@@ -20,11 +20,11 @@ const isLog = false;
 // Options
 const srvParams = {
   port: 26540, // default - 26543, 26540 (opcua.test), 26550 (opcua.test2), 26560 (opcua-clients.test), 26570 (opcua-servers.test),
-  serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1' },
+  serverInfo: { applicationName: 'ua-cherkassy-azot-test1' },
 };
 
 const clientParams = {
-  applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1',
+  applicationName: 'ua-cherkassy-azot-test1',
 };
 
 let server = null, client = null;
@@ -217,9 +217,9 @@ describe('<<=== OPC-UA: Test (opcua.test) ===>>', () => {
         const start = moment.utc().format();
 
         // Save value to history
-        readResult = await client.sessionReadVariableValue('Device2.PressureVesselDevice');
-        readResult = await client.sessionReadVariableValue('Device2.PressureVesselDevice');
-        readResult = await client.sessionReadVariableValue('Device2.PressureVesselDevice');
+        loForEach([1, 2, 3], async (value) => {
+          readResult = await client.sessionReadVariableValue('Device2.PressureVesselDevice');
+        });
 
         await pause(1000);
         // Get end time
@@ -231,7 +231,7 @@ describe('<<=== OPC-UA: Test (opcua.test) ===>>', () => {
             let dataValues = readResult[0].historyData.dataValues;
             dataValues.forEach(dataValue => {
               if (dataValue.statusCode.name === 'Good') {
-                console.log(chalk.green('PressureVesselDevice:'), chalk.cyan(`${loRound(dataValue.value.value, 3)}; Timestamp=${dataValue.sourceTimestamp}`));
+                console.log(chalk.green('sessionReadHistoryValues.PressureVesselDevice:'), chalk.cyan(`${loRound(dataValue.value.value, 3)}; Timestamp=${dataValue.sourceTimestamp}`));
                 assert.ok(readResult, 'OPC-UA client session history value');
               } else {
                 assert.ok(false, 'OPC-UA client session history value');

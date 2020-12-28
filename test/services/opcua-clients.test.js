@@ -8,13 +8,13 @@ const {
   getSrvCurrentState,
   inspector,
   isObject,
-  getDateTimeSeparately,
   pause } = require('../../src/plugins');
 
 const chalk = require('chalk');
 const moment = require('moment');
 
 const loRound = require('lodash/round');
+const loForEach = require('lodash/forEach');
 
 const {
   StatusCodes,
@@ -28,18 +28,15 @@ const isLog = false;
 
 // Options
 const srvData = {
-  action: 'create',
   params: {
     port: 26560, // default - 26543, 26540 (opcua.test), 26550 (opcua.test2), 26560 (opcua-clients.test), 26570 (opcua-servers.test),
-    serverInfo: { applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1' },
+    serverInfo: { applicationName: 'ua-cherkassy-azot-test1' },
   }
 };
 
 const clientData = {
-  action: 'create',
-  endpointUrl: 'opc.tcp://localhost:26546',
   params: {
-    applicationName: 'UA-CHERKASSY-AZOT-M5.TEST1',
+    applicationName: 'ua-cherkassy-azot-test1',
   }
 };
 
@@ -347,9 +344,9 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
       // Get start time
       const start = moment.utc().format();
       // Save value to history
-      readResult = await service.sessionReadVariableValue(id, 'Device2.PressureVesselDevice');
-      readResult = await service.sessionReadVariableValue(id, 'Device2.PressureVesselDevice');
-      readResult = await service.sessionReadVariableValue(id, 'Device2.PressureVesselDevice');
+      loForEach([1, 2, 3], async (value) => {
+        readResult = await service.sessionReadVariableValue(id, 'Device2.PressureVesselDevice');
+      });
 
       await pause(1000);
       // Get end time
