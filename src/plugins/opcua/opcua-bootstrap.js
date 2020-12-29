@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
+const fs = require('fs');
 const {
   inspector,
+  readOnlyNewFile
 } = require('../lib');
 const {
   getOpcuaConfig,
@@ -21,6 +23,21 @@ const isLog = false;
  */
 module.exports = async function opcuaBootstrap(app) {
   let service = null;
+
+  // fs.watch('c:/tmp', (eventType, filename) => {
+  //   if (eventType === 'rename' && filename) {
+  //     fs.access(`c:/tmp/${filename}`, fs.constants.F_OK, (err) => {
+  //       if(!err){
+  //         fs.readFile(`c:/tmp/${filename}`, 'utf8', (err, data) => {
+  //           if (err) throw err;
+  //           console.log(`${filename}.data:`, data);
+  //         });
+  //       }
+  //     });
+  //   }
+  // });
+
+  
   const opcuaOptions = getOpcuaConfig();
   opcuaOptions.forEach(async option => {
     const myPort = app.get('port');

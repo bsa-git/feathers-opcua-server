@@ -1,9 +1,13 @@
 /* eslint-disable no-console */
 const logger = require('./logger');
 const app = require('./app');
-const { opcuaBootstrap } = require('./plugins/opcua');
+const { opcuaBootstrap, isTrue } = require('./plugins');
 
-opcuaBootstrap(app);
+// Run opcuaBootstrap
+if(isTrue(process.env.OPCUA_BOOTSTRAP_ENABLE)){
+  Promise.resolve(opcuaBootstrap(app));
+}
+
 
 const port = app.get('port');
 const server = app.listen(port);
