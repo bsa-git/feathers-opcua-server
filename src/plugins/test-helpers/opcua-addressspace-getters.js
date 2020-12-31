@@ -70,6 +70,21 @@ function histValueFromSource(params = {}, addedValue) {
     addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
     t = t + 1;
   }, interval);
+}
+
+function histValueFromFile(params = {}, addedValue) {
+  // simulate pressure change
+  const _t = 0;
+  const _interval = 200;
+  let t = params.t ? params.t : _t;
+  let interval = params.interval ? params.interval :_interval;
+  setInterval(function () {
+    let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
+    if(isDebug) debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime());
+    // debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime()); 
+    addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
+    t = t + 1;
+  }, interval);
 
 }
 

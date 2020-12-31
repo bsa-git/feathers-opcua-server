@@ -8,7 +8,9 @@ const {
   getSrvCurrentState,
   inspector,
   isObject,
-  pause } = require('../../src/plugins');
+  pause,
+  getTime
+} = require('../../src/plugins');
 
 const chalk = require('chalk');
 const moment = require('moment');
@@ -343,11 +345,11 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     if (readResult) {
       // Get start time
       const start = moment.utc().format();
-      debug('SessionHistoryValue.StartTime:', start);
+      debug('SessionHistoryValue.StartTime:', getTime(start));
       await pause(1000);
       // Get end time
       const end = moment.utc().format();
-      debug('SessionHistoryValue.EndTime:', end);
+      debug('SessionHistoryValue.EndTime:', getTime(end));
 
       // service.sessionReadHistoryValues
       readResult = await service.sessionReadHistoryValues(id, 'Device2.PressureVesselDevice', start, end);
