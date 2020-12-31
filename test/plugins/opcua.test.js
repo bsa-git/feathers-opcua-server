@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
 const app = require('../../src/app');
-const { getValueFromNodeId, OpcuaServer, OpcuaClient, pause, getDateTimeSeparately, isObject, inspector, appRoot } = require('../../src/plugins');
+const { getTime, getValueFromNodeId, OpcuaServer, OpcuaClient, pause, isObject, inspector } = require('../../src/plugins');
 const chalk = require('chalk');
 const moment = require('moment');
 const loRound = require('lodash/round');
@@ -215,15 +215,11 @@ describe('<<=== OPC-UA: Test (opcua.test) ===>>', () => {
       if (client.getItemNodeId('Device2.PressureVesselDevice')) {
         // Get start time
         const start = moment.utc().format();
-
-        // Save value to history
-        loForEach([1, 2, 3], async (value) => {
-          readResult = await client.sessionReadVariableValue('Device2.PressureVesselDevice');
-        });
-
+        debug('SessionHistoryValue.StartTime:', getTime(start));
         await pause(1000);
         // Get end time
         const end = moment.utc().format();
+        debug('SessionHistoryValue.EndTime:', getTime(end));
 
         readResult = await client.sessionReadHistoryValues('Device2.PressureVesselDevice', start, end);
         if (readResult.length && readResult[0].statusCode.name === 'Good') {

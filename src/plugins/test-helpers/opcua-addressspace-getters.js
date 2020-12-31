@@ -8,6 +8,12 @@ const {
   standardUnits,
   makeAccessLevelFlag,
 } = require('node-opcua');
+
+const { getTime } = require('../../plugins');
+
+const loRound = require('lodash/round');
+const moment = require('moment');
+
 const debug = require('debug')('app:opcua-addressspace-getters');
 const isDebug = false;
 // const isLog = false;
@@ -59,7 +65,8 @@ function histValueFromSource(params = {}, addedValue) {
   let interval = params.interval ? params.interval :_interval;
   setInterval(function () {
     let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
-    if(isDebug) debug('histValueFromSource.value:', value);
+    if(isDebug) debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime());
+    // debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime()); 
     addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
     t = t + 1;
   }, interval);
@@ -75,7 +82,6 @@ function percentageMemUsed() {
   const value = percentageMemUsed * 100;
   return new Variant({ dataType: DataType.Double, value: value });
 }
-
 
 module.exports = {
   valueSimulate1,

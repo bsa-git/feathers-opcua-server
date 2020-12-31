@@ -1,6 +1,6 @@
 
 /* eslint-disable no-unused-vars */
-const { readJsonFileSync, appRoot } = require('../../plugins/lib');
+const { readFileSync, appRoot } = require('../../plugins/lib');
 const {
   SecurityPolicy,
   MessageSecurityMode,
@@ -14,7 +14,7 @@ const {
 
 const fs = require('fs');
 const packageFile = `${appRoot}/node_modules/node-opcua-server/package.json`;
-const packageInfo = readJsonFileSync(packageFile);
+const packageInfo = require(packageFile); 
 const default_build_info = {
   manufacturerName: 'Node-OPCUA : MIT Licence ( see http://node-opcua.github.io/)',
   productName: packageInfo.name,

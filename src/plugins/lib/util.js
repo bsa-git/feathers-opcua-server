@@ -53,12 +53,12 @@ const waitTimeout = function (fn, cb = null, delay = 0) {
 
 /**
  * Get date time separately
- * e.g. { year: 2020, month: 9, date: 22, hours: 13, minutes: 31, seconds: 10 }
+ * e.g. { year: 2020, month: 9, date: 22, hours: 13, minutes: 31, seconds: 10, milliseconds: 555 }
  * @param {*} dt 
  * @param {*} isUtc 
  * @returns {Object}
  */
-const getDateTimeSeparately = function name(dt = undefined, isUtc = true) {
+const getDateTimeSeparately = function (dt = undefined, isUtc = true) {
   if (isUtc) {
     dt = moment.utc(dt);
   } else {
@@ -70,8 +70,37 @@ const getDateTimeSeparately = function name(dt = undefined, isUtc = true) {
     date: dt.date(),
     hours: dt.hours(),
     minutes: dt.minutes(),
-    seconds: dt.seconds()
+    seconds: dt.seconds(),
+    milliseconds: dt.milliseconds()
   };
+};
+
+/**
+ * @method getDate
+ * @param {*} dt 
+ * @param {Boolean} isUtc 
+ * @returns {String}
+ */
+const getDate = function (dt = undefined, isUtc = true) {
+  const d = getDateTimeSeparately(dt, isUtc);
+  d.year = `${d.year}`;
+  d.month = d.month > 9? `${d.month}` : `0${d.month}`;
+  d.date = d.date > 9? `${d.date}` : `0${d.date}`;
+  return `${d.year}-${d.month}-${d.date}`;
+};
+
+/**
+ * @method getTime
+ * @param {*} dt 
+ * @param {Boolean} isUtc 
+ * @returns {String}
+ */
+const getTime = function (dt = undefined, isUtc = true) {
+  const t = getDateTimeSeparately(dt, isUtc);
+  t.hours = t.hours > 9? `${t.hours}` : `0${t.hours}`;
+  t.minutes = t.minutes > 9? `${t.minutes}` : `0${t.minutes}`;
+  t.seconds = t.seconds > 9? `${t.seconds}` : `0${t.seconds}`;
+  return `${t.hours}:${t.minutes}:${t.seconds}.${t.milliseconds}`;
 };
 
 /**
@@ -447,6 +476,8 @@ module.exports = {
   pause,
   waitTimeout,
   getDateTimeSeparately,
+  getDate,
+  getTime,
   stripSlashes,
   stripSpecific,
   getCapitalizeStr,

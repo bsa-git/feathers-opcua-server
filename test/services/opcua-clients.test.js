@@ -14,7 +14,7 @@ const chalk = require('chalk');
 const moment = require('moment');
 
 const loRound = require('lodash/round');
-const loForEach = require('lodash/forEach');
+// const loForEach = require('lodash/forEach');
 
 const {
   StatusCodes,
@@ -343,14 +343,11 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     if (readResult) {
       // Get start time
       const start = moment.utc().format();
-      // Save value to history
-      loForEach([1, 2, 3], async (value) => {
-        readResult = await service.sessionReadVariableValue(id, 'Device2.PressureVesselDevice');
-      });
-
+      debug('SessionHistoryValue.StartTime:', start);
       await pause(1000);
       // Get end time
       const end = moment.utc().format();
+      debug('SessionHistoryValue.EndTime:', end);
 
       // service.sessionReadHistoryValues
       readResult = await service.sessionReadHistoryValues(id, 'Device2.PressureVesselDevice', start, end);
