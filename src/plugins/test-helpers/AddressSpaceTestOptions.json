@@ -18,7 +18,9 @@
       "dataType": "Double",
       "variableGetType": "get",
       "getter": "valueSimulate1",
-      "getterParams": { "value": 100 },
+      "getterParams": {
+        "value": 100
+      },
       "subscription": "onChangedCommonHandler"
     },
     {
@@ -32,7 +34,9 @@
         "dataType": "String"
       },
       "getter": "valueFromSource1",
-      "getterParams": { "value": "https://leanpub.com/b/nodejsbundle" }
+      "getterParams": {
+        "value": "https://leanpub.com/b/nodejsbundle"
+      }
     },
     {
       "browseName": "Device1.Variable3",
@@ -46,9 +50,17 @@
         "arrayType": "Array"
       },
       "getter": "valueFromSource2",
-      "getterParams": { "value": [10.12345, 20.12345, 30.12345] },
+      "getterParams": {
+        "value": [
+          10.12345,
+          20.12345,
+          30.12345
+        ]
+      },
       "valueParams": {
-        "arrayDimensions": [3],
+        "arrayDimensions": [
+          3
+        ],
         "accessLevel": "CurrentRead | CurrentWrite",
         "userAccessLevel": "CurrentRead | CurrentWrite",
         "valueRank": 1
@@ -82,7 +94,31 @@
       "hist": true,
       "variableGetType": "valueFromSource",
       "getter": "histValueFromSource",
-      "getterParams": { "t": 50, "interval": 200 },
+      "getterParams": {
+        "t": 50,
+        "interval": 200
+      },
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10.0
+        },
+        "engineeringUnits": "bar"
+      }
+    },
+    {
+      "browseName": "Device2.TagListFromFile",
+      "displayName": "Tag List From File",
+      "ownerName": "Device2",
+      "type": "analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValueFromSource",
+      "getterParams": {
+        "t": 50,
+        "interval": 200
+      },
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -101,19 +137,25 @@
       "inputArguments": [
         {
           "name": "number1",
-          "description": { "text": "first item" },
+          "description": {
+            "text": "first item"
+          },
           "dataType": "UInt32"
-        }, 
+        },
         {
           "name": "number2",
-          "description": { "text": "second item" },
+          "description": {
+            "text": "second item"
+          },
           "dataType": "UInt32"
         }
       ],
       "outputArguments": [
         {
           "name": "SumResult",
-          "description": { "text": "sum of numbers" },
+          "description": {
+            "text": "sum of numbers"
+          },
           "dataType": "UInt32",
           "valueRank": 1
         }

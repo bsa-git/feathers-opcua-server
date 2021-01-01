@@ -103,5 +103,6 @@ module.exports = {
   valueFromSource1,
   valueFromSource2,
   histValueFromSource,
+  histValueFromFile,
   percentageMemUsed
 };

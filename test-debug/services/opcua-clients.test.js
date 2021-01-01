@@ -3,13 +3,16 @@ const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port') || 3030;
 const {
+  appRoot,
   getServerService,
   getClientService,
   getSrvCurrentState,
   inspector,
   isObject,
   pause,
-  getTime
+  getTime,
+  makeDirSync,
+  removeDirSync
 } = require('../../src/plugins');
 
 const chalk = require('chalk');
@@ -60,12 +63,15 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     server.once('listening', () => {
       setTimeout(() => done(), 500);
     });
+    // mkdirSync([appRoot, 'test/data/tmp']);
+    makeDirSync([appRoot, 'test', 'data', 'tmp']);
   });
 
   after(function (done) {
     if (isDebug) debug('after Start!');
     server.close();
     setTimeout(() => done(), 500);
+    removeDirSync([appRoot, 'test/data/tmp']);
   });
 
   it('OPC-UA clients: registered the service', async () => {
