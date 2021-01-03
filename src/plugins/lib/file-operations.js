@@ -23,6 +23,23 @@ const doesFileExist = function (path) {
   }
 };
 
+/**
+ * @method doesDirExist
+ * @param {String|Array} path 
+ * @returns {Boolean}
+ */
+const doesDirExist = function (path) {
+  try {
+    if (Array.isArray(path)) {
+      path = join(...path);
+    }
+    return fs.statSync(path).isDirectory();
+  } catch (err) {
+    if (err.code !== 'ENOENT') throw err;
+    return false;
+  }
+};
+
 
 /**
  * @method fsAccess
@@ -39,6 +56,7 @@ const fsAccess = function (path, mode = fs.constants.F_OK) {
     fs.accessSync(path, mode);
     return true;
   } catch (err) {
+    if (err.code !== 'ENOENT') throw err;
     return false;
   }
 };
@@ -48,14 +66,14 @@ const fsAccess = function (path, mode = fs.constants.F_OK) {
  * @param {String|Array} path 
  */
 const makeDirSync = function (path) {
-  let isAccess = false, _path = '';
+  let isExist = false, _path = '';
   if (Array.isArray(path)) {
     path.forEach(item => {
       _path = join(_path, item);
-      isAccess = fsAccess(_path);
-      if (isDebug) debug('makeDirSync.path:', _path, '; isAccess:', isAccess);
-      debug('mkdirSync.path:', _path, '; isAccess:', isAccess);
-      if (!isAccess) {
+      isExist = doesDirExist(_path);
+      if (isDebug) debug('makeDirSync.path:', _path, '; isExist:', isExist);
+      // debug('makeDirSync.path:', _path, '; isExist:', isExist);
+      if (!isExist) {
         fs.mkdirSync(_path);
         debug('makeDirSync.path:', _path);
       }
@@ -71,70 +89,39 @@ const removeDirSync = function (path) {
   if (Array.isArray(path)) {
     path = join(...path);
   }
-  const isAccess = fsAccess(path);
-  if (isAccess) {
+  let isExist = doesDirExist(path);
+  // debug('removeDirSync.isExist:', isExist);
+  if (isExist) return;
+  if (isExist) {
     fs.rmdirSync(path);
     debug('removeDirSync.path:', path);
   }
 };
 
-// const rmDirFiles = dir => {
-//   const dirPath = fs.readdirSync(dir);
-//   dirPath.map(item => {
-//     const currentPath = path.join(dir, item);
-//     console.log(`rmove ${currentPath}`);
-//     fileTool.removeSync(currentPath);
-//   });
-// }
 
-// const availableActions = templates => {
-//   const generators = fs.readdirSync(templates).filter(_ => fs.lstatSync(path.join(templates, _)).isDirectory());
-//   return generators.reduce((acc, generator) => {
-//    const actions = fs.readdirSync(path.join(templates, generator));
-//    acc[generator] = actions;
-//    return acc;
-//   }, {});
-//  }
-
-// function run(gen) {
-//   var iter = gen((err, data) => {
-//     if (err) { iter.throw(err); }
-
-//     return iter.next(data);
-//   });
-
-//   iter.next();
-// }
-
-// const dirPath = '/usr/local/bin';
-
-// // Execute the generator function
-// run(function* (resume) {
-//   // Emit the list of files in the directory from the generator
-//   var contents = yield fs.readdir(dirPath, resume);
-//   console.log(contents);
-// });
-
+/**
+ * @method readDirSync
+ * @param {String|Array} path 
+ * @param {Boolean} withFileTypes 
+ */
 const readDirSync = function (path, withFileTypes = false) {
   if (Array.isArray(path)) {
     path = join(...path);
   }
-  debug('readDirSync.path:', path);
+  if (isDebug) debug('readDirSync.path:', path);
   const isAccess = fsAccess(path);
   if (isAccess) {
-    if(withFileTypes){
-      const fileObjs = fs.readdirSync(path, { withFileTypes: true }); 
-
-    }else{
-      const filenames  = fs.readdirSync(path);
-      if(isDebug) debug('readDirSync.filenames:', filenames);
-      return  filenames;
+    if (withFileTypes) {
+      let fileObjs = fs.readdirSync(path, { withFileTypes: true });
+      if (isDebug) debug('readDirSync.fileObjs:', fileObjs);
+      return fileObjs;
+    } else {
+      const filenames = fs.readdirSync(path);
+      if (isDebug) debug('readDirSync.filenames:', filenames);
+      return filenames;
     }
-    
-    
   }
 };
-
 
 
 /**
@@ -166,7 +153,7 @@ const watchDirOrFile = function (path, cb) {
       cb(eventType, path);
     }
   });
-}
+};
 
 /**
  * @method watchFile
@@ -187,7 +174,7 @@ const watchFile = function (path, cb) {
   fs.watchFile(path, (current, previous) => {
     cb(current, previous);
   });
-}
+};
 
 /**
  * @method unwatchFile
@@ -200,7 +187,7 @@ const unwatchFile = function (path) {
     path = join(...path);
   }
   fs.unwatchFile(path);
-}
+};
 
 /**
  * @method readOnlyNewFile
@@ -212,12 +199,21 @@ const readOnlyNewFile = function (path, cb) {
     path = join(...path);
   }
   fs.watch(path, (eventType, filename) => {
+    if (isDebug) debug('readOnlyNewFile.filename:', filename, '; eventType:', eventType);
+    // debug('readOnlyNewFile.filename:', filename, '; eventType:', eventType);
     if (eventType === 'rename' && filename) {
       let filePath = join(path, filename);
-      if (isDebug) debug('readOnlyNewFile.path:', filePath);
+
+      // const data = readFileSync(filePath);
+      // debug('readOnlyNewFile.filePath:', filePath, '; data:', data);
+
       const isAccess = fsAccess(filePath, fs.constants.F_OK) && fsAccess(filePath, fs.constants.R_OK);
+      if (isDebug) debug('readOnlyNewFile.isAccess:', isAccess);
+      // debug('readOnlyNewFile.isAccess:', isAccess, '; doesFileExist:', doesFileExist(filePath));
       if (isAccess) {
         const data = readFileSync(filePath);
+        if (isDebug) debug('readOnlyNewFile.filePath:', filePath, '; data:', data);
+        // debug('readOnlyNewFile.filePath:', filePath, '; data:', data);
         cb(filePath, data);
       }
     }
@@ -254,7 +250,7 @@ const readOnlyModifiedFile = function (path, cb) {
  * e.g. 'utf8'
  * @returns {String|Object}
  */
-const readFileSync = function (path, encoding) {
+const readFileSync = function (path, encoding = 'utf8') {
   let result = null;
   if (Array.isArray(path)) {
     path = join(...path);
@@ -276,8 +272,13 @@ const writeFileSync = function (path, data, isJson = false) {
   if (Array.isArray(path)) {
     path = join(...path);
   }
+  // if(doesFileExist(path)){
+  // throw new Error(`It is not possible to write the file. A file with this name - '${path}' already exists`);
+  // }
   if (isJson) {
     data = JSON.stringify(data, null, 2);
+    if (isDebug) debug('writeFileSync.jsonData:', data);
+    // debug('writeFileSync.jsonData:', data);
   }
   fs.writeFileSync(path, data); // encoding <string> | <null> Default: 'utf8'
 };
@@ -295,12 +296,14 @@ const removeFileSync = function (path) {
 
 module.exports = {
   doesFileExist,
+  doesDirExist,
   fsAccess,
   watchDirOrFile,
   watchFile,
   unwatchFile,
   makeDirSync,
   removeDirSync,
+  readDirSync,
   readOnlyNewFile,
   readOnlyModifiedFile,
   readFileSync,
