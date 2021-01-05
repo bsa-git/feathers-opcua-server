@@ -110,21 +110,26 @@
       "browseName": "Device2.TagListFromFile",
       "displayName": "Tag List From File",
       "ownerName": "Device2",
-      "type": "analog",
-      "dataType": "Double",
+      "type": "simple",
+      "dataType": "String",
       "hist": true,
       "variableGetType": "valueFromSource",
-      "getter": "histValueFromSource",
+      "valueFromSourceParams": {
+        "dataType": "String",
+        "arrayType": "Array"
+      },
+      "getter": "histTagListFromFile",
       "getterParams": {
-        "t": 50,
-        "interval": 200
+        "path": "test/data/tmp/m5_data",
+        "t": 50
       },
       "valueParams": {
-        "engineeringUnitsRange": {
-          "low": 0,
-          "high": 10.0
-        },
-        "engineeringUnits": "bar"
+        "arrayDimensions": [
+          3
+        ],
+        "accessLevel": "CurrentRead | CurrentWrite",
+        "userAccessLevel": "CurrentRead | CurrentWrite",
+        "valueRank": 1
       }
     }
   ],

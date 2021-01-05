@@ -9,14 +9,48 @@ const {
   makeAccessLevelFlag,
 } = require('node-opcua');
 
-const { getTime } = require('../../plugins');
+const {
+  appRoot,
+  getDate,
+  getTime,
+  stripSpecific,
+  readOnlyNewFile,
+  writeFileSync,
+  readFileSync,
+  removeFileSync,
+
+} = require('../../plugins');
 
 const loRound = require('lodash/round');
+const loForEach = require('lodash/forEach');
 const moment = require('moment');
+const { pause } = require('../lib');
 
 const debug = require('debug')('app:opcua-addressspace-getters');
 const isDebug = false;
 // const isLog = false;
+
+/**
+ * @method getTValue
+ * @param {Number} t 
+ * @returns {Number}
+ */
+const getTValue = function(t) {
+  let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
+  return value;
+}
+
+/**
+ * @method getFileName
+ * @returns {String} e.g. data-20210105_153826.json
+ */
+const getFileName = function() {
+  const dt = moment().format();
+  const d = stripSpecific(getDate(dt), '-');
+  const t = stripSpecific(getTime(dt), ':').split('.')[0];
+  return `data-${d}_${t}.json`;
+}
+
 
 /**
  * Simulate for value
@@ -62,10 +96,10 @@ function histValueFromSource(params = {}, addedValue) {
   const _t = 0;
   const _interval = 200;
   let t = params.t ? params.t : _t;
-  let interval = params.interval ? params.interval :_interval;
+  let interval = params.interval ? params.interval : _interval;
   setInterval(function () {
     let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
-    if(isDebug) debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime());
+    if (isDebug) debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime());
     // debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime()); 
     addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
     t = t + 1;
@@ -75,12 +109,31 @@ function histValueFromSource(params = {}, addedValue) {
 function histValueFromFile(params = {}, addedValue) {
   // simulate pressure change
   const _t = 0;
-  const _interval = 200;
+  const _path = 'test/data/tmp/m5_data';
   let t = params.t ? params.t : _t;
-  let interval = params.interval ? params.interval :_interval;
+  let path = params.path ? params.path : _path;
+  // Watch read only new file
+  path = readOnlyNewFile([appRoot, path], (filePath, data) => {
+    console.log(chalk.green('cbReadOnlyNewFile.filePath:'), chalk.cyan(filePath));
+    console.log(chalk.green('cbReadOnlyNewFile.data:'), chalk.cyan(data));
+    // debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime()); 
+    addedValue.setValueFromSource({ value: value });
+    t = t + 1;
+  });
+
+  // Write file
+
+  loForEach([1, 2, 3], async function (value) {
+    const data = { nameTag: 'Device2.TagListFromFile', value: getTValue(value) };
+    writeFileSync([path, 'new.json'], data, true);
+    await pause(200);
+  });
+
+  // data-20210105_153826.txt
+
   setInterval(function () {
     let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
-    if(isDebug) debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime());
+    if (isDebug) debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime());
     // debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime()); 
     addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
     t = t + 1;

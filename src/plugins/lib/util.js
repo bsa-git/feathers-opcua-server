@@ -79,7 +79,7 @@ const getDateTimeSeparately = function (dt = undefined, isUtc = true) {
  * @method getDate
  * @param {*} dt 
  * @param {Boolean} isUtc 
- * @returns {String}
+ * @returns {String} e.g. 2021-01-10
  */
 const getDate = function (dt = undefined, isUtc = true) {
   const d = getDateTimeSeparately(dt, isUtc);
@@ -93,7 +93,7 @@ const getDate = function (dt = undefined, isUtc = true) {
  * @method getTime
  * @param {*} dt 
  * @param {Boolean} isUtc 
- * @returns {String}
+ * @returns {String} e.g. 15:50:10.134
  */
 const getTime = function (dt = undefined, isUtc = true) {
   const t = getDateTimeSeparately(dt, isUtc);

@@ -5,14 +5,10 @@ const {
   inspector,
   pause,
   doesDirExist,
-  doesFileExist,
   makeDirSync,
-  removeDirSync,
-  removeFilesFromDirSync,
   clearDirSync,
   writeFileSync,
   readFileSync,
-  removeFileSync,
   readDirSync,
   readOnlyNewFile,
   readOnlyModifiedFile,
@@ -33,7 +29,6 @@ const isLog = false;
 function cbReadOnlyNewFile(filePath, data) {
   console.log(chalk.green('cbReadOnlyNewFile.filePath:'), chalk.cyan(filePath));
   console.log(chalk.green('cbReadOnlyNewFile.data:'), chalk.cyan(data));
-  // removeFileSync(filePath);
 }
 
 /**
@@ -44,7 +39,6 @@ function cbReadOnlyNewFile(filePath, data) {
 function cbReadOnlyModifiedFile(filePath, data) {
   console.log(chalk.green('cbReadOnlyModifiedFile.filePath:'), chalk.cyan(filePath));
   console.log(chalk.green('cbReadOnlyModifiedFile.data:'), chalk.cyan(data));
-  // removeFileSync(filePath);
 }
 
 /**
@@ -57,8 +51,8 @@ function cbWatchFile(filePath, current, previous) {
   console.log(chalk.green('cbWatchFile.filePath:'), chalk.cyan(filePath));
   inspector('cbWatchFile.current:', current);
   inspector('cbWatchFile.previous:', previous);
+  // UnWatch File
   unwatchFile(filePath);
-  // removeFileSync(filePath);
 }
 
 describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
@@ -69,8 +63,8 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
 
   after(async () => {
     const path = [appRoot, 'test/data/tmp'];
-    removeFilesFromDirSync(path);
-    // clearDirSync(path);
+    // removeFilesFromDirSync(path);
+    clearDirSync(path);
   });
 
   it('FileOperations: writeFileSync/readFileSync', () => {
@@ -142,17 +136,13 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
   });
 
   it('FileOperations: watchFile', async () => {
+    // Watch file
     let path = watchFile([appRoot, 'test/data/tmp/tmp3/3.json'], cbWatchFile, {interval: 100});
-
-    debug('FileOperations: watchFile.path:', path);
-
-    // pause(300);
-
+    if (isDebug) debug('FileOperations: watchFile.path:', path);
+    // Write file
     const data = { value: '12345-ModifiedFile' };
     writeFileSync(path, data, true);
-
-    // removeFileSync(path);
-
+    // Pause 300Ms
     await pause(300);
 
     assert.ok(true, 'FileOperations: watchFile');

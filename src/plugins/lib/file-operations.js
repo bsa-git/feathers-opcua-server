@@ -74,7 +74,7 @@ const makeDirSync = function (path) {
       if (isDebug) debug('makeDirSync.path:', _path, '; isExist:', isExist);
       if (!isExist) {
         fs.mkdirSync(_path);
-        debug('makeDirSync.path:', _path);
+        debug('Make dir for path:', _path);
       }
     });
   } else {
@@ -83,45 +83,12 @@ const makeDirSync = function (path) {
     if (isDebug) debug('makeDirSync.path:', _path, '; isExist:', isExist);
     if (!isExist) {
       fs.mkdirSync(_path);
-      debug('makeDirSync.path:', _path);
+      debug('Make dir for path:', _path);
     }
   }
   return _path;
 };
 
-/**
- * @method removeDirSync
- * @param {String|Array} path 
- */
-const removeDirSync = function (path) {
-  let newPath;
-  if (Array.isArray(path)) {
-    path = join(...path);
-  }
-  const isExist = doesDirExist(path);
-  if (isDebug) debug('removeDirSync.path:', path, '; isExist:', isExist);
-  if (isExist) {
-    const fileObjs = readDirSync(path, true);
-    if (isDebug) debug('removeDirSync.fileObjs:', fileObjs);
-    if (fileObjs.length) {
-      fileObjs.forEach(fileObj => {
-        newPath = join(path, fileObj.name);
-        if (fileObj.isFile()) {
-          removeFileSync(newPath);
-          debug('Removed file for path:', newPath);
-        }
-        if (fileObj.isDirectory()) {
-          fs.rmdirSync(path);
-          if (isDebug) debug('Removed dir for path:', path);
-        }
-      });
-    } else {
-      fs.rmdirSync(path);
-      if (isDebug) debug('Removed dir for path:', path);
-    }
-  }
-  return path;
-};
 
 /**
  * @method removeFilesFromDirSync
@@ -134,21 +101,55 @@ const removeFilesFromDirSync = function (path) {
   }
   let isExist = doesDirExist(path);
   if (isExist) {
-    debug('removeFilesFromDirSync.path:', path);
+    if (isDebug) debug('removeFilesFromDirSync.path:', path);
     fileObjs = readDirSync(path, true);
-    debug('removeFilesFromDirSync.fileObjs:', fileObjs);
+    if (isDebug) debug('removeFilesFromDirSync.fileObjs:', fileObjs);
     if (fileObjs.length) {
       fileObjs.forEach(fileObj => {
         newPath = join(path, fileObj.name);
         if (fileObj.isFile()) {
           removeFileSync(newPath);
-          debug('Removed file for path:', newPath);
+          if (isDebug) debug('Removed file for path:', newPath);
         }
         if (fileObj.isDirectory()) {
-          debug('Run recursion for path:', newPath);
+          if (isDebug) debug('Run recursion for path:', newPath);
           removeFilesFromDirSync(newPath);
         }
       });
+    }
+  }
+  return path;
+};
+
+/**
+ * @method removeDirFromDirSync
+ * @param {String|Array} path 
+ */
+const removeDirFromDirSync = function (path) {
+  let fileObjs = [], newPath = '';
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  let isExist = doesDirExist(path);
+  if (isExist) {
+    if (isDebug) debug('removeDirFromDirSync.path:', path);
+    fileObjs = readDirSync(path, true);
+    if (isDebug) debug('removeDirFromDirSync.fileObjs:', fileObjs);
+    if (fileObjs.length) {
+      fileObjs.forEach(fileObj => {
+        newPath = join(path, fileObj.name);
+        if (fileObj.isDirectory()) {
+          if (isDebug) debug('Run recursion for path:', newPath);
+        }
+      });
+      fileObjs = readDirSync(path, true);
+      if (!fileObjs.length) {
+        fs.rmdirSync(path);
+        if (isDebug) debug('Removed dir for path:', path);
+      }
+    } else {
+      fs.rmdirSync(path);
+      if (isDebug) debug('Removed dir for path:', path);
     }
   }
   return path;
@@ -159,32 +160,14 @@ const removeFilesFromDirSync = function (path) {
  * @param {String|Array} path 
  */
 const clearDirSync = function (path) {
-  let fileObjs = [], newPath = '';
   if (Array.isArray(path)) {
     path = join(...path);
   }
-  let isExist = doesDirExist(path);
+  const isExist = doesDirExist(path);
   if (isExist) {
-    debug('clearDirSync.path:', path);
-    fileObjs = readDirSync(path, true);
-    debug('clearDirSync.fileObjs:', fileObjs);
-    if (fileObjs.length) {
-      fileObjs.forEach(fileObj => {
-        newPath = join(path, fileObj.name);
-        if (fileObj.isFile()) {
-          removeFileSync(newPath);
-          debug('Removed file for path:', newPath);
-        }
-        if (fileObj.isDirectory()) {
-          debug('Run recursion for path:', newPath);
-          clearDirSync(newPath);
-        }
-      });
-    } 
-    // else {
-    //   fs.rmdirSync(path);
-    //   debug('Removed dir for path:', path);
-    // }
+    if (isDebug) debug('clearDirSync.path:', path);
+    removeFilesFromDirSync(path);
+    removeDirFromDirSync(path);
   }
   return path;
 };
@@ -415,8 +398,8 @@ module.exports = {
   watchFile,
   unwatchFile,
   makeDirSync,
-  removeDirSync,
   removeFilesFromDirSync,
+  removeDirFromDirSync,
   clearDirSync,
   readDirSync,
   readOnlyNewFile,
