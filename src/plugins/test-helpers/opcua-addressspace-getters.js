@@ -9,16 +9,14 @@ const {
   makeAccessLevelFlag,
 } = require('node-opcua');
 
+const chalk = require('chalk');
+
 const {
   appRoot,
-  getDate,
   getTime,
-  stripSpecific,
   readOnlyNewFile,
   writeFileSync,
-  readFileSync,
-  removeFileSync,
-
+  getFileName
 } = require('../../plugins');
 
 const loRound = require('lodash/round');
@@ -38,18 +36,7 @@ const isDebug = false;
 const getTValue = function(t) {
   let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
   return value;
-}
-
-/**
- * @method getFileName
- * @returns {String} e.g. data-20210105_153826.json
- */
-const getFileName = function() {
-  const dt = moment().format();
-  const d = stripSpecific(getDate(dt), '-');
-  const t = stripSpecific(getTime(dt), ':').split('.')[0];
-  return `data-${d}_${t}.json`;
-}
+};
 
 
 /**
@@ -113,31 +100,30 @@ function histValueFromFile(params = {}, addedValue) {
   let t = params.t ? params.t : _t;
   let path = params.path ? params.path : _path;
   // Watch read only new file
-  path = readOnlyNewFile([appRoot, path], (filePath, data) => {
+  readOnlyNewFile([appRoot, path], (filePath, data) => {
+    // Set value from source
+    addedValue.setValueFromSource({ value: data });
+
     console.log(chalk.green('cbReadOnlyNewFile.filePath:'), chalk.cyan(filePath));
     console.log(chalk.green('cbReadOnlyNewFile.data:'), chalk.cyan(data));
-    // debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime()); 
-    addedValue.setValueFromSource({ value: value });
-    t = t + 1;
   });
 
   // Write file
 
   loForEach([1, 2, 3], async function (value) {
-    const data = { nameTag: 'Device2.TagListFromFile', value: getTValue(value) };
-    writeFileSync([path, 'new.json'], data, true);
+    const data = { nameTag: 'Device2.TagListFromFile', value: getTValue(value + t) };
+    const fileName = getFileName('data-', 'json', true);
+    writeFileSync([path, fileName], data, true);
     await pause(200);
   });
 
-  // data-20210105_153826.txt
-
-  setInterval(function () {
-    let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
-    if (isDebug) debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime());
-    // debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime()); 
-    addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
-    t = t + 1;
-  }, interval);
+  // setInterval(function () {
+  //   let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
+  //   if (isDebug) debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime());
+  //   // debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime()); 
+  //   addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
+  //   t = t + 1;
+  // }, interval);
 
 }
 

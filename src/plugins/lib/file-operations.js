@@ -1,10 +1,28 @@
 /* eslint-disable no-unused-vars */
 const fs = require('fs');
 const { join } = require('path');
+const moment = require('moment');
+const { getDate, getTime, stripSpecific  } = require('../../plugins');
 
 const debug = require('debug')('app:opcua-operations');
 const isDebug = false;
 const isLog = false;
+
+
+/**
+ * @method getFileName
+ * @param {String} prefix
+ * @param {String} ex
+ * @param {Boolean} isMsec
+ * @returns {String} e.g. data-20210105_153826.123.json
+ */
+const getFileName = function(prefix = '', ex = 'json', isMsec = false) {
+  const dt = moment().format();
+  const d = stripSpecific(getDate(dt), '-');
+  const tList = stripSpecific(getTime(dt), ':').split('.');
+  const t = isMsec ?  `${tList[0]}.${tList[1]}` : `${tList[0]}`;
+  return `${prefix}${d}_${t}.${ex}`;
+};
 
 /**
  * @method doesFileExist
@@ -140,6 +158,7 @@ const removeDirFromDirSync = function (path) {
         newPath = join(path, fileObj.name);
         if (fileObj.isDirectory()) {
           if (isDebug) debug('Run recursion for path:', newPath);
+          removeDirFromDirSync(newPath);
         }
       });
       fileObjs = readDirSync(path, true);
@@ -390,7 +409,9 @@ const removeFileSync = function (path) {
   return path;
 };
 
+
 module.exports = {
+  getFileName,
   doesFileExist,
   doesDirExist,
   fsAccess,

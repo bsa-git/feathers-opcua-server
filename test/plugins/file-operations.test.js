@@ -13,7 +13,7 @@ const {
   readOnlyNewFile,
   readOnlyModifiedFile,
   watchFile,
-  unwatchFile
+  unwatchFile,
 } = require('../../src/plugins');
 const chalk = require('chalk');
 
@@ -63,7 +63,6 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
 
   after(async () => {
     const path = [appRoot, 'test/data/tmp'];
-    // removeFilesFromDirSync(path);
     clearDirSync(path);
   });
 
