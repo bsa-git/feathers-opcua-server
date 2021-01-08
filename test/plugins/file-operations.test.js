@@ -4,6 +4,9 @@ const {
   appRoot,
   inspector,
   pause,
+} = require('../../src/plugins/lib/util');
+
+const {
   doesDirExist,
   makeDirSync,
   clearDirSync,
@@ -14,7 +17,8 @@ const {
   readOnlyModifiedFile,
   watchFile,
   unwatchFile,
-} = require('../../src/plugins');
+} = require('../../src/plugins/lib/file-operations');
+
 const chalk = require('chalk');
 
 const debug = require('debug')('app:file-operations.test');

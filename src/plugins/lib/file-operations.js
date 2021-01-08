@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars */
 const fs = require('fs');
-const { join } = require('path');
+// const { join } = require('path');
+const Path = require('path');
+const join = Path.join;
 const moment = require('moment');
-const { getDate, getTime, stripSpecific  } = require('../../plugins');
+const { getDate, getTime, strReplace } = require('../lib/util');
 
 const debug = require('debug')('app:opcua-operations');
 const isDebug = false;
@@ -16,12 +18,13 @@ const isLog = false;
  * @param {Boolean} isMsec
  * @returns {String} e.g. data-20210105_153826.123.json
  */
-const getFileName = function(prefix = '', ex = 'json', isMsec = false) {
+const getFileName = function (prefix = '', ex = 'json', isMsec = false) {
   const dt = moment().format();
-  const d = stripSpecific(getDate(dt), '-');
-  const tList = stripSpecific(getTime(dt), ':').split('.');
-  const t = isMsec ?  `${tList[0]}.${tList[1]}` : `${tList[0]}`;
-  return `${prefix}${d}_${t}.${ex}`;
+  const d = strReplace(getDate(dt), '-');
+  const tList = strReplace(getTime(dt), ':').split('.');
+  const t = isMsec ? `${tList[0]}.${tList[1]}` : `${tList[0]}`;
+  const fileName = `${prefix}${d}_${t}.${ex}`;
+  return fileName;
 };
 
 /**
@@ -187,6 +190,7 @@ const clearDirSync = function (path) {
     if (isDebug) debug('clearDirSync.path:', path);
     removeFilesFromDirSync(path);
     removeDirFromDirSync(path);
+    debug('Directory has been cleared for path:', path);
   }
   return path;
 };
@@ -296,12 +300,12 @@ const unwatchFile = function (path) {
 };
 
 /**
- * @method readOnlyNewFile
+ * @method watchNewFile
  * @param {String|Array} path 
  * @param {Function} cb 
  * @returns {String}
  */
-const readOnlyNewFile = function (path, cb) {
+const watchNewFile = function (path, cb) {
   if (Array.isArray(path)) {
     path = join(...path);
   }
@@ -313,9 +317,62 @@ const readOnlyNewFile = function (path, cb) {
       const isAccess = fsAccess(filePath, fs.constants.F_OK) && fsAccess(filePath, fs.constants.R_OK);
       if (isDebug) debug('readOnlyNewFile.filePath:', filePath, '; isAccess:', isAccess);
 
+      if (isAccess) cb(filePath);
+    }
+  });
+  return path;
+};
+
+/**
+ * @method readOnlyModifiedFile
+ * @param {String|Array} path 
+ * @param {Function} cb 
+ * @returns {String}
+ */
+const watchModifiedFile = function (path, cb) {
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  fs.watch(path, (eventType, filename) => {
+    if (isDebug) debug('readOnlyModifiedFile.eventType:', eventType, '; filename:', filename);
+    debug('readOnlyModifiedFile.eventType:', eventType, '; filename:', filename);
+    if (eventType === 'change' && filename) {
+      let filePath = join(path, filename);
+
+      const isAccess = fsAccess(filePath, fs.constants.F_OK) && fsAccess(filePath, fs.constants.R_OK);
+      if (isDebug) debug('readOnlyModifiedFile.filePath:', filePath, '; isAccess:', isAccess);
+      debug('readOnlyModifiedFile.filePath:', filePath, '; isAccess:', isAccess);
+
+      if (isAccess) cb(filePath);
+    }
+  });
+  return path;
+};
+
+/**
+ * @method readOnlyNewFile
+ * @param {String|Array} path 
+ * @param {Function} cb 
+ * @returns {String}
+ */
+const readOnlyNewFile = function (path, cb) {
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  fs.watch(path, (eventType, filename) => {
+    if (isDebug) debug('readOnlyNewFile.eventType:', eventType, '; filename:', filename);
+    debug('readOnlyNewFile.eventType:', eventType, '; filename:', filename);
+    if (eventType === 'rename' && filename) {
+      let filePath = join(path, filename);
+
+      const isAccess = fsAccess(filePath, fs.constants.F_OK) && fsAccess(filePath, fs.constants.R_OK);
+      if (isDebug) debug('readOnlyNewFile.filePath:', filePath, '; isAccess:', isAccess);
+      debug('readOnlyNewFile.filePath:', filePath, '; isAccess:', isAccess);
+
       if (isAccess) {
         const data = readFileSync(filePath);
         if (isDebug) debug('readOnlyNewFile.filePath:', filePath, '; data:', data);
+        debug('readOnlyNewFile.filePath:', filePath, '; data:', data);
         cb(filePath, data);
       }
     }
@@ -384,15 +441,27 @@ const writeFileSync = function (path, data, isJson = false) {
   if (Array.isArray(path)) {
     path = join(...path);
   }
-  // if(doesFileExist(path)){
-  // throw new Error(`It is not possible to write the file. A file with this name - '${path}' already exists`);
-  // }
   if (isJson) {
     data = JSON.stringify(data, null, 2);
     if (isDebug) debug('writeFileSync.jsonData:', data);
     // debug('writeFileSync.jsonData:', data);
   }
-  fs.writeFileSync(path, data); // encoding <string> | <null> Default: 'utf8'
+
+  const dir = Path.parse(path).dir;
+  // Returns:
+  // { root: 'C:\\',
+  //   dir: 'C:\\path\\dir',
+  //   base: 'file.txt',
+  //   ext: '.txt',
+  //   name: 'file' }
+
+  const isAccess = fsAccess(dir, fs.constants.F_OK) && fsAccess(dir, fs.constants.W_OK);
+  if (isAccess) {
+    fs.writeFileSync(path, data); // encoding <string> | <null> Default: 'utf8'
+    debug('File was written for path:', path);
+  } else {
+    throw new Error(`Access error for path: ${dir}; fs.F_OK: ${fsAccess(dir, fs.constants.F_OK)}; fs.W_OK: ${fsAccess(dir, fs.constants.W_OK)};`);
+  }
   return path;
 };
 
@@ -418,6 +487,8 @@ module.exports = {
   watchDirOrFile,
   watchFile,
   unwatchFile,
+  watchNewFile,
+  watchModifiedFile,
   makeDirSync,
   removeFilesFromDirSync,
   removeDirFromDirSync,

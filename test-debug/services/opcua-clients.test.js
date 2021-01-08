@@ -3,17 +3,25 @@ const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port') || 3030;
 const {
-  appRoot,
   getServerService,
   getClientService,
   getSrvCurrentState,
+} = require('../../src/plugins/opcua/opcua-helper');
+
+const {
+  appRoot,
   inspector,
   isObject,
   pause,
   getTime,
+} = require('../../src/plugins/lib');
+
+const {
+  getFileName,
   makeDirSync,
-  clearDirSync
-} = require('../../src/plugins');
+  clearDirSync,
+  writeFileSync
+} = require('../../src/plugins/lib/file-operations');
 
 const chalk = require('chalk');
 const moment = require('moment');
@@ -63,7 +71,10 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     server.once('listening', () => {
       setTimeout(() => done(), 500);
     });
-    makeDirSync([appRoot, 'test/data/tmp', 'm5_data']);
+    // makeDirSync([appRoot, 'test/data/tmp', 'm5_data']);
+    const path = makeDirSync([appRoot, 'test/data/tmp', 'm5_data']);
+    const fileName = getFileName('data-', 'json', true);
+    writeFileSync([path, fileName], {value: '12345'}, true);
   });
 
   after(function (done) {

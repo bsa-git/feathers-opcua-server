@@ -114,22 +114,11 @@
       "dataType": "String",
       "hist": true,
       "variableGetType": "valueFromSource",
-      "valueFromSourceParams": {
-        "dataType": "String",
-        "arrayType": "Array"
-      },
-      "getter": "histTagListFromFile",
+      "getter": "histValueFromFile",
       "getterParams": {
         "path": "test/data/tmp/m5_data",
-        "t": 50
-      },
-      "valueParams": {
-        "arrayDimensions": [
-          3
-        ],
-        "accessLevel": "CurrentRead | CurrentWrite",
-        "userAccessLevel": "CurrentRead | CurrentWrite",
-        "valueRank": 1
+        "t": 50,
+        "interval": 200
       }
     }
   ],

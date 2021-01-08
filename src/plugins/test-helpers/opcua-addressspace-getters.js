@@ -3,10 +3,10 @@ const os = require('os');
 const {
   Variant,
   DataType,
-  StatusCodes,
-  VariantArrayType,
-  standardUnits,
-  makeAccessLevelFlag,
+  // StatusCodes,
+  // VariantArrayType,
+  // standardUnits,
+  // makeAccessLevelFlag,
 } = require('node-opcua');
 
 const chalk = require('chalk');
@@ -14,10 +14,13 @@ const chalk = require('chalk');
 const {
   appRoot,
   getTime,
+} = require('../lib/util');
+
+const {
   readOnlyNewFile,
   writeFileSync,
   getFileName
-} = require('../../plugins');
+} = require('../lib/file-operations');
 
 const loRound = require('lodash/round');
 const loForEach = require('lodash/forEach');
@@ -96,35 +99,34 @@ function histValueFromSource(params = {}, addedValue) {
 function histValueFromFile(params = {}, addedValue) {
   // simulate pressure change
   const _t = 0;
+  const _interval = 200;
   const _path = 'test/data/tmp/m5_data';
   let t = params.t ? params.t : _t;
+  let interval = params.interval ? params.interval : _interval;
   let path = params.path ? params.path : _path;
   // Watch read only new file
   readOnlyNewFile([appRoot, path], (filePath, data) => {
     // Set value from source
-    addedValue.setValueFromSource({ value: data });
+    addedValue.setValueFromSource({ dataType: DataType.String, value: data });
 
     console.log(chalk.green('cbReadOnlyNewFile.filePath:'), chalk.cyan(filePath));
     console.log(chalk.green('cbReadOnlyNewFile.data:'), chalk.cyan(data));
   });
 
   // Write file
-
-  loForEach([1, 2, 3], async function (value) {
-    const data = { nameTag: 'Device2.TagListFromFile', value: getTValue(value + t) };
-    const fileName = getFileName('data-', 'json', true);
-    writeFileSync([path, fileName], data, true);
-    await pause(200);
-  });
+  // loForEach([1, 2, 3], async function (value) {
+  //   const data = { nameTag: 'Device2.TagListFromFile', value: getTValue(value + t) };
+  //   const fileName = getFileName('data-', 'json', true);
+  //   writeFileSync([appRoot, path, fileName], data, true);
+  //   await pause(200);
+  // });
 
   // setInterval(function () {
-  //   let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
-  //   if (isDebug) debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime());
-  //   // debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime()); 
-  //   addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
+  //   const data = { nameTag: 'Device2.TagListFromFile', value: getTValue(t) };
+  //   const fileName = getFileName('data-', 'json', true);
+  //   writeFileSync([appRoot, path, fileName], data, true);
   //   t = t + 1;
   // }, interval);
-
 }
 
 /**
