@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const fs = require('fs');
-// const { join } = require('path');
+const os = require('os');
 const Path = require('path');
 const join = Path.join;
 const moment = require('moment');
@@ -19,12 +19,88 @@ const isLog = false;
  * @returns {String} e.g. data-20210105_153826.123.json
  */
 const getFileName = function (prefix = '', ex = 'json', isMsec = false) {
-  const dt = moment().format();
-  const d = strReplace(getDate(dt), '-');
-  const tList = strReplace(getTime(dt), ':').split('.');
+  const dt = moment();
+  const d = strReplace(getDate(dt, false), '-');
+  const tList = strReplace(getTime(dt, false), ':').split('.');
   const t = isMsec ? `${tList[0]}.${tList[1]}` : `${tList[0]}`;
   const fileName = `${prefix}${d}_${t}.${ex}`;
   return fileName;
+};
+
+
+/**
+ * @method getPathBasename
+ * @param {String|Array} path
+ * @returns {String} 
+ */
+const getPathBasename = function (path) {
+  let basename = '';
+  const platform = os.platform();
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  if(platform === 'win32'){
+    basename = Path.win32.basename(path);
+  }else{
+    basename = Path.posix.basename(path);
+  }
+  return basename;
+};
+
+/**
+ * @method getPathExtname
+ * @param {String|Array} path
+ * @returns {String} 
+ */
+const getPathExtname = function (path) {
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  return Path.extname(path);
+};
+
+/**
+ * @method getPathDirname
+ * @param {String|Array} path
+ * @returns {String} 
+ */
+const getPathDirname = function (path) {
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  return Path.dirname(path);
+};
+
+/**
+ * @method getPathParse
+ * @param {String|Array} path
+ * @returns {Object} 
+ * 
+ * @example C:\path\dir\file.txt
+┌─────────────────────┬────────────┐
+│          dir        │    base    │
+├──────┬──────────────├──────┬─────┤
+│ root │              │ name │ ext │
+│ C:\  │    path\dir  │ file │.txt │
+└──────┴──────────────┴──────┴─────┘
+ */
+const getPathParse = function (path) {
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  return Path.parse(path);
+};
+
+/**
+ * @method getPathToArray
+ * @param {String|Array} path
+ * @returns {Array} 
+ */
+const getPathToArray = function (path) {
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  return  path.split(Path.sep);
 };
 
 /**
@@ -95,7 +171,7 @@ const makeDirSync = function (path) {
       if (isDebug) debug('makeDirSync.path:', _path, '; isExist:', isExist);
       if (!isExist) {
         fs.mkdirSync(_path);
-        debug('Make dir for path:', _path);
+        if(isDebug) debug('Make dir for path:', _path);
       }
     });
   } else {
@@ -104,7 +180,7 @@ const makeDirSync = function (path) {
     if (isDebug) debug('makeDirSync.path:', _path, '; isExist:', isExist);
     if (!isExist) {
       fs.mkdirSync(_path);
-      debug('Make dir for path:', _path);
+      if(isDebug) debug('Make dir for path:', _path);
     }
   }
   return _path;
@@ -190,7 +266,7 @@ const clearDirSync = function (path) {
     if (isDebug) debug('clearDirSync.path:', path);
     removeFilesFromDirSync(path);
     removeDirFromDirSync(path);
-    debug('Directory has been cleared for path:', path);
+    if(isDebug) debug('Directory has been cleared for path:', path);
   }
   return path;
 };
@@ -335,13 +411,11 @@ const watchModifiedFile = function (path, cb) {
   }
   fs.watch(path, (eventType, filename) => {
     if (isDebug) debug('readOnlyModifiedFile.eventType:', eventType, '; filename:', filename);
-    debug('readOnlyModifiedFile.eventType:', eventType, '; filename:', filename);
     if (eventType === 'change' && filename) {
       let filePath = join(path, filename);
 
       const isAccess = fsAccess(filePath, fs.constants.F_OK) && fsAccess(filePath, fs.constants.R_OK);
       if (isDebug) debug('readOnlyModifiedFile.filePath:', filePath, '; isAccess:', isAccess);
-      debug('readOnlyModifiedFile.filePath:', filePath, '; isAccess:', isAccess);
 
       if (isAccess) cb(filePath);
     }
@@ -361,18 +435,15 @@ const readOnlyNewFile = function (path, cb) {
   }
   fs.watch(path, (eventType, filename) => {
     if (isDebug) debug('readOnlyNewFile.eventType:', eventType, '; filename:', filename);
-    debug('readOnlyNewFile.eventType:', eventType, '; filename:', filename);
     if (eventType === 'rename' && filename) {
       let filePath = join(path, filename);
 
       const isAccess = fsAccess(filePath, fs.constants.F_OK) && fsAccess(filePath, fs.constants.R_OK);
       if (isDebug) debug('readOnlyNewFile.filePath:', filePath, '; isAccess:', isAccess);
-      debug('readOnlyNewFile.filePath:', filePath, '; isAccess:', isAccess);
 
       if (isAccess) {
         const data = readFileSync(filePath);
         if (isDebug) debug('readOnlyNewFile.filePath:', filePath, '; data:', data);
-        debug('readOnlyNewFile.filePath:', filePath, '; data:', data);
         cb(filePath, data);
       }
     }
@@ -392,13 +463,11 @@ const readOnlyModifiedFile = function (path, cb) {
   }
   fs.watch(path, (eventType, filename) => {
     if (isDebug) debug('readOnlyModifiedFile.eventType:', eventType, '; filename:', filename);
-    debug('readOnlyModifiedFile.eventType:', eventType, '; filename:', filename);
     if (eventType === 'change' && filename) {
       let filePath = join(path, filename);
 
       const isAccess = fsAccess(filePath, fs.constants.F_OK) && fsAccess(filePath, fs.constants.R_OK);
       if (isDebug) debug('readOnlyModifiedFile.filePath:', filePath, '; isAccess:', isAccess);
-      debug('readOnlyModifiedFile.filePath:', filePath, '; isAccess:', isAccess);
 
       if (isAccess) {
         const data = readFileSync(filePath);
@@ -444,21 +513,14 @@ const writeFileSync = function (path, data, isJson = false) {
   if (isJson) {
     data = JSON.stringify(data, null, 2);
     if (isDebug) debug('writeFileSync.jsonData:', data);
-    // debug('writeFileSync.jsonData:', data);
   }
 
-  const dir = Path.parse(path).dir;
-  // Returns:
-  // { root: 'C:\\',
-  //   dir: 'C:\\path\\dir',
-  //   base: 'file.txt',
-  //   ext: '.txt',
-  //   name: 'file' }
+  const dir = getPathParse(path).dir;
 
   const isAccess = fsAccess(dir, fs.constants.F_OK) && fsAccess(dir, fs.constants.W_OK);
   if (isAccess) {
     fs.writeFileSync(path, data); // encoding <string> | <null> Default: 'utf8'
-    debug('File was written for path:', path);
+    if(isDebug) debug('File was written for path:', path);
   } else {
     throw new Error(`Access error for path: ${dir}; fs.F_OK: ${fsAccess(dir, fs.constants.F_OK)}; fs.W_OK: ${fsAccess(dir, fs.constants.W_OK)};`);
   }
@@ -481,6 +543,11 @@ const removeFileSync = function (path) {
 
 module.exports = {
   getFileName,
+  getPathBasename,
+  getPathExtname,
+  getPathDirname,
+  getPathParse,
+  getPathToArray,
   doesFileExist,
   doesDirExist,
   fsAccess,

@@ -107,8 +107,8 @@
       }
     },
     {
-      "browseName": "Device2.TagListFromFile",
-      "displayName": "Tag List From File",
+      "browseName": "Device2.ValueFromFile",
+      "displayName": "Value From File",
       "ownerName": "Device2",
       "type": "simple",
       "dataType": "String",
@@ -116,9 +116,9 @@
       "variableGetType": "valueFromSource",
       "getter": "histValueFromFile",
       "getterParams": {
-        "path": "test/data/tmp/m5_data",
+        "path": "test/data/tmp",
         "t": 50,
-        "interval": 200
+        "interval": 300
       }
     }
   ],

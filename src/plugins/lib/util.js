@@ -52,57 +52,49 @@ const waitTimeout = function (fn, cb = null, delay = 0) {
 };
 
 /**
- * Get date time separately
+ * @method dtToObject
  * e.g. { year: 2020, month: 9, date: 22, hours: 13, minutes: 31, seconds: 10, milliseconds: 555 }
- * @param {*} dt 
- * @param {*} isUtc 
+ * @param {Number|String} dt 
+ * @param {Boolean} isUtc 
  * @returns {Object}
  */
-const getDateTimeSeparately = function (dt = undefined, isUtc = true) {
+const dtToObject = function (dt, isUtc = true) {
   if (isUtc) {
     dt = moment.utc(dt);
   } else {
     dt = moment(dt);
   }
-  return {
-    year: dt.year(),
-    month: dt.month() + 1,
-    date: dt.date(),
-    hours: dt.hours(),
-    minutes: dt.minutes(),
-    seconds: dt.seconds(),
-    milliseconds: dt.milliseconds()
-  };
+  return dt.toObject();
 };
 
 /**
  * @method getDate
- * @param {*} dt 
+ * @param {Number|String} dt 
  * @param {Boolean} isUtc 
  * @returns {String} e.g. 2021-01-10
  */
-const getDate = function (dt = undefined, isUtc = true) {
-  const d = getDateTimeSeparately(dt, isUtc);
-  d.year = `${d.year}`;
-  d.month = d.month > 9 ? `${d.month}` : `0${d.month}`;
-  d.date = d.date > 9 ? `${d.date}` : `0${d.date}`;
-  const date = `${d.year}-${d.month}-${d.date}`;
-  return date;
+const getDate = function (dt, isUtc = true) {
+  if (isUtc) {
+    dt = moment.utc(dt);
+  } else {
+    dt = moment(dt);
+  }
+  return dt.format('YYYY-MM-DD');
 };
 
 /**
  * @method getTime
- * @param {*} dt 
+ * @param {Number|String} dt 
  * @param {Boolean} isUtc 
  * @returns {String} e.g. 15:50:10.134
  */
 const getTime = function (dt = undefined, isUtc = true) {
-  const t = getDateTimeSeparately(dt, isUtc);
-  t.hours = t.hours > 9 ? `${t.hours}` : `0${t.hours}`;
-  t.minutes = t.minutes > 9 ? `${t.minutes}` : `0${t.minutes}`;
-  t.seconds = t.seconds > 9 ? `${t.seconds}` : `0${t.seconds}`;
-  const time = `${t.hours}:${t.minutes}:${t.seconds}.${t.milliseconds}`;
-  return time;
+  if (isUtc) {
+    dt = moment.utc(dt);
+  } else {
+    dt = moment(dt);
+  }
+  return dt.format('HH:mm:SS.SSS');
 };
 
 /**
@@ -483,7 +475,7 @@ module.exports = {
   delayTime,
   pause,
   waitTimeout,
-  getDateTimeSeparately,
+  dtToObject,
   getDate,
   getTime,
   stripSlashes,

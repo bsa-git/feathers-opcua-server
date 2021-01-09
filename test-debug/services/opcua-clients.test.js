@@ -20,6 +20,7 @@ const {
   getFileName,
   makeDirSync,
   clearDirSync,
+  removeFilesFromDirSync,
   writeFileSync
 } = require('../../src/plugins/lib/file-operations');
 
@@ -72,17 +73,19 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
       setTimeout(() => done(), 500);
     });
     // makeDirSync([appRoot, 'test/data/tmp', 'm5_data']);
-    const path = makeDirSync([appRoot, 'test/data/tmp', 'm5_data']);
+    const path = makeDirSync([appRoot, 'test/data/tmp']);
     const fileName = getFileName('data-', 'json', true);
     writeFileSync([path, fileName], {value: '12345'}, true);
   });
 
-  after(function (done) {
+  after( function (done) {
     if (isDebug) debug('after Start!');
     server.close();
     setTimeout(() => done(), 500);
     const path = [appRoot, 'test/data/tmp'];
-    clearDirSync(path);
+    // clearDirSync(path);
+    // await pause(1000);
+    // removeFilesFromDirSync(path);
   });
 
   it('OPC-UA clients: registered the service', async () => {
@@ -395,6 +398,51 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     }
   });
 
+  it('OPC-UA clients: session history value from file', async () => {
+    let value, readResult = null;
+    const service = await getClientService(app, id);
+
+    // service.getItemNodeId
+    readResult = await service.getItemNodeId(id, 'Device2.ValueFromFile');
+    if (isLog) inspector('getItemNodeId.readResult:', readResult);
+
+    if (readResult) {
+      // Get start time
+      const start = moment.utc().format();
+      debug('SessionHistoryValue_FromFile.StartTime:', getTime(start));
+      await pause(1000);
+      // Get end time
+      const end = moment.utc().format();
+      debug('SessionHistoryValue_FromFile.EndTime:', getTime(end));
+
+      // service.sessionReadHistoryValues
+      readResult = await service.sessionReadHistoryValues(id, 'Device2.ValueFromFile', start, end);
+
+      if (isLog) inspector('SessionHistoryValue_FromFile.readResult:', readResult);
+      // inspector('SessionHistoryValue_FromFile.readResult:', readResult);
+      if (readResult.length && readResult[0].statusCode.name === 'Good') {
+        if (readResult[0].historyData.dataValues.length) {
+          let dataValues = readResult[0].historyData.dataValues;
+          dataValues.forEach(dataValue => {
+            if (dataValue.statusCode.name === 'Good') {
+              value = JSON.parse(dataValue.value.value).value;
+              console.log(chalk.green('SessionHistoryValue_FromFile.ValueFromFile:'), chalk.cyan(`${value}; Timestamp=${dataValue.sourceTimestamp}`));
+              assert.ok(true, 'OPC-UA clients: session history value from file');
+            } else {
+              assert.ok(false, 'OPC-UA clients: session history value from file');
+            }
+          });
+        } else {
+          assert.ok(false, 'OPC-UA clients: session history value from file');
+        }
+      } else {
+        assert.ok(false, 'OPC-UA clients: session history value from file');
+      }
+    } else {
+      assert.ok(false, 'OPC-UA clients: session history value from file');
+    }
+  });
+
   //============== SESSION WRITE VALUE ====================//
 
   it('OPC-UA clients: session write single node value', async () => {
@@ -605,7 +653,8 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
   it('OPC-UA servers: shutdown the service', async () => {
     const service = await getServerService(app, id);
-    const opcuaServer = await service.opcuaServerShutdown(id, 1500);
+    // const opcuaServer = await service.opcuaServerShutdown(id, 1500);
+    const opcuaServer = await service.opcuaServerShutdown(id);
     if (isLog) inspector('Shutdown the server:', opcuaServer);
     assert.ok(opcuaServer, 'OPC-UA servers: shutdown the service');
   });

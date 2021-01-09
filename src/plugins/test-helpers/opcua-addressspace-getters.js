@@ -19,7 +19,9 @@ const {
 const {
   readOnlyNewFile,
   writeFileSync,
-  getFileName
+  removeFileSync,
+  getFileName,
+  getPathBasename
 } = require('../lib/file-operations');
 
 const loRound = require('lodash/round');
@@ -38,7 +40,7 @@ const isDebug = false;
  */
 const getTValue = function(t) {
   let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
-  return value;
+  return loRound(value, 3);
 };
 
 
@@ -100,7 +102,7 @@ function histValueFromFile(params = {}, addedValue) {
   // simulate pressure change
   const _t = 0;
   const _interval = 200;
-  const _path = 'test/data/tmp/m5_data';
+  const _path = 'test/data/tmp';
   let t = params.t ? params.t : _t;
   let interval = params.interval ? params.interval : _interval;
   let path = params.path ? params.path : _path;
@@ -109,24 +111,19 @@ function histValueFromFile(params = {}, addedValue) {
     // Set value from source
     addedValue.setValueFromSource({ dataType: DataType.String, value: data });
 
-    console.log(chalk.green('cbReadOnlyNewFile.filePath:'), chalk.cyan(filePath));
-    console.log(chalk.green('cbReadOnlyNewFile.data:'), chalk.cyan(data));
+    // Remove file 
+    removeFileSync(filePath);
+
+    if(isDebug) console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
+    if(isDebug) console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
   });
-
   // Write file
-  // loForEach([1, 2, 3], async function (value) {
-  //   const data = { nameTag: 'Device2.TagListFromFile', value: getTValue(value + t) };
-  //   const fileName = getFileName('data-', 'json', true);
-  //   writeFileSync([appRoot, path, fileName], data, true);
-  //   await pause(200);
-  // });
-
-  // setInterval(function () {
-  //   const data = { nameTag: 'Device2.TagListFromFile', value: getTValue(t) };
-  //   const fileName = getFileName('data-', 'json', true);
-  //   writeFileSync([appRoot, path, fileName], data, true);
-  //   t = t + 1;
-  // }, interval);
+  setInterval(function () {
+    const data = { nameTag: 'Device2.TagListFromFile', value: getTValue(t) };
+    const fileName = getFileName('data-', 'json', true);
+    writeFileSync([appRoot, path, fileName], data, true);
+    t = t + 1;
+  }, interval);
 }
 
 /**
