@@ -14,6 +14,7 @@ const chalk = require('chalk');
 const {
   appRoot,
   getTime,
+  inspector,
 } = require('../lib/util');
 
 const {
@@ -43,6 +44,15 @@ const getTValue = function(t) {
   return loRound(value, 3);
 };
 
+/**
+ * @method histPlugForGroupVariables
+ * 
+ * @param {Object} params
+ * @param {Object} addedValue 
+ */
+function histPlugForGroupVariables(params = {}, addedValue) {
+  if(isDebug) debug('histPlugForGroupVariables.params:', params);
+}
 
 /**
  * Simulate for value
@@ -99,7 +109,6 @@ function histValueFromSource(params = {}, addedValue) {
 }
 
 function histValueFromFile(params = {}, addedValue) {
-  // simulate pressure change
   const _t = 0;
   const _interval = 200;
   const _path = 'test/data/tmp';
@@ -110,21 +119,40 @@ function histValueFromFile(params = {}, addedValue) {
   readOnlyNewFile([appRoot, path], (filePath, data) => {
     // Set value from source
     addedValue.setValueFromSource({ dataType: DataType.String, value: data });
-
     // Remove file 
     removeFileSync(filePath);
-
+    // 
+    const groupVariableList = params.addedVariableList;
+    if(isDebug) inspector('histValueFromFile.groupVariableList:', groupVariableList);
+    groupVariableList.forEach(v => {
+      debug('histValueFromFile.nodeId:', v.nodeId.toString());
+      debug('histValueFromFile.browseName:', v.browseName.name);
+      debug('histValueFromFile.dataType:', v.dataType.toString());
+      // debug('histValueFromFile.engineeringUnits:', v.engineeringUnits);
+      // inspector('histValueFromFile.v:', v);
+    });
     if(isDebug) console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
     if(isDebug) console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
   });
   // Write file
   setInterval(function () {
-    const data = { nameTag: 'Device2.TagListFromFile', value: getTValue(t) };
+    const data = [
+      { 
+        name: 'Device2.02F5', 
+        value: getTValue(t) 
+      },
+      { 
+        name: 'Device2.02P100', 
+        value: getTValue(t) 
+      }
+    ];
     const fileName = getFileName('data-', 'json', true);
     writeFileSync([appRoot, path, fileName], data, true);
     t = t + 1;
   }, interval);
 }
+
+
 
 /**
  * Get percentage memory used
@@ -137,6 +165,7 @@ function percentageMemUsed() {
 }
 
 module.exports = {
+  histPlugForGroupVariables,
   valueSimulate1,
   valueFromSource1,
   valueFromSource2,

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const { appRoot } = require('../lib');
+const { appRoot, inspector } = require('../lib');
 const { getOpcuaConfig } = require('./opcua-helper');
 const {
   OPCUAServer,
@@ -15,7 +15,7 @@ const loOmit = require('lodash/omit');
 const chalk = require('chalk');
 
 const debug = require('debug')('app:plugins.opcua-server.class');
-const isLog = true;
+const isLog = false;
 const isDebug = false;
 
 
@@ -325,6 +325,7 @@ class OpcuaServer {
    */
   constructAddressSpace(params = null, getters = null, methods = null) {
     let addedVariable, addedMethod, object = null;
+    let addedVariableList, getterParams;
     this.opcuaServerNotCreated();
     const id = this.params.serverInfo.applicationName;
     const opcuaConfig = getOpcuaConfig(id);
@@ -344,151 +345,149 @@ class OpcuaServer {
     // Add objects
     if (params.objects.length) {
       params.objects.forEach(o => {
-        // Add only those objects that do not exist in the current state list
-        const foundObject = this.currentState.paramsAddressSpace.objects.find(_o => _o.browseName === o.browseName);
-        if (!foundObject) {
-          // addObject
-          object = namespace.addObject({
-            browseName: o.browseName,
-            displayName: o.displayName,
-            organizedBy: addressSpace.rootFolder.objects
-          });
-          // Push object to paramsAddressSpace.objects
-          this.currentState.paramsAddressSpace.objects.push({
-            nodeId: object.nodeId.toString(),
-            browseName: o.browseName,
-            displayName: o.displayName
-          });
+        // addObject
+        object = namespace.addObject({
+          browseName: o.browseName,
+          displayName: o.displayName,
+          organizedBy: addressSpace.rootFolder.objects
+        });
+        // Push object to paramsAddressSpace.objects
+        this.currentState.paramsAddressSpace.objects.push({
+          nodeId: object.nodeId.toString(),
+          browseName: o.browseName,
+          displayName: o.displayName
+        });
 
-          // Add variables
-          if (params.variables.length) {
-            const variables = params.variables.filter(v => v.ownerName === o.browseName);
-            if (variables.length) {
-              variables.forEach(v => {
-                // Add only those variables that do not exist in the current state list
-                const foundVariable = this.currentState.paramsAddressSpace.variables.find(_v => _v.browseName === v.browseName);
-                if (!foundVariable) {
-                  let varParams = {
-                    componentOf: object,
-                    nodeId: `s=${v.browseName}`,
-                    browseName: v.browseName,
-                    displayName: v.displayName,
-                    dataType: v.dataType,
-                  };
-                  if (v.valueParams) {
-                    // Value params merge 
-                    loMerge(varParams, v.valueParams);
-                    // Value of engineeringUnits param merge 
-                    loMerge(varParams, v.valueParams.engineeringUnits ? standardUnits[v.valueParams.engineeringUnits] : {});
-                  }
-                  if (v.variableGetType === 'get') {
-                    // Value get func merge 
-                    loMerge(varParams, { value: { get: () => { return getters[v.getter](v.getterParams ? v.getterParams : {}); } } });
-                  }
-                  // Add variables
-                  if (v.type === 'analog') {
-                    addedVariable = namespace.addAnalogDataItem(varParams);
-                  } else {
-                    addedVariable = namespace.addVariable(varParams);
-                  }
+        // Add variables
+        if (params.variables.length) {
+          const variables = params.variables.filter(v => v.ownerName === o.browseName);
+          if (variables.length) {
+            variables.forEach(v => {
+              let varParams = {
+                componentOf: object,
+                nodeId: `s=${v.browseName}`,
+                browseName: v.browseName,
+                displayName: v.displayName,
+                dataType: v.dataType,
+              };
+              if (v.valueParams) {
+                // Value params merge 
+                loMerge(varParams, v.valueParams);
+                // Value of engineeringUnits param merge 
+                loMerge(varParams, v.valueParams.engineeringUnits ? standardUnits[v.valueParams.engineeringUnits] : {});
+              }
+              if (v.variableGetType === 'get') {
+                // Value get func merge 
+                loMerge(varParams, { value: { get: () => { return getters[v.getter](v.getterParams ? v.getterParams : {}); } } });
+              }
+              // Add variables
+              if (v.type === 'analog') {
+                addedVariable = namespace.addAnalogDataItem(varParams);
+              } else {
+                addedVariable = namespace.addVariable(varParams);
+              }
 
-                  // Push variable to paramsAddressSpace.variables
-                  this.currentState.paramsAddressSpace.variables.push(loMerge({
-                    nodeId: addedVariable.nodeId.toString(),
-                    browseName: v.browseName,
-                    displayName: v.displayName,
-                    ownerName: v.ownerName,
-                    dataType: v.dataType,
-                    type: v.type,
-                  },
-                  v.variableGetType ? { variableGetType: v.variableGetType } : {},
-                  v.getter ? { getter: v.getter } : {},
-                  v.getterParams ? { getterParams: v.getterParams } : {},
-                  v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
-                  loOmit(v.valueParams, ['componentOf'])));
+              // Push variable to paramsAddressSpace.variables
+              this.currentState.paramsAddressSpace.variables.push(loMerge({
+                nodeId: addedVariable.nodeId.toString(),
+                browseName: v.browseName,
+                displayName: v.displayName,
+                ownerName: v.ownerName,
+                dataType: v.dataType,
+                type: v.type,
+              },
+              v.group ? { group: v.group } : {},
+              v.variableGetType ? { variableGetType: v.variableGetType } : {},
+              v.getter ? { getter: v.getter } : {},
+              v.getterParams ? { getterParams: v.getterParams } : {},
+              v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
+              loOmit(v.valueParams, ['componentOf'])));
 
-                  // Value from source
-                  if (v.variableGetType === 'valueFromSource') {
-                    // If a variable has history
-                    if (v.hist) {
-                      addressSpace.installHistoricalDataNode(addedVariable);
-                      let getterParams = v.getterParams ? v.getterParams : {};
-                      getters[v.getter](getterParams, addedVariable);
-                    } else {
-                      let valueFromSourceParams = loMerge({}, v.valueFromSourceParams);
-                      if (valueFromSourceParams.dataType) {
-                        const dataType = DataType[valueFromSourceParams.dataType];
-                        loMerge(valueFromSourceParams, { dataType });
-                      }
-                      if (valueFromSourceParams.arrayType) {
-                        const arrayType = VariantArrayType[valueFromSourceParams.arrayType];
-                        loMerge(valueFromSourceParams, { arrayType });
-                      }
-                      // Value get func merge 
-                      let valueFromSource = getters[v.getter](v.getterParams ? v.getterParams : {});
-                      loMerge(valueFromSourceParams, { value: valueFromSource });
-                      addedVariable.setValueFromSource(valueFromSourceParams);
-                    }
+              // Value from source
+              if (v.variableGetType === 'valueFromSource') {
+                // If a variable has history
+                if (v.hist) {
+                  addressSpace.installHistoricalDataNode(addedVariable);
+                  // Get getter params
+                  getterParams = v.getterParams ? v.getterParams : {};
+                  // Get group variables
+                  if (v.group) {
+                    const variables = params.groups.filter(g => v.browseName === g.ownerGroup);
+                    // Add group variables
+                    addedVariableList = this.addGroupVariables(addressSpace, namespace, object, variables, this.currentState);
+                    if (isLog) inspector('constructAddressSpace.addedVariableList:', addedVariableList);
+                    getterParams.addedVariableList = addedVariableList;
                   }
+                  // Run getter
+                  getters[v.getter](getterParams, addedVariable);
+                } else {
+                  let valueFromSourceParams = loMerge({}, v.valueFromSourceParams);
+                  if (valueFromSourceParams.dataType) {
+                    const dataType = DataType[valueFromSourceParams.dataType];
+                    loMerge(valueFromSourceParams, { dataType });
+                  }
+                  if (valueFromSourceParams.arrayType) {
+                    const arrayType = VariantArrayType[valueFromSourceParams.arrayType];
+                    loMerge(valueFromSourceParams, { arrayType });
+                  }
+                  // Value get func merge 
+                  let valueFromSource = getters[v.getter](v.getterParams ? v.getterParams : {});
+                  loMerge(valueFromSourceParams, { value: valueFromSource });
+                  addedVariable.setValueFromSource(valueFromSourceParams);
                 }
-              });
-            }
+              }
+            });
           }
+        }
 
-          // Add methods for object
-          if (params.methods.length) {
-            const filterMethods = params.methods.filter(m => m.ownerName === o.browseName);
-            if (filterMethods.length) {
-              filterMethods.forEach(m => {
-                // Add only those methods that do not exist in the current state list
-                const foundMethod = this.currentState.paramsAddressSpace.methods.find(_m => _m.browseName === m.browseName);
-                if (!foundMethod) {
-                  let methodParams = {
-                    nodeId: `s=${m.browseName}`,
-                    browseName: m.browseName,
-                    displayName: m.displayName,
-                  };
-                  // Method inputArguments merge 
-                  if (m.inputArguments.length) {
-                    m.inputArguments = m.inputArguments.map(arg => {
-                      arg.dataType = DataType[arg.dataType];
-                      return arg;
-                    });
-                    loMerge(methodParams, { inputArguments: m.inputArguments });
-                  }
-                  // Method outputArguments merge 
-                  if (m.outputArguments.length) {
-                    m.outputArguments = m.outputArguments.map(arg => {
-                      arg.dataType = DataType[arg.dataType];
-                      return arg;
-                    });
-                    loMerge(methodParams, { outputArguments: m.outputArguments });
-                  }
+        // Add methods for object
+        if (params.methods.length) {
+          const filterMethods = params.methods.filter(m => m.ownerName === o.browseName);
+          if (filterMethods.length) {
+            filterMethods.forEach(m => {
+              let methodParams = {
+                nodeId: `s=${m.browseName}`,
+                browseName: m.browseName,
+                displayName: m.displayName,
+              };
+              // Method inputArguments merge 
+              if (m.inputArguments.length) {
+                m.inputArguments = m.inputArguments.map(arg => {
+                  arg.dataType = DataType[arg.dataType];
+                  return arg;
+                });
+                loMerge(methodParams, { inputArguments: m.inputArguments });
+              }
+              // Method outputArguments merge 
+              if (m.outputArguments.length) {
+                m.outputArguments = m.outputArguments.map(arg => {
+                  arg.dataType = DataType[arg.dataType];
+                  return arg;
+                });
+                loMerge(methodParams, { outputArguments: m.outputArguments });
+              }
 
-                  // Add method
-                  addedMethod = namespace.addMethod(object, methodParams);
+              // Add method
+              addedMethod = namespace.addMethod(object, methodParams);
 
-                  // Push method to paramsAddressSpace.methods
-                  this.currentState.paramsAddressSpace.methods.push(loMerge(
-                    loOmit(methodParams, ['componentOf', 'propertyOf', 'organizedBy', 'encodingOf']),
-                    {
-                      nodeId: addedMethod.nodeId.toString(),
-                      ownerName: m.ownerName,
-                    }));
+              // Push method to paramsAddressSpace.methods
+              this.currentState.paramsAddressSpace.methods.push(loMerge(
+                loOmit(methodParams, ['componentOf', 'propertyOf', 'organizedBy', 'encodingOf']),
+                {
+                  nodeId: addedMethod.nodeId.toString(),
+                  ownerName: m.ownerName,
+                }));
 
-                  // optionally, we can adjust userAccessLevel attribute 
-                  if (m.userAccessLevel && m.userAccessLevel.inputArguments) {
-                    addedMethod.inputArguments.userAccessLevel = makeAccessLevelFlag(m.userAccessLevel.inputArguments);
-                  }
-                  if (m.userAccessLevel && m.userAccessLevel.outputArguments) {
-                    addedMethod.outputArguments.userAccessLevel = makeAccessLevelFlag(m.userAccessLevel.outputArguments);
-                  }
-
-                  // Bind method
-                  addedMethod.bindMethod(methods[m.bindMethod]);
-                }
-              });
-            }
+              // optionally, we can adjust userAccessLevel attribute 
+              if (m.userAccessLevel && m.userAccessLevel.inputArguments) {
+                addedMethod.inputArguments.userAccessLevel = makeAccessLevelFlag(m.userAccessLevel.inputArguments);
+              }
+              if (m.userAccessLevel && m.userAccessLevel.outputArguments) {
+                addedMethod.outputArguments.userAccessLevel = makeAccessLevelFlag(m.userAccessLevel.outputArguments);
+              }
+              // Bind method
+              addedMethod.bindMethod(methods[m.bindMethod]);
+            });
           }
         }
       });
@@ -498,6 +497,68 @@ class OpcuaServer {
       // inspector('currentState:', this.currentState);
       console.log(chalk.yellow('Server constructed address space'));
     }
+  }
+
+  /**
+   * @method addGroupVariables
+   * @param {Object} addressSpace
+   * @param {Object} namespace
+   * @param {Object} object 
+   * @param {Array} variables 
+   * @param {Object} currentState
+   * @returns {Array} 
+   */
+  addGroupVariables(addressSpace, namespace, object, variables, currentState) {
+    let addedVariable, addedVariableList = [];
+    // Add variables
+    if (variables.length) {
+      variables.forEach(v => {
+        let varParams = {
+          componentOf: object,
+          nodeId: `s=${v.browseName}`,
+          browseName: v.browseName,
+          displayName: v.displayName,
+          dataType: v.dataType,
+        };
+        if (v.valueParams) {
+          // Value params merge 
+          loMerge(varParams, v.valueParams);
+          // Value of engineeringUnits param merge 
+          loMerge(varParams, v.valueParams.engineeringUnits ? standardUnits[v.valueParams.engineeringUnits] : {});
+        }
+        // Add variables
+        if (v.type === 'analog') {
+          addedVariable = namespace.addAnalogDataItem(varParams);
+        } else {
+          addedVariable = namespace.addVariable(varParams);
+        }
+
+        // Push variable to paramsAddressSpace.variables
+        currentState.paramsAddressSpace.variables.push(loMerge({
+          nodeId: addedVariable.nodeId.toString(),
+          browseName: v.browseName,
+          displayName: v.displayName,
+          ownerName: v.ownerName,
+          ownerGroup: v.ownerGroup,
+          dataType: v.dataType,
+          type: v.type,
+        },
+        v.variableGetType ? { variableGetType: v.variableGetType } : {},
+        v.getter ? { getter: v.getter } : {},
+        v.getterParams ? { getterParams: v.getterParams } : {},
+        v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
+        loOmit(v.valueParams, ['componentOf'])
+        ));
+        // Install historical DataNode
+        addressSpace.installHistoricalDataNode(addedVariable);
+        // let getterParams = v.getterParams ? v.getterParams : {};
+        // Run getter
+        // getters[v.getter](getterParams, addedVariable);
+        addedVariableList.push(addedVariable);
+
+      });
+    }
+    return addedVariableList;
   }
 }
 
