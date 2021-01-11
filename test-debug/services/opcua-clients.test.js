@@ -14,13 +14,12 @@ const {
   isObject,
   pause,
   getTime,
+  dtToObject
 } = require('../../src/plugins/lib');
 
 const {
   getFileName,
   makeDirSync,
-  clearDirSync,
-  removeFilesFromDirSync,
   writeFileSync
 } = require('../../src/plugins/lib/file-operations');
 
@@ -364,12 +363,13 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
     if (readResult) {
       // Get start time
-      const start = moment.utc().format();
-      debug('SessionHistoryValue.StartTime:', getTime(start));
+      let start = moment();
+      debug('SessionHistoryValue.StartTime:', getTime(start, false));
+      // Pause
       await pause(1000);
       // Get end time
-      const end = moment.utc().format();
-      debug('SessionHistoryValue.EndTime:', getTime(end));
+      let end = moment();
+      debug('SessionHistoryValue.EndTime:', getTime(end, false));
 
       // service.sessionReadHistoryValues
       readResult = await service.sessionReadHistoryValues(id, 'Device2.PressureVesselDevice', start, end);
@@ -399,7 +399,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
   });
 
   it('OPC-UA clients: session history value from file', async () => {
-    let value, readResult = null;
+    let dataItems, readResult = null, accumulator = '';
     const service = await getClientService(app, id);
 
     // service.getItemNodeId
@@ -408,25 +408,27 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
     if (readResult) {
       // Get start time
-      const start = moment.utc().format();
-      debug('SessionHistoryValue_FromFile.StartTime:', getTime(start));
+      let start = moment();
+      debug('SessionHistoryValue_FromFile.StartTime:', getTime(start, false));
+      // Pause
       await pause(1000);
       // Get end time
-      const end = moment.utc().format();
-      debug('SessionHistoryValue_FromFile.EndTime:', getTime(end));
+      let end = moment();
+      debug('SessionHistoryValue_FromFile.EndTime:', getTime(end, false));
 
       // service.sessionReadHistoryValues
       readResult = await service.sessionReadHistoryValues(id, 'Device2.ValueFromFile', start, end);
 
       if (isLog) inspector('SessionHistoryValue_FromFile.readResult:', readResult);
-      // inspector('SessionHistoryValue_FromFile.readResult:', readResult);
       if (readResult.length && readResult[0].statusCode.name === 'Good') {
         if (readResult[0].historyData.dataValues.length) {
           let dataValues = readResult[0].historyData.dataValues;
           dataValues.forEach(dataValue => {
             if (dataValue.statusCode.name === 'Good') {
-              value = JSON.parse(dataValue.value.value).value;
-              console.log(chalk.green('SessionHistoryValue_FromFile.ValueFromFile:'), chalk.cyan(`${value}; Timestamp=${dataValue.sourceTimestamp}`));
+              dataItems = JSON.parse(dataValue.value.value);
+              accumulator = '';
+              dataItems.forEach(item => accumulator = accumulator + `${item.name}=${item.value}; `);
+              console.log(chalk.green('SessionHistoryValue_FromFile.ValueFromFile:'), chalk.cyan(`${accumulator}; Timestamp=${dataValue.sourceTimestamp}`));
               assert.ok(true, 'OPC-UA clients: session history value from file');
             } else {
               assert.ok(false, 'OPC-UA clients: session history value from file');
@@ -440,6 +442,97 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
       }
     } else {
       assert.ok(false, 'OPC-UA clients: session history value from file');
+    }
+  });
+
+  it('OPC-UA clients: session history value from Device2.02F5', async () => {
+    let dataItem, readResult = null;
+    const service = await getClientService(app, id);
+
+    // service.getItemNodeId
+    readResult = await service.getItemNodeId(id, 'Device2.02F5');
+    if (isLog) inspector('getItemNodeId.readResult:', readResult);
+
+    if (readResult) {
+      // Get start time
+      let start = moment();
+      debug('SessionHistoryValue_From_Device2.02F5.StartTime:', getTime(start, false));
+      // Pause
+      await pause(1000);
+      // Get end time
+      let end = moment();
+      debug('SessionHistoryValue_From_Device2.02F5.EndTime:', getTime(end, false));
+
+      // service.sessionReadHistoryValues
+      readResult = await service.sessionReadHistoryValues(id, 'Device2.02F5', start, end);
+
+      if (isLog) inspector('SessionHistoryValue_From_Device2.02F5.readResult:', readResult);
+      // inspector('SessionHistoryValue_FromFile.readResult:', readResult);
+      if (readResult.length && readResult[0].statusCode.name === 'Good') {
+        if (readResult[0].historyData.dataValues.length) {
+          let dataValues = readResult[0].historyData.dataValues;
+          dataValues.forEach(dataValue => {
+            if (dataValue.statusCode.name === 'Good') {
+              dataItem = dataValue.value.value;
+              console.log(chalk.green('SessionHistoryValue_From_Device2.02F5:'), chalk.cyan(`${dataItem}; Timestamp=${dataValue.sourceTimestamp}`));
+              assert.ok(true, 'OPC-UA clients: session history value from Device2.02F5');
+            } else {
+              assert.ok(false, 'OPC-UA clients: session history value from Device2.02F5');
+            }
+          });
+        } else {
+          assert.ok(false, 'OPC-UA clients: session history value from Device2.02F5');
+        }
+      } else {
+        assert.ok(false, 'OPC-UA clients: session history value from Device2.02F5');
+      }
+    } else {
+      assert.ok(false, 'OPC-UA clients: session history value from Device2.02F5');
+    }
+  });
+
+  it('OPC-UA clients: session history value from Device2.02P5', async () => {
+    let dataItem, readResult = null;
+    const service = await getClientService(app, id);
+
+    // service.getItemNodeId
+    readResult = await service.getItemNodeId(id, 'Device2.02P5');
+    if (isLog) inspector('getItemNodeId.readResult:', readResult);
+
+    if (readResult) {
+      // Get start time
+      let start = moment();
+      debug('SessionHistoryValue_From_Device2.02P5.StartTime:', getTime(start, false));
+      // Pause
+      await pause(1000);
+      // Get end time
+      let end = moment();
+      debug('SessionHistoryValue_From_Device2.02P5.EndTime:', getTime(end, false));
+
+      // service.sessionReadHistoryValues
+      readResult = await service.sessionReadHistoryValues(id, 'Device2.02P5', start, end);
+
+      if (isLog) inspector('SessionHistoryValue_From_Device2.02P5.readResult:', readResult);
+      if (readResult.length && readResult[0].statusCode.name === 'Good') {
+        if (readResult[0].historyData.dataValues.length) {
+          let dataValues = readResult[0].historyData.dataValues;
+          dataValues.forEach(dataValue => {
+            if (dataValue.statusCode.name === 'Good') {
+              dataItem = dataValue.value.value;
+              console.log(chalk.green('SessionHistoryValue_From_Device2.02P5:'), chalk.cyan(`${dataItem}; Timestamp=${dataValue.sourceTimestamp}`));
+              assert.ok(true, 'OPC-UA clients: session history value from Device2.02P5');
+            } else {
+              assert.ok(false, 'OPC-UA clients: session history value from Device2.02P5');
+            }
+          });
+        } else {
+          assert.ok(false, 'OPC-UA clients: session history value from Device2.02P5');
+        }
+      } else {
+        assert.ok(false, 'OPC-UA clients: session history value from Device2.02P5');
+      }
+    } else {
+      assert.ok(false, 'OPC-UA clients: session history value from Device2.02P5');
     }
   });
 

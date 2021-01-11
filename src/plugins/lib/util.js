@@ -58,13 +58,15 @@ const waitTimeout = function (fn, cb = null, delay = 0) {
  * @param {Boolean} isUtc 
  * @returns {Object}
  */
-const dtToObject = function (dt, isUtc = true) {
+const dtToObject = function (dt = '', isUtc = true) {
   if (isUtc) {
-    dt = moment.utc(dt);
+    dt = moment.utc(dt === '' ? undefined : dt);
   } else {
-    dt = moment(dt);
+    dt = moment(dt === '' ? undefined : dt);
   }
-  return dt.toObject();
+  dt = dt.toObject();
+  dt.months = dt.months + 1;
+  return dt;
 };
 
 /**
@@ -73,13 +75,9 @@ const dtToObject = function (dt, isUtc = true) {
  * @param {Boolean} isUtc 
  * @returns {String} e.g. 2021-01-10
  */
-const getDate = function (dt, isUtc = true) {
-  if (isUtc) {
-    dt = moment.utc(dt);
-  } else {
-    dt = moment(dt);
-  }
-  return dt.format('YYYY-MM-DD');
+const getDate = function (dt = '', isUtc = true) {
+  dt = dtToObject(dt, isUtc);
+  return `${dt.years}-${dt.months}-${dt.date}`;
 };
 
 /**
@@ -88,13 +86,9 @@ const getDate = function (dt, isUtc = true) {
  * @param {Boolean} isUtc 
  * @returns {String} e.g. 15:50:10.134
  */
-const getTime = function (dt = undefined, isUtc = true) {
-  if (isUtc) {
-    dt = moment.utc(dt);
-  } else {
-    dt = moment(dt);
-  }
-  return dt.format('HH:mm:SS.SSS');
+const getTime = function (dt = '', isUtc = true) {
+  dt = dtToObject(dt, isUtc);
+  return `${dt.hours}:${dt.minutes}:${dt.seconds}.${dt.milliseconds}`;
 };
 
 /**
@@ -184,54 +178,54 @@ const getRegex = function (type) {
   switch (type) {
   case 'phone':
     /*
-            (123) 456-7890
-            +(123) 456-7890
-            +(123)-456-7890
-            +(123) - 456-7890
-            +(123) - 456-78-90
-            123-456-7890
-            123.456.7890
-            1234567890
-            +31636363634
-            +380980029669
-            075-63546725
-            */
+              (123) 456-7890
+              +(123) 456-7890
+              +(123)-456-7890
+              +(123) - 456-7890
+              +(123) - 456-78-90
+              123-456-7890
+              123.456.7890
+              1234567890
+              +31636363634
+              +380980029669
+              075-63546725
+              */
     return '^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\\./0-9]*$';
   case 'zip_code':
     /*
-            12345
-            12345-6789
-            */
+              12345
+              12345-6789
+              */
     return '^[0-9]{5}(?:-[0-9]{4})?$';
   case 'lat':
     /*
-            +90.0
-            45
-            -90
-            -90.000
-            +90
-            47.123123
-            */
+              +90.0
+              45
+              -90
+              -90.000
+              +90
+              47.123123
+              */
     return '^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'long':
     /*
-            -127.554334
-            180
-            -180
-            -180.0000
-            +180
-            179.999999
-            */
+              -127.554334
+              180
+              -180
+              -180.0000
+              +180
+              179.999999
+              */
     return '^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'lat_and_long':
     /*
-            +90.0, -127.554334
-            45, 180
-            -90, -180
-            -90.000, -180.0000
-            +90, +180
-            47.1231231, 179.99999999
-            */
+              +90.0, -127.554334
+              45, 180
+              -90, -180
+              -90.000, -180.0000
+              +90, +180
+              47.1231231, 179.99999999
+              */
     return '^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$';
   default:
     return '//g';

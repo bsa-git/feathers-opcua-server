@@ -39,7 +39,7 @@ const isDebug = false;
  * @param {Number} t 
  * @returns {Number}
  */
-const getTValue = function(t) {
+const getTValue = function (t) {
   let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
   return loRound(value, 3);
 };
@@ -51,7 +51,7 @@ const getTValue = function(t) {
  * @param {Object} addedValue 
  */
 function histPlugForGroupVariables(params = {}, addedValue) {
-  if(isDebug) debug('histPlugForGroupVariables.params:', params);
+  if (isDebug) debug('histPlugForGroupVariables.params:', params);
 }
 
 /**
@@ -112,38 +112,52 @@ function histValueFromFile(params = {}, addedValue) {
   const _t = 0;
   const _interval = 200;
   const _path = 'test/data/tmp';
+  let dataItems, groupVariable;
   let t = params.t ? params.t : _t;
   let interval = params.interval ? params.interval : _interval;
   let path = params.path ? params.path : _path;
   // Watch read only new file
   readOnlyNewFile([appRoot, path], (filePath, data) => {
+    // Show filePath, data
+    if (isDebug) console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
+    if (isDebug) console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
     // Set value from source
     addedValue.setValueFromSource({ dataType: DataType.String, value: data });
     // Remove file 
     removeFileSync(filePath);
-    // 
+
+    // Get data
+    dataItems = JSON.parse(data);
+    // Get group variable list 
     const groupVariableList = params.addedVariableList;
-    if(isDebug) inspector('histValueFromFile.groupVariableList:', groupVariableList);
-    groupVariableList.forEach(v => {
-      debug('histValueFromFile.nodeId:', v.nodeId.toString());
-      debug('histValueFromFile.browseName:', v.browseName.name);
-      debug('histValueFromFile.dataType:', v.dataType.toString());
-      // debug('histValueFromFile.engineeringUnits:', v.engineeringUnits);
-      // inspector('histValueFromFile.v:', v);
+    if (isDebug) inspector('histValueFromFile.groupVariableList:', groupVariableList);
+
+    dataItems.forEach(dataItem => {
+      groupVariable = groupVariableList.find(v => v.browseName.name === dataItem.name);
+      // Set value from source
+      if(groupVariable){
+        groupVariable.setValueFromSource({ dataType: DataType[groupVariable.strDataType], value: dataItem.value });
+        if (isDebug) console.log(chalk.green(`histValueFromFile.${groupVariable.browseName.name}:`), chalk.cyan(dataItem.value));
+        // console.log(chalk.green(`histValueFromFile.${groupVariable.browseName.name}:`), chalk.cyan(dataItem.value));
+      }
     });
-    if(isDebug) console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
-    if(isDebug) console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
+
+    // groupVariableList.forEach(v => {
+    //   // Set value from source
+    //   v.setValueFromSource({ dataType: DataType[v.strDataType], value: data });
+    // });
+    
   });
   // Write file
   setInterval(function () {
     const data = [
-      { 
-        name: 'Device2.02F5', 
-        value: getTValue(t) 
+      {
+        name: 'Device2.02F5',
+        value: getTValue(t)
       },
-      { 
-        name: 'Device2.02P100', 
-        value: getTValue(t) 
+      {
+        name: 'Device2.02P5',
+        value: getTValue(t)
       }
     ];
     const fileName = getFileName('data-', 'json', true);

@@ -86,7 +86,6 @@ const getOpcuaConfig = function (id = '') {
       throw new errors.BadRequest(`The opcua option not find for this id = '${id}' in the opcua config list`);
     }
   }
-
   return id ? opcuaOption : opcuaOptions;
 };
 

@@ -143,7 +143,7 @@
       }
     },
     {
-      "browseName": "Device2.02P100",
+      "browseName": "Device2.02P5",
       "displayName": "Natural gas pressure",
       "ownerName": "Device2",
       "ownerGroup": "Device2.ValueFromFile",

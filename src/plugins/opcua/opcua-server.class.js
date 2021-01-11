@@ -554,6 +554,7 @@ class OpcuaServer {
         // let getterParams = v.getterParams ? v.getterParams : {};
         // Run getter
         // getters[v.getter](getterParams, addedVariable);
+        addedVariable.strDataType = v.dataType;
         addedVariableList.push(addedVariable);
 
       });
