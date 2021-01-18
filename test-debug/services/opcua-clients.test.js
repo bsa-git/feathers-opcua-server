@@ -6,6 +6,7 @@ const {
   getServerService,
   getClientService,
   getSrvCurrentState,
+  getOpcuaDataType
 } = require('../../src/plugins/opcua/opcua-helper');
 
 const {
@@ -327,21 +328,22 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     assert.ok(readResult, 'OPC-UA client session read');
   });
 
-  it('OPC-UA client session read all attributes', async () => {
+  it('OPC-UA client session read all attributes for "Device1.Temperature"', async () => {
     let value = null, readResult = null;
     const service = await getClientService(app, id);
     // service.sessionReadAllAttributes
     readResult = await service.sessionReadAllAttributes(id, 'Device1.Temperature');
 
     if (isLog) inspector('sessionReadAllAttributes.readResult:', readResult);
-    // inspector('sessionReadAllAttributes.readResult:', readResult);
     if (readResult && readResult.length) {
       value = readResult[0];
       if (value.statusCode === StatusCodes.Good) {
         console.log(chalk.green('sessionReadAllAttributes.nodeId:'), chalk.cyan(value.nodeId.toString()));
         console.log(chalk.green('sessionReadAllAttributes.browseName:'), chalk.cyan(value.browseName.name));
         console.log(chalk.green('sessionReadAllAttributes.displayName:'), chalk.cyan(value.displayName.text));
+        console.log(chalk.green('sessionReadAllAttributes.description:'), chalk.cyan(value.description.text));
         console.log(chalk.green('sessionReadAllAttributes.value:'), chalk.cyan(loRound(value.value, 3)));
+        console.log(chalk.green('sessionReadAllAttributes.historizing:'), chalk.cyan(value.historizing));
         assert.ok(readResult, 'OPC-UA client session read all attributes');
       } else {
         assert.ok(false, 'OPC-UA client session read all attributes');
@@ -351,6 +353,37 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     }
   });
 
+  it('OPC-UA client session read all attributes for "Device2.PressureVesselDevice"', async () => {
+    let value = null, readResult = null;
+    const service = await getClientService(app, id);
+    // service.sessionReadAllAttributes
+    readResult = await service.sessionReadAllAttributes(id, 'Device2.PressureVesselDevice');
+
+    if (isLog) inspector('sessionReadAllAttributes.readResult:', readResult);
+    // inspector('sessionReadAllAttributes.readResult:', readResult);
+    if (readResult && readResult.length) {
+      value = readResult[0];
+      if (value.statusCode === StatusCodes.Good) {
+        let dataType = value.dataType.toString();
+        dataType = getOpcuaDataType(dataType);
+        
+        console.log(chalk.green('sessionReadAllAttributes.nodeId:'), chalk.cyan(value.nodeId.toString()));
+        console.log(chalk.green('sessionReadAllAttributes.browseName:'), chalk.cyan(value.browseName.name));
+        console.log(chalk.green('sessionReadAllAttributes.displayName:'), chalk.cyan(value.displayName.text));
+        console.log(chalk.green('sessionReadAllAttributes.description:'), chalk.cyan(value.description.text));
+        console.log(chalk.green('sessionReadAllAttributes.value:'), chalk.cyan(loRound(value.value, 3)));
+        console.log(chalk.green('sessionReadAllAttributes.dataType:'), chalk.cyan(dataType));
+        console.log(chalk.green('sessionReadAllAttributes.historizing:'), chalk.cyan(value.historizing));
+        assert.ok(readResult, 'OPC-UA client session read all attributes');
+      } else {
+        assert.ok(false, 'OPC-UA client session read all attributes');
+      }
+    } else {
+      assert.ok(false, 'OPC-UA client session read all attributes');
+    }
+  });
+
+  
   //============== SESSION HISTORY VALUES ====================//
 
   it('OPC-UA clients: session history value', async () => {

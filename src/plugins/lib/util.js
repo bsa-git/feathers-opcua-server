@@ -92,6 +92,17 @@ const getTime = function (dt = '', isUtc = true) {
 };
 
 /**
+ * @method getDateTime
+ * @param {Number|String} dt 
+ * @param {Boolean} isUtc 
+ * @returns {String} e.g. 2021-01-10T15:50:10.134
+ */
+const getDateTime = function (dt = '', isUtc = true) {
+  dt = dtToObject(dt, isUtc);
+  return `${dt.years}-${dt.months}-${dt.date}T${dt.hours}:${dt.minutes}:${dt.seconds}.${dt.milliseconds}`;
+};
+
+/**
  * Strip slashes
  * @param value String
  * @return {XML|string|*|void}
@@ -472,6 +483,7 @@ module.exports = {
   dtToObject,
   getDate,
   getTime,
+  getDateTime,
   stripSlashes,
   stripSpecific,
   strReplace,

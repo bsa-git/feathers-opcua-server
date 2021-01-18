@@ -2,12 +2,14 @@
 const errors = require('@feathersjs/errors');
 const { inspector, appRoot, getParseUrl, getHostname, getMyIp } = require('../lib');
 const {
+  DataType,
   extractFullyQualifiedDomainName
 } = require('node-opcua');
 const moment = require('moment');
 
 const loToInteger = require('lodash/toInteger');
 const loIsObject = require('lodash/isObject');
+const loToPairs = require('lodash/toPairs');
 
 const debug = require('debug')('app:opcua-helper');
 const isLog = true;
@@ -70,6 +72,29 @@ const getNameSpaceFromNodeId = function (nodeId = '') {
     ns = loToInteger(ns);
   }
   return ns;
+};
+
+/**
+ * @method getOpcuaDataType
+ * 
+ * @param {String|Object} nodeId
+ * e.g. nodeId='ns=1;s=Device1.Temperature' 
+ * @returns {Array}
+ * e.g. ['Double', 11]
+ */
+const getOpcuaDataType = function (nodeId = '') {
+  let value = getValueFromNodeId(nodeId);
+  debug('getOpcuaDataType.value:', value);
+  const dataTypeList = loToPairs(DataType);
+  if(isLog) inspector('getOpcuaDataType.DataTypeList:', dataTypeList);
+  const dataType = dataTypeList.find(item => {
+    const _item = item[1];
+    // debug('getOpcuaDataType._item:', _item);
+    // debug('getOpcuaDataType.value:', value);
+    return  (_item === value);
+  });
+  debug('getOpcuaDataType.dataType:', dataType);
+  return dataType;
 };
 
 /**
@@ -237,6 +262,7 @@ module.exports = {
   getNodeIdType,
   getValueFromNodeId,
   getNameSpaceFromNodeId,
+  getOpcuaDataType,
   getOpcuaConfig,
   getSubscriptionHandler,
   getServerService,
