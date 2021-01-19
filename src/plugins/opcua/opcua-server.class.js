@@ -27,14 +27,15 @@ class OpcuaServer {
    * @param params {Object}
    */
   constructor(app, params = {}) {
+    this.app = app;
     // Set process.on to event 'SIGINT'
     this.isOnSignInt = false;
     // Get opcua config
     const opcuaConfig = getOpcuaConfig(params.serverInfo.applicationName);
     params.buildInfo = { productName: opcuaConfig.name };
     this.params = loMerge(opcuaDefaultServerOptions, params);
-    this.app = app;
     this.opcuaServer = null;
+    this.addedItemList = [];
     this.currentState = {
       id: this.params.serverInfo.applicationName,
       productName: this.params.buildInfo.productName,
@@ -178,9 +179,20 @@ class OpcuaServer {
 
   /**
    * Get current state
+   * @method getCurrentState
+   * @returns {Object}
    */
   getCurrentState() {
     return this.currentState;
+  }
+
+  /**
+   * Get added item list
+   * @method getAddedItemList
+   * @returns {Array}
+   */
+  getAddedItemList(type = '') {
+    return type? this.addedItemList.filter(item => item.type === type) : this.addedItemList;
   }
 
   /**
@@ -357,6 +369,13 @@ class OpcuaServer {
           browseName: o.browseName,
           displayName: o.displayName
         });
+        // Add object to addedItemList
+        this.addedItemList.push({
+          type: 'object',
+          nodeId: object.nodeId.toString(),
+          browseName: o.browseName,
+          item: object
+        });
 
         // Add variables
         if (params.variables.length) {
@@ -376,9 +395,15 @@ class OpcuaServer {
                 // Value of engineeringUnits param merge 
                 loMerge(varParams, v.valueParams.engineeringUnits ? standardUnits[v.valueParams.engineeringUnits] : {});
               }
+
+              // Add "this" to getterParams
+              getterParams = v.getterParams ? v.getterParams : {};
+              getterParams.myOpcuaServer = this;
+
               if (v.variableGetType === 'get') {
                 // Value get func merge 
-                loMerge(varParams, { value: { get: () => { return getters[v.getter](v.getterParams ? v.getterParams : {}); } } });
+                // loMerge(varParams, { value: { get: () => { return getters[v.getter](v.getterParams ? v.getterParams : {}); } } });
+                loMerge(varParams, { value: { get: () => { return getters[v.getter](getterParams); } } });
               }
               // Add variables
               if (v.type === 'analog') {
@@ -386,6 +411,14 @@ class OpcuaServer {
               } else {
                 addedVariable = namespace.addVariable(varParams);
               }
+              // Add addedVariable to addedItemList
+              this.addedItemList.push({
+                type: 'variable',
+                ownerName: v.ownerName,
+                nodeId: addedVariable.nodeId.toString(),
+                browseName: v.browseName,
+                item: addedVariable
+              });
 
               // Push variable to paramsAddressSpace.variables
               this.currentState.paramsAddressSpace.variables.push(loMerge({
@@ -409,7 +442,7 @@ class OpcuaServer {
                 if (v.hist) {
                   addressSpace.installHistoricalDataNode(addedVariable);
                   // Get getter params
-                  getterParams = v.getterParams ? v.getterParams : {};
+                  // getterParams = v.getterParams ? v.getterParams : {};
                   // Get group variables
                   if (v.group) {
                     const variables = params.groups.filter(g => v.browseName === g.ownerGroup);
@@ -431,7 +464,8 @@ class OpcuaServer {
                     loMerge(valueFromSourceParams, { arrayType });
                   }
                   // Value get func merge 
-                  let valueFromSource = getters[v.getter](v.getterParams ? v.getterParams : {});
+                  // let valueFromSource = getters[v.getter](v.getterParams ? v.getterParams : {});
+                  let valueFromSource = getters[v.getter](getterParams);
                   loMerge(valueFromSourceParams, { value: valueFromSource });
                   addedVariable.setValueFromSource(valueFromSourceParams);
                 }
@@ -487,6 +521,14 @@ class OpcuaServer {
               }
               // Bind method
               addedMethod.bindMethod(methods[m.bindMethod]);
+              // Add addedMethod to addedItemList
+              this.addedItemList.push({
+                type: 'method',
+                ownerName: m.ownerName,
+                nodeId: addedMethod.nodeId.toString(),
+                browseName: m.browseName,
+                item: addedMethod
+              });
             });
           }
         }
@@ -496,6 +538,7 @@ class OpcuaServer {
       Object.assign(this.currentState.paths, opcuaConfig.paths);
       // inspector('currentState:', this.currentState);
       console.log(chalk.yellow('Server constructed address space'));
+      if(isLog) inspector('constructAddressSpace.addedItemList:', this.addedItemList.map(item => loOmit(item, ['item'])));
     }
   }
 
@@ -532,6 +575,14 @@ class OpcuaServer {
         } else {
           addedVariable = namespace.addVariable(varParams);
         }
+        // Add addedVariable to addedItemList
+        this.addedItemList.push({
+          type: 'variable',
+          ownerName: v.ownerName,
+          nodeId: addedVariable.nodeId.toString(),
+          browseName: v.browseName,
+          item: addedVariable
+        });
 
         // Push variable to paramsAddressSpace.variables
         currentState.paramsAddressSpace.variables.push(loMerge({
@@ -551,12 +602,9 @@ class OpcuaServer {
         ));
         // Install historical DataNode
         addressSpace.installHistoricalDataNode(addedVariable);
-        // let getterParams = v.getterParams ? v.getterParams : {};
         // Run getter
-        // getters[v.getter](getterParams, addedVariable);
         addedVariable.strDataType = v.dataType;
         addedVariableList.push(addedVariable);
-
       });
     }
     return addedVariableList;

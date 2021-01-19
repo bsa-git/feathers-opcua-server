@@ -72,7 +72,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     server.once('listening', () => {
       setTimeout(() => done(), 500);
     });
-    // makeDirSync([appRoot, 'test/data/tmp', 'm5_data']);
+    // Write file
     const path = makeDirSync([appRoot, 'test/data/tmp']);
     const fileName = getFileName('data-', 'json', true);
     writeFileSync([path, fileName], {value: '12345'}, true);
@@ -82,10 +82,6 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     if (isDebug) debug('after Start!');
     server.close();
     setTimeout(() => done(), 500);
-    const path = [appRoot, 'test/data/tmp'];
-    // clearDirSync(path);
-    // await pause(1000);
-    // removeFilesFromDirSync(path);
   });
 
   it('OPC-UA clients: registered the service', async () => {
@@ -338,11 +334,13 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     if (readResult && readResult.length) {
       value = readResult[0];
       if (value.statusCode === StatusCodes.Good) {
+        const dataType = getOpcuaDataType(value.dataType)[0];
         console.log(chalk.green('sessionReadAllAttributes.nodeId:'), chalk.cyan(value.nodeId.toString()));
         console.log(chalk.green('sessionReadAllAttributes.browseName:'), chalk.cyan(value.browseName.name));
         console.log(chalk.green('sessionReadAllAttributes.displayName:'), chalk.cyan(value.displayName.text));
         console.log(chalk.green('sessionReadAllAttributes.description:'), chalk.cyan(value.description.text));
         console.log(chalk.green('sessionReadAllAttributes.value:'), chalk.cyan(loRound(value.value, 3)));
+        console.log(chalk.green('sessionReadAllAttributes.dataType:'), chalk.cyan(dataType));
         console.log(chalk.green('sessionReadAllAttributes.historizing:'), chalk.cyan(value.historizing));
         assert.ok(readResult, 'OPC-UA client session read all attributes');
       } else {
@@ -364,8 +362,8 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     if (readResult && readResult.length) {
       value = readResult[0];
       if (value.statusCode === StatusCodes.Good) {
-        let dataType = value.dataType.toString();
-        dataType = getOpcuaDataType(dataType);
+        // let dataType = value.dataType.toString();
+        const dataType = getOpcuaDataType(value.dataType)[0];
         
         console.log(chalk.green('sessionReadAllAttributes.nodeId:'), chalk.cyan(value.nodeId.toString()));
         console.log(chalk.green('sessionReadAllAttributes.browseName:'), chalk.cyan(value.browseName.name));
