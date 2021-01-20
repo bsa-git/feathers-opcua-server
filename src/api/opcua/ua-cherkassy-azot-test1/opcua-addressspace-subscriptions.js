@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const { inspector, getValueFromNodeId } = require('../../plugins');
+const { inspector, getValueFromNodeId } = require('../../../plugins');
 const {
   Variant,
   DataType,

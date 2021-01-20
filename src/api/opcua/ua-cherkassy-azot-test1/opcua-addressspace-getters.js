@@ -15,7 +15,11 @@ const {
   appRoot,
   getTime,
   inspector,
-} = require('../lib/util');
+} = require('../../../plugins/lib/util');
+
+const {
+  formatUAVariable
+} = require('../../../plugins/opcua/opcua-helper');
 
 const {
   readOnlyNewFile,
@@ -23,16 +27,16 @@ const {
   removeFileSync,
   getFileName,
   getPathBasename
-} = require('../lib/file-operations');
+} = require('../../../plugins/lib/file-operations');
 
 const loRound = require('lodash/round');
 const loForEach = require('lodash/forEach');
 const moment = require('moment');
-const { pause } = require('../lib');
+const { pause } = require('../../../plugins/lib');
 
 const debug = require('debug')('app:opcua-addressspace-getters');
 const isDebug = false;
-// const isLog = false;
+const isLog = false;
 
 /**
  * @method getTValue
@@ -112,17 +116,23 @@ function histValueFromFile(params = {}, addedValue) {
   const _t = 0;
   const _interval = 200;
   const _path = 'test/data/tmp';
-  let dataItems, groupVariable;
+  let dataItems, groupVariable, dataType, browseName;
   let t = params.t ? params.t : _t;
   let interval = params.interval ? params.interval : _interval;
   let path = params.path ? params.path : _path;
+
   // Watch read only new file
   readOnlyNewFile([appRoot, path], (filePath, data) => {
     // Show filePath, data
     if (isDebug) console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
     if (isDebug) console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
     // Set value from source
-    addedValue.setValueFromSource({ dataType: DataType.String, value: data });
+    dataType = formatUAVariable(addedValue).dataType[1];
+    addedValue.setValueFromSource({ dataType, value: data });
+
+    if (isLog) inspector('histValueFromFile.addedValue:', formatUAVariable(addedValue) );
+    // inspector('histValueFromFile.addedValue:', formatUAVariable(addedValue));
+
     // Remove file 
     removeFileSync(filePath);
 
@@ -135,18 +145,14 @@ function histValueFromFile(params = {}, addedValue) {
     dataItems.forEach(dataItem => {
       groupVariable = groupVariableList.find(v => v.browseName.name === dataItem.name);
       // Set value from source
-      if(groupVariable){
-        groupVariable.setValueFromSource({ dataType: DataType[groupVariable.strDataType], value: dataItem.value });
-        if (isDebug) console.log(chalk.green(`histValueFromFile.${groupVariable.browseName.name}:`), chalk.cyan(dataItem.value));
-        // console.log(chalk.green(`histValueFromFile.${groupVariable.browseName.name}:`), chalk.cyan(dataItem.value));
+      if (groupVariable) {
+        dataType = formatUAVariable(groupVariable).dataType[1];
+        browseName = formatUAVariable(groupVariable).browseName;
+        groupVariable.setValueFromSource({ dataType, value: dataItem.value });
+        if (isDebug) console.log(chalk.green(`histValueFromFile.${browseName}:`), chalk.cyan(dataItem.value));
       }
     });
 
-    // groupVariableList.forEach(v => {
-    //   // Set value from source
-    //   v.setValueFromSource({ dataType: DataType[v.strDataType], value: data });
-    // });
-    
   });
   // Write file
   setInterval(function () {

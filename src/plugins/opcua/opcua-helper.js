@@ -98,6 +98,27 @@ const getOpcuaDataType = function (nodeId = '') {
 };
 
 /**
+ * @method formatUAVariable
+ * @param {Object} uaVariable 
+ * @returns {Object}
+ */
+const formatUAVariable = function (uaVariable = null) {
+  let uaVar = {};
+  uaVar.nodeClass = uaVariable.nodeClass;
+  uaVar.nodeId = nodeIdToString(uaVariable.nodeId);
+  uaVar.browseName = uaVariable.browseName.name;
+  uaVar.dataType =  getOpcuaDataType(uaVariable.dataType);
+  uaVar.accessLevel =  uaVariable.accessLevel;
+  uaVar.userAccessLevel =  uaVariable.userAccessLevel;
+  uaVar.minimumSamplingInterval =  uaVariable.minimumSamplingInterval;
+  uaVar.historizing =  uaVariable.historizing;
+  uaVar.value =  uaVariable._dataValue.value.value;
+  uaVar.statusCode =  uaVariable._dataValue.statusCode.name;
+
+  return uaVar;
+};
+
+/**
  * @method getOpcuaConfig
  * @param {String} id 
  * @returns {Object|Array}
@@ -263,6 +284,7 @@ module.exports = {
   getValueFromNodeId,
   getNameSpaceFromNodeId,
   getOpcuaDataType,
+  formatUAVariable,
   getOpcuaConfig,
   getSubscriptionHandler,
   getServerService,

@@ -603,7 +603,7 @@ class OpcuaServer {
         // Install historical DataNode
         addressSpace.installHistoricalDataNode(addedVariable);
         // Run getter
-        addedVariable.strDataType = v.dataType;
+        // addedVariable.strDataType = v.dataType;
         addedVariableList.push(addedVariable);
       });
     }
