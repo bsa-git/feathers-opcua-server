@@ -26,7 +26,7 @@
       "methods": "/src/api/opcua/ua-cherkassy-azot-m5_test/opcua-addressspace-methods",
       "subscriptions": "/src/api/opcua/ua-cherkassy-azot-m5_test/opcua-addressspace-subscriptions"
     }
-  }
+  },
   {
     "id": "ua-cherkassy-azot-m5",
     "name": "380-472-00203826-m5",
