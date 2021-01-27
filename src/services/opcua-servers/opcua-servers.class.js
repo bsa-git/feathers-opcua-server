@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { OpcuaServer } = require('../../plugins');
+const { OpcuaServer, opcuaServerMixins } = require('../../plugins/opcua');
 const { isOpcuaServerInList, getServerForProvider } = require('../../plugins/opcua/opcua-helper');
 
 const loRemove = require('lodash/remove');
+const loAt = require('lodash/at');
 
 const debug = require('debug')('app:opcua-servers.class');
 const isDebug = false;
@@ -17,6 +18,19 @@ class OpcuaServers {
   }
 
   async create(data, params) {
+    let result;
+    // Execute an OPCUA action through a service method (create)
+    if(data.id && data.action){
+      opcuaServerMixins(this);
+      const path = this.getPathForServerMixins(data.action);
+      if(path === null){
+        throw new errors.BadRequest(`There is no path for the corresponding action - "${data.action}"`);  
+      }
+      const args = loAt(data, path);
+      result = await this[data.action](...args);
+      return result;
+    }
+
     // Get id
     const id = data.params.serverInfo.applicationName;
     if (isOpcuaServerInList(this, id)) {
@@ -39,7 +53,7 @@ class OpcuaServers {
     };
     this.opcuaServers.push(opcuaServer);
     // Get result
-    const result = params.provider ? Object.assign({}, opcuaServer, getServerForProvider(opcuaServer.server)) : opcuaServer;
+    result = params.provider ? Object.assign({}, opcuaServer, getServerForProvider(opcuaServer.server)) : opcuaServer;
     return result;
   }
 

@@ -210,18 +210,21 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
   it('OPC-UA clients: disconnect the service', async () => {
     const service = await getClientService(app, id);
-    let opcuaClient = await service.sessionClose(id);
-    opcuaClient = await service.opcuaClientDisconnect(id);
+    let data = {id, action: 'sessionClose'};
+    let opcuaClient = await service.create(data);
+    data = {id, action: 'opcuaClientDisconnect'};
+    opcuaClient = await service.create(data);
     if (isLog) inspector('Session close the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
   });
 
   it('OPC-UA clients: connect the service', async () => {
     const srvCurrentState = await getSrvCurrentState(app, id);
-    // inspector('srvCurrentState:', srvCurrentState);
     const service = await getClientService(app, id);
-    let opcuaClient = await service.opcuaClientConnect(id, srvCurrentState);
-    opcuaClient = await service.sessionCreate(id);
+    let data = {id, action: 'opcuaClientConnect', params: srvCurrentState};
+    let opcuaClient = await service.create(data);
+    data = {id, action: 'sessionCreate'};
+    opcuaClient = await service.create(data);
     if (isLog) inspector('Connect the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: connect the service');
   });
@@ -739,11 +742,14 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     console.log(chalk.greenBright('server.isInitialized:'), chalk.cyan(result));
     result = await service.isAuditing(id);
     console.log(chalk.greenBright('server.isAuditing:'), chalk.cyan(result));
-    result = await service.getServerInfo(id);
+    let data = {id, action: 'getServerInfo'};
+    result = await service.create(data);
     inspector('server.getServerInfo:', result);
-    result = await service.getBuildInfo(id);
+    data = {id, action: 'getBuildInfo'};
+    result = await service.create(data);
     inspector('server.getBuildInfo:', result);
-    result = await service.getCurrentState(id);
+    data = {id, action: 'getCurrentState'};
+    result = await service.create(data);
     if (isLog) inspector('server.getCurrentState:', result);
 
     assert.ok(true, 'OPC-UA servers: properties of server');

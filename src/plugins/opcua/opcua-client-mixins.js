@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const { inspector, appRoot } = require('../lib');
-const { getSrvCurrentState, getClientForProvider, getSubscriptionHandler } = require('./opcua-helper');
+const { getClientForProvider, getSubscriptionHandler } = require('./opcua-helper');
 
 const {
   Variant,
@@ -16,11 +16,76 @@ const debug = require('debug')('app:opcua-client-mixins');
 const isLog = true;
 const isDebug = false;
 
-let result;
-
+let result = null;
 
 
 module.exports = function opcuaClientMixins(service, path) {
+
+  /**
+   * @method getPathForClientMixins
+   * @param {String} action 
+   * @returns {Array}
+   * e.g. return -> ['id', 'params']
+   */
+  service.getPathForClientMixins = function (action) {
+    switch (action) {
+    case 'opcuaClientDisconnect':
+    case 'sessionCreate':
+    case 'sessionClose':
+    case 'subscriptionCreate':
+    case 'subscriptionTerminate':
+    case 'getCurrentState':
+    case 'getSrvCurrentState':
+    case 'getClientInfo':
+    case 'sessionToString':
+    case 'sessionEndpoint':
+    case 'sessionSubscriptionCount':
+    case 'sessionIsReconnecting':
+    case 'sessionGetPublishEngine':
+    case 'sessionReadNamespaceArray':
+    case 'sessionGetMonitoredItems':
+      result = ['id'];
+      break;
+    case 'opcuaClientCreate':
+    case 'opcuaClientConnect':
+      result = ['id', 'params'];
+      break;
+    case 'getNodeIds':
+    case 'sessionBrowse':
+    case 'sessionReadVariableValue':
+    case 'sessionReadAllAttributes':
+      result = ['id', 'nameNodeIds'];
+      break;
+    case 'getItemNodeId':
+    case 'sessionGetArgumentDefinition':
+      result = ['id', 'nameNodeId'];
+      break;
+    case 'sessionTranslateBrowsePath':
+      result = ['id', 'folder', 'path'];
+      break;
+    case 'sessionRead':
+      result = ['id', 'nameNodeIds', 'attributeIds', 'maxAge'];
+      break;
+    case 'sessionReadHistoryValues':
+      result = ['id', 'nameNodeIds', 'start', 'end'];
+      break;
+    case 'sessionWriteSingleNode':
+      result = ['id', 'nameNodeId', 'variantValue'];
+      break;
+    case 'sessionWrite':
+      result = ['id', 'nameNodeIds', 'valuesToWrite'];
+      break;
+    case 'sessionCallMethod':
+      result = ['id', 'nameNodeIds', 'inputArguments'];
+      break;
+    case 'subscriptionMonitor':
+      result = ['id', 'subscriptionHandlerName', 'itemToMonitor', 'requestedParameters', 'timestampsToReturn'];
+      break;  
+    default:
+      break;
+    }
+    return result;
+  };
 
   /**
    * @method opcuaClientCreate

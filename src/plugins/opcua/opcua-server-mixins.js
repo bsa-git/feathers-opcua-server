@@ -23,6 +23,45 @@ let result;
 module.exports = function opcuaServerMixins(service, path) {
 
   /**
+   * @method getPathForServerMixins
+   * @param {String} action 
+   * @returns {Array}
+   * e.g. return -> ['id', 'params', 'getters', 'methods']
+   */
+  service.getPathForServerMixins = function (action) {
+    switch (action) {
+    case 'opcuaServerCreate':
+    case 'opcuaServerStart':
+    case 'getCurrentState':
+    case 'getServerInfo':
+    case 'getBuildInfo':
+    case 'getBytesWritten':
+    case 'getBytesRead':
+    case 'getTransactionsCount':
+    case 'getCurrentChannelCount':
+    case 'getCurrentSubscriptionCount':
+    case 'getRejectedSessionCount':
+    case 'getRejectedRequestsCount':
+    case 'getSessionAbortCount':
+    case 'getPublishingIntervalCount':
+    case 'getCurrentSessionCount':
+    case 'isInitialized':
+    case 'isAuditing':
+      result = ['id'];
+      break;
+    case 'opcuaClientCreate':
+      result = ['id', 'timeout'];
+      break;
+    case 'constructAddressSpace':
+      result = ['id', 'params', 'getters', 'methods'];
+      break;
+    default:
+      break;
+    }
+    return result;
+  };
+
+  /**
    * @method opcuaServerCreate
    * @async
    * 
@@ -246,18 +285,6 @@ module.exports = function opcuaServerMixins(service, path) {
   service.isInitialized = async function (id) {
     const opcuaServer = await service.get(id);
     result = opcuaServer.server.isInitialized();
-    return result;
-  };
-
-  /**
-   * @method isAuditing
-   * @async
-   * 
-   * @returns {Boolean}
-   */
-  service.isAuditing = async function (id) {
-    const opcuaServer = await service.get(id);
-    result = opcuaServer.server.isAuditing();
     return result;
   };
 
