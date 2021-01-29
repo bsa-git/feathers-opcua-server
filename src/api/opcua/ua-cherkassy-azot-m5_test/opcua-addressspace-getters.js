@@ -18,6 +18,7 @@ const {
 } = require('../../../plugins/lib/util');
 
 const {
+  convertTo,
   formatUAVariable
 } = require('../../../plugins/opcua/opcua-helper');
 
@@ -30,6 +31,7 @@ const {
 } = require('../../../plugins/lib/file-operations');
 
 const loRound = require('lodash/round');
+const loOmit = require('lodash/omit');
 const loForEach = require('lodash/forEach');
 const moment = require('moment');
 const { pause } = require('../../../plugins/lib');
@@ -54,8 +56,26 @@ const getTValue = function (t) {
  * @param {Object} params
  * @param {Object} addedValue 
  */
-function histPlugForGroupVariables(params = {}, addedValue) {
+function histPlugForGroupVariables(params = {}) {
+  params = loOmit(params, ['myOpcuaServer']);
   if (isDebug) debug('histPlugForGroupVariables.params:', params);
+  return params.value? params.value : null;
+}
+
+/**
+ * @method converterForVariable
+ * @param {Object} params 
+ * @returns {any}
+ */
+function converterForVariable(params = {}) {
+  let value = null;
+  params = loOmit(params, ['myOpcuaServer']);
+  if (isDebug) debug('histPlugForGroupVariables.params:', params);
+  // tonnes per hour to cubic meters per hour  TonPerHour_To_CubicMetrePerHour
+  if(params.value && params.convertType){
+    value = convertTo(params.value, params.convertType);
+  }
+  return value;
 }
 
 /**
@@ -146,9 +166,13 @@ function histValueFromFile(params = {}, addedValue) {
       groupVariable = groupVariableList.find(v => v.browseName.name === dataItem.name);
       // Set value from source
       if (groupVariable) {
-        dataType = formatUAVariable(groupVariable).dataType[1];
         browseName = formatUAVariable(groupVariable).browseName;
-        groupVariable.setValueFromSource({ dataType, value: dataItem.value });
+        
+        // Run setValueFromSource for groupVariable
+        const currentState = params.myOpcuaServer.getCurrentState();
+        const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
+        params.myOpcuaServer.setValueFromSource(variable, groupVariable, module.exports[variable.getter], dataItem.value);
+
         if (isDebug) console.log(chalk.green(`histValueFromFile.${browseName}:`), chalk.cyan(dataItem.value));
       }
     });
@@ -186,6 +210,7 @@ function percentageMemUsed() {
 
 module.exports = {
   histPlugForGroupVariables,
+  converterForVariable,
   valueSimulate1,
   valueFromSource1,
   valueFromSource2,

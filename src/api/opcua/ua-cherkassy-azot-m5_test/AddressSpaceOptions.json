@@ -205,13 +205,16 @@
       "dataType": "Double",
       "hist": true,
       "variableGetType": "valueFromSource",
-      "getter": "histPlugForGroupVariables",
+      "getter": "converterForVariable",
+      "getterParams": {
+        "convertType": "Ammonia_TonPerHour_To_CubicMetrePerHour"
+      },
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
           "high": 16
         },
-        "engineeringUnits": "т/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -876,13 +879,16 @@
       "dataType": "Double",
       "hist": true,
       "variableGetType": "valueFromSource",
-      "getter": "histPlugForGroupVariables",
+      "getter": "converterForVariable",
+      "getterParams": {
+        "convertType": "Ammonia_TonPerHour_To_CubicMetrePerHour"
+      },
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
           "high": 16
         },
-        "engineeringUnits": "т/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {

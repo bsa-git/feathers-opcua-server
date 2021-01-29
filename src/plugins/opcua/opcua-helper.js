@@ -119,6 +119,26 @@ const formatUAVariable = function (uaVariable = null) {
 };
 
 /**
+ * @method convertTo
+ * @param {any} value 
+ * @param {String} convertType 
+ * @returns {any}
+ */
+const convertTo = function (value, convertType) {
+  let result = null;
+  switch (convertType) {
+    // (t/h -> m3/h) for ammonia
+    case 'Ammonia_TonPerHour_To_CubicMetrePerHour':
+      result = value * 1000 * 1.4;
+      break;
+  
+    default:
+      break;
+  }
+  return result;
+};
+
+/**
  * @method getOpcuaConfig
  * @param {String} id 
  * @returns {Object|Array}
@@ -285,6 +305,7 @@ module.exports = {
   getNameSpaceFromNodeId,
   getOpcuaDataType,
   formatUAVariable,
+  convertTo,
   getOpcuaConfig,
   getSubscriptionHandler,
   getServerService,
