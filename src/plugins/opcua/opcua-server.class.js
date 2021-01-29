@@ -192,7 +192,7 @@ class OpcuaServer {
    * @returns {Array}
    */
   getAddedItemList(type = '') {
-    return type? this.addedItemList.filter(item => item.type === type) : this.addedItemList;
+    return type ? this.addedItemList.filter(item => item.type === type) : this.addedItemList;
   }
 
   /**
@@ -441,8 +441,6 @@ class OpcuaServer {
                 // If a variable has history
                 if (v.hist) {
                   addressSpace.installHistoricalDataNode(addedVariable);
-                  // Get getter params
-                  // getterParams = v.getterParams ? v.getterParams : {};
                   // Get group variables
                   if (v.group) {
                     const variables = params.groups.filter(g => v.browseName === g.ownerGroup);
@@ -454,20 +452,8 @@ class OpcuaServer {
                   // Run getter
                   getters[v.getter](getterParams, addedVariable);
                 } else {
-                  let valueFromSourceParams = loMerge({}, v.valueFromSourceParams);
-                  if (valueFromSourceParams.dataType) {
-                    const dataType = DataType[valueFromSourceParams.dataType];
-                    loMerge(valueFromSourceParams, { dataType });
-                  }
-                  if (valueFromSourceParams.arrayType) {
-                    const arrayType = VariantArrayType[valueFromSourceParams.arrayType];
-                    loMerge(valueFromSourceParams, { arrayType });
-                  }
-                  // Value get func merge 
-                  // let valueFromSource = getters[v.getter](v.getterParams ? v.getterParams : {});
-                  let valueFromSource = getters[v.getter](getterParams);
-                  loMerge(valueFromSourceParams, { value: valueFromSource });
-                  addedVariable.setValueFromSource(valueFromSourceParams);
+                  // Set value from source
+                  this.setValueFromSource(v, addedVariable, getters[v.getter]);
                 }
               }
             });
@@ -538,7 +524,7 @@ class OpcuaServer {
       Object.assign(this.currentState.paths, opcuaConfig.paths);
       // inspector('currentState:', this.currentState);
       console.log(chalk.yellow('Server constructed address space'));
-      if(isLog) inspector('constructAddressSpace.addedItemList:', this.addedItemList.map(item => loOmit(item, ['item'])));
+      if (isLog) inspector('constructAddressSpace.addedItemList:', this.addedItemList.map(item => loOmit(item, ['item'])));
     }
   }
 
@@ -608,6 +594,41 @@ class OpcuaServer {
       });
     }
     return addedVariableList;
+  }
+
+  /**
+   * @method setValueFromSource
+   * @param {Object} variable 
+   * @param {Object} addedVariable 
+   * @param {Function} getter 
+   * @param {any} value 
+   */
+  setValueFromSource(variable, addedVariable, getter, value) {
+    
+    // getterParams
+    let getterParams = variable.getterParams ? variable.getterParams : {};
+    // Add "value" to getterParams
+    loMerge(getterParams, value === undefined ? {} : { value });
+    // Add "this" to getterParams
+    getterParams.myOpcuaServer = this;
+    
+    let valueFromSourceParams = loMerge({}, variable.valueFromSourceParams);
+    if (valueFromSourceParams.dataType) {
+      const dataType = DataType[valueFromSourceParams.dataType];
+      loMerge(valueFromSourceParams, { dataType });
+    }
+    if (valueFromSourceParams.arrayType) {
+      const arrayType = VariantArrayType[valueFromSourceParams.arrayType];
+      loMerge(valueFromSourceParams, { arrayType });
+    }
+    // Value get func merge 
+    let valueFromSource = getter(getterParams);
+    loMerge(valueFromSourceParams, { value: valueFromSource });
+    if(!valueFromSourceParams.dataType){
+      valueFromSourceParams.dataType = DataType[variable.dataType];
+    }
+    if(isDebug) debug('setValueFromSource.valueFromSourceParams:', valueFromSourceParams);
+    addedVariable.setValueFromSource(valueFromSourceParams);
   }
 }
 

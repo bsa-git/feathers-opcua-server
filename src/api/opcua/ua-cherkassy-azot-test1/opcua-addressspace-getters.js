@@ -54,8 +54,10 @@ const getTValue = function (t) {
  * @param {Object} params
  * @param {Object} addedValue 
  */
-function histPlugForGroupVariables(params = {}, addedValue) {
-  if (isDebug) debug('histPlugForGroupVariables.params:', params);
+function histPlugForGroupVariables(params = {}) {
+  if (isDebug) debug('histPlugForGroupVariables.value:', params.value);
+  // debug('histPlugForGroupVariables.value:', params.value);
+  return params.value? params.value : null;
 }
 
 /**
@@ -140,15 +142,19 @@ function histValueFromFile(params = {}, addedValue) {
     dataItems = JSON.parse(data);
     // Get group variable list 
     const groupVariableList = params.addedVariableList;
-    if (isDebug) inspector('histValueFromFile.groupVariableList:', groupVariableList);
+    if (isLog) inspector('histValueFromFile.groupVariableList:', groupVariableList);
 
     dataItems.forEach(dataItem => {
       groupVariable = groupVariableList.find(v => v.browseName.name === dataItem.name);
-      // Set value from source
+      // Set value from source for variable
       if (groupVariable) {
-        dataType = formatUAVariable(groupVariable).dataType[1];
         browseName = formatUAVariable(groupVariable).browseName;
-        groupVariable.setValueFromSource({ dataType, value: dataItem.value });
+        
+        // Run setValueFromSource for groupVariable
+        const currentState = params.myOpcuaServer.getCurrentState();
+        const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
+        params.myOpcuaServer.setValueFromSource(variable, groupVariable, module.exports[variable.getter], dataItem.value);
+
         if (isDebug) console.log(chalk.green(`histValueFromFile.${browseName}:`), chalk.cyan(dataItem.value));
       }
     });

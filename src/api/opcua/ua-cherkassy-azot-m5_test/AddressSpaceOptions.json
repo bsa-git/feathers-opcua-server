@@ -59,7 +59,7 @@
           "low": 0,
           "high": 200
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -78,7 +78,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -97,7 +97,7 @@
           "low": 0,
           "high": 1600
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -116,7 +116,7 @@
           "low": -50,
           "high": 50
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -135,7 +135,7 @@
           "low": 0,
           "high": 16
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -154,7 +154,7 @@
           "low": 0,
           "high": 3200
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -173,7 +173,7 @@
           "low": -50,
           "high": 50
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -192,7 +192,7 @@
           "low": 0,
           "high": 25
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -230,7 +230,7 @@
           "low": 0,
           "high": 400
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -249,7 +249,7 @@
           "low": 0,
           "high": 25
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -287,7 +287,7 @@
           "low": 0,
           "high": 400
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -306,7 +306,7 @@
           "low": 0,
           "high": 25
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -363,7 +363,7 @@
           "low": 0,
           "high": 100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -382,7 +382,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -401,7 +401,7 @@
           "low": 0,
           "high": 100
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -420,7 +420,7 @@
           "low": -50,
           "high": 50
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -439,7 +439,7 @@
           "low": -50,
           "high": 50
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -458,7 +458,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -477,7 +477,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
 
@@ -499,7 +499,7 @@
           "low": 0,
           "high": 3
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -518,7 +518,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -537,7 +537,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -556,7 +556,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -575,7 +575,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -594,7 +594,7 @@
           "low": 0,
           "high": 60000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -613,7 +613,7 @@
           "low": 0,
           "high": 20000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -632,7 +632,7 @@
           "low": 0,
           "high": 8000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -651,7 +651,7 @@
           "low": 0,
           "high": 160
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -670,7 +670,7 @@
           "low": 0,
           "high": 30
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -689,7 +689,7 @@
           "low": 0,
           "high": 2000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -730,7 +730,7 @@
           "low": 0,
           "high": 200
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -749,7 +749,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -768,7 +768,7 @@
           "low": 0,
           "high": 1600
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -787,7 +787,7 @@
           "low": -50,
           "high": 50
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -806,7 +806,7 @@
           "low": 0,
           "high": 16
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -825,7 +825,7 @@
           "low": 0,
           "high": 3200
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -844,7 +844,7 @@
           "low": -50,
           "high": 50
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -863,7 +863,7 @@
           "low": 0,
           "high": 25
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -901,7 +901,7 @@
           "low": 0,
           "high": 400
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -920,7 +920,7 @@
           "low": 0,
           "high": 25
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -958,7 +958,7 @@
           "low": 0,
           "high": 400
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -977,7 +977,7 @@
           "low": 0,
           "high": 25
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -1034,7 +1034,7 @@
           "low": 0,
           "high": 100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -1053,7 +1053,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -1072,7 +1072,7 @@
           "low": 0,
           "high": 100
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1091,7 +1091,7 @@
           "low": -50,
           "high": 50
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -1110,7 +1110,7 @@
           "low": -50,
           "high": 50
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -1129,7 +1129,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -1148,7 +1148,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
 
@@ -1170,7 +1170,7 @@
           "low": 0,
           "high": 3
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -1189,7 +1189,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -1208,7 +1208,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -1227,7 +1227,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -1246,7 +1246,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -1265,7 +1265,7 @@
           "low": 0,
           "high": 60000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1284,7 +1284,7 @@
           "low": 0,
           "high": 20000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1303,7 +1303,7 @@
           "low": 0,
           "high": 8000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1322,7 +1322,7 @@
           "low": 0,
           "high": 160
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1341,7 +1341,7 @@
           "low": 0,
           "high": 30
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1360,7 +1360,7 @@
           "low": 0,
           "high": 2000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1401,7 +1401,7 @@
           "low": 0,
           "high": 3
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -1420,7 +1420,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -1439,7 +1439,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -1458,7 +1458,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -1477,7 +1477,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -1496,7 +1496,7 @@
           "low": 0,
           "high": 60000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1515,7 +1515,7 @@
           "low": 0,
           "high": 20000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1534,7 +1534,7 @@
           "low": 0,
           "high": 8000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1553,7 +1553,7 @@
           "low": 0,
           "high": 160
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1572,7 +1572,7 @@
           "low": 0,
           "high": 30
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1591,7 +1591,7 @@
           "low": 0,
           "high": 2000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1632,7 +1632,7 @@
           "low": 0,
           "high": 3
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -1651,7 +1651,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -1670,7 +1670,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -1689,7 +1689,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -1708,7 +1708,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -1727,7 +1727,7 @@
           "low": 0,
           "high": 60000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1746,7 +1746,7 @@
           "low": 0,
           "high": 20000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1765,7 +1765,7 @@
           "low": 0,
           "high": 8000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1784,7 +1784,7 @@
           "low": 0,
           "high": 160
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1803,7 +1803,7 @@
           "low": 0,
           "high": 30
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1822,7 +1822,7 @@
           "low": 0,
           "high": 2000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1863,7 +1863,7 @@
           "low": 0,
           "high": 3
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -1882,7 +1882,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -1901,7 +1901,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -1920,7 +1920,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -1939,7 +1939,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -1958,7 +1958,7 @@
           "low": 0,
           "high": 60000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1977,7 +1977,7 @@
           "low": 0,
           "high": 20000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1996,7 +1996,7 @@
           "low": 0,
           "high": 8000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2015,7 +2015,7 @@
           "low": 0,
           "high": 160
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2034,7 +2034,7 @@
           "low": 0,
           "high": 30
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2053,7 +2053,7 @@
           "low": 0,
           "high": 2000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2094,7 +2094,7 @@
           "low": 0,
           "high": 3
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -2113,7 +2113,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -2132,7 +2132,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -2151,7 +2151,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -2170,7 +2170,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -2189,7 +2189,7 @@
           "low": 0,
           "high": 60000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2208,7 +2208,7 @@
           "low": 0,
           "high": 20000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2227,7 +2227,7 @@
           "low": 0,
           "high": 8000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2246,7 +2246,7 @@
           "low": 0,
           "high": 160
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2265,7 +2265,7 @@
           "low": 0,
           "high": 30
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2284,7 +2284,7 @@
           "low": 0,
           "high": 2000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2325,7 +2325,7 @@
           "low": 0,
           "high": 3
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -2344,7 +2344,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -2363,7 +2363,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -2382,7 +2382,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -2401,7 +2401,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -2420,7 +2420,7 @@
           "low": 0,
           "high": 60000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2439,7 +2439,7 @@
           "low": 0,
           "high": 20000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2458,7 +2458,7 @@
           "low": 0,
           "high": 8000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2477,7 +2477,7 @@
           "low": 0,
           "high": 160
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2496,7 +2496,7 @@
           "low": 0,
           "high": 30
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2515,7 +2515,7 @@
           "low": 0,
           "high": 2000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2556,7 +2556,7 @@
           "low": 0,
           "high": 3
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -2575,7 +2575,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -2594,7 +2594,7 @@
           "low": 0,
           "high": 10
         },
-        "engineeringUnits": "кгс/см2"
+        "engineeringUnits": "bar"
       }
     },
     {
@@ -2613,7 +2613,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -2632,7 +2632,7 @@
           "low": 0,
           "high": 1100
         },
-        "engineeringUnits": "град.С"
+        "engineeringUnits": "degree_celsius"
       }
     },
     {
@@ -2651,7 +2651,7 @@
           "low": 0,
           "high": 60000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2670,7 +2670,7 @@
           "low": 0,
           "high": 20000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2689,7 +2689,7 @@
           "low": 0,
           "high": 8000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2708,7 +2708,7 @@
           "low": 0,
           "high": 160
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2727,7 +2727,7 @@
           "low": 0,
           "high": 30
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -2746,7 +2746,7 @@
           "low": 0,
           "high": 2000
         },
-        "engineeringUnits": "м3/ч"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {

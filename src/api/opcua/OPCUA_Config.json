@@ -7,7 +7,7 @@
     "srvServiceUrl": "http://localhost:3030",
     "clientServiceUrl": "http://localhost:3030",
     "paths": {
-      "options": "/src/api/opcua/ua-cherkassy-azot-test1/AddressSpaceTestOptions.json",
+      "options": "/src/api/opcua/ua-cherkassy-azot-test1/AddressSpaceOptions.json",
       "getters": "/src/api/opcua/ua-cherkassy-azot-test1/opcua-addressspace-getters",
       "methods": "/src/api/opcua/ua-cherkassy-azot-test1/opcua-addressspace-methods",
       "subscriptions": "/src/api/opcua/ua-cherkassy-azot-test1/opcua-addressspace-subscriptions"

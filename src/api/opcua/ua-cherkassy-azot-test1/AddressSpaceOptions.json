@@ -139,7 +139,7 @@
           "low": 0,
           "high": 10.0
         },
-        "engineeringUnits": "m3/hour"
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
