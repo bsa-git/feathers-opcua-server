@@ -127,13 +127,21 @@ const formatUAVariable = function (uaVariable = null) {
 const convertTo = function (value, convertType) {
   let result = null;
   switch (convertType) {
-    // (t/h -> m3/h) for ammonia
-    case 'Ammonia_TonPerHour_To_CubicMetrePerHour':
-      result = value * 1000 * 1.4;
-      break;
+  // (t/h -> m3/h) for ammonia
+  case 'Ammonia_TonPerHour_To_CubicMetrePerHour':
+    result = value * 1000 * 1.4;
+    break;
+  // (kg/h -> m3/h) for ammonia
+  case 'Ammonia_KgPerHour_To_CubicMetrePerHour':
+    result = value * 1.4;
+    break;
+  // (m3/h -> kg/h) for ammonia
+  case 'Ammonia_CubicMetrePerHour_To_KgPerHour':
+    result = value * 0.716;
+    break;    
   
-    default:
-      break;
+  default:
+    break;
   }
   return result;
 };

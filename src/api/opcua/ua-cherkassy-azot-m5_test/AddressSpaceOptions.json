@@ -42,7 +42,7 @@
     }
   ],
   "groups": [
-    {"01GE": "==================================================================="},
+    {"01GE": "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"},
     {
       "browseName": "CH_M51::01AMIAK:01T4.PNT",
       "aliasName": "01NH3_T4",
@@ -214,7 +214,7 @@
           "low": 0,
           "high": 16
         },
-        "engineeringUnits": "cubic_metre_per_hour"
+        "engineeringUnits": "cubic_metre_per_hour(т/ч)"
       }
     },
     {
@@ -715,7 +715,7 @@
       }
     },
 
-    {"02GE": "==================================================================="},
+    {"02GE": "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"},
 
     {
       "browseName": "CH_M52::02AMIAK:02T4.PNT",
@@ -826,7 +826,7 @@
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
-          "high": 3200
+          "high": 12500
         },
         "engineeringUnits": "cubic_metre_per_hour"
       }
@@ -886,9 +886,69 @@
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
-          "high": 16
+          "high": 25
         },
-        "engineeringUnits": "cubic_metre_per_hour"
+        "engineeringUnits": "cubic_metre_per_hour(т/ч)"
+      }
+    },
+    {
+      "browseName": "CH_M52::02AMIAK:02T21_2.PNT",
+      "aliasName": "02JAM_T21_2",
+      "displayName": "Т ЖА в цех 2-коллектор",
+      "ownerName": "CH_M52",
+      "ownerGroup": "CH_M52::ValueFromFile",
+      "type": "analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histPlugForGroupVariables",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -50,
+          "high": 50
+        },
+        "engineeringUnits": "degree_celsius"
+      }
+    },
+    {
+      "browseName": "CH_M52::02AMIAK:02P21_2.PNT",
+      "aliasName": "02JAM_P21_2",
+      "displayName": "Р ЖА в цех 2-коллектор",
+      "ownerName": "CH_M52",
+      "ownerGroup": "CH_M52::ValueFromFile",
+      "type": "analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histPlugForGroupVariables",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 25
+        },
+        "engineeringUnits": "bar"
+      }
+    },
+    {
+      "browseName": "CH_M52::02AMIAK:02F21_2.PNT",
+      "aliasName": "02JAM_F21_2",
+      "displayName": "F ЖА в цех 2-коллектор",
+      "ownerName": "CH_M52",
+      "ownerGroup": "CH_M52::ValueFromFile",
+      "type": "analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "converterForVariable",
+      "getterParams": {
+        "convertType": "Ammonia_TonPerHour_To_CubicMetrePerHour"
+      },
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 25
+        },
+        "engineeringUnits": "cubic_metre_per_hour(т/ч)"
       }
     },
     {
@@ -943,7 +1003,7 @@
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
-          "high": 20
+          "high": 80
         },
         "engineeringUnits": "т/ч"
       }
@@ -1000,14 +1060,14 @@
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
-          "high": 20
+          "high": 80
         },
         "engineeringUnits": "т/ч"
       }
     },
     {
-      "browseName": "CH_M52::02SKLAD:02L26_SUM.PNT",
-      "aliasName": "02SKLAD_L26",
+      "browseName": "CH_M52::02SKLAD:01L26_SUM.PNT",
+      "aliasName": "01SKLAD_L26",
       "displayName": "Кислота на складе 1-отделения",
       "ownerName": "CH_M52",
       "ownerGroup": "CH_M52::ValueFromFile",
@@ -1021,7 +1081,198 @@
           "low": 0,
           "high": 1000
         },
-        "engineeringUnits": "м3"
+        "engineeringUnits": "cubic_metre"
+      }
+    },
+    {
+      "browseName": "CH_M52::02SKLAD:02L26_SUM.PNT",
+      "aliasName": "02SKLAD_L26",
+      "displayName": "Кислота на складе 2-отделения",
+      "ownerName": "CH_M52",
+      "ownerGroup": "CH_M52::ValueFromFile",
+      "type": "analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histPlugForGroupVariables",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 1800
+        },
+        "engineeringUnits": "cubic_metre"
+      }
+    },
+    {
+      "browseName": "CH_M52::02SKLAD:02L26_CALSUM.RO03",
+      "aliasName": "02SKLAD_SUM",
+      "displayName": "Кислота на складе 1+2-отделения",
+      "ownerName": "CH_M52",
+      "ownerGroup": "CH_M52::ValueFromFile",
+      "type": "analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histPlugForGroupVariables",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 2800
+        },
+        "engineeringUnits": "cubic_metre"
+      }
+    },
+
+    {
+      "browseName": "CH_M52::02SKLAD:02Q20.PNT",
+      "aliasName": "02HNO3_Q20",
+      "displayName": "Q кислоты в хранилище",
+      "ownerName": "CH_M52",
+      "ownerGroup": "CH_M52::ValueFromFile",
+      "type": "analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histPlugForGroupVariables",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 45,
+          "high": 60
+        },
+        "engineeringUnits": "kilogram_per_cubic_metre(кг/м3)"
+      }
+    },
+    {
+      "browseName": "CH_M52::02SKLAD:02T20.PNT",
+      "aliasName": "02HNO3_T20",
+      "displayName": "Т кислоты в хранилище",
+      "ownerName": "CH_M52",
+      "ownerGroup": "CH_M52::ValueFromFile",
+      "type": "analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histPlugForGroupVariables",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 45,
+          "high": 60
+        },
+        "engineeringUnits": "degree_celsius"
+      }
+    },
+    {
+      "browseName": "CH_M52::02SKLAD:02P20_1.PNT",
+      "aliasName": "02HNO3_P20_1",
+      "displayName": "Р кислоты в коллекторе-1",
+      "ownerName": "CH_M52",
+      "ownerGroup": "CH_M52::ValueFromFile",
+      "type": "analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histPlugForGroupVariables",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 20
+        },
+        "engineeringUnits": "bar"
+      }
+    },
+    {
+      "browseName": "CH_M52::02SKLAD:02P20_2.PNT",
+      "aliasName": "02HNO3_P20_2",
+      "displayName": "Р кислоты в коллекторе-2",
+      "ownerName": "CH_M52",
+      "ownerGroup": "CH_M52::ValueFromFile",
+      "type": "analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histPlugForGroupVariables",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 20
+        },
+        "engineeringUnits": "bar"
+      }
+    },
+    {
+      "browseName": "CH_M52::02SKLAD:02P22_1.PNT",
+      "aliasName": "02HNO3_P22_1",
+      "displayName": "Р кислоты в М9 коллекторе-1",
+      "ownerName": "CH_M52",
+      "ownerGroup": "CH_M52::ValueFromFile",
+      "type": "analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histPlugForGroupVariables",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 16
+        },
+        "engineeringUnits": "bar"
+      }
+    },
+    {
+      "browseName": "CH_M52::02SKLAD:02P22_2.PNT",
+      "aliasName": "02HNO3_P22_2",
+      "displayName": "Р кислоты в М9 коллекторе-2",
+      "ownerName": "CH_M52",
+      "ownerGroup": "CH_M52::ValueFromFile",
+      "type": "analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histPlugForGroupVariables",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 16
+        },
+        "engineeringUnits": "bar"
+      }
+    },
+    {
+      "browseName": "CH_M52::02SKLAD:02F20_1.PNT",
+      "aliasName": "02HNO3_F20_1",
+      "displayName": "F кислоты в коллекторе-1",
+      "ownerName": "CH_M52",
+      "ownerGroup": "CH_M52::ValueFromFile",
+      "type": "analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histPlugForGroupVariables",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 100
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      }
+    },
+    {
+      "browseName": "CH_M52::02SKLAD:02F20_2.PNT",
+      "aliasName": "02HNO3_F20_2",
+      "displayName": "F кислоты в коллекторе-2",
+      "ownerName": "CH_M52",
+      "ownerGroup": "CH_M52::ValueFromFile",
+      "type": "analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histPlugForGroupVariables",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 100
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {
@@ -1076,7 +1327,7 @@
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
-          "high": 100
+          "high": 260
         },
         "engineeringUnits": "cubic_metre_per_hour"
       }
