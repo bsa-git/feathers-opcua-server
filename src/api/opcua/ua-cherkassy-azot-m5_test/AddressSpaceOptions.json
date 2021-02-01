@@ -22,7 +22,9 @@
       "getter": "histValueFromFileForCH_M51",
       "getterParams": {
         "path": "test/data/tmp/ch-m51",
-        "interval": 500
+        "hist": false,
+        "interval": 500,
+        "t": 10
       }
     },
     {
@@ -37,7 +39,9 @@
       "getter": "histValueFromFileForCH_M52",
       "getterParams": {
         "path": "test/data/tmp/ch-m52",
-        "interval": 500
+        "hist": false,
+        "interval": 500,
+        "t": 20
       }
     }
   ],
@@ -205,16 +209,13 @@
       "dataType": "Double",
       "hist": true,
       "variableGetType": "valueFromSource",
-      "getter": "converterForVariable",
-      "getterParams": {
-        "convertType": "Ammonia_TonPerHour_To_CubicMetrePerHour"
-      },
+      "getter": "histPlugForGroupVariables",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
           "high": 16
         },
-        "engineeringUnits": "cubic_metre_per_hour(т/ч)"
+        "engineeringUnits": "т/ч"
       }
     },
     {
@@ -879,16 +880,13 @@
       "dataType": "Double",
       "hist": true,
       "variableGetType": "valueFromSource",
-      "getter": "converterForVariable",
-      "getterParams": {
-        "convertType": "Ammonia_TonPerHour_To_CubicMetrePerHour"
-      },
+      "getter": "histPlugForGroupVariables",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
           "high": 25
         },
-        "engineeringUnits": "cubic_metre_per_hour(т/ч)"
+        "engineeringUnits": "т/ч"
       }
     },
     {
@@ -939,16 +937,13 @@
       "dataType": "Double",
       "hist": true,
       "variableGetType": "valueFromSource",
-      "getter": "converterForVariable",
-      "getterParams": {
-        "convertType": "Ammonia_TonPerHour_To_CubicMetrePerHour"
-      },
+      "getter": "histPlugForGroupVariables",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
           "high": 25
         },
-        "engineeringUnits": "cubic_metre_per_hour(т/ч)"
+        "engineeringUnits": "т/ч"
       }
     },
     {
@@ -1139,7 +1134,7 @@
           "low": 45,
           "high": 60
         },
-        "engineeringUnits": "kilogram_per_cubic_metre(кг/м3)"
+        "engineeringUnits": "кг/м3"
       }
     },
     {
