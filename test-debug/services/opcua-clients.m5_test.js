@@ -21,6 +21,7 @@ const {
 const {
   getFileName,
   makeDirSync,
+  removeDirFromDirSync,
   writeFileSync
 } = require('../../src/plugins/lib/file-operations');
 
@@ -66,7 +67,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       setTimeout(() => done(), 500);
     });
     // Write file
-    const path = makeDirSync([appRoot, 'test/data/tmp']);
+    const path = makeDirSync([appRoot, 'test/data/tmp', 'ch-m51']);
     // const fileName = getFileName('data-', 'json', true);
     // writeFileSync([path, fileName], {value: '12345'}, true);
   });
@@ -75,6 +76,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     if (isDebug) debug('after Start!');
     server.close();
     setTimeout(() => done(), 500);
+    removeDirFromDirSync([appRoot, 'test/data/tmp'])
   });
 
   it('OPC-UA clients: registered the service', async () => {

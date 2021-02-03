@@ -16,13 +16,13 @@
       "ownerName": "CH_M51",
       "type": "simple",
       "dataType": "String",
-      "hist": false,
+      "hist": true,
       "group": true,
       "variableGetType": "valueFromSource",
       "getter": "histValueFromFileForCH_M51",
       "getterParams": {
         "path": "test/data/tmp/ch-m51",
-        "isHistForGetter": false,
+        "isHistForGetter": true,
         "interval": 500,
         "t": 10
       }

@@ -131,26 +131,38 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
     });
     // Write file
     setInterval(function () {
-      const data = [
-        {
-          name: 'Device2.02F5',
-          value: getTValue(t)
-        },
-        {
-          name: 'Device2.02P5',
-          value: getTValue(t)
-        }
-      ];
-      const fileName = getFileName('data-', 'json', true);
-      writeFileSync([appRoot, path, fileName], data, true);
+      // const data = [
+      //   {
+      //     name: 'Device2.02F5',
+      //     value: getTValue(t)
+      //   },
+      //   {
+      //     name: 'Device2.02P5',
+      //     value: getTValue(t)
+      //   }
+      // ];
+
+      let csv = readFileSync([appRoot, '/src/api/opcua/ua-cherkassy-azot-m5_test/data-CH_M51.csv']);
+      if (csv) {
+        let results = papa.parse(csv, { delimiter: ';', header: true });
+        inspector('histValueFromFileForCH_M51.parse.data:', results.data);
+        // loForEach
+        csv = papa.unparse(results.data, { delimiter: ';' });
+        inspector('histValueFromFileForCH_M51.unparse.csv:', csv);
+      }
+
+      const fileName = getFileName('data-', 'csv', true);
+      writeFileSync([appRoot, path, fileName], csv);
       t = t + 1;
     }, interval);
   } else {
     // Parse local CSV file
-    const csv = readFileSync([appRoot, '/src/api/opcua/ua-cherkassy-azot-m5_test/data-CH_M51.csv']);
-    if(csv){
-      const results = papa.parse(csv, {delimiter: ';', header: true});
-      inspector('histValueFromFileForCH_M51.results:', results);
+    let csv = readFileSync([appRoot, '/src/api/opcua/ua-cherkassy-azot-m5_test/data-CH_M51.csv']);
+    if (csv) {
+      let results = papa.parse(csv, { delimiter: ';', header: true });
+      inspector('histValueFromFileForCH_M51.parse.data:', results.data);
+      csv = papa.unparse(results.data, { delimiter: ';' });
+      inspector('histValueFromFileForCH_M51.unparse.csv:', csv);
     }
     return 'histValueFromFileForCH_M51';
   }
@@ -158,11 +170,11 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
 
 function histValueFromFileForCH_M52(params = {}, addedValue) {
   // Parse local CSV file
-  const csv = readFileSync([appRoot, '/src/api/opcua/ua-cherkassy-azot-m5_test/data-CH_M52.csv']);
-  if(csv){
-    const results = papa.parse(csv, {delimiter: ';', header: true});
-    inspector('histValueFromFileForCH_M52.results:', results);
-  }
+  // const csv = readFileSync([appRoot, '/src/api/opcua/ua-cherkassy-azot-m5_test/data-CH_M52.csv']);
+  // if(csv){
+  //   const results = papa.parse(csv, {delimiter: ';', header: true});
+  //   inspector('histValueFromFileForCH_M52.results:', results);
+  // }
   return 'histValueFromFileForCH_M52';
 }
 
