@@ -10,6 +10,8 @@ const {
 } = require('node-opcua');
 
 const chalk = require('chalk');
+const papa = require('papaparse');
+
 
 const {
   appRoot,
@@ -24,6 +26,7 @@ const {
 
 const {
   readOnlyNewFile,
+  readFileSync,
   writeFileSync,
   removeFileSync,
   getFileName,
@@ -81,14 +84,14 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
   const _t = 0;
   const _interval = 200;
   const _path = 'test/data/tmp';
-  const _hist = true;
+  const _isHistForGetter = true;
   let dataItems, groupVariable, dataType, browseName;
   let t = params.t ? params.t : _t;
   let interval = params.interval ? params.interval : _interval;
   let path = params.path ? params.path : _path;
-  let hist = params.hist === undefined ? _hist : params.hist;
+  let isHistForGetter = params.isHistForGetter === undefined ? _isHistForGetter : params.isHistForGetter;
 
-  if (hist) {
+  if (isHistForGetter) {
     // Watch read only new file
     readOnlyNewFile([appRoot, path], (filePath, data) => {
       // Show filePath, data
@@ -142,15 +145,30 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
       writeFileSync([appRoot, path, fileName], data, true);
       t = t + 1;
     }, interval);
-  } else{
-    
+  } else {
+    // Parse local CSV file
+    const csv = readFileSync([appRoot, '/src/api/opcua/ua-cherkassy-azot-m5_test/data-CH_M51.csv']);
+    if(csv){
+      const results = papa.parse(csv, {delimiter: ';', header: true});
+      inspector('histValueFromFileForCH_M51.results:', results);
+    }
+    return 'histValueFromFileForCH_M51';
   }
+}
 
-
+function histValueFromFileForCH_M52(params = {}, addedValue) {
+  // Parse local CSV file
+  const csv = readFileSync([appRoot, '/src/api/opcua/ua-cherkassy-azot-m5_test/data-CH_M52.csv']);
+  if(csv){
+    const results = papa.parse(csv, {delimiter: ';', header: true});
+    inspector('histValueFromFileForCH_M52.results:', results);
+  }
+  return 'histValueFromFileForCH_M52';
 }
 
 module.exports = {
   histPlugForGroupVariables,
   converterForVariable,
   histValueFromFileForCH_M51,
+  histValueFromFileForCH_M52,
 };

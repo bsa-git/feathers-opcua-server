@@ -441,7 +441,7 @@ class OpcuaServer {
                 // If a variable has history
                 if (v.hist) {
                   addressSpace.installHistoricalDataNode(addedVariable);
-                  // Get group variables
+                  // If a variable has group - get group variables
                   if (v.group) {
                     const variables = params.groups.filter(g => v.browseName === g.ownerGroup);
                     // Add group variables
@@ -604,14 +604,14 @@ class OpcuaServer {
    * @param {any} value 
    */
   setValueFromSource(variable, addedVariable, getter, value) {
-    
+
     // getterParams
     let getterParams = variable.getterParams ? variable.getterParams : {};
     // Add "value" to getterParams
     loMerge(getterParams, value === undefined ? {} : { value });
     // Add "this" to getterParams
     getterParams.myOpcuaServer = this;
-    
+
     let valueFromSourceParams = loMerge({}, variable.valueFromSourceParams);
     if (valueFromSourceParams.dataType) {
       const dataType = DataType[valueFromSourceParams.dataType];
@@ -624,10 +624,10 @@ class OpcuaServer {
     // Value get func merge 
     let valueFromSource = getter(getterParams);
     loMerge(valueFromSourceParams, { value: valueFromSource });
-    if(!valueFromSourceParams.dataType){
+    if (!valueFromSourceParams.dataType) {
       valueFromSourceParams.dataType = DataType[variable.dataType];
     }
-    if(isDebug) debug('setValueFromSource.valueFromSourceParams:', valueFromSourceParams);
+    if (isDebug) debug('setValueFromSource.valueFromSourceParams:', valueFromSourceParams);
     addedVariable.setValueFromSource(valueFromSourceParams);
   }
 }
