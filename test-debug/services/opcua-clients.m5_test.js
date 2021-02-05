@@ -21,6 +21,8 @@ const {
 const {
   getFileName,
   makeDirSync,
+  clearDirSync,
+  removeFilesFromDirSync,
   removeDirFromDirSync,
   writeFileSync
 } = require('../../src/plugins/lib/file-operations');
@@ -29,7 +31,7 @@ const chalk = require('chalk');
 const moment = require('moment');
 
 const loRound = require('lodash/round');
-// const loForEach = require('lodash/forEach');
+const loForEach = require('lodash/forEach');
 
 const {
   StatusCodes,
@@ -66,17 +68,18 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     server.once('listening', () => {
       setTimeout(() => done(), 500);
     });
-    // Write file
-    const path = makeDirSync([appRoot, 'test/data/tmp', 'ch-m51']);
-    // const fileName = getFileName('data-', 'json', true);
-    // writeFileSync([path, fileName], {value: '12345'}, true);
+    // Remove files and dirs from dir
+    clearDirSync([appRoot, 'test/data/tmp']);
+    // Make dirs
+    makeDirSync([appRoot, 'test/data/tmp', 'ch-m51']);
+    makeDirSync([appRoot, 'test/data/tmp', 'ch-m52']);
   });
 
   after( function (done) {
     if (isDebug) debug('after Start!');
     server.close();
     setTimeout(() => done(), 500);
-    removeDirFromDirSync([appRoot, 'test/data/tmp'])
+    // removeDirFromDirSync([appRoot, 'test/data/tmp']);
   });
 
   it('OPC-UA clients: registered the service', async () => {
@@ -101,39 +104,14 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
   it('OPC-UA clients: created the service', async () => {
     const service = await getClientService(app, id);
     // service create
-    // const params = { user: opcuaUser, provider: 'rest', authenticated: true };
-    // const opcuaClient = await service.create(clientData, params);
     const opcuaClient = await service.create(clientData);
-    // debug('Service mixin.getNodeIds:', await service.getNodeIds(id, ['Device1.Temperature']));
     if (isLog) inspector('created the service.opcuaClient:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: created the service');
   });
 
-  //============== CLIENT SESSION-CREATE ====================//
-
-  // it('OPC-UA clients: session create the service', async () => {
-  //   const service = await getClientService(app, id);
-  //   const opcuaClient = await service.sessionCreate(id);
-  //   if (isLog) inspector('Session create the clients:', opcuaClient);
-  //   assert.ok(opcuaClient, 'OPC-UA clients: session create the service');
-  // });
-
-  //============== CLIENT CLIENT-CONNECT/SESSION-CREATE ====================//
-
-  // it('OPC-UA clients: connect the service', async () => {
-  //   const srvCurrentState = await getSrvCurrentState(app, id);
-  //   const service = await getClientService(app, id);
-  //   let opcuaClient = await service.opcuaClientConnect(id, srvCurrentState);
-  //   opcuaClient = await service.sessionCreate(id);
-  //   if (isLog) inspector('Connect the clients:', opcuaClient);
-  //   assert.ok(opcuaClient, 'OPC-UA clients: connect the service');
-  // });
-
-    
   //============== SESSION HISTORY VALUES ====================//
 
-  /*
-  it('OPC-UA clients: session history value from file for "CH_M51" object', async () => {
+  it('OPC-UA clients: session history values for "CH_M51"', async () => {
     let dataItems, readResult = null, accumulator = '';
     const service = await getClientService(app, id);
 
@@ -144,17 +122,17 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     if (readResult) {
       // Get start time
       let start = moment();
-      debug('SessionHistoryValue_FromFile.StartTime:', getTime(start, false));
+      debug('SessionHistoryValue_ForCH_M51.StartTime:', getTime(start, false));
       // Pause
       await pause(1000);
       // Get end time
       let end = moment();
-      debug('SessionHistoryValue_FromFile.EndTime:', getTime(end, false));
+      debug('SessionHistoryValue_ForCH_M51.EndTime:', getTime(end, false));
 
       // service.sessionReadHistoryValues
       readResult = await service.sessionReadHistoryValues(id, 'CH_M51::ValueFromFile', start, end);
 
-      if (isLog) inspector('SessionHistoryValue_FromFile.readResult:', readResult);
+      if (isLog) inspector('SessionHistoryValue_ForCH_M51.readResult:', readResult);
       if (readResult.length && readResult[0].statusCode.name === 'Good') {
         if (readResult[0].historyData.dataValues.length) {
           let dataValues = readResult[0].historyData.dataValues;
@@ -162,8 +140,10 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
             if (dataValue.statusCode.name === 'Good') {
               dataItems = JSON.parse(dataValue.value.value);
               accumulator = '';
-              dataItems.forEach(item => accumulator = accumulator + `${item.name}=${item.value}; `);
-              console.log(chalk.green('SessionHistoryValue_FromFile.ValueFromFile:'), chalk.cyan(`${accumulator}; Timestamp=${dataValue.sourceTimestamp}`));
+              loForEach(dataItems, function(value, key) {
+                accumulator = accumulator + `${key}=${value}; `;
+              });
+              console.log(chalk.green('SessionHistoryValue_ForCH_M51.ValueFromFile:'), chalk.cyan(`${accumulator} Timestamp=${dataValue.sourceTimestamp}`));
               assert.ok(true, 'OPC-UA clients: session history value from file');
             } else {
               assert.ok(false, 'OPC-UA clients: session history value from file');
@@ -179,11 +159,16 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       assert.ok(false, 'OPC-UA clients: session history value from file');
     }
   });
-
-  it('OPC-UA clients: session history value from Device2.02F5', async () => {
+  
+  it('OPC-UA clients: session history values for "CH_M51::ValueFromFile" group', async () => {
     let dataItem, readResult = null;
     const service = await getClientService(app, id);
 
+    const srvCurrentState = await service.getSrvCurrentState(id);
+    inspector('srvCurrentState.variables:', srvCurrentState.paramsAddressSpace.variables);
+    assert.ok(true, 'OPC-UA clients: session history value from file');
+  });
+  /*
     // service.getItemNodeId
     readResult = await service.getItemNodeId(id, 'Device2.02F5');
     if (isLog) inspector('getItemNodeId.readResult:', readResult);
@@ -225,7 +210,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       assert.ok(false, 'OPC-UA clients: session history value from Device2.02F5');
     }
   });
-
+  
   it('OPC-UA clients: session history value from Device2.02P5', async () => {
     let dataItem, readResult = null;
     const service = await getClientService(app, id);
@@ -312,6 +297,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
   //===== SESSION CLOSE/CLIENT DISCONNECT/SERVER SHUTDOWN =====//
 
   it('OPC-UA clients: session close the service', async () => {
+    await pause(1000);
     const service = await getClientService(app, id);
     const opcuaClient = await service.sessionClose(id);
     if (isLog) inspector('Session close the clients:', opcuaClient);

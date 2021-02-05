@@ -12,6 +12,7 @@ const loToInteger = require('lodash/toInteger');
 const loIsObject = require('lodash/isObject');
 const loIsEqual = require('lodash/isEqual');
 const loToPairs = require('lodash/toPairs');
+const loMerge = require('lodash/merge');
 
 const debug = require('debug')('app:opcua-helper');
 const isLog = false;
@@ -114,7 +115,7 @@ const formatUAVariable = function (uaVariable = null) {
   uaVar.historizing =  uaVariable.historizing;
   uaVar.value =  uaVariable._dataValue.value.value;
   uaVar.statusCode =  uaVariable._dataValue.statusCode.name;
-
+  loMerge(uaVar, uaVariable.aliasName ? { aliasName: uaVariable.aliasName } : {});
   return uaVar;
 };
 

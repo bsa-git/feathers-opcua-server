@@ -397,7 +397,7 @@ class OpcuaServer {
               }
 
               // Add "this" to getterParams
-              getterParams = v.getterParams ? v.getterParams : {};
+              getterParams = Object.assign({}, v.getterParams ? v.getterParams : {});
               getterParams.myOpcuaServer = this;
 
               if (v.variableGetType === 'get') {
@@ -411,6 +411,10 @@ class OpcuaServer {
               } else {
                 addedVariable = namespace.addVariable(varParams);
               }
+
+              // Set aliasName to addedVariable
+              loMerge(addedVariable, v.aliasName ? { aliasName: v.aliasName } : {});
+
               // Add addedVariable to addedItemList
               this.addedItemList.push({
                 type: 'variable',
@@ -429,6 +433,7 @@ class OpcuaServer {
                 dataType: v.dataType,
                 type: v.type,
               },
+              v.aliasName ? { aliasName: v.aliasName } : {},
               v.group ? { group: v.group } : {},
               v.variableGetType ? { variableGetType: v.variableGetType } : {},
               v.getter ? { getter: v.getter } : {},
@@ -561,6 +566,10 @@ class OpcuaServer {
         } else {
           addedVariable = namespace.addVariable(varParams);
         }
+
+        // Set aliasName to addedVariable
+        loMerge(addedVariable, v.aliasName ? { aliasName: v.aliasName } : {});
+
         // Add addedVariable to addedItemList
         this.addedItemList.push({
           type: 'variable',
@@ -580,6 +589,7 @@ class OpcuaServer {
           dataType: v.dataType,
           type: v.type,
         },
+        v.aliasName ? { aliasName: v.aliasName } : {},
         v.variableGetType ? { variableGetType: v.variableGetType } : {},
         v.getter ? { getter: v.getter } : {},
         v.getterParams ? { getterParams: v.getterParams } : {},
@@ -606,7 +616,7 @@ class OpcuaServer {
   setValueFromSource(variable, addedVariable, getter, value) {
 
     // getterParams
-    let getterParams = variable.getterParams ? variable.getterParams : {};
+    let getterParams = Object.assign({}, variable.getterParams ? variable.getterParams : {});
     // Add "value" to getterParams
     loMerge(getterParams, value === undefined ? {} : { value });
     // Add "this" to getterParams

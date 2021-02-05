@@ -85,7 +85,7 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
   const _interval = 200;
   const _path = 'test/data/tmp';
   const _isHistForGetter = true;
-  let dataItems, groupVariable, dataType, browseName;
+  let dataItems, groupVariable, dataType, browseName, results;
   let t = params.t ? params.t : _t;
   let interval = params.interval ? params.interval : _interval;
   let path = params.path ? params.path : _path;
@@ -99,22 +99,24 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
       if (isDebug) console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
       // Set value from source
       dataType = formatUAVariable(addedValue).dataType[1];
-      addedValue.setValueFromSource({ dataType, value: data });
+      results = papa.parse(data, { delimiter: ';', header: true });
+      dataItems = results.data[0];
+      addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
 
-      if (isLog) inspector('histValueFromFile.addedValue:', formatUAVariable(addedValue));
-      // inspector('histValueFromFile.addedValue:', formatUAVariable(addedValue));
+      if (isLog) inspector('histValueFromFileForCH_M51.dataItems:', dataItems);
+      // inspector('histValueFromFileForCH_M51.dataItems:', dataItems);
 
       // Remove file 
       removeFileSync(filePath);
 
       // Get data
-      dataItems = JSON.parse(data);
+      // dataItems = JSON.parse(data);
       // Get group variable list 
       const groupVariableList = params.addedVariableList;
       if (isDebug) inspector('histValueFromFile.groupVariableList:', groupVariableList);
 
-      dataItems.forEach(dataItem => {
-        groupVariable = groupVariableList.find(v => v.browseName.name === dataItem.name);
+      loForEach(dataItems, function(value, key) {
+        groupVariable = groupVariableList.find(v => v.aliasName === key);
         // Set value from source
         if (groupVariable) {
           browseName = formatUAVariable(groupVariable).browseName;
@@ -122,38 +124,30 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
           // Run setValueFromSource for groupVariable
           const currentState = params.myOpcuaServer.getCurrentState();
           const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
-          params.myOpcuaServer.setValueFromSource(variable, groupVariable, module.exports[variable.getter], dataItem.value);
+          params.myOpcuaServer.setValueFromSource(variable, groupVariable, module.exports[variable.getter], value);
 
-          if (isDebug) console.log(chalk.green(`histValueFromFile.${browseName}:`), chalk.cyan(dataItem.value));
+          if (isDebug) console.log(chalk.green(`histValueFromFileForCH_M51.${browseName}:`), chalk.cyan(value));
+          // console.log(chalk.green(`histValueFromFileForCH_M51.${browseName}:`), chalk.cyan(value));
         }
       });
 
     });
     // Write file
     setInterval(function () {
-      // const data = [
-      //   {
-      //     name: 'Device2.02F5',
-      //     value: getTValue(t)
-      //   },
-      //   {
-      //     name: 'Device2.02P5',
-      //     value: getTValue(t)
-      //   }
-      // ];
-
       let csv = readFileSync([appRoot, '/src/api/opcua/ua-cherkassy-azot-m5_test/data-CH_M51.csv']);
       if (csv) {
-        let results = papa.parse(csv, { delimiter: ';', header: true });
-        inspector('histValueFromFileForCH_M51.parse.data:', results.data);
-        // loForEach
+        results = papa.parse(csv, { delimiter: ';', header: true });
+        // inspector('histValueFromFileForCH_M51.parse.data:', results.data);
+        loForEach(results.data[0], function(value, key) {
+          results.data[0][key] = getTValue(value);
+        });
         csv = papa.unparse(results.data, { delimiter: ';' });
-        inspector('histValueFromFileForCH_M51.unparse.csv:', csv);
+        if(isLog) inspector('histValueFromFileForCH_M51.unparse.csv:', csv);
       }
 
       const fileName = getFileName('data-', 'csv', true);
       writeFileSync([appRoot, path, fileName], csv);
-      t = t + 1;
+      // t = t + 1;
     }, interval);
   } else {
     // Parse local CSV file
