@@ -13,6 +13,7 @@ const loIsObject = require('lodash/isObject');
 const loIsEqual = require('lodash/isEqual');
 const loToPairs = require('lodash/toPairs');
 const loMerge = require('lodash/merge');
+const loConcat = require('lodash/concat');
 
 const debug = require('debug')('app:opcua-helper');
 const isLog = false;
@@ -144,6 +145,33 @@ const convertTo = function (convertType, value) {
 };
 
 /**
+ * @method getHistoryResults
+ * @param {Object[]} historyResults 
+ * @param {String[]} nameNodeIds 
+ * e.g. ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT']
+ * @param {Object[]}
+ */
+const getHistoryResults = function (historyResults, nameNodeIds) {
+  let results = [], result, value, historyResult;
+  nameNodeIds.forEach((n, index) => {
+    historyResult = historyResults[index];
+    result = {};
+    result.browseName = n;
+    result.statusCode = historyResult.statusCode._name;
+    result.dataValues = [];
+    historyResult.historyData.dataValues.forEach(v => {
+      value = {};
+      value.statusCode = v.statusCode.name;
+      value.timestamp = v.sourceTimestamp;
+      value.value = v.value.value;
+      result.dataValues.push(loMerge({}, value));
+    })
+    results.push(loMerge({}, result));
+  })
+  return results;
+}
+
+/**
  * @method getOpcuaConfig
  * @param {String} id 
  * @returns {Object|Array}
@@ -173,6 +201,15 @@ const getSubscriptionHandler = function (id, nameFile = '') {
   // Get subscriptionHandler
   const subscriptionHandlers = require(`${appRoot}${opcuaOption.paths.subscriptions}`);
   return subscriptionHandlers[nameFile] ? subscriptionHandlers[nameFile] : subscriptionHandlers[defaultNameFile];
+};
+
+const getOpcuaConfigOptions = function (id, browseName = '') {
+  // Get opcuaOption 
+  let opcuaOptions = getOpcuaConfig(id);
+  opcuaOptions = require(`${appRoot}${opcuaOption.paths.options}`);
+  opcuaOptions = loConcat(opcuaOptions.objects, opcuaOptions.variables, opcuaOptions.groups, nodeIds.methods);
+  opcuaOptions = browseName? opcuaOptions.find(opt => opt.browseName === browseName) : opcuaOptions;
+  return opcuaOptions;
 };
 
 /**
@@ -312,6 +349,7 @@ module.exports = {
   formatUAVariable,
   convertTo,
   getOpcuaConfig,
+  getOpcuaConfigOptions,
   getSubscriptionHandler,
   getServerService,
   getClientService,

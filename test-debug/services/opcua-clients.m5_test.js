@@ -75,7 +75,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     makeDirSync([appRoot, 'test/data/tmp', 'ch-m52']);
   });
 
-  after( function (done) {
+  after(function (done) {
     if (isDebug) debug('after Start!');
     server.close();
     setTimeout(() => done(), 500);
@@ -140,7 +140,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
             if (dataValue.statusCode.name === 'Good') {
               dataItems = JSON.parse(dataValue.value.value);
               accumulator = '';
-              loForEach(dataItems, function(value, key) {
+              loForEach(dataItems, function (value, key) {
                 accumulator = accumulator + `${key}=${value}; `;
               });
               console.log(chalk.green('SessionHistoryValue_ForCH_M51.ValueFromFile:'), chalk.cyan(`${accumulator} Timestamp=${dataValue.sourceTimestamp}`));
@@ -159,58 +159,189 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       assert.ok(false, 'OPC-UA clients: session history value from file');
     }
   });
-  
-  it('OPC-UA clients: session history values for "CH_M51::ValueFromFile" group', async () => {
-    let dataItem, readResult = null;
+
+  it('OPC-UA clients: session history values for "CH_M51" group', async () => {
+    let dataItem, readResults = null;
     const service = await getClientService(app, id);
 
     const srvCurrentState = await service.getSrvCurrentState(id);
-    inspector('srvCurrentState.variables:', srvCurrentState.paramsAddressSpace.variables);
-    assert.ok(true, 'OPC-UA clients: session history value from file');
-  });
-  /*
-    // service.getItemNodeId
-    readResult = await service.getItemNodeId(id, 'Device2.02F5');
-    if (isLog) inspector('getItemNodeId.readResult:', readResult);
+    let variables = srvCurrentState.paramsAddressSpace.variables;
+    variables = variables.filter(v => v.ownerGroup === 'CH_M51::ValueFromFile').map(v => v.browseName);
+    // inspector('srvCurrentState.variables:', variables);
+    // assert.ok(true, 'OPC-UA clients: session history value from file');
+    // });
 
-    if (readResult) {
+    // service.getItemNodeId
+    // readResult = await service.getItemNodeId(id, 'Device2.02F5');
+    // if (isLog) inspector('getItemNodeId.readResult:', readResult);
+
+    if (variables.length) {
       // Get start time
       let start = moment();
-      debug('SessionHistoryValue_From_Device2.02F5.StartTime:', getTime(start, false));
+      debug('OPC-UA clients: session history values for "CH_M51" group.StartTime:', getTime(start, false));
       // Pause
       await pause(1000);
       // Get end time
       let end = moment();
-      debug('SessionHistoryValue_From_Device2.02F5.EndTime:', getTime(end, false));
+      debug('OPC-UA clients: session history values for "CH_M51" group.EndTime:', getTime(end, false));
 
+      // variables.forEach(v => {
       // service.sessionReadHistoryValues
-      readResult = await service.sessionReadHistoryValues(id, 'Device2.02F5', start, end);
+      // readResults = await service.sessionReadHistoryValues(id, variables, start, end);
+      readResults = await service.sessionReadHistoryValues(id, ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT'], start, end);
 
-      if (isLog) inspector('SessionHistoryValue_From_Device2.02F5.readResult:', readResult);
-      // inspector('SessionHistoryValue_FromFile.readResult:', readResult);
-      if (readResult.length && readResult[0].statusCode.name === 'Good') {
+      if (isLog) inspector('OPC-UA clients: session history values for "CH_M51" group.readResults:', readResults);
+      inspector('OPC-UA clients: session history values for "CH_M51" group.readResults:', readResults);
+      assert.ok(true, 'OPC-UA clients: session history values for "CH_M51" group');
+
+      const results = OPC-UA clients: session history values for "CH_M51" group.readResults:
+      [
+        HistoryReadResult {
+          statusCode: ConstantStatusCode {
+            _value: 0,
+            _description: 'No Error',
+            _name: 'Good'
+          },
+          continuationPoint: null,
+          historyData: HistoryData {
+            dataValues: [
+              DataValue {
+                value: Variant {
+                  dataType: 11,
+                  arrayType: 0,
+                  value: 3.283,
+                  dimensions: null
+                },
+                statusCode: ConstantStatusCode {
+                  _value: 0,
+                  _description: 'No Error',
+                  _name: 'Good'
+                },
+                sourceTimestamp: 2021-02-06T11:41:02.639Z {
+                  high_low: [ 30866556, -228724083 ],
+                  picoseconds: 578900000
+                },
+                sourcePicoseconds: 578942000,
+                serverTimestamp: 2021-02-06T11:41:02.639Z {
+                  high_low: [ 30866556, -228724083 ],
+                  picoseconds: 578900000
+                },
+                serverPicoseconds: 578942000
+              },
+              DataValue {
+                value: Variant {
+                  dataType: 11,
+                  arrayType: 0,
+                  value: 3.773,
+                  dimensions: null
+                },
+                statusCode: ConstantStatusCode {
+                  _value: 0,
+                  _description: 'No Error',
+                  _name: 'Good'
+                },
+                sourceTimestamp: 2021-02-06T11:41:03.147Z {
+                  high_low: [ 30866556, -223644776 ],
+                  picoseconds: 509600000
+                },
+                sourcePicoseconds: 509656000,
+                serverTimestamp: 2021-02-06T11:41:03.147Z {
+                  high_low: [ 30866556, -223644776 ],
+                  picoseconds: 509600000
+                },
+                serverPicoseconds: 509656000
+              }
+            ]
+          }
+        },
+        HistoryReadResult {
+          statusCode: ConstantStatusCode {
+            _value: 0,
+            _description: 'No Error',
+            _name: 'Good'
+          },
+          continuationPoint: null,
+          historyData: HistoryData {
+            dataValues: [
+              DataValue {
+                value: Variant {
+                  dataType: 11,
+                  arrayType: 0,
+                  value: 5.767,
+                  dimensions: null
+                },
+                statusCode: ConstantStatusCode {
+                  _value: 0,
+                  _description: 'No Error',
+                  _name: 'Good'
+                },
+                sourceTimestamp: 2021-02-06T11:41:02.641Z {
+                  high_low: [ 30866556, -228701117 ],
+                  picoseconds: 875500000
+                },
+                sourcePicoseconds: 875504000,
+                serverTimestamp: 2021-02-06T11:41:02.641Z {
+                  high_low: [ 30866556, -228701117 ],
+                  picoseconds: 875500000
+                },
+                serverPicoseconds: 875504000
+              },
+              DataValue {
+                value: Variant {
+                  dataType: 11,
+                  arrayType: 0,
+                  value: 6.161,
+                  dimensions: null
+                },
+                statusCode: ConstantStatusCode {
+                  _value: 0,
+                  _description: 'No Error',
+                  _name: 'Good'
+                },
+                sourceTimestamp: 2021-02-06T11:41:03.149Z {
+                  high_low: [ 30866556, -223622973 ],
+                  picoseconds: 689900000
+                },
+                sourcePicoseconds: 689901000,
+                serverTimestamp: 2021-02-06T11:41:03.149Z {
+                  high_low: [ 30866556, -223622973 ],
+                  picoseconds: 689900000
+                },
+                serverPicoseconds: 689901000
+              }
+            ]
+          }
+        }
+      ];
+
+
+
+      /*
+
+      if (readResults.length && readResults[0].statusCode.name === 'Good') {
         if (readResult[0].historyData.dataValues.length) {
           let dataValues = readResult[0].historyData.dataValues;
           dataValues.forEach(dataValue => {
             if (dataValue.statusCode.name === 'Good') {
               dataItem = dataValue.value.value;
-              console.log(chalk.green('SessionHistoryValue_From_Device2.02F5:'), chalk.cyan(`${dataItem}; Timestamp=${dataValue.sourceTimestamp}`));
-              assert.ok(true, 'OPC-UA clients: session history value from Device2.02F5');
+              console.log(chalk.green('OPC-UA clients: session history values for "CH_M51" group:'), chalk.cyan(`${dataItem}; Timestamp=${dataValue.sourceTimestamp}`));
+              assert.ok(true, 'OPC-UA clients: session history values for "CH_M51" group');
             } else {
-              assert.ok(false, 'OPC-UA clients: session history value from Device2.02F5');
+              assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
             }
           });
         } else {
-          assert.ok(false, 'OPC-UA clients: session history value from Device2.02F5');
+          assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
         }
       } else {
-        assert.ok(false, 'OPC-UA clients: session history value from Device2.02F5');
+        assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
       }
+      */
     } else {
-      assert.ok(false, 'OPC-UA clients: session history value from Device2.02F5');
+      assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
     }
   });
-  
+  /*
   it('OPC-UA clients: session history value from Device2.02P5', async () => {
     let dataItem, readResult = null;
     const service = await getClientService(app, id);
