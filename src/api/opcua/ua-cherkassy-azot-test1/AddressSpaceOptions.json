@@ -2,11 +2,13 @@
   "objects": [
     {
       "browseName": "Device1",
-      "displayName": "Device1"
+      "displayName": "Device1",
+      "type": "object"
     },
     {
       "browseName": "Device2",
-      "displayName": "Device2"
+      "displayName": "Device2",
+      "type": "object"
     }
   ],
   "variables": [
@@ -14,7 +16,7 @@
       "browseName": "Device1.Temperature",
       "displayName": "Temperature",
       "ownerName": "Device1",
-      "type": "simple",
+      "type": "variable.simple",
       "dataType": "Double",
       "variableGetType": "get",
       "getter": "valueSimulate1",
@@ -27,7 +29,7 @@
       "browseName": "Device1.Variable2",
       "displayName": "Variable2",
       "ownerName": "Device1",
-      "type": "simple",
+      "type": "variable.simple",
       "dataType": "String",
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
@@ -42,7 +44,7 @@
       "browseName": "Device1.Variable3",
       "displayName": "Variable3",
       "ownerName": "Device1",
-      "type": "simple",
+      "type": "variable.simple",
       "dataType": "Double",
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
@@ -70,7 +72,7 @@
       "browseName": "Device1.PercentageMemoryUsed",
       "displayName": "Percentage Memory Used",
       "ownerName": "Device1",
-      "type": "simple",
+      "type": "variable.simple",
       "dataType": "Double",
       "variableGetType": "get",
       "getter": "percentageMemUsed",
@@ -82,14 +84,14 @@
       "browseName": "Device1.VariableForWrite",
       "displayName": "Variable For Write",
       "ownerName": "Device1",
-      "type": "simple",
+      "type": "variable.simple",
       "dataType": "String"
     },
     {
       "browseName": "Device2.PressureVesselDevice",
       "displayName": "Pressure Vessel Device",
       "ownerName": "Device2",
-      "type": "analog",
+      "type": "variable.analog",
       "dataType": "Double",
       "hist": true,
       "variableGetType": "valueFromSource",
@@ -110,7 +112,7 @@
       "browseName": "Device2.ValueFromFile",
       "displayName": "Value From File",
       "ownerName": "Device2",
-      "type": "simple",
+      "type": "variable.simple",
       "dataType": "String",
       "hist": true,
       "group": true,
@@ -129,7 +131,7 @@
       "displayName": "Natural gas consumption",
       "ownerName": "Device2",
       "ownerGroup": "Device2.ValueFromFile",
-      "type": "analog",
+      "type": "variable.analog",
       "dataType": "Double",
       "hist": true,
       "variableGetType": "valueFromSource",
@@ -147,7 +149,7 @@
       "displayName": "Natural gas pressure",
       "ownerName": "Device2",
       "ownerGroup": "Device2.ValueFromFile",
-      "type": "analog",
+      "type": "variable.analog",
       "dataType": "Double",
       "hist": true,
       "variableGetType": "valueFromSource",
@@ -166,6 +168,7 @@
       "browseName": "Device1.SumMethod",
       "displayName": "Sum Method",
       "ownerName": "Device1",
+      "type": "method",
       "bindMethod": "sumMethod",
       "inputArguments": [
         {

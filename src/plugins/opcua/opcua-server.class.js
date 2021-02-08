@@ -406,7 +406,7 @@ class OpcuaServer {
                 loMerge(varParams, { value: { get: () => { return getters[v.getter](getterParams); } } });
               }
               // Add variables
-              if (v.type === 'analog') {
+              if (v.type === 'variable.analog') {
                 addedVariable = namespace.addAnalogDataItem(varParams);
               } else {
                 addedVariable = namespace.addVariable(varParams);
@@ -417,7 +417,7 @@ class OpcuaServer {
 
               // Add addedVariable to addedItemList
               this.addedItemList.push({
-                type: 'variable',
+                type: v.type,
                 ownerName: v.ownerName,
                 nodeId: addedVariable.nodeId.toString(),
                 browseName: v.browseName,
@@ -561,7 +561,7 @@ class OpcuaServer {
           loMerge(varParams, v.valueParams.engineeringUnits ? standardUnits[v.valueParams.engineeringUnits] : {});
         }
         // Add variables
-        if (v.type === 'analog') {
+        if (v.type === 'variable.analog') {
           addedVariable = namespace.addAnalogDataItem(varParams);
         } else {
           addedVariable = namespace.addVariable(varParams);
@@ -572,7 +572,7 @@ class OpcuaServer {
 
         // Add addedVariable to addedItemList
         this.addedItemList.push({
-          type: 'variable',
+          type: v.type,
           ownerName: v.ownerName,
           nodeId: addedVariable.nodeId.toString(),
           browseName: v.browseName,

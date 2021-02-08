@@ -4,6 +4,7 @@ const { inspector, appRoot, getParseUrl, getHostname, getMyIp } = require('../li
 
 const {
   DataType,
+  standardUnits,
   extractFullyQualifiedDomainName
 } = require('node-opcua');
 const moment = require('moment');
@@ -109,40 +110,38 @@ const formatUAVariable = function (uaVariable = null) {
   uaVar.nodeClass = uaVariable.nodeClass;
   uaVar.nodeId = nodeIdToString(uaVariable.nodeId);
   uaVar.browseName = uaVariable.browseName.name;
-  uaVar.dataType =  getOpcuaDataType(uaVariable.dataType);
-  uaVar.accessLevel =  uaVariable.accessLevel;
-  uaVar.userAccessLevel =  uaVariable.userAccessLevel;
-  uaVar.minimumSamplingInterval =  uaVariable.minimumSamplingInterval;
-  uaVar.historizing =  uaVariable.historizing;
-  uaVar.value =  uaVariable._dataValue.value.value;
-  uaVar.statusCode =  uaVariable._dataValue.statusCode.name;
+  uaVar.dataType = getOpcuaDataType(uaVariable.dataType);
+  uaVar.accessLevel = uaVariable.accessLevel;
+  uaVar.userAccessLevel = uaVariable.userAccessLevel;
+  uaVar.minimumSamplingInterval = uaVariable.minimumSamplingInterval;
+  uaVar.historizing = uaVariable.historizing;
+  uaVar.value = uaVariable._dataValue.value.value;
+  uaVar.statusCode = uaVariable._dataValue.statusCode.name;
   loMerge(uaVar, uaVariable.aliasName ? { aliasName: uaVariable.aliasName } : {});
   return uaVar;
 };
 
 /**
- * @method convertTo
- * @param {String} convertType 
- * @param {any} value 
- * @returns {any}
+ * @method formatConfigOption
+ * @param {Object} configOption 
+ * @returns {Object}
  */
-const convertTo = function (convertType, value) {
-  let result = null;
-  switch (convertType) {
-  // (kg/h -> m3/h) for ammonia
-  case 'ammonia_kg/h_to_m3/h':
-    result = value * 1.4;
-    break;
-  // (m3/h -> kg/h) for ammonia
-  case 'ammonia_m3/h_to_kg/h':
-    result = value * 0.716;
-    break;    
-  
-  default:
-    break;
+const formatConfigOption = function (configOption) {
+  let formatResult = {};
+  formatResult.browseName = configOption.browseName;
+  formatResult.displayName = configOption.displayName;
+  loMerge(formatResult, configOption.aliasName ? { aliasName: configOption.aliasName } : {});
+  loMerge(formatResult, configOption.type ? { type: configOption.type } : {});
+  loMerge(formatResult, configOption.dataType ? { dataType: configOption.dataType } : {});
+  loMerge(formatResult, configOption.valueParams ? { valueParams: configOption.valueParams } : {});
+  if(formatResult.valueParams && 
+    formatResult.valueParams.engineeringUnits &&
+    standardUnits[formatResult.valueParams.engineeringUnits]){
+    formatResult.valueParams.engineeringUnits = standardUnits[formatResult.valueParams.engineeringUnits];
   }
-  return result;
+  return formatResult;
 };
+
 
 /**
  * @method getHistoryResults
@@ -152,24 +151,64 @@ const convertTo = function (convertType, value) {
  * @param {Object[]}
  */
 const getHistoryResults = function (historyResults, nameNodeIds) {
-  let results = [], result, value, historyResult;
-  nameNodeIds.forEach((n, index) => {
-    historyResult = historyResults[index];
+  let results = [], result, value, nameNodeId;
+
+  historyResults.forEach((historyResult, index) => {
+    nameNodeId = (nameNodeIds.length && index < nameNodeIds.length) ? nameNodeIds[index] : '';
     result = {};
-    result.browseName = n;
+    loMerge(result, nameNodeId ? { browseName: nameNodeId } : {});
     result.statusCode = historyResult.statusCode._name;
     result.dataValues = [];
     historyResult.historyData.dataValues.forEach(v => {
       value = {};
       value.statusCode = v.statusCode.name;
-      value.timestamp = v.sourceTimestamp;
+      value.timestamp = getTimestamp(v.sourceTimestamp.toString());
       value.value = v.value.value;
       result.dataValues.push(loMerge({}, value));
-    })
+    });
     results.push(loMerge({}, result));
-  })
+  });
   return results;
-}
+};
+
+/**
+ * @method getHistoryResultsEx
+ * @param {Object[]} historyResults 
+ * @param {String[]} nameNodeIds 
+ * e.g. ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT']
+ * @param {String} id 
+ * e.g. 'ua-cherkassy-azot-test1'
+ * @param {Object[]}
+ */
+const getHistoryResultsEx = function (historyResults, nameNodeIds, id) {
+  let results = [], result, option, value, nameNodeId;
+  const options = getOpcuaConfigOptions(id);
+
+  historyResults.forEach((historyResult, index) => {
+    nameNodeId = nameNodeIds[index];
+    option = options.find(opt => opt.browseName === nameNodeId);
+    option = formatConfigOption(option);
+    result = {};
+    result.browseName = nameNodeId;
+    result.displayName = option.displayName;
+    loMerge(result, option.aliasName ? { aliasName: option.aliasName } : {});
+    loMerge(result, option.type ? { type: option.type } : {});
+    loMerge(result, option.dataType ? { dataType: option.dataType } : {});
+    loMerge(result, option.valueParams ? { valueParams: option.valueParams } : {});
+    result.statusCode = historyResult.statusCode._name;
+    result.dataValues = [];
+    historyResult.historyData.dataValues.forEach(v => {
+      value = {};
+      value.statusCode = v.statusCode.name;
+      value.timestamp = getTimestamp(v.sourceTimestamp.toString());
+      value.value = v.value.value;
+      result.dataValues.push(loMerge({}, value));
+    });
+    results.push(loMerge({}, result));
+  });
+
+  return results;
+};
 
 /**
  * @method getOpcuaConfig
@@ -189,6 +228,22 @@ const getOpcuaConfig = function (id = '') {
 };
 
 /**
+ * @method getOpcuaConfigOptions
+ * @param {String} id 
+ * @param {String} browseName 
+ * @returns {Object}
+ */
+const getOpcuaConfigOptions = function (id, browseName = '') {
+  // Get opcuaOption 
+  let opcuaOptions = getOpcuaConfig(id);
+  opcuaOptions = require(`${appRoot}${opcuaOptions.paths.options}`);
+  opcuaOptions = loConcat(opcuaOptions.objects, opcuaOptions.variables, opcuaOptions.groups, opcuaOptions.methods);
+  opcuaOptions = browseName ? opcuaOptions.find(opt => opt.browseName === browseName) : opcuaOptions;
+  return opcuaOptions;
+};
+
+
+/**
  * @method getSubscriptionHandler
  * @param {String} id 
  * @param {String} nameFile 
@@ -201,15 +256,6 @@ const getSubscriptionHandler = function (id, nameFile = '') {
   // Get subscriptionHandler
   const subscriptionHandlers = require(`${appRoot}${opcuaOption.paths.subscriptions}`);
   return subscriptionHandlers[nameFile] ? subscriptionHandlers[nameFile] : subscriptionHandlers[defaultNameFile];
-};
-
-const getOpcuaConfigOptions = function (id, browseName = '') {
-  // Get opcuaOption 
-  let opcuaOptions = getOpcuaConfig(id);
-  opcuaOptions = require(`${appRoot}${opcuaOption.paths.options}`);
-  opcuaOptions = loConcat(opcuaOptions.objects, opcuaOptions.variables, opcuaOptions.groups, nodeIds.methods);
-  opcuaOptions = browseName? opcuaOptions.find(opt => opt.browseName === browseName) : opcuaOptions;
-  return opcuaOptions;
 };
 
 /**
@@ -339,6 +385,44 @@ const isMyServiceHost = async function (serviceUrl, myPort) {
   return (servicePort === myPort) || (serviceHostname === myHostname) || (serviceHostname === myDomainName) || (serviceHostname === 'localhost') || (serviceHostname === myIp);
 };
 
+/**
+ * @method convertTo
+ * @param {String} convertType 
+ * @param {any} value 
+ * @returns {any}
+ */
+const convertTo = function (convertType, value) {
+  let result = null;
+  switch (convertType) {
+  // (kg/h -> m3/h) for ammonia
+  case 'ammonia_kg/h_to_m3/h':
+    result = value * 1.4;
+    break;
+    // (m3/h -> kg/h) for ammonia
+  case 'ammonia_m3/h_to_kg/h':
+    result = value * 0.716;
+    break;
+
+  default:
+    break;
+  }
+  return result;
+};
+
+/**
+ * @method getTimestamp
+ * @param {String|Object} timestamp 
+ * @returns {String}
+ */
+const getTimestamp = function (timestamp) {
+  // Mon Feb 08 2021 11:47:22 GMT+0200 (GMT+02:00)
+  let dt = loIsObject(timestamp) ? timestamp.toString() : timestamp;
+  const dtList = dt.split(' ');
+  dt = moment(`${dtList[1]} ${dtList[2]} ${dtList[3]} ${dtList[4]}`, 'MMM DD YYYY HH:mm:ss');
+  dt = dt.format();
+  return dt;
+};
+
 
 module.exports = {
   nodeIdToString,
@@ -347,7 +431,9 @@ module.exports = {
   getNameSpaceFromNodeId,
   getOpcuaDataType,
   formatUAVariable,
-  convertTo,
+  formatConfigOption,
+  getHistoryResults,
+  getHistoryResultsEx,
   getOpcuaConfig,
   getOpcuaConfigOptions,
   getSubscriptionHandler,
@@ -358,5 +444,7 @@ module.exports = {
   getServerForProvider,
   isOpcuaServerInList,
   isOpcuaClientInList,
-  isMyServiceHost
+  isMyServiceHost,
+  convertTo,
+  getTimestamp
 };

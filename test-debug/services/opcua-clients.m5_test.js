@@ -5,6 +5,8 @@ const port = app.get('port') || 3030;
 const {
   getServerService,
   getClientService,
+  getHistoryResults,
+  getHistoryResultsEx,
   getSrvCurrentState,
   getOpcuaDataType
 } = require('../../src/plugins/opcua/opcua-helper');
@@ -190,10 +192,12 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       // readResults = await service.sessionReadHistoryValues(id, variables, start, end);
       readResults = await service.sessionReadHistoryValues(id, ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT'], start, end);
 
+      readResults = getHistoryResultsEx(readResults, ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT'], id);
       if (isLog) inspector('OPC-UA clients: session history values for "CH_M51" group.readResults:', readResults);
       inspector('OPC-UA clients: session history values for "CH_M51" group.readResults:', readResults);
       assert.ok(true, 'OPC-UA clients: session history values for "CH_M51" group');
 
+      /*
       const results = OPC-UA clients: session history values for "CH_M51" group.readResults:
       [
         HistoryReadResult {
@@ -316,7 +320,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
 
 
-      /*
+      
 
       if (readResults.length && readResults[0].statusCode.name === 'Good') {
         if (readResult[0].historyData.dataValues.length) {
