@@ -5,6 +5,7 @@ const { inspector, appRoot, getParseUrl, getHostname, getMyIp } = require('../li
 const {
   DataType,
   standardUnits,
+  makeEUInformation,
   extractFullyQualifiedDomainName
 } = require('node-opcua');
 const moment = require('moment');
@@ -19,6 +20,15 @@ const loConcat = require('lodash/concat');
 const debug = require('debug')('app:opcua-helper');
 const isLog = false;
 const isDebug = false;
+
+
+loMerge(standardUnits, {
+  degree_celsius: makeEUInformation("CEL", "deg.C", "degree Celsius"),
+  kilograms_force_per_square_centimetre: makeEUInformation('E42', 'kgf/cm2', 'A unit of pressure defining the number of kilograms force per square centimetre = 9,806 65 x 10⁴ Pa'),
+  cubic_metre_per_hour: makeEUInformation("MQH", "m3/h", "Cubic metre per hours = 2,777 78 x 10^-4 m3/s"),
+  kilogram_per_cubic_metre: makeEUInformation('KMQ', 'kg/m3', 'kilogram per cubic metre   kg/m3'),
+});
+
 
 /**
  * @method nodeIdToString
