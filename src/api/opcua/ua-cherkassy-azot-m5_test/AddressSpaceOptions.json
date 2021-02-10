@@ -217,7 +217,7 @@
           "low": 0,
           "high": 16
         },
-        "engineeringUnits": "kilogram_per_cubic_metre"
+        "engineeringUnits": "tonne_per_hour"
       }
     },
     {
@@ -274,7 +274,7 @@
           "low": 0,
           "high": 20
         },
-        "engineeringUnits": "т/ч"
+        "engineeringUnits": "tonne_per_hour"
       }
     },
     {
@@ -331,7 +331,7 @@
           "low": 0,
           "high": 20
         },
-        "engineeringUnits": "т/ч"
+        "engineeringUnits": "tonne_per_hour"
       }
     },
     {
@@ -350,7 +350,7 @@
           "low": 0,
           "high": 1000
         },
-        "engineeringUnits": "м3"
+        "engineeringUnits": "cubic_metre"
       }
     },
     {
@@ -714,7 +714,7 @@
           "low": -1500,
           "high": 1500
         },
-        "engineeringUnits": "кВт"
+        "engineeringUnits": "kilowatt"
       }
     },
 
@@ -888,7 +888,7 @@
           "low": 0,
           "high": 25
         },
-        "engineeringUnits": "т/ч"
+        "engineeringUnits": "tonne_per_hour"
       }
     },
     {
@@ -945,7 +945,7 @@
           "low": 0,
           "high": 25
         },
-        "engineeringUnits": "т/ч"
+        "engineeringUnits": "tonne_per_hour"
       }
     },
     {
@@ -1002,7 +1002,7 @@
           "low": 0,
           "high": 80
         },
-        "engineeringUnits": "т/ч"
+        "engineeringUnits": "tonne_per_hour"
       }
     },
     {
@@ -1059,7 +1059,7 @@
           "low": 0,
           "high": 80
         },
-        "engineeringUnits": "т/ч"
+        "engineeringUnits": "tonne_per_hour"
       }
     },
     {
@@ -1136,7 +1136,7 @@
           "low": 45,
           "high": 60
         },
-        "engineeringUnits": "кг/м3"
+        "engineeringUnits": "kilogram_per_cubic_metre"
       }
     },
     {
@@ -1633,7 +1633,7 @@
           "low": -1500,
           "high": 1500
         },
-        "engineeringUnits": "кВт"
+        "engineeringUnits": "kilowatt"
       }
     },
 
@@ -1864,7 +1864,7 @@
           "low": -1500,
           "high": 1500
         },
-        "engineeringUnits": "кВт"
+        "engineeringUnits": "kilowatt"
       }
     },
 
@@ -2095,7 +2095,7 @@
           "low": -1500,
           "high": 1500
         },
-        "engineeringUnits": "кВт"
+        "engineeringUnits": "kilowatt"
       }
     },
 
@@ -2326,7 +2326,7 @@
           "low": -1500,
           "high": 1500
         },
-        "engineeringUnits": "кВт"
+        "engineeringUnits": "kilowatt"
       }
     },
 
@@ -2557,7 +2557,7 @@
           "low": -1500,
           "high": 1500
         },
-        "engineeringUnits": "кВт"
+        "engineeringUnits": "kilowatt"
       }
     },
 
@@ -2788,7 +2788,7 @@
           "low": -1500,
           "high": 1500
         },
-        "engineeringUnits": "кВт"
+        "engineeringUnits": "kilowatt"
       }
     },
 
@@ -3019,7 +3019,7 @@
           "low": -1500,
           "high": 1500
         },
-        "engineeringUnits": "кВт"
+        "engineeringUnits": "kilowatt"
       }
     }
   ],
