@@ -1,0 +1,9374 @@
+﻿[
+  {
+    "symbol": "C81",
+    "unitId": 4405297,
+    "shortName": "rad",
+    "longName": "radian"
+  },
+  {
+    "symbol": "C25",
+    "unitId": 4403765,
+    "shortName": "mrad",
+    "longName": "milliradian"
+  },
+  {
+    "symbol": "B97",
+    "unitId": 4340023,
+    "shortName": "µrad",
+    "longName": "microradian"
+  },
+  {
+    "symbol": "DD",
+    "unitId": 17476,
+    "shortName": "°",
+    "longName": "degree [unit of angle]"
+  },
+  {
+    "symbol": "D61",
+    "unitId": 4470321,
+    "shortName": "'",
+    "longName": "minute [unit of angle]"
+  },
+  {
+    "symbol": "D62",
+    "unitId": 4470322,
+    "shortName": "\"",
+    "longName": "second [unit of angle]"
+  },
+  {
+    "symbol": "A91",
+    "unitId": 4274481,
+    "shortName": "gon",
+    "longName": "gon"
+  },
+  {
+    "symbol": "M43",
+    "unitId": 5059635,
+    "shortName": "mil",
+    "longName": "mil"
+  },
+  {
+    "symbol": "M44",
+    "unitId": 5059636,
+    "shortName": "rev",
+    "longName": "revolution"
+  },
+  {
+    "symbol": "D27",
+    "unitId": 4469303,
+    "shortName": "sr",
+    "longName": "steradian"
+  },
+  {
+    "symbol": "H57",
+    "unitId": 4732215,
+    "shortName": "in/revolution",
+    "longName": "inch per two pi radiant"
+  },
+  {
+    "symbol": "MTR",
+    "unitId": 5067858,
+    "shortName": "m",
+    "longName": "metre"
+  },
+  {
+    "symbol": "E96",
+    "unitId": 4536630,
+    "shortName": "°/s",
+    "longName": "degree per second"
+  },
+  {
+    "symbol": "H27",
+    "unitId": 4731447,
+    "shortName": "°/m",
+    "longName": "degree per metre"
+  },
+  {
+    "symbol": "M55",
+    "unitId": 5059893,
+    "shortName": "m/rad",
+    "longName": "metre per radiant"
+  },
+  {
+    "symbol": "DMT",
+    "unitId": 4476244,
+    "shortName": "dm",
+    "longName": "decimetre"
+  },
+  {
+    "symbol": "CMT",
+    "unitId": 4410708,
+    "shortName": "cm",
+    "longName": "centimetre"
+  },
+  {
+    "symbol": "4H",
+    "unitId": 13384,
+    "shortName": "µm",
+    "longName": "micrometre (micron)"
+  },
+  {
+    "symbol": "MMT",
+    "unitId": 5066068,
+    "shortName": "mm",
+    "longName": "millimetre"
+  },
+  {
+    "symbol": "HMT",
+    "unitId": 4738388,
+    "shortName": "hm",
+    "longName": "hectometre"
+  },
+  {
+    "symbol": "KMT",
+    "unitId": 4934996,
+    "shortName": "km",
+    "longName": "kilometre"
+  },
+  {
+    "symbol": "C45",
+    "unitId": 4404277,
+    "shortName": "nm",
+    "longName": "nanometre"
+  },
+  {
+    "symbol": "C52",
+    "unitId": 4404530,
+    "shortName": "pm",
+    "longName": "picometre"
+  },
+  {
+    "symbol": "A71",
+    "unitId": 4273969,
+    "shortName": "fm",
+    "longName": "femtometre"
+  },
+  {
+    "symbol": "A45",
+    "unitId": 4273205,
+    "shortName": "dam",
+    "longName": "decametre"
+  },
+  {
+    "symbol": "NMI",
+    "unitId": 5131593,
+    "shortName": "n mile",
+    "longName": "nautical mile"
+  },
+  {
+    "symbol": "A11",
+    "unitId": 4272433,
+    "shortName": "Å",
+    "longName": "angstrom"
+  },
+  {
+    "symbol": "A12",
+    "unitId": 4272434,
+    "shortName": "ua",
+    "longName": "astronomical unit"
+  },
+  {
+    "symbol": "C63",
+    "unitId": 4404787,
+    "shortName": "pc",
+    "longName": "parsec"
+  },
+  {
+    "symbol": "F52",
+    "unitId": 4601138,
+    "shortName": "m/K",
+    "longName": "metre per kelvin"
+  },
+  {
+    "symbol": "F50",
+    "unitId": 4601136,
+    "shortName": "µm/K",
+    "longName": "micrometre per kelvin"
+  },
+  {
+    "symbol": "F51",
+    "unitId": 4601137,
+    "shortName": "cm/K",
+    "longName": "centimetre per kelvin"
+  },
+  {
+    "symbol": "G06",
+    "unitId": 4665398,
+    "shortName": "mm/bar",
+    "longName": "millimetre per bar"
+  },
+  {
+    "symbol": "H84",
+    "unitId": 4732980,
+    "shortName": "g·mm",
+    "longName": "gram millimetre"
+  },
+  {
+    "symbol": "G04",
+    "unitId": 4665396,
+    "shortName": "cm/bar",
+    "longName": "centimetre per bar"
+  },
+  {
+    "symbol": "G05",
+    "unitId": 4665397,
+    "shortName": "m/bar",
+    "longName": "metre per bar"
+  },
+  {
+    "symbol": "H79",
+    "unitId": 4732729,
+    "shortName": "Fg",
+    "longName": "French gauge"
+  },
+  {
+    "symbol": "AK",
+    "unitId": 16715,
+    "shortName": "fth",
+    "longName": "fathom"
+  },
+  {
+    "symbol": "X1",
+    "unitId": 22577,
+    "shortName": "ch (UK)",
+    "longName": "Gunter's chain"
+  },
+  {
+    "symbol": "INH",
+    "unitId": 4804168,
+    "shortName": "in",
+    "longName": "inch"
+  },
+  {
+    "symbol": "M7",
+    "unitId": 19767,
+    "shortName": "µin",
+    "longName": "micro-inch"
+  },
+  {
+    "symbol": "FOT",
+    "unitId": 4607828,
+    "shortName": "ft",
+    "longName": "foot"
+  },
+  {
+    "symbol": "YRD",
+    "unitId": 5853764,
+    "shortName": "yd",
+    "longName": "yard"
+  },
+  {
+    "symbol": "SMI",
+    "unitId": 5459273,
+    "shortName": "mile",
+    "longName": "mile (statute mile)"
+  },
+  {
+    "symbol": 77,
+    "unitId": 14135,
+    "shortName": "mil",
+    "longName": "milli-inch"
+  },
+  {
+    "symbol": "B57",
+    "unitId": 4338999,
+    "shortName": "ly",
+    "longName": "light year"
+  },
+  {
+    "symbol": "F49",
+    "unitId": 4600889,
+    "shortName": "rd (US)",
+    "longName": "rod [unit of distance]"
+  },
+  {
+    "symbol": "MAM",
+    "unitId": 5062989,
+    "shortName": "Mm",
+    "longName": "megametre"
+  },
+  {
+    "symbol": "K13",
+    "unitId": 4927795,
+    "shortName": "ft/°F",
+    "longName": "foot per degree Fahrenheit"
+  },
+  {
+    "symbol": "K17",
+    "unitId": 4927799,
+    "shortName": "ft/psi",
+    "longName": "foot per psi"
+  },
+  {
+    "symbol": "K45",
+    "unitId": 4928565,
+    "shortName": "in/°F",
+    "longName": "inch per degree Fahrenheit"
+  },
+  {
+    "symbol": "K46",
+    "unitId": 4928566,
+    "shortName": "in/psi",
+    "longName": "inch per psi"
+  },
+  {
+    "symbol": "L98",
+    "unitId": 4995384,
+    "shortName": "yd/°F",
+    "longName": "yard per degree Fahrenheit"
+  },
+  {
+    "symbol": "L99",
+    "unitId": 4995385,
+    "shortName": "yd/psi",
+    "longName": "yard per psi"
+  },
+  {
+    "symbol": "M49",
+    "unitId": 5059641,
+    "shortName": "ch (US survey)",
+    "longName": "chain (based on U.S. survey foot)"
+  },
+  {
+    "symbol": "M50",
+    "unitId": 5059888,
+    "shortName": "fur",
+    "longName": "furlong"
+  },
+  {
+    "symbol": "M51",
+    "unitId": 5059889,
+    "shortName": "ft (US survey)",
+    "longName": "foot (U.S. survey)"
+  },
+  {
+    "symbol": "M52",
+    "unitId": 5059890,
+    "shortName": "mi (US survey)",
+    "longName": "mile (based on U.S. survey foot)"
+  },
+  {
+    "symbol": "M53",
+    "unitId": 5059891,
+    "shortName": "m/Pa",
+    "longName": "metre per pascal"
+  },
+  {
+    "symbol": "MTK",
+    "unitId": 5067851,
+    "shortName": "m²",
+    "longName": "square metre"
+  },
+  {
+    "symbol": "KMK",
+    "unitId": 4934987,
+    "shortName": "km²",
+    "longName": "square kilometre"
+  },
+  {
+    "symbol": "H30",
+    "unitId": 4731696,
+    "shortName": "µm²",
+    "longName": "square micrometre (square micron)"
+  },
+  {
+    "symbol": "H59",
+    "unitId": 4732217,
+    "shortName": "m²/N",
+    "longName": "square metre per newton"
+  },
+  {
+    "symbol": "DAA",
+    "unitId": 4473153,
+    "shortName": "daa",
+    "longName": "decare"
+  },
+  {
+    "symbol": "CMK",
+    "unitId": 4410699,
+    "shortName": "cm²",
+    "longName": "square centimetre"
+  },
+  {
+    "symbol": "DMK",
+    "unitId": 4476235,
+    "shortName": "dm²",
+    "longName": "square decimetre"
+  },
+  {
+    "symbol": "H16",
+    "unitId": 4731190,
+    "shortName": "dam²",
+    "longName": "square decametre"
+  },
+  {
+    "symbol": "H18",
+    "unitId": 4731192,
+    "shortName": "hm²",
+    "longName": "square hectometre"
+  },
+  {
+    "symbol": "MMK",
+    "unitId": 5066059,
+    "shortName": "mm²",
+    "longName": "square millimetre"
+  },
+  {
+    "symbol": "ARE",
+    "unitId": 4280901,
+    "shortName": "a",
+    "longName": "are"
+  },
+  {
+    "symbol": "HAR",
+    "unitId": 4735314,
+    "shortName": "ha",
+    "longName": "hectare"
+  },
+  {
+    "symbol": "INK",
+    "unitId": 4804171,
+    "shortName": "in²",
+    "longName": "square inch"
+  },
+  {
+    "symbol": "FTK",
+    "unitId": 4609099,
+    "shortName": "ft²",
+    "longName": "square foot"
+  },
+  {
+    "symbol": "YDK",
+    "unitId": 5850187,
+    "shortName": "yd²",
+    "longName": "square yard"
+  },
+  {
+    "symbol": "MIK",
+    "unitId": 5065035,
+    "shortName": "mi²",
+    "longName": "square mile (statute mile)"
+  },
+  {
+    "symbol": "M48",
+    "unitId": 5059640,
+    "shortName": "mi² (US survey)",
+    "longName": "square mile (based on U.S. survey foot)"
+  },
+  {
+    "symbol": "ACR",
+    "unitId": 4277074,
+    "shortName": "acre",
+    "longName": "acre"
+  },
+  {
+    "symbol": "M47",
+    "unitId": 5059639,
+    "shortName": "cmil",
+    "longName": "circular mil"
+  },
+  {
+    "symbol": "MTQ",
+    "unitId": 5067857,
+    "shortName": "m³",
+    "longName": "cubic metre"
+  },
+  {
+    "symbol": "MAL",
+    "unitId": 5062988,
+    "shortName": "Ml",
+    "longName": "megalitre"
+  },
+  {
+    "symbol": "LTR",
+    "unitId": 5002322,
+    "shortName": "l",
+    "longName": "litre"
+  },
+  {
+    "symbol": "MMQ",
+    "unitId": 5066065,
+    "shortName": "mm³",
+    "longName": "cubic millimetre"
+  },
+  {
+    "symbol": "CMQ",
+    "unitId": 4410705,
+    "shortName": "cm³",
+    "longName": "cubic centimetre"
+  },
+  {
+    "symbol": "DMQ",
+    "unitId": 4476241,
+    "shortName": "dm³",
+    "longName": "cubic decimetre"
+  },
+  {
+    "symbol": "MLT",
+    "unitId": 5065812,
+    "shortName": "ml",
+    "longName": "millilitre"
+  },
+  {
+    "symbol": "HLT",
+    "unitId": 4738132,
+    "shortName": "hl",
+    "longName": "hectolitre"
+  },
+  {
+    "symbol": "CLT",
+    "unitId": 4410452,
+    "shortName": "cl",
+    "longName": "centilitre"
+  },
+  {
+    "symbol": "DMA",
+    "unitId": 4476225,
+    "shortName": "dam³",
+    "longName": "cubic decametre"
+  },
+  {
+    "symbol": "H19",
+    "unitId": 4731193,
+    "shortName": "hm³",
+    "longName": "cubic hectometre"
+  },
+  {
+    "symbol": "H20",
+    "unitId": 4731440,
+    "shortName": "km³",
+    "longName": "cubic kilometre"
+  },
+  {
+    "symbol": "M71",
+    "unitId": 5060401,
+    "shortName": "m³/Pa",
+    "longName": "cubic metre per pascal"
+  },
+  {
+    "symbol": "DLT",
+    "unitId": 4475988,
+    "shortName": "dl",
+    "longName": "decilitre"
+  },
+  {
+    "symbol": "4G",
+    "unitId": 13383,
+    "shortName": "µl",
+    "longName": "microlitre"
+  },
+  {
+    "symbol": "K6",
+    "unitId": 19254,
+    "shortName": "kl",
+    "longName": "kilolitre"
+  },
+  {
+    "symbol": "A44",
+    "unitId": 4273204,
+    "shortName": "dal",
+    "longName": "decalitre"
+  },
+  {
+    "symbol": "G94",
+    "unitId": 4667700,
+    "shortName": "cm³/bar",
+    "longName": "cubic centimetre per bar"
+  },
+  {
+    "symbol": "G95",
+    "unitId": 4667701,
+    "shortName": "l/bar",
+    "longName": "litre per bar"
+  },
+  {
+    "symbol": "G96",
+    "unitId": 4667702,
+    "shortName": "m³/bar",
+    "longName": "cubic metre per bar"
+  },
+  {
+    "symbol": "G97",
+    "unitId": 4667703,
+    "shortName": "ml/bar",
+    "longName": "millilitre per bar"
+  },
+  {
+    "symbol": "INQ",
+    "unitId": 4804177,
+    "shortName": "in³",
+    "longName": "cubic inch"
+  },
+  {
+    "symbol": "FTQ",
+    "unitId": 4609105,
+    "shortName": "ft³",
+    "longName": "cubic foot"
+  },
+  {
+    "symbol": "YDQ",
+    "unitId": 5850193,
+    "shortName": "yd³",
+    "longName": "cubic yard"
+  },
+  {
+    "symbol": "GLI",
+    "unitId": 4672585,
+    "shortName": "gal (UK)",
+    "longName": "gallon (UK)"
+  },
+  {
+    "symbol": "GLL",
+    "unitId": 4672588,
+    "shortName": "gal (US)",
+    "longName": "gallon (US)"
+  },
+  {
+    "symbol": "PT",
+    "unitId": 20564,
+    "shortName": "pt (US)",
+    "longName": "pint (US)"
+  },
+  {
+    "symbol": "PTI",
+    "unitId": 5264457,
+    "shortName": "pt (UK)",
+    "longName": "pint (UK)"
+  },
+  {
+    "symbol": "QTI",
+    "unitId": 5329993,
+    "shortName": "qt (UK)",
+    "longName": "quart (UK)"
+  },
+  {
+    "symbol": "PTL",
+    "unitId": 5264460,
+    "shortName": "liq pt (US)",
+    "longName": "liquid pint (US)"
+  },
+  {
+    "symbol": "QTL",
+    "unitId": 5329996,
+    "shortName": "liq qt (US)",
+    "longName": "liquid quart (US)"
+  },
+  {
+    "symbol": "PTD",
+    "unitId": 5264452,
+    "shortName": "dry pt (US)",
+    "longName": "dry pint (US)"
+  },
+  {
+    "symbol": "OZI",
+    "unitId": 5200457,
+    "shortName": "fl oz (UK)",
+    "longName": "fluid ounce (UK)"
+  },
+  {
+    "symbol": "QT",
+    "unitId": 20820,
+    "shortName": "qt (US)",
+    "longName": "quart (US)"
+  },
+  {
+    "symbol": "J57",
+    "unitId": 4863287,
+    "shortName": "bbl (UK liq.)",
+    "longName": "barrel (UK petroleum)"
+  },
+  {
+    "symbol": "K21",
+    "unitId": 4928049,
+    "shortName": "ft³/°F",
+    "longName": "cubic foot per degree Fahrenheit"
+  },
+  {
+    "symbol": "K23",
+    "unitId": 4928051,
+    "shortName": "ft³/psi",
+    "longName": "cubic foot per psi"
+  },
+  {
+    "symbol": "L43",
+    "unitId": 4994099,
+    "shortName": "pk (UK)",
+    "longName": "peck (UK)"
+  },
+  {
+    "symbol": "L84",
+    "unitId": 4995124,
+    "shortName": "British shipping ton",
+    "longName": "ton (UK shipping)"
+  },
+  {
+    "symbol": "L86",
+    "unitId": 4995126,
+    "shortName": "(US) shipping ton",
+    "longName": "ton (US shipping)"
+  },
+  {
+    "symbol": "M11",
+    "unitId": 5058865,
+    "shortName": "yd³/°F",
+    "longName": "cubic yard per degree Fahrenheit"
+  },
+  {
+    "symbol": "M14",
+    "unitId": 5058868,
+    "shortName": "yd³/psi",
+    "longName": "cubic yard per psi"
+  },
+  {
+    "symbol": "OZA",
+    "unitId": 5200449,
+    "shortName": "fl oz (US)",
+    "longName": "fluid ounce (US)"
+  },
+  {
+    "symbol": "BUI",
+    "unitId": 4347209,
+    "shortName": "bushel (UK)",
+    "longName": "bushel (UK)"
+  },
+  {
+    "symbol": "BUA",
+    "unitId": 4347201,
+    "shortName": "bu (US)",
+    "longName": "bushel (US)"
+  },
+  {
+    "symbol": "BLL",
+    "unitId": 4344908,
+    "shortName": "barrel (US)",
+    "longName": "barrel (US)"
+  },
+  {
+    "symbol": "BLD",
+    "unitId": 4344900,
+    "shortName": "bbl (US)",
+    "longName": "dry barrel (US)"
+  },
+  {
+    "symbol": "GLD",
+    "unitId": 4672580,
+    "shortName": "dry gal (US)",
+    "longName": "dry gallon (US)"
+  },
+  {
+    "symbol": "QTD",
+    "unitId": 5329988,
+    "shortName": "dry qt (US)",
+    "longName": "dry quart (US)"
+  },
+  {
+    "symbol": "G26",
+    "unitId": 4665910,
+    "shortName": "st",
+    "longName": "stere"
+  },
+  {
+    "symbol": "G21",
+    "unitId": 4665905,
+    "shortName": "cup (US)",
+    "longName": "cup [unit of volume]"
+  },
+  {
+    "symbol": "G24",
+    "unitId": 4665908,
+    "shortName": "tablespoon (US)",
+    "longName": "tablespoon (US)"
+  },
+  {
+    "symbol": "G25",
+    "unitId": 4665909,
+    "shortName": "teaspoon (US)",
+    "longName": "teaspoon (US)"
+  },
+  {
+    "symbol": "G23",
+    "unitId": 4665907,
+    "shortName": "pk (US)",
+    "longName": "peck"
+  },
+  {
+    "symbol": "M67",
+    "unitId": 5060151,
+    "shortName": "acre-ft (US survey)",
+    "longName": "acre-foot (based on U.S. survey foot)"
+  },
+  {
+    "symbol": "M68",
+    "unitId": 5060152,
+    "shortName": "cord",
+    "longName": "cord (128 ft3)"
+  },
+  {
+    "symbol": "M69",
+    "unitId": 5060153,
+    "shortName": "mi³",
+    "longName": "cubic mile (UK statute)"
+  },
+  {
+    "symbol": "M70",
+    "unitId": 5060400,
+    "shortName": "RT",
+    "longName": "ton, register"
+  },
+  {
+    "symbol": "G27",
+    "unitId": 4665911,
+    "shortName": "cm³/K",
+    "longName": "cubic centimetre per kelvin"
+  },
+  {
+    "symbol": "G29",
+    "unitId": 4665913,
+    "shortName": "m³/K",
+    "longName": "cubic metre per kelvin"
+  },
+  {
+    "symbol": "G28",
+    "unitId": 4665912,
+    "shortName": "l/K",
+    "longName": "litre per kelvin"
+  },
+  {
+    "symbol": "G30",
+    "unitId": 4666160,
+    "shortName": "ml/K",
+    "longName": "millilitre per kelvin"
+  },
+  {
+    "symbol": "J36",
+    "unitId": 4862774,
+    "shortName": "µl/l",
+    "longName": "microlitre per litre"
+  },
+  {
+    "symbol": "J87",
+    "unitId": 4864055,
+    "shortName": "cm³/m³",
+    "longName": "cubic centimetre per cubic metre"
+  },
+  {
+    "symbol": "J91",
+    "unitId": 4864305,
+    "shortName": "dm³/m³",
+    "longName": "cubic decimetre per cubic metre"
+  },
+  {
+    "symbol": "K62",
+    "unitId": 4929074,
+    "shortName": "l/l",
+    "longName": "litre per litre"
+  },
+  {
+    "symbol": "L19",
+    "unitId": 4993337,
+    "shortName": "ml/l",
+    "longName": "millilitre per litre"
+  },
+  {
+    "symbol": "L21",
+    "unitId": 4993585,
+    "shortName": "mm³/m³",
+    "longName": "cubic millimetre per cubic metre"
+  },
+  {
+    "symbol": "SEC",
+    "unitId": 5457219,
+    "shortName": "s",
+    "longName": "second [unit of time]"
+  },
+  {
+    "symbol": "MIN",
+    "unitId": 5065038,
+    "shortName": "min",
+    "longName": "minute [unit of time]"
+  },
+  {
+    "symbol": "HUR",
+    "unitId": 4740434,
+    "shortName": "h",
+    "longName": "hour"
+  },
+  {
+    "symbol": "DAY",
+    "unitId": 4473177,
+    "shortName": "d",
+    "longName": "day"
+  },
+  {
+    "symbol": "B52",
+    "unitId": 4338994,
+    "shortName": "ks",
+    "longName": "kilosecond"
+  },
+  {
+    "symbol": "C26",
+    "unitId": 4403766,
+    "shortName": "ms",
+    "longName": "millisecond"
+  },
+  {
+    "symbol": "H70",
+    "unitId": 4732720,
+    "shortName": "ps",
+    "longName": "picosecond"
+  },
+  {
+    "symbol": "B98",
+    "unitId": 4340024,
+    "shortName": "µs",
+    "longName": "microsecond"
+  },
+  {
+    "symbol": "C47",
+    "unitId": 4404279,
+    "shortName": "ns",
+    "longName": "nanosecond"
+  },
+  {
+    "symbol": "WEE",
+    "unitId": 5719365,
+    "shortName": "wk",
+    "longName": "week"
+  },
+  {
+    "symbol": "MON",
+    "unitId": 5066574,
+    "shortName": "mo",
+    "longName": "month"
+  },
+  {
+    "symbol": "ANN",
+    "unitId": 4279886,
+    "shortName": "y",
+    "longName": "year"
+  },
+  {
+    "symbol": "D42",
+    "unitId": 4469810,
+    "shortName": "y (tropical)",
+    "longName": "tropical year"
+  },
+  {
+    "symbol": "L95",
+    "unitId": 4995381,
+    "shortName": "y (365 days)",
+    "longName": "common year"
+  },
+  {
+    "symbol": "L96",
+    "unitId": 4995382,
+    "shortName": "y (sidereal)",
+    "longName": "sidereal year"
+  },
+  {
+    "symbol": "M56",
+    "unitId": 5059894,
+    "shortName": "shake",
+    "longName": "shake"
+  },
+  {
+    "symbol": "2A",
+    "unitId": 12865,
+    "shortName": "rad/s",
+    "longName": "radian per second"
+  },
+  {
+    "symbol": "M46",
+    "unitId": 5059638,
+    "shortName": "r/min",
+    "longName": "revolution per minute"
+  },
+  {
+    "symbol": "2B",
+    "unitId": 12866,
+    "shortName": "rad/s²",
+    "longName": "radian per second squared"
+  },
+  {
+    "symbol": "M45",
+    "unitId": 5059637,
+    "shortName": "°/s²",
+    "longName": "degree [unit of angle] per second squared"
+  },
+  {
+    "symbol": "MTS",
+    "unitId": 5067859,
+    "shortName": "m/s",
+    "longName": "metre per second"
+  },
+  {
+    "symbol": "KNT",
+    "unitId": 4935252,
+    "shortName": "kn",
+    "longName": "knot"
+  },
+  {
+    "symbol": "KMH",
+    "unitId": 4934984,
+    "shortName": "km/h",
+    "longName": "kilometre per hour"
+  },
+  {
+    "symbol": "C16",
+    "unitId": 4403510,
+    "shortName": "mm/s",
+    "longName": "millimetre per second"
+  },
+  {
+    "symbol": "2M",
+    "unitId": 12877,
+    "shortName": "cm/s",
+    "longName": "centimetre per second"
+  },
+  {
+    "symbol": "H49",
+    "unitId": 4731961,
+    "shortName": "cm/h",
+    "longName": "centimetre per hour"
+  },
+  {
+    "symbol": "H81",
+    "unitId": 4732977,
+    "shortName": "mm/min",
+    "longName": "millimetre per minute"
+  },
+  {
+    "symbol": "2X",
+    "unitId": 12888,
+    "shortName": "m/min",
+    "longName": "metre per minute"
+  },
+  {
+    "symbol": "M59",
+    "unitId": 5059897,
+    "shortName": "(m/s)/Pa",
+    "longName": "metre per second pascal"
+  },
+  {
+    "symbol": "H66",
+    "unitId": 4732470,
+    "shortName": "mm/y",
+    "longName": "millimetre per year"
+  },
+  {
+    "symbol": "H67",
+    "unitId": 4732471,
+    "shortName": "mm/h",
+    "longName": "millimetre per hour"
+  },
+  {
+    "symbol": "FR",
+    "unitId": 18002,
+    "shortName": "ft/min",
+    "longName": "foot per minute"
+  },
+  {
+    "symbol": "IU",
+    "unitId": 18773,
+    "shortName": "in/s",
+    "longName": "inch per second"
+  },
+  {
+    "symbol": "FS",
+    "unitId": 18003,
+    "shortName": "ft/s",
+    "longName": "foot per second"
+  },
+  {
+    "symbol": "HM",
+    "unitId": 18509,
+    "shortName": "mile/h",
+    "longName": "mile per hour (statute mile)"
+  },
+  {
+    "symbol": "J84",
+    "unitId": 4864052,
+    "shortName": "(cm/s)/K",
+    "longName": "centimetre per second kelvin"
+  },
+  {
+    "symbol": "J85",
+    "unitId": 4864053,
+    "shortName": "(cm/s)/bar",
+    "longName": "centimetre per second bar"
+  },
+  {
+    "symbol": "K14",
+    "unitId": 4927796,
+    "shortName": "ft/h",
+    "longName": "foot per hour"
+  },
+  {
+    "symbol": "K18",
+    "unitId": 4927800,
+    "shortName": "(ft/s)/°F",
+    "longName": "foot per second degree Fahrenheit"
+  },
+  {
+    "symbol": "K19",
+    "unitId": 4927801,
+    "shortName": "(ft/s)/psi",
+    "longName": "foot per second psi"
+  },
+  {
+    "symbol": "K47",
+    "unitId": 4928567,
+    "shortName": "(in/s)/°F",
+    "longName": "inch per second degree Fahrenheit"
+  },
+  {
+    "symbol": "K48",
+    "unitId": 4928568,
+    "shortName": "(in/s)/psi",
+    "longName": "inch per second psi"
+  },
+  {
+    "symbol": "L12",
+    "unitId": 4993330,
+    "shortName": "(m/s)/K",
+    "longName": "metre per second kelvin"
+  },
+  {
+    "symbol": "L13",
+    "unitId": 4993331,
+    "shortName": "(m/s)/bar",
+    "longName": "metre per second bar"
+  },
+  {
+    "symbol": "M22",
+    "unitId": 5059122,
+    "shortName": "(ml/min)/cm²",
+    "longName": "millilitre per square centimetre minute"
+  },
+  {
+    "symbol": "M57",
+    "unitId": 5059895,
+    "shortName": "mi/min",
+    "longName": "mile per minute"
+  },
+  {
+    "symbol": "M58",
+    "unitId": 5059896,
+    "shortName": "mi/s",
+    "longName": "mile per second"
+  },
+  {
+    "symbol": "M60",
+    "unitId": 5060144,
+    "shortName": "m/h",
+    "longName": "metre per hour"
+  },
+  {
+    "symbol": "M61",
+    "unitId": 5060145,
+    "shortName": "in/y",
+    "longName": "inch per year"
+  },
+  {
+    "symbol": "M62",
+    "unitId": 5060146,
+    "shortName": "km/s",
+    "longName": "kilometre per second"
+  },
+  {
+    "symbol": "M63",
+    "unitId": 5060147,
+    "shortName": "in/min",
+    "longName": "inch per minute"
+  },
+  {
+    "symbol": "M64",
+    "unitId": 5060148,
+    "shortName": "yd/s",
+    "longName": "yard per second"
+  },
+  {
+    "symbol": "M65",
+    "unitId": 5060149,
+    "shortName": "yd/min",
+    "longName": "yard per minute"
+  },
+  {
+    "symbol": "M66",
+    "unitId": 5060150,
+    "shortName": "yd/h",
+    "longName": "yard per hour"
+  },
+  {
+    "symbol": "MSK",
+    "unitId": 5067595,
+    "shortName": "m/s²",
+    "longName": "metre per second squared"
+  },
+  {
+    "symbol": "A76",
+    "unitId": 4273974,
+    "shortName": "Gal",
+    "longName": "gal"
+  },
+  {
+    "symbol": "C11",
+    "unitId": 4403505,
+    "shortName": "mGal",
+    "longName": "milligal"
+  },
+  {
+    "symbol": "M38",
+    "unitId": 5059384,
+    "shortName": "km/s²",
+    "longName": "kilometre per second squared"
+  },
+  {
+    "symbol": "M39",
+    "unitId": 5059385,
+    "shortName": "cm/s²",
+    "longName": "centimetre per second squared"
+  },
+  {
+    "symbol": "M41",
+    "unitId": 5059633,
+    "shortName": "mm/s²",
+    "longName": "millimetre per second squared"
+  },
+  {
+    "symbol": "A73",
+    "unitId": 4273971,
+    "shortName": "ft/s²",
+    "longName": "foot per second squared"
+  },
+  {
+    "symbol": "IV",
+    "unitId": 18774,
+    "shortName": "in/s²",
+    "longName": "inch per second squared"
+  },
+  {
+    "symbol": "K40",
+    "unitId": 4928560,
+    "shortName": "gn",
+    "longName": "standard acceleration of free fall"
+  },
+  {
+    "symbol": "M40",
+    "unitId": 5059632,
+    "shortName": "yd/s²",
+    "longName": "yard per second squared"
+  },
+  {
+    "symbol": "M42",
+    "unitId": 5059634,
+    "shortName": "mi/s²",
+    "longName": "mile (statute mile) per second squared"
+  },
+  {
+    "symbol": "C92",
+    "unitId": 4405554,
+    "shortName": "m⁻¹",
+    "longName": "reciprocal metre"
+  },
+  {
+    "symbol": "Q32",
+    "unitId": 5321522,
+    "shortName": "fl",
+    "longName": "femtolitre"
+  },
+  {
+    "symbol": "Q33",
+    "unitId": 5321523,
+    "shortName": "pl",
+    "longName": "picolitre"
+  },
+  {
+    "symbol": "Q34",
+    "unitId": 5321524,
+    "shortName": "nl",
+    "longName": "nanolitre"
+  },
+  {
+    "symbol": "AWG",
+    "unitId": 4282183,
+    "shortName": "AWG",
+    "longName": "american wire gauge"
+  },
+  {
+    "symbol": "HTZ",
+    "unitId": 4740186,
+    "shortName": "Hz",
+    "longName": "hertz"
+  },
+  {
+    "symbol": "KHZ",
+    "unitId": 4933722,
+    "shortName": "kHz",
+    "longName": "kilohertz"
+  },
+  {
+    "symbol": "MHZ",
+    "unitId": 5064794,
+    "shortName": "MHz",
+    "longName": "megahertz"
+  },
+  {
+    "symbol": "D29",
+    "unitId": 4469305,
+    "shortName": "THz",
+    "longName": "terahertz"
+  },
+  {
+    "symbol": "A86",
+    "unitId": 4274230,
+    "shortName": "GHz",
+    "longName": "gigahertz"
+  },
+  {
+    "symbol": "H10",
+    "unitId": 4731184,
+    "shortName": "1/h",
+    "longName": "reciprocal hour"
+  },
+  {
+    "symbol": "H11",
+    "unitId": 4731185,
+    "shortName": "1/mo",
+    "longName": "reciprocal month"
+  },
+  {
+    "symbol": "H09",
+    "unitId": 4730937,
+    "shortName": "1/y",
+    "longName": "reciprocal year"
+  },
+  {
+    "symbol": "H85",
+    "unitId": 4732981,
+    "shortName": "1/wk",
+    "longName": "reciprocal week"
+  },
+  {
+    "symbol": "C97",
+    "unitId": 4405559,
+    "shortName": "s⁻¹",
+    "longName": "reciprocal second"
+  },
+  {
+    "symbol": "RPS",
+    "unitId": 5394515,
+    "shortName": "r/s",
+    "longName": "revolutions per second"
+  },
+  {
+    "symbol": "RPM",
+    "unitId": 5394509,
+    "shortName": "r/min",
+    "longName": "revolutions per minute"
+  },
+  {
+    "symbol": "C94",
+    "unitId": 4405556,
+    "shortName": "min⁻¹",
+    "longName": "reciprocal minute"
+  },
+  {
+    "symbol": "C50",
+    "unitId": 4404528,
+    "shortName": "Np",
+    "longName": "neper"
+  },
+  {
+    "symbol": "2N",
+    "unitId": 12878,
+    "shortName": "dB",
+    "longName": "decibel"
+  },
+  {
+    "symbol": "M72",
+    "unitId": 5060402,
+    "shortName": "B",
+    "longName": "bel"
+  },
+  {
+    "symbol": "C51",
+    "unitId": 4404529,
+    "shortName": "Np/s",
+    "longName": "neper per second"
+  },
+  {
+    "symbol": "KGM",
+    "unitId": 4933453,
+    "shortName": "kg",
+    "longName": "kilogram"
+  },
+  {
+    "symbol": "MC",
+    "unitId": 19779,
+    "shortName": "µg",
+    "longName": "microgram"
+  },
+  {
+    "symbol": "DJ",
+    "unitId": 17482,
+    "shortName": "dag",
+    "longName": "decagram"
+  },
+  {
+    "symbol": "DG",
+    "unitId": 17479,
+    "shortName": "dg",
+    "longName": "decigram"
+  },
+  {
+    "symbol": "GRM",
+    "unitId": 4674125,
+    "shortName": "g",
+    "longName": "gram"
+  },
+  {
+    "symbol": "CGM",
+    "unitId": 4409165,
+    "shortName": "cg",
+    "longName": "centigram"
+  },
+  {
+    "symbol": "TNE",
+    "unitId": 5525061,
+    "shortName": "t",
+    "longName": "tonne (metric ton)"
+  },
+  {
+    "symbol": "DTN",
+    "unitId": 4478030,
+    "shortName": "dt or dtn",
+    "longName": "decitonne"
+  },
+  {
+    "symbol": "MGM",
+    "unitId": 5064525,
+    "shortName": "mg",
+    "longName": "milligram"
+  },
+  {
+    "symbol": "HGM",
+    "unitId": 4736845,
+    "shortName": "hg",
+    "longName": "hectogram"
+  },
+  {
+    "symbol": "KTN",
+    "unitId": 4936782,
+    "shortName": "kt",
+    "longName": "kilotonne"
+  },
+  {
+    "symbol": "2U",
+    "unitId": 12885,
+    "shortName": "Mg",
+    "longName": "megagram"
+  },
+  {
+    "symbol": "LBR",
+    "unitId": 4997714,
+    "shortName": "lb",
+    "longName": "pound"
+  },
+  {
+    "symbol": "GRN",
+    "unitId": 4674126,
+    "shortName": "gr",
+    "longName": "grain"
+  },
+  {
+    "symbol": "ONZ",
+    "unitId": 5197402,
+    "shortName": "oz",
+    "longName": "ounce (avoirdupois)"
+  },
+  {
+    "symbol": "CWI",
+    "unitId": 4413257,
+    "shortName": "cwt (UK)",
+    "longName": "hundred weight (UK)"
+  },
+  {
+    "symbol": "CWA",
+    "unitId": 4413249,
+    "shortName": "cwt (US)",
+    "longName": "hundred pound (cwt) / hundred weight (US)"
+  },
+  {
+    "symbol": "LTN",
+    "unitId": 5002318,
+    "shortName": "ton (UK)",
+    "longName": "ton (UK) or long ton (US)"
+  },
+  {
+    "symbol": "STI",
+    "unitId": 5461065,
+    "shortName": "st",
+    "longName": "stone (UK)"
+  },
+  {
+    "symbol": "STN",
+    "unitId": 5461070,
+    "shortName": "ton (US)",
+    "longName": "ton (US) or short ton (UK/US)"
+  },
+  {
+    "symbol": "APZ",
+    "unitId": 4280410,
+    "shortName": "tr oz",
+    "longName": "troy ounce or apothecary ounce"
+  },
+  {
+    "symbol": "F13",
+    "unitId": 4600115,
+    "shortName": "slug",
+    "longName": "slug"
+  },
+  {
+    "symbol": "K64",
+    "unitId": 4929076,
+    "shortName": "lb/°F",
+    "longName": "pound (avoirdupois) per degree Fahrenheit"
+  },
+  {
+    "symbol": "L69",
+    "unitId": 4994617,
+    "shortName": "t/K",
+    "longName": "tonne per kelvin"
+  },
+  {
+    "symbol": "L87",
+    "unitId": 4995127,
+    "shortName": "ton (US)/°F",
+    "longName": "ton short per degree Fahrenheit"
+  },
+  {
+    "symbol": "M86",
+    "unitId": 5060662,
+    "shortName": "pfd",
+    "longName": "pfund"
+  },
+  {
+    "symbol": "KMQ",
+    "unitId": 4934993,
+    "shortName": "kg/m³",
+    "longName": "kilogram per cubic metre"
+  },
+  {
+    "symbol": 23,
+    "unitId": 12851,
+    "shortName": "g/cm³",
+    "longName": "gram per cubic centimetre"
+  },
+  {
+    "symbol": "D41",
+    "unitId": 4469809,
+    "shortName": "t/m³",
+    "longName": "tonne per cubic metre"
+  },
+  {
+    "symbol": "GJ",
+    "unitId": 18250,
+    "shortName": "g/ml",
+    "longName": "gram per millilitre"
+  },
+  {
+    "symbol": "B35",
+    "unitId": 4338485,
+    "shortName": "kg/l or kg/L",
+    "longName": "kilogram per litre"
+  },
+  {
+    "symbol": "GL",
+    "unitId": 18252,
+    "shortName": "g/l",
+    "longName": "gram per litre"
+  },
+  {
+    "symbol": "A93",
+    "unitId": 4274483,
+    "shortName": "g/m³",
+    "longName": "gram per cubic metre"
+  },
+  {
+    "symbol": "GP",
+    "unitId": 18256,
+    "shortName": "mg/m³",
+    "longName": "milligram per cubic metre"
+  },
+  {
+    "symbol": "B72",
+    "unitId": 4339506,
+    "shortName": "Mg/m³",
+    "longName": "megagram per cubic metre"
+  },
+  {
+    "symbol": "B34",
+    "unitId": 4338484,
+    "shortName": "kg/dm³",
+    "longName": "kilogram per cubic decimetre"
+  },
+  {
+    "symbol": "H64",
+    "unitId": 4732468,
+    "shortName": "mg/g",
+    "longName": "milligram per gram"
+  },
+  {
+    "symbol": "H29",
+    "unitId": 4731449,
+    "shortName": "µg/l",
+    "longName": "microgram per litre"
+  },
+  {
+    "symbol": "M1",
+    "unitId": 19761,
+    "shortName": "mg/l",
+    "longName": "milligram per litre"
+  },
+  {
+    "symbol": "GQ",
+    "unitId": 18257,
+    "shortName": "µg/m³",
+    "longName": "microgram per cubic metre"
+  },
+  {
+    "symbol": "G11",
+    "unitId": 4665649,
+    "shortName": "g/(cm³·bar)",
+    "longName": "gram per cubic centimetre bar"
+  },
+  {
+    "symbol": "G33",
+    "unitId": 4666163,
+    "shortName": "g/(cm³·K)",
+    "longName": "gram per cubic centimetre kelvin"
+  },
+  {
+    "symbol": "F23",
+    "unitId": 4600371,
+    "shortName": "g/dm³",
+    "longName": "gram per cubic decimetre"
+  },
+  {
+    "symbol": "G12",
+    "unitId": 4665650,
+    "shortName": "g/(dm³·bar)",
+    "longName": "gram per cubic decimetre bar"
+  },
+  {
+    "symbol": "G34",
+    "unitId": 4666164,
+    "shortName": "g/(dm³·K)",
+    "longName": "gram per cubic decimetre kelvin"
+  },
+  {
+    "symbol": "G14",
+    "unitId": 4665652,
+    "shortName": "g/(m³·bar)",
+    "longName": "gram per cubic metre bar"
+  },
+  {
+    "symbol": "G36",
+    "unitId": 4666166,
+    "shortName": "g/(m³·K)",
+    "longName": "gram per cubic metre kelvin"
+  },
+  {
+    "symbol": "G13",
+    "unitId": 4665651,
+    "shortName": "g/(l·bar)",
+    "longName": "gram per litre bar"
+  },
+  {
+    "symbol": "G35",
+    "unitId": 4666165,
+    "shortName": "g/(l·K)",
+    "longName": "gram per litre kelvin"
+  },
+  {
+    "symbol": "G15",
+    "unitId": 4665653,
+    "shortName": "g/(ml·bar)",
+    "longName": "gram per millilitre bar"
+  },
+  {
+    "symbol": "G37",
+    "unitId": 4666167,
+    "shortName": "g/(ml·K)",
+    "longName": "gram per millilitre kelvin"
+  },
+  {
+    "symbol": "G31",
+    "unitId": 4666161,
+    "shortName": "kg/cm³",
+    "longName": "kilogram per cubic centimetre"
+  },
+  {
+    "symbol": "G16",
+    "unitId": 4665654,
+    "shortName": "kg/(cm³·bar)",
+    "longName": "kilogram per cubic centimetre bar"
+  },
+  {
+    "symbol": "G38",
+    "unitId": 4666168,
+    "shortName": "kg/(cm³·K)",
+    "longName": "kilogram per cubic centimetre kelvin"
+  },
+  {
+    "symbol": "G18",
+    "unitId": 4665656,
+    "shortName": "kg/(m³·bar)",
+    "longName": "kilogram per cubic metre bar"
+  },
+  {
+    "symbol": "G40",
+    "unitId": 4666416,
+    "shortName": "kg/(m³·K)",
+    "longName": "kilogram per cubic metre kelvin"
+  },
+  {
+    "symbol": "H54",
+    "unitId": 4732212,
+    "shortName": "(kg/dm³)/K",
+    "longName": "kilogram per cubic decimetre kelvin"
+  },
+  {
+    "symbol": "H55",
+    "unitId": 4732213,
+    "shortName": "(kg/dm³)/bar",
+    "longName": "kilogram per cubic decimetre bar"
+  },
+  {
+    "symbol": "F14",
+    "unitId": 4600116,
+    "shortName": "g/K",
+    "longName": "gram per kelvin"
+  },
+  {
+    "symbol": "F15",
+    "unitId": 4600117,
+    "shortName": "kg/K",
+    "longName": "kilogram per kelvin"
+  },
+  {
+    "symbol": "F24",
+    "unitId": 4600372,
+    "shortName": "kg/kmol",
+    "longName": "kilogram per kilomol"
+  },
+  {
+    "symbol": "G17",
+    "unitId": 4665655,
+    "shortName": "kg/(l·bar)",
+    "longName": "kilogram per litre bar"
+  },
+  {
+    "symbol": "G39",
+    "unitId": 4666169,
+    "shortName": "kg/(l·K)",
+    "longName": "kilogram per litre kelvin"
+  },
+  {
+    "symbol": "H53",
+    "unitId": 4732211,
+    "shortName": "kg/bar",
+    "longName": "kilogram per bar"
+  },
+  {
+    "symbol": "F18",
+    "unitId": 4600120,
+    "shortName": "kg·cm²",
+    "longName": "kilogram square centimetre"
+  },
+  {
+    "symbol": "F19",
+    "unitId": 4600121,
+    "shortName": "kg·mm²",
+    "longName": "kilogram square millimetre"
+  },
+  {
+    "symbol": "F74",
+    "unitId": 4601652,
+    "shortName": "g/bar",
+    "longName": "gram per bar"
+  },
+  {
+    "symbol": "F75",
+    "unitId": 4601653,
+    "shortName": "mg/bar",
+    "longName": "milligram per bar"
+  },
+  {
+    "symbol": "F16",
+    "unitId": 4600118,
+    "shortName": "mg/K",
+    "longName": "milligram per kelvin"
+  },
+  {
+    "symbol": "M73",
+    "unitId": 5060403,
+    "shortName": "(kg/m³)/Pa",
+    "longName": "kilogram per cubic metre pascal"
+  },
+  {
+    "symbol": 87,
+    "unitId": 14391,
+    "shortName": "lb/ft³",
+    "longName": "pound per cubic foot"
+  },
+  {
+    "symbol": "GE",
+    "unitId": 18245,
+    "shortName": "lb/gal (US)",
+    "longName": "pound per gallon (US)"
+  },
+  {
+    "symbol": "LA",
+    "unitId": 19521,
+    "shortName": "lb/in³",
+    "longName": "pound per cubic inch"
+  },
+  {
+    "symbol": "G32",
+    "unitId": 4666162,
+    "shortName": "oz/yd³",
+    "longName": "ounce (avoirdupois) per cubic yard"
+  },
+  {
+    "symbol": "J34",
+    "unitId": 4862772,
+    "shortName": "(µg/m³)/K",
+    "longName": "microgram per cubic metre kelvin"
+  },
+  {
+    "symbol": "J35",
+    "unitId": 4862773,
+    "shortName": "(µg/m³)/bar",
+    "longName": "microgram per cubic metre bar"
+  },
+  {
+    "symbol": "K41",
+    "unitId": 4928561,
+    "shortName": "gr/gal (US)",
+    "longName": "grain per gallon (US)"
+  },
+  {
+    "symbol": "K69",
+    "unitId": 4929081,
+    "shortName": "(lb/ft³)/°F",
+    "longName": "pound (avoirdupois) per cubic foot degree Fahrenheit"
+  },
+  {
+    "symbol": "K70",
+    "unitId": 4929328,
+    "shortName": "(lb/ft³)/psi",
+    "longName": "pound (avoirdupois) per cubic foot psi"
+  },
+  {
+    "symbol": "K71",
+    "unitId": 4929329,
+    "shortName": "lb/gal (UK)",
+    "longName": "pound (avoirdupois) per gallon (UK)"
+  },
+  {
+    "symbol": "K75",
+    "unitId": 4929333,
+    "shortName": "(lb/in³)/°F",
+    "longName": "pound (avoirdupois) per cubic inch degree Fahrenheit"
+  },
+  {
+    "symbol": "K76",
+    "unitId": 4929334,
+    "shortName": "(lb/in³)/psi",
+    "longName": "pound (avoirdupois) per cubic inch psi"
+  },
+  {
+    "symbol": "K84",
+    "unitId": 4929588,
+    "shortName": "lb/yd³",
+    "longName": "pound per cubic yard"
+  },
+  {
+    "symbol": "L17",
+    "unitId": 4993335,
+    "shortName": "(mg/m³)/K",
+    "longName": "milligram per cubic metre kelvin"
+  },
+  {
+    "symbol": "L18",
+    "unitId": 4993336,
+    "shortName": "(mg/m³)/bar",
+    "longName": "milligram per cubic metre bar"
+  },
+  {
+    "symbol": "L37",
+    "unitId": 4993847,
+    "shortName": "oz/gal (UK)",
+    "longName": "ounce (avoirdupois) per gallon (UK)"
+  },
+  {
+    "symbol": "L38",
+    "unitId": 4993848,
+    "shortName": "oz/gal (US)",
+    "longName": "ounce (avoirdupois) per gallon (US)"
+  },
+  {
+    "symbol": "L39",
+    "unitId": 4993849,
+    "shortName": "oz/in³",
+    "longName": "ounce (avoirdupois) per cubic inch"
+  },
+  {
+    "symbol": "L65",
+    "unitId": 4994613,
+    "shortName": "slug/ft³",
+    "longName": "slug per cubic foot"
+  },
+  {
+    "symbol": "L76",
+    "unitId": 4994870,
+    "shortName": "(t/m³)/K",
+    "longName": "tonne per cubic metre kelvin"
+  },
+  {
+    "symbol": "L77",
+    "unitId": 4994871,
+    "shortName": "(t/m³)/bar",
+    "longName": "tonne per cubic metre bar"
+  },
+  {
+    "symbol": "L92",
+    "unitId": 4995378,
+    "shortName": "ton.l/yd³ (UK)",
+    "longName": "ton (UK long) per cubic yard"
+  },
+  {
+    "symbol": "L93",
+    "unitId": 4995379,
+    "shortName": "ton.s/yd³ (US)",
+    "longName": "ton (US short) per cubic yard"
+  },
+  {
+    "symbol": "K77",
+    "unitId": 4929335,
+    "shortName": "lb/psi",
+    "longName": "pound (avoirdupois) per psi"
+  },
+  {
+    "symbol": "L70",
+    "unitId": 4994864,
+    "shortName": "t/bar",
+    "longName": "tonne per bar"
+  },
+  {
+    "symbol": "L91",
+    "unitId": 4995377,
+    "shortName": "ton (US)/psi",
+    "longName": "ton short per psi"
+  },
+  {
+    "symbol": "M74",
+    "unitId": 5060404,
+    "shortName": "kg/Pa",
+    "longName": "kilogram per pascal"
+  },
+  {
+    "symbol": "C62",
+    "unitId": 4404786,
+    "shortName": 1,
+    "longName": "one"
+  },
+  {
+    "symbol": "A39",
+    "unitId": 4272953,
+    "shortName": "m³/kg",
+    "longName": "cubic metre per kilogram"
+  },
+  {
+    "symbol": 22,
+    "unitId": 12850,
+    "shortName": "dl/g",
+    "longName": "decilitre per gram"
+  },
+  {
+    "symbol": "H65",
+    "unitId": 4732469,
+    "shortName": "ml/m³",
+    "longName": "millilitre per cubic metre"
+  },
+  {
+    "symbol": "H83",
+    "unitId": 4732979,
+    "shortName": "l/kg",
+    "longName": "litre per kilogram"
+  },
+  {
+    "symbol": "KX",
+    "unitId": 19288,
+    "shortName": "ml/kg",
+    "longName": "millilitre per kilogram"
+  },
+  {
+    "symbol": "H15",
+    "unitId": 4731189,
+    "shortName": "cm²/g",
+    "longName": "square centimetre per gram"
+  },
+  {
+    "symbol": "N28",
+    "unitId": 5124664,
+    "shortName": "dm³/kg",
+    "longName": "cubic decimetre per kilogram"
+  },
+  {
+    "symbol": "N29",
+    "unitId": 5124665,
+    "shortName": "ft³/lb",
+    "longName": "cubic foot per pound"
+  },
+  {
+    "symbol": "N30",
+    "unitId": 5124912,
+    "shortName": "in³/lb",
+    "longName": "cubic inch per pound"
+  },
+  {
+    "symbol": "KL",
+    "unitId": 19276,
+    "shortName": "kg/m",
+    "longName": "kilogram per metre"
+  },
+  {
+    "symbol": "GF",
+    "unitId": 18246,
+    "shortName": "g/m",
+    "longName": "gram per metre (gram per 100 centimetres)"
+  },
+  {
+    "symbol": "H76",
+    "unitId": 4732726,
+    "shortName": "g/mm",
+    "longName": "gram per millimetre"
+  },
+  {
+    "symbol": "KW",
+    "unitId": 19287,
+    "shortName": "kg/mm",
+    "longName": "kilogram per millimetre"
+  },
+  {
+    "symbol": "C12",
+    "unitId": 4403506,
+    "shortName": "mg/m",
+    "longName": "milligram per metre"
+  },
+  {
+    "symbol": "M31",
+    "unitId": 5059377,
+    "shortName": "kg/km",
+    "longName": "kilogram per kilometre"
+  },
+  {
+    "symbol": "P2",
+    "unitId": 20530,
+    "shortName": "lb/ft",
+    "longName": "pound per foot"
+  },
+  {
+    "symbol": "PO",
+    "unitId": 20559,
+    "shortName": "lb/in",
+    "longName": "pound per inch of length"
+  },
+  {
+    "symbol": "M83",
+    "unitId": 5060659,
+    "shortName": "den",
+    "longName": "denier"
+  },
+  {
+    "symbol": "M84",
+    "unitId": 5060660,
+    "shortName": "lb/yd",
+    "longName": "pound per yard"
+  },
+  {
+    "symbol": "GO",
+    "unitId": 18255,
+    "shortName": "mg/m²",
+    "longName": "milligram per square metre"
+  },
+  {
+    "symbol": 25,
+    "unitId": 12853,
+    "shortName": "g/cm²",
+    "longName": "gram per square centimetre"
+  },
+  {
+    "symbol": "H63",
+    "unitId": 4732467,
+    "shortName": "mg/cm²",
+    "longName": "milligram per square centimetre"
+  },
+  {
+    "symbol": "GM",
+    "unitId": 18253,
+    "shortName": "g/m²",
+    "longName": "gram per square metre"
+  },
+  {
+    "symbol": 28,
+    "unitId": 12856,
+    "shortName": "kg/m²",
+    "longName": "kilogram per square metre"
+  },
+  {
+    "symbol": "D5",
+    "unitId": 17461,
+    "shortName": "kg/cm²",
+    "longName": "kilogram per square centimetre"
+  },
+  {
+    "symbol": "ON",
+    "unitId": 20302,
+    "shortName": "oz/yd²",
+    "longName": "ounce per square yard"
+  },
+  {
+    "symbol": 37,
+    "unitId": 13111,
+    "shortName": "oz/ft²",
+    "longName": "ounce per square foot"
+  },
+  {
+    "symbol": "B31",
+    "unitId": 4338481,
+    "shortName": "kg·m/s",
+    "longName": "kilogram metre per second"
+  },
+  {
+    "symbol": "M98",
+    "unitId": 5060920,
+    "shortName": "kg·(cm/s)",
+    "longName": "kilogram centimetre per second"
+  },
+  {
+    "symbol": "M99",
+    "unitId": 5060921,
+    "shortName": "g·(cm/s)",
+    "longName": "gram centimetre per second"
+  },
+  {
+    "symbol": "N10",
+    "unitId": 5124400,
+    "shortName": "lb·(ft/s)",
+    "longName": "pound foot per second"
+  },
+  {
+    "symbol": "N11",
+    "unitId": 5124401,
+    "shortName": "lb·(in/s)",
+    "longName": "pound inch per second"
+  },
+  {
+    "symbol": "B33",
+    "unitId": 4338483,
+    "shortName": "kg·m²/s",
+    "longName": "kilogram metre squared per second"
+  },
+  {
+    "symbol": "B32",
+    "unitId": 4338482,
+    "shortName": "kg·m²",
+    "longName": "kilogram metre squared"
+  },
+  {
+    "symbol": "F20",
+    "unitId": 4600368,
+    "shortName": "lb·in²",
+    "longName": "pound inch squared"
+  },
+  {
+    "symbol": "K65",
+    "unitId": 4929077,
+    "shortName": "lb·ft²",
+    "longName": "pound (avoirdupois) square foot"
+  },
+  {
+    "symbol": "NEW",
+    "unitId": 5129559,
+    "shortName": "N",
+    "longName": "newton"
+  },
+  {
+    "symbol": "B73",
+    "unitId": 4339507,
+    "shortName": "MN",
+    "longName": "meganewton"
+  },
+  {
+    "symbol": "B47",
+    "unitId": 4338743,
+    "shortName": "kN",
+    "longName": "kilonewton"
+  },
+  {
+    "symbol": "C20",
+    "unitId": 4403760,
+    "shortName": "mN",
+    "longName": "millinewton"
+  },
+  {
+    "symbol": "B92",
+    "unitId": 4340018,
+    "shortName": "µN",
+    "longName": "micronewton"
+  },
+  {
+    "symbol": "DU",
+    "unitId": 17493,
+    "shortName": "dyn",
+    "longName": "dyne"
+  },
+  {
+    "symbol": "C78",
+    "unitId": 4405048,
+    "shortName": "lbf",
+    "longName": "pound-force"
+  },
+  {
+    "symbol": "B37",
+    "unitId": 4338487,
+    "shortName": "kgf",
+    "longName": "kilogram-force"
+  },
+  {
+    "symbol": "B51",
+    "unitId": 4338993,
+    "shortName": "kp",
+    "longName": "kilopond"
+  },
+  {
+    "symbol": "L40",
+    "unitId": 4994096,
+    "shortName": "ozf",
+    "longName": "ounce (avoirdupois)-force"
+  },
+  {
+    "symbol": "L94",
+    "unitId": 4995380,
+    "shortName": "ton.sh-force",
+    "longName": "ton-force (US short)"
+  },
+  {
+    "symbol": "M75",
+    "unitId": 5060405,
+    "shortName": "kip",
+    "longName": "kilopound-force"
+  },
+  {
+    "symbol": "M76",
+    "unitId": 5060406,
+    "shortName": "pdl",
+    "longName": "poundal"
+  },
+  {
+    "symbol": "M77",
+    "unitId": 5060407,
+    "shortName": "kg·m/s²",
+    "longName": "kilogram metre per second squared"
+  },
+  {
+    "symbol": "M78",
+    "unitId": 5060408,
+    "shortName": "p",
+    "longName": "pond"
+  },
+  {
+    "symbol": "F17",
+    "unitId": 4600119,
+    "shortName": "lbf/ft",
+    "longName": "pound-force per foot"
+  },
+  {
+    "symbol": "F48",
+    "unitId": 4600888,
+    "shortName": "lbf/in",
+    "longName": "pound-force per inch"
+  },
+  {
+    "symbol": "C54",
+    "unitId": 4404532,
+    "shortName": "N·m²/kg²",
+    "longName": "newton metre squared per kilogram squared"
+  },
+  {
+    "symbol": "NU",
+    "unitId": 20053,
+    "shortName": "N·m",
+    "longName": "newton metre"
+  },
+  {
+    "symbol": "H40",
+    "unitId": 4731952,
+    "shortName": "N/A",
+    "longName": "newton per ampere"
+  },
+  {
+    "symbol": "B74",
+    "unitId": 4339508,
+    "shortName": "MN·m",
+    "longName": "meganewton metre"
+  },
+  {
+    "symbol": "B48",
+    "unitId": 4338744,
+    "shortName": "kN·m",
+    "longName": "kilonewton metre"
+  },
+  {
+    "symbol": "D83",
+    "unitId": 4470835,
+    "shortName": "mN·m",
+    "longName": "millinewton metre"
+  },
+  {
+    "symbol": "B93",
+    "unitId": 4340019,
+    "shortName": "µN·m",
+    "longName": "micronewton metre"
+  },
+  {
+    "symbol": "DN",
+    "unitId": 17486,
+    "shortName": "dN·m",
+    "longName": "decinewton metre"
+  },
+  {
+    "symbol": "J72",
+    "unitId": 4863794,
+    "shortName": "cN·m",
+    "longName": "centinewton metre"
+  },
+  {
+    "symbol": "M94",
+    "unitId": 5060916,
+    "shortName": "kg·m",
+    "longName": "kilogram metre"
+  },
+  {
+    "symbol": "F88",
+    "unitId": 4601912,
+    "shortName": "N·cm",
+    "longName": "newton centimetre"
+  },
+  {
+    "symbol": "F90",
+    "unitId": 4602160,
+    "shortName": "N·m/A",
+    "longName": "newton metre per ampere"
+  },
+  {
+    "symbol": "F89",
+    "unitId": 4601913,
+    "shortName": "Nm/°",
+    "longName": "newton metre per degree"
+  },
+  {
+    "symbol": "G19",
+    "unitId": 4665657,
+    "shortName": "N·m/kg",
+    "longName": "newton metre per kilogram"
+  },
+  {
+    "symbol": "F47",
+    "unitId": 4600887,
+    "shortName": "N/mm",
+    "longName": "newton per millimetre"
+  },
+  {
+    "symbol": "M93",
+    "unitId": 5060915,
+    "shortName": "N·m/rad",
+    "longName": "newton metre per radian"
+  },
+  {
+    "symbol": "H41",
+    "unitId": 4731953,
+    "shortName": "N·m·W⁻⁰‧⁵",
+    "longName": "newton metre watt to the power minus 0,5"
+  },
+  {
+    "symbol": "B38",
+    "unitId": 4338488,
+    "shortName": "kgf·m",
+    "longName": "kilogram-force metre"
+  },
+  {
+    "symbol": "IA",
+    "unitId": 18753,
+    "shortName": "in·lb",
+    "longName": "inch pound (pound inch)"
+  },
+  {
+    "symbol": "4Q",
+    "unitId": 13393,
+    "shortName": "oz·in",
+    "longName": "ounce inch"
+  },
+  {
+    "symbol": "4R",
+    "unitId": 13394,
+    "shortName": "oz·ft",
+    "longName": "ounce foot"
+  },
+  {
+    "symbol": "F22",
+    "unitId": 4600370,
+    "shortName": "lbf·ft/A",
+    "longName": "pound-force foot per ampere"
+  },
+  {
+    "symbol": "F21",
+    "unitId": 4600369,
+    "shortName": "lbf·in",
+    "longName": "pound-force inch"
+  },
+  {
+    "symbol": "G20",
+    "unitId": 4665904,
+    "shortName": "lbf·ft/lb",
+    "longName": "pound-force foot per pound"
+  },
+  {
+    "symbol": "J94",
+    "unitId": 4864308,
+    "shortName": "dyn·cm",
+    "longName": "dyne centimetre"
+  },
+  {
+    "symbol": "L41",
+    "unitId": 4994097,
+    "shortName": "ozf·in",
+    "longName": "ounce (avoirdupois)-force inch"
+  },
+  {
+    "symbol": "M92",
+    "unitId": 5060914,
+    "shortName": "lbf·ft",
+    "longName": "pound-force foot"
+  },
+  {
+    "symbol": "M95",
+    "unitId": 5060917,
+    "shortName": "pdl·ft",
+    "longName": "poundal foot"
+  },
+  {
+    "symbol": "M96",
+    "unitId": 5060918,
+    "shortName": "pdl·in",
+    "longName": "poundal inch"
+  },
+  {
+    "symbol": "M97",
+    "unitId": 5060919,
+    "shortName": "dyn·m",
+    "longName": "dyne metre"
+  },
+  {
+    "symbol": "C57",
+    "unitId": 4404535,
+    "shortName": "N·s",
+    "longName": "newton second"
+  },
+  {
+    "symbol": "C53",
+    "unitId": 4404531,
+    "shortName": "N·m·s",
+    "longName": "newton metre second"
+  },
+  {
+    "symbol": 74,
+    "unitId": 14132,
+    "shortName": "mPa",
+    "longName": "millipascal"
+  },
+  {
+    "symbol": "MPA",
+    "unitId": 5066817,
+    "shortName": "MPa",
+    "longName": "megapascal"
+  },
+  {
+    "symbol": "PAL",
+    "unitId": 5259596,
+    "shortName": "Pa",
+    "longName": "pascal"
+  },
+  {
+    "symbol": "KPA",
+    "unitId": 4935745,
+    "shortName": "kPa",
+    "longName": "kilopascal"
+  },
+  {
+    "symbol": "BAR",
+    "unitId": 4342098,
+    "shortName": "bar",
+    "longName": "bar [unit of pressure]"
+  },
+  {
+    "symbol": "HBA",
+    "unitId": 4735553,
+    "shortName": "hbar",
+    "longName": "hectobar"
+  },
+  {
+    "symbol": "MBR",
+    "unitId": 5063250,
+    "shortName": "mbar",
+    "longName": "millibar"
+  },
+  {
+    "symbol": "KBA",
+    "unitId": 4932161,
+    "shortName": "kbar",
+    "longName": "kilobar"
+  },
+  {
+    "symbol": "ATM",
+    "unitId": 4281421,
+    "shortName": "atm",
+    "longName": "standard atmosphere"
+  },
+  {
+    "symbol": "A89",
+    "unitId": 4274233,
+    "shortName": "GPa",
+    "longName": "gigapascal"
+  },
+  {
+    "symbol": "B96",
+    "unitId": 4340022,
+    "shortName": "µPa",
+    "longName": "micropascal"
+  },
+  {
+    "symbol": "A97",
+    "unitId": 4274487,
+    "shortName": "hPa",
+    "longName": "hectopascal"
+  },
+  {
+    "symbol": "H75",
+    "unitId": 4732725,
+    "shortName": "daPa",
+    "longName": "decapascal"
+  },
+  {
+    "symbol": "B85",
+    "unitId": 4339765,
+    "shortName": "µbar",
+    "longName": "microbar"
+  },
+  {
+    "symbol": "C55",
+    "unitId": 4404533,
+    "shortName": "N/m²",
+    "longName": "newton per square metre"
+  },
+  {
+    "symbol": "C56",
+    "unitId": 4404534,
+    "shortName": "N/mm²",
+    "longName": "newton per square millimetre"
+  },
+  {
+    "symbol": "H07",
+    "unitId": 4730935,
+    "shortName": "Pa·s/bar",
+    "longName": "pascal second per bar"
+  },
+  {
+    "symbol": "F94",
+    "unitId": 4602164,
+    "shortName": "hPa·m³/s",
+    "longName": "hectopascal cubic metre per second"
+  },
+  {
+    "symbol": "F93",
+    "unitId": 4602163,
+    "shortName": "hPa·l/s",
+    "longName": "hectopascal litre per second"
+  },
+  {
+    "symbol": "F82",
+    "unitId": 4601906,
+    "shortName": "hPa/K",
+    "longName": "hectopascal per kelvin"
+  },
+  {
+    "symbol": "F83",
+    "unitId": 4601907,
+    "shortName": "kPa/K",
+    "longName": "kilopascal per kelvin"
+  },
+  {
+    "symbol": "F98",
+    "unitId": 4602168,
+    "shortName": "MPa·m³/s",
+    "longName": "megapascal cubic metre per second"
+  },
+  {
+    "symbol": "F97",
+    "unitId": 4602167,
+    "shortName": "MPa·l/s",
+    "longName": "megapascal litre per second"
+  },
+  {
+    "symbol": "F85",
+    "unitId": 4601909,
+    "shortName": "MPa/K",
+    "longName": "megapascal per kelvin"
+  },
+  {
+    "symbol": "F96",
+    "unitId": 4602166,
+    "shortName": "mbar·m³/s",
+    "longName": "millibar cubic metre per second"
+  },
+  {
+    "symbol": "F95",
+    "unitId": 4602165,
+    "shortName": "mbar·l/s",
+    "longName": "millibar litre per second"
+  },
+  {
+    "symbol": "F84",
+    "unitId": 4601908,
+    "shortName": "mbar/K",
+    "longName": "millibar per kelvin"
+  },
+  {
+    "symbol": "G01",
+    "unitId": 4665393,
+    "shortName": "Pa·m³/s",
+    "longName": "pascal cubic metre per second"
+  },
+  {
+    "symbol": "F99",
+    "unitId": 4602169,
+    "shortName": "Pa·l/s",
+    "longName": "pascal litre per second"
+  },
+  {
+    "symbol": "F77",
+    "unitId": 4601655,
+    "shortName": "Pa.s/K",
+    "longName": "pascal second per kelvin"
+  },
+  {
+    "symbol": "E01",
+    "unitId": 4534321,
+    "shortName": "N/cm²",
+    "longName": "newton per square centimetre"
+  },
+  {
+    "symbol": "FP",
+    "unitId": 18000,
+    "shortName": "lb/ft²",
+    "longName": "pound per square foot"
+  },
+  {
+    "symbol": "PS",
+    "unitId": 20563,
+    "shortName": "lbf/in²",
+    "longName": "pound-force per square inch"
+  },
+  {
+    "symbol": "B40",
+    "unitId": 4338736,
+    "shortName": "kgf/m²",
+    "longName": "kilogram-force per square metre"
+  },
+  {
+    "symbol": "UA",
+    "unitId": 21825,
+    "shortName": "Torr",
+    "longName": "torr"
+  },
+  {
+    "symbol": "ATT",
+    "unitId": 4281428,
+    "shortName": "at",
+    "longName": "technical atmosphere"
+  },
+  {
+    "symbol": 80,
+    "unitId": 14384,
+    "shortName": "lb/in²",
+    "longName": "pound per square inch absolute"
+  },
+  {
+    "symbol": "H78",
+    "unitId": 4732728,
+    "shortName": "cm H₂O",
+    "longName": "conventional centimetre of water"
+  },
+  {
+    "symbol": "HP",
+    "unitId": 18512,
+    "shortName": "mm H₂O",
+    "longName": "conventional millimetre of water"
+  },
+  {
+    "symbol": "HN",
+    "unitId": 18510,
+    "shortName": "mm Hg",
+    "longName": "conventional millimetre of mercury"
+  },
+  {
+    "symbol": "F79",
+    "unitId": 4601657,
+    "shortName": "inHg",
+    "longName": "inch of mercury"
+  },
+  {
+    "symbol": "F78",
+    "unitId": 4601656,
+    "shortName": "inH₂O",
+    "longName": "inch of water"
+  },
+  {
+    "symbol": "J89",
+    "unitId": 4864057,
+    "shortName": "cm Hg",
+    "longName": "centimetre of mercury"
+  },
+  {
+    "symbol": "K24",
+    "unitId": 4928052,
+    "shortName": "ft H₂O",
+    "longName": "foot of water"
+  },
+  {
+    "symbol": "K25",
+    "unitId": 4928053,
+    "shortName": "ft Hg",
+    "longName": "foot of mercury"
+  },
+  {
+    "symbol": "K31",
+    "unitId": 4928305,
+    "shortName": "gf/cm²",
+    "longName": "gram-force per square centimetre"
+  },
+  {
+    "symbol": "E42",
+    "unitId": 4535346,
+    "shortName": "kgf/cm²",
+    "longName": "kilogram force per square centimetre"
+  },
+  {
+    "symbol": "E41",
+    "unitId": 4535345,
+    "shortName": "kgf·m/cm²",
+    "longName": "kilogram-force per square millimetre"
+  },
+  {
+    "symbol": "K85",
+    "unitId": 4929589,
+    "shortName": "lbf/ft²",
+    "longName": "pound-force per square foot"
+  },
+  {
+    "symbol": "K86",
+    "unitId": 4929590,
+    "shortName": "psi/°F",
+    "longName": "pound-force per square inch degree Fahrenheit"
+  },
+  {
+    "symbol": 84,
+    "unitId": 14388,
+    "shortName": "klbf/in²",
+    "longName": "A unit of pressure defining the number of kilopounds force per square inch.Use kip per square inch (common code N20)."
+  },
+  {
+    "symbol": "N13",
+    "unitId": 5124403,
+    "shortName": "cmHg (0 ºC)",
+    "longName": "centimetre of mercury (0 ºC)"
+  },
+  {
+    "symbol": "N14",
+    "unitId": 5124404,
+    "shortName": "cmH₂O (4 °C)",
+    "longName": "centimetre of water (4 ºC)"
+  },
+  {
+    "symbol": "N15",
+    "unitId": 5124405,
+    "shortName": "ftH₂O (39,2 ºF)",
+    "longName": "foot of water (39.2 ºF)"
+  },
+  {
+    "symbol": "N16",
+    "unitId": 5124406,
+    "shortName": "inHG (32 ºF)",
+    "longName": "inch of mercury (32 ºF)"
+  },
+  {
+    "symbol": "N17",
+    "unitId": 5124407,
+    "shortName": "inHg (60 ºF)",
+    "longName": "inch of mercury (60 ºF)"
+  },
+  {
+    "symbol": "N18",
+    "unitId": 5124408,
+    "shortName": "inH₂O (39,2 ºF)",
+    "longName": "inch of water (39.2 ºF)"
+  },
+  {
+    "symbol": "N19",
+    "unitId": 5124409,
+    "shortName": "inH₂O (60 ºF)",
+    "longName": "inch of water (60 ºF)"
+  },
+  {
+    "symbol": "N20",
+    "unitId": 5124656,
+    "shortName": "ksi",
+    "longName": "kip per square inch"
+  },
+  {
+    "symbol": "N21",
+    "unitId": 5124657,
+    "shortName": "pdl/ft²",
+    "longName": "poundal per square foot"
+  },
+  {
+    "symbol": "N22",
+    "unitId": 5124658,
+    "shortName": "oz/in²",
+    "longName": "ounce (avoirdupois) per square inch"
+  },
+  {
+    "symbol": "N23",
+    "unitId": 5124659,
+    "shortName": "mH₂O",
+    "longName": "conventional metre of water"
+  },
+  {
+    "symbol": "N24",
+    "unitId": 5124660,
+    "shortName": "g/mm²",
+    "longName": "gram per square millimetre"
+  },
+  {
+    "symbol": "N25",
+    "unitId": 5124661,
+    "shortName": "lb/yd²",
+    "longName": "pound per square yard"
+  },
+  {
+    "symbol": "N26",
+    "unitId": 5124662,
+    "shortName": "pdl/in²",
+    "longName": "poundal per square inch"
+  },
+  {
+    "symbol": "E99",
+    "unitId": 4536633,
+    "shortName": "hPa/bar",
+    "longName": "hectopascal per bar"
+  },
+  {
+    "symbol": "F05",
+    "unitId": 4599861,
+    "shortName": "MPa/bar",
+    "longName": "megapascal per bar"
+  },
+  {
+    "symbol": "F04",
+    "unitId": 4599860,
+    "shortName": "mbar/bar",
+    "longName": "millibar per bar"
+  },
+  {
+    "symbol": "F07",
+    "unitId": 4599863,
+    "shortName": "Pa/bar",
+    "longName": "pascal per bar"
+  },
+  {
+    "symbol": "F03",
+    "unitId": 4599859,
+    "shortName": "kPa/bar",
+    "longName": "kilopascal per bar"
+  },
+  {
+    "symbol": "L52",
+    "unitId": 4994354,
+    "shortName": "psi/psi",
+    "longName": "psi per psi"
+  },
+  {
+    "symbol": "J56",
+    "unitId": 4863286,
+    "shortName": "bar/bar",
+    "longName": "bar per bar"
+  },
+  {
+    "symbol": "C96",
+    "unitId": 4405558,
+    "shortName": "Pa⁻¹",
+    "longName": "reciprocal pascal or pascal to the power minus one"
+  },
+  {
+    "symbol": "F58",
+    "unitId": 4601144,
+    "shortName": "1/bar",
+    "longName": "reciprocal bar"
+  },
+  {
+    "symbol": "B83",
+    "unitId": 4339763,
+    "shortName": "m⁴",
+    "longName": "metre to the fourth power"
+  },
+  {
+    "symbol": "G77",
+    "unitId": 4667191,
+    "shortName": "mm⁴",
+    "longName": "millimetre to the fourth power"
+  },
+  {
+    "symbol": "D69",
+    "unitId": 4470329,
+    "shortName": "in⁴",
+    "longName": "inch to the fourth power"
+  },
+  {
+    "symbol": "N27",
+    "unitId": 5124663,
+    "shortName": "ft⁴",
+    "longName": "foot to the fourth power"
+  },
+  {
+    "symbol": "C65",
+    "unitId": 4404789,
+    "shortName": "Pa·s",
+    "longName": "pascal second"
+  },
+  {
+    "symbol": "N37",
+    "unitId": 5124919,
+    "shortName": "kg/(m·s)",
+    "longName": "kilogram per metre second"
+  },
+  {
+    "symbol": "N38",
+    "unitId": 5124920,
+    "shortName": "kg/(m·min)",
+    "longName": "kilogram per metre minute"
+  },
+  {
+    "symbol": "C24",
+    "unitId": 4403764,
+    "shortName": "mPa·s",
+    "longName": "millipascal second"
+  },
+  {
+    "symbol": "N36",
+    "unitId": 5124918,
+    "shortName": "(N/m²)·s",
+    "longName": "newton second per square metre"
+  },
+  {
+    "symbol": "N39",
+    "unitId": 5124921,
+    "shortName": "kg/(m·d)",
+    "longName": "kilogram per metre day"
+  },
+  {
+    "symbol": "N40",
+    "unitId": 5125168,
+    "shortName": "kg/(m·h)",
+    "longName": "kilogram per metre hour"
+  },
+  {
+    "symbol": "N41",
+    "unitId": 5125169,
+    "shortName": "g/(cm·s)",
+    "longName": "gram per centimetre second"
+  },
+  {
+    "symbol": 89,
+    "unitId": 14393,
+    "shortName": "P",
+    "longName": "poise"
+  },
+  {
+    "symbol": "C7",
+    "unitId": 17207,
+    "shortName": "cP",
+    "longName": "centipoise"
+  },
+  {
+    "symbol": "F06",
+    "unitId": 4599862,
+    "shortName": "P/bar",
+    "longName": "poise per bar"
+  },
+  {
+    "symbol": "F86",
+    "unitId": 4601910,
+    "shortName": "P/K",
+    "longName": "poise per kelvin"
+  },
+  {
+    "symbol": "J32",
+    "unitId": 4862770,
+    "shortName": "µP",
+    "longName": "micropoise"
+  },
+  {
+    "symbol": "J73",
+    "unitId": 4863795,
+    "shortName": "cP/K",
+    "longName": "centipoise per kelvin"
+  },
+  {
+    "symbol": "J74",
+    "unitId": 4863796,
+    "shortName": "cP/bar",
+    "longName": "centipoise per bar"
+  },
+  {
+    "symbol": "K67",
+    "unitId": 4929079,
+    "shortName": "lb/(ft·h)",
+    "longName": "pound per foot hour"
+  },
+  {
+    "symbol": "K68",
+    "unitId": 4929080,
+    "shortName": "lb/(ft·s)",
+    "longName": "pound per foot second"
+  },
+  {
+    "symbol": "K91",
+    "unitId": 4929841,
+    "shortName": "lbf·s/ft²",
+    "longName": "pound-force second per square foot"
+  },
+  {
+    "symbol": "K92",
+    "unitId": 4929842,
+    "shortName": "lbf·s/in²",
+    "longName": "pound-force second per square inch"
+  },
+  {
+    "symbol": "L15",
+    "unitId": 4993333,
+    "shortName": "mPa·s/K",
+    "longName": "millipascal second per kelvin"
+  },
+  {
+    "symbol": "L16",
+    "unitId": 4993334,
+    "shortName": "mPa·s/bar",
+    "longName": "millipascal second per bar"
+  },
+  {
+    "symbol": "L64",
+    "unitId": 4994612,
+    "shortName": "slug/(ft·s)",
+    "longName": "slug per foot second"
+  },
+  {
+    "symbol": "N34",
+    "unitId": 5124916,
+    "shortName": "(pdl/ft²)·s",
+    "longName": "poundal second per square foot"
+  },
+  {
+    "symbol": "N35",
+    "unitId": 5124917,
+    "shortName": "P/Pa",
+    "longName": "poise per pascal"
+  },
+  {
+    "symbol": "N42",
+    "unitId": 5125170,
+    "shortName": "(pdl/in²)·s",
+    "longName": "poundal second per square inch"
+  },
+  {
+    "symbol": "N43",
+    "unitId": 5125171,
+    "shortName": "lb/(ft·min)",
+    "longName": "pound per foot minute"
+  },
+  {
+    "symbol": "N44",
+    "unitId": 5125172,
+    "shortName": "lb/(ft·d)",
+    "longName": "pound per foot day"
+  },
+  {
+    "symbol": "S4",
+    "unitId": 21300,
+    "shortName": "m²/s",
+    "longName": "square metre per second"
+  },
+  {
+    "symbol": "M82",
+    "unitId": 5060658,
+    "shortName": "(m²/s)/Pa",
+    "longName": "square metre per second pascal"
+  },
+  {
+    "symbol": "C17",
+    "unitId": 4403511,
+    "shortName": "mm²/s",
+    "longName": "millimetre squared per second"
+  },
+  {
+    "symbol": "G41",
+    "unitId": 4666417,
+    "shortName": "m²/(s·bar)",
+    "longName": "square metre per second bar"
+  },
+  {
+    "symbol": "G09",
+    "unitId": 4665401,
+    "shortName": "m²/(s·K)",
+    "longName": "square metre per second kelvin"
+  },
+  {
+    "symbol": 91,
+    "unitId": 14641,
+    "shortName": "St",
+    "longName": "stokes"
+  },
+  {
+    "symbol": "4C",
+    "unitId": 13379,
+    "shortName": "cSt",
+    "longName": "centistokes"
+  },
+  {
+    "symbol": "G46",
+    "unitId": 4666422,
+    "shortName": "St/bar",
+    "longName": "stokes per bar"
+  },
+  {
+    "symbol": "G10",
+    "unitId": 4665648,
+    "shortName": "St/K",
+    "longName": "stokes per kelvin"
+  },
+  {
+    "symbol": "S3",
+    "unitId": 21299,
+    "shortName": "ft²/s",
+    "longName": "square foot per second"
+  },
+  {
+    "symbol": "G08",
+    "unitId": 4665400,
+    "shortName": "in²/s",
+    "longName": "square inch per second"
+  },
+  {
+    "symbol": "M79",
+    "unitId": 5060409,
+    "shortName": "ft²/h",
+    "longName": "square foot per hour"
+  },
+  {
+    "symbol": "M80",
+    "unitId": 5060656,
+    "shortName": "St/Pa",
+    "longName": "stokes per pascal"
+  },
+  {
+    "symbol": "M81",
+    "unitId": 5060657,
+    "shortName": "cm²/s",
+    "longName": "square centimetre per second"
+  },
+  {
+    "symbol": "4P",
+    "unitId": 13392,
+    "shortName": "N/m",
+    "longName": "newton per metre"
+  },
+  {
+    "symbol": "C22",
+    "unitId": 4403762,
+    "shortName": "mN/m",
+    "longName": "millinewton per metre"
+  },
+  {
+    "symbol": "M23",
+    "unitId": 5059123,
+    "shortName": "N/cm",
+    "longName": "newton per centimetre"
+  },
+  {
+    "symbol": "N31",
+    "unitId": 5124913,
+    "shortName": "kN/m",
+    "longName": "kilonewton per metre"
+  },
+  {
+    "symbol": "DX",
+    "unitId": 17496,
+    "shortName": "dyn/cm",
+    "longName": "dyne per centimetre"
+  },
+  {
+    "symbol": "N32",
+    "unitId": 5124914,
+    "shortName": "pdl/in",
+    "longName": "poundal per inch"
+  },
+  {
+    "symbol": "N33",
+    "unitId": 5124915,
+    "shortName": "lbf/yd",
+    "longName": "pound-force per yard"
+  },
+  {
+    "symbol": "M34",
+    "unitId": 5059380,
+    "shortName": "N·m/m²",
+    "longName": "newton metre per square metre"
+  },
+  {
+    "symbol": "JOU",
+    "unitId": 4869973,
+    "shortName": "J",
+    "longName": "joule"
+  },
+  {
+    "symbol": "KJO",
+    "unitId": 4934223,
+    "shortName": "kJ",
+    "longName": "kilojoule"
+  },
+  {
+    "symbol": "A68",
+    "unitId": 4273720,
+    "shortName": "EJ",
+    "longName": "exajoule"
+  },
+  {
+    "symbol": "C68",
+    "unitId": 4404792,
+    "shortName": "PJ",
+    "longName": "petajoule"
+  },
+  {
+    "symbol": "D30",
+    "unitId": 4469552,
+    "shortName": "TJ",
+    "longName": "terajoule"
+  },
+  {
+    "symbol": "GV",
+    "unitId": 18262,
+    "shortName": "GJ",
+    "longName": "gigajoule"
+  },
+  {
+    "symbol": "3B",
+    "unitId": 13122,
+    "shortName": "MJ",
+    "longName": "megajoule"
+  },
+  {
+    "symbol": "C15",
+    "unitId": 4403509,
+    "shortName": "mJ",
+    "longName": "millijoule"
+  },
+  {
+    "symbol": "A70",
+    "unitId": 4273968,
+    "shortName": "fJ",
+    "longName": "femtojoule"
+  },
+  {
+    "symbol": "A13",
+    "unitId": 4272435,
+    "shortName": "aJ",
+    "longName": "attojoule"
+  },
+  {
+    "symbol": "WHR",
+    "unitId": 5720146,
+    "shortName": "W·h",
+    "longName": "watt hour"
+  },
+  {
+    "symbol": "MWH",
+    "unitId": 5068616,
+    "shortName": "MW·h",
+    "longName": "megawatt hour (1000 kW.h)"
+  },
+  {
+    "symbol": "KWH",
+    "unitId": 4937544,
+    "shortName": "kW·h",
+    "longName": "kilowatt hour"
+  },
+  {
+    "symbol": "GWH",
+    "unitId": 4675400,
+    "shortName": "GW·h",
+    "longName": "gigawatt hour"
+  },
+  {
+    "symbol": "D32",
+    "unitId": 4469554,
+    "shortName": "TW·h",
+    "longName": "terawatt hour"
+  },
+  {
+    "symbol": "A53",
+    "unitId": 4273459,
+    "shortName": "eV",
+    "longName": "electronvolt"
+  },
+  {
+    "symbol": "B71",
+    "unitId": 4339505,
+    "shortName": "MeV",
+    "longName": "megaelectronvolt"
+  },
+  {
+    "symbol": "A85",
+    "unitId": 4274229,
+    "shortName": "GeV",
+    "longName": "gigaelectronvolt"
+  },
+  {
+    "symbol": "B29",
+    "unitId": 4338233,
+    "shortName": "keV",
+    "longName": "kiloelectronvolt"
+  },
+  {
+    "symbol": "A57",
+    "unitId": 4273463,
+    "shortName": "erg",
+    "longName": "erg"
+  },
+  {
+    "symbol": 85,
+    "unitId": 14389,
+    "shortName": "ft·lbf",
+    "longName": "foot pound-force"
+  },
+  {
+    "symbol": "N46",
+    "unitId": 5125174,
+    "shortName": "ft·pdl",
+    "longName": "foot poundal"
+  },
+  {
+    "symbol": "N47",
+    "unitId": 5125175,
+    "shortName": "in·pdl",
+    "longName": "inch poundal"
+  },
+  {
+    "symbol": "WTT",
+    "unitId": 5723220,
+    "shortName": "W",
+    "longName": "watt"
+  },
+  {
+    "symbol": "KWT",
+    "unitId": 4937556,
+    "shortName": "kW",
+    "longName": "kilowatt"
+  },
+  {
+    "symbol": "MAW",
+    "unitId": 5062999,
+    "shortName": "MW",
+    "longName": "megawatt"
+  },
+  {
+    "symbol": "A90",
+    "unitId": 4274480,
+    "shortName": "GW",
+    "longName": "gigawatt"
+  },
+  {
+    "symbol": "C31",
+    "unitId": 4404017,
+    "shortName": "mW",
+    "longName": "milliwatt"
+  },
+  {
+    "symbol": "D80",
+    "unitId": 4470832,
+    "shortName": "µW",
+    "longName": "microwatt"
+  },
+  {
+    "symbol": "A63",
+    "unitId": 4273715,
+    "shortName": "erg/s",
+    "longName": "erg per second"
+  },
+  {
+    "symbol": "A74",
+    "unitId": 4273972,
+    "shortName": "ft·lbf/s",
+    "longName": "foot pound-force per second"
+  },
+  {
+    "symbol": "B39",
+    "unitId": 4338489,
+    "shortName": "kgf·m/s",
+    "longName": "kilogram-force metre per second"
+  },
+  {
+    "symbol": "HJ",
+    "unitId": 18506,
+    "shortName": "metric hp",
+    "longName": "metric horse power"
+  },
+  {
+    "symbol": "A25",
+    "unitId": 4272693,
+    "shortName": "CV",
+    "longName": "cheval vapeur"
+  },
+  {
+    "symbol": "BHP",
+    "unitId": 4343888,
+    "shortName": "BHP",
+    "longName": "brake horse power"
+  },
+  {
+    "symbol": "K15",
+    "unitId": 4927797,
+    "shortName": "ft·lbf/h",
+    "longName": "foot pound-force per hour"
+  },
+  {
+    "symbol": "K16",
+    "unitId": 4927798,
+    "shortName": "ft·lbf/min",
+    "longName": "foot pound-force per minute"
+  },
+  {
+    "symbol": "K42",
+    "unitId": 4928562,
+    "shortName": "boiler hp",
+    "longName": "horsepower (boiler)"
+  },
+  {
+    "symbol": "N12",
+    "unitId": 5124402,
+    "shortName": "PS",
+    "longName": "Pferdestaerke"
+  },
+  {
+    "symbol": "KGS",
+    "unitId": 4933459,
+    "shortName": "kg/s",
+    "longName": "kilogram per second"
+  },
+  {
+    "symbol": "H56",
+    "unitId": 4732214,
+    "shortName": "kg/(m²·s)",
+    "longName": "kilogram per square metre second"
+  },
+  {
+    "symbol": "M87",
+    "unitId": 5060663,
+    "shortName": "(kg/s)/Pa",
+    "longName": "kilogram per second pascal"
+  },
+  {
+    "symbol": "4M",
+    "unitId": 13389,
+    "shortName": "mg/h",
+    "longName": "milligram per hour"
+  },
+  {
+    "symbol": "F26",
+    "unitId": 4600374,
+    "shortName": "g/d",
+    "longName": "gram per day"
+  },
+  {
+    "symbol": "F62",
+    "unitId": 4601394,
+    "shortName": "g/(d·bar)",
+    "longName": "gram per day bar"
+  },
+  {
+    "symbol": "F35",
+    "unitId": 4600629,
+    "shortName": "g/(d·K)",
+    "longName": "gram per day kelvin"
+  },
+  {
+    "symbol": "F27",
+    "unitId": 4600375,
+    "shortName": "g/h",
+    "longName": "gram per hour"
+  },
+  {
+    "symbol": "F63",
+    "unitId": 4601395,
+    "shortName": "g/(h·bar)",
+    "longName": "gram per hour bar"
+  },
+  {
+    "symbol": "F36",
+    "unitId": 4600630,
+    "shortName": "g/(h·K)",
+    "longName": "gram per hour kelvin"
+  },
+  {
+    "symbol": "F28",
+    "unitId": 4600376,
+    "shortName": "g/min",
+    "longName": "gram per minute"
+  },
+  {
+    "symbol": "F64",
+    "unitId": 4601396,
+    "shortName": "g/(min·bar)",
+    "longName": "gram per minute bar"
+  },
+  {
+    "symbol": "F37",
+    "unitId": 4600631,
+    "shortName": "g/(min·K)",
+    "longName": "gram per minute kelvin"
+  },
+  {
+    "symbol": "F29",
+    "unitId": 4600377,
+    "shortName": "g/s",
+    "longName": "gram per second"
+  },
+  {
+    "symbol": "F65",
+    "unitId": 4601397,
+    "shortName": "g/(s·bar)",
+    "longName": "gram per second bar"
+  },
+  {
+    "symbol": "F38",
+    "unitId": 4600632,
+    "shortName": "g/(s·K)",
+    "longName": "gram per second kelvin"
+  },
+  {
+    "symbol": "F30",
+    "unitId": 4600624,
+    "shortName": "kg/d",
+    "longName": "kilogram per day"
+  },
+  {
+    "symbol": "F66",
+    "unitId": 4601398,
+    "shortName": "kg/(d·bar)",
+    "longName": "kilogram per day bar"
+  },
+  {
+    "symbol": "F39",
+    "unitId": 4600633,
+    "shortName": "kg/(d·K)",
+    "longName": "kilogram per day kelvin"
+  },
+  {
+    "symbol": "E93",
+    "unitId": 4536627,
+    "shortName": "kg/h",
+    "longName": "kilogram per hour"
+  },
+  {
+    "symbol": "F67",
+    "unitId": 4601399,
+    "shortName": "kg/(h·bar)",
+    "longName": "kilogram per hour bar"
+  },
+  {
+    "symbol": "F40",
+    "unitId": 4600880,
+    "shortName": "kg/(h·K)",
+    "longName": "kilogram per hour kelvin"
+  },
+  {
+    "symbol": "F31",
+    "unitId": 4600625,
+    "shortName": "kg/min",
+    "longName": "kilogram per minute"
+  },
+  {
+    "symbol": "F68",
+    "unitId": 4601400,
+    "shortName": "kg/(min·bar)",
+    "longName": "kilogram per minute bar"
+  },
+  {
+    "symbol": "F41",
+    "unitId": 4600881,
+    "shortName": "kg/(min·K)",
+    "longName": "kilogram per minute kelvin"
+  },
+  {
+    "symbol": "F69",
+    "unitId": 4601401,
+    "shortName": "kg/(s·bar)",
+    "longName": "kilogram per second bar"
+  },
+  {
+    "symbol": "F42",
+    "unitId": 4600882,
+    "shortName": "kg/(s·K)",
+    "longName": "kilogram per second kelvin"
+  },
+  {
+    "symbol": "F32",
+    "unitId": 4600626,
+    "shortName": "mg/d",
+    "longName": "milligram per day"
+  },
+  {
+    "symbol": "F70",
+    "unitId": 4601648,
+    "shortName": "mg/(d·bar)",
+    "longName": "milligram per day bar"
+  },
+  {
+    "symbol": "F43",
+    "unitId": 4600883,
+    "shortName": "mg/(d·K)",
+    "longName": "milligram per day kelvin"
+  },
+  {
+    "symbol": "F71",
+    "unitId": 4601649,
+    "shortName": "mg/(h·bar)",
+    "longName": "milligram per hour bar"
+  },
+  {
+    "symbol": "F44",
+    "unitId": 4600884,
+    "shortName": "mg/(h·K)",
+    "longName": "milligram per hour kelvin"
+  },
+  {
+    "symbol": "F33",
+    "unitId": 4600627,
+    "shortName": "mg/min",
+    "longName": "milligram per minute"
+  },
+  {
+    "symbol": "F72",
+    "unitId": 4601650,
+    "shortName": "mg/(min·bar)",
+    "longName": "milligram per minute bar"
+  },
+  {
+    "symbol": "F45",
+    "unitId": 4600885,
+    "shortName": "mg/(min·K)",
+    "longName": "milligram per minute kelvin"
+  },
+  {
+    "symbol": "F34",
+    "unitId": 4600628,
+    "shortName": "mg/s",
+    "longName": "milligram per second"
+  },
+  {
+    "symbol": "F73",
+    "unitId": 4601651,
+    "shortName": "mg/(s·bar)",
+    "longName": "milligram per second bar"
+  },
+  {
+    "symbol": "F46",
+    "unitId": 4600886,
+    "shortName": "mg/(s·K)",
+    "longName": "milligram per second kelvin"
+  },
+  {
+    "symbol": "F25",
+    "unitId": 4600373,
+    "shortName": "g/Hz",
+    "longName": "gram per hertz"
+  },
+  {
+    "symbol": "4W",
+    "unitId": 13399,
+    "shortName": "ton (US) /h",
+    "longName": "ton (US) per hour"
+  },
+  {
+    "symbol": "4U",
+    "unitId": 13397,
+    "shortName": "lb/h",
+    "longName": "pound per hour"
+  },
+  {
+    "symbol": "K66",
+    "unitId": 4929078,
+    "shortName": "lb/d",
+    "longName": "pound (avoirdupois) per day"
+  },
+  {
+    "symbol": "K73",
+    "unitId": 4929331,
+    "shortName": "(lb/h)/°F",
+    "longName": "pound (avoirdupois) per hour degree Fahrenheit"
+  },
+  {
+    "symbol": "K74",
+    "unitId": 4929332,
+    "shortName": "(lb/h)/psi",
+    "longName": "pound (avoirdupois) per hour psi"
+  },
+  {
+    "symbol": "K78",
+    "unitId": 4929336,
+    "shortName": "lb/min",
+    "longName": "pound (avoirdupois) per minute"
+  },
+  {
+    "symbol": "K79",
+    "unitId": 4929337,
+    "shortName": "lb/(min·°F)",
+    "longName": "pound (avoirdupois) per minute degree Fahrenheit"
+  },
+  {
+    "symbol": "K80",
+    "unitId": 4929584,
+    "shortName": "(lb/min)/psi",
+    "longName": "pound (avoirdupois) per minute psi"
+  },
+  {
+    "symbol": "K81",
+    "unitId": 4929585,
+    "shortName": "lb/s",
+    "longName": "pound (avoirdupois) per second"
+  },
+  {
+    "symbol": "K82",
+    "unitId": 4929586,
+    "shortName": "(lb/s)/°F",
+    "longName": "pound (avoirdupois) per second degree Fahrenheit"
+  },
+  {
+    "symbol": "K83",
+    "unitId": 4929587,
+    "shortName": "(lb/s)/psi",
+    "longName": "pound (avoirdupois) per second psi"
+  },
+  {
+    "symbol": "L33",
+    "unitId": 4993843,
+    "shortName": "oz/d",
+    "longName": "ounce (avoirdupois) per day"
+  },
+  {
+    "symbol": "L34",
+    "unitId": 4993844,
+    "shortName": "oz/h",
+    "longName": "ounce (avoirdupois) per hour"
+  },
+  {
+    "symbol": "L35",
+    "unitId": 4993845,
+    "shortName": "oz/min",
+    "longName": "ounce (avoirdupois) per minute"
+  },
+  {
+    "symbol": "L36",
+    "unitId": 4993846,
+    "shortName": "oz/s",
+    "longName": "ounce (avoirdupois) per second"
+  },
+  {
+    "symbol": "L63",
+    "unitId": 4994611,
+    "shortName": "slug/d",
+    "longName": "slug per day"
+  },
+  {
+    "symbol": "L66",
+    "unitId": 4994614,
+    "shortName": "slug/h",
+    "longName": "slug per hour"
+  },
+  {
+    "symbol": "L67",
+    "unitId": 4994615,
+    "shortName": "slug/min",
+    "longName": "slug per minute"
+  },
+  {
+    "symbol": "L68",
+    "unitId": 4994616,
+    "shortName": "slug/s",
+    "longName": "slug per second"
+  },
+  {
+    "symbol": "L71",
+    "unitId": 4994865,
+    "shortName": "t/d",
+    "longName": "tonne per day"
+  },
+  {
+    "symbol": "L72",
+    "unitId": 4994866,
+    "shortName": "(t/d)/K",
+    "longName": "tonne per day kelvin"
+  },
+  {
+    "symbol": "L73",
+    "unitId": 4994867,
+    "shortName": "(t/d)/bar",
+    "longName": "tonne per day bar"
+  },
+  {
+    "symbol": "E18",
+    "unitId": 4534584,
+    "shortName": "t/h",
+    "longName": "tonne per hour"
+  },
+  {
+    "symbol": "L74",
+    "unitId": 4994868,
+    "shortName": "(t/h)/K",
+    "longName": "tonne per hour kelvin"
+  },
+  {
+    "symbol": "L75",
+    "unitId": 4994869,
+    "shortName": "(t/h)/bar",
+    "longName": "tonne per hour bar"
+  },
+  {
+    "symbol": "L78",
+    "unitId": 4994872,
+    "shortName": "t/min",
+    "longName": "tonne per minute"
+  },
+  {
+    "symbol": "L79",
+    "unitId": 4994873,
+    "shortName": "(t/min)/K",
+    "longName": "tonne per minute kelvin"
+  },
+  {
+    "symbol": "L80",
+    "unitId": 4995120,
+    "shortName": "(t/min)/bar",
+    "longName": "tonne per minute bar"
+  },
+  {
+    "symbol": "L81",
+    "unitId": 4995121,
+    "shortName": "t/s",
+    "longName": "tonne per second"
+  },
+  {
+    "symbol": "L82",
+    "unitId": 4995122,
+    "shortName": "(t/s)/K",
+    "longName": "tonne per second kelvin"
+  },
+  {
+    "symbol": "L83",
+    "unitId": 4995123,
+    "shortName": "(t/s)/bar",
+    "longName": "tonne per second bar"
+  },
+  {
+    "symbol": "L85",
+    "unitId": 4995125,
+    "shortName": "ton (UK)/d",
+    "longName": "ton long per day"
+  },
+  {
+    "symbol": "L88",
+    "unitId": 4995128,
+    "shortName": "ton (US)/d",
+    "longName": "ton short per day"
+  },
+  {
+    "symbol": "L89",
+    "unitId": 4995129,
+    "shortName": "ton (US)/(h·°F)",
+    "longName": "ton short per hour degree Fahrenheit"
+  },
+  {
+    "symbol": "L90",
+    "unitId": 4995376,
+    "shortName": "(ton (US)/h)/psi",
+    "longName": "ton short per hour psi"
+  },
+  {
+    "symbol": "M88",
+    "unitId": 5060664,
+    "shortName": "t/mo",
+    "longName": "tonne per month"
+  },
+  {
+    "symbol": "M89",
+    "unitId": 5060665,
+    "shortName": "t/y",
+    "longName": "tonne per year"
+  },
+  {
+    "symbol": "M90",
+    "unitId": 5060912,
+    "shortName": "klb/h",
+    "longName": "kilopound per hour"
+  },
+  {
+    "symbol": "J33",
+    "unitId": 4862771,
+    "shortName": "µg/kg",
+    "longName": "microgram per kilogram"
+  },
+  {
+    "symbol": "L32",
+    "unitId": 4993842,
+    "shortName": "ng/kg",
+    "longName": "nanogram per kilogram"
+  },
+  {
+    "symbol": "NA",
+    "unitId": 20033,
+    "shortName": "mg/kg",
+    "longName": "milligram per kilogram"
+  },
+  {
+    "symbol": "M29",
+    "unitId": 5059129,
+    "shortName": "kg/kg",
+    "longName": "kilogram per kilogram"
+  },
+  {
+    "symbol": "M91",
+    "unitId": 5060913,
+    "shortName": "lb/lb",
+    "longName": "pound per pound"
+  },
+  {
+    "symbol": "MQS",
+    "unitId": 5067091,
+    "shortName": "m³/s",
+    "longName": "cubic metre per second"
+  },
+  {
+    "symbol": "MQH",
+    "unitId": 5067080,
+    "shortName": "m³/h",
+    "longName": "cubic metre per hour"
+  },
+  {
+    "symbol": 40,
+    "unitId": 13360,
+    "shortName": "ml/s",
+    "longName": "millilitre per second"
+  },
+  {
+    "symbol": 41,
+    "unitId": 13361,
+    "shortName": "ml/min",
+    "longName": "millilitre per minute"
+  },
+  {
+    "symbol": "LD",
+    "unitId": 19524,
+    "shortName": "l/d",
+    "longName": "litre per day"
+  },
+  {
+    "symbol": "2J",
+    "unitId": 12874,
+    "shortName": "cm³/s",
+    "longName": "cubic centimetre per second"
+  },
+  {
+    "symbol": "4X",
+    "unitId": 13400,
+    "shortName": "kl/h",
+    "longName": "kilolitre per hour"
+  },
+  {
+    "symbol": "L2",
+    "unitId": 19506,
+    "shortName": "l/min",
+    "longName": "litre per minute"
+  },
+  {
+    "symbol": "G47",
+    "unitId": 4666423,
+    "shortName": "cm³/d",
+    "longName": "cubic centimetre per day"
+  },
+  {
+    "symbol": "G78",
+    "unitId": 4667192,
+    "shortName": "cm³/(d·bar)",
+    "longName": "cubic centimetre per day bar"
+  },
+  {
+    "symbol": "G61",
+    "unitId": 4666929,
+    "shortName": "cm³/(d·K)",
+    "longName": "cubic centimetre per day kelvin"
+  },
+  {
+    "symbol": "G48",
+    "unitId": 4666424,
+    "shortName": "cm³/h",
+    "longName": "cubic centimetre per hour"
+  },
+  {
+    "symbol": "G79",
+    "unitId": 4667193,
+    "shortName": "cm³/(h·bar)",
+    "longName": "cubic centimetre per hour bar"
+  },
+  {
+    "symbol": "G62",
+    "unitId": 4666930,
+    "shortName": "cm³/(h·K)",
+    "longName": "cubic centimetre per hour kelvin"
+  },
+  {
+    "symbol": "G49",
+    "unitId": 4666425,
+    "shortName": "cm³/min",
+    "longName": "cubic centimetre per minute"
+  },
+  {
+    "symbol": "G80",
+    "unitId": 4667440,
+    "shortName": "cm³/(min·bar)",
+    "longName": "cubic centimetre per minute bar"
+  },
+  {
+    "symbol": "G63",
+    "unitId": 4666931,
+    "shortName": "cm³/(min·K)",
+    "longName": "cubic centimetre per minute kelvin"
+  },
+  {
+    "symbol": "G81",
+    "unitId": 4667441,
+    "shortName": "cm³/(s·bar)",
+    "longName": "cubic centimetre per second bar"
+  },
+  {
+    "symbol": "G64",
+    "unitId": 4666932,
+    "shortName": "cm³/(s·K)",
+    "longName": "cubic centimetre per second kelvin"
+  },
+  {
+    "symbol": "E92",
+    "unitId": 4536626,
+    "shortName": "dm³/h",
+    "longName": "cubic decimetre per hour"
+  },
+  {
+    "symbol": "G52",
+    "unitId": 4666674,
+    "shortName": "m³/d",
+    "longName": "cubic metre per day"
+  },
+  {
+    "symbol": "G86",
+    "unitId": 4667446,
+    "shortName": "m³/(d·bar)",
+    "longName": "cubic metre per day bar"
+  },
+  {
+    "symbol": "G69",
+    "unitId": 4666937,
+    "shortName": "m³/(d·K)",
+    "longName": "cubic metre per day kelvin"
+  },
+  {
+    "symbol": "G87",
+    "unitId": 4667447,
+    "shortName": "m³/(h·bar)",
+    "longName": "cubic metre per hour bar"
+  },
+  {
+    "symbol": "G70",
+    "unitId": 4667184,
+    "shortName": "m³/(h·K)",
+    "longName": "cubic metre per hour kelvin"
+  },
+  {
+    "symbol": "G53",
+    "unitId": 4666675,
+    "shortName": "m³/min",
+    "longName": "cubic metre per minute"
+  },
+  {
+    "symbol": "G88",
+    "unitId": 4667448,
+    "shortName": "m³/(min·bar)",
+    "longName": "cubic metre per minute bar"
+  },
+  {
+    "symbol": "G71",
+    "unitId": 4667185,
+    "shortName": "m³/(min·K)",
+    "longName": "cubic metre per minute kelvin"
+  },
+  {
+    "symbol": "G89",
+    "unitId": 4667449,
+    "shortName": "m³/(s·bar)",
+    "longName": "cubic metre per second bar"
+  },
+  {
+    "symbol": "G72",
+    "unitId": 4667186,
+    "shortName": "m³/(s·K)",
+    "longName": "cubic metre per second kelvin"
+  },
+  {
+    "symbol": "G82",
+    "unitId": 4667442,
+    "shortName": "l/(d·bar)",
+    "longName": "litre per day bar"
+  },
+  {
+    "symbol": "G65",
+    "unitId": 4666933,
+    "shortName": "l/(d·K)",
+    "longName": "litre per day kelvin"
+  },
+  {
+    "symbol": "G83",
+    "unitId": 4667443,
+    "shortName": "l/(h·bar)",
+    "longName": "litre per hour bar"
+  },
+  {
+    "symbol": "G66",
+    "unitId": 4666934,
+    "shortName": "l/(h·K)",
+    "longName": "litre per hour kelvin"
+  },
+  {
+    "symbol": "G84",
+    "unitId": 4667444,
+    "shortName": "l/(min·bar)",
+    "longName": "litre per minute bar"
+  },
+  {
+    "symbol": "G67",
+    "unitId": 4666935,
+    "shortName": "l/(min·K)",
+    "longName": "litre per minute kelvin"
+  },
+  {
+    "symbol": "G51",
+    "unitId": 4666673,
+    "shortName": "l/s",
+    "longName": "litre per second"
+  },
+  {
+    "symbol": "G85",
+    "unitId": 4667445,
+    "shortName": "l/(s·bar)",
+    "longName": "litre per second bar"
+  },
+  {
+    "symbol": "G68",
+    "unitId": 4666936,
+    "shortName": "l/(s·K)",
+    "longName": "litre per second kelvin"
+  },
+  {
+    "symbol": "G54",
+    "unitId": 4666676,
+    "shortName": "ml/d",
+    "longName": "millilitre per day"
+  },
+  {
+    "symbol": "G90",
+    "unitId": 4667696,
+    "shortName": "ml/(d·bar)",
+    "longName": "millilitre per day bar"
+  },
+  {
+    "symbol": "G73",
+    "unitId": 4667187,
+    "shortName": "ml/(d·K)",
+    "longName": "millilitre per day kelvin"
+  },
+  {
+    "symbol": "G55",
+    "unitId": 4666677,
+    "shortName": "ml/h",
+    "longName": "millilitre per hour"
+  },
+  {
+    "symbol": "G91",
+    "unitId": 4667697,
+    "shortName": "ml/(h·bar)",
+    "longName": "millilitre per hour bar"
+  },
+  {
+    "symbol": "G74",
+    "unitId": 4667188,
+    "shortName": "ml/(h·K)",
+    "longName": "millilitre per hour kelvin"
+  },
+  {
+    "symbol": "G92",
+    "unitId": 4667698,
+    "shortName": "ml/(min·bar)",
+    "longName": "millilitre per minute bar"
+  },
+  {
+    "symbol": "G75",
+    "unitId": 4667189,
+    "shortName": "ml/(min·K)",
+    "longName": "millilitre per minute kelvin"
+  },
+  {
+    "symbol": "G93",
+    "unitId": 4667699,
+    "shortName": "ml/(s·bar)",
+    "longName": "millilitre per second bar"
+  },
+  {
+    "symbol": "G76",
+    "unitId": 4667190,
+    "shortName": "ml/(s·K)",
+    "longName": "millilitre per second kelvin"
+  },
+  {
+    "symbol": "2K",
+    "unitId": 12875,
+    "shortName": "ft³/h",
+    "longName": "cubic foot per hour"
+  },
+  {
+    "symbol": "2L",
+    "unitId": 12876,
+    "shortName": "ft³/min",
+    "longName": "cubic foot per minute"
+  },
+  {
+    "symbol": "5A",
+    "unitId": 13633,
+    "shortName": "barrel (US)/min",
+    "longName": "barrel (US) per minute"
+  },
+  {
+    "symbol": "G2",
+    "unitId": 18226,
+    "shortName": "gal (US) /min",
+    "longName": "US gallon per minute"
+  },
+  {
+    "symbol": "G3",
+    "unitId": 18227,
+    "shortName": "gal (UK) /min",
+    "longName": "Imperial gallon per minute"
+  },
+  {
+    "symbol": "G56",
+    "unitId": 4666678,
+    "shortName": "in³/h",
+    "longName": "cubic inch per hour"
+  },
+  {
+    "symbol": "G57",
+    "unitId": 4666679,
+    "shortName": "in³/min",
+    "longName": "cubic inch per minute"
+  },
+  {
+    "symbol": "G58",
+    "unitId": 4666680,
+    "shortName": "in³/s",
+    "longName": "cubic inch per second"
+  },
+  {
+    "symbol": "G50",
+    "unitId": 4666672,
+    "shortName": "gal/h",
+    "longName": "gallon (US) per hour"
+  },
+  {
+    "symbol": "J58",
+    "unitId": 4863288,
+    "shortName": "bbl (UK liq.)/min",
+    "longName": "barrel (UK petroleum) per minute"
+  },
+  {
+    "symbol": "J59",
+    "unitId": 4863289,
+    "shortName": "bbl (UK liq.)/d",
+    "longName": "barrel (UK petroleum) per day"
+  },
+  {
+    "symbol": "J60",
+    "unitId": 4863536,
+    "shortName": "bbl (UK liq.)/h",
+    "longName": "barrel (UK petroleum) per hour"
+  },
+  {
+    "symbol": "J61",
+    "unitId": 4863537,
+    "shortName": "bbl (UK liq.)/s",
+    "longName": "barrel (UK petroleum) per second"
+  },
+  {
+    "symbol": "J62",
+    "unitId": 4863538,
+    "shortName": "bbl (US)/h",
+    "longName": "barrel (US petroleum) per hour"
+  },
+  {
+    "symbol": "J63",
+    "unitId": 4863539,
+    "shortName": "bbl (US)/s",
+    "longName": "barrel (US petroleum) per second"
+  },
+  {
+    "symbol": "J64",
+    "unitId": 4863540,
+    "shortName": "bu (UK)/d",
+    "longName": "bushel (UK) per day"
+  },
+  {
+    "symbol": "J65",
+    "unitId": 4863541,
+    "shortName": "bu (UK)/h",
+    "longName": "bushel (UK) per hour"
+  },
+  {
+    "symbol": "J66",
+    "unitId": 4863542,
+    "shortName": "bu (UK)/min",
+    "longName": "bushel (UK) per minute"
+  },
+  {
+    "symbol": "J67",
+    "unitId": 4863543,
+    "shortName": "bu (UK)/s",
+    "longName": "bushel (UK) per second"
+  },
+  {
+    "symbol": "J68",
+    "unitId": 4863544,
+    "shortName": "bu (US dry)/d",
+    "longName": "bushel (US dry) per day"
+  },
+  {
+    "symbol": "J69",
+    "unitId": 4863545,
+    "shortName": "bu (US dry)/h",
+    "longName": "bushel (US dry) per hour"
+  },
+  {
+    "symbol": "J70",
+    "unitId": 4863792,
+    "shortName": "bu (US dry)/min",
+    "longName": "bushel (US dry) per minute"
+  },
+  {
+    "symbol": "J71",
+    "unitId": 4863793,
+    "shortName": "bu (US dry)/s",
+    "longName": "bushel (US dry) per second"
+  },
+  {
+    "symbol": "J90",
+    "unitId": 4864304,
+    "shortName": "dm³/d",
+    "longName": "cubic decimetre per day"
+  },
+  {
+    "symbol": "J92",
+    "unitId": 4864306,
+    "shortName": "dm³/min",
+    "longName": "cubic decimetre per minute"
+  },
+  {
+    "symbol": "J93",
+    "unitId": 4864307,
+    "shortName": "dm³/s",
+    "longName": "cubic decimetre per second"
+  },
+  {
+    "symbol": "N45",
+    "unitId": 5125173,
+    "shortName": "(m³/s)/Pa",
+    "longName": "cubic metre per second pascal"
+  },
+  {
+    "symbol": "J95",
+    "unitId": 4864309,
+    "shortName": "fl oz (UK)/d",
+    "longName": "ounce (UK fluid) per day"
+  },
+  {
+    "symbol": "J96",
+    "unitId": 4864310,
+    "shortName": "fl oz (UK)/h",
+    "longName": "ounce (UK fluid) per hour"
+  },
+  {
+    "symbol": "J97",
+    "unitId": 4864311,
+    "shortName": "fl oz (UK)/min",
+    "longName": "ounce (UK fluid) per minute"
+  },
+  {
+    "symbol": "J98",
+    "unitId": 4864312,
+    "shortName": "fl oz (UK)/s",
+    "longName": "ounce (UK fluid) per second"
+  },
+  {
+    "symbol": "J99",
+    "unitId": 4864313,
+    "shortName": "fl oz (US)/d",
+    "longName": "ounce (US fluid) per day"
+  },
+  {
+    "symbol": "K10",
+    "unitId": 4927792,
+    "shortName": "fl oz (US)/h",
+    "longName": "ounce (US fluid) per hour"
+  },
+  {
+    "symbol": "K11",
+    "unitId": 4927793,
+    "shortName": "fl oz (US)/min",
+    "longName": "ounce (US fluid) per minute"
+  },
+  {
+    "symbol": "K12",
+    "unitId": 4927794,
+    "shortName": "fl oz (US)/s",
+    "longName": "ounce (US fluid) per second"
+  },
+  {
+    "symbol": "K22",
+    "unitId": 4928050,
+    "shortName": "ft³/d",
+    "longName": "cubic foot per day"
+  },
+  {
+    "symbol": "K26",
+    "unitId": 4928054,
+    "shortName": "gal (UK)/d",
+    "longName": "gallon (UK) per day"
+  },
+  {
+    "symbol": "K27",
+    "unitId": 4928055,
+    "shortName": "gal (UK)/h",
+    "longName": "gallon (UK) per hour"
+  },
+  {
+    "symbol": "K28",
+    "unitId": 4928056,
+    "shortName": "gal (UK)/s",
+    "longName": "gallon (UK) per second"
+  },
+  {
+    "symbol": "K30",
+    "unitId": 4928304,
+    "shortName": "gal (US liq.)/s",
+    "longName": "gallon (US liquid) per second"
+  },
+  {
+    "symbol": "K32",
+    "unitId": 4928306,
+    "shortName": "gi (UK)/d",
+    "longName": "gill (UK) per day"
+  },
+  {
+    "symbol": "K33",
+    "unitId": 4928307,
+    "shortName": "gi (UK)/h",
+    "longName": "gill (UK) per hour"
+  },
+  {
+    "symbol": "K34",
+    "unitId": 4928308,
+    "shortName": "gi (UK)/min",
+    "longName": "gill (UK) per minute"
+  },
+  {
+    "symbol": "K35",
+    "unitId": 4928309,
+    "shortName": "gi (UK)/s",
+    "longName": "gill (UK) per second"
+  },
+  {
+    "symbol": "K36",
+    "unitId": 4928310,
+    "shortName": "gi (US)/d",
+    "longName": "gill (US) per day"
+  },
+  {
+    "symbol": "K37",
+    "unitId": 4928311,
+    "shortName": "gi (US)/h",
+    "longName": "gill (US) per hour"
+  },
+  {
+    "symbol": "K38",
+    "unitId": 4928312,
+    "shortName": "gi (US)/min",
+    "longName": "gill (US) per minute"
+  },
+  {
+    "symbol": "K39",
+    "unitId": 4928313,
+    "shortName": "gi (US)/s",
+    "longName": "gill (US) per second"
+  },
+  {
+    "symbol": "K94",
+    "unitId": 4929844,
+    "shortName": "qt (UK liq.)/d",
+    "longName": "quart (UK liquid) per day"
+  },
+  {
+    "symbol": "K95",
+    "unitId": 4929845,
+    "shortName": "qt (UK liq.)/h",
+    "longName": "quart (UK liquid) per hour"
+  },
+  {
+    "symbol": "K96",
+    "unitId": 4929846,
+    "shortName": "qt (UK liq.)/min",
+    "longName": "quart (UK liquid) per minute"
+  },
+  {
+    "symbol": "K97",
+    "unitId": 4929847,
+    "shortName": "qt (UK liq.)/s",
+    "longName": "quart (UK liquid) per second"
+  },
+  {
+    "symbol": "K98",
+    "unitId": 4929848,
+    "shortName": "qt (US liq.)/d",
+    "longName": "quart (US liquid) per day"
+  },
+  {
+    "symbol": "K99",
+    "unitId": 4929849,
+    "shortName": "qt (US liq.)/h",
+    "longName": "quart (US liquid) per hour"
+  },
+  {
+    "symbol": "L10",
+    "unitId": 4993328,
+    "shortName": "qt (US liq.)/min",
+    "longName": "quart (US liquid) per minute"
+  },
+  {
+    "symbol": "L11",
+    "unitId": 4993329,
+    "shortName": "qt (US liq.)/s",
+    "longName": "quart (US liquid) per second"
+  },
+  {
+    "symbol": "L44",
+    "unitId": 4994100,
+    "shortName": "pk (UK)/d",
+    "longName": "peck (UK) per day"
+  },
+  {
+    "symbol": "L45",
+    "unitId": 4994101,
+    "shortName": "pk (UK)/h",
+    "longName": "peck (UK) per hour"
+  },
+  {
+    "symbol": "L46",
+    "unitId": 4994102,
+    "shortName": "pk (UK)/min",
+    "longName": "peck (UK) per minute"
+  },
+  {
+    "symbol": "L47",
+    "unitId": 4994103,
+    "shortName": "pk (UK)/s",
+    "longName": "peck (UK) per second"
+  },
+  {
+    "symbol": "L48",
+    "unitId": 4994104,
+    "shortName": "pk (US dry)/d",
+    "longName": "peck (US dry) per day"
+  },
+  {
+    "symbol": "L49",
+    "unitId": 4994105,
+    "shortName": "pk (US dry)/h",
+    "longName": "peck (US dry) per hour"
+  },
+  {
+    "symbol": "L50",
+    "unitId": 4994352,
+    "shortName": "pk (US dry)/min",
+    "longName": "peck (US dry) per minute"
+  },
+  {
+    "symbol": "L51",
+    "unitId": 4994353,
+    "shortName": "pk (US dry)/s",
+    "longName": "peck (US dry) per second"
+  },
+  {
+    "symbol": "L53",
+    "unitId": 4994355,
+    "shortName": "pt (UK)/d",
+    "longName": "pint (UK) per day"
+  },
+  {
+    "symbol": "L54",
+    "unitId": 4994356,
+    "shortName": "pt (UK)/h",
+    "longName": "pint (UK) per hour"
+  },
+  {
+    "symbol": "L55",
+    "unitId": 4994357,
+    "shortName": "pt (UK)/min",
+    "longName": "pint (UK) per minute"
+  },
+  {
+    "symbol": "L56",
+    "unitId": 4994358,
+    "shortName": "pt (UK)/s",
+    "longName": "pint (UK) per second"
+  },
+  {
+    "symbol": "L57",
+    "unitId": 4994359,
+    "shortName": "pt (US liq.)/d",
+    "longName": "pint (US liquid) per day"
+  },
+  {
+    "symbol": "L58",
+    "unitId": 4994360,
+    "shortName": "pt (US liq.)/h",
+    "longName": "pint (US liquid) per hour"
+  },
+  {
+    "symbol": "L59",
+    "unitId": 4994361,
+    "shortName": "pt (US liq.)/min",
+    "longName": "pint (US liquid) per minute"
+  },
+  {
+    "symbol": "L60",
+    "unitId": 4994608,
+    "shortName": "pt (US liq.)/s",
+    "longName": "pint (US liquid) per second"
+  },
+  {
+    "symbol": "M12",
+    "unitId": 5058866,
+    "shortName": "yd³/d",
+    "longName": "cubic yard per day"
+  },
+  {
+    "symbol": "M13",
+    "unitId": 5058867,
+    "shortName": "yd³/h",
+    "longName": "cubic yard per hour"
+  },
+  {
+    "symbol": "M15",
+    "unitId": 5058869,
+    "shortName": "yd³/min",
+    "longName": "cubic yard per minute"
+  },
+  {
+    "symbol": "M16",
+    "unitId": 5058870,
+    "shortName": "yd³/s",
+    "longName": "cubic yard per second"
+  },
+  {
+    "symbol": "H60",
+    "unitId": 4732464,
+    "shortName": "m³/m³",
+    "longName": "cubic metre per cubic metre"
+  },
+  {
+    "symbol": "F92",
+    "unitId": 4602162,
+    "shortName": "bar·m³/s",
+    "longName": "bar cubic metre per second"
+  },
+  {
+    "symbol": "F91",
+    "unitId": 4602161,
+    "shortName": "bar·l/s",
+    "longName": "bar litre per second"
+  },
+  {
+    "symbol": "K87",
+    "unitId": 4929591,
+    "shortName": "psi·in³/s",
+    "longName": "psi cubic inch per second"
+  },
+  {
+    "symbol": "K88",
+    "unitId": 4929592,
+    "shortName": "psi·l/s",
+    "longName": "psi litre per second"
+  },
+  {
+    "symbol": "K89",
+    "unitId": 4929593,
+    "shortName": "psi·m³/s",
+    "longName": "psi cubic metre per second"
+  },
+  {
+    "symbol": "K90",
+    "unitId": 4929840,
+    "shortName": "psi·yd³/s",
+    "longName": "psi cubic yard per second"
+  },
+  {
+    "symbol": "Q29",
+    "unitId": 5321273,
+    "shortName": "µg/hg",
+    "longName": "microgram per hectogram"
+  },
+  {
+    "symbol": "KEL",
+    "unitId": 4932940,
+    "shortName": "K",
+    "longName": "kelvin"
+  },
+  {
+    "symbol": "CEL",
+    "unitId": 4408652,
+    "shortName": "°C",
+    "longName": "degree Celsius"
+  },
+  {
+    "symbol": "H12",
+    "unitId": 4731186,
+    "shortName": "°C/h",
+    "longName": "degree Celsius per hour"
+  },
+  {
+    "symbol": "F60",
+    "unitId": 4601392,
+    "shortName": "°C/bar",
+    "longName": "degree Celsius per bar"
+  },
+  {
+    "symbol": "E98",
+    "unitId": 4536632,
+    "shortName": "°C/K",
+    "longName": "degree Celsius per kelvin"
+  },
+  {
+    "symbol": "H13",
+    "unitId": 4731187,
+    "shortName": "°C/min",
+    "longName": "degree Celsius per minute"
+  },
+  {
+    "symbol": "H14",
+    "unitId": 4731188,
+    "shortName": "°C/s",
+    "longName": "degree Celsius per second"
+  },
+  {
+    "symbol": "F61",
+    "unitId": 4601393,
+    "shortName": "K/bar",
+    "longName": "kelvin per bar"
+  },
+  {
+    "symbol": "F10",
+    "unitId": 4600112,
+    "shortName": "K/h",
+    "longName": "kelvin per hour"
+  },
+  {
+    "symbol": "F02",
+    "unitId": 4599858,
+    "shortName": "K/K",
+    "longName": "kelvin per kelvin"
+  },
+  {
+    "symbol": "F11",
+    "unitId": 4600113,
+    "shortName": "K/min",
+    "longName": "kelvin per minute"
+  },
+  {
+    "symbol": "F12",
+    "unitId": 4600114,
+    "shortName": "K/s",
+    "longName": "kelvin per second"
+  },
+  {
+    "symbol": "N79",
+    "unitId": 5125945,
+    "shortName": "K/Pa",
+    "longName": "kelvin per pascal"
+  },
+  {
+    "symbol": "J20",
+    "unitId": 4862512,
+    "shortName": "°F/K",
+    "longName": "degree Fahrenheit per kelvin"
+  },
+  {
+    "symbol": "J21",
+    "unitId": 4862513,
+    "shortName": "°F/bar",
+    "longName": "degree Fahrenheit per bar"
+  },
+  {
+    "symbol": "J26",
+    "unitId": 4862518,
+    "shortName": "1/°F",
+    "longName": "reciprocal degree Fahrenheit"
+  },
+  {
+    "symbol": "A48",
+    "unitId": 4273208,
+    "shortName": "°R",
+    "longName": "degree Rankine"
+  },
+  {
+    "symbol": "FAH",
+    "unitId": 4604232,
+    "shortName": "°F",
+    "longName": "degree Fahrenheit"
+  },
+  {
+    "symbol": "J23",
+    "unitId": 4862515,
+    "shortName": "°F/h",
+    "longName": "degree Fahrenheit per hour"
+  },
+  {
+    "symbol": "J24",
+    "unitId": 4862516,
+    "shortName": "°F/min",
+    "longName": "degree Fahrenheit per minute"
+  },
+  {
+    "symbol": "J25",
+    "unitId": 4862517,
+    "shortName": "°F/s",
+    "longName": "degree Fahrenheit per second"
+  },
+  {
+    "symbol": "J28",
+    "unitId": 4862520,
+    "shortName": "°R/h",
+    "longName": "degree Rankine per hour"
+  },
+  {
+    "symbol": "J29",
+    "unitId": 4862521,
+    "shortName": "°R/min",
+    "longName": "degree Rankine per minute"
+  },
+  {
+    "symbol": "J30",
+    "unitId": 4862768,
+    "shortName": "°R/s",
+    "longName": "degree Rankine per second"
+  },
+  {
+    "symbol": "C91",
+    "unitId": 4405553,
+    "shortName": "K⁻¹",
+    "longName": "reciprocal kelvin or kelvin to the power minus one"
+  },
+  {
+    "symbol": "M20",
+    "unitId": 5059120,
+    "shortName": "1/MK",
+    "longName": "reciprocal megakelvin or megakelvin to the power minus one"
+  },
+  {
+    "symbol": "C64",
+    "unitId": 4404788,
+    "shortName": "Pa/K",
+    "longName": "pascal per kelvin"
+  },
+  {
+    "symbol": "F81",
+    "unitId": 4601905,
+    "shortName": "bar/K",
+    "longName": "bar per kelvin"
+  },
+  {
+    "symbol": "J55",
+    "unitId": 4863285,
+    "shortName": "W·s",
+    "longName": "watt second"
+  },
+  {
+    "symbol": "BTU",
+    "unitId": 4346965,
+    "shortName": "BtuIT",
+    "longName": "British thermal unit (international table)"
+  },
+  {
+    "symbol": "A1",
+    "unitId": 16689,
+    "shortName": "cal₁₅",
+    "longName": "15 °C calorie"
+  },
+  {
+    "symbol": "D70",
+    "unitId": 4470576,
+    "shortName": "calIT",
+    "longName": "calorie (international table)"
+  },
+  {
+    "symbol": "J39",
+    "unitId": 4862777,
+    "shortName": "Btu",
+    "longName": "British thermal unit (mean)"
+  },
+  {
+    "symbol": "J75",
+    "unitId": 4863797,
+    "shortName": "cal",
+    "longName": "calorie (mean)"
+  },
+  {
+    "symbol": "K51",
+    "unitId": 4928817,
+    "shortName": "kcal",
+    "longName": "kilocalorie (mean)"
+  },
+  {
+    "symbol": "E14",
+    "unitId": 4534580,
+    "shortName": "kcalIT",
+    "longName": "kilocalorie (international table)"
+  },
+  {
+    "symbol": "K53",
+    "unitId": 4928819,
+    "shortName": "kcalth",
+    "longName": "kilocalorie (thermochemical)"
+  },
+  {
+    "symbol": "N66",
+    "unitId": 5125686,
+    "shortName": "Btu (39 ºF)",
+    "longName": "British thermal unit (39 ºF)"
+  },
+  {
+    "symbol": "N67",
+    "unitId": 5125687,
+    "shortName": "Btu (59 ºF)",
+    "longName": "British thermal unit (59 ºF)"
+  },
+  {
+    "symbol": "N68",
+    "unitId": 5125688,
+    "shortName": "Btu (60 ºF)",
+    "longName": "British thermal unit (60 ºF)"
+  },
+  {
+    "symbol": "N69",
+    "unitId": 5125689,
+    "shortName": "cal₂₀",
+    "longName": "calorie (20 ºC)"
+  },
+  {
+    "symbol": "N70",
+    "unitId": 5125936,
+    "shortName": "quad",
+    "longName": "quad (1015 BtuIT)"
+  },
+  {
+    "symbol": "N71",
+    "unitId": 5125937,
+    "shortName": "thm (EC)",
+    "longName": "therm (EC)"
+  },
+  {
+    "symbol": "N72",
+    "unitId": 5125938,
+    "shortName": "thm (US)",
+    "longName": "therm (U.S.)"
+  },
+  {
+    "symbol": "D35",
+    "unitId": 4469557,
+    "shortName": "calth",
+    "longName": "calorie (thermochemical)"
+  },
+  {
+    "symbol": "2I",
+    "unitId": 12873,
+    "shortName": "BtuIT/h",
+    "longName": "British thermal unit (international table) per hour"
+  },
+  {
+    "symbol": "J44",
+    "unitId": 4863028,
+    "shortName": "BtuIT/min",
+    "longName": "British thermal unit (international table) per minute"
+  },
+  {
+    "symbol": "J45",
+    "unitId": 4863029,
+    "shortName": "BtuIT/s",
+    "longName": "British thermal unit (international table) per second"
+  },
+  {
+    "symbol": "J47",
+    "unitId": 4863031,
+    "shortName": "Btuth/h",
+    "longName": "British thermal unit (thermochemical) per hour"
+  },
+  {
+    "symbol": "J51",
+    "unitId": 4863281,
+    "shortName": "Btuth/min",
+    "longName": "British thermal unit (thermochemical) per minute"
+  },
+  {
+    "symbol": "J52",
+    "unitId": 4863282,
+    "shortName": "Btuth/s",
+    "longName": "British thermal unit (thermochemical) per second"
+  },
+  {
+    "symbol": "J81",
+    "unitId": 4864049,
+    "shortName": "calth/min",
+    "longName": "calorie (thermochemical) per minute"
+  },
+  {
+    "symbol": "J82",
+    "unitId": 4864050,
+    "shortName": "calth/s",
+    "longName": "calorie (thermochemical) per second"
+  },
+  {
+    "symbol": "E15",
+    "unitId": 4534581,
+    "shortName": "kcalth/h",
+    "longName": "kilocalorie (thermochemical) per hour"
+  },
+  {
+    "symbol": "K54",
+    "unitId": 4928820,
+    "shortName": "kcalth/min",
+    "longName": "kilocalorie (thermochemical) per minute"
+  },
+  {
+    "symbol": "K55",
+    "unitId": 4928821,
+    "shortName": "kcalth/s",
+    "longName": "kilocalorie (thermochemical) per second"
+  },
+  {
+    "symbol": "D54",
+    "unitId": 4470068,
+    "shortName": "W/m²",
+    "longName": "watt per square metre"
+  },
+  {
+    "symbol": "N48",
+    "unitId": 5125176,
+    "shortName": "W/cm²",
+    "longName": "watt per square centimetre"
+  },
+  {
+    "symbol": "N49",
+    "unitId": 5125177,
+    "shortName": "W/in²",
+    "longName": "watt per square inch"
+  },
+  {
+    "symbol": "N50",
+    "unitId": 5125424,
+    "shortName": "BtuIT/(ft²·h)",
+    "longName": "British thermal unit (international table) per square foot hour"
+  },
+  {
+    "symbol": "N51",
+    "unitId": 5125425,
+    "shortName": "Btuth/(ft²·h)",
+    "longName": "British thermal unit (thermochemical) per square foot hour"
+  },
+  {
+    "symbol": "N52",
+    "unitId": 5125426,
+    "shortName": "Btuth/(ft²·min)",
+    "longName": "British thermal unit (thermochemical) per square foot minute"
+  },
+  {
+    "symbol": "N53",
+    "unitId": 5125427,
+    "shortName": "BtuIT/(ft²·s)",
+    "longName": "British thermal unit (international table) per square foot second"
+  },
+  {
+    "symbol": "N54",
+    "unitId": 5125428,
+    "shortName": "Btuth/(ft²·s)",
+    "longName": "British thermal unit (thermochemical) per square foot second"
+  },
+  {
+    "symbol": "N55",
+    "unitId": 5125429,
+    "shortName": "BtuIT/(in²·s)",
+    "longName": "British thermal unit (international table) per square inch second"
+  },
+  {
+    "symbol": "N56",
+    "unitId": 5125430,
+    "shortName": "calth/(cm²·min)",
+    "longName": "calorie (thermochemical) per square centimetre minute"
+  },
+  {
+    "symbol": "N57",
+    "unitId": 5125431,
+    "shortName": "calth/(cm²·s)",
+    "longName": "calorie (thermochemical) per square centimetre second"
+  },
+  {
+    "symbol": "D53",
+    "unitId": 4470067,
+    "shortName": "W/(m·K)",
+    "longName": "watt per metre kelvin"
+  },
+  {
+    "symbol": "N80",
+    "unitId": 5126192,
+    "shortName": "W/(m·°C)",
+    "longName": "watt per metre degree Celsius"
+  },
+  {
+    "symbol": "N81",
+    "unitId": 5126193,
+    "shortName": "kW/(m·K)",
+    "longName": "kilowatt per metre kelvin"
+  },
+  {
+    "symbol": "N82",
+    "unitId": 5126194,
+    "shortName": "kW/(m·°C)",
+    "longName": "kilowatt per metre degree Celsius"
+  },
+  {
+    "symbol": "A22",
+    "unitId": 4272690,
+    "shortName": "BtuIT/(s·ft·°R)",
+    "longName": "British thermal unit (international table) per second foot degree Rankine"
+  },
+  {
+    "symbol": "D71",
+    "unitId": 4470577,
+    "shortName": "calIT/(s·cm·K)",
+    "longName": "calorie (international table) per second centimetre kelvin"
+  },
+  {
+    "symbol": "D38",
+    "unitId": 4469560,
+    "shortName": "calth/(s·cm·K)",
+    "longName": "calorie (thermochemical) per second centimetre kelvin"
+  },
+  {
+    "symbol": "J40",
+    "unitId": 4863024,
+    "shortName": "BtuIT·ft/(h·ft²·°F)",
+    "longName": "British thermal unit (international table) foot per hour square foot degree Fahrenheit"
+  },
+  {
+    "symbol": "J41",
+    "unitId": 4863025,
+    "shortName": "BtuIT·in/(h·ft²·°F)",
+    "longName": "British thermal unit (international table) inch per hour square foot degree Fahrenheit"
+  },
+  {
+    "symbol": "J42",
+    "unitId": 4863026,
+    "shortName": "BtuIT·in/(s·ft²·°F)",
+    "longName": "British thermal unit (international table) inch per second square foot degree Fahrenheit"
+  },
+  {
+    "symbol": "J46",
+    "unitId": 4863030,
+    "shortName": "Btuth·ft/(h·ft²·°F)",
+    "longName": "British thermal unit (thermochemical) foot per hour square foot degree Fahrenheit"
+  },
+  {
+    "symbol": "J48",
+    "unitId": 4863032,
+    "shortName": "Btuth·in/(h·ft²·°F)",
+    "longName": "British thermal unit (thermochemical) inch per hour square foot degree Fahrenheit"
+  },
+  {
+    "symbol": "J49",
+    "unitId": 4863033,
+    "shortName": "Btuth·in/(s·ft²·°F)",
+    "longName": "British thermal unit (thermochemical) inch per second square foot degree Fahrenheit"
+  },
+  {
+    "symbol": "J78",
+    "unitId": 4863800,
+    "shortName": "calth/(cm·s·°C)",
+    "longName": "calorie (thermochemical) per centimetre second degree Celsius"
+  },
+  {
+    "symbol": "K52",
+    "unitId": 4928818,
+    "shortName": "kcal/(m·h·°C)",
+    "longName": "kilocalorie (international table) per hour metre degree Celsius"
+  },
+  {
+    "symbol": "D55",
+    "unitId": 4470069,
+    "shortName": "W/(m²·K)",
+    "longName": "watt per square metre kelvin"
+  },
+  {
+    "symbol": "N78",
+    "unitId": 5125944,
+    "shortName": "kW/(m²·K)",
+    "longName": "kilowatt per square metre kelvin"
+  },
+  {
+    "symbol": "D72",
+    "unitId": 4470578,
+    "shortName": "calIT/(s·cm²·K)",
+    "longName": "calorie (international table) per second square centimetre kelvin"
+  },
+  {
+    "symbol": "D39",
+    "unitId": 4469561,
+    "shortName": "calth/(s·cm²·K)",
+    "longName": "calorie (thermochemical) per second square centimetre kelvin"
+  },
+  {
+    "symbol": "A20",
+    "unitId": 4272688,
+    "shortName": "BtuIT/(s·ft²·°R)",
+    "longName": "British thermal unit (international table) per second square foot degree Rankine"
+  },
+  {
+    "symbol": "A23",
+    "unitId": 4272691,
+    "shortName": "BtuIT/(h·ft²·°R)",
+    "longName": "British thermal unit (international table) per hour square foot degree Rankine"
+  },
+  {
+    "symbol": "N74",
+    "unitId": 5125940,
+    "shortName": "BtuIT/(h·ft²·ºF)",
+    "longName": "British thermal unit (international table) per hour square foot degree Fahrenheit"
+  },
+  {
+    "symbol": "N75",
+    "unitId": 5125941,
+    "shortName": "Btuth/(h·ft²·ºF)",
+    "longName": "British thermal unit (thermochemical) per hour square foot degree Fahrenheit"
+  },
+  {
+    "symbol": "N76",
+    "unitId": 5125942,
+    "shortName": "BtuIT/(s·ft²·ºF)",
+    "longName": "British thermal unit (international table) per second square foot degree Fahrenheit"
+  },
+  {
+    "symbol": "N77",
+    "unitId": 5125943,
+    "shortName": "Btuth/(s·ft²·ºF)",
+    "longName": "British thermal unit (thermochemical) per second square foot degree Fahrenheit"
+  },
+  {
+    "symbol": "D19",
+    "unitId": 4469049,
+    "shortName": "m²·K/W",
+    "longName": "square metre kelvin per watt"
+  },
+  {
+    "symbol": "J19",
+    "unitId": 4862265,
+    "shortName": "°F·h·ft²/Btuth",
+    "longName": "degree Fahrenheit hour square foot per British thermal unit (thermochemical)"
+  },
+  {
+    "symbol": "J22",
+    "unitId": 4862514,
+    "shortName": "°F·h·ft²/BtuIT",
+    "longName": "degree Fahrenheit hour square foot per British thermal unit (international table)"
+  },
+  {
+    "symbol": "J83",
+    "unitId": 4864051,
+    "shortName": "clo",
+    "longName": "clo"
+  },
+  {
+    "symbol": "L14",
+    "unitId": 4993332,
+    "shortName": "m²·h·°C/kcal",
+    "longName": "square metre hour degree Celsius per kilocalorie (international table)"
+  },
+  {
+    "symbol": "B21",
+    "unitId": 4338225,
+    "shortName": "K/W",
+    "longName": "kelvin per watt"
+  },
+  {
+    "symbol": "H35",
+    "unitId": 4731701,
+    "shortName": "K·m/W",
+    "longName": "kelvin metre per watt"
+  },
+  {
+    "symbol": "N84",
+    "unitId": 5126196,
+    "shortName": "ºF/(BtuIT/h)",
+    "longName": "degree Fahrenheit hour per British thermal unit (international table)"
+  },
+  {
+    "symbol": "N85",
+    "unitId": 5126197,
+    "shortName": "ºF/(Btuth/h)",
+    "longName": "degree Fahrenheit hour per British thermal unit (thermochemical)"
+  },
+  {
+    "symbol": "N86",
+    "unitId": 5126198,
+    "shortName": "ºF/(BtuIT/s)",
+    "longName": "degree Fahrenheit second per British thermal unit (international table)"
+  },
+  {
+    "symbol": "N87",
+    "unitId": 5126199,
+    "shortName": "ºF/(Btuth/s)",
+    "longName": "degree Fahrenheit second per British thermal unit (thermochemical)"
+  },
+  {
+    "symbol": "N88",
+    "unitId": 5126200,
+    "shortName": "ºF·h·ft²/(BtuIT·in)",
+    "longName": "degree Fahrenheit hour square foot per British thermal unit (international table) inch"
+  },
+  {
+    "symbol": "N89",
+    "unitId": 5126201,
+    "shortName": "ºF·h·ft²/(Btuth·in)",
+    "longName": "degree Fahrenheit hour square foot per British thermal unit (thermochemical) inch"
+  },
+  {
+    "symbol": "D52",
+    "unitId": 4470066,
+    "shortName": "W/K",
+    "longName": "watt per kelvin"
+  },
+  {
+    "symbol": "E97",
+    "unitId": 4536631,
+    "shortName": "mm/(°C·m)",
+    "longName": "millimetre per degree Celcius metre"
+  },
+  {
+    "symbol": "F53",
+    "unitId": 4601139,
+    "shortName": "mm/K",
+    "longName": "millimetre per kelvin"
+  },
+  {
+    "symbol": "N83",
+    "unitId": 5126195,
+    "shortName": "m/(°C·m)",
+    "longName": "metre per degree Celcius metre"
+  },
+  {
+    "symbol": "JE",
+    "unitId": 19013,
+    "shortName": "J/K",
+    "longName": "joule per kelvin"
+  },
+  {
+    "symbol": "B41",
+    "unitId": 4338737,
+    "shortName": "kJ/K",
+    "longName": "kilojoule per kelvin"
+  },
+  {
+    "symbol": "J43",
+    "unitId": 4863027,
+    "shortName": "BtuIT/(lb·°F)",
+    "longName": "British thermal unit (international table) per pound degree Fahrenheit"
+  },
+  {
+    "symbol": "J50",
+    "unitId": 4863280,
+    "shortName": "Btuth/(lb·°F)",
+    "longName": "British thermal unit (thermochemical) per pound degree Fahrenheit"
+  },
+  {
+    "symbol": "J76",
+    "unitId": 4863798,
+    "shortName": "calIT/(g·°C)",
+    "longName": "calorie (international table) per gram degree Celsius"
+  },
+  {
+    "symbol": "J79",
+    "unitId": 4863801,
+    "shortName": "calth/(g·°C)",
+    "longName": "calorie (thermochemical) per gram degree Celsius"
+  },
+  {
+    "symbol": "N60",
+    "unitId": 5125680,
+    "shortName": "BtuIT/ºF",
+    "longName": "British thermal unit (international table) per degree Fahrenheit"
+  },
+  {
+    "symbol": "N61",
+    "unitId": 5125681,
+    "shortName": "Btuth/ºF",
+    "longName": "British thermal unit (thermochemical) per degree Fahrenheit"
+  },
+  {
+    "symbol": "N62",
+    "unitId": 5125682,
+    "shortName": "BtuIT/ºR",
+    "longName": "British thermal unit (international table) per degree Rankine"
+  },
+  {
+    "symbol": "N63",
+    "unitId": 5125683,
+    "shortName": "Btuth/ºR",
+    "longName": "British thermal unit (thermochemical) per degree Rankine"
+  },
+  {
+    "symbol": "N64",
+    "unitId": 5125684,
+    "shortName": "(Btuth/°R)/lb",
+    "longName": "British thermal unit (thermochemical) per pound degree Rankine"
+  },
+  {
+    "symbol": "N65",
+    "unitId": 5125685,
+    "shortName": "(kcalIT/K)/g",
+    "longName": "kilocalorie (international table) per gram kelvin"
+  },
+  {
+    "symbol": "B11",
+    "unitId": 4337969,
+    "shortName": "J/(kg·K)",
+    "longName": "joule per kilogram kelvin"
+  },
+  {
+    "symbol": "B43",
+    "unitId": 4338739,
+    "shortName": "kJ/(kg·K)",
+    "longName": "kilojoule per kilogram kelvin"
+  },
+  {
+    "symbol": "A21",
+    "unitId": 4272689,
+    "shortName": "Btu/IT(lb·°R)",
+    "longName": "British thermal unit (international table) per pound degree Rankine"
+  },
+  {
+    "symbol": "D76",
+    "unitId": 4470582,
+    "shortName": "calIT/(g·K)",
+    "longName": "calorie (international table) per gram kelvin"
+  },
+  {
+    "symbol": "D37",
+    "unitId": 4469559,
+    "shortName": "calth/(g·K)",
+    "longName": "calorie (thermochemical) per gram kelvin"
+  },
+  {
+    "symbol": "J2",
+    "unitId": 18994,
+    "shortName": "J/kg",
+    "longName": "joule per kilogram"
+  },
+  {
+    "symbol": "D95",
+    "unitId": 4471093,
+    "shortName": "J/g",
+    "longName": "joule per gram"
+  },
+  {
+    "symbol": "JK",
+    "unitId": 19019,
+    "shortName": "MJ/kg",
+    "longName": "megajoule per kilogram"
+  },
+  {
+    "symbol": "B42",
+    "unitId": 4338738,
+    "shortName": "kJ/kg",
+    "longName": "kilojoule per kilogram"
+  },
+  {
+    "symbol": "AZ",
+    "unitId": 16730,
+    "shortName": "BtuIT/lb",
+    "longName": "British thermal unit (international table) per pound"
+  },
+  {
+    "symbol": "D75",
+    "unitId": 4470581,
+    "shortName": "calIT/g",
+    "longName": "calorie (international table) per gram"
+  },
+  {
+    "symbol": "N73",
+    "unitId": 5125939,
+    "shortName": "Btuth/lb",
+    "longName": "British thermal unit (thermochemical) per pound"
+  },
+  {
+    "symbol": "B36",
+    "unitId": 4338486,
+    "shortName": "calth/g",
+    "longName": "calorie (thermochemical) per gram"
+  },
+  {
+    "symbol": "N58",
+    "unitId": 5125432,
+    "shortName": "BtuIT/ft³",
+    "longName": "British thermal unit (international table) per cubic foot"
+  },
+  {
+    "symbol": "N59",
+    "unitId": 5125433,
+    "shortName": "Btuth/ft³",
+    "longName": "British thermal unit (thermochemical) per cubic foot"
+  },
+  {
+    "symbol": "Q31",
+    "unitId": 5321521,
+    "shortName": "kJ/g",
+    "longName": "kilojoule per gram"
+  },
+  {
+    "symbol": "AMP",
+    "unitId": 4279632,
+    "shortName": "A",
+    "longName": "ampere"
+  },
+  {
+    "symbol": "B22",
+    "unitId": 4338226,
+    "shortName": "kA",
+    "longName": "kiloampere"
+  },
+  {
+    "symbol": "H38",
+    "unitId": 4731704,
+    "shortName": "MA",
+    "longName": "megaampere"
+  },
+  {
+    "symbol": "4K",
+    "unitId": 13387,
+    "shortName": "mA",
+    "longName": "milliampere"
+  },
+  {
+    "symbol": "B84",
+    "unitId": 4339764,
+    "shortName": "µA",
+    "longName": "microampere"
+  },
+  {
+    "symbol": "C39",
+    "unitId": 4404025,
+    "shortName": "nA",
+    "longName": "nanoampere"
+  },
+  {
+    "symbol": "C70",
+    "unitId": 4405040,
+    "shortName": "pA",
+    "longName": "picoampere"
+  },
+  {
+    "symbol": "N96",
+    "unitId": 5126454,
+    "shortName": "Bi",
+    "longName": "biot"
+  },
+  {
+    "symbol": "N97",
+    "unitId": 5126455,
+    "shortName": "Gi",
+    "longName": "gilbert"
+  },
+  {
+    "symbol": "COU",
+    "unitId": 4411221,
+    "shortName": "C",
+    "longName": "coulomb"
+  },
+  {
+    "symbol": "A8",
+    "unitId": 16696,
+    "shortName": "A·s",
+    "longName": "ampere second"
+  },
+  {
+    "symbol": "H32",
+    "unitId": 4731698,
+    "shortName": "A²·s",
+    "longName": "ampere squared second"
+  },
+  {
+    "symbol": "AMH",
+    "unitId": 4279624,
+    "shortName": "A·h",
+    "longName": "ampere hour"
+  },
+  {
+    "symbol": "TAH",
+    "unitId": 5521736,
+    "shortName": "kA·h",
+    "longName": "kiloampere hour (thousand ampere hour)"
+  },
+  {
+    "symbol": "D77",
+    "unitId": 4470583,
+    "shortName": "MC",
+    "longName": "megacoulomb"
+  },
+  {
+    "symbol": "D86",
+    "unitId": 4470838,
+    "shortName": "mC",
+    "longName": "millicoulomb"
+  },
+  {
+    "symbol": "B26",
+    "unitId": 4338230,
+    "shortName": "kC",
+    "longName": "kilocoulomb"
+  },
+  {
+    "symbol": "B86",
+    "unitId": 4339766,
+    "shortName": "µC",
+    "longName": "microcoulomb"
+  },
+  {
+    "symbol": "C40",
+    "unitId": 4404272,
+    "shortName": "nC",
+    "longName": "nanocoulomb"
+  },
+  {
+    "symbol": "C71",
+    "unitId": 4405041,
+    "shortName": "pC",
+    "longName": "picocoulomb"
+  },
+  {
+    "symbol": "E09",
+    "unitId": 4534329,
+    "shortName": "mA·h",
+    "longName": "milliampere hour"
+  },
+  {
+    "symbol": "N95",
+    "unitId": 5126453,
+    "shortName": "A·min",
+    "longName": "ampere minute"
+  },
+  {
+    "symbol": "N94",
+    "unitId": 5126452,
+    "shortName": "Fr",
+    "longName": "franklin"
+  },
+  {
+    "symbol": "A29",
+    "unitId": 4272697,
+    "shortName": "C/m³",
+    "longName": "coulomb per cubic metre"
+  },
+  {
+    "symbol": "A84",
+    "unitId": 4274228,
+    "shortName": "GC/m³",
+    "longName": "gigacoulomb per cubic metre"
+  },
+  {
+    "symbol": "A30",
+    "unitId": 4272944,
+    "shortName": "C/mm³",
+    "longName": "coulomb per cubic millimetre"
+  },
+  {
+    "symbol": "B69",
+    "unitId": 4339257,
+    "shortName": "MC/m³",
+    "longName": "megacoulomb per cubic metre"
+  },
+  {
+    "symbol": "A28",
+    "unitId": 4272696,
+    "shortName": "C/cm³",
+    "longName": "coulomb per cubic centimetre"
+  },
+  {
+    "symbol": "B27",
+    "unitId": 4338231,
+    "shortName": "kC/m³",
+    "longName": "kilocoulomb per cubic metre"
+  },
+  {
+    "symbol": "D88",
+    "unitId": 4470840,
+    "shortName": "mC/m³",
+    "longName": "millicoulomb per cubic metre"
+  },
+  {
+    "symbol": "B87",
+    "unitId": 4339767,
+    "shortName": "µC/m³",
+    "longName": "microcoulomb per cubic metre"
+  },
+  {
+    "symbol": "A34",
+    "unitId": 4272948,
+    "shortName": "C/m²",
+    "longName": "coulomb per square metre"
+  },
+  {
+    "symbol": "B70",
+    "unitId": 4339504,
+    "shortName": "MC/m²",
+    "longName": "megacoulomb per square metre"
+  },
+  {
+    "symbol": "A35",
+    "unitId": 4272949,
+    "shortName": "C/mm²",
+    "longName": "coulomb per square millimetre"
+  },
+  {
+    "symbol": "A33",
+    "unitId": 4272947,
+    "shortName": "C/cm²",
+    "longName": "coulomb per square centimetre"
+  },
+  {
+    "symbol": "B28",
+    "unitId": 4338232,
+    "shortName": "kC/m²",
+    "longName": "kilocoulomb per square metre"
+  },
+  {
+    "symbol": "D89",
+    "unitId": 4470841,
+    "shortName": "mC/m²",
+    "longName": "millicoulomb per square metre"
+  },
+  {
+    "symbol": "B88",
+    "unitId": 4339768,
+    "shortName": "µC/m²",
+    "longName": "microcoulomb per square metre"
+  },
+  {
+    "symbol": "D50",
+    "unitId": 4470064,
+    "shortName": "V/m",
+    "longName": "volt per metre"
+  },
+  {
+    "symbol": "H45",
+    "unitId": 4731957,
+    "shortName": "V·s/m",
+    "longName": "volt second per metre"
+  },
+  {
+    "symbol": "D45",
+    "unitId": 4469813,
+    "shortName": "V²/K²",
+    "longName": "volt squared per kelvin squared"
+  },
+  {
+    "symbol": "D51",
+    "unitId": 4470065,
+    "shortName": "V/mm",
+    "longName": "volt per millimetre"
+  },
+  {
+    "symbol": "H24",
+    "unitId": 4731444,
+    "shortName": "V/µs",
+    "longName": "volt per microsecond"
+  },
+  {
+    "symbol": "H62",
+    "unitId": 4732466,
+    "shortName": "mV/min",
+    "longName": "millivolt per minute"
+  },
+  {
+    "symbol": "H46",
+    "unitId": 4731958,
+    "shortName": "V/s",
+    "longName": "volt per second"
+  },
+  {
+    "symbol": "B79",
+    "unitId": 4339513,
+    "shortName": "MV/m",
+    "longName": "megavolt per metre"
+  },
+  {
+    "symbol": "B55",
+    "unitId": 4338997,
+    "shortName": "kV/m",
+    "longName": "kilovolt per metre"
+  },
+  {
+    "symbol": "D47",
+    "unitId": 4469815,
+    "shortName": "V/cm",
+    "longName": "volt per centimetre"
+  },
+  {
+    "symbol": "C30",
+    "unitId": 4404016,
+    "shortName": "mV/m",
+    "longName": "millivolt per metre"
+  },
+  {
+    "symbol": "C3",
+    "unitId": 17203,
+    "shortName": "µV/m",
+    "longName": "microvolt per metre"
+  },
+  {
+    "symbol": "G60",
+    "unitId": 4666928,
+    "shortName": "V/bar",
+    "longName": "volt per bar"
+  },
+  {
+    "symbol": "N98",
+    "unitId": 5126456,
+    "shortName": "V/Pa",
+    "longName": "volt per pascal"
+  },
+  {
+    "symbol": "F87",
+    "unitId": 4601911,
+    "shortName": "V/(l·min)",
+    "longName": "volt per litre minute"
+  },
+  {
+    "symbol": "H22",
+    "unitId": 4731442,
+    "shortName": "V/(lbf/in²)",
+    "longName": "volt square inch per pound-force"
+  },
+  {
+    "symbol": "H23",
+    "unitId": 4731443,
+    "shortName": "V/in",
+    "longName": "volt per inch"
+  },
+  {
+    "symbol": "VLT",
+    "unitId": 5655636,
+    "shortName": "V",
+    "longName": "volt"
+  },
+  {
+    "symbol": "B78",
+    "unitId": 4339512,
+    "shortName": "MV",
+    "longName": "megavolt"
+  },
+  {
+    "symbol": "KVT",
+    "unitId": 4937300,
+    "shortName": "kV",
+    "longName": "kilovolt"
+  },
+  {
+    "symbol": "2Z",
+    "unitId": 12890,
+    "shortName": "mV",
+    "longName": "millivolt"
+  },
+  {
+    "symbol": "D82",
+    "unitId": 4470834,
+    "shortName": "µV",
+    "longName": "microvolt"
+  },
+  {
+    "symbol": "N99",
+    "unitId": 5126457,
+    "shortName": "pV",
+    "longName": "picovolt"
+  },
+  {
+    "symbol": "FAR",
+    "unitId": 4604242,
+    "shortName": "F",
+    "longName": "farad"
+  },
+  {
+    "symbol": "H48",
+    "unitId": 4731960,
+    "shortName": "aF",
+    "longName": "attofarad"
+  },
+  {
+    "symbol": "C10",
+    "unitId": 4403504,
+    "shortName": "mF",
+    "longName": "millifarad"
+  },
+  {
+    "symbol": "4O",
+    "unitId": 13391,
+    "shortName": "µF",
+    "longName": "microfarad"
+  },
+  {
+    "symbol": "C41",
+    "unitId": 4404273,
+    "shortName": "nF",
+    "longName": "nanofarad"
+  },
+  {
+    "symbol": "4T",
+    "unitId": 13396,
+    "shortName": "pF",
+    "longName": "picofarad"
+  },
+  {
+    "symbol": "N90",
+    "unitId": 5126448,
+    "shortName": "kF",
+    "longName": "kilofarad"
+  },
+  {
+    "symbol": "A69",
+    "unitId": 4273721,
+    "shortName": "F/m",
+    "longName": "farad per metre"
+  },
+  {
+    "symbol": "H28",
+    "unitId": 4731448,
+    "shortName": "µF/km",
+    "longName": "microfarad per kilometre"
+  },
+  {
+    "symbol": "H33",
+    "unitId": 4731699,
+    "shortName": "F/km",
+    "longName": "farad per kilometre"
+  },
+  {
+    "symbol": "B89",
+    "unitId": 4339769,
+    "shortName": "µF/m",
+    "longName": "microfarad per metre"
+  },
+  {
+    "symbol": "C42",
+    "unitId": 4404274,
+    "shortName": "nF/m",
+    "longName": "nanofarad per metre"
+  },
+  {
+    "symbol": "C72",
+    "unitId": 4405042,
+    "shortName": "pF/m",
+    "longName": "picofarad per metre"
+  },
+  {
+    "symbol": "A26",
+    "unitId": 4272694,
+    "shortName": "C·m",
+    "longName": "coulomb metre"
+  },
+  {
+    "symbol": "A41",
+    "unitId": 4273201,
+    "shortName": "A/m²",
+    "longName": "ampere per square metre"
+  },
+  {
+    "symbol": "H31",
+    "unitId": 4731697,
+    "shortName": "A/kg",
+    "longName": "ampere per kilogram"
+  },
+  {
+    "symbol": "B66",
+    "unitId": 4339254,
+    "shortName": "MA/m²",
+    "longName": "megaampere per square metre"
+  },
+  {
+    "symbol": "A7",
+    "unitId": 16695,
+    "shortName": "A/mm²",
+    "longName": "ampere per square millimetre"
+  },
+  {
+    "symbol": "A4",
+    "unitId": 16692,
+    "shortName": "A/cm²",
+    "longName": "ampere per square centimetre"
+  },
+  {
+    "symbol": "B23",
+    "unitId": 4338227,
+    "shortName": "kA/m²",
+    "longName": "kiloampere per square metre"
+  },
+  {
+    "symbol": "G59",
+    "unitId": 4666681,
+    "shortName": "mA/(l·min)",
+    "longName": "milliampere per litre minute"
+  },
+  {
+    "symbol": "N93",
+    "unitId": 5126451,
+    "shortName": "A/Pa",
+    "longName": "ampere per pascal"
+  },
+  {
+    "symbol": "F57",
+    "unitId": 4601143,
+    "shortName": "mA/(lbf/in²)",
+    "longName": "milliampere per pound-force per square inch"
+  },
+  {
+    "symbol": "F59",
+    "unitId": 4601145,
+    "shortName": "mA/bar",
+    "longName": "milliampere per bar"
+  },
+  {
+    "symbol": "AE",
+    "unitId": 16709,
+    "shortName": "A/m",
+    "longName": "ampere per metre"
+  },
+  {
+    "symbol": "B24",
+    "unitId": 4338228,
+    "shortName": "kA/m",
+    "longName": "kiloampere per metre"
+  },
+  {
+    "symbol": "A3",
+    "unitId": 16691,
+    "shortName": "A/mm",
+    "longName": "ampere per millimetre"
+  },
+  {
+    "symbol": "A2",
+    "unitId": 16690,
+    "shortName": "A/cm",
+    "longName": "ampere per centimetre"
+  },
+  {
+    "symbol": "F76",
+    "unitId": 4601654,
+    "shortName": "mA/mm",
+    "longName": "milliampere per millimetre"
+  },
+  {
+    "symbol": "F08",
+    "unitId": 4599864,
+    "shortName": "mA/in",
+    "longName": "milliampere per inch"
+  },
+  {
+    "symbol": "P10",
+    "unitId": 5255472,
+    "shortName": "C/m",
+    "longName": "coulomb per metre"
+  },
+  {
+    "symbol": "D33",
+    "unitId": 4469555,
+    "shortName": "T",
+    "longName": "tesla"
+  },
+  {
+    "symbol": "C29",
+    "unitId": 4403769,
+    "shortName": "mT",
+    "longName": "millitesla"
+  },
+  {
+    "symbol": "D81",
+    "unitId": 4470833,
+    "shortName": "µT",
+    "longName": "microtesla"
+  },
+  {
+    "symbol": "C48",
+    "unitId": 4404280,
+    "shortName": "nT",
+    "longName": "nanotesla"
+  },
+  {
+    "symbol": "P13",
+    "unitId": 5255475,
+    "shortName": "kT",
+    "longName": "kilotesla"
+  },
+  {
+    "symbol": "P12",
+    "unitId": 5255474,
+    "shortName": "γ",
+    "longName": "gamma"
+  },
+  {
+    "symbol": "WEB",
+    "unitId": 5719362,
+    "shortName": "Wb",
+    "longName": "weber"
+  },
+  {
+    "symbol": "C33",
+    "unitId": 4404019,
+    "shortName": "mWb",
+    "longName": "milliweber"
+  },
+  {
+    "symbol": "P11",
+    "unitId": 5255473,
+    "shortName": "kWb",
+    "longName": "kiloweber"
+  },
+  {
+    "symbol": "D59",
+    "unitId": 4470073,
+    "shortName": "Wb/m",
+    "longName": "weber per metre"
+  },
+  {
+    "symbol": "B56",
+    "unitId": 4338998,
+    "shortName": "kWb/m",
+    "longName": "kiloweber per metre"
+  },
+  {
+    "symbol": "D60",
+    "unitId": 4470320,
+    "shortName": "Wb/mm",
+    "longName": "weber per millimetre"
+  },
+  {
+    "symbol": 81,
+    "unitId": 14385,
+    "shortName": "H",
+    "longName": "henry"
+  },
+  {
+    "symbol": "C14",
+    "unitId": 4403508,
+    "shortName": "mH",
+    "longName": "millihenry"
+  },
+  {
+    "symbol": "B90",
+    "unitId": 4340016,
+    "shortName": "µH",
+    "longName": "microhenry"
+  },
+  {
+    "symbol": "C43",
+    "unitId": 4404275,
+    "shortName": "nH",
+    "longName": "nanohenry"
+  },
+  {
+    "symbol": "C73",
+    "unitId": 4405043,
+    "shortName": "pH",
+    "longName": "picohenry"
+  },
+  {
+    "symbol": "H03",
+    "unitId": 4730931,
+    "shortName": "H/kΩ",
+    "longName": "henry per kiloohm"
+  },
+  {
+    "symbol": "H04",
+    "unitId": 4730932,
+    "shortName": "H/Ω",
+    "longName": "henry per ohm"
+  },
+  {
+    "symbol": "G98",
+    "unitId": 4667704,
+    "shortName": "µH/kΩ",
+    "longName": "microhenry per kiloohm"
+  },
+  {
+    "symbol": "G99",
+    "unitId": 4667705,
+    "shortName": "µH/Ω",
+    "longName": "microhenry per ohm"
+  },
+  {
+    "symbol": "H05",
+    "unitId": 4730933,
+    "shortName": "mH/kΩ",
+    "longName": "millihenry per kiloohm"
+  },
+  {
+    "symbol": "H06",
+    "unitId": 4730934,
+    "shortName": "mH/Ω",
+    "longName": "millihenry per ohm"
+  },
+  {
+    "symbol": "P24",
+    "unitId": 5255732,
+    "shortName": "kH",
+    "longName": "kilohenry"
+  },
+  {
+    "symbol": "A98",
+    "unitId": 4274488,
+    "shortName": "H/m",
+    "longName": "henry per metre"
+  },
+  {
+    "symbol": "B91",
+    "unitId": 4340017,
+    "shortName": "µH/m",
+    "longName": "microhenry per metre"
+  },
+  {
+    "symbol": "C44",
+    "unitId": 4404276,
+    "shortName": "nH/m",
+    "longName": "nanohenry per metre"
+  },
+  {
+    "symbol": "A5",
+    "unitId": 16693,
+    "shortName": "A·m²",
+    "longName": "ampere square metre"
+  },
+  {
+    "symbol": "B8",
+    "unitId": 16952,
+    "shortName": "J/m³",
+    "longName": "joule per cubic metre"
+  },
+  {
+    "symbol": "OHM",
+    "unitId": 5195853,
+    "shortName": "Ω",
+    "longName": "ohm"
+  },
+  {
+    "symbol": "A87",
+    "unitId": 4274231,
+    "shortName": "GΩ",
+    "longName": "gigaohm"
+  },
+  {
+    "symbol": "B75",
+    "unitId": 4339509,
+    "shortName": "MΩ",
+    "longName": "megaohm"
+  },
+  {
+    "symbol": "H44",
+    "unitId": 4731956,
+    "shortName": "TΩ",
+    "longName": "teraohm"
+  },
+  {
+    "symbol": "B49",
+    "unitId": 4338745,
+    "shortName": "kΩ",
+    "longName": "kiloohm"
+  },
+  {
+    "symbol": "E45",
+    "unitId": 4535349,
+    "shortName": "mΩ",
+    "longName": "milliohm"
+  },
+  {
+    "symbol": "B94",
+    "unitId": 4340020,
+    "shortName": "µΩ",
+    "longName": "microohm"
+  },
+  {
+    "symbol": "P22",
+    "unitId": 5255730,
+    "shortName": "nΩ",
+    "longName": "nanoohm"
+  },
+  {
+    "symbol": "M26",
+    "unitId": 5059126,
+    "shortName": "GΩ/m",
+    "longName": "gigaohm per metre"
+  },
+  {
+    "symbol": "SIE",
+    "unitId": 5458245,
+    "shortName": "S",
+    "longName": "siemens"
+  },
+  {
+    "symbol": "B53",
+    "unitId": 4338995,
+    "shortName": "kS",
+    "longName": "kilosiemens"
+  },
+  {
+    "symbol": "C27",
+    "unitId": 4403767,
+    "shortName": "mS",
+    "longName": "millisiemens"
+  },
+  {
+    "symbol": "B99",
+    "unitId": 4340025,
+    "shortName": "µS",
+    "longName": "microsiemens"
+  },
+  {
+    "symbol": "G42",
+    "unitId": 4666418,
+    "shortName": "µS/cm",
+    "longName": "microsiemens per centimetre"
+  },
+  {
+    "symbol": "G43",
+    "unitId": 4666419,
+    "shortName": "µS/m",
+    "longName": "microsiemens per metre"
+  },
+  {
+    "symbol": "N92",
+    "unitId": 5126450,
+    "shortName": "pS",
+    "longName": "picosiemens"
+  },
+  {
+    "symbol": "C61",
+    "unitId": 4404785,
+    "shortName": "Ω·m",
+    "longName": "ohm metre"
+  },
+  {
+    "symbol": "A88",
+    "unitId": 4274232,
+    "shortName": "GΩ·m",
+    "longName": "gigaohm metre"
+  },
+  {
+    "symbol": "B76",
+    "unitId": 4339510,
+    "shortName": "MΩ·m",
+    "longName": "megaohm metre"
+  },
+  {
+    "symbol": "H88",
+    "unitId": 4732984,
+    "shortName": "MΩ·km",
+    "longName": "megaohm kilometre"
+  },
+  {
+    "symbol": "B50",
+    "unitId": 4338992,
+    "shortName": "kΩ·m",
+    "longName": "kiloohm metre"
+  },
+  {
+    "symbol": "C60",
+    "unitId": 4404784,
+    "shortName": "Ω·cm",
+    "longName": "ohm centimetre"
+  },
+  {
+    "symbol": "C23",
+    "unitId": 4403763,
+    "shortName": "mΩ·m",
+    "longName": "milliohm metre"
+  },
+  {
+    "symbol": "B95",
+    "unitId": 4340021,
+    "shortName": "µΩ·m",
+    "longName": "microohm metre"
+  },
+  {
+    "symbol": "C46",
+    "unitId": 4404278,
+    "shortName": "nΩ·m",
+    "longName": "nanoohm metre"
+  },
+  {
+    "symbol": "M24",
+    "unitId": 5059124,
+    "shortName": "Ω·km",
+    "longName": "ohm kilometre"
+  },
+  {
+    "symbol": "P23",
+    "unitId": 5255731,
+    "shortName": "Ω·cmil/ft",
+    "longName": "ohm circular-mil per foot"
+  },
+  {
+    "symbol": "F56",
+    "unitId": 4601142,
+    "shortName": "Ω/km",
+    "longName": "ohm per kilometre"
+  },
+  {
+    "symbol": "H26",
+    "unitId": 4731446,
+    "shortName": "Ω/m",
+    "longName": "ohm per metre"
+  },
+  {
+    "symbol": "H37",
+    "unitId": 4731703,
+    "shortName": "MΩ/m",
+    "longName": "megaohm per metre"
+  },
+  {
+    "symbol": "F54",
+    "unitId": 4601140,
+    "shortName": "mΩ/m",
+    "longName": "milliohm per metre"
+  },
+  {
+    "symbol": "H36",
+    "unitId": 4731702,
+    "shortName": "MΩ/km",
+    "longName": "megaohm per kilometre"
+  },
+  {
+    "symbol": "F55",
+    "unitId": 4601141,
+    "shortName": "Ω/mi",
+    "longName": "ohm per mile (statute mile)"
+  },
+  {
+    "symbol": "D10",
+    "unitId": 4469040,
+    "shortName": "S/m",
+    "longName": "siemens per metre"
+  },
+  {
+    "symbol": "H43",
+    "unitId": 4731955,
+    "shortName": "S/cm",
+    "longName": "siemens per centimetre"
+  },
+  {
+    "symbol": "H61",
+    "unitId": 4732465,
+    "shortName": "mS/cm",
+    "longName": "millisiemens per centimetre"
+  },
+  {
+    "symbol": "B77",
+    "unitId": 4339511,
+    "shortName": "MS/m",
+    "longName": "megasiemens per metre"
+  },
+  {
+    "symbol": "B54",
+    "unitId": 4338996,
+    "shortName": "kS/m",
+    "longName": "kilosiemens per metre"
+  },
+  {
+    "symbol": "G45",
+    "unitId": 4666421,
+    "shortName": "nS/m",
+    "longName": "nanosiemens per metre"
+  },
+  {
+    "symbol": "G44",
+    "unitId": 4666420,
+    "shortName": "nS/cm",
+    "longName": "nanosiemens per centimetre"
+  },
+  {
+    "symbol": "L42",
+    "unitId": 4994098,
+    "shortName": "pS/m",
+    "longName": "picosiemens per metre"
+  },
+  {
+    "symbol": "C89",
+    "unitId": 4405305,
+    "shortName": "H⁻¹",
+    "longName": "reciprocal henry"
+  },
+  {
+    "symbol": "P14",
+    "unitId": 5255476,
+    "shortName": "J/s",
+    "longName": "joule per second"
+  },
+  {
+    "symbol": "D31",
+    "unitId": 4469553,
+    "shortName": "TW",
+    "longName": "terawatt"
+  },
+  {
+    "symbol": "P15",
+    "unitId": 5255477,
+    "shortName": "J/min",
+    "longName": "joule per minute"
+  },
+  {
+    "symbol": "P16",
+    "unitId": 5255478,
+    "shortName": "J/h",
+    "longName": "joule per hour"
+  },
+  {
+    "symbol": "P17",
+    "unitId": 5255479,
+    "shortName": "J/d",
+    "longName": "joule per day"
+  },
+  {
+    "symbol": "P18",
+    "unitId": 5255480,
+    "shortName": "kJ/s",
+    "longName": "kilojoule per second"
+  },
+  {
+    "symbol": "P19",
+    "unitId": 5255481,
+    "shortName": "kJ/min",
+    "longName": "kilojoule per minute"
+  },
+  {
+    "symbol": "P20",
+    "unitId": 5255728,
+    "shortName": "kJ/h",
+    "longName": "kilojoule per hour"
+  },
+  {
+    "symbol": "P21",
+    "unitId": 5255729,
+    "shortName": "kJ/d",
+    "longName": "kilojoule per day"
+  },
+  {
+    "symbol": "K43",
+    "unitId": 4928563,
+    "shortName": "electric hp",
+    "longName": "horsepower (electric)"
+  },
+  {
+    "symbol": "C49",
+    "unitId": 4404281,
+    "shortName": "nW",
+    "longName": "nanowatt"
+  },
+  {
+    "symbol": "C75",
+    "unitId": 4405045,
+    "shortName": "pW",
+    "longName": "picowatt"
+  },
+  {
+    "symbol": "D46",
+    "unitId": 4469814,
+    "shortName": "V·A",
+    "longName": "volt - ampere"
+  },
+  {
+    "symbol": "MVA",
+    "unitId": 5068353,
+    "shortName": "MV·A",
+    "longName": "megavolt - ampere"
+  },
+  {
+    "symbol": "KVA",
+    "unitId": 4937281,
+    "shortName": "kV·A",
+    "longName": "kilovolt - ampere"
+  },
+  {
+    "symbol": "M35",
+    "unitId": 5059381,
+    "shortName": "mV·A",
+    "longName": "millivolt - ampere"
+  },
+  {
+    "symbol": "D44",
+    "unitId": 4469812,
+    "shortName": "var",
+    "longName": "var"
+  },
+  {
+    "symbol": "K5",
+    "unitId": 19253,
+    "shortName": "kvar",
+    "longName": "kilovolt ampere (reactive)"
+  },
+  {
+    "symbol": "KVR",
+    "unitId": 4937298,
+    "shortName": "kvar",
+    "longName": "kilovar"
+  },
+  {
+    "symbol": "MAR",
+    "unitId": 5062994,
+    "shortName": "mvar",
+    "longName": "megavar"
+  },
+  {
+    "symbol": "N91",
+    "unitId": 5126449,
+    "shortName": "1/J",
+    "longName": "reciprocal joule"
+  },
+  {
+    "symbol": "M30",
+    "unitId": 5059376,
+    "shortName": "1/(V·A·s)",
+    "longName": "reciprocal volt - ampere reciprocal second"
+  },
+  {
+    "symbol": "M17",
+    "unitId": 5058871,
+    "shortName": "kHz·m",
+    "longName": "kilohertz metre"
+  },
+  {
+    "symbol": "M18",
+    "unitId": 5058872,
+    "shortName": "GHz·m",
+    "longName": "gigahertz metre"
+  },
+  {
+    "symbol": "M27",
+    "unitId": 5059127,
+    "shortName": "MHz·m",
+    "longName": "megahertz metre"
+  },
+  {
+    "symbol": "M21",
+    "unitId": 5059121,
+    "shortName": "1/kVAh",
+    "longName": "reciprocal kilovolt - ampere reciprocal hour"
+  },
+  {
+    "symbol": "H34",
+    "unitId": 4731700,
+    "shortName": "Hz·m",
+    "longName": "hertz metre"
+  },
+  {
+    "symbol": "H39",
+    "unitId": 4731705,
+    "shortName": "MHz·km",
+    "longName": "megahertz kilometre"
+  },
+  {
+    "symbol": "C84",
+    "unitId": 4405300,
+    "shortName": "rad/m",
+    "longName": "radian per metre"
+  },
+  {
+    "symbol": "JM",
+    "unitId": 19021,
+    "shortName": "MJ/m³",
+    "longName": "megajoule per cubic metre"
+  },
+  {
+    "symbol": "B14",
+    "unitId": 4337972,
+    "shortName": "J/m⁴",
+    "longName": "joule per metre to the fourth power"
+  },
+  {
+    "symbol": "B13",
+    "unitId": 4337971,
+    "shortName": "J/m²",
+    "longName": "joule per square metre"
+  },
+  {
+    "symbol": "D1",
+    "unitId": 17457,
+    "shortName": "s⁻¹/sr",
+    "longName": "reciprocal second per steradian"
+  },
+  {
+    "symbol": "D2",
+    "unitId": 17458,
+    "shortName": "s⁻¹/(sr·m²)",
+    "longName": "reciprocal second per steradian metre squared"
+  },
+  {
+    "symbol": "C99",
+    "unitId": 4405561,
+    "shortName": "s⁻¹/m²",
+    "longName": "reciprocal second per metre squared"
+  },
+  {
+    "symbol": "C93",
+    "unitId": 4405555,
+    "shortName": "m⁻²",
+    "longName": "reciprocal square metre"
+  },
+  {
+    "symbol": "H47",
+    "unitId": 4731959,
+    "shortName": "W/m³",
+    "longName": "watt per cubic metre"
+  },
+  {
+    "symbol": "H74",
+    "unitId": 4732724,
+    "shortName": "W/m",
+    "longName": "watt per metre"
+  },
+  {
+    "symbol": "E43",
+    "unitId": 4535347,
+    "shortName": "J/cm²",
+    "longName": "joule per square centimetre"
+  },
+  {
+    "symbol": "P37",
+    "unitId": 5255991,
+    "shortName": "BtuIT/ft²",
+    "longName": "British thermal unit (international table) per square foot"
+  },
+  {
+    "symbol": "P38",
+    "unitId": 5255992,
+    "shortName": "Btuth/ft²",
+    "longName": "British thermal unit (thermochemical) per square foot"
+  },
+  {
+    "symbol": "P39",
+    "unitId": 5255993,
+    "shortName": "calth/cm²",
+    "longName": "calorie (thermochemical) per square centimetre"
+  },
+  {
+    "symbol": "P40",
+    "unitId": 5256240,
+    "shortName": "Ly",
+    "longName": "langley"
+  },
+  {
+    "symbol": "D57",
+    "unitId": 4470071,
+    "shortName": "W/sr",
+    "longName": "watt per steradian"
+  },
+  {
+    "symbol": "D58",
+    "unitId": 4470072,
+    "shortName": "W/(sr·m²)",
+    "longName": "watt per steradian square metre"
+  },
+  {
+    "symbol": "D56",
+    "unitId": 4470070,
+    "shortName": "W/(m²·K⁴)",
+    "longName": "watt per square metre kelvin to the fourth power"
+  },
+  {
+    "symbol": "D18",
+    "unitId": 4469048,
+    "shortName": "m·K",
+    "longName": "metre kelvin"
+  },
+  {
+    "symbol": "CDL",
+    "unitId": 4408396,
+    "shortName": "cd",
+    "longName": "candela"
+  },
+  {
+    "symbol": "P33",
+    "unitId": 5255987,
+    "shortName": "kcd",
+    "longName": "kilocandela"
+  },
+  {
+    "symbol": "P34",
+    "unitId": 5255988,
+    "shortName": "mcd",
+    "longName": "millicandela"
+  },
+  {
+    "symbol": "P35",
+    "unitId": 5255989,
+    "shortName": "HK",
+    "longName": "Hefner-Kerze"
+  },
+  {
+    "symbol": "P36",
+    "unitId": 5255990,
+    "shortName": "IK",
+    "longName": "international candle"
+  },
+  {
+    "symbol": "LUM",
+    "unitId": 5002573,
+    "shortName": "lm",
+    "longName": "lumen"
+  },
+  {
+    "symbol": "B62",
+    "unitId": 4339250,
+    "shortName": "lm·s",
+    "longName": "lumen second"
+  },
+  {
+    "symbol": "B59",
+    "unitId": 4339001,
+    "shortName": "lm·h",
+    "longName": "lumen hour"
+  },
+  {
+    "symbol": "A24",
+    "unitId": 4272692,
+    "shortName": "cd/m²",
+    "longName": "candela per square metre"
+  },
+  {
+    "symbol": "P28",
+    "unitId": 5255736,
+    "shortName": "cd/in²",
+    "longName": "candela per square inch"
+  },
+  {
+    "symbol": "P29",
+    "unitId": 5255737,
+    "shortName": "ftL",
+    "longName": "footlambert"
+  },
+  {
+    "symbol": "P30",
+    "unitId": 5255984,
+    "shortName": "Lb",
+    "longName": "lambert"
+  },
+  {
+    "symbol": "P31",
+    "unitId": 5255985,
+    "shortName": "sb",
+    "longName": "stilb"
+  },
+  {
+    "symbol": "P32",
+    "unitId": 5255986,
+    "shortName": "cd/ft²",
+    "longName": "candela per square foot"
+  },
+  {
+    "symbol": "B60",
+    "unitId": 4339248,
+    "shortName": "lm/m²",
+    "longName": "lumen per square metre"
+  },
+  {
+    "symbol": "LUX",
+    "unitId": 5002584,
+    "shortName": "lx",
+    "longName": "lux"
+  },
+  {
+    "symbol": "KLX",
+    "unitId": 4934744,
+    "shortName": "klx",
+    "longName": "kilolux"
+  },
+  {
+    "symbol": "P25",
+    "unitId": 5255733,
+    "shortName": "lm/ft²",
+    "longName": "lumen per square foot"
+  },
+  {
+    "symbol": "P26",
+    "unitId": 5255734,
+    "shortName": "ph",
+    "longName": "phot"
+  },
+  {
+    "symbol": "P27",
+    "unitId": 5255735,
+    "shortName": "ftc",
+    "longName": "footcandle"
+  },
+  {
+    "symbol": "B64",
+    "unitId": 4339252,
+    "shortName": "lx·s",
+    "longName": "lux second"
+  },
+  {
+    "symbol": "B63",
+    "unitId": 4339251,
+    "shortName": "lx·h",
+    "longName": "lux hour"
+  },
+  {
+    "symbol": "B61",
+    "unitId": 4339249,
+    "shortName": "lm/W",
+    "longName": "lumen per watt"
+  },
+  {
+    "symbol": "D22",
+    "unitId": 4469298,
+    "shortName": "m²/mol",
+    "longName": "square metre per mole"
+  },
+  {
+    "symbol": "D9",
+    "unitId": 17465,
+    "shortName": "dyn/cm²",
+    "longName": "dyne per square centimetre"
+  },
+  {
+    "symbol": "A60",
+    "unitId": 4273712,
+    "shortName": "erg/cm³",
+    "longName": "erg per cubic centimetre"
+  },
+  {
+    "symbol": "C32",
+    "unitId": 4404018,
+    "shortName": "mW/m²",
+    "longName": "milliwatt per square metre"
+  },
+  {
+    "symbol": "D85",
+    "unitId": 4470837,
+    "shortName": "µW/m²",
+    "longName": "microwatt per square metre"
+  },
+  {
+    "symbol": "C76",
+    "unitId": 4405046,
+    "shortName": "pW/m²",
+    "longName": "picowatt per square metre"
+  },
+  {
+    "symbol": "A64",
+    "unitId": 4273716,
+    "shortName": "erg/(s·cm²)",
+    "longName": "erg per second square centimetre"
+  },
+  {
+    "symbol": "C67",
+    "unitId": 4404791,
+    "shortName": "Pa· s/m",
+    "longName": "pascal second per metre"
+  },
+  {
+    "symbol": "A50",
+    "unitId": 4273456,
+    "shortName": "dyn·s/cm³",
+    "longName": "dyne second per cubic centimetre"
+  },
+  {
+    "symbol": "C66",
+    "unitId": 4404790,
+    "shortName": "Pa·s/m³",
+    "longName": "pascal second per cubic metre"
+  },
+  {
+    "symbol": "A52",
+    "unitId": 4273458,
+    "shortName": "dyn·s/cm⁵",
+    "longName": "dyne second per centimetre to the fifth power"
+  },
+  {
+    "symbol": "M32",
+    "unitId": 5059378,
+    "shortName": "Pa·s/l",
+    "longName": "pascal second per litre"
+  },
+  {
+    "symbol": "C58",
+    "unitId": 4404536,
+    "shortName": "N·s/m",
+    "longName": "newton second per metre"
+  },
+  {
+    "symbol": "A51",
+    "unitId": 4273457,
+    "shortName": "dyn·s/cm",
+    "longName": "dyne second per centimetre"
+  },
+  {
+    "symbol": "P43",
+    "unitId": 5256243,
+    "shortName": "B/m",
+    "longName": "bel per metre"
+  },
+  {
+    "symbol": "H51",
+    "unitId": 4732209,
+    "shortName": "dB/km",
+    "longName": "decibel per kilometre"
+  },
+  {
+    "symbol": "H52",
+    "unitId": 4732210,
+    "shortName": "dB/m",
+    "longName": "decibel per metre"
+  },
+  {
+    "symbol": "P42",
+    "unitId": 5256242,
+    "shortName": "Pa²·s",
+    "longName": "pascal squared second"
+  },
+  {
+    "symbol": "P41",
+    "unitId": 5256241,
+    "shortName": "dec",
+    "longName": "decade (logarithmic)"
+  },
+  {
+    "symbol": "C34",
+    "unitId": 4404020,
+    "shortName": "mol",
+    "longName": "mole"
+  },
+  {
+    "symbol": "B45",
+    "unitId": 4338741,
+    "shortName": "kmol",
+    "longName": "kilomole"
+  },
+  {
+    "symbol": "C18",
+    "unitId": 4403512,
+    "shortName": "mmol",
+    "longName": "millimole"
+  },
+  {
+    "symbol": "FH",
+    "unitId": 17992,
+    "shortName": "µmol",
+    "longName": "micromole"
+  },
+  {
+    "symbol": "P44",
+    "unitId": 5256244,
+    "shortName": "lbmol",
+    "longName": "pound mole"
+  },
+  {
+    "symbol": "C95",
+    "unitId": 4405557,
+    "shortName": "mol⁻¹",
+    "longName": "reciprocal mole"
+  },
+  {
+    "symbol": "D74",
+    "unitId": 4470580,
+    "shortName": "kg/mol",
+    "longName": "kilogram per mole"
+  },
+  {
+    "symbol": "A94",
+    "unitId": 4274484,
+    "shortName": "g/mol",
+    "longName": "gram per mole"
+  },
+  {
+    "symbol": "A40",
+    "unitId": 4273200,
+    "shortName": "m³/mol",
+    "longName": "cubic metre per mole"
+  },
+  {
+    "symbol": "A37",
+    "unitId": 4272951,
+    "shortName": "dm³/mol",
+    "longName": "cubic decimetre per mole"
+  },
+  {
+    "symbol": "A36",
+    "unitId": 4272950,
+    "shortName": "cm³/mol",
+    "longName": "cubic centimetre per mole"
+  },
+  {
+    "symbol": "B58",
+    "unitId": 4339000,
+    "shortName": "l/mol",
+    "longName": "litre per mole"
+  },
+  {
+    "symbol": "B15",
+    "unitId": 4337973,
+    "shortName": "J/mol",
+    "longName": "joule per mole"
+  },
+  {
+    "symbol": "B44",
+    "unitId": 4338740,
+    "shortName": "kJ/mol",
+    "longName": "kilojoule per mole"
+  },
+  {
+    "symbol": "B16",
+    "unitId": 4337974,
+    "shortName": "J/(mol·K)",
+    "longName": "joule per mole kelvin"
+  },
+  {
+    "symbol": "C86",
+    "unitId": 4405302,
+    "shortName": "m⁻³",
+    "longName": "reciprocal cubic metre"
+  },
+  {
+    "symbol": "H50",
+    "unitId": 4732208,
+    "shortName": "cm⁻³",
+    "longName": "reciprocal cubic centimetre"
+  },
+  {
+    "symbol": "L20",
+    "unitId": 4993584,
+    "shortName": "1/mm³",
+    "longName": "reciprocal cubic millimetre"
+  },
+  {
+    "symbol": "K20",
+    "unitId": 4928048,
+    "shortName": "1/ft³",
+    "longName": "reciprocal cubic foot"
+  },
+  {
+    "symbol": "K49",
+    "unitId": 4928569,
+    "shortName": "1/in³",
+    "longName": "reciprocal cubic inch"
+  },
+  {
+    "symbol": "K63",
+    "unitId": 4929075,
+    "shortName": "1/l",
+    "longName": "reciprocal litre"
+  },
+  {
+    "symbol": "M10",
+    "unitId": 5058864,
+    "shortName": "1/yd³",
+    "longName": "reciprocal cubic yard"
+  },
+  {
+    "symbol": "C36",
+    "unitId": 4404022,
+    "shortName": "mol/m³",
+    "longName": "mole per cubic metre"
+  },
+  {
+    "symbol": "C38",
+    "unitId": 4404024,
+    "shortName": "mol/l",
+    "longName": "mole per litre"
+  },
+  {
+    "symbol": "C35",
+    "unitId": 4404021,
+    "shortName": "mol/dm³",
+    "longName": "mole per cubic decimetre"
+  },
+  {
+    "symbol": "B46",
+    "unitId": 4338742,
+    "shortName": "kmol/m³",
+    "longName": "kilomole per cubic metre"
+  },
+  {
+    "symbol": "E95",
+    "unitId": 4536629,
+    "shortName": "mol/s",
+    "longName": "mole per second"
+  },
+  {
+    "symbol": "M33",
+    "unitId": 5059379,
+    "shortName": "mmol/l",
+    "longName": "millimole per litre"
+  },
+  {
+    "symbol": "P51",
+    "unitId": 5256497,
+    "shortName": "(mol/kg)/Pa",
+    "longName": "mol per kilogram pascal"
+  },
+  {
+    "symbol": "P52",
+    "unitId": 5256498,
+    "shortName": "(mol/m³)/Pa",
+    "longName": "mol per cubic metre pascal"
+  },
+  {
+    "symbol": "K59",
+    "unitId": 4928825,
+    "shortName": "(kmol/m³)/K",
+    "longName": "kilomole per cubic metre kelvin"
+  },
+  {
+    "symbol": "K60",
+    "unitId": 4929072,
+    "shortName": "(kmol/m³)/bar",
+    "longName": "kilomole per cubic metre bar"
+  },
+  {
+    "symbol": "K93",
+    "unitId": 4929843,
+    "shortName": "1/psi",
+    "longName": "reciprocal psi"
+  },
+  {
+    "symbol": "L24",
+    "unitId": 4993588,
+    "shortName": "(mol/kg)/K",
+    "longName": "mole per kilogram kelvin"
+  },
+  {
+    "symbol": "L25",
+    "unitId": 4993589,
+    "shortName": "(mol/kg)/bar",
+    "longName": "mole per kilogram bar"
+  },
+  {
+    "symbol": "L26",
+    "unitId": 4993590,
+    "shortName": "(mol/l)/K",
+    "longName": "mole per litre kelvin"
+  },
+  {
+    "symbol": "L27",
+    "unitId": 4993591,
+    "shortName": "(mol/l)/bar",
+    "longName": "mole per litre bar"
+  },
+  {
+    "symbol": "L28",
+    "unitId": 4993592,
+    "shortName": "(mol/m³)/K",
+    "longName": "mole per cubic metre kelvin"
+  },
+  {
+    "symbol": "L29",
+    "unitId": 4993593,
+    "shortName": "(mol/m³)/bar",
+    "longName": "mole per cubic metre bar"
+  },
+  {
+    "symbol": "C19",
+    "unitId": 4403513,
+    "shortName": "mol/kg",
+    "longName": "mole per kilogram"
+  },
+  {
+    "symbol": "D93",
+    "unitId": 4471091,
+    "shortName": "s/m³",
+    "longName": "second per cubic metre"
+  },
+  {
+    "symbol": "D87",
+    "unitId": 4470839,
+    "shortName": "mmol/kg",
+    "longName": "millimole per kilogram"
+  },
+  {
+    "symbol": "H68",
+    "unitId": 4732472,
+    "shortName": "mmol/g",
+    "longName": "millimole per gram"
+  },
+  {
+    "symbol": "P47",
+    "unitId": 5256247,
+    "shortName": "kmol/kg",
+    "longName": "kilomole per kilogram"
+  },
+  {
+    "symbol": "P48",
+    "unitId": 5256248,
+    "shortName": "lbmol/lb",
+    "longName": "pound mole per pound"
+  },
+  {
+    "symbol": "KAT",
+    "unitId": 4931924,
+    "shortName": "kat",
+    "longName": "katal"
+  },
+  {
+    "symbol": "E94",
+    "unitId": 4536628,
+    "shortName": "kmol/s",
+    "longName": "kilomole per second"
+  },
+  {
+    "symbol": "P45",
+    "unitId": 5256245,
+    "shortName": "lbmol/s",
+    "longName": "pound mole per second"
+  },
+  {
+    "symbol": "P46",
+    "unitId": 5256246,
+    "shortName": "lbmol/h",
+    "longName": "pound mole per minute"
+  },
+  {
+    "symbol": "D43",
+    "unitId": 4469811,
+    "shortName": "u",
+    "longName": "unified atomic mass unit"
+  },
+  {
+    "symbol": "A27",
+    "unitId": 4272695,
+    "shortName": "C·m²/V",
+    "longName": "coulomb metre squared per volt"
+  },
+  {
+    "symbol": "A32",
+    "unitId": 4272946,
+    "shortName": "C/mol",
+    "longName": "coulomb per mole"
+  },
+  {
+    "symbol": "D12",
+    "unitId": 4469042,
+    "shortName": "S·m²/mol",
+    "longName": "siemens square metre per mole"
+  },
+  {
+    "symbol": "K58",
+    "unitId": 4928824,
+    "shortName": "kmol/h",
+    "longName": "kilomole per hour"
+  },
+  {
+    "symbol": "K61",
+    "unitId": 4929073,
+    "shortName": "kmol/min",
+    "longName": "kilomole per minute"
+  },
+  {
+    "symbol": "L23",
+    "unitId": 4993587,
+    "shortName": "mol/h",
+    "longName": "mole per hour"
+  },
+  {
+    "symbol": "L30",
+    "unitId": 4993840,
+    "shortName": "mol/min",
+    "longName": "mole per minute"
+  },
+  {
+    "symbol": "C82",
+    "unitId": 4405298,
+    "shortName": "rad·m²/mol",
+    "longName": "radian square metre per mole"
+  },
+  {
+    "symbol": "C83",
+    "unitId": 4405299,
+    "shortName": "rad·m²/kg",
+    "longName": "radian square metre per kilogram"
+  },
+  {
+    "symbol": "P49",
+    "unitId": 5256249,
+    "shortName": "N·m²/A",
+    "longName": "newton square metre per ampere"
+  },
+  {
+    "symbol": "P50",
+    "unitId": 5256496,
+    "shortName": "Wb·m",
+    "longName": "weber metre"
+  },
+  {
+    "symbol": "Q30",
+    "unitId": 5321520,
+    "shortName": "pH",
+    "longName": "pH (potential of Hydrogen)"
+  },
+  {
+    "symbol": "B18",
+    "unitId": 4337976,
+    "shortName": "J·s",
+    "longName": "joule second"
+  },
+  {
+    "symbol": "A10",
+    "unitId": 4272432,
+    "shortName": "A·m²/(J·s)",
+    "longName": "ampere square metre per joule second"
+  },
+  {
+    "symbol": "CUR",
+    "unitId": 4412754,
+    "shortName": "Ci",
+    "longName": "curie"
+  },
+  {
+    "symbol": "MCU",
+    "unitId": 5063509,
+    "shortName": "mCi",
+    "longName": "millicurie"
+  },
+  {
+    "symbol": "M5",
+    "unitId": 19765,
+    "shortName": "µCi",
+    "longName": "microcurie"
+  },
+  {
+    "symbol": "2R",
+    "unitId": 12882,
+    "shortName": "kCi",
+    "longName": "kilocurie"
+  },
+  {
+    "symbol": "BQL",
+    "unitId": 4346188,
+    "shortName": "Bq",
+    "longName": "becquerel"
+  },
+  {
+    "symbol": "GBQ",
+    "unitId": 4670033,
+    "shortName": "GBq",
+    "longName": "gigabecquerel"
+  },
+  {
+    "symbol": "2Q",
+    "unitId": 12881,
+    "shortName": "kBq",
+    "longName": "kilobecquerel"
+  },
+  {
+    "symbol": "4N",
+    "unitId": 13390,
+    "shortName": "MBq",
+    "longName": "megabecquerel"
+  },
+  {
+    "symbol": "H08",
+    "unitId": 4730936,
+    "shortName": "µBq",
+    "longName": "microbecquerel"
+  },
+  {
+    "symbol": "A42",
+    "unitId": 4273202,
+    "shortName": "Ci/kg",
+    "longName": "curie per kilogram"
+  },
+  {
+    "symbol": "A18",
+    "unitId": 4272440,
+    "shortName": "Bq/kg",
+    "longName": "becquerel per kilogram"
+  },
+  {
+    "symbol": "B67",
+    "unitId": 4339255,
+    "shortName": "MBq/kg",
+    "longName": "megabecquerel per kilogram"
+  },
+  {
+    "symbol": "B25",
+    "unitId": 4338229,
+    "shortName": "kBq/kg",
+    "longName": "kilobecquerel per kilogram"
+  },
+  {
+    "symbol": "A19",
+    "unitId": 4272441,
+    "shortName": "Bq/m³",
+    "longName": "becquerel per cubic metre"
+  },
+  {
+    "symbol": "A14",
+    "unitId": 4272436,
+    "shortName": "b",
+    "longName": "barn"
+  },
+  {
+    "symbol": "D24",
+    "unitId": 4469300,
+    "shortName": "m²/sr",
+    "longName": "square metre per steradian"
+  },
+  {
+    "symbol": "A17",
+    "unitId": 4272439,
+    "shortName": "b/sr",
+    "longName": "barn per steradian"
+  },
+  {
+    "symbol": "D20",
+    "unitId": 4469296,
+    "shortName": "m²/J",
+    "longName": "square metre per joule"
+  },
+  {
+    "symbol": "A15",
+    "unitId": 4272437,
+    "shortName": "b/eV",
+    "longName": "barn per electronvolt"
+  },
+  {
+    "symbol": "D16",
+    "unitId": 4469046,
+    "shortName": "cm²/erg",
+    "longName": "square centimetre per erg"
+  },
+  {
+    "symbol": "D25",
+    "unitId": 4469301,
+    "shortName": "m²/(sr·J)",
+    "longName": "square metre per steradian joule"
+  },
+  {
+    "symbol": "A16",
+    "unitId": 4272438,
+    "shortName": "b/(sr·eV)",
+    "longName": "barn per steradian electronvolt"
+  },
+  {
+    "symbol": "D17",
+    "unitId": 4469047,
+    "shortName": "cm²/(sr·erg)",
+    "longName": "square centimetre per steradian erg"
+  },
+  {
+    "symbol": "B81",
+    "unitId": 4339761,
+    "shortName": "m⁻²/s",
+    "longName": "reciprocal metre squared reciprocal second"
+  },
+  {
+    "symbol": "A65",
+    "unitId": 4273717,
+    "shortName": "erg/(cm²·s)",
+    "longName": "erg per square centimetre second"
+  },
+  {
+    "symbol": "D21",
+    "unitId": 4469297,
+    "shortName": "m²/kg",
+    "longName": "square metre per kilogram"
+  },
+  {
+    "symbol": "B12",
+    "unitId": 4337970,
+    "shortName": "J/m",
+    "longName": "joule per metre"
+  },
+  {
+    "symbol": "A54",
+    "unitId": 4273460,
+    "shortName": "eV/m",
+    "longName": "electronvolt per metre"
+  },
+  {
+    "symbol": "A58",
+    "unitId": 4273464,
+    "shortName": "erg/cm",
+    "longName": "erg per centimetre"
+  },
+  {
+    "symbol": "D73",
+    "unitId": 4470579,
+    "shortName": "J·m²",
+    "longName": "joule square metre"
+  },
+  {
+    "symbol": "A55",
+    "unitId": 4273461,
+    "shortName": "eV·m²",
+    "longName": "electronvolt square metre"
+  },
+  {
+    "symbol": "A66",
+    "unitId": 4273718,
+    "shortName": "erg·cm²",
+    "longName": "erg square centimetre"
+  },
+  {
+    "symbol": "B20",
+    "unitId": 4338224,
+    "shortName": "J·m²/kg",
+    "longName": "joule square metre per kilogram"
+  },
+  {
+    "symbol": "A56",
+    "unitId": 4273462,
+    "shortName": "eV·m²/kg",
+    "longName": "electronvolt square metre per kilogram"
+  },
+  {
+    "symbol": "A67",
+    "unitId": 4273719,
+    "shortName": "erg·cm²/g",
+    "longName": "erg square centimetre per gram"
+  },
+  {
+    "symbol": "D26",
+    "unitId": 4469302,
+    "shortName": "m²/(V·s)",
+    "longName": "square metre per volt second"
+  },
+  {
+    "symbol": "H58",
+    "unitId": 4732216,
+    "shortName": "m/(V·s)",
+    "longName": "metre per volt second"
+  },
+  {
+    "symbol": "C87",
+    "unitId": 4405303,
+    "shortName": "m⁻³/s",
+    "longName": "reciprocal cubic metre per second"
+  },
+  {
+    "symbol": "A95",
+    "unitId": 4274485,
+    "shortName": "Gy",
+    "longName": "gray"
+  },
+  {
+    "symbol": "C13",
+    "unitId": 4403507,
+    "shortName": "mGy",
+    "longName": "milligray"
+  },
+  {
+    "symbol": "C80",
+    "unitId": 4405296,
+    "shortName": "rad",
+    "longName": "rad"
+  },
+  {
+    "symbol": "A61",
+    "unitId": 4273713,
+    "shortName": "erg/g",
+    "longName": "erg per gram"
+  },
+  {
+    "symbol": "D13",
+    "unitId": 4469043,
+    "shortName": "Sv",
+    "longName": "sievert"
+  },
+  {
+    "symbol": "C28",
+    "unitId": 4403768,
+    "shortName": "mSv",
+    "longName": "millisievert"
+  },
+  {
+    "symbol": "D91",
+    "unitId": 4471089,
+    "shortName": "rem",
+    "longName": "rem"
+  },
+  {
+    "symbol": "L31",
+    "unitId": 4993841,
+    "shortName": "mrem",
+    "longName": "milliroentgen aequivalent men"
+  },
+  {
+    "symbol": "A96",
+    "unitId": 4274486,
+    "shortName": "Gy/s",
+    "longName": "gray per second"
+  },
+  {
+    "symbol": "A62",
+    "unitId": 4273714,
+    "shortName": "erg/g·s",
+    "longName": "erg per gram second"
+  },
+  {
+    "symbol": "CKG",
+    "unitId": 4410183,
+    "shortName": "C/kg",
+    "longName": "coulomb per kilogram"
+  },
+  {
+    "symbol": "C8",
+    "unitId": 17208,
+    "shortName": "mC/kg",
+    "longName": "millicoulomb per kilogram"
+  },
+  {
+    "symbol": "2C",
+    "unitId": 12867,
+    "shortName": "R",
+    "longName": "roentgen"
+  },
+  {
+    "symbol": "2Y",
+    "unitId": 12889,
+    "shortName": "mR",
+    "longName": "milliroentgen"
+  },
+  {
+    "symbol": "J53",
+    "unitId": 4863283,
+    "shortName": "C·m²/kg",
+    "longName": "coulomb square metre per kilogram"
+  },
+  {
+    "symbol": "KR",
+    "unitId": 19282,
+    "shortName": "kR",
+    "longName": "kiloroentgen"
+  },
+  {
+    "symbol": "A31",
+    "unitId": 4272945,
+    "shortName": "C/(kg·s)",
+    "longName": "coulomb per kilogram second"
+  },
+  {
+    "symbol": "D6",
+    "unitId": 17462,
+    "shortName": "R/s",
+    "longName": "roentgen per second"
+  },
+  {
+    "symbol": "P54",
+    "unitId": 5256500,
+    "shortName": "mGy/s",
+    "longName": "milligray per second"
+  },
+  {
+    "symbol": "P55",
+    "unitId": 5256501,
+    "shortName": "µGy/s",
+    "longName": "microgray per second"
+  },
+  {
+    "symbol": "P56",
+    "unitId": 5256502,
+    "shortName": "nGy/s",
+    "longName": "nanogray per second"
+  },
+  {
+    "symbol": "P57",
+    "unitId": 5256503,
+    "shortName": "Gy/min",
+    "longName": "gray per minute"
+  },
+  {
+    "symbol": "P58",
+    "unitId": 5256504,
+    "shortName": "mGy/min",
+    "longName": "milligray per minute"
+  },
+  {
+    "symbol": "P59",
+    "unitId": 5256505,
+    "shortName": "µGy/min",
+    "longName": "microgray per minute"
+  },
+  {
+    "symbol": "P60",
+    "unitId": 5256752,
+    "shortName": "nGy/min",
+    "longName": "nanogray per minute"
+  },
+  {
+    "symbol": "P61",
+    "unitId": 5256753,
+    "shortName": "Gy/h",
+    "longName": "gray per hour"
+  },
+  {
+    "symbol": "P62",
+    "unitId": 5256754,
+    "shortName": "mGy/h",
+    "longName": "milligray per hour"
+  },
+  {
+    "symbol": "P63",
+    "unitId": 5256755,
+    "shortName": "µGy/h",
+    "longName": "microgray per hour"
+  },
+  {
+    "symbol": "P64",
+    "unitId": 5256756,
+    "shortName": "nGy/h",
+    "longName": "nanogray per hour"
+  },
+  {
+    "symbol": "P65",
+    "unitId": 5256757,
+    "shortName": "Sv/s",
+    "longName": "sievert per second"
+  },
+  {
+    "symbol": "P66",
+    "unitId": 5256758,
+    "shortName": "mSv/s",
+    "longName": "millisievert per second"
+  },
+  {
+    "symbol": "P67",
+    "unitId": 5256759,
+    "shortName": "µSv/s",
+    "longName": "microsievert per second"
+  },
+  {
+    "symbol": "P68",
+    "unitId": 5256760,
+    "shortName": "nSv/s",
+    "longName": "nanosievert per second"
+  },
+  {
+    "symbol": "P69",
+    "unitId": 5256761,
+    "shortName": "rem/s",
+    "longName": "rem per second"
+  },
+  {
+    "symbol": "P70",
+    "unitId": 5257008,
+    "shortName": "Sv/h",
+    "longName": "sievert per hour"
+  },
+  {
+    "symbol": "P71",
+    "unitId": 5257009,
+    "shortName": "mSv/h",
+    "longName": "millisievert per hour"
+  },
+  {
+    "symbol": "P72",
+    "unitId": 5257010,
+    "shortName": "µSv/h",
+    "longName": "microsievert per hour"
+  },
+  {
+    "symbol": "P73",
+    "unitId": 5257011,
+    "shortName": "nSv/h",
+    "longName": "nanosievert per hour"
+  },
+  {
+    "symbol": "P74",
+    "unitId": 5257012,
+    "shortName": "Sv/min",
+    "longName": "sievert per minute"
+  },
+  {
+    "symbol": "P75",
+    "unitId": 5257013,
+    "shortName": "mSv/min",
+    "longName": "millisievert per minute"
+  },
+  {
+    "symbol": "P76",
+    "unitId": 5257014,
+    "shortName": "µSv/min",
+    "longName": "microsievert per minute"
+  },
+  {
+    "symbol": "P77",
+    "unitId": 5257015,
+    "shortName": "nSv/min",
+    "longName": "nanosievert per minute"
+  },
+  {
+    "symbol": "P78",
+    "unitId": 5257016,
+    "shortName": "1/in²",
+    "longName": "reciprocal square inch"
+  },
+  {
+    "symbol": "P53",
+    "unitId": 5256499,
+    "shortName": "unit pole",
+    "longName": "unit pole"
+  },
+  {
+    "symbol": "C85",
+    "unitId": 4405301,
+    "shortName": "Å⁻¹",
+    "longName": "reciprocal angstrom"
+  },
+  {
+    "symbol": "D94",
+    "unitId": 4471092,
+    "shortName": "s/(rad·m³)",
+    "longName": "second per cubic metre radian"
+  },
+  {
+    "symbol": "C90",
+    "unitId": 4405552,
+    "shortName": "J⁻¹/m³",
+    "longName": "reciprocal joule per cubic metre"
+  },
+  {
+    "symbol": "C88",
+    "unitId": 4405304,
+    "shortName": "eV⁻¹/m³",
+    "longName": "reciprocal electron volt per cubic metre"
+  },
+  {
+    "symbol": "A38",
+    "unitId": 4272952,
+    "shortName": "m³/C",
+    "longName": "cubic metre per coulomb"
+  },
+  {
+    "symbol": "D48",
+    "unitId": 4469816,
+    "shortName": "V/K",
+    "longName": "volt per kelvin"
+  },
+  {
+    "symbol": "D49",
+    "unitId": 4469817,
+    "shortName": "mV/K",
+    "longName": "millivolt per kelvin"
+  },
+  {
+    "symbol": "A6",
+    "unitId": 16694,
+    "shortName": "A/(m²·K²)",
+    "longName": "ampere per square metre kelvin squared"
+  },
+  {
+    "symbol": 33,
+    "unitId": 13107,
+    "shortName": "kPa·m²/g",
+    "longName": "kilopascal square metre per gram"
+  },
+  {
+    "symbol": "P79",
+    "unitId": 5257017,
+    "shortName": "Pa/(kg/m²)",
+    "longName": "pascal square metre per kilogram"
+  },
+  {
+    "symbol": 34,
+    "unitId": 13108,
+    "shortName": "kPa/mm",
+    "longName": "kilopascal per millimetre"
+  },
+  {
+    "symbol": "H42",
+    "unitId": 4731954,
+    "shortName": "Pa/m",
+    "longName": "pascal per metre"
+  },
+  {
+    "symbol": "H69",
+    "unitId": 4732473,
+    "shortName": "pPa/km",
+    "longName": "picopascal per kilometre"
+  },
+  {
+    "symbol": "P80",
+    "unitId": 5257264,
+    "shortName": "mPa/m",
+    "longName": "millipascal per metre"
+  },
+  {
+    "symbol": "P81",
+    "unitId": 5257265,
+    "shortName": "kPa/m",
+    "longName": "kilopascal per metre"
+  },
+  {
+    "symbol": "P82",
+    "unitId": 5257266,
+    "shortName": "hPa/m",
+    "longName": "hectopascal per metre"
+  },
+  {
+    "symbol": "P83",
+    "unitId": 5257267,
+    "shortName": "Atm/m",
+    "longName": "standard atmosphere per metre"
+  },
+  {
+    "symbol": "P84",
+    "unitId": 5257268,
+    "shortName": "at/m",
+    "longName": "technical atmosphere per metre"
+  },
+  {
+    "symbol": "P85",
+    "unitId": 5257269,
+    "shortName": "Torr/m",
+    "longName": "torr per metre"
+  },
+  {
+    "symbol": "P86",
+    "unitId": 5257270,
+    "shortName": "psi/in",
+    "longName": "psi per inch"
+  },
+  {
+    "symbol": 35,
+    "unitId": 13109,
+    "shortName": "ml/(cm²·s)",
+    "longName": "millilitre per square centimetre second"
+  },
+  {
+    "symbol": "P87",
+    "unitId": 5257271,
+    "shortName": "(m³/s)/m²",
+    "longName": "cubic metre per second square metre"
+  },
+  {
+    "symbol": "OPM",
+    "unitId": 5197901,
+    "shortName": "o/min",
+    "longName": "oscillations per minute"
+  },
+  {
+    "symbol": "KNM",
+    "unitId": 4935245,
+    "shortName": "KN/m2",
+    "longName": "kilonewton per square metre"
+  },
+  {
+    "symbol": "Q35",
+    "unitId": 5321525,
+    "shortName": "MW/min",
+    "longName": "megawatts per minute"
+  },
+  {
+    "symbol": 38,
+    "unitId": 13112,
+    "shortName": "oz/(ft²/cin)",
+    "longName": "ounce per square foot per 0,01inch"
+  },
+  {
+    "symbol": 59,
+    "unitId": 13625,
+    "shortName": "ppm",
+    "longName": "part per million"
+  },
+  {
+    "symbol": 61,
+    "unitId": 13873,
+    "shortName": "ppb",
+    "longName": "part per billion (US)"
+  },
+  {
+    "symbol": 66,
+    "unitId": 13878,
+    "shortName": "Oe",
+    "longName": "oersted"
+  },
+  {
+    "symbol": 76,
+    "unitId": 14134,
+    "shortName": "Gs",
+    "longName": "gauss"
+  },
+  {
+    "symbol": 78,
+    "unitId": 14136,
+    "shortName": "kGs",
+    "longName": "kilogauss"
+  },
+  {
+    "symbol": "2G",
+    "unitId": 12871,
+    "shortName": "V",
+    "longName": "volt AC"
+  },
+  {
+    "symbol": "2H",
+    "unitId": 12872,
+    "shortName": "V",
+    "longName": "volt DC"
+  },
+  {
+    "symbol": "2P",
+    "unitId": 12880,
+    "shortName": "kbyte",
+    "longName": "kilobyte"
+  },
+  {
+    "symbol": "4L",
+    "unitId": 13388,
+    "shortName": "Mbyte",
+    "longName": "megabyte"
+  },
+  {
+    "symbol": "A43",
+    "unitId": 4273203,
+    "shortName": "dwt",
+    "longName": "deadweight tonnage"
+  },
+  {
+    "symbol": "A47",
+    "unitId": 4273207,
+    "shortName": "dtex (g/10km)",
+    "longName": "decitex"
+  },
+  {
+    "symbol": "A49",
+    "unitId": 4273209,
+    "shortName": "den (g/9 km)",
+    "longName": "denier"
+  },
+  {
+    "symbol": "A99",
+    "unitId": 4274489,
+    "shortName": "bit",
+    "longName": "bit"
+  },
+  {
+    "symbol": "AB",
+    "unitId": 16706,
+    "shortName": "pk",
+    "longName": "bulk pack"
+  },
+  {
+    "symbol": "AD",
+    "unitId": 16708,
+    "shortName": "byte",
+    "longName": "byte"
+  },
+  {
+    "symbol": "B1",
+    "unitId": 16945,
+    "shortName": "barrel (US)/d",
+    "longName": "barrel (US) per day"
+  },
+  {
+    "symbol": "B10",
+    "unitId": 4337968,
+    "shortName": "bit/s",
+    "longName": "bit per second"
+  },
+  {
+    "symbol": "B30",
+    "unitId": 4338480,
+    "shortName": "Gibit",
+    "longName": "gibibit"
+  },
+  {
+    "symbol": "B65",
+    "unitId": 4339253,
+    "shortName": "Mx",
+    "longName": "maxwell"
+  },
+  {
+    "symbol": "B68",
+    "unitId": 4339256,
+    "shortName": "Gbit",
+    "longName": "gigabit"
+  },
+  {
+    "symbol": "B80",
+    "unitId": 4339760,
+    "shortName": "Gbit/s",
+    "longName": "gigabit per second"
+  },
+  {
+    "symbol": "BFT",
+    "unitId": 4343380,
+    "shortName": "fbm",
+    "longName": "board foot"
+  },
+  {
+    "symbol": "BPM",
+    "unitId": 4345933,
+    "shortName": "BPM",
+    "longName": "beats per minute"
+  },
+  {
+    "symbol": "C21",
+    "unitId": 4403761,
+    "shortName": "Kibit",
+    "longName": "kibibit"
+  },
+  {
+    "symbol": "C37",
+    "unitId": 4404023,
+    "shortName": "kbit",
+    "longName": "kilobit"
+  },
+  {
+    "symbol": "C74",
+    "unitId": 4405044,
+    "shortName": "kbit/s",
+    "longName": "kilobit per second"
+  },
+  {
+    "symbol": "C79",
+    "unitId": 4405049,
+    "shortName": "kVAh",
+    "longName": "kilovolt ampere hour"
+  },
+  {
+    "symbol": "D03",
+    "unitId": 4468787,
+    "shortName": "kW·h/h",
+    "longName": "kilowatt hour per hour"
+  },
+  {
+    "symbol": "D11",
+    "unitId": 4469041,
+    "shortName": "Mibit",
+    "longName": "mebibit"
+  },
+  {
+    "symbol": "D34",
+    "unitId": 4469556,
+    "shortName": "tex (g/km)",
+    "longName": "tex"
+  },
+  {
+    "symbol": "D36",
+    "unitId": 4469558,
+    "shortName": "Mbit",
+    "longName": "megabit"
+  },
+  {
+    "symbol": "D78",
+    "unitId": 4470584,
+    "shortName": "MJ/s",
+    "longName": "megajoule per second"
+  },
+  {
+    "symbol": "DZN",
+    "unitId": 4479566,
+    "shortName": "DOZ",
+    "longName": "dozen"
+  },
+  {
+    "symbol": "E07",
+    "unitId": 4534327,
+    "shortName": "MW·h/h",
+    "longName": "megawatt hour per hour"
+  },
+  {
+    "symbol": "E08",
+    "unitId": 4534328,
+    "shortName": "MW/Hz",
+    "longName": "megawatt per hertz"
+  },
+  {
+    "symbol": "E10",
+    "unitId": 4534576,
+    "shortName": "deg da",
+    "longName": "degree day"
+  },
+  {
+    "symbol": "E16",
+    "unitId": 4534582,
+    "shortName": "BtuIT/h",
+    "longName": "million Btu(IT) per hour"
+  },
+  {
+    "symbol": "E17",
+    "unitId": 4534583,
+    "shortName": "ft³/s",
+    "longName": "cubic foot per second"
+  },
+  {
+    "symbol": "E20",
+    "unitId": 4534832,
+    "shortName": "Mbit/s",
+    "longName": "megabit per second"
+  },
+  {
+    "symbol": "E31",
+    "unitId": 4535089,
+    "shortName": "m²/l",
+    "longName": "square metre per litre"
+  },
+  {
+    "symbol": "E32",
+    "unitId": 4535090,
+    "shortName": "l/h",
+    "longName": "litre per hour"
+  },
+  {
+    "symbol": "E34",
+    "unitId": 4535092,
+    "shortName": "Gbyte",
+    "longName": "gigabyte"
+  },
+  {
+    "symbol": "E35",
+    "unitId": 4535093,
+    "shortName": "Tbyte",
+    "longName": "terabyte"
+  },
+  {
+    "symbol": "E36",
+    "unitId": 4535094,
+    "shortName": "Pbyte",
+    "longName": "petabyte"
+  },
+  {
+    "symbol": "E39",
+    "unitId": 4535097,
+    "shortName": "dpi",
+    "longName": "dots per inch"
+  },
+  {
+    "symbol": "E40",
+    "unitId": 4535344,
+    "shortName": "ppht",
+    "longName": "part per hundred thousand"
+  },
+  {
+    "symbol": "E44",
+    "unitId": 4535348,
+    "shortName": "kgf·m/cm²",
+    "longName": "kilogram-force metre per square centimetre"
+  },
+  {
+    "symbol": "E46",
+    "unitId": 4535350,
+    "shortName": "kW·h/m³",
+    "longName": "kilowatt hour per cubic metre"
+  },
+  {
+    "symbol": "E47",
+    "unitId": 4535351,
+    "shortName": "kW·h/K",
+    "longName": "kilowatt hour per kelvin"
+  },
+  {
+    "symbol": "E58",
+    "unitId": 4535608,
+    "shortName": "Ebit/s",
+    "longName": "exabit per second"
+  },
+  {
+    "symbol": "E59",
+    "unitId": 4535609,
+    "shortName": "Eibyte",
+    "longName": "exbibyte"
+  },
+  {
+    "symbol": "E60",
+    "unitId": 4535856,
+    "shortName": "Pibyte",
+    "longName": "pebibyte"
+  },
+  {
+    "symbol": "E61",
+    "unitId": 4535857,
+    "shortName": "Tibyte",
+    "longName": "tebibyte"
+  },
+  {
+    "symbol": "E62",
+    "unitId": 4535858,
+    "shortName": "Gibyte",
+    "longName": "gibibyte"
+  },
+  {
+    "symbol": "E63",
+    "unitId": 4535859,
+    "shortName": "Mibyte",
+    "longName": "mebibyte"
+  },
+  {
+    "symbol": "E64",
+    "unitId": 4535860,
+    "shortName": "Kibyte",
+    "longName": "kibibyte"
+  },
+  {
+    "symbol": "E65",
+    "unitId": 4535861,
+    "shortName": "Eibit/m",
+    "longName": "exbibit per metre"
+  },
+  {
+    "symbol": "E66",
+    "unitId": 4535862,
+    "shortName": "Eibit/m²",
+    "longName": "exbibit per square metre"
+  },
+  {
+    "symbol": "E67",
+    "unitId": 4535863,
+    "shortName": "Eibit/m³",
+    "longName": "exbibit per cubic metre"
+  },
+  {
+    "symbol": "E68",
+    "unitId": 4535864,
+    "shortName": "Gbyte/s",
+    "longName": "gigabyte per second"
+  },
+  {
+    "symbol": "E69",
+    "unitId": 4535865,
+    "shortName": "Gibit/m",
+    "longName": "gibibit per metre"
+  },
+  {
+    "symbol": "E70",
+    "unitId": 4536112,
+    "shortName": "Gibit/m²",
+    "longName": "gibibit per square metre"
+  },
+  {
+    "symbol": "E71",
+    "unitId": 4536113,
+    "shortName": "Gibit/m³",
+    "longName": "gibibit per cubic metre"
+  },
+  {
+    "symbol": "E72",
+    "unitId": 4536114,
+    "shortName": "Kibit/m",
+    "longName": "kibibit per metre"
+  },
+  {
+    "symbol": "E73",
+    "unitId": 4536115,
+    "shortName": "Kibit/m²",
+    "longName": "kibibit per square metre"
+  },
+  {
+    "symbol": "E74",
+    "unitId": 4536116,
+    "shortName": "Kibit/m³",
+    "longName": "kibibit per cubic metre"
+  },
+  {
+    "symbol": "E75",
+    "unitId": 4536117,
+    "shortName": "Mibit/m",
+    "longName": "mebibit per metre"
+  },
+  {
+    "symbol": "E76",
+    "unitId": 4536118,
+    "shortName": "Mibit/m²",
+    "longName": "mebibit per square metre"
+  },
+  {
+    "symbol": "E77",
+    "unitId": 4536119,
+    "shortName": "Mibit/m³",
+    "longName": "mebibit per cubic metre"
+  },
+  {
+    "symbol": "E78",
+    "unitId": 4536120,
+    "shortName": "Pbit",
+    "longName": "petabit"
+  },
+  {
+    "symbol": "E79",
+    "unitId": 4536121,
+    "shortName": "Pbit/s",
+    "longName": "petabit per second"
+  },
+  {
+    "symbol": "E80",
+    "unitId": 4536368,
+    "shortName": "Pibit/m",
+    "longName": "pebibit per metre"
+  },
+  {
+    "symbol": "E81",
+    "unitId": 4536369,
+    "shortName": "Pibit/m²",
+    "longName": "pebibit per square metre"
+  },
+  {
+    "symbol": "E82",
+    "unitId": 4536370,
+    "shortName": "Pibit/m³",
+    "longName": "pebibit per cubic metre"
+  },
+  {
+    "symbol": "E83",
+    "unitId": 4536371,
+    "shortName": "Tbit",
+    "longName": "terabit"
+  },
+  {
+    "symbol": "E84",
+    "unitId": 4536372,
+    "shortName": "Tbit/s",
+    "longName": "terabit per second"
+  },
+  {
+    "symbol": "E85",
+    "unitId": 4536373,
+    "shortName": "Tibit/m",
+    "longName": "tebibit per metre"
+  },
+  {
+    "symbol": "E86",
+    "unitId": 4536374,
+    "shortName": "Tibit/m³",
+    "longName": "tebibit per cubic metre"
+  },
+  {
+    "symbol": "E87",
+    "unitId": 4536375,
+    "shortName": "Tibit/m²",
+    "longName": "tebibit per square metre"
+  },
+  {
+    "symbol": "E88",
+    "unitId": 4536376,
+    "shortName": "bit/m",
+    "longName": "bit per metre"
+  },
+  {
+    "symbol": "E89",
+    "unitId": 4536377,
+    "shortName": "bit/m²",
+    "longName": "bit per square metre"
+  },
+  {
+    "symbol": "E90",
+    "unitId": 4536624,
+    "shortName": "cm⁻¹",
+    "longName": "reciprocal centimetre"
+  },
+  {
+    "symbol": "E91",
+    "unitId": 4536625,
+    "shortName": "d⁻¹",
+    "longName": "reciprocal day"
+  },
+  {
+    "symbol": "F01",
+    "unitId": 4599857,
+    "shortName": "bit/m³",
+    "longName": "bit per cubic metre"
+  },
+  {
+    "symbol": "FC",
+    "unitId": 17987,
+    "shortName": "kft³",
+    "longName": "thousand cubic foot"
+  },
+  {
+    "symbol": "FIT",
+    "unitId": 4606292,
+    "shortName": "FIT",
+    "longName": "failures in time"
+  },
+  {
+    "symbol": "GB",
+    "unitId": 18242,
+    "shortName": "gal (US)/d",
+    "longName": "gallon (US) per day"
+  },
+  {
+    "symbol": "GFI",
+    "unitId": 4671049,
+    "shortName": "gi F/S",
+    "longName": "gram of fissile isotope"
+  },
+  {
+    "symbol": "GIA",
+    "unitId": 4671809,
+    "shortName": "gi (US)",
+    "longName": "gill (US)"
+  },
+  {
+    "symbol": "GII",
+    "unitId": 4671817,
+    "shortName": "gi (UK)",
+    "longName": "gill (UK)"
+  },
+  {
+    "symbol": "GRO",
+    "unitId": 4674127,
+    "shortName": "gr",
+    "longName": "gross"
+  },
+  {
+    "symbol": "H25",
+    "unitId": 4731445,
+    "shortName": "%/K",
+    "longName": "percent per kelvin"
+  },
+  {
+    "symbol": "H71",
+    "unitId": 4732721,
+    "shortName": "%/mo",
+    "longName": "percent per month"
+  },
+  {
+    "symbol": "H72",
+    "unitId": 4732722,
+    "shortName": "%/hbar",
+    "longName": "percent per hectobar"
+  },
+  {
+    "symbol": "H73",
+    "unitId": 4732723,
+    "shortName": "%/daK",
+    "longName": "percent per decakelvin"
+  },
+  {
+    "symbol": "H77",
+    "unitId": 4732727,
+    "shortName": "MW",
+    "longName": "module width"
+  },
+  {
+    "symbol": "H80",
+    "unitId": 4732976,
+    "shortName": "U or RU",
+    "longName": "rack unit"
+  },
+  {
+    "symbol": "H82",
+    "unitId": 4732978,
+    "shortName": "bp",
+    "longName": "big point"
+  },
+  {
+    "symbol": "H89",
+    "unitId": 4732985,
+    "shortName": "%/Ω",
+    "longName": "percent per ohm"
+  },
+  {
+    "symbol": "H90",
+    "unitId": 4733232,
+    "shortName": "%/°",
+    "longName": "percent per degree"
+  },
+  {
+    "symbol": "H91",
+    "unitId": 4733233,
+    "shortName": "%/10000",
+    "longName": "percent per ten thousand"
+  },
+  {
+    "symbol": "H92",
+    "unitId": 4733234,
+    "shortName": "%/100000",
+    "longName": "percent per one hundred thousand"
+  },
+  {
+    "symbol": "H93",
+    "unitId": 4733235,
+    "shortName": "%/100",
+    "longName": "percent per hundred"
+  },
+  {
+    "symbol": "H94",
+    "unitId": 4733236,
+    "shortName": "%/1000",
+    "longName": "percent per thousand"
+  },
+  {
+    "symbol": "H95",
+    "unitId": 4733237,
+    "shortName": "%/V",
+    "longName": "percent per volt"
+  },
+  {
+    "symbol": "H96",
+    "unitId": 4733238,
+    "shortName": "%/bar",
+    "longName": "percent per bar"
+  },
+  {
+    "symbol": "H98",
+    "unitId": 4733240,
+    "shortName": "%/in",
+    "longName": "percent per inch"
+  },
+  {
+    "symbol": "H99",
+    "unitId": 4733241,
+    "shortName": "%/m",
+    "longName": "percent per metre"
+  },
+  {
+    "symbol": "HMQ",
+    "unitId": 4738385,
+    "shortName": "Mm³",
+    "longName": "million cubic metre"
+  },
+  {
+    "symbol": "J10",
+    "unitId": 4862256,
+    "shortName": "%/mm",
+    "longName": "percent per millimetre"
+  },
+  {
+    "symbol": "J12",
+    "unitId": 4862258,
+    "shortName": "‰/psi",
+    "longName": "per mille per psi"
+  },
+  {
+    "symbol": "J13",
+    "unitId": 4862259,
+    "shortName": "°API",
+    "longName": "degree API"
+  },
+  {
+    "symbol": "J14",
+    "unitId": 4862260,
+    "shortName": "°Bé",
+    "longName": "degree Baume (origin scale)"
+  },
+  {
+    "symbol": "J15",
+    "unitId": 4862261,
+    "shortName": "°Bé (US heavy)",
+    "longName": "degree Baume (US heavy)"
+  },
+  {
+    "symbol": "J16",
+    "unitId": 4862262,
+    "shortName": "°Bé (US light)",
+    "longName": "degree Baume (US light)"
+  },
+  {
+    "symbol": "J17",
+    "unitId": 4862263,
+    "shortName": "°Balling",
+    "longName": "degree Balling"
+  },
+  {
+    "symbol": "J18",
+    "unitId": 4862264,
+    "shortName": "°Bx",
+    "longName": "degree Brix"
+  },
+  {
+    "symbol": "J27",
+    "unitId": 4862519,
+    "shortName": "°Oechsle",
+    "longName": "degree Oechsle"
+  },
+  {
+    "symbol": "J31",
+    "unitId": 4862769,
+    "shortName": "°Tw",
+    "longName": "degree Twaddell"
+  },
+  {
+    "symbol": "J38",
+    "unitId": 4862776,
+    "shortName": "Bd",
+    "longName": "baud"
+  },
+  {
+    "symbol": "J54",
+    "unitId": 4863284,
+    "shortName": "MBd",
+    "longName": "megabaud"
+  },
+  {
+    "symbol": "K3",
+    "unitId": 19251,
+    "shortName": "kvar·h",
+    "longName": "kilovolt ampere reactive hour"
+  },
+  {
+    "symbol": "K50",
+    "unitId": 4928816,
+    "shortName": "kBd",
+    "longName": "kilobaud"
+  },
+  {
+    "symbol": "KCC",
+    "unitId": 4932419,
+    "shortName": "kg C₅ H₁₄ClNO",
+    "longName": "kilogram of choline chloride"
+  },
+  {
+    "symbol": "KDW",
+    "unitId": 4932695,
+    "shortName": "kg/net eda",
+    "longName": "kilogram drained net weight"
+  },
+  {
+    "symbol": "KHY",
+    "unitId": 4933721,
+    "shortName": "kg H₂O₂",
+    "longName": "kilogram of hydrogen peroxide"
+  },
+  {
+    "symbol": "KMA",
+    "unitId": 4934977,
+    "shortName": "kg met.am.",
+    "longName": "kilogram of methylamine"
+  },
+  {
+    "symbol": "KNI",
+    "unitId": 4935241,
+    "shortName": "kg N",
+    "longName": "kilogram of nitrogen"
+  },
+  {
+    "symbol": "KPH",
+    "unitId": 4935752,
+    "shortName": "kg KOH",
+    "longName": "kilogram of potassium hydroxide (caustic potash)"
+  },
+  {
+    "symbol": "KPO",
+    "unitId": 4935759,
+    "shortName": "kg K₂O",
+    "longName": "kilogram of potassium oxide"
+  },
+  {
+    "symbol": "KSD",
+    "unitId": 4936516,
+    "shortName": "kg 90 % sdt",
+    "longName": "kilogram of substance 90 % dry"
+  },
+  {
+    "symbol": "KSH",
+    "unitId": 4936520,
+    "shortName": "kg NaOH",
+    "longName": "kilogram of sodium hydroxide (caustic soda)"
+  },
+  {
+    "symbol": "KUR",
+    "unitId": 4937042,
+    "shortName": "kg U",
+    "longName": "kilogram of uranium"
+  },
+  {
+    "symbol": "KWY",
+    "unitId": 4937561,
+    "shortName": "kW/year",
+    "longName": "kilowatt year"
+  },
+  {
+    "symbol": "KWO",
+    "unitId": 4937551,
+    "shortName": "kg WO₃",
+    "longName": "kilogram of tungsten trioxide"
+  },
+  {
+    "symbol": "M19",
+    "unitId": 5058873,
+    "shortName": "Bft",
+    "longName": "Beaufort"
+  },
+  {
+    "symbol": "M25",
+    "unitId": 5059125,
+    "shortName": "%/°C",
+    "longName": "percent per degree Celsius"
+  },
+  {
+    "symbol": "M36",
+    "unitId": 5059382,
+    "shortName": "mo (30 days)",
+    "longName": "30-day month"
+  },
+  {
+    "symbol": "M37",
+    "unitId": 5059383,
+    "shortName": "y (360 days)",
+    "longName": "actual/360"
+  },
+  {
+    "symbol": "M9",
+    "unitId": 19769,
+    "shortName": "MBTU/kft³",
+    "longName": "million Btu per 1000 cubic foot"
+  },
+  {
+    "symbol": "MAH",
+    "unitId": 5062984,
+    "shortName": "Mvar·h",
+    "longName": "megavolt ampere reactive hour"
+  },
+  {
+    "symbol": "NIL",
+    "unitId": 5130572,
+    "shortName": "()",
+    "longName": "nil"
+  },
+  {
+    "symbol": "NX",
+    "unitId": 20056,
+    "shortName": "‰",
+    "longName": "part per thousand"
+  },
+  {
+    "symbol": "P1",
+    "unitId": 20529,
+    "shortName": "% or pct",
+    "longName": "percent"
+  },
+  {
+    "symbol": "P88",
+    "unitId": 5257272,
+    "shortName": "rhe",
+    "longName": "rhe"
+  },
+  {
+    "symbol": "P89",
+    "unitId": 5257273,
+    "shortName": "lbf·ft/in",
+    "longName": "pound-force foot per inch"
+  },
+  {
+    "symbol": "P90",
+    "unitId": 5257520,
+    "shortName": "lbf·in/in",
+    "longName": "pound-force inch per inch"
+  },
+  {
+    "symbol": "P91",
+    "unitId": 5257521,
+    "shortName": "perm (0 ºC)",
+    "longName": "perm (0 ºC)"
+  },
+  {
+    "symbol": "P92",
+    "unitId": 5257522,
+    "shortName": "perm (23 ºC)",
+    "longName": "perm (23 ºC)"
+  },
+  {
+    "symbol": "P93",
+    "unitId": 5257523,
+    "shortName": "byte/s",
+    "longName": "byte per second"
+  },
+  {
+    "symbol": "P94",
+    "unitId": 5257524,
+    "shortName": "kbyte/s",
+    "longName": "kilobyte per second"
+  },
+  {
+    "symbol": "P95",
+    "unitId": 5257525,
+    "shortName": "Mbyte/s",
+    "longName": "megabyte per second"
+  },
+  {
+    "symbol": "P96",
+    "unitId": 5257526,
+    "shortName": "1/V",
+    "longName": "reciprocal volt"
+  },
+  {
+    "symbol": "P97",
+    "unitId": 5257527,
+    "shortName": "1/rad",
+    "longName": "reciprocal radian"
+  },
+  {
+    "symbol": "P98",
+    "unitId": 5257528,
+    "shortName": "PaΣνB",
+    "longName": "pascal to the power sum of stoichiometric numbers"
+  },
+  {
+    "symbol": "P99",
+    "unitId": 5257529,
+    "shortName": "(mol/m³)∑νB",
+    "longName": "mole per cubiv metre to the power sum of stoichiometric numbers"
+  },
+  {
+    "symbol": "PLA",
+    "unitId": 5262401,
+    "shortName": "°P",
+    "longName": "degree Plato"
+  },
+  {
+    "symbol": "PQ",
+    "unitId": 20561,
+    "shortName": "ppi",
+    "longName": "page per inch"
+  },
+  {
+    "symbol": "PTN",
+    "unitId": 5264462,
+    "shortName": "PTN",
+    "longName": "portion"
+  },
+  {
+    "symbol": "Q10",
+    "unitId": 5321008,
+    "shortName": "J/T",
+    "longName": "joule per tesla"
+  },
+  {
+    "symbol": "Q11",
+    "unitId": 5321009,
+    "shortName": "E",
+    "longName": "erlang"
+  },
+  {
+    "symbol": "Q12",
+    "unitId": 5321010,
+    "shortName": "o",
+    "longName": "octet"
+  },
+  {
+    "symbol": "Q13",
+    "unitId": 5321011,
+    "shortName": "o/s",
+    "longName": "octet per second"
+  },
+  {
+    "symbol": "Q14",
+    "unitId": 5321012,
+    "shortName": "Sh",
+    "longName": "shannon"
+  },
+  {
+    "symbol": "Q15",
+    "unitId": 5321013,
+    "shortName": "Hart",
+    "longName": "hartley"
+  },
+  {
+    "symbol": "Q16",
+    "unitId": 5321014,
+    "shortName": "nat",
+    "longName": "natural unit of information"
+  },
+  {
+    "symbol": "Q17",
+    "unitId": 5321015,
+    "shortName": "Sh/s",
+    "longName": "shannon per second"
+  },
+  {
+    "symbol": "Q18",
+    "unitId": 5321016,
+    "shortName": "Hart/s",
+    "longName": "hartley per second"
+  },
+  {
+    "symbol": "Q19",
+    "unitId": 5321017,
+    "shortName": "nat/s",
+    "longName": "natural unit of information per second"
+  },
+  {
+    "symbol": "Q20",
+    "unitId": 5321264,
+    "shortName": "s/kg",
+    "longName": "second per kilogramm"
+  },
+  {
+    "symbol": "Q21",
+    "unitId": 5321265,
+    "shortName": "W·m²",
+    "longName": "watt square metre"
+  },
+  {
+    "symbol": "Q22",
+    "unitId": 5321266,
+    "shortName": "1/(Hz·rad·m³)",
+    "longName": "second per radian cubic metre"
+  },
+  {
+    "symbol": "Q23",
+    "unitId": 5321267,
+    "shortName": "1/Wb",
+    "longName": "weber to the power minus one"
+  },
+  {
+    "symbol": "Q24",
+    "unitId": 5321268,
+    "shortName": "1/in",
+    "longName": "reciprocal inch"
+  },
+  {
+    "symbol": "Q25",
+    "unitId": 5321269,
+    "shortName": "dpt",
+    "longName": "dioptre"
+  },
+  {
+    "symbol": "Q26",
+    "unitId": 5321270,
+    "shortName": "1/1",
+    "longName": "one per one"
+  },
+  {
+    "symbol": "Q27",
+    "unitId": 5321271,
+    "shortName": "N·m/m²",
+    "longName": "newton metre per metre"
+  },
+  {
+    "symbol": "Q28",
+    "unitId": 5321272,
+    "shortName": "kg/(m²·Pa·s)",
+    "longName": "kilogram per square metre pascal second"
+  },
+  {
+    "symbol": "Q36",
+    "unitId": 5321526,
+    "shortName": "m2/m3",
+    "longName": "square metre per cubic metre"
+  },
+  {
+    "symbol": "QR",
+    "unitId": 20818,
+    "shortName": "qr",
+    "longName": "quire"
+  },
+  {
+    "symbol": "QTR",
+    "unitId": 5330002,
+    "shortName": "Qr (UK)",
+    "longName": "quarter (UK)"
+  },
+  {
+    "symbol": "TAN",
+    "unitId": 5521742,
+    "shortName": "TAN",
+    "longName": "total acid number"
+  },
+  {
+    "symbol": "TKM",
+    "unitId": 5524301,
+    "shortName": "t·km",
+    "longName": "tonne kilometre"
+  },
+  {
+    "symbol": "TPI",
+    "unitId": 5525577,
+    "shortName": "TPI",
+    "longName": "teeth per inch"
+  },
+  {
+    "symbol": "TQD",
+    "unitId": 5525828,
+    "shortName": "km³/d",
+    "longName": "thousand cubic metre per day"
+  },
+  {
+    "symbol": "VA",
+    "unitId": 22081,
+    "shortName": "V·A / kg",
+    "longName": "volt - ampere per kilogram"
+  },
+  {
+    "symbol": "WA",
+    "unitId": 22337,
+    "shortName": "W/kg",
+    "longName": "watt per kilogram"
+  },
+  {
+    "symbol": "WSD",
+    "unitId": 5722948,
+    "shortName": "std",
+    "longName": "standard"
+  },
+  {
+    "symbol": "MRW",
+    "unitId": 5067351,
+    "shortName": "m·wk",
+    "longName": "Metre Week"
+  },
+  {
+    "symbol": "MKW",
+    "unitId": 5065559,
+    "shortName": "m²· wk",
+    "longName": "Square Metre Week"
+  },
+  {
+    "symbol": "MQW",
+    "unitId": 5067095,
+    "shortName": "m³·wk",
+    "longName": "Cubic Metre Week"
+  },
+  {
+    "symbol": "HWE",
+    "unitId": 4740933,
+    "shortName": "piece·k",
+    "longName": "Piece Week"
+  },
+  {
+    "symbol": "MRD",
+    "unitId": 5067332,
+    "shortName": "m·day",
+    "longName": "Metre Day"
+  },
+  {
+    "symbol": "MKD",
+    "unitId": 5065540,
+    "shortName": "m²·d",
+    "longName": "Square Metre Day"
+  },
+  {
+    "symbol": "MQD",
+    "unitId": 5067076,
+    "shortName": "m³·d",
+    "longName": "Cubic Metre Day"
+  },
+  {
+    "symbol": "HAD",
+    "unitId": 4735300,
+    "shortName": "piece·d",
+    "longName": "Piece Day"
+  },
+  {
+    "symbol": "MRM",
+    "unitId": 5067341,
+    "shortName": "m·mo",
+    "longName": "Metre Month"
+  },
+  {
+    "symbol": "MKM",
+    "unitId": 5065549,
+    "shortName": "m²·mo",
+    "longName": "Square Metre Month"
+  },
+  {
+    "symbol": "MQM",
+    "unitId": 5067085,
+    "shortName": "m³·mo",
+    "longName": "Cubic Metre Month"
+  },
+  {
+    "symbol": "HMO",
+    "unitId": 4738383,
+    "shortName": "piece·mo",
+    "longName": "Piece Month"
+  },
+  {
+    "symbol": "DBW",
+    "unitId": 4473431,
+    "shortName": "dBW",
+    "longName": "Decibel watt"
+  },
+  {
+    "symbol": "DBM",
+    "unitId": 4473421,
+    "shortName": "dBm",
+    "longName": "Decibel-milliwatts"
+  },
+  {
+    "symbol": "FNU",
+    "unitId": 4607573,
+    "shortName": "FNU",
+    "longName": "Formazin nephelometric unit"
+  },
+  {
+    "symbol": "NTU",
+    "unitId": 5133397,
+    "shortName": "NTU",
+    "longName": "Nephelometric turbidity unit"
+  }
+]

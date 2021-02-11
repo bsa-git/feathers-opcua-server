@@ -7,8 +7,7 @@ const {
   getClientService,
   getHistoryResults,
   getHistoryResultsEx,
-  getSrvCurrentState,
-  getOpcuaDataType
+  Unece_to_Locale
 } = require('../../src/plugins/opcua/opcua-helper');
 
 const {
@@ -75,6 +74,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     // Make dirs
     makeDirSync([appRoot, 'test/data/tmp', 'ch-m51']);
     makeDirSync([appRoot, 'test/data/tmp', 'ch-m52']);
+    // Unece_to_Locale(`${appRoot}/src/api/opcua/UNECE_to_OPCUA.json`, `${appRoot}/test/data/tmp/en.json`);
   });
 
   after(function (done) {

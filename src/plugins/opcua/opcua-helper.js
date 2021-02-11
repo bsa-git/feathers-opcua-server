@@ -1,6 +1,19 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { inspector, appRoot, getParseUrl, getHostname, getMyIp } = require('../lib');
+const {
+  inspector,
+  appRoot,
+  getParseUrl,
+  getHostname,
+  getMyIp,
+  strReplace
+} = require('../lib');
+
+const {
+  readFileSync,
+  writeFileSync,
+  doesFileExist
+} = require('../lib/file-operations');
 
 const {
   DataType,
@@ -8,7 +21,10 @@ const {
   makeEUInformation,
   extractFullyQualifiedDomainName
 } = require('node-opcua');
+
 const moment = require('moment');
+
+const papa = require('papaparse');
 
 const loToInteger = require('lodash/toInteger');
 const loIsObject = require('lodash/isObject');
@@ -16,6 +32,8 @@ const loIsEqual = require('lodash/isEqual');
 const loToPairs = require('lodash/toPairs');
 const loMerge = require('lodash/merge');
 const loConcat = require('lodash/concat');
+const loOmit = require('lodash/omit');
+// const loSnakeCase = require('lodash/snakeCase');
 
 const debug = require('debug')('app:opcua-helper');
 const isLog = false;
@@ -23,9 +41,9 @@ const isDebug = false;
 
 
 loMerge(standardUnits, {
-  degree_celsius: makeEUInformation("CEL", "deg.C", "degree Celsius"),
+  degree_celsius: makeEUInformation('CEL', 'deg.C', 'degree Celsius'),
   kilograms_force_per_square_centimetre: makeEUInformation('E42', 'kgf/cm2', 'A unit of pressure defining the number of kilograms force per square centimetre = 9,806 65 x 10⁴ Pa'),
-  cubic_metre_per_hour: makeEUInformation("MQH", "m3/h", "Cubic metre per hours = 2,777 78 x 10^-4 m3/s"),
+  cubic_metre_per_hour: makeEUInformation('MQH', 'm3/h', 'Cubic metre per hours = 2,777 78 x 10^-4 m3/s'),
   kilogram_per_cubic_metre: makeEUInformation('KMQ', 'kg/m3', 'kilogram per cubic metre   kg/m3'),
 });
 
@@ -144,9 +162,9 @@ const formatConfigOption = function (configOption) {
   loMerge(formatResult, configOption.type ? { type: configOption.type } : {});
   loMerge(formatResult, configOption.dataType ? { dataType: configOption.dataType } : {});
   loMerge(formatResult, configOption.valueParams ? { valueParams: configOption.valueParams } : {});
-  if(formatResult.valueParams && 
+  if (formatResult.valueParams &&
     formatResult.valueParams.engineeringUnits &&
-    standardUnits[formatResult.valueParams.engineeringUnits]){
+    standardUnits[formatResult.valueParams.engineeringUnits]) {
     formatResult.valueParams.engineeringUnits = standardUnits[formatResult.valueParams.engineeringUnits];
   }
   return formatResult;
@@ -433,6 +451,32 @@ const getTimestamp = function (timestamp) {
   return dt;
 };
 
+/**
+ * @method Unece_to_Locale
+ * @param {String} pathFrom 
+ * @param {String} pathTo 
+ */
+const Unece_to_Locale = function (pathFrom, pathTo) {
+  let standardUnits = {}, longName = '', pathToFile = {};
+  // Convert unece data
+  let uneceList = require(pathFrom);
+  uneceList = uneceList.map(item => loOmit(item, ['unitId']));
+  uneceList.forEach(item => {
+    longName = item.longName.toLowerCase();
+    longName = strReplace(longName, ' - ', '_');
+    longName = strReplace(longName, '-', '_');
+    longName = strReplace(longName, ' ', '_');
+    standardUnits[longName] = { symbol: item.symbol, shortName: item.shortName, longName: item.longName};
+  });
+  // Merge new data and  pathToFile data
+  if(doesFileExist(pathTo)){
+    pathToFile = require(pathTo);
+  }
+  loMerge(pathToFile, {standardUnits});
+  // Write to file
+  writeFileSync(pathTo, pathToFile, true);
+};
+
 
 module.exports = {
   nodeIdToString,
@@ -456,5 +500,6 @@ module.exports = {
   isOpcuaClientInList,
   isMyServiceHost,
   convertTo,
-  getTimestamp
+  getTimestamp,
+  Unece_to_Locale
 };
