@@ -27,17 +27,20 @@ class OpcuaServer {
    * @param params {Object}
    */
   constructor(app, params = {}) {
+    this.id = params.serverInfo.applicationName;
     this.app = app;
     // Set process.on to event 'SIGINT'
     this.isOnSignInt = false;
     // Get opcua config
-    const opcuaConfig = getOpcuaConfig(params.serverInfo.applicationName);
+    const opcuaConfig = getOpcuaConfig(this.id);
     params.buildInfo = { productName: opcuaConfig.name };
+    this.locale = (params.locale === undefined)? process.env.LOCALE : params.locale;
     this.params = loMerge(opcuaDefaultServerOptions, params);
     this.opcuaServer = null;
     this.addedItemList = [];
     this.currentState = {
-      id: this.params.serverInfo.applicationName,
+      id: this.id,
+      locale: this.locale,
       productName: this.params.buildInfo.productName,
       port: this.params.port,
       endpointUrl: '',

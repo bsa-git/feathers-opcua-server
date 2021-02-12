@@ -5,9 +5,7 @@ const port = app.get('port') || 3030;
 const {
   getServerService,
   getClientService,
-  getHistoryResults,
   getHistoryResultsEx,
-  Unece_to_Locale
 } = require('../../src/plugins/opcua/opcua-helper');
 
 const {
@@ -49,12 +47,14 @@ const srvData = {
   params: {
     port: 26580, // default - 26543, 26540 (opcua.test), 26550 (opcua.test2), 26570 (opcua-servers.test), 26560 (opcua-clients.test), 26580 (opcua-clients.m5.test),
     serverInfo: { applicationName: 'ua-cherkassy-azot-m5_test' },
+    locale: 'ru'
   }
 };
 
 const clientData = {
   params: {
     applicationName: 'ua-cherkassy-azot-m5_test',
+    locale: 'ru'
   }
 };
 
@@ -190,9 +190,9 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       // variables.forEach(v => {
       // service.sessionReadHistoryValues
       // readResults = await service.sessionReadHistoryValues(id, variables, start, end);
-      readResults = await service.sessionReadHistoryValues(id, ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT'], start, end);// т/ч
+      readResults = await service.sessionReadHistoryValues(id, ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT'], start, end);
 
-      readResults = getHistoryResultsEx(readResults, ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT'], id);
+      readResults = getHistoryResultsEx(id, readResults, ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT'], srvCurrentState.locale);
       if (isLog) inspector('OPC-UA clients: session history values for "CH_M51" group.readResults:', readResults);
       inspector('OPC-UA clients: session history values for "CH_M51" group.readResults:', readResults);
       assert.ok(true, 'OPC-UA clients: session history values for "CH_M51" group');

@@ -33,20 +33,11 @@ const loToPairs = require('lodash/toPairs');
 const loMerge = require('lodash/merge');
 const loConcat = require('lodash/concat');
 const loOmit = require('lodash/omit');
-// const loSnakeCase = require('lodash/snakeCase');
+const loAt = require('lodash/at');
 
 const debug = require('debug')('app:opcua-helper');
 const isLog = false;
 const isDebug = false;
-
-
-loMerge(standardUnits, {
-  degree_celsius: makeEUInformation('CEL', 'deg.C', 'degree Celsius'),
-  kilograms_force_per_square_centimetre: makeEUInformation('E42', 'kgf/cm2', 'A unit of pressure defining the number of kilograms force per square centimetre = 9,806 65 x 10⁴ Pa'),
-  cubic_metre_per_hour: makeEUInformation('MQH', 'm3/h', 'Cubic metre per hours = 2,777 78 x 10^-4 m3/s'),
-  kilogram_per_cubic_metre: makeEUInformation('KMQ', 'kg/m3', 'kilogram per cubic metre   kg/m3'),
-});
-
 
 /**
  * @method nodeIdToString
@@ -152,20 +143,28 @@ const formatUAVariable = function (uaVariable = null) {
 /**
  * @method formatConfigOption
  * @param {Object} configOption 
+ * @param {String} locale 
  * @returns {Object}
  */
-const formatConfigOption = function (configOption) {
-  let formatResult = {};
+const formatConfigOption = function (configOption, locale) {
+  let formatResult = {}, engineeringUnit, locales;
   formatResult.browseName = configOption.browseName;
   formatResult.displayName = configOption.displayName;
   loMerge(formatResult, configOption.aliasName ? { aliasName: configOption.aliasName } : {});
   loMerge(formatResult, configOption.type ? { type: configOption.type } : {});
   loMerge(formatResult, configOption.dataType ? { dataType: configOption.dataType } : {});
   loMerge(formatResult, configOption.valueParams ? { valueParams: configOption.valueParams } : {});
-  if (formatResult.valueParams &&
-    formatResult.valueParams.engineeringUnits &&
-    standardUnits[formatResult.valueParams.engineeringUnits]) {
-    formatResult.valueParams.engineeringUnits = standardUnits[formatResult.valueParams.engineeringUnits];
+  // Set engineering unit for value
+  if (formatResult.valueParams && formatResult.valueParams.engineeringUnits) {
+    locales = require(`${appRoot}/src/plugins/localization/locales/${locale}.json`);
+    engineeringUnit = locales.standardUnits[formatResult.valueParams.engineeringUnits];
+    if (!engineeringUnit) {
+      locales = require(`${appRoot}/src/plugins/localization/locales/${process.env.FALLBACK_LOCALE}.json`);
+      engineeringUnit = locales.standardUnits[formatResult.valueParams.engineeringUnits];
+    }
+    // makeEUInformation
+    const args = loAt(engineeringUnit, ['symbol', 'shortName', 'longName']);
+    formatResult.valueParams.engineeringUnits = makeEUInformation(...args).displayName.text;
   }
   return formatResult;
 };
@@ -201,21 +200,22 @@ const getHistoryResults = function (historyResults, nameNodeIds) {
 
 /**
  * @method getHistoryResultsEx
+ * @param {String} id 
  * @param {Object[]} historyResults 
  * @param {String[]} nameNodeIds 
  * e.g. ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT']
- * @param {String} id 
+ * @param {String} locale 
  * e.g. 'ua-cherkassy-azot-test1'
  * @param {Object[]}
  */
-const getHistoryResultsEx = function (historyResults, nameNodeIds, id) {
+const getHistoryResultsEx = function (id, historyResults, nameNodeIds, locale = '') {
   let results = [], result, option, value, nameNodeId;
   const options = getOpcuaConfigOptions(id);
 
   historyResults.forEach((historyResult, index) => {
     nameNodeId = nameNodeIds[index];
     option = options.find(opt => opt.browseName === nameNodeId);
-    option = formatConfigOption(option);
+    option = formatConfigOption(option, locale ? locale : process.env.FALLBACK_LOCALE);
     result = {};
     result.browseName = nameNodeId;
     result.displayName = option.displayName;
@@ -335,6 +335,21 @@ const getSrvCurrentState = async (app, id) => {
   const service = await getServerService(app, id);
   const opcuaServer = await service.get(id);
   return opcuaServer.server.currentState;
+};
+
+/**
+ * @method getClientCurrentState
+ * Get opcua client currentState
+ * @async
+ * 
+ * @param {Application} app 
+ * @param {String} id 
+ * @returns {Object}
+ */
+const getClientCurrentState = async (app, id) => {
+  const service = await getClientService(app, id);
+  const opcuaClient = await service.get(id);
+  return opcuaClient.server.currentState;
 };
 
 /**
@@ -466,13 +481,13 @@ const Unece_to_Locale = function (pathFrom, pathTo) {
     longName = strReplace(longName, ' - ', '_');
     longName = strReplace(longName, '-', '_');
     longName = strReplace(longName, ' ', '_');
-    standardUnits[longName] = { symbol: item.symbol, shortName: item.shortName, longName: item.longName};
+    standardUnits[longName] = { symbol: item.symbol, shortName: item.shortName, longName: item.longName };
   });
   // Merge new data and  pathToFile data
-  if(doesFileExist(pathTo)){
+  if (doesFileExist(pathTo)) {
     pathToFile = require(pathTo);
   }
-  loMerge(pathToFile, {standardUnits});
+  loMerge(pathToFile, { standardUnits });
   // Write to file
   writeFileSync(pathTo, pathToFile, true);
 };
@@ -494,6 +509,7 @@ module.exports = {
   getServerService,
   getClientService,
   getSrvCurrentState,
+  getClientCurrentState,
   getClientForProvider,
   getServerForProvider,
   isOpcuaServerInList,

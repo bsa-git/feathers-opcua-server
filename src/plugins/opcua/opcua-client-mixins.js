@@ -67,6 +67,7 @@ module.exports = function opcuaClientMixins(service, path) {
       result = ['id', 'nameNodeIds', 'attributeIds', 'maxAge'];
       break;
     case 'sessionReadHistoryValues':
+    case 'sessionReadHistoryValuesEx':  
       result = ['id', 'nameNodeIds', 'start', 'end'];
       break;
     case 'sessionWriteSingleNode':
@@ -419,6 +420,22 @@ module.exports = function opcuaClientMixins(service, path) {
   service.sessionReadHistoryValues = async function (id, nameNodeIds, start, end) {
     const opcuaClient = await service.get(id);
     result = await opcuaClient.client.sessionReadHistoryValues(nameNodeIds, start, end);
+    return result;
+  };
+
+  /**
+   * @method sessionReadHistoryValuesEx
+   * @async
+   * 
+   * @param {String} id 
+   * @param {ReadValueIdLike|ReadValueIdLike[]} nameNodeIds
+   * @param {String} start   the start time in UTC format
+   * @param {String} end     the end time in UTC format
+   * @returns {Promise<HistoryReadResult[]>}
+   */
+  service.sessionReadHistoryValuesEx = async function (id, nameNodeIds, start, end) {
+    const opcuaClient = await service.get(id);
+    result = await opcuaClient.client.sessionReadHistoryValuesEx(nameNodeIds, start, end);
     return result;
   };
 

@@ -2,7 +2,7 @@
   "standardUnits": {
     "degree_celsius": {"symbol": "CEL", "shortName": "град.С", "longName": "градус Цельсия"},
     "kilogram_force_per_square_centimetre": {"symbol": "E42", "shortName": "кгс/см2", "longName": "килограмм сила на сантиметр квадратный"},
-    "cubic_metre_per_hour": {"symbol": "MQH", "shortName": "м3/ч", "longName": "метр кубический в час"},
+    "cubic_metre_per_hour": {"symbol": "MQH", "shortName": "м3/ч", "longName": "метр кубический в час"},    
     "kilogram_per_cubic_metre": {"symbol": "KMQ", "shortName": "кг/м3", "longName": "килограмм на метр кубический"},
     "tonne_per_hour": {"symbol": "E18", "shortName": "т/ч", "longName": "тонн в час"},
     "cubic_metre": {"symbol": "MTQ", "shortName": "м3", "longName": "метр кубический"},

@@ -1,6 +1,10 @@
 /* eslint-disable no-unused-vars */
 const { inspector, isString, isObject, appRoot } = require('../lib');
-const { getOpcuaConfig, getSubscriptionHandler } = require('./opcua-helper');
+const { 
+  getOpcuaConfig, 
+  getSubscriptionHandler,
+  getHistoryResultsEx
+} = require('./opcua-helper');
 const {
   OPCUAClient,
   ClientSubscription,
@@ -30,14 +34,17 @@ class OpcuaClient {
    * @param params {Object}
    */
   constructor(app, params = {}) {
+    this.id = params.applicationName;
     // Get opcua config
-    const opcuaConfig = getOpcuaConfig(params.applicationName);
+    const opcuaConfig = getOpcuaConfig(this.id);
+    this.locale = (params.locale === undefined)? process.env.LOCALE : params.locale;
     params.clientName = opcuaConfig.name;
     this.params = loMerge(defaultClientOptions, params);
     this.app = app;
     this.srvCurrentState = null;
     this.currentState = {
-      id: this.params.applicationName,
+      id: this.id,
+      locale: this.locale,
       clientName: this.params.clientName,
       port: null,
       endpointUrl: '',
@@ -615,6 +622,62 @@ class OpcuaClient {
 
     if (itemNodeIds.length) {
       dataValues = await this.session.readHistoryValue(itemNodeIds, start, end);
+      result = dataValues;
+    }
+    if (isLog) inspector('plugins.opcua-client.class::sessionReadHistoryValue.result:', result);
+    return result;
+  }
+
+  /**
+   * @method sessionReadHistoryValuesEx
+   * @async
+   *
+   * @example
+   *
+   * ```javascript
+   * //  es5
+   * session.readHistoryValue(
+   *   "ns=5;s=Simulation Examples.Functions.Sine1",
+   *   "2015-06-10T09:00:00.000Z",
+   *   "2015-06-10T09:01:00.000Z", function(err,dataValues) {
+   *
+   * });
+   * ```
+   *
+   * ```javascript
+   * //  es6
+   * const dataValues = await session.readHistoryValue(
+   *   "ns=5;s=Simulation Examples.Functions.Sine1",
+   *   "2015-06-10T09:00:00.000Z",
+   *   "2015-06-10T09:01:00.000Z");
+   * ```
+   * 
+   * ```javascript
+   * //  es6
+   * const dataValues = await session.readHistoryValue(
+   *   [{
+   *  nodeId: "ns=0;i=2258",
+   *  attributeId: AttributeIds.Value,
+   *  indexRange: null,
+   *  dataEncoding: { namespaceIndex: 0, name: null }
+   *}],
+   *   "2015-06-10T09:00:00.000Z",
+   *   "2015-06-10T09:01:00.000Z");
+   * ```
+   * @param {ReadValueIdLike|ReadValueIdLike[]} nameNodeIds   the read value id
+   * @param {String} start   the start time in UTC format
+   * @param {String} end     the end time in UTC format
+   * @return {Promise<HistoryReadResult[]>}
+   */
+  async sessionReadHistoryValuesEx(nameNodeIds, start, end) {
+    let result = [], itemNodeIds = [], dataValues;
+    this.sessionNotCreated();
+    // Get nodeIds
+    itemNodeIds = this.getNodeIds(nameNodeIds);
+
+    if (itemNodeIds.length) {
+      dataValues = await this.session.readHistoryValue(itemNodeIds, start, end);
+      dataValues = getHistoryResultsEx(this.id, dataValues, itemNodeIds, this.locale);
       result = dataValues;
     }
     if (isLog) inspector('plugins.opcua-client.class::sessionReadHistoryValue.result:', result);
