@@ -5,7 +5,7 @@ const port = app.get('port') || 3030;
 const {
   getServerService,
   getClientService,
-  getHistoryResultsEx,
+  getSubscriptionResult,
 } = require('../../src/plugins/opcua/opcua-helper');
 
 const {
@@ -169,14 +169,6 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     const srvCurrentState = await service.getSrvCurrentState(id);
     let variables = srvCurrentState.paramsAddressSpace.variables;
     variables = variables.filter(v => v.ownerGroup === 'CH_M51::ValueFromFile').map(v => v.browseName);
-    // inspector('srvCurrentState.variables:', variables);
-    // assert.ok(true, 'OPC-UA clients: session history value from file');
-    // });
-
-    // service.getItemNodeId
-    // readResult = await service.getItemNodeId(id, 'Device2.02F5');
-    // if (isLog) inspector('getItemNodeId.readResult:', readResult);
-
     if (variables.length) {
       // Get start time
       let start = moment();
@@ -186,211 +178,36 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       // Get end time
       let end = moment();
       debug('OPC-UA clients: session history values for "CH_M51" group.EndTime:', getTime(end, false));
-
-      // variables.forEach(v => {
-      // service.sessionReadHistoryValues
-      // readResults = await service.sessionReadHistoryValues(id, variables, start, end);
-      readResults = await service.sessionReadHistoryValues(id, ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT'], start, end);
-
-      readResults = getHistoryResultsEx(id, readResults, ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT'], srvCurrentState.locale);
+      readResults = await service.sessionReadHistoryValuesEx(id, variables, start, end);
       if (isLog) inspector('OPC-UA clients: session history values for "CH_M51" group.readResults:', readResults);
-      inspector('OPC-UA clients: session history values for "CH_M51" group.readResults:', readResults);
-      assert.ok(true, 'OPC-UA clients: session history values for "CH_M51" group');
-
-      /*
-      const results = OPC-UA clients: session history values for "CH_M51" group.readResults:
-      [
-        HistoryReadResult {
-          statusCode: ConstantStatusCode {
-            _value: 0,
-            _description: 'No Error',
-            _name: 'Good'
-          },
-          continuationPoint: null,
-          historyData: HistoryData {
-            dataValues: [
-              DataValue {
-                value: Variant {
-                  dataType: 11,
-                  arrayType: 0,
-                  value: 3.283,
-                  dimensions: null
-                },
-                statusCode: ConstantStatusCode {
-                  _value: 0,
-                  _description: 'No Error',
-                  _name: 'Good'
-                },
-                sourceTimestamp: 2021-02-06T11:41:02.639Z {
-                  high_low: [ 30866556, -228724083 ],
-                  picoseconds: 578900000
-                },
-                sourcePicoseconds: 578942000,
-                serverTimestamp: 2021-02-06T11:41:02.639Z {
-                  high_low: [ 30866556, -228724083 ],
-                  picoseconds: 578900000
-                },
-                serverPicoseconds: 578942000
-              },
-              DataValue {
-                value: Variant {
-                  dataType: 11,
-                  arrayType: 0,
-                  value: 3.773,
-                  dimensions: null
-                },
-                statusCode: ConstantStatusCode {
-                  _value: 0,
-                  _description: 'No Error',
-                  _name: 'Good'
-                },
-                sourceTimestamp: 2021-02-06T11:41:03.147Z {
-                  high_low: [ 30866556, -223644776 ],
-                  picoseconds: 509600000
-                },
-                sourcePicoseconds: 509656000,
-                serverTimestamp: 2021-02-06T11:41:03.147Z {
-                  high_low: [ 30866556, -223644776 ],
-                  picoseconds: 509600000
-                },
-                serverPicoseconds: 509656000
-              }
-            ]
-          }
-        },
-        HistoryReadResult {
-          statusCode: ConstantStatusCode {
-            _value: 0,
-            _description: 'No Error',
-            _name: 'Good'
-          },
-          continuationPoint: null,
-          historyData: HistoryData {
-            dataValues: [
-              DataValue {
-                value: Variant {
-                  dataType: 11,
-                  arrayType: 0,
-                  value: 5.767,
-                  dimensions: null
-                },
-                statusCode: ConstantStatusCode {
-                  _value: 0,
-                  _description: 'No Error',
-                  _name: 'Good'
-                },
-                sourceTimestamp: 2021-02-06T11:41:02.641Z {
-                  high_low: [ 30866556, -228701117 ],
-                  picoseconds: 875500000
-                },
-                sourcePicoseconds: 875504000,
-                serverTimestamp: 2021-02-06T11:41:02.641Z {
-                  high_low: [ 30866556, -228701117 ],
-                  picoseconds: 875500000
-                },
-                serverPicoseconds: 875504000
-              },
-              DataValue {
-                value: Variant {
-                  dataType: 11,
-                  arrayType: 0,
-                  value: 6.161,
-                  dimensions: null
-                },
-                statusCode: ConstantStatusCode {
-                  _value: 0,
-                  _description: 'No Error',
-                  _name: 'Good'
-                },
-                sourceTimestamp: 2021-02-06T11:41:03.149Z {
-                  high_low: [ 30866556, -223622973 ],
-                  picoseconds: 689900000
-                },
-                sourcePicoseconds: 689901000,
-                serverTimestamp: 2021-02-06T11:41:03.149Z {
-                  high_low: [ 30866556, -223622973 ],
-                  picoseconds: 689900000
-                },
-                serverPicoseconds: 689901000
-              }
-            ]
-          }
-        }
-      ];
-
-
-
-      
-
-      if (readResults.length && readResults[0].statusCode.name === 'Good') {
-        if (readResult[0].historyData.dataValues.length) {
-          let dataValues = readResult[0].historyData.dataValues;
-          dataValues.forEach(dataValue => {
-            if (dataValue.statusCode.name === 'Good') {
-              dataItem = dataValue.value.value;
-              console.log(chalk.green('OPC-UA clients: session history values for "CH_M51" group:'), chalk.cyan(`${dataItem}; Timestamp=${dataValue.sourceTimestamp}`));
-              assert.ok(true, 'OPC-UA clients: session history values for "CH_M51" group');
+      if (readResults.length) {
+        readResults.forEach(readResult => {
+          if (readResult.statusCode === 'Good') {
+            if (readResult.dataValues.length) {
+              readResult.dataValues.forEach(dataValue => {
+                if (dataValue.statusCode === 'Good') {
+                  dataItem = dataValue.value;
+                  console.log(chalk.green(`historyValue.${readResult.browseName}:`), chalk.cyan(`${dataItem} (${readResult.valueParams.engineeringUnits}); Timestamp=${dataValue.timestamp}`));
+                  assert.ok(true, 'OPC-UA clients: session history values for "CH_M51" group');
+                } else {
+                  assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
+                }
+              });
             } else {
               assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
             }
-          });
-        } else {
-          assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
-        }
+          } else {
+            assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
+          }
+        });
       } else {
         assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
       }
-      */
     } else {
       assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
     }
   });
-  /*
-  it('OPC-UA clients: session history value from Device2.02P5', async () => {
-    let dataItem, readResult = null;
-    const service = await getClientService(app, id);
-
-    // service.getItemNodeId
-    readResult = await service.getItemNodeId(id, 'Device2.02P5');
-    if (isLog) inspector('getItemNodeId.readResult:', readResult);
-
-    if (readResult) {
-      // Get start time
-      let start = moment();
-      debug('SessionHistoryValue_From_Device2.02P5.StartTime:', getTime(start, false));
-      // Pause
-      await pause(1000);
-      // Get end time
-      let end = moment();
-      debug('SessionHistoryValue_From_Device2.02P5.EndTime:', getTime(end, false));
-
-      // service.sessionReadHistoryValues
-      readResult = await service.sessionReadHistoryValues(id, 'Device2.02P5', start, end);
-
-      if (isLog) inspector('SessionHistoryValue_From_Device2.02P5.readResult:', readResult);
-      if (readResult.length && readResult[0].statusCode.name === 'Good') {
-        if (readResult[0].historyData.dataValues.length) {
-          let dataValues = readResult[0].historyData.dataValues;
-          dataValues.forEach(dataValue => {
-            if (dataValue.statusCode.name === 'Good') {
-              dataItem = dataValue.value.value;
-              console.log(chalk.green('SessionHistoryValue_From_Device2.02P5:'), chalk.cyan(`${dataItem}; Timestamp=${dataValue.sourceTimestamp}`));
-              assert.ok(true, 'OPC-UA clients: session history value from Device2.02P5');
-            } else {
-              assert.ok(false, 'OPC-UA clients: session history value from Device2.02P5');
-            }
-          });
-        } else {
-          assert.ok(false, 'OPC-UA clients: session history value from Device2.02P5');
-        }
-      } else {
-        assert.ok(false, 'OPC-UA clients: session history value from Device2.02P5');
-      }
-    } else {
-      assert.ok(false, 'OPC-UA clients: session history value from Device2.02P5');
-    }
-  });
-
+  
   //============== START SUBSCRIPTION ====================//
 
   it('OPC-UA clients: subscription create', async () => {
@@ -405,14 +222,11 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
   it('OPC-UA clients: subscription monitor', async () => {
     const service = await getClientService(app, id);
     // service.getNodeIds
-    const nodeIds = await service.getNodeIds(id, ['Device1.Temperature']);
+    const nodeIds = await service.getNodeIds(id, ['CH_M51::01AMIAK:01T4.PNT', 'CH_M51::01AMIAK:01P4_1.PNT']);
     if (nodeIds.length) {
       nodeIds.forEach(async nodeId => {
-        // service.subscriptionMonitor
-        await service.subscriptionMonitor(id, 'onChangedCommonHandler', { nodeId });
-
+        await service.subscriptionMonitor(id, 'onChangedCH_M5Handler', { nodeId });
       });
-
       assert.ok(true, 'OPC-UA client subscription monitor');
     }
   });
@@ -428,7 +242,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(true, 'OPC-UA clients: subscription terminate');
   });
 
-  */
+
   //===== SESSION CLOSE/CLIENT DISCONNECT/SERVER SHUTDOWN =====//
 
   it('OPC-UA clients: session close the service', async () => {

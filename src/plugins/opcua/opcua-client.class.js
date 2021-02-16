@@ -3,7 +3,7 @@ const { inspector, isString, isObject, appRoot } = require('../lib');
 const { 
   getOpcuaConfig, 
   getSubscriptionHandler,
-  getHistoryResultsEx
+  formatHistoryResults
 } = require('./opcua-helper');
 const {
   OPCUAClient,
@@ -12,6 +12,8 @@ const {
   TimestampsToReturn,
   Variant,
 } = require('node-opcua');
+
+const moment = require('moment');
 
 const defaultClientOptions = require(`${appRoot}/src/api/opcua/OPCUAClientOptions`);
 const defaultSubscriptionOptions = require(`${appRoot}/src/api/opcua/ClientSubscriptionOptions.json`);
@@ -677,7 +679,7 @@ class OpcuaClient {
 
     if (itemNodeIds.length) {
       dataValues = await this.session.readHistoryValue(itemNodeIds, start, end);
-      dataValues = getHistoryResultsEx(this.id, dataValues, itemNodeIds, this.locale);
+      dataValues = formatHistoryResults(this.id, dataValues, itemNodeIds, this.locale);
       result = dataValues;
     }
     if (isLog) inspector('plugins.opcua-client.class::sessionReadHistoryValue.result:', result);
@@ -1081,12 +1083,16 @@ class OpcuaClient {
       // Run subscriptionHandler
       monitoredItem.on('changed', (dataValue) => {
         if (isLog) inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
+        itemToMonitor.id = this.id;
+        itemToMonitor.locale = this.locale;
+        // itemToMonitor.timestamp = moment().format();
+        dataValue.sourceTimestamp = moment().format();
         if (cb) {
           cb(itemToMonitor, dataValue);
         } else {
           // Get subscriptionHandler
-          const id = this.getCurrentState().id;
-          subscriptionHandler = getSubscriptionHandler(id, subscriptionHandlerName);
+          // const id = this.getCurrentState().id;
+          subscriptionHandler = getSubscriptionHandler(this.id, subscriptionHandlerName);
           subscriptionHandler(itemToMonitor, dataValue);
         }
 

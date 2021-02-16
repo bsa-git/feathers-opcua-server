@@ -28,12 +28,15 @@ const papa = require('papaparse');
 
 const loToInteger = require('lodash/toInteger');
 const loIsObject = require('lodash/isObject');
+const loIsString = require('lodash/isString');
+const loIsNumber = require('lodash/isNumber');
 const loIsEqual = require('lodash/isEqual');
 const loToPairs = require('lodash/toPairs');
 const loMerge = require('lodash/merge');
 const loConcat = require('lodash/concat');
 const loOmit = require('lodash/omit');
 const loAt = require('lodash/at');
+const loRound = require('lodash/round');
 
 const debug = require('debug')('app:opcua-helper');
 const isLog = false;
@@ -46,7 +49,7 @@ const isDebug = false;
  * @returns {String}
  */
 const nodeIdToString = function (nodeId = '') {
-  return loIsObject(nodeId) ? nodeId.toString() : nodeId;
+  return !loIsString(nodeId) ? nodeId.toString() : nodeId;
 };
 
 /**
@@ -61,7 +64,12 @@ const nodeIdToString = function (nodeId = '') {
  */
 const getNodeIdType = function (nodeId = '') {
   nodeId = nodeIdToString(nodeId);
-  const nodeIdType = nodeId.split(';')[1].split('=')[0];
+  let nodeIdType = nodeId.split(';');
+  if (nodeIdType.length > 1) {
+    nodeIdType = nodeIdType[1].split('=')[0];
+  } else {
+    nodeIdType = '';
+  }
   return nodeIdType;
 };
 
@@ -76,10 +84,11 @@ const getValueFromNodeId = function (nodeId) {
   let nodeIdType = '', value = null;
   nodeId = nodeIdToString(nodeId);
   nodeIdType = getNodeIdType(nodeId);
-  if (nodeId) {
+  if (nodeId && nodeIdType) {
     value = nodeId.split(';')[1].split('=')[1];
     value = (nodeIdType === 'i') ? loToInteger(value) : value;
-
+  } else {
+    value = nodeId;
   }
   return value;
 };
@@ -110,11 +119,12 @@ const getNameSpaceFromNodeId = function (nodeId = '') {
  * e.g. ['Double', 11]
  */
 const getOpcuaDataType = function (nodeId = '') {
+  nodeId = nodeIdToString(nodeId);
   let value = getValueFromNodeId(nodeId);
   const dataTypeList = loToPairs(DataType);
   if (isLog) inspector('getOpcuaDataType.DataTypeList:', dataTypeList);
   const dataType = dataTypeList.find(item => {
-    return loIsEqual(item[1], value);
+    return loIsEqual(item[1], loToInteger(value));
   });
   return dataType;
 };
@@ -144,6 +154,7 @@ const formatUAVariable = function (uaVariable = null) {
  * @method formatConfigOption
  * @param {Object} configOption 
  * @param {String} locale 
+ * e.g. locale -> 'ru'|'en'
  * @returns {Object}
  */
 const formatConfigOption = function (configOption, locale) {
@@ -162,58 +173,75 @@ const formatConfigOption = function (configOption, locale) {
       locales = require(`${appRoot}/src/plugins/localization/locales/${process.env.FALLBACK_LOCALE}.json`);
       engineeringUnit = locales.standardUnits[formatResult.valueParams.engineeringUnits];
     }
-    // makeEUInformation
-    const args = loAt(engineeringUnit, ['symbol', 'shortName', 'longName']);
-    formatResult.valueParams.engineeringUnits = makeEUInformation(...args).displayName.text;
+    if (engineeringUnit) {
+      const args = loAt(engineeringUnit, ['symbol', 'shortName', 'longName']);
+      formatResult.valueParams.engineeringUnits = makeEUInformation(...args).displayName.text;
+    }
   }
   return formatResult;
 };
 
-
 /**
- * @method getHistoryResults
+ * @method formatHistoryResults
+ * @param {String} id 
+ * e.g. 'ua-cherkassy-azot-test1'
  * @param {Object[]} historyResults 
  * @param {String[]} nameNodeIds 
- * e.g. ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT']
+ * e.g. ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT'] ||
+ * e.g. ['ns=1;s=CH_M51::01AMIAK:01F4.PNT', 'ns=1;s=CH_M51::01AMIAK:01F21_1.PNT']
+ * @param {String} locale 
+ * e.g. locale -> 'ru'|'en'
  * @param {Object[]}
  */
-const getHistoryResults = function (historyResults, nameNodeIds) {
-  let results = [], result, value, nameNodeId;
-
-  historyResults.forEach((historyResult, index) => {
-    nameNodeId = (nameNodeIds.length && index < nameNodeIds.length) ? nameNodeIds[index] : '';
-    result = {};
-    loMerge(result, nameNodeId ? { browseName: nameNodeId } : {});
-    result.statusCode = historyResult.statusCode._name;
-    result.dataValues = [];
-    historyResult.historyData.dataValues.forEach(v => {
-      value = {};
-      value.statusCode = v.statusCode.name;
-      value.timestamp = getTimestamp(v.sourceTimestamp.toString());
-      value.value = v.value.value;
-      result.dataValues.push(loMerge({}, value));
+const formatHistoryResults = function (id, historyResults, nameNodeIds, locale = '') {
+  let results = [], result, option, value, nameNodeId;
+  const options = getOpcuaConfigOptions(id);
+  if (Array.isArray(nameNodeIds) && (nameNodeIds.length === historyResults.length)) {
+    historyResults.forEach((historyResult, index) => {
+      nameNodeId = nameNodeIds[index];
+      nameNodeId = getValueFromNodeId(nameNodeId);
+      option = options.find(opt => opt.browseName === nameNodeId);
+      option = formatConfigOption(option, locale ? locale : process.env.FALLBACK_LOCALE);
+      result = {};
+      result.browseName = nameNodeId;
+      result.displayName = option.displayName;
+      loMerge(result, option.aliasName ? { aliasName: option.aliasName } : {});
+      loMerge(result, option.type ? { type: option.type } : {});
+      loMerge(result, option.dataType ? { dataType: option.dataType } : {});
+      loMerge(result, option.valueParams ? { valueParams: option.valueParams } : {});
+      result.statusCode = historyResult.statusCode._name;
+      result.dataValues = [];
+      historyResult.historyData.dataValues.forEach(v => {
+        value = {};
+        value.statusCode = v.statusCode.name;
+        value.timestamp = getTimestamp(v.sourceTimestamp.toString());
+        value.value = v.value.value;
+        result.dataValues.push(loMerge({}, value));
+      });
+      results.push(loMerge({}, result));
     });
-    results.push(loMerge({}, result));
-  });
+  } else {
+    results = historyResults;
+  }
   return results;
 };
 
 /**
- * @method getHistoryResultsEx
+ * @method formatDataValue
  * @param {String} id 
- * @param {Object[]} historyResults 
- * @param {String[]} nameNodeIds 
- * e.g. ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT']
- * @param {String} locale 
  * e.g. 'ua-cherkassy-azot-test1'
- * @param {Object[]}
+ * @param {Object} dataValue 
+ * @param {String} nameNodeId 
+ * e.g. 'CH_M51::01AMIAK:01F4.PNT' | 'ns=1;s=CH_M51::01AMIAK:01F4.PNT'
+ * @param {String} locale 
+ * e.g. locale -> 'ru'|'en'
+ * @param {Object}
  */
-const getHistoryResultsEx = function (id, historyResults, nameNodeIds, locale = '') {
-  let results = [], result, option, value, nameNodeId;
+const formatDataValue = function (id, dataValue, nameNodeId, locale = '') {
+  let result, option;
   const options = getOpcuaConfigOptions(id);
-
-  historyResults.forEach((historyResult, index) => {
-    nameNodeId = nameNodeIds[index];
+  nameNodeId = getValueFromNodeId(nameNodeId);
+  if (nameNodeId) {
     option = options.find(opt => opt.browseName === nameNodeId);
     option = formatConfigOption(option, locale ? locale : process.env.FALLBACK_LOCALE);
     result = {};
@@ -221,21 +249,19 @@ const getHistoryResultsEx = function (id, historyResults, nameNodeIds, locale = 
     result.displayName = option.displayName;
     loMerge(result, option.aliasName ? { aliasName: option.aliasName } : {});
     loMerge(result, option.type ? { type: option.type } : {});
-    loMerge(result, option.dataType ? { dataType: option.dataType } : {});
-    loMerge(result, option.valueParams ? { valueParams: option.valueParams } : {});
-    result.statusCode = historyResult.statusCode._name;
-    result.dataValues = [];
-    historyResult.historyData.dataValues.forEach(v => {
-      value = {};
-      value.statusCode = v.statusCode.name;
-      value.timestamp = getTimestamp(v.sourceTimestamp.toString());
-      value.value = v.value.value;
-      result.dataValues.push(loMerge({}, value));
-    });
-    results.push(loMerge({}, result));
-  });
-
-  return results;
+    loMerge(result, option.valueParams ? { valueParams: option.valueParams } : {}); 
+    loMerge(result, dataValue.sourceTimestamp ? { sourceTimestamp: dataValue.sourceTimestamp } : {});
+    loMerge(result, dataValue.serverTimestamp ? { serverTimestamp: dataValue.serverTimestamp } : {});
+    result.statusCode = dataValue.statusCode._name;
+    result.value = {};
+    loMerge(result.value, dataValue.value.dataType ? { dataType: getOpcuaDataType(dataValue.value.dataType)[0] } : {});
+    loMerge(result.value, dataValue.value.arrayType ? { arrayType: dataValue.value.arrayType } : {});
+    loMerge(result.value, dataValue.value.dimensions ? { dimensions: dataValue.value.dimensions } : {});
+    result.value.value = dataValue.value.value;
+  } else {
+    result = dataValue;
+  }
+  return result;
 };
 
 /**
@@ -501,8 +527,8 @@ module.exports = {
   getOpcuaDataType,
   formatUAVariable,
   formatConfigOption,
-  getHistoryResults,
-  getHistoryResultsEx,
+  formatHistoryResults,
+  formatDataValue,
   getOpcuaConfig,
   getOpcuaConfigOptions,
   getSubscriptionHandler,
