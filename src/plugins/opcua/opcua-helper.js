@@ -10,33 +10,28 @@ const {
 } = require('../lib');
 
 const {
-  readFileSync,
   writeFileSync,
   doesFileExist
 } = require('../lib/file-operations');
 
 const {
   DataType,
-  standardUnits,
   makeEUInformation,
   extractFullyQualifiedDomainName
 } = require('node-opcua');
 
 const moment = require('moment');
-
 const papa = require('papaparse');
 
 const loToInteger = require('lodash/toInteger');
 const loIsObject = require('lodash/isObject');
 const loIsString = require('lodash/isString');
-const loIsNumber = require('lodash/isNumber');
 const loIsEqual = require('lodash/isEqual');
 const loToPairs = require('lodash/toPairs');
 const loMerge = require('lodash/merge');
 const loConcat = require('lodash/concat');
 const loOmit = require('lodash/omit');
 const loAt = require('lodash/at');
-const loRound = require('lodash/round');
 
 const debug = require('debug')('app:opcua-helper');
 const isLog = false;
