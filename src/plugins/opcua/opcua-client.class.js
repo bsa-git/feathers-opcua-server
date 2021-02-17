@@ -1073,6 +1073,9 @@ class OpcuaClient {
       const mergeItemToMonitor = loMerge({}, defaultItemToMonitor, itemToMonitor);
       const mergeRequestedParameters = loMerge({}, defaultRequestedParameters, requestedParameters);
 
+      if (isLog) inspector('opcua-client.class::subscriptionMonitor.mergeItemToMonitor:', mergeItemToMonitor);
+      if (isLog) inspector('opcua-client.class::subscriptionMonitor.mergeRequestedParameters:', mergeRequestedParameters);
+
       const monitoredItem = await this.subscription.monitor(
         mergeItemToMonitor,
         mergeRequestedParameters,
@@ -1085,13 +1088,11 @@ class OpcuaClient {
         if (isLog) inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
         itemToMonitor.id = this.id;
         itemToMonitor.locale = this.locale;
-        // itemToMonitor.timestamp = moment().format();
-        dataValue.sourceTimestamp = moment().format();
+        dataValue.serverTimestamp = moment().format();
         if (cb) {
           cb(itemToMonitor, dataValue);
         } else {
           // Get subscriptionHandler
-          // const id = this.getCurrentState().id;
           subscriptionHandler = getSubscriptionHandler(this.id, subscriptionHandlerName);
           subscriptionHandler(itemToMonitor, dataValue);
         }

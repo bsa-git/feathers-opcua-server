@@ -119,7 +119,7 @@
       "variableGetType": "valueFromSource",
       "getter": "histValueFromFile",
       "getterParams": {
-        "path": "test/data/tmp",
+        "path": "test/data/tmp/test1",
         "t": 50,
         "interval": 500
       }

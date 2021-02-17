@@ -1,7 +1,13 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
 const app = require('../../src/app');
-const { OpcuaServer, OpcuaClient, appRoot, inspector, getOpcuaConfig } = require('../../src/plugins');
+const { 
+  OpcuaServer, 
+  OpcuaClient, 
+  appRoot, 
+  inspector, 
+  // getOpcuaConfig 
+} = require('../../src/plugins');
 const chalk = require('chalk');
 const moment = require('moment');
 

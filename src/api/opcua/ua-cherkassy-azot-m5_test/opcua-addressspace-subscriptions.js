@@ -49,7 +49,7 @@ function onChangedCH_M5Handler(params, dataValue) {
   if (isLog) inspector('subscriptions.onChangedCH_M5Handler.formatDataValue:', dataValue);
   const value = loRound(dataValue.value.value, 3);
   const engineeringUnits = dataValue.valueParams.engineeringUnits;
-  const timestamp = dataValue.sourceTimestamp;
+  const timestamp = dataValue.serverTimestamp;
   console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} (${engineeringUnits}) Timestamp=${timestamp}`));
 }
 

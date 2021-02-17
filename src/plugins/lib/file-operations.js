@@ -168,6 +168,7 @@ const makeDirSync = function (path) {
     path.forEach(item => {
       _path = join(_path, item);
       isExist = doesDirExist(_path);
+      // isExist = fsAccess(_path);
       if (isDebug) debug('makeDirSync.path:', _path, '; isExist:', isExist);
       if (!isExist) {
         fs.mkdirSync(_path);
@@ -177,6 +178,7 @@ const makeDirSync = function (path) {
   } else {
     _path = path;
     isExist = doesDirExist(_path);
+    // isExist = fsAccess(_path);
     if (isDebug) debug('makeDirSync.path:', _path, '; isExist:', isExist);
     if (!isExist) {
       fs.mkdirSync(_path);
@@ -197,6 +199,7 @@ const removeFilesFromDirSync = function (path) {
     path = join(...path);
   }
   let isExist = doesDirExist(path);
+  // let isExist = fsAccess(path);
   if (isExist) {
     if (isDebug) debug('removeFilesFromDirSync.path:', path);
     fileObjs = readDirSync(path, true);
@@ -228,6 +231,7 @@ const removeDirFromDirSync = function (path) {
     path = join(...path);
   }
   let isExist = doesDirExist(path);
+  // let isExist = fsAccess(path);
   if (isExist) {
     if (isDebug) debug('removeDirFromDirSync.path:', path);
     fileObjs = readDirSync(path, true);
@@ -262,6 +266,7 @@ const clearDirSync = function (path) {
     path = join(...path);
   }
   const isExist = doesDirExist(path);
+  // const isExist = fsAccess(path);
   if (isExist) {
     if (isDebug) debug('clearDirSync.path:', path);
     removeFilesFromDirSync(path);

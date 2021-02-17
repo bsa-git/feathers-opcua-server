@@ -17,6 +17,7 @@ const {
   readOnlyModifiedFile,
   watchFile,
   unwatchFile,
+  removeFileSync
 } = require('../../src/plugins/lib/file-operations');
 
 const chalk = require('chalk');
@@ -57,57 +58,59 @@ function cbWatchFile(filePath, current, previous) {
   inspector('cbWatchFile.previous:', previous);
   // UnWatch File
   unwatchFile(filePath);
+  // Remove file 
+  removeFileSync(filePath);
 }
 
 describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
 
   before(async () => {
-    makeDirSync([appRoot, 'test/data/tmp']);
+    makeDirSync([appRoot, 'test/data/tmp', 'fo']);
   });
 
   after(async () => {
-    const path = [appRoot, 'test/data/tmp'];
-    clearDirSync(path);
   });
 
   it('FileOperations: writeFileSync/readFileSync', () => {
     const data = { value: '12345-ABC' };
-    let path = writeFileSync([appRoot, 'test/data/tmp/1.json'], data, true);
+    let path = writeFileSync([appRoot, 'test/data/tmp/fo/1.json'], data, true);
 
     let result = readFileSync(path);
     result = JSON.parse(result);
     if (isDebug) debug('FileOperations: writeFileSync/readFileSync.jsonData:', result);
     // debug('FileOperations: writeFileSync/readFileSync.jsonData:', result);
+    removeFileSync(path);
     assert.ok(result.value === data.value, 'FileOperations: writeFileSync/readFileSync');
   });
 
   it('FileOperations: makeDirSync', () => {
-    let path = makeDirSync([appRoot, 'test/data/tmp/tmp2']);
+    let path = makeDirSync([appRoot, 'test/data/tmp/fo/tmp2']);
     const isExist = doesDirExist(path);
     assert.ok(isExist === true, 'FileOperations: makeDirSync');
   });
 
   it('FileOperations: writeFileSync/readFileSync', () => {
     const data = { value: '67890-ABC' };
-    let path = writeFileSync([appRoot, 'test/data/tmp/tmp2/2.json'], data, true);
+    let path = writeFileSync([appRoot, 'test/data/tmp/fo/tmp2/2.json'], data, true);
 
     let result = readFileSync(path);
     result = JSON.parse(result);
     if (isDebug) debug('FileOperations: writeFileSync/readFileSync.jsonData:', result);
     // debug('FileOperations: writeFileSync/readFileSync.jsonData:', result);
+    clearDirSync([appRoot, 'test/data/tmp/fo/tmp2']);
     assert.ok(result.value === data.value, 'FileOperations: writeFileSync/readFileSync');
   });
 
   it('FileOperations: readDirSync', () => {
-    const filenames = readDirSync([appRoot, 'test/data/tmp']);
+    const filenames = readDirSync([appRoot, 'test/data/tmp/fo']);
     inspector('FileOperations: readDirSync.filenames:', filenames);
-    const fileObjs = readDirSync([appRoot, 'test/data/tmp'], true);
+    const fileObjs = readDirSync([appRoot, 'test/data/tmp/fo'], true);
     inspector('FileOperations: readDirSync.fileObjs:', fileObjs);
     assert.ok(true, 'FileOperations: readDirSync');
   });
 
   it('FileOperations: readOnlyNewFile', () => {
-    let path = readOnlyNewFile([appRoot, 'test/data/tmp/tmp2'], cbReadOnlyNewFile);
+    let path = readOnlyNewFile([appRoot, 'test/data/tmp/fo'], cbReadOnlyNewFile);
 
     const data = { value: '12345-NewFile' };
     writeFileSync([path, 'new.json'], data, true);
@@ -116,47 +119,25 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
   });
 
   it('FileOperations: readOnlyModifiedFile', () => {
-    let path = readOnlyModifiedFile([appRoot, 'test/data/tmp/tmp2'], cbReadOnlyModifiedFile);
+    let path = readOnlyModifiedFile([appRoot, 'test/data/tmp/fo'], cbReadOnlyModifiedFile);
 
     const data = { value: '12345-ModifiedFile' };
-    writeFileSync([path, '2.json'], data, true);
+    writeFileSync([path, 'new.json'], data, true);
 
     assert.ok(true, 'FileOperations: readOnlyModifiedFile');
   });
 
-  it('FileOperations: makeDirSync/writeFileSync/readFileSync', () => {
-    // Make dir
-    let path = makeDirSync([appRoot, 'test/data/tmp/tmp3']);
-
-    // Write file
-    const data = { value: '12345-ABC' };
-    path = writeFileSync([path, '3.json'], data, true);
-
-    // Read file
-    let result = readFileSync(path);
-    result = JSON.parse(result);
-    assert.ok(result.value === data.value, 'FileOperations: makeDirSync/writeFileSync/readFileSync');
-  });
-
   it('FileOperations: watchFile', async () => {
     // Watch file
-    let path = watchFile([appRoot, 'test/data/tmp/tmp3/3.json'], cbWatchFile, {interval: 100});
+    let path = watchFile([appRoot, 'test/data/tmp/fo/new.json'], cbWatchFile, {interval: 100});
     if (isDebug) debug('FileOperations: watchFile.path:', path);
     // Write file
-    const data = { value: '12345-ModifiedFile' };
+    const data = { value: '12345-WatchFile' };
     writeFileSync(path, data, true);
     // Pause 300Ms
     await pause(300);
-
+    // Stop watching for changes on filename
+    // unwatchFile(path);
     assert.ok(true, 'FileOperations: watchFile');
   });
-
-
-
-  // it('FileOperations: removeFileSync', async () => {
-  //   removeFileSync([appRoot, 'test/data/tmp/1.json']);
-  //   const isExist = doesFileExist([appRoot, 'test/data/tmp/1.json']);
-  //   assert.ok(isExist === false, 'FileOperations: removeFileSync');
-  // });
-
 });

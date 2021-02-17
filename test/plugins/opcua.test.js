@@ -1,7 +1,16 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
 const app = require('../../src/app');
-const { getTime, getValueFromNodeId, OpcuaServer, OpcuaClient, pause, isObject, inspector } = require('../../src/plugins');
+const { 
+  getTime, 
+  getValueFromNodeId, 
+  OpcuaServer, 
+  OpcuaClient, 
+  pause, 
+  isObject, 
+  inspector 
+} = require('../../src/plugins');
+
 const chalk = require('chalk');
 const moment = require('moment');
 const loRound = require('lodash/round');

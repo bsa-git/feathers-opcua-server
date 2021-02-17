@@ -69,19 +69,15 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     server.once('listening', () => {
       setTimeout(() => done(), 500);
     });
-    // Remove files and dirs from dir
-    clearDirSync([appRoot, 'test/data/tmp']);
     // Make dirs
     makeDirSync([appRoot, 'test/data/tmp', 'ch-m51']);
     makeDirSync([appRoot, 'test/data/tmp', 'ch-m52']);
-    // Unece_to_Locale(`${appRoot}/src/api/opcua/UNECE_to_OPCUA.json`, `${appRoot}/test/data/tmp/en.json`);
   });
 
   after(function (done) {
     if (isDebug) debug('after Start!');
     server.close();
     setTimeout(() => done(), 500);
-    // removeDirFromDirSync([appRoot, 'test/data/tmp']);
   });
 
   it('OPC-UA clients: registered the service', async () => {
@@ -207,7 +203,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
     }
   });
-  
+
   //============== START SUBSCRIPTION ====================//
 
   it('OPC-UA clients: subscription create', async () => {
@@ -221,17 +217,21 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   it('OPC-UA clients: subscription monitor', async () => {
     const service = await getClientService(app, id);
+    const srvCurrentState = await service.getSrvCurrentState(id);
     // service.getNodeIds
-    const nodeIds = await service.getNodeIds(id, ['CH_M51::01AMIAK:01T4.PNT', 'CH_M51::01AMIAK:01P4_1.PNT']);
+    let variables = srvCurrentState.paramsAddressSpace.variables;
+    variables = variables.filter(v => v.ownerGroup === 'CH_M51::ValueFromFile').map(v => v.browseName);
+    const nodeIds = await service.getNodeIds(id, variables);
     if (nodeIds.length) {
       nodeIds.forEach(async nodeId => {
         await service.subscriptionMonitor(id, 'onChangedCH_M5Handler', { nodeId });
       });
-      assert.ok(true, 'OPC-UA client subscription monitor');
     }
+
+    assert.ok(true, 'OPC-UA client subscription monitor');
   });
 
-  
+
   it('OPC-UA clients: subscription terminate', async () => {
     const service = await getClientService(app, id);
     await pause(1000);
@@ -246,7 +246,6 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
   //===== SESSION CLOSE/CLIENT DISCONNECT/SERVER SHUTDOWN =====//
 
   it('OPC-UA clients: session close the service', async () => {
-    await pause(1000);
     const service = await getClientService(app, id);
     const opcuaClient = await service.sessionClose(id);
     if (isLog) inspector('Session close the clients:', opcuaClient);
