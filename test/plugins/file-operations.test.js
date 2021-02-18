@@ -17,7 +17,7 @@ const {
   readOnlyModifiedFile,
   watchFile,
   unwatchFile,
-  removeFileSync
+  removeFileSync,
 } = require('../../src/plugins/lib/file-operations');
 
 const chalk = require('chalk');
@@ -65,7 +65,7 @@ function cbWatchFile(filePath, current, previous) {
 describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
 
   before(async () => {
-    makeDirSync([appRoot, 'test/data/tmp', 'fo']);
+    makeDirSync([appRoot, 'test/data/tmp/fo']);
   });
 
   after(async () => {
@@ -96,15 +96,14 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     let result = readFileSync(path);
     result = JSON.parse(result);
     if (isDebug) debug('FileOperations: writeFileSync/readFileSync.jsonData:', result);
-    // debug('FileOperations: writeFileSync/readFileSync.jsonData:', result);
     clearDirSync([appRoot, 'test/data/tmp/fo/tmp2']);
     assert.ok(result.value === data.value, 'FileOperations: writeFileSync/readFileSync');
   });
 
   it('FileOperations: readDirSync', () => {
-    const filenames = readDirSync([appRoot, 'test/data/tmp/fo']);
+    const filenames = readDirSync([appRoot, 'test/data/tmp']);
     inspector('FileOperations: readDirSync.filenames:', filenames);
-    const fileObjs = readDirSync([appRoot, 'test/data/tmp/fo'], true);
+    const fileObjs = readDirSync([appRoot, 'test/data/tmp'], true);
     inspector('FileOperations: readDirSync.fileObjs:', fileObjs);
     assert.ok(true, 'FileOperations: readDirSync');
   });

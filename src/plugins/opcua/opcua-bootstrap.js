@@ -25,7 +25,8 @@ module.exports = async function opcuaBootstrap(app) {
   let service = null;
   
   const opcuaOptions = getOpcuaConfig();
-  opcuaOptions.forEach(async option => {
+  for (let index = 0; index < opcuaOptions.length; index++) {
+    const option = opcuaOptions[index];
     const myPort = app.get('port');
     // Create service for OPC-UA server
     const isMySrvService = await isMyServiceHost(option.srvServiceUrl, myPort);
@@ -56,5 +57,5 @@ module.exports = async function opcuaBootstrap(app) {
       if(isLog) inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
       // inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
     }
-  });
+  }
 };

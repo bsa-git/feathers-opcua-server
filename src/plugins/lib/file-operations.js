@@ -6,6 +6,8 @@ const join = Path.join;
 const moment = require('moment');
 const { getDate, getTime, strReplace } = require('../lib/util');
 
+const loEndsWith = require('lodash/endsWith');
+
 const debug = require('debug')('app:opcua-operations');
 const isDebug = false;
 const isLog = false;
@@ -39,9 +41,9 @@ const getPathBasename = function (path) {
   if (Array.isArray(path)) {
     path = join(...path);
   }
-  if(platform === 'win32'){
+  if (platform === 'win32') {
     basename = Path.win32.basename(path);
-  }else{
+  } else {
     basename = Path.posix.basename(path);
   }
   return basename;
@@ -100,7 +102,7 @@ const getPathToArray = function (path) {
   if (Array.isArray(path)) {
     path = join(...path);
   }
-  return  path.split(Path.sep);
+  return path.split(Path.sep);
 };
 
 /**
@@ -163,29 +165,54 @@ const fsAccess = function (path, mode = fs.constants.F_OK) {
  * @param {String|Array} path 
  */
 const makeDirSync = function (path) {
-  let isExist = false, _path = '';
+  let isExist = false, joinPath = '', arrPath = [];
   if (Array.isArray(path)) {
     path.forEach(item => {
-      _path = join(_path, item);
-      isExist = doesDirExist(_path);
-      // isExist = fsAccess(_path);
-      if (isDebug) debug('makeDirSync.path:', _path, '; isExist:', isExist);
+      joinPath = join(joinPath, item);
+      isExist = doesDirExist(joinPath);
+      if (isDebug) debug('makeDirSync.path:', joinPath, '; isExist:', isExist);
       if (!isExist) {
-        fs.mkdirSync(_path);
-        if(isDebug) debug('Make dir for path:', _path);
+        arrPath = getPathToArray(joinPath);
+        joinPath = '';
+        arrPath.forEach((item2, index) => {
+          if (!joinPath && loEndsWith(item2, ':')) {
+            item2 += Path.sep;
+          }
+          joinPath = join(joinPath, item2);
+          if (index > 0) {
+            isExist = doesDirExist(joinPath);
+            if (!isExist) {
+              fs.mkdirSync(joinPath);
+              if (isDebug) debug('Make dir for path:', joinPath);
+              debug('Make dir for path:', joinPath);
+            }
+          }
+        });
       }
     });
+    return joinPath;
   } else {
-    _path = path;
-    isExist = doesDirExist(_path);
-    // isExist = fsAccess(_path);
-    if (isDebug) debug('makeDirSync.path:', _path, '; isExist:', isExist);
+    isExist = doesDirExist(path);
+    if (isDebug) debug('makeDirSync.path:', path, '; isExist:', isExist);
     if (!isExist) {
-      fs.mkdirSync(_path);
-      if(isDebug) debug('Make dir for path:', _path);
+      arrPath = getPathToArray(path);
+      arrPath.forEach((item, index) => {
+        if (!joinPath && loEndsWith(item, ':')) {
+          item += Path.sep;
+        }
+        joinPath = join(joinPath, item);
+        if (index > 0) {
+          isExist = doesDirExist(joinPath);
+          if (!isExist) {
+            fs.mkdirSync(joinPath);
+            if (isDebug) debug('Make dir for path:', joinPath);
+            debug('Make dir for path:', joinPath);
+          }
+        }
+      });
     }
+    return path;
   }
-  return _path;
 };
 
 
@@ -271,7 +298,7 @@ const clearDirSync = function (path) {
     if (isDebug) debug('clearDirSync.path:', path);
     removeFilesFromDirSync(path);
     removeDirFromDirSync(path);
-    if(isDebug) debug('Directory has been cleared for path:', path);
+    if (isDebug) debug('Directory has been cleared for path:', path);
   }
   return path;
 };
@@ -525,7 +552,7 @@ const writeFileSync = function (path, data, isJson = false) {
   const isAccess = fsAccess(dir, fs.constants.F_OK) && fsAccess(dir, fs.constants.W_OK);
   if (isAccess) {
     fs.writeFileSync(path, data); // encoding <string> | <null> Default: 'utf8'
-    if(isDebug) debug('File was written for path:', path);
+    if (isDebug) debug('File was written for path:', path);
   } else {
     throw new Error(`Access error for path: ${dir}; fs.F_OK: ${fsAccess(dir, fs.constants.F_OK)}; fs.W_OK: ${fsAccess(dir, fs.constants.W_OK)};`);
   }

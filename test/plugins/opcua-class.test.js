@@ -22,7 +22,7 @@ const {
   StatusCodes,
   makeBrowsePath
 } = require('node-opcua');
-const debug = require('debug')('app:test.opcua');
+const debug = require('debug')('app:opcua-class.test');
 const isDebug = false;
 const isLog = false;
 
@@ -39,19 +39,8 @@ const clientParams = {
 let server = null, client = null;
 let opcuaServer = null, opcuaClient = null;
 
-/**
- * Call back function for subscription monitor
- * @param {Object} params 
- * @param {Object} DataValue 
- */
-const cbSubscriptionMonitor = async (params, dataValue) => {
-  if (isDebug) debug('cbSubscriptionMonitor.nodeId:', params.nodeId);
-  const browseName = getValueFromNodeId(params.nodeId);
-  const value = loRound(dataValue.value.value, 3);
-  console.log(chalk.green(`subscription::${browseName}:`), chalk.cyan(value));
-};
 
-describe('<<=== OPC-UA: Test (opcua.test) ===>>', () => {
+describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
 
   before(async () => {
     // Create OPC-UA server
@@ -76,7 +65,7 @@ describe('<<=== OPC-UA: Test (opcua.test) ===>>', () => {
   it('Client object created', async () => {
     assert.ok(client, 'OPCUA client not created');
   });
-  describe('<<=== OPC-UA: RUN (opcua.test) ===>>', function () {
+  describe('<<=== OPC-UA: Run (opcua-class.test) ===>>', function () {
 
     //===== SERVER CREATE/SERVER CONSTRUCT ADDRESS SPACE/CLIENT CREATE/CLIENT CONNECT/SESSION CREATE =======//
 
@@ -217,18 +206,20 @@ describe('<<=== OPC-UA: Test (opcua.test) ===>>', () => {
     });
 
     //============== SESSION HISTORY VALUES ====================//
-
+    
     it('OPC-UA client session history value', async () => {
       let readResult = null;
 
       if (client.getItemNodeId('Device2.PressureVesselDevice')) {
         // Get start time
-        const start = moment.utc().format();
-        debug('SessionHistoryValue.StartTime:', getTime(start));
+        // const start = moment.utc().format();
+        const start = moment();
+        debug('SessionHistoryValue.StartTime:', getTime(start, false));
         await pause(1000);
         // Get end time
-        const end = moment.utc().format();
-        debug('SessionHistoryValue.EndTime:', getTime(end));
+        // const end = moment.utc().format();
+        const end = moment();
+        debug('SessionHistoryValue.EndTime:', getTime(end, false));
 
         readResult = await client.sessionReadHistoryValues('Device2.PressureVesselDevice', start, end);
         if (readResult.length && readResult[0].statusCode.name === 'Good') {
@@ -236,7 +227,7 @@ describe('<<=== OPC-UA: Test (opcua.test) ===>>', () => {
             let dataValues = readResult[0].historyData.dataValues;
             dataValues.forEach(dataValue => {
               if (dataValue.statusCode.name === 'Good') {
-                console.log(chalk.green('sessionReadHistoryValues.PressureVesselDevice:'), chalk.cyan(`${loRound(dataValue.value.value, 3)}; Timestamp=${dataValue.sourceTimestamp}`));
+                console.log(chalk.green('historyValue.PressureVesselDevice:'), chalk.cyan(`${loRound(dataValue.value.value, 3)}; Timestamp=${dataValue.sourceTimestamp}`));
                 assert.ok(readResult, 'OPC-UA client session history value');
               } else {
                 assert.ok(false, 'OPC-UA client session history value');

@@ -73,12 +73,8 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     server.once('listening', () => {
       setTimeout(() => done(), 500);
     });
-    // Remove files and dirs from dir
-    // clearDirSync([appRoot, 'test/data/tmp']);
-    // Write file
-    const path = makeDirSync([appRoot, 'test/data/tmp', 'test1']);
-    // const fileName = getFileName('data-', 'json', true);
-    // writeFileSync([path, fileName], {value: '12345'}, true);
+    // Make dir
+    const path = makeDirSync([appRoot, 'test/data/tmp/test1']);
   });
 
   after( function (done) {
@@ -457,7 +453,6 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
       readResult = await service.sessionReadHistoryValues(id, 'Device2.ValueFromFile', start, end);
 
       if (isLog) inspector('SessionHistoryValue_FromFile.readResult:', readResult);
-      inspector('SessionHistoryValue_FromFile.readResult:', readResult);
       if (readResult.length && readResult[0].statusCode.name === 'Good') {
         if (readResult[0].historyData.dataValues.length) {
           let dataValues = readResult[0].historyData.dataValues;
@@ -505,7 +500,6 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
       readResult = await service.sessionReadHistoryValues(id, 'Device2.02F5', start, end);
 
       if (isLog) inspector('SessionHistoryValue_From_Device2.02F5.readResult:', readResult);
-      inspector('SessionHistoryValue_From_Device2.02F5.readResult:', readResult);
       // inspector('SessionHistoryValue_FromFile.readResult:', readResult);
       if (readResult.length && readResult[0].statusCode.name === 'Good') {
         if (readResult[0].historyData.dataValues.length) {
@@ -552,7 +546,6 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
       readResult = await service.sessionReadHistoryValues(id, 'Device2.02P5', start, end);
 
       if (isLog) inspector('SessionHistoryValue_From_Device2.02P5.readResult:', readResult);
-      inspector('SessionHistoryValue_From_Device2.02P5.readResult:', readResult);
       if (readResult.length && readResult[0].statusCode.name === 'Good') {
         if (readResult[0].historyData.dataValues.length) {
           let dataValues = readResult[0].historyData.dataValues;

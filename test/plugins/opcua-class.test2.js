@@ -20,7 +20,7 @@ const {
   makeBrowsePath
 } = require('node-opcua');
 
-const debug = require('debug')('app:test.opcua2');
+const debug = require('debug')('app:opcua-class.test2');
 const isDebug = false;
 const isLog = false;
 
@@ -37,7 +37,7 @@ const clientParams = {
 let server = null, client = null;
 let opcuaServer = null, opcuaClient = null;
 
-describe('<<=== OPC-UA: Test (opcua.test2) ===>>', () => {
+describe('<<=== OPC-UA: Test (opcua-class.test2) ===>>', () => {
 
   before(async () => {
     // Create OPC-UA server
@@ -62,7 +62,7 @@ describe('<<=== OPC-UA: Test (opcua.test2) ===>>', () => {
   it('Client object created', async () => {
     assert.ok(client, 'OPCUA client not created');
   });
-  describe('<<=== OPC-UA: RUN ===>>', function () {
+  describe('<<=== OPC-UA: Run (opcua-class.test2) ===>>', function () {
     it('OPC-UA server start', async () => {
       await server.opcuaServerCreate();
       server.constructAddressSpace();

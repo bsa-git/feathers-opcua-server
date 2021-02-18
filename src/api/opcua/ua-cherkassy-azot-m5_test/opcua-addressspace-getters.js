@@ -81,94 +81,67 @@ function converterForVariable(params = {}) {
 }
 
 function histValueFromFileForCH_M51(params = {}, addedValue) {
-  const _t = 0;
   const _interval = 200;
   const _path = 'test/data/tmp';
-  const _isHistForGetter = true;
   let dataItems, groupVariable, dataType, browseName, results;
-  let t = params.t ? params.t : _t;
   let interval = params.interval ? params.interval : _interval;
   let path = params.path ? params.path : _path;
-  let isHistForGetter = params.isHistForGetter === undefined ? _isHistForGetter : params.isHistForGetter;
 
-  if (isHistForGetter) {
-    // Watch read only new file
-    readOnlyNewFile([appRoot, path], (filePath, data) => {
-      // Show filePath, data
-      if (isDebug) console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
-      if (isDebug) console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
+  // Watch read only new file
+  readOnlyNewFile([appRoot, path], (filePath, data) => {
+    // Show filePath, data
+    if (isDebug) console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
+    if (isDebug) console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
+    // Set value from source
+    dataType = formatUAVariable(addedValue).dataType[1];
+    results = papa.parse(data, { delimiter: ';', header: true });
+    dataItems = results.data[0];
+    addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
+
+    if (isLog) inspector('histValueFromFileForCH_M51.dataItems:', dataItems);
+    // inspector('histValueFromFileForCH_M51.dataItems:', dataItems);
+
+    // Remove file 
+    removeFileSync(filePath);
+
+    // Get group variable list 
+    const groupVariableList = params.addedVariableList;
+    if (isDebug) inspector('histValueFromFile.groupVariableList:', groupVariableList);
+
+    loForEach(dataItems, function (value, key) {
+      groupVariable = groupVariableList.find(v => v.aliasName === key);
       // Set value from source
-      dataType = formatUAVariable(addedValue).dataType[1];
-      results = papa.parse(data, { delimiter: ';', header: true });
-      dataItems = results.data[0];
-      addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
+      if (groupVariable) {
+        browseName = formatUAVariable(groupVariable).browseName;
 
-      if (isLog) inspector('histValueFromFileForCH_M51.dataItems:', dataItems);
-      // inspector('histValueFromFileForCH_M51.dataItems:', dataItems);
+        // Run setValueFromSource for groupVariable
+        const currentState = params.myOpcuaServer.getCurrentState();
+        const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
+        params.myOpcuaServer.setValueFromSource(variable, groupVariable, module.exports[variable.getter], value);
 
-      // Remove file 
-      removeFileSync(filePath);
-
-      // Get data
-      // dataItems = JSON.parse(data);
-      // Get group variable list 
-      const groupVariableList = params.addedVariableList;
-      if (isDebug) inspector('histValueFromFile.groupVariableList:', groupVariableList);
-
-      loForEach(dataItems, function(value, key) {
-        groupVariable = groupVariableList.find(v => v.aliasName === key);
-        // Set value from source
-        if (groupVariable) {
-          browseName = formatUAVariable(groupVariable).browseName;
-
-          // Run setValueFromSource for groupVariable
-          const currentState = params.myOpcuaServer.getCurrentState();
-          const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
-          params.myOpcuaServer.setValueFromSource(variable, groupVariable, module.exports[variable.getter], value);
-
-          if (isDebug) console.log(chalk.green(`histValueFromFileForCH_M51.${browseName}:`), chalk.cyan(value));
-          // console.log(chalk.green(`histValueFromFileForCH_M51.${browseName}:`), chalk.cyan(value));
-        }
-      });
-
-    });
-    // Write file
-    setInterval(function () {
-      let csv = readFileSync([appRoot, '/src/api/opcua/ua-cherkassy-azot-m5_test/data-CH_M51.csv']);
-      if (csv) {
-        results = papa.parse(csv, { delimiter: ';', header: true });
-        // inspector('histValueFromFileForCH_M51.parse.data:', results.data);
-        loForEach(results.data[0], function(value, key) {
-          results.data[0][key] = getTValue(value);
-        });
-        csv = papa.unparse(results.data, { delimiter: ';' });
-        if(isLog) inspector('histValueFromFileForCH_M51.unparse.csv:', csv);
+        if (isDebug) console.log(chalk.green(`histValueFromFileForCH_M51.${browseName}:`), chalk.cyan(value));
       }
+    });
 
-      const fileName = getFileName('data-', 'csv', true);
-      writeFileSync([appRoot, path, fileName], csv);
-      // t = t + 1;
-    }, interval);
-  } else {
-    // Parse local CSV file
+  });
+  // Write file
+  setInterval(function () {
     let csv = readFileSync([appRoot, '/src/api/opcua/ua-cherkassy-azot-m5_test/data-CH_M51.csv']);
     if (csv) {
-      let results = papa.parse(csv, { delimiter: ';', header: true });
-      inspector('histValueFromFileForCH_M51.parse.data:', results.data);
+      results = papa.parse(csv, { delimiter: ';', header: true });
+      // inspector('histValueFromFileForCH_M51.parse.data:', results.data);
+      loForEach(results.data[0], function (value, key) {
+        results.data[0][key] = getTValue(value);
+      });
       csv = papa.unparse(results.data, { delimiter: ';' });
-      inspector('histValueFromFileForCH_M51.unparse.csv:', csv);
+      if (isLog) inspector('histValueFromFileForCH_M51.unparse.csv:', csv);
     }
-    return 'histValueFromFileForCH_M51';
-  }
+    const fileName = getFileName('data-', 'csv', true);
+    writeFileSync([appRoot, path, fileName], csv);
+  }, interval);
 }
 
 function histValueFromFileForCH_M52(params = {}, addedValue) {
-  // Parse local CSV file
-  // const csv = readFileSync([appRoot, '/src/api/opcua/ua-cherkassy-azot-m5_test/data-CH_M52.csv']);
-  // if(csv){
-  //   const results = papa.parse(csv, {delimiter: ';', header: true});
-  //   inspector('histValueFromFileForCH_M52.results:', results);
-  // }
   return 'histValueFromFileForCH_M52';
 }
 

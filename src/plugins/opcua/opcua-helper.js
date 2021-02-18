@@ -33,9 +33,11 @@ const loConcat = require('lodash/concat');
 const loOmit = require('lodash/omit');
 const loAt = require('lodash/at');
 
+
 const debug = require('debug')('app:opcua-helper');
 const isLog = false;
 const isDebug = false;
+
 
 /**
  * @method nodeIdToString

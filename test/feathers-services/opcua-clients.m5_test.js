@@ -11,10 +11,9 @@ const {
 const {
   appRoot,
   inspector,
-  isObject,
   pause,
   getTime,
-  dtToObject
+  getGroupsFromArray
 } = require('../../src/plugins/lib');
 
 const {
@@ -70,8 +69,8 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       setTimeout(() => done(), 500);
     });
     // Make dirs
-    makeDirSync([appRoot, 'test/data/tmp', 'ch-m51']);
-    makeDirSync([appRoot, 'test/data/tmp', 'ch-m52']);
+    makeDirSync([appRoot, 'test/data/tmp/ch-m51']);
+    makeDirSync([appRoot, 'test/data/tmp/ch-m52']);
   });
 
   after(function (done) {
@@ -216,18 +215,21 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
   });
 
   it('OPC-UA clients: subscription monitor', async () => {
+
     const service = await getClientService(app, id);
     const srvCurrentState = await service.getSrvCurrentState(id);
-    // service.getNodeIds
+    // Start subscriptionMonitor
     let variables = srvCurrentState.paramsAddressSpace.variables;
     variables = variables.filter(v => v.ownerGroup === 'CH_M51::ValueFromFile').map(v => v.browseName);
-    const nodeIds = await service.getNodeIds(id, variables);
-    if (nodeIds.length) {
-      nodeIds.forEach(async nodeId => {
+    const groups = getGroupsFromArray(variables, 10);
+    for (let index = 0; index < groups.length; index++) {
+      const group = groups[index];
+      const nodeIds = await service.getNodeIds(id, group);
+      for (let index2 = 0; index2 < nodeIds.length; index2++) {
+        const nodeId = nodeIds[index2];
         await service.subscriptionMonitor(id, 'onChangedCH_M5Handler', { nodeId });
-      });
+      }
     }
-
     assert.ok(true, 'OPC-UA client subscription monitor');
   });
 
