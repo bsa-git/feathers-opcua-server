@@ -106,6 +106,20 @@ const getPathToArray = function (path) {
 };
 
 /**
+ * @method toPathWithSep
+ * @param {Array|String} path 
+ * @returns {String}
+ */
+const toPathWithSep = function (path) {
+  if (Array.isArray(path)) {
+    path = join(...path);
+  } else {
+    path = join('', path);
+  }
+  return path;
+};
+
+/**
  * @method doesFileExist
  * @param {String|Array} path 
  * @returns {Boolean}
@@ -165,49 +179,49 @@ const fsAccess = function (path, mode = fs.constants.F_OK) {
  * @param {String|Array} path 
  */
 const makeDirSync = function (path) {
-  let isExist = false, joinPath = '', arrPath = [];
+  let isExist = false, joinPath = '', existingPath = '', arrPath = [];
   if (Array.isArray(path)) {
     path.forEach(item => {
       joinPath = join(joinPath, item);
       isExist = doesDirExist(joinPath);
       if (isDebug) debug('makeDirSync.path:', joinPath, '; isExist:', isExist);
-      if (!isExist) {
-        arrPath = getPathToArray(joinPath);
-        joinPath = '';
-        arrPath.forEach((item2, index) => {
-          if (!joinPath && loEndsWith(item2, ':')) {
+      if (isExist) {
+        existingPath = joinPath;
+      } else {
+        item = toPathWithSep(item);
+        arrPath = getPathToArray(item);
+        arrPath.forEach(item2 => {
+          if (!existingPath && loEndsWith(item2, ':')) {
             item2 += Path.sep;
           }
-          joinPath = join(joinPath, item2);
-          if (index > 0) {
-            isExist = doesDirExist(joinPath);
-            if (!isExist) {
-              fs.mkdirSync(joinPath);
-              if (isDebug) debug('Make dir for path:', joinPath);
-              debug('Make dir for path:', joinPath);
-            }
-          }
-        });
-      }
-    });
-    return joinPath;
-  } else {
-    isExist = doesDirExist(path);
-    if (isDebug) debug('makeDirSync.path:', path, '; isExist:', isExist);
-    if (!isExist) {
-      arrPath = getPathToArray(path);
-      arrPath.forEach((item, index) => {
-        if (!joinPath && loEndsWith(item, ':')) {
-          item += Path.sep;
-        }
-        joinPath = join(joinPath, item);
-        if (index > 0) {
+          joinPath = join(existingPath, item2);
           isExist = doesDirExist(joinPath);
           if (!isExist) {
             fs.mkdirSync(joinPath);
             if (isDebug) debug('Make dir for path:', joinPath);
             debug('Make dir for path:', joinPath);
           }
+          existingPath = joinPath;
+        });
+      }
+    });
+    return existingPath;
+  } else {
+    path = toPathWithSep(path);
+    isExist = doesDirExist(path);
+    if (isDebug) debug('makeDirSync.path:', path, '; isExist:', isExist);
+    if (!isExist) {
+      arrPath = getPathToArray(path);
+      arrPath.forEach(item => {
+        if (!joinPath && loEndsWith(item, ':')) {
+          item += Path.sep;
+        }
+        joinPath = join(joinPath, item);
+        isExist = doesDirExist(joinPath);
+        if (!isExist) {
+          fs.mkdirSync(joinPath);
+          if (isDebug) debug('Make dir for path:', joinPath);
+          debug('Make dir for path:', joinPath);
         }
       });
     }
@@ -580,6 +594,7 @@ module.exports = {
   getPathDirname,
   getPathParse,
   getPathToArray,
+  toPathWithSep,
   doesFileExist,
   doesDirExist,
   fsAccess,
