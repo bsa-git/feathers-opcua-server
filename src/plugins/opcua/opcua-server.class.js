@@ -30,7 +30,7 @@ class OpcuaServer {
     this.id = params.serverInfo.applicationName;
     this.app = app;
     // Set process.on to event 'SIGINT'
-    this.isOnSignInt = false;
+    this.isOnSignInt = true;
     // Get opcua config
     const opcuaConfig = getOpcuaConfig(this.id);
     params.buildInfo = { productName: opcuaConfig.name };
@@ -116,7 +116,7 @@ class OpcuaServer {
 
     this.currentState.isCreated = true;
     // OPC-UA server created.
-    console.log(chalk.yellow('Server created'));
+    console.log(chalk.yellow('OPCUAServer created'));
   }
 
   /**

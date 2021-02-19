@@ -9,7 +9,7 @@ const {
   getOpcuaConfig,
   getServerService,
   getClientService,
-  isMyServiceHost,
+  executeOpcuaClientScript,
 } = require('./opcua-helper');
 
 const debug = require('debug')('app:opcua-bootstrap');
@@ -22,39 +22,58 @@ const isLog = false;
  * @param {Object} app 
  */
 module.exports = async function opcuaBootstrap(app) {
-  let service = null;
-  
+  let service = null, opcuaServer = null, opcuaClient = null;
+
   const opcuaOptions = getOpcuaConfig();
   for (let index = 0; index < opcuaOptions.length; index++) {
     const option = opcuaOptions[index];
     const myPort = app.get('port');
+    if (isDebug) debug('opcuaBootstrap.opcuaOptionID:', option.id);
+    // debug('opcuaBootstrap.opcuaOptionID:', option.id);
     // Create service for OPC-UA server
-    const isMySrvService = await isMyServiceHost(option.srvServiceUrl, myPort);
-    if (isMySrvService) {
+    service = await getServerService(app, option.id);
+    if (service) {
       // service create
-      service = await getServerService(app, option.id);
       const srvData = {
         params: {
-          port: option.endpointPort, 
+          port: option.endpointPort,
           serverInfo: { applicationName: option.id },
         }
       };
-      const opcuaServer = await service.create(srvData);
-      if(isLog) inspector('opcuaBootstrap.opcuaServer:', opcuaServer.server.getCurrentState());
+      opcuaServer = await service.create(srvData);
+      if (isLog) inspector('opcuaBootstrap.opcuaServer:', opcuaServer.server.getCurrentState());
       // inspector('opcuaBootstrap.opcuaServer:', opcuaServer.server.getCurrentState());
     }
     // Create service for OPC-UA client
-    const isMyClientService = await isMyServiceHost(option.clientServiceUrl, myPort);
-    if (isMyClientService) {
+    service = await getClientService(app, option.id);
+    if (service) {
       // service create
-      service = await getClientService(app, option.id);
       const clientData = {
         params: {
           applicationName: option.id,
         }
       };
-      const opcuaClient = await service.create(clientData);
-      if(isLog) inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
+      opcuaClient = await service.create(clientData);
+      if (isLog) inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
+      // Execute client script
+      await executeOpcuaClientScript(service, option.id);
+
+      // await service.subscriptionCreate(id);
+
+      // const srvCurrentState = await service.getSrvCurrentState(id);
+      // // Start subscriptionMonitor
+      // let variables = srvCurrentState.paramsAddressSpace.variables;
+      // variables = variables.filter(v => v.ownerGroup === 'CH_M51::ValueFromFile').map(v => v.browseName);
+      // const groups = getGroupsFromArray(variables, 10);
+      // for (let index = 0; index < groups.length; index++) {
+      //   const group = groups[index];
+      //   const nodeIds = await service.getNodeIds(id, group);
+      //   for (let index2 = 0; index2 < nodeIds.length; index2++) {
+      //     const nodeId = nodeIds[index2];
+      //     await service.subscriptionMonitor(id, 'onChangedCH_M5Handler', { nodeId });
+      //   }
+      // }
+
       // inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
     }
   }

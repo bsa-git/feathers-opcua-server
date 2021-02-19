@@ -101,8 +101,8 @@ class OpcuaClient {
     this.opcuaClient = OPCUAClient.create(this.params);
     // Retrying connection
     this.opcuaClient.on('backoff', (retry) => console.log(chalk.yellow('Retrying to connect to:'), this.srvCurrentState.endpointUrl, ' attempt: ', retry));
-
     this.currentState.isCreated = true;
+    console.log(chalk.yellow('OPCUAClient created'));
   }
 
   /**

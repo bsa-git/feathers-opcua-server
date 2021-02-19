@@ -6,7 +6,8 @@ const {
   getParseUrl,
   getHostname,
   getMyIp,
-  strReplace
+  strReplace,
+  getNumber
 } = require('../lib');
 
 const {
@@ -310,6 +311,61 @@ const getSubscriptionHandler = function (id, nameFile = '') {
 };
 
 /**
+ * @method getOpcuaClientScript
+ * @param {String} id 
+ * @param {String} nameScript 
+ * @returns {Function}
+ */
+const getOpcuaClientScript = function (id, nameScript = '') {
+  debug('getOpcuaClientScript.id,nameScript:', id, nameScript);
+  // Get opcuaOption 
+  const opcuaOption = getOpcuaConfig(id);
+  // Get opcuaClientScript
+  const opcuaClientScripts = require(`${appRoot}${opcuaOption.paths['client-scripts']}`);
+  debug('getOpcuaClientScript.opcuaClientScripts:', opcuaClientScripts);
+  const opcuaClientScript = opcuaClientScripts[nameScript];
+  debug('getOpcuaClientScript.opcuaClientScript:', opcuaClientScript);
+  return opcuaClientScript;
+};
+
+/**
+ * @method isMyServiceHost
+ * @async
+ * 
+ * @param {String} serviceUrl 
+ * @param {Number} myPort 
+ * @returns {Boolean}
+ */
+const isMyServiceHost = async function (serviceUrl, myPort) {
+  const serviceHostname = getParseUrl(serviceUrl).hostname.toLowerCase();
+  let servicePort = getParseUrl(serviceUrl).port;
+  servicePort = getNumber(servicePort);
+  const myHostname = getHostname();
+  let myDomainName = await extractFullyQualifiedDomainName();
+  myDomainName = myDomainName.toLowerCase();
+  const myIp = getMyIp();
+  const hostInfo = {
+    serviceHostname,
+    servicePort,
+    myPort,
+    myHostname,
+    myDomainName,
+    myIp
+  };
+  if (isDebug) debug('isMyServiceHostname.hostInfo:', hostInfo);
+  // debug('isMyServiceHostname:', hostInfo);
+  const isPort = (servicePort === myPort);
+  const isLocalhost = (serviceHostname === 'localhost') && (process.env.NODE_ENV === 'test'); 
+  const isHost = (serviceHostname === myHostname) || (serviceHostname === myDomainName) || (serviceHostname === myIp) || isLocalhost;
+  const result = isPort && isHost;
+  if(result){
+    if (isDebug) debug('isMyServiceHostname.hostInfo:', hostInfo);
+    // debug('isMyServiceHostname.hostInfo:', hostInfo);
+  }
+  return result;
+};
+
+/**
  * @method getServerService
  * @param {Object} app
  * @param {String} id 
@@ -426,29 +482,21 @@ const isOpcuaClientInList = (service, id) => {
 };
 
 /**
- * @method isMyServiceHost
- * @async
- * 
- * @param {String} serviceUrl 
- * @param {Number} myPort 
- * @returns {Boolean}
+ * @method executeOpcuaClientScript
+ * @param {Object} service 
+ * @param {String} id 
  */
-const isMyServiceHost = async function (serviceUrl, myPort) {
-  const serviceHostname = getParseUrl(serviceUrl).hostname.toLowerCase();
-  const servicePort = getParseUrl(serviceUrl).port;
-  const myHostname = getHostname();
-  let myDomainName = await extractFullyQualifiedDomainName();
-  myDomainName = myDomainName.toLowerCase();
-  const myIp = getMyIp();
-  if (isDebug) debug('isMyServiceHostname:', {
-    serviceHostname,
-    servicePort,
-    myPort,
-    myHostname,
-    myDomainName,
-    myIp
-  });
-  return (servicePort === myPort) || (serviceHostname === myHostname) || (serviceHostname === myDomainName) || (serviceHostname === 'localhost') || (serviceHostname === myIp);
+const executeOpcuaClientScript = async (service, id) => {
+  const opcuaOption = getOpcuaConfig(id);
+  debug('getOpcuaClientScript.opcuaOption:', opcuaOption);
+  const scriptName = opcuaOption.clientScript;
+  debug('getOpcuaClientScript.scriptName:', scriptName);
+  if(scriptName){
+    const script = getOpcuaClientScript(id, scriptName);
+    if(script){
+      await script(id, service);
+    }
+  }
 };
 
 /**
@@ -529,6 +577,7 @@ module.exports = {
   getOpcuaConfig,
   getOpcuaConfigOptions,
   getSubscriptionHandler,
+  getOpcuaClientScript,
   getServerService,
   getClientService,
   getSrvCurrentState,
@@ -537,6 +586,7 @@ module.exports = {
   getServerForProvider,
   isOpcuaServerInList,
   isOpcuaClientInList,
+  executeOpcuaClientScript,
   isMyServiceHost,
   convertTo,
   getTimestamp,

@@ -86,6 +86,7 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
   let dataItems, groupVariable, dataType, browseName, results;
   let interval = params.interval ? params.interval : _interval;
   let path = params.path ? params.path : _path;
+  let id = params.myOpcuaServer.id;
 
   // Watch read only new file
   readOnlyNewFile([appRoot, path], (filePath, data) => {
@@ -126,10 +127,9 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
   });
   // Write file
   setInterval(function () {
-    let csv = readFileSync([appRoot, '/src/api/opcua/ua-cherkassy-azot-m5_test/data-CH_M51.csv']);
+    let csv = readFileSync([appRoot, '/src/api/opcua', id, 'data-CH_M51.csv']);
     if (csv) {
       results = papa.parse(csv, { delimiter: ';', header: true });
-      // inspector('histValueFromFileForCH_M51.parse.data:', results.data);
       loForEach(results.data[0], function (value, key) {
         results.data[0][key] = getTValue(value);
       });
