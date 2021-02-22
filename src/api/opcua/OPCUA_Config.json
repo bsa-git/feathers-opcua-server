@@ -50,11 +50,13 @@
     "endpointPort": 26580,
     "srvServiceUrl": "http://192.168.3.5:3030",
     "clientServiceUrl": "http://192.168.3.5:3030",
+    "clientScript": "subscriptionMonitor_CH_M5",
     "paths": {
       "options": "/src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json",
       "getters": "/src/api/opcua/ua-cherkassy-azot-m5/opcua-addressspace-getters",
       "methods": "/src/api/opcua/ua-cherkassy-azot-m5/opcua-addressspace-methods",
-      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-m5/opcua-addressspace-subscriptions"
+      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-m5/opcua-addressspace-subscriptions",
+      "client-scripts": "/src/api/opcua/ua-cherkassy-azot-m5/opcua-client-scripts"
     }
   }
 ]

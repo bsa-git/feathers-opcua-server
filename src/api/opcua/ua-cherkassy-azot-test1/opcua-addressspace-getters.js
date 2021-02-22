@@ -3,10 +3,6 @@ const os = require('os');
 const {
   Variant,
   DataType,
-  // StatusCodes,
-  // VariantArrayType,
-  // standardUnits,
-  // makeAccessLevelFlag,
 } = require('node-opcua');
 
 const chalk = require('chalk');
@@ -30,9 +26,6 @@ const {
 } = require('../../../plugins/lib/file-operations');
 
 const loRound = require('lodash/round');
-const loForEach = require('lodash/forEach');
-const moment = require('moment');
-const { pause } = require('../../../plugins/lib');
 
 const debug = require('debug')('app:opcua-addressspace-getters');
 const isDebug = false;
@@ -47,18 +40,6 @@ const getTValue = function (t) {
   let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
   return loRound(value, 3);
 };
-
-/**
- * @method histPlugForGroupVariables
- * 
- * @param {Object} params
- * @param {Object} addedValue 
- */
-function histPlugForGroupVariables(params = {}) {
-  if (isDebug) debug('histPlugForGroupVariables.value:', params.value);
-  // debug('histPlugForGroupVariables.value:', params.value);
-  return params.value? params.value : null;
-}
 
 /**
  * Simulate for value
@@ -193,7 +174,6 @@ function percentageMemUsed() {
 }
 
 module.exports = {
-  histPlugForGroupVariables,
   valueSimulate1,
   valueFromSource1,
   valueFromSource2,

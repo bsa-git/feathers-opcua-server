@@ -58,6 +58,7 @@
     "feathers-hooks-common": "^5.0.4",
     "feathers-nedb": "^5.1.0",
     "helmet": "^3.22.0",
+    "is-unc-path": "^1.0.0",
     "moment": "^2.27.0",
     "nedb": "^1.8.0",
     "node-opcua": "^2.22.0",

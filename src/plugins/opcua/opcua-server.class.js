@@ -9,6 +9,7 @@ const {
   makeAccessLevelFlag,
 } = require('node-opcua');
 const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/OPCUAServerOptions`);
+const opcuaDefaultGetters = require(`${appRoot}/src/api/opcua/OPCUAGetters`);
 
 const loMerge = require('lodash/merge');
 const loOmit = require('lodash/omit');
@@ -351,6 +352,8 @@ class OpcuaServer {
     if (getters === null) {
       getters = require(`${appRoot}${opcuaConfig.paths.getters}`);
     }
+    // getters = loMerge({}, opcuaDefaultGetters, getters);
+    loMerge(getters, opcuaDefaultGetters);
     if (methods === null) {
       methods = require(`${appRoot}${opcuaConfig.paths.methods}`);
     }

@@ -21,6 +21,7 @@ const {
 } = require('../../src/plugins/lib/file-operations');
 
 const chalk = require('chalk');
+const papa = require('papaparse');
 
 const debug = require('debug')('app:file-operations.test');
 const isDebug = false;
@@ -34,6 +35,11 @@ const isLog = false;
 function cbReadOnlyNewFile(filePath, data) {
   console.log(chalk.green('cbReadOnlyNewFile.filePath:'), chalk.cyan(filePath));
   console.log(chalk.green('cbReadOnlyNewFile.data:'), chalk.cyan(data));
+}
+
+function cbReadOnlyNewFile2(filePath, data) {
+  console.log(chalk.green('cbReadOnlyNewFile2.filePath:'), chalk.cyan(filePath));
+  console.log(chalk.green('cbReadOnlyNewFile2.data:'), chalk.cyan(data));
 }
 
 /**
@@ -98,6 +104,36 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     if (isDebug) debug('FileOperations: writeFileSync/readFileSync.jsonData:', result);
     clearDirSync([appRoot, 'test/data/tmp/fo/tmp2']);
     assert.ok(result.value === data.value, 'FileOperations: writeFileSync/readFileSync');
+  });
+
+  it('FileOperations: readFileSync', () => {
+    let path = 'd:\\Share\\ch-m51\\data-CH_M51.csv';
+    // path = '\\\\10.60.0.220\\Share\\ch-m51\\data-CH_M51.csv';
+    // path = '//10.60.0.220/d$/Share/ch-m51/data-CH_M51.csv';
+    path = '//10.60.0.220/Share/ch-m51/data-CH_M51.csv';
+    
+    const isExist = doesDirExist('//10.60.0.220/Share/ch-m51');
+    debug('FileOperations: readFileSync.isExist:', isExist);
+
+    let data = readFileSync(path);
+    data = papa.parse(data, { delimiter: ';', header: true });
+    data = data.data[0];
+    if (isDebug) debug('FileOperations: readFileSync.path:', path);
+    debug('FileOperations: readFileSync.path:', path);
+    if (isDebug) debug('FileOperations: readFileSync.jsonData:', data);
+    debug('FileOperations: readFileSync.jsonData:', data);
+    
+    // cbReadOnlyNewFile2
+    path = readOnlyNewFile('//10.60.0.220/Share/ch-m51', cbReadOnlyNewFile2);
+
+    
+
+    path = writeFileSync('//10.60.0.220/Share/ch-m51/data-CH_M51.json', data, true);
+
+    // Remove file 
+    // removeFileSync(path);
+
+    assert.ok(data, 'FileOperations: readFileSync');
   });
 
   it('FileOperations: readDirSync', () => {

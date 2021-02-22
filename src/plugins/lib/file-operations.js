@@ -4,9 +4,15 @@ const os = require('os');
 const Path = require('path');
 const join = Path.join;
 const moment = require('moment');
-const { getDate, getTime, strReplace } = require('../lib/util');
+const {
+  appRoot,
+  getDate,
+  getTime,
+  strReplace
+} = require('../lib/util');
 
 const loEndsWith = require('lodash/endsWith');
+const loStartsWith = require('lodash/startsWith');
 
 const debug = require('debug')('app:opcua-operations');
 const isDebug = false;
@@ -227,6 +233,23 @@ const makeDirSync = function (path) {
     }
     return path;
   }
+};
+
+/**
+ * @method createPath
+ * @param {String} path 
+ * @returns {String}
+ */
+const createPath = function (path) {
+  const isUncPath = require('is-unc-path');
+  // Make dir
+  if (!isUncPath(path) && (loStartsWith(path, '/') || loStartsWith(path, '\\'))) {
+    path = makeDirSync([appRoot, path]);
+  } else {
+    // For UNC path the command 'makeDirSync' does not work
+    path = isUncPath(path)? path : makeDirSync(path);
+  }
+  return path;
 };
 
 
@@ -604,6 +627,7 @@ module.exports = {
   watchNewFile,
   watchModifiedFile,
   makeDirSync,
+  createPath,
   removeFilesFromDirSync,
   removeDirFromDirSync,
   clearDirSync,

@@ -488,9 +488,9 @@ const isOpcuaClientInList = (service, id) => {
  */
 const executeOpcuaClientScript = async (service, id) => {
   const opcuaOption = getOpcuaConfig(id);
-  debug('getOpcuaClientScript.opcuaOption:', opcuaOption);
+  if(isDebug) debug('getOpcuaClientScript.opcuaOption:', opcuaOption);
   const scriptName = opcuaOption.clientScript;
-  debug('getOpcuaClientScript.scriptName:', scriptName);
+  if(isDebug) debug('getOpcuaClientScript.scriptName:', scriptName);
   if(scriptName){
     const script = getOpcuaClientScript(id, scriptName);
     if(script){

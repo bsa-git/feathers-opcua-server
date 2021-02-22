@@ -1,26 +1,13 @@
 /* eslint-disable no-unused-vars */
-const os = require('os');
-const {
-  Variant,
-  DataType,
-  // StatusCodes,
-  // VariantArrayType,
-  // standardUnits,
-  // makeAccessLevelFlag,
-} = require('node-opcua');
-
 const chalk = require('chalk');
 const papa = require('papaparse');
 
-
 const {
   appRoot,
-  getTime,
   inspector,
 } = require('../../../plugins/lib/util');
 
 const {
-  convertTo,
   formatUAVariable
 } = require('../../../plugins/opcua/opcua-helper');
 
@@ -30,14 +17,15 @@ const {
   writeFileSync,
   removeFileSync,
   getFileName,
-  getPathBasename
+  getPathBasename,
+  makeDirSync,
+  createPath
 } = require('../../../plugins/lib/file-operations');
 
 const loRound = require('lodash/round');
-const loOmit = require('lodash/omit');
 const loForEach = require('lodash/forEach');
-const moment = require('moment');
-const { pause } = require('../../../plugins/lib');
+const loStartsWith = require('lodash/startsWith');
+
 
 const debug = require('debug')('app:opcua-addressspace-getters');
 const isDebug = false;
@@ -53,43 +41,19 @@ const getTValue = function (t) {
   return loRound(value, 3);
 };
 
-/**
- * @method histPlugForGroupVariables
- * 
- * @param {Object} params
- * @param {Object} addedValue 
- */
-function histPlugForGroupVariables(params = {}) {
-  params = loOmit(params, ['myOpcuaServer']);
-  if (isDebug) debug('histPlugForGroupVariables.params:', params);
-  return params.value ? params.value : null;
-}
-
-/**
- * @method converterForVariable
- * @param {Object} params 
- * @returns {any}
- */
-function converterForVariable(params = {}) {
-  let value = null;
-  params = loOmit(params, ['myOpcuaServer']);
-  if (isDebug) debug('histPlugForGroupVariables.params:', params);
-  if (params.value && params.convertType) {
-    value = convertTo(params.convertType, params.value);
-  }
-  return value;
-}
-
 function histValueFromFileForCH_M51(params = {}, addedValue) {
   const _interval = 200;
-  const _path = 'test/data/tmp';
+  const _path = '/test/data/tmp/ch-m51';
   let dataItems, groupVariable, dataType, browseName, results;
   let interval = params.interval ? params.interval : _interval;
   let path = params.path ? params.path : _path;
   let id = params.myOpcuaServer.id;
 
+  // Create path
+  path = createPath(path);
+
   // Watch read only new file
-  readOnlyNewFile([appRoot, path], (filePath, data) => {
+  readOnlyNewFile(path, (filePath, data) => {  
     // Show filePath, data
     if (isDebug) console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
     if (isDebug) console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
@@ -123,7 +87,6 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
         if (isDebug) console.log(chalk.green(`histValueFromFileForCH_M51.${browseName}:`), chalk.cyan(value));
       }
     });
-
   });
   // Write file
   setInterval(function () {
@@ -137,7 +100,7 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
       if (isLog) inspector('histValueFromFileForCH_M51.unparse.csv:', csv);
     }
     const fileName = getFileName('data-', 'csv', true);
-    writeFileSync([appRoot, path, fileName], csv);
+    writeFileSync([path, fileName], csv);
   }, interval);
 }
 
@@ -146,8 +109,6 @@ function histValueFromFileForCH_M52(params = {}, addedValue) {
 }
 
 module.exports = {
-  histPlugForGroupVariables,
-  converterForVariable,
   histValueFromFileForCH_M51,
   histValueFromFileForCH_M52,
 };

@@ -29,7 +29,6 @@ module.exports = async function opcuaBootstrap(app) {
     const option = opcuaOptions[index];
     const myPort = app.get('port');
     if (isDebug) debug('opcuaBootstrap.opcuaOptionID:', option.id);
-    // debug('opcuaBootstrap.opcuaOptionID:', option.id);
     // Create service for OPC-UA server
     service = await getServerService(app, option.id);
     if (service) {

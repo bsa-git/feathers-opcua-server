@@ -59,26 +59,26 @@ const getTValue = function (t) {
  * @param {Object} params
  * @param {Object} addedValue 
  */
-function histPlugForGroupVariables(params = {}) {
-  params = loOmit(params, ['myOpcuaServer']);
-  if (isDebug) debug('histPlugForGroupVariables.params:', params);
-  return params.value ? params.value : null;
-}
+// function histPlugForGroupVariables(params = {}) {
+//   params = loOmit(params, ['myOpcuaServer']);
+//   if (isDebug) debug('histPlugForGroupVariables.params:', params);
+//   return params.value ? params.value : null;
+// }
 
 /**
  * @method converterForVariable
  * @param {Object} params 
  * @returns {any}
  */
-function converterForVariable(params = {}) {
-  let value = null;
-  params = loOmit(params, ['myOpcuaServer']);
-  if (isDebug) debug('histPlugForGroupVariables.params:', params);
-  if (params.value && params.convertType) {
-    value = convertTo(params.convertType, params.value);
-  }
-  return value;
-}
+// function converterForVariable(params = {}) {
+//   let value = null;
+//   params = loOmit(params, ['myOpcuaServer']);
+//   if (isDebug) debug('histPlugForGroupVariables.params:', params);
+//   if (params.value && params.convertType) {
+//     value = convertTo(params.convertType, params.value);
+//   }
+//   return value;
+// }
 
 function histValueFromFileForCH_M51(params = {}, addedValue) {
   const _interval = 200;
@@ -146,8 +146,8 @@ function histValueFromFileForCH_M52(params = {}, addedValue) {
 }
 
 module.exports = {
-  histPlugForGroupVariables,
-  converterForVariable,
+  // histPlugForGroupVariables,
+  // converterForVariable,
   histValueFromFileForCH_M51,
   histValueFromFileForCH_M52,
 };

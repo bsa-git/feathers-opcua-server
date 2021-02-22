@@ -1,86 +1,129 @@
 /* eslint-disable no-unused-vars */
-const os = require('os');
+const chalk = require('chalk');
+const papa = require('papaparse');
+
+
 const {
-  Variant,
-  DataType,
-  StatusCodes,
-  VariantArrayType,
-  standardUnits,
-  makeAccessLevelFlag,
-} = require('node-opcua');
+  appRoot,
+  inspector,
+} = require('../../../plugins/lib/util');
+
+const {
+  formatUAVariable
+} = require('../../../plugins/opcua/opcua-helper');
+
+const {
+  readOnlyNewFile,
+  getPathBasename
+} = require('../../../plugins/lib/file-operations');
+
+const loRound = require('lodash/round');
+const loForEach = require('lodash/forEach');
+const moment = require('moment');
+const { pause } = require('../../../plugins/lib');
+
 const debug = require('debug')('app:opcua-addressspace-getters');
 const isDebug = false;
-// const isLog = false;
+const isLog = false;
 
 /**
- * Simulate for value
- * @param {Object} params 
- * @returns {Variant}
- */
-function valueSimulate1(params = {}) {
-  const t = new Date() / 10000;
-  let value = params.value ? params.value : 10;
-  value = value + 10 * Math.sin(t);
-  return new Variant({ dataType: DataType.Double, value: value });
-}
-
-/**
- * Get value from source1
- * @param {Object} params 
- * @returns {Object}
- */
-function valueFromSource1(params = {}) {
-  const defValue = 'https://leanpub.com/node-opcuabyexample';
-  const value = `Learn Node-OPCUA ! Read ${params.value ? params.value : defValue}`;
-  return value;
-}
-
-/**
- * Get value from source2
- * @param {Object} params 
- * @returns {Object}
- */
-function valueFromSource2(params = {}) {
-  const defValue = [1.0, 2.0, 3.0];
-  const value = params.value ? params.value : defValue;
-  return value;
-}
-
-/**
- * Get hist value from source
+ * @method histValueFromFileForCH_M51
  * @param {Object} params 
  * @param {Object} addedValue 
  */
-function histValueFromSource(params = {}, addedValue) {
-  // simulate pressure change
-  const _t = 0;
-  const _interval = 200;
-  let t = params.t ? params.t : _t;
-  let interval = params.interval ? params.interval :_interval;
-  setInterval(function () {
-    let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
-    if(isDebug) debug('histValueFromSource.value:', value);
-    addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
-    t = t + 1;
-  }, interval);
+function histValueFromFileForCH_M51(params = {}, addedValue) {
+  const _path = 'test/data/tmp';
+  let dataItems, groupVariable, dataType, browseName, results;
+  let path = params.path ? params.path : _path;
+  let id = params.myOpcuaServer.id;
 
+  // Watch read only new file
+  readOnlyNewFile(path, (filePath, data) => {
+    // Show filePath, data
+    if (isDebug) console.log(chalk.green('histValueFromFileForCH_M51.file:'), chalk.cyan(getPathBasename(filePath)));
+    console.log(chalk.green('histValueFromFileForCH_M51.file:'), chalk.cyan(filePath));
+    if (isDebug) console.log(chalk.green('histValueFromFileForCH_M51.data:'), chalk.cyan(data));
+    // Set value from source
+    dataType = formatUAVariable(addedValue).dataType[1];
+    results = papa.parse(data, { delimiter: ';', header: true });
+    dataItems = results.data[0];
+    addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
+
+    if (isLog) inspector('histValueFromFileForCH_M51.dataItems:', dataItems);
+    inspector('histValueFromFileForCH_M51.dataItems:', dataItems);
+    // inspector('histValueFromFileForCH_M51.dataItems:', dataItems);
+
+    // Get group variable list 
+    const groupVariableList = params.addedVariableList;
+    if (isDebug) inspector('histValueFromFileForCH_M51.groupVariableList:', groupVariableList);
+
+    loForEach(dataItems, function (value, key) {
+      groupVariable = groupVariableList.find(v => v.aliasName === key);
+      // Set value from source
+      if (groupVariable) {
+        browseName = formatUAVariable(groupVariable).browseName;
+
+        // Run setValueFromSource for groupVariable
+        const currentState = params.myOpcuaServer.getCurrentState();
+        const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
+        params.myOpcuaServer.setValueFromSource(variable, groupVariable, module.exports[variable.getter], value);
+
+        if (isDebug) console.log(chalk.green(`histValueFromFileForCH_M51.${browseName}:`), chalk.cyan(value));
+      }
+    });
+
+  });
 }
 
 /**
- * Get percentage memory used
- * @returns {Variant}
+ * @method histValueFromFileForCH_M52
+ * @param {Object} params 
+ * @param {Object} addedValue 
  */
-function percentageMemUsed() {
-  const percentageMemUsed = 1.0 - (os.freemem() / os.totalmem());
-  const value = percentageMemUsed * 100;
-  return new Variant({ dataType: DataType.Double, value: value });
+function histValueFromFileForCH_M52(params = {}, addedValue) {
+  const _path = 'test/data/tmp';
+  let dataItems, groupVariable, dataType, browseName, results;
+  let path = params.path ? params.path : _path;
+  let id = params.myOpcuaServer.id;
+
+  // Watch read only new file
+  readOnlyNewFile(path, (filePath, data) => {
+    // Show filePath, data
+    if (isDebug) console.log(chalk.green('histValueFromFileForCH_M52.file:'), chalk.cyan(getPathBasename(filePath)));
+    console.log(chalk.green('histValueFromFileForCH_M52.file:'), chalk.cyan(filePath));
+    if (isDebug) console.log(chalk.green('histValueFromFileForCH_M52.data:'), chalk.cyan(data));
+    // Set value from source
+    dataType = formatUAVariable(addedValue).dataType[1];
+    results = papa.parse(data, { delimiter: ';', header: true });
+    dataItems = results.data[0];
+    addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
+
+    if (isLog) inspector('histValueFromFileForCH_M52.dataItems:', dataItems);
+    // inspector('histValueFromFileForCH_M52.dataItems:', dataItems);
+
+    // Get group variable list 
+    const groupVariableList = params.addedVariableList;
+    if (isDebug) inspector('histValueFromFileForCH_M52.groupVariableList:', groupVariableList);
+
+    loForEach(dataItems, function (value, key) {
+      groupVariable = groupVariableList.find(v => v.aliasName === key);
+      // Set value from source
+      if (groupVariable) {
+        browseName = formatUAVariable(groupVariable).browseName;
+
+        // Run setValueFromSource for groupVariable
+        const currentState = params.myOpcuaServer.getCurrentState();
+        const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
+        params.myOpcuaServer.setValueFromSource(variable, groupVariable, module.exports[variable.getter], value);
+
+        if (isDebug) console.log(chalk.green(`histValueFromFileForCH_M52.${browseName}:`), chalk.cyan(value));
+      }
+    });
+
+  });
 }
 
-
 module.exports = {
-  valueSimulate1,
-  valueFromSource1,
-  valueFromSource2,
-  histValueFromSource,
-  percentageMemUsed
+  histValueFromFileForCH_M51,
+  histValueFromFileForCH_M52,
 };
