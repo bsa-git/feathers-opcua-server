@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+// const fs = require('fs');
 const assert = require('assert');
 const {
   appRoot,
@@ -18,6 +19,8 @@ const {
   watchFile,
   unwatchFile,
   removeFileSync,
+  getOsPlatform,
+  winPathToUncPath
 } = require('../../src/plugins/lib/file-operations');
 
 const chalk = require('chalk');
@@ -40,6 +43,8 @@ function cbReadOnlyNewFile(filePath, data) {
 function cbReadOnlyNewFile2(filePath, data) {
   console.log(chalk.green('cbReadOnlyNewFile2.filePath:'), chalk.cyan(filePath));
   console.log(chalk.green('cbReadOnlyNewFile2.data:'), chalk.cyan(data));
+  // Remove file 
+  removeFileSync(filePath);
 }
 
 /**
@@ -106,34 +111,40 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     assert.ok(result.value === data.value, 'FileOperations: writeFileSync/readFileSync');
   });
 
-  it('FileOperations: readFileSync', () => {
-    let path = 'd:\\Share\\ch-m51\\data-CH_M51.csv';
-    // path = '\\\\10.60.0.220\\Share\\ch-m51\\data-CH_M51.csv';
-    // path = '//10.60.0.220/d$/Share/ch-m51/data-CH_M51.csv';
-    path = '//10.60.0.220/Share/ch-m51/data-CH_M51.csv';
-    
-    const isExist = doesDirExist('//10.60.0.220/Share/ch-m51');
-    debug('FileOperations: readFileSync.isExist:', isExist);
+  it('FileOperations: UNC directory operations', () => {
 
-    let data = readFileSync(path);
-    data = papa.parse(data, { delimiter: ';', header: true });
-    data = data.data[0];
-    if (isDebug) debug('FileOperations: readFileSync.path:', path);
-    debug('FileOperations: readFileSync.path:', path);
-    if (isDebug) debug('FileOperations: readFileSync.jsonData:', data);
-    debug('FileOperations: readFileSync.jsonData:', data);
-    
-    // cbReadOnlyNewFile2
-    path = readOnlyNewFile('//10.60.0.220/Share/ch-m51', cbReadOnlyNewFile2);
+    if (getOsPlatform() === 'win32') {
 
-    
+      let path = winPathToUncPath([appRoot, 'src/api/opcua/ua-cherkassy-azot-m5_test1']);
+      let fileName = 'data-CH_M51.csv';
+      // Does UNC dir exist
+      let isExist = doesDirExist(path);
 
-    path = writeFileSync('//10.60.0.220/Share/ch-m51/data-CH_M51.json', data, true);
+      // Read file from UNC dir
+      let data = readFileSync([path, fileName]);
+      data = papa.parse(data, { delimiter: ';', header: true });
+      data = data.data[0];
+      if (isDebug) debug('FileOperations: UNC directory operations.fileName:', fileName);
+      // debug('FileOperations: UNC directory operations.fileName:', fileName);
+      if (isDebug) debug('FileOperations: UNC directory operations.jsonData:', data);
+      // debug('FileOperations: UNC directory operations.jsonData:', data);
 
-    // Remove file 
-    // removeFileSync(path);
+      // Convert win path to unc path
+      path = winPathToUncPath([appRoot, 'test/data/tmp/fo']);
+      // Make 'share' dir
+      path = makeDirSync([path, 'share']);
+      // Write file to UNC dir
+      fileName = 'data-CH_M51.json';
+      isExist = doesDirExist(path);
+      if (isExist) writeFileSync([path, fileName], data, true);
+      // Clear dir
+      clearDirSync(path);
 
-    assert.ok(data, 'FileOperations: readFileSync');
+      assert.ok(isExist, 'FileOperations: UNC directory operations');
+    } else {
+      assert.ok(true, 'FileOperations: UNC directory operations');
+    }
+
   });
 
   it('FileOperations: readDirSync', () => {
@@ -164,7 +175,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
 
   it('FileOperations: watchFile', async () => {
     // Watch file
-    let path = watchFile([appRoot, 'test/data/tmp/fo/new.json'], cbWatchFile, {interval: 100});
+    let path = watchFile([appRoot, 'test/data/tmp/fo/new.json'], cbWatchFile, { interval: 100 });
     if (isDebug) debug('FileOperations: watchFile.path:', path);
     // Write file
     const data = { value: '12345-WatchFile' };

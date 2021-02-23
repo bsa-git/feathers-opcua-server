@@ -23,7 +23,7 @@
       "variableGetType": "valueFromSource",
       "getter": "histValueFromFileForCH_M51",
       "getterParams": {
-        "path": "/test/data/tmp/ch-m51",
+        "path": "//localhost/Share/ch-m51",
         "interval": 5000
       }
     },
@@ -33,12 +33,12 @@
       "ownerName": "CH_M52",
       "type": "variable.simple",
       "dataType": "String",
-      "hist": false,
+      "hist": true,
       "group": true,
       "variableGetType": "valueFromSource",
       "getter": "histValueFromFileForCH_M52",
       "getterParams": {
-        "path": "/test/data/tmp/ch-m52",
+        "path": "//localhost/Share/ch-m52",
         "interval": 5000
       }
     }

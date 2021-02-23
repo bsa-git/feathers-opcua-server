@@ -17,7 +17,17 @@ const loStartsWith = require('lodash/startsWith');
 const debug = require('debug')('app:opcua-operations');
 const isDebug = false;
 const isLog = false;
+//===========================================================
 
+
+/**
+ * @method getOsPlatform
+ * @returns {String}
+ * e.g. 'aix', 'darwin', 'freebsd', 'linux', 'openbsd', 'sunos', and 'win32'
+ */
+const getOsPlatform = function () {
+  return os.platform();
+};
 
 /**
  * @method getFileName
@@ -218,18 +228,30 @@ const makeDirSync = function (path) {
     if (isDebug) debug('makeDirSync.path:', path, '; isExist:', isExist);
     if (!isExist) {
       arrPath = getPathToArray(path);
-      arrPath.forEach(item => {
-        if (!joinPath && loEndsWith(item, ':')) {
+      if (isDebug) debug('makeDirSync.arrPath:', arrPath);
+      let index = isUncPath(path) ? 2 : 0;
+      for (index; index < arrPath.length; index++) {
+        let item = arrPath[index];
+        if (loEndsWith(item, ':') && !joinPath) {
           item += Path.sep;
         }
-        joinPath = join(joinPath, item);
+        if (isUncPath(path) && joinPath) {
+          joinPath = `${joinPath}${Path.sep}${item}`;
+        }
+        if (isUncPath(path) && !joinPath) {
+          joinPath = `${Path.sep}${Path.sep}${item}`;
+        }
+        if (!isUncPath(path)) {
+          joinPath = join(joinPath, item);
+        }
         isExist = doesDirExist(joinPath);
+        if (isDebug) debug('makeDirSync.joinPath:', joinPath, '; isExist:', isExist);
         if (!isExist) {
           fs.mkdirSync(joinPath);
           if (isDebug) debug('Make dir for path:', joinPath);
           debug('Make dir for path:', joinPath);
         }
-      });
+      }
     }
     return path;
   }
@@ -241,15 +263,62 @@ const makeDirSync = function (path) {
  * @returns {String}
  */
 const createPath = function (path) {
-  const isUncPath = require('is-unc-path');
   // Make dir
-  if (!isUncPath(path) && (loStartsWith(path, '/') || loStartsWith(path, '\\'))) {
-    path = makeDirSync([appRoot, path]);
+  if (isUncPath(path) || !loStartsWith(path, Path.sep)) {
+    path = makeDirSync(path);
   } else {
-    // For UNC path the command 'makeDirSync' does not work
-    path = isUncPath(path)? path : makeDirSync(path);
+    path = makeDirSync([appRoot, path]);
   }
   return path;
+};
+
+/**
+ * @method isUncPath
+ * @param {String} path 
+ * @returns {Boolean}
+ */
+const isUncPath = function (path) {
+  const isUncPath = require('is-unc-path');
+  return isUncPath(path);
+};
+
+/**
+ * @method winPathToUncPath
+ * @param {String} path 
+ * e.g. 'C:\NodeServer\feathers-opcua-server\'
+ * @param {String} host 
+ * @param {String} share 
+ * @returns {String}
+ * e.g. '\\localhost\c$\NodeServer\feathers-opcua-server'
+ */
+const winPathToUncPath = function (path, host = 'localhost', share = 'drv') {
+  let joinPath = '', isExist = false, arrPath = [], drv = '';
+  if (Array.isArray(path)) {
+    path.forEach(item => {
+      joinPath = join(joinPath, item);
+    });
+    path = joinPath;
+  }
+  path = toPathWithSep(path);
+  isExist = doesDirExist(path);
+  if (isExist) {
+    if (isUncPath(path)) {
+      return path;
+    }
+    arrPath = getPathToArray(path);
+    drv = arrPath[0];
+    if (loEndsWith(drv, ':')) {
+      share = (share === 'drv') ? `${Path.sep}${strReplace(drv, ':', '').toLowerCase()}$` : '';
+      path = strReplace(path, drv, `${Path.sep}${Path.sep}${host}${share}`);
+      if (isDebug) debug('winPathToUncPath.path:', path);
+      // debug('winPathToUncPath.path:', path);
+      return path;
+    } else {
+      return path;
+    }
+  } else {
+    return path;
+  }
 };
 
 
@@ -611,6 +680,7 @@ const removeFileSync = function (path) {
 
 
 module.exports = {
+  getOsPlatform,
   getFileName,
   getPathBasename,
   getPathExtname,
@@ -628,6 +698,8 @@ module.exports = {
   watchModifiedFile,
   makeDirSync,
   createPath,
+  isUncPath,
+  winPathToUncPath,
   removeFilesFromDirSync,
   removeDirFromDirSync,
   clearDirSync,

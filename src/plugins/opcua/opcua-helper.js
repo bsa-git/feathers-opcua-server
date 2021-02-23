@@ -317,14 +317,14 @@ const getSubscriptionHandler = function (id, nameFile = '') {
  * @returns {Function}
  */
 const getOpcuaClientScript = function (id, nameScript = '') {
-  debug('getOpcuaClientScript.id,nameScript:', id, nameScript);
+  if(isDebug) debug('getOpcuaClientScript.id,nameScript:', id, nameScript);
   // Get opcuaOption 
   const opcuaOption = getOpcuaConfig(id);
   // Get opcuaClientScript
   const opcuaClientScripts = require(`${appRoot}${opcuaOption.paths['client-scripts']}`);
-  debug('getOpcuaClientScript.opcuaClientScripts:', opcuaClientScripts);
+  if(isDebug) debug('getOpcuaClientScript.opcuaClientScripts:', opcuaClientScripts);
   const opcuaClientScript = opcuaClientScripts[nameScript];
-  debug('getOpcuaClientScript.opcuaClientScript:', opcuaClientScript);
+  if(isDebug) debug('getOpcuaClientScript.opcuaClientScript:', opcuaClientScript);
   return opcuaClientScript;
 };
 

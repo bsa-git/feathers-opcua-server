@@ -404,6 +404,7 @@ class OpcuaServer {
 
               // Add "this" to getterParams
               getterParams = Object.assign({}, v.getterParams ? v.getterParams : {});
+              getterParams.hist = !!v.hist;
               getterParams.myOpcuaServer = this;
 
               if (v.variableGetType === 'get') {
@@ -625,6 +626,7 @@ class OpcuaServer {
     let getterParams = Object.assign({}, variable.getterParams ? variable.getterParams : {});
     // Add "value" to getterParams
     loMerge(getterParams, value === undefined ? {} : { value });
+    getterParams.hist = !!variable.hist;
     // Add "this" to getterParams
     getterParams.myOpcuaServer = this;
 
