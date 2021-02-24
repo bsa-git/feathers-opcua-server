@@ -128,6 +128,33 @@ const getOpcuaDataType = function (nodeId = '') {
 };
 
 /**
+ * @method getEngineeringUnit
+ * @param {String} type 
+ * @param {String} locale 
+ * @returns {Object} 
+ * e.g. EUInformation {
+        description: {text: longName},
+        displayName: {text: shortName},
+        unitId: commonCodeToUInt(symbol),
+    }
+ */
+const getEngineeringUnit = function (type, locale) {
+  let result = null;
+  let locales = require(`${appRoot}/src/plugins/localization/locales/${locale}.json`);
+  let engineeringUnit = locales.standardUnits[type];
+  if (!engineeringUnit) {
+    locales = require(`${appRoot}/src/plugins/localization/locales/${process.env.FALLBACK_LOCALE}.json`);
+    engineeringUnit = locales.standardUnits[type];
+  }
+  if (engineeringUnit) {
+    const args = loAt(engineeringUnit, ['symbol', 'shortName', 'longName']);
+    if (isLog) inspector('formatConfigOption.makeEUInformation:', makeEUInformation(...args));
+    result = makeEUInformation(...args);
+  }
+  return result;
+}
+
+/**
  * @method formatUAVariable
  * @param {Object} uaVariable 
  * @returns {Object}
@@ -165,15 +192,9 @@ const formatConfigOption = function (configOption, locale) {
   loMerge(formatResult, configOption.valueParams ? { valueParams: configOption.valueParams } : {});
   // Set engineering unit for value
   if (formatResult.valueParams && formatResult.valueParams.engineeringUnits) {
-    locales = require(`${appRoot}/src/plugins/localization/locales/${locale}.json`);
-    engineeringUnit = locales.standardUnits[formatResult.valueParams.engineeringUnits];
-    if (!engineeringUnit) {
-      locales = require(`${appRoot}/src/plugins/localization/locales/${process.env.FALLBACK_LOCALE}.json`);
-      engineeringUnit = locales.standardUnits[formatResult.valueParams.engineeringUnits];
-    }
-    if (engineeringUnit) {
-      const args = loAt(engineeringUnit, ['symbol', 'shortName', 'longName']);
-      formatResult.valueParams.engineeringUnits = makeEUInformation(...args).displayName.text;
+    engineeringUnit = getEngineeringUnit(formatResult.valueParams.engineeringUnits, locale);
+    if(engineeringUnit){
+      formatResult.valueParams.engineeringUnits = engineeringUnit.displayName.text;
     }
   }
   return formatResult;
@@ -247,7 +268,7 @@ const formatDataValue = function (id, dataValue, nameNodeId, locale = '') {
     result.displayName = option.displayName;
     loMerge(result, option.aliasName ? { aliasName: option.aliasName } : {});
     loMerge(result, option.type ? { type: option.type } : {});
-    loMerge(result, option.valueParams ? { valueParams: option.valueParams } : {}); 
+    loMerge(result, option.valueParams ? { valueParams: option.valueParams } : {});
     loMerge(result, dataValue.sourceTimestamp ? { sourceTimestamp: dataValue.sourceTimestamp } : {});
     loMerge(result, dataValue.serverTimestamp ? { serverTimestamp: dataValue.serverTimestamp } : {});
     result.statusCode = dataValue.statusCode._name;
@@ -303,11 +324,12 @@ const getOpcuaConfigOptions = function (id, browseName = '') {
  */
 const getSubscriptionHandler = function (id, nameFile = '') {
   const defaultNameFile = 'onChangedCommonHandler';
+  const subscriptionDefaultHandler = require(`${appRoot}/src/api/opcua/OPCUA_Subscriptions`)[defaultNameFile];
   // Get opcuaOption 
   const opcuaOption = getOpcuaConfig(id);
   // Get subscriptionHandler
   const subscriptionHandlers = require(`${appRoot}${opcuaOption.paths.subscriptions}`);
-  return subscriptionHandlers[nameFile] ? subscriptionHandlers[nameFile] : subscriptionHandlers[defaultNameFile];
+  return (nameFile && subscriptionHandlers[nameFile]) ? subscriptionHandlers[nameFile] : subscriptionDefaultHandler;
 };
 
 /**
@@ -317,14 +339,14 @@ const getSubscriptionHandler = function (id, nameFile = '') {
  * @returns {Function}
  */
 const getOpcuaClientScript = function (id, nameScript = '') {
-  if(isDebug) debug('getOpcuaClientScript.id,nameScript:', id, nameScript);
+  if (isDebug) debug('getOpcuaClientScript.id,nameScript:', id, nameScript);
   // Get opcuaOption 
   const opcuaOption = getOpcuaConfig(id);
   // Get opcuaClientScript
   const opcuaClientScripts = require(`${appRoot}${opcuaOption.paths['client-scripts']}`);
-  if(isDebug) debug('getOpcuaClientScript.opcuaClientScripts:', opcuaClientScripts);
+  if (isDebug) debug('getOpcuaClientScript.opcuaClientScripts:', opcuaClientScripts);
   const opcuaClientScript = opcuaClientScripts[nameScript];
-  if(isDebug) debug('getOpcuaClientScript.opcuaClientScript:', opcuaClientScript);
+  if (isDebug) debug('getOpcuaClientScript.opcuaClientScript:', opcuaClientScript);
   return opcuaClientScript;
 };
 
@@ -355,10 +377,10 @@ const isMyServiceHost = async function (serviceUrl, myPort) {
   if (isDebug) debug('isMyServiceHostname.hostInfo:', hostInfo);
   // debug('isMyServiceHostname:', hostInfo);
   const isPort = (servicePort === myPort);
-  const isLocalhost = (serviceHostname === 'localhost') && (process.env.NODE_ENV === 'test'); 
+  const isLocalhost = (serviceHostname === 'localhost') && (process.env.NODE_ENV === 'test');
   const isHost = (serviceHostname === myHostname) || (serviceHostname === myDomainName) || (serviceHostname === myIp) || isLocalhost;
   const result = isPort && isHost;
-  if(result){
+  if (result) {
     if (isDebug) debug('isMyServiceHostname.hostInfo:', hostInfo);
     // debug('isMyServiceHostname.hostInfo:', hostInfo);
   }
@@ -488,12 +510,12 @@ const isOpcuaClientInList = (service, id) => {
  */
 const executeOpcuaClientScript = async (service, id) => {
   const opcuaOption = getOpcuaConfig(id);
-  if(isDebug) debug('getOpcuaClientScript.opcuaOption:', opcuaOption);
+  if (isDebug) debug('getOpcuaClientScript.opcuaOption:', opcuaOption);
   const scriptName = opcuaOption.clientScript;
-  if(isDebug) debug('getOpcuaClientScript.scriptName:', scriptName);
-  if(scriptName){
+  if (isDebug) debug('getOpcuaClientScript.scriptName:', scriptName);
+  if (scriptName) {
     const script = getOpcuaClientScript(id, scriptName);
-    if(script){
+    if (script) {
       await script(id, service);
     }
   }
@@ -508,17 +530,17 @@ const executeOpcuaClientScript = async (service, id) => {
 const convertTo = function (convertType, value) {
   let result = null;
   switch (convertType) {
-  // (kg/h -> m3/h) for ammonia
-  case 'ammonia_kg/h_to_m3/h':
-    result = value * 1.4;
-    break;
+    // (kg/h -> m3/h) for ammonia
+    case 'ammonia_kg/h_to_m3/h':
+      result = value * 1.4;
+      break;
     // (m3/h -> kg/h) for ammonia
-  case 'ammonia_m3/h_to_kg/h':
-    result = value * 0.716;
-    break;
+    case 'ammonia_m3/h_to_kg/h':
+      result = value * 0.716;
+      break;
 
-  default:
-    break;
+    default:
+      break;
   }
   return result;
 };
@@ -570,6 +592,7 @@ module.exports = {
   getValueFromNodeId,
   getNameSpaceFromNodeId,
   getOpcuaDataType,
+  getEngineeringUnit,
   formatUAVariable,
   formatConfigOption,
   formatHistoryResults,

@@ -22,9 +22,9 @@ async function subscriptionMonitor_CH_M5(id, service) {
 
   const srvCurrentState = await service.getSrvCurrentState(id);
   // Start subscriptionMonitor
-  let variables = srvCurrentState.paramsAddressSpace.variables;
+  const allVariables = srvCurrentState.paramsAddressSpace.variables;
   //---- CH_M51 ---//
-  variables = variables.filter(v => v.ownerGroup === 'CH_M51::ValueFromFile').map(v => v.browseName);
+  let variables = allVariables.filter(v => v.ownerGroup === 'CH_M51::ValueFromFile').map(v => v.browseName);
   groups = getGroupsFromArray(variables, 10);
   for (let index = 0; index < groups.length; index++) {
     const group = groups[index];
@@ -35,8 +35,7 @@ async function subscriptionMonitor_CH_M5(id, service) {
     }
   }
   //---- CH_M52 ---//
-  variables = srvCurrentState.paramsAddressSpace.variables;
-  variables = variables.filter(v => v.ownerGroup === 'CH_M52::ValueFromFile').map(v => v.browseName);
+  variables = allVariables.filter(v => v.ownerGroup === 'CH_M52::ValueFromFile').map(v => v.browseName);
   groups = getGroupsFromArray(variables, 10);
   for (let index = 0; index < groups.length; index++) {
     const group = groups[index];

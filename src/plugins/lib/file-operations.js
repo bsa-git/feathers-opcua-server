@@ -264,10 +264,11 @@ const makeDirSync = function (path) {
  */
 const createPath = function (path) {
   // Make dir
-  if (isUncPath(path) || !loStartsWith(path, Path.sep)) {
+  if (isUncPath(path)) {
     path = makeDirSync(path);
   } else {
-    path = makeDirSync([appRoot, path]);
+    path = toPathWithSep(path);
+    path = loStartsWith(path, Path.sep)? makeDirSync([appRoot, path]) : makeDirSync(path);
   }
   return path;
 };

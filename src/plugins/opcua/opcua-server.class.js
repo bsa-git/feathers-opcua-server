@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const { appRoot, inspector } = require('../lib');
-const { getOpcuaConfig } = require('./opcua-helper');
+const { getOpcuaConfig, getEngineeringUnit } = require('./opcua-helper');
 const {
   OPCUAServer,
   DataType,
@@ -8,8 +8,8 @@ const {
   standardUnits,
   makeAccessLevelFlag,
 } = require('node-opcua');
-const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/OPCUAServerOptions`);
-const opcuaDefaultGetters = require(`${appRoot}/src/api/opcua/OPCUAGetters`);
+const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/OPCUA_ServerOptions`);
+const opcuaDefaultGetters = require(`${appRoot}/src/api/opcua/OPCUA_Getters`);
 
 const loMerge = require('lodash/merge');
 const loOmit = require('lodash/omit');
@@ -35,7 +35,7 @@ class OpcuaServer {
     // Get opcua config
     const opcuaConfig = getOpcuaConfig(this.id);
     params.buildInfo = { productName: opcuaConfig.name };
-    this.locale = (params.locale === undefined)? process.env.LOCALE : params.locale;
+    this.locale = (params.locale === undefined) ? process.env.LOCALE : params.locale;
     this.params = loMerge(opcuaDefaultServerOptions, params);
     this.opcuaServer = null;
     this.addedItemList = [];
@@ -341,7 +341,7 @@ class OpcuaServer {
    */
   constructAddressSpace(params = null, getters = null, methods = null) {
     let addedVariable, addedMethod, object = null;
-    let addedVariableList, getterParams;
+    let addedVariableList, getterParams, valueParams, engineeringUnit;
     this.opcuaServerNotCreated();
     const id = this.params.serverInfo.applicationName;
     const opcuaConfig = getOpcuaConfig(id);
@@ -393,13 +393,19 @@ class OpcuaServer {
                 nodeId: `s=${v.browseName}`,
                 browseName: v.browseName,
                 displayName: v.displayName,
+                description: v.description ? v.description : '',
                 dataType: v.dataType,
               };
               if (v.valueParams) {
+                valueParams = loMerge({}, v.valueParams);
+                if (v.valueParams.engineeringUnits) {
+                  engineeringUnit = getEngineeringUnit(v.valueParams.engineeringUnits, this.locale);
+                  if (engineeringUnit) {
+                    valueParams.engineeringUnits = engineeringUnit;
+                  }
+                }
                 // Value params merge 
-                loMerge(varParams, v.valueParams);
-                // Value of engineeringUnits param merge 
-                loMerge(varParams, v.valueParams.engineeringUnits ? standardUnits[v.valueParams.engineeringUnits] : {});
+                loMerge(varParams, valueParams);
               }
 
               // Add "this" to getterParams
@@ -440,13 +446,13 @@ class OpcuaServer {
                 dataType: v.dataType,
                 type: v.type,
               },
-              v.aliasName ? { aliasName: v.aliasName } : {},
-              v.group ? { group: v.group } : {},
-              v.variableGetType ? { variableGetType: v.variableGetType } : {},
-              v.getter ? { getter: v.getter } : {},
-              v.getterParams ? { getterParams: v.getterParams } : {},
-              v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
-              loOmit(v.valueParams, ['componentOf'])));
+                v.aliasName ? { aliasName: v.aliasName } : {},
+                v.group ? { group: v.group } : {},
+                v.variableGetType ? { variableGetType: v.variableGetType } : {},
+                v.getter ? { getter: v.getter } : {},
+                v.getterParams ? { getterParams: v.getterParams } : {},
+                v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
+                loOmit(v.valueParams, ['componentOf'])));
 
               // Value from source
               if (v.variableGetType === 'valueFromSource') {
@@ -550,7 +556,7 @@ class OpcuaServer {
    * @returns {Array} 
    */
   addGroupVariables(addressSpace, namespace, object, variables, currentState) {
-    let addedVariable, addedVariableList = [];
+    let addedVariable, addedVariableList = [], engineeringUnit, valueParams;
     // Add variables
     if (variables.length) {
       variables.forEach(v => {
@@ -559,13 +565,19 @@ class OpcuaServer {
           nodeId: `s=${v.browseName}`,
           browseName: v.browseName,
           displayName: v.displayName,
+          description: v.description ? v.description : '',
           dataType: v.dataType,
         };
         if (v.valueParams) {
+          valueParams = loMerge({}, v.valueParams);
+          if (v.valueParams.engineeringUnits) {
+            engineeringUnit = getEngineeringUnit(v.valueParams.engineeringUnits, this.locale);
+            if (engineeringUnit) {
+              valueParams.engineeringUnits = engineeringUnit;
+            }
+          }
           // Value params merge 
-          loMerge(varParams, v.valueParams);
-          // Value of engineeringUnits param merge 
-          loMerge(varParams, v.valueParams.engineeringUnits ? standardUnits[v.valueParams.engineeringUnits] : {});
+          loMerge(varParams, valueParams);
         }
         // Add variables
         if (v.type === 'variable.analog') {
@@ -596,12 +608,12 @@ class OpcuaServer {
           dataType: v.dataType,
           type: v.type,
         },
-        v.aliasName ? { aliasName: v.aliasName } : {},
-        v.variableGetType ? { variableGetType: v.variableGetType } : {},
-        v.getter ? { getter: v.getter } : {},
-        v.getterParams ? { getterParams: v.getterParams } : {},
-        v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
-        loOmit(v.valueParams, ['componentOf'])
+          v.aliasName ? { aliasName: v.aliasName } : {},
+          v.variableGetType ? { variableGetType: v.variableGetType } : {},
+          v.getter ? { getter: v.getter } : {},
+          v.getterParams ? { getterParams: v.getterParams } : {},
+          v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
+          loOmit(v.valueParams, ['componentOf'])
         ));
         // Install historical DataNode
         addressSpace.installHistoricalDataNode(addedVariable);

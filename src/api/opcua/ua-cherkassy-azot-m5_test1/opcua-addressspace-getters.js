@@ -146,8 +146,6 @@ function histValueFromFileForCH_M52(params = {}, addedValue) {
 }
 
 module.exports = {
-  // histPlugForGroupVariables,
-  // converterForVariable,
   histValueFromFileForCH_M51,
   histValueFromFileForCH_M52,
 };

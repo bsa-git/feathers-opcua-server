@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const loOmit = require('lodash/omit');
 
-const debug = require('debug')('app:OPCUAGetters');
+const debug = require('debug')('app:OPCUA_Getters');
 const isDebug = false;
 
 
@@ -14,7 +14,7 @@ const isDebug = false;
 function histPlugForGroupVariables(params = {}) {
   params = loOmit(params, ['myOpcuaServer']);
   if (isDebug) debug('histPlugForGroupVariables.params:', params);
-  return params.value ? params.value : null;
+  return params.value ? params.value : undefined;
 }
 
 module.exports = {

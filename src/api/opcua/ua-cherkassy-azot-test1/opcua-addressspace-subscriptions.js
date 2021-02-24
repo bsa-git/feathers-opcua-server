@@ -1,12 +1,5 @@
 /* eslint-disable no-unused-vars */
 const { inspector, getValueFromNodeId } = require('../../../plugins');
-const {
-  Variant,
-  DataType,
-  StatusCodes,
-  VariantArrayType,
-  standardUnits,
-} = require('node-opcua');
 const chalk = require('chalk');
 const loRound = require('lodash/round');
 
@@ -21,7 +14,7 @@ const isLog = false;
  * @param {Object} dataValue
  * @returns {void}
  */
-function onChangedCommonHandler(params, dataValue) {
+function onChangedValueHandler(params, dataValue) {
   if (isLog) inspector('subscriptions.onChangedCommonHandle.params.nodeId:', params.nodeId);
   const browseName = getValueFromNodeId(params.nodeId);
   const value = loRound(dataValue.value.value, 3);
@@ -29,5 +22,5 @@ function onChangedCommonHandler(params, dataValue) {
 }
 
 module.exports = {
-  onChangedCommonHandler,
+  onChangedValueHandler,
 };

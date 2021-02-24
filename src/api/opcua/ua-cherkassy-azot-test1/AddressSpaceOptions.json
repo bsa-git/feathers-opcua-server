@@ -23,7 +23,7 @@
       "getterParams": {
         "value": 100
       },
-      "subscription": "onChangedCommonHandler"
+      "subscription": "onChangedValueHandler"
     },
     {
       "browseName": "Device1.Variable2",

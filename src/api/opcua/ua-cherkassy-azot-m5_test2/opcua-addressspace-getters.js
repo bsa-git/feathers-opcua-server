@@ -51,7 +51,7 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
 
   // Exit 
   if(!params.hist){
-    return params.value? params.value : id;
+    return params.value? params.value : '';
   }
 
   // Create path
@@ -119,7 +119,7 @@ function histValueFromFileForCH_M52(params = {}, addedValue) {
 
   // Exit 
   if(!params.hist){
-    return params.value? params.value : id;
+    return params.value? params.value : '';
   }
   
   // Create path

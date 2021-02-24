@@ -4,35 +4,12 @@ const {
   getValueFromNodeId,
   formatDataValue 
 } = require('../../../plugins');
-const {
-  Variant,
-  DataType,
-  StatusCodes,
-  VariantArrayType,
-  standardUnits,
-} = require('node-opcua');
 const chalk = require('chalk');
 const loRound = require('lodash/round');
 
 const debug = require('debug')('app:opcua-addressspace-subscriptions');
 const isDebug = false;
 const isLog = false;
-
-/**
- * @method onChangedCommonHandle
- * 
- * @param {Object} params 
- * @param {Object} dataValue
- * @returns {void}
- */
-function onChangedCommonHandler(params, dataValue) {
-  if (isLog) inspector('subscriptions.onChangedCommonHandle.params:', params);
-  if (isLog) inspector('subscriptions.onChangedCommonHandle.dataValue:', dataValue);
-  inspector('subscriptions.onChangedCommonHandle.dataValue:', dataValue);
-  const browseName = getValueFromNodeId(params.nodeId);
-  const value = loRound(dataValue.value.value, 3);
-  console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(value));
-}
 
 /**
  * @method onChangedCH_M5Handler
@@ -54,6 +31,5 @@ function onChangedCH_M5Handler(params, dataValue) {
 }
 
 module.exports = {
-  onChangedCommonHandler,
   onChangedCH_M5Handler
 };
