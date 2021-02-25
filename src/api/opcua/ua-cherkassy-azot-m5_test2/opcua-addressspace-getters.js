@@ -8,7 +8,8 @@ const {
 } = require('../../../plugins/lib/util');
 
 const {
-  formatUAVariable
+  formatUAVariable,
+  setValueFromSourceForGroup
 } = require('../../../plugins/opcua/opcua-helper');
 
 const {
@@ -18,7 +19,6 @@ const {
   removeFileSync,
   getFileName,
   getPathBasename,
-  makeDirSync,
   createPath
 } = require('../../../plugins/lib/file-operations');
 
@@ -41,6 +41,12 @@ const getTValue = function (t) {
   return loRound(value, 3);
 };
 
+/**
+ * @method histValueFromFileForCH_M51
+ * @param {Object} params 
+ * @param {Object} addedValue 
+ * @returns {void}
+ */
 function histValueFromFileForCH_M51(params = {}, addedValue) {
   const _interval = 200;
   const _path = '/test/data/tmp/ch-m51';
@@ -49,16 +55,11 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
   let path = params.path ? params.path : _path;
   let id = params.myOpcuaServer.id;
 
-  // Exit 
-  if(!params.hist){
-    return params.value? params.value : '';
-  }
-
   // Create path
   path = createPath(path);
 
   // Watch read only new file
-  readOnlyNewFile(path, (filePath, data) => {  
+  readOnlyNewFile(path, (filePath, data) => {
     // Show filePath, data
     if (isDebug) console.log(chalk.green('histValueFromFileForCH_M51.file:'), chalk.cyan(getPathBasename(filePath)));
     if (isDebug) console.log(chalk.green('histValueFromFileForCH_M51.data:'), chalk.cyan(data));
@@ -69,29 +70,14 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
 
     if (isLog) inspector('histValueFromFileForCH_M51.dataItems:', dataItems);
-    // inspector('histValueFromFileForCH_M51.dataItems:', dataItems);
 
     // Remove file 
     removeFileSync(filePath);
 
-    // Get group variable list 
-    const groupVariableList = params.addedVariableList;
-    if (isDebug) inspector('histValueFromFileForCH_M51.groupVariableList:', groupVariableList);
-
-    loForEach(dataItems, function (value, key) {
-      groupVariable = groupVariableList.find(v => v.aliasName === key);
-      // Set value from source
-      if (groupVariable) {
-        browseName = formatUAVariable(groupVariable).browseName;
-
-        // Run setValueFromSource for groupVariable
-        const currentState = params.myOpcuaServer.getCurrentState();
-        const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
-        params.myOpcuaServer.setValueFromSource(variable, groupVariable, module.exports[variable.getter], value);
-
-        if (isDebug) console.log(chalk.green(`histValueFromFileForCH_M51.${browseName}:`), chalk.cyan(value));
-      }
-    });
+    // Set value from source for group 
+    if (params.addedVariableList) {
+      setValueFromSourceForGroup(params, dataItems, module.exports)
+    }
   });
   // Write file
   setInterval(function () {
@@ -109,6 +95,12 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
   }, interval);
 }
 
+/**
+ * @method histValueFromFileForCH_M51
+ * @param {Object} params 
+ * @param {Object} addedValue 
+ * @returns {void}
+ */
 function histValueFromFileForCH_M52(params = {}, addedValue) {
   const _interval = 200;
   const _path = '/test/data/tmp/ch-m52';
@@ -117,15 +109,11 @@ function histValueFromFileForCH_M52(params = {}, addedValue) {
   let path = params.path ? params.path : _path;
   let id = params.myOpcuaServer.id;
 
-  // Exit 
-  if(!params.hist){
-    return params.value? params.value : '';
-  }
-  
   // Create path
   path = createPath(path);
+
   // Watch read only new file
-  readOnlyNewFile(path, (filePath, data) => {  
+  readOnlyNewFile(path, (filePath, data) => {
     // Show filePath, data
     if (isDebug) console.log(chalk.green('histValueFromFileForCH_M52.file:'), chalk.cyan(getPathBasename(filePath)));
     if (isDebug) console.log(chalk.green('histValueFromFileForCH_M52.data:'), chalk.cyan(data));
@@ -136,30 +124,14 @@ function histValueFromFileForCH_M52(params = {}, addedValue) {
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
 
     if (isLog) inspector('histValueFromFileForCH_M52.dataItems:', dataItems);
-    // inspector('histValueFromFileForCH_M52.dataItems:', dataItems);
 
     // Remove file 
     removeFileSync(filePath);
 
-    // Get group variable list 
-    const groupVariableList = params.addedVariableList;
-    if (isDebug) inspector('histValueFromFileForCH_M52.groupVariableList:', groupVariableList);
-
-    loForEach(dataItems, function (value, key) {
-      groupVariable = groupVariableList.find(v => v.aliasName === key);
-      // Set value from source
-      if (groupVariable) {
-        browseName = formatUAVariable(groupVariable).browseName;
-
-        // Run setValueFromSource for groupVariable
-        const currentState = params.myOpcuaServer.getCurrentState();
-        const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
-        params.myOpcuaServer.setValueFromSource(variable, groupVariable, module.exports[variable.getter], value);
-
-        if (isDebug) console.log(chalk.green(`histValueFromFileForCH_M52.${browseName}:`), chalk.cyan(value));
-        // console.log(chalk.green(`histValueFromFileForCH_M52.${browseName}:`), chalk.cyan(value));
-      }
-    });
+    // Set value from source for group 
+    if (params.addedVariableList) {
+      setValueFromSourceForGroup(params, dataItems, module.exports)
+    }
   });
   // Write file
   setInterval(function () {
@@ -177,7 +149,33 @@ function histValueFromFileForCH_M52(params = {}, addedValue) {
   }, interval);
 }
 
+/**
+ * @method histValueFromFileForCH_M51
+ * @param {Object} params 
+ * @param {Object} addedValue 
+ * @returns {void}
+ */
+function valueFromFileForCH_M52(params = {}, addedValue) {
+  let dataItems, results;
+  let id = params.myOpcuaServer.id;
+
+  // Read file
+  let csv = readFileSync([appRoot, '/src/api/opcua', id, 'data-CH_M52.csv']);
+  results = papa.parse(csv, { delimiter: ';', header: true });
+  loForEach(results.data[0], function (value, key) {
+    results.data[0][key] = getTValue(value);
+  });
+  dataItems = results.data[0];
+  if (isLog) inspector('valueFromFileForCH_M52.dataItems:', dataItems);
+  // Set value from source for group 
+  if (params.addedVariableList) {
+    setValueFromSourceForGroup(params, dataItems, module.exports)
+  }
+  return JSON.stringify(dataItems);
+}
+
 module.exports = {
   histValueFromFileForCH_M51,
   histValueFromFileForCH_M52,
+  valueFromFileForCH_M52
 };

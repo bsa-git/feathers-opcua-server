@@ -408,14 +408,15 @@ class OpcuaServer {
                 loMerge(varParams, valueParams);
               }
 
-              // Add "this" to getterParams
+              
               getterParams = Object.assign({}, v.getterParams ? v.getterParams : {});
-              getterParams.hist = !!v.hist;
+              // Add "dataType" to getterParams
+              getterParams.dataType = v.dataType;
+              // Add "this" to getterParams
               getterParams.myOpcuaServer = this;
 
               if (v.variableGetType === 'get') {
                 // Value get func merge 
-                // loMerge(varParams, { value: { get: () => { return getters[v.getter](v.getterParams ? v.getterParams : {}); } } });
                 loMerge(varParams, { value: { get: () => { return getters[v.getter](getterParams); } } });
               }
               // Add variables
@@ -456,22 +457,30 @@ class OpcuaServer {
 
               // Value from source
               if (v.variableGetType === 'valueFromSource') {
+
+                if (v.group) {
+                  const variables = params.groups.filter(g => v.browseName === g.ownerGroup);
+                  // Add group variables
+                  addedVariableList = this.addGroupVariables(addressSpace, namespace, object, variables, this.currentState);
+                  if (isLog) inspector('constructAddressSpace.addedVariableList:', addedVariableList);
+                }
+
                 // If a variable has history
                 if (v.hist) {
                   addressSpace.installHistoricalDataNode(addedVariable);
                   // If a variable has group - get group variables
                   if (v.group) {
-                    const variables = params.groups.filter(g => v.browseName === g.ownerGroup);
-                    // Add group variables
-                    addedVariableList = this.addGroupVariables(addressSpace, namespace, object, variables, this.currentState);
-                    if (isLog) inspector('constructAddressSpace.addedVariableList:', addedVariableList);
                     getterParams.addedVariableList = addedVariableList;
                   }
                   // Run getter
                   getters[v.getter](getterParams, addedVariable);
                 } else {
                   // Set value from source
-                  this.setValueFromSource(v, addedVariable, getters[v.getter]);
+                  const variable = Object.assign({}, v);
+                  if (v.group) {
+                    variable.group = addedVariableList;
+                  }
+                  this.setValueFromSource(variable, addedVariable, getters[v.getter]);
                 }
               }
             });
@@ -616,7 +625,9 @@ class OpcuaServer {
           loOmit(v.valueParams, ['componentOf'])
         ));
         // Install historical DataNode
-        addressSpace.installHistoricalDataNode(addedVariable);
+        if(v.hist){
+          addressSpace.installHistoricalDataNode(addedVariable);
+        }
         // Run getter
         // addedVariable.strDataType = v.dataType;
         addedVariableList.push(addedVariable);
@@ -638,9 +649,13 @@ class OpcuaServer {
     let getterParams = Object.assign({}, variable.getterParams ? variable.getterParams : {});
     // Add "value" to getterParams
     loMerge(getterParams, value === undefined ? {} : { value });
-    getterParams.hist = !!variable.hist;
+    getterParams.dataType = variable.dataType;
     // Add "this" to getterParams
     getterParams.myOpcuaServer = this;
+    // Add "group" to getterParams.addedVariableList
+    if(variable.group){
+      getterParams.addedVariableList = variable.group;
+    }
 
     let valueFromSourceParams = loMerge({}, variable.valueFromSourceParams);
     if (valueFromSourceParams.dataType) {

@@ -14,13 +14,11 @@ const {
 
 const {
   readOnlyNewFile,
-  getPathBasename
+  getPathBasename,
+  createPath
 } = require('../../../plugins/lib/file-operations');
 
-const loRound = require('lodash/round');
 const loForEach = require('lodash/forEach');
-const moment = require('moment');
-const { pause } = require('../../../plugins/lib');
 
 const debug = require('debug')('app:opcua-addressspace-getters');
 const isDebug = false;
@@ -35,7 +33,15 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
   const _path = 'test/data/tmp';
   let dataItems, groupVariable, dataType, browseName, results;
   let path = params.path ? params.path : _path;
-  let id = params.myOpcuaServer.id;
+  // let id = params.myOpcuaServer.id;
+
+  // Exit 
+  if(!params.hist){
+    return params.value? params.value : '';
+  }
+
+  // Create path
+  path = createPath(path);
 
   // Watch read only new file
   readOnlyNewFile(path, (filePath, data) => {
@@ -81,16 +87,23 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
  * @param {Object} addedValue 
  */
 function histValueFromFileForCH_M52(params = {}, addedValue) {
-  const _path = 'test/data/tmp';
+  const _path = 'test/data/tmp/ch-m51';
   let dataItems, groupVariable, dataType, browseName, results;
   let path = params.path ? params.path : _path;
-  let id = params.myOpcuaServer.id;
+  // let id = params.myOpcuaServer.id;
+
+  // Exit 
+  if(!params.hist){
+    return params.value? params.value : '';
+  }
+
+  // Create path
+  path = createPath(path);
 
   // Watch read only new file
   readOnlyNewFile(path, (filePath, data) => {
     // Show filePath, data
     if (isDebug) console.log(chalk.green('histValueFromFileForCH_M52.file:'), chalk.cyan(getPathBasename(filePath)));
-    console.log(chalk.green('histValueFromFileForCH_M52.file:'), chalk.cyan(filePath));
     if (isDebug) console.log(chalk.green('histValueFromFileForCH_M52.data:'), chalk.cyan(data));
     // Set value from source
     dataType = formatUAVariable(addedValue).dataType[1];

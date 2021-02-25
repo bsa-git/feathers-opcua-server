@@ -33,12 +33,14 @@ const loMerge = require('lodash/merge');
 const loConcat = require('lodash/concat');
 const loOmit = require('lodash/omit');
 const loAt = require('lodash/at');
+const loForEach = require('lodash/forEach');
 
 
 const debug = require('debug')('app:opcua-helper');
 const isLog = false;
 const isDebug = false;
 
+// debug('loToInteger:', loToInteger('w'));
 
 /**
  * @method nodeIdToString
@@ -193,7 +195,7 @@ const formatConfigOption = function (configOption, locale) {
   // Set engineering unit for value
   if (formatResult.valueParams && formatResult.valueParams.engineeringUnits) {
     engineeringUnit = getEngineeringUnit(formatResult.valueParams.engineeringUnits, locale);
-    if(engineeringUnit){
+    if (engineeringUnit) {
       formatResult.valueParams.engineeringUnits = engineeringUnit.displayName.text;
     }
   }
@@ -522,6 +524,33 @@ const executeOpcuaClientScript = async (service, id) => {
 };
 
 /**
+ * @method setValueFromSourceForGroup 
+ * @param {Object} params 
+ * @param {Object} dataItems 
+ * @param {Object} getters 
+ * @returns {void}
+ */
+const setValueFromSourceForGroup = (params = {}, dataItems = {}, getters) => {
+  let groupVariable, browseName;
+  // Get group variable list 
+  const groupVariableList = params.addedVariableList;
+  if (isDebug) inspector('histValueFromFileForCH_M52.groupVariableList:', groupVariableList);
+
+  loForEach(dataItems, function (value, key) {
+    groupVariable = groupVariableList.find(v => v.aliasName === key);
+    // Set value from source
+    if (groupVariable) {
+      browseName = formatUAVariable(groupVariable).browseName;
+      // Run setValueFromSource for groupVariable
+      const currentState = params.myOpcuaServer.getCurrentState();
+      const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
+      params.myOpcuaServer.setValueFromSource(variable, groupVariable, getters[variable.getter], value);
+      if (isDebug) console.log(chalk.green(`histValueFromFileForCH_M52.${browseName}:`), chalk.cyan(value));
+    }
+  });
+}
+
+/**
  * @method convertTo
  * @param {String} convertType 
  * @param {any} value 
@@ -544,6 +573,63 @@ const convertTo = function (convertType, value) {
   }
   return result;
 };
+
+/**
+ * @method opcuaDataTypeToString
+ * @param {String|Int} dataType 
+ * e.g. dataType -> 'Double' | dataType -> 11
+ * @returns {String}
+ * e.g. 'Double'
+ */
+const opcuaDataTypeToString = function (dataType) {
+  const convertToInteger = loToInteger(dataType)
+  const dataTypeList = loToPairs(DataType);
+  if (convertToInteger > 0) {// dataType -> 'Integer'
+    dataType = dataTypeList.find(item => {
+      return loIsEqual(item[1], convertToInteger);
+    });
+    dataType = dataType[0];
+  }
+  return dataType;
+}
+
+/**
+ * @method getInitValueForDataType
+ * @param {String|Int} dataType 
+ * @returns {any}
+ */
+const getInitValueForDataType = function (dataType) {
+  let result = null;
+  dataType = opcuaDataTypeToString(dataType);
+  dataType = dataType.toLowerCase();
+  switch (dataType) {
+    case 'boolean':
+      result = false;
+      break;
+    case 'sbyte':
+    case 'byte':
+    case 'uint16':
+    case 'int32':
+    case 'uint32':
+    case 'int64':
+      result = 0;
+      break;
+    case 'float':
+    case 'double':
+      result = 0.0;
+      break;
+    case 'string':
+      result = '';
+      break;
+    case 'datetime':
+      result = moment().format();
+      break;
+    default:
+      break;
+  }
+  debug('getInitValueForDataType.dataType:', dataType, ';result:', result);
+  return result;
+}
 
 /**
  * @method getTimestamp
@@ -601,6 +687,7 @@ module.exports = {
   getOpcuaConfigOptions,
   getSubscriptionHandler,
   getOpcuaClientScript,
+  isMyServiceHost,
   getServerService,
   getClientService,
   getSrvCurrentState,
@@ -610,8 +697,9 @@ module.exports = {
   isOpcuaServerInList,
   isOpcuaClientInList,
   executeOpcuaClientScript,
-  isMyServiceHost,
+  setValueFromSourceForGroup,
   convertTo,
+  getInitValueForDataType,
   getTimestamp,
   Unece_to_Locale
 };
