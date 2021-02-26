@@ -128,6 +128,7 @@
   "groups": [
     {
       "browseName": "Device2.02F5",
+      "aliasName": "02NG_F5",
       "displayName": "Natural gas consumption",
       "ownerName": "Device2",
       "ownerGroup": "Device2.ValueFromFile",
@@ -135,7 +136,7 @@
       "dataType": "Double",
       "hist": true,
       "variableGetType": "valueFromSource",
-      "getter": "histPlugForGroupVariables",
+      "getter": "plugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -146,6 +147,7 @@
     },
     {
       "browseName": "Device2.02P5",
+      "aliasName": "02NG_P5",
       "displayName": "Natural gas pressure",
       "ownerName": "Device2",
       "ownerGroup": "Device2.ValueFromFile",
@@ -153,7 +155,7 @@
       "dataType": "Double",
       "hist": true,
       "variableGetType": "valueFromSource",
-      "getter": "histPlugForGroupVariables",
+      "getter": "plugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,

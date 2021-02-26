@@ -347,7 +347,14 @@ class OpcuaServer {
     const opcuaConfig = getOpcuaConfig(id);
     // Set arguments
     if (params === null) {
-      params = require(`${appRoot}${opcuaConfig.paths.options}`);
+      // params = require(`${appRoot}${opcuaConfig.paths.options}`);
+      if(opcuaConfig.paths['base-options']){
+        const baseOptions = require(`${appRoot}${opcuaConfig.paths['base-options']}`);
+        const options = require(`${appRoot}${opcuaConfig.paths.options}`);
+        params = loMerge(baseOptions, options);
+      } else {
+        params = require(`${appRoot}${opcuaConfig.paths.options}`);
+      }
     }
     if (getters === null) {
       getters = require(`${appRoot}${opcuaConfig.paths.getters}`);
@@ -367,13 +374,15 @@ class OpcuaServer {
         object = namespace.addObject({
           browseName: o.browseName,
           displayName: o.displayName,
+          description: o.description ? o.description : '',
           organizedBy: addressSpace.rootFolder.objects
         });
         // Push object to paramsAddressSpace.objects
         this.currentState.paramsAddressSpace.objects.push({
           nodeId: object.nodeId.toString(),
           browseName: o.browseName,
-          displayName: o.displayName
+          displayName: o.displayName,
+          description: o.description,
         });
         // Add object to addedItemList
         this.addedItemList.push({
@@ -408,7 +417,7 @@ class OpcuaServer {
                 loMerge(varParams, valueParams);
               }
 
-              
+
               getterParams = Object.assign({}, v.getterParams ? v.getterParams : {});
               // Add "dataType" to getterParams
               getterParams.dataType = v.dataType;
@@ -443,17 +452,18 @@ class OpcuaServer {
                 nodeId: addedVariable.nodeId.toString(),
                 browseName: v.browseName,
                 displayName: v.displayName,
+                description: v.description ? v.description : '',
                 ownerName: v.ownerName,
                 dataType: v.dataType,
                 type: v.type,
               },
-                v.aliasName ? { aliasName: v.aliasName } : {},
-                v.group ? { group: v.group } : {},
-                v.variableGetType ? { variableGetType: v.variableGetType } : {},
-                v.getter ? { getter: v.getter } : {},
-                v.getterParams ? { getterParams: v.getterParams } : {},
-                v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
-                loOmit(v.valueParams, ['componentOf'])));
+              v.aliasName ? { aliasName: v.aliasName } : {},
+              v.group ? { group: v.group } : {},
+              v.variableGetType ? { variableGetType: v.variableGetType } : {},
+              v.getter ? { getter: v.getter } : {},
+              v.getterParams ? { getterParams: v.getterParams } : {},
+              v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
+              loOmit(v.valueParams, ['componentOf'])));
 
               // Value from source
               if (v.variableGetType === 'valueFromSource') {
@@ -496,6 +506,7 @@ class OpcuaServer {
                 nodeId: `s=${m.browseName}`,
                 browseName: m.browseName,
                 displayName: m.displayName,
+                description: m.description ? m.description : ''
               };
               // Method inputArguments merge 
               if (m.inputArguments.length) {
@@ -612,20 +623,21 @@ class OpcuaServer {
           nodeId: addedVariable.nodeId.toString(),
           browseName: v.browseName,
           displayName: v.displayName,
+          description: v.description ? v.description : '',
           ownerName: v.ownerName,
           ownerGroup: v.ownerGroup,
           dataType: v.dataType,
           type: v.type,
         },
-          v.aliasName ? { aliasName: v.aliasName } : {},
-          v.variableGetType ? { variableGetType: v.variableGetType } : {},
-          v.getter ? { getter: v.getter } : {},
-          v.getterParams ? { getterParams: v.getterParams } : {},
-          v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
-          loOmit(v.valueParams, ['componentOf'])
+        v.aliasName ? { aliasName: v.aliasName } : {},
+        v.variableGetType ? { variableGetType: v.variableGetType } : {},
+        v.getter ? { getter: v.getter } : {},
+        v.getterParams ? { getterParams: v.getterParams } : {},
+        v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
+        loOmit(v.valueParams, ['componentOf'])
         ));
         // Install historical DataNode
-        if(v.hist){
+        if (v.hist) {
           addressSpace.installHistoricalDataNode(addedVariable);
         }
         // Run getter
@@ -653,7 +665,7 @@ class OpcuaServer {
     // Add "this" to getterParams
     getterParams.myOpcuaServer = this;
     // Add "group" to getterParams.addedVariableList
-    if(variable.group){
+    if (variable.group) {
       getterParams.addedVariableList = variable.group;
     }
 

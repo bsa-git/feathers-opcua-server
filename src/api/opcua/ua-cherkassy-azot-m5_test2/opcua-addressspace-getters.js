@@ -76,7 +76,7 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
 
     // Set value from source for group 
     if (params.addedVariableList) {
-      setValueFromSourceForGroup(params, dataItems, module.exports)
+      setValueFromSourceForGroup(params, dataItems, module.exports);
     }
   });
   // Write file
@@ -130,7 +130,7 @@ function histValueFromFileForCH_M52(params = {}, addedValue) {
 
     // Set value from source for group 
     if (params.addedVariableList) {
-      setValueFromSourceForGroup(params, dataItems, module.exports)
+      setValueFromSourceForGroup(params, dataItems, module.exports);
     }
   });
   // Write file
@@ -169,7 +169,7 @@ function valueFromFileForCH_M52(params = {}, addedValue) {
   if (isLog) inspector('valueFromFileForCH_M52.dataItems:', dataItems);
   // Set value from source for group 
   if (params.addedVariableList) {
-    setValueFromSourceForGroup(params, dataItems, module.exports)
+    setValueFromSourceForGroup(params, dataItems, module.exports);
   }
   return JSON.stringify(dataItems);
 }

@@ -14,7 +14,8 @@ const {
 } = require('../../../plugins/lib/util');
 
 const {
-  formatUAVariable
+  formatUAVariable,
+  setValueFromSourceForGroup
 } = require('../../../plugins/opcua/opcua-helper');
 
 const {
@@ -115,43 +116,33 @@ function histValueFromFile(params = {}, addedValue) {
     dataType = formatUAVariable(addedValue).dataType[1];
     addedValue.setValueFromSource({ dataType, value: data });
 
-    if (isLog) inspector('histValueFromFile.addedValue:', formatUAVariable(addedValue) );
-    // inspector('histValueFromFile.addedValue:', formatUAVariable(addedValue));
+    if (isLog) inspector('histValueFromFile.addedValue:', formatUAVariable(addedValue));
 
     // Remove file 
     removeFileSync(filePath);
 
     // Get data
+    // e.g. [{ name: '02NG_F5', value: 10.234 }, { name: '02NG_P5', value: 2.444 }] => { "02NG_F5": 10.234, "02NG_P5": 2.444 }
+    let dataItem = {};
     dataItems = JSON.parse(data);
-    // Get group variable list 
-    const groupVariableList = params.addedVariableList;
-    if (isLog) inspector('histValueFromFile.groupVariableList:', groupVariableList);
-
-    dataItems.forEach(dataItem => {
-      groupVariable = groupVariableList.find(v => v.browseName.name === dataItem.name);
-      // Set value from source for variable
-      if (groupVariable) {
-        browseName = formatUAVariable(groupVariable).browseName;
-        
-        // Run setValueFromSource for groupVariable
-        const currentState = params.myOpcuaServer.getCurrentState();
-        const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
-        params.myOpcuaServer.setValueFromSource(variable, groupVariable, module.exports[variable.getter], dataItem.value);
-
-        if (isDebug) console.log(chalk.green(`histValueFromFile.${browseName}:`), chalk.cyan(dataItem.value));
-      }
+    dataItems.forEach(item => {
+      Object.assign(dataItem, {[item.name]: item.value});
     });
 
+    // Set value from source for group 
+    if (params.addedVariableList) {
+      setValueFromSourceForGroup(params, dataItem, module.exports);
+    }
   });
   // Write file
   setInterval(function () {
     const data = [
       {
-        name: 'Device2.02F5',
+        name: '02NG_F5',
         value: getTValue(t)
       },
       {
-        name: 'Device2.02P5',
+        name: '02NG_P5',
         value: getTValue(t)
       }
     ];

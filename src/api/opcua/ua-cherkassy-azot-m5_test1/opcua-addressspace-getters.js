@@ -20,7 +20,7 @@ const {
 } = require('../../../plugins/lib/util');
 
 const {
-  convertTo,
+  setValueFromSourceForGroup,
   formatUAVariable
 } = require('../../../plugins/opcua/opcua-helper');
 
@@ -53,37 +53,11 @@ const getTValue = function (t) {
   return loRound(value, 3);
 };
 
-/**
- * @method histPlugForGroupVariables
- * 
- * @param {Object} params
- * @param {Object} addedValue 
- */
-// function histPlugForGroupVariables(params = {}) {
-//   params = loOmit(params, ['myOpcuaServer']);
-//   if (isDebug) debug('histPlugForGroupVariables.params:', params);
-//   return params.value ? params.value : null;
-// }
-
-/**
- * @method converterForVariable
- * @param {Object} params 
- * @returns {any}
- */
-// function converterForVariable(params = {}) {
-//   let value = null;
-//   params = loOmit(params, ['myOpcuaServer']);
-//   if (isDebug) debug('histPlugForGroupVariables.params:', params);
-//   if (params.value && params.convertType) {
-//     value = convertTo(params.convertType, params.value);
-//   }
-//   return value;
-// }
 
 function histValueFromFileForCH_M51(params = {}, addedValue) {
   const _interval = 200;
   const _path = 'test/data/tmp';
-  let dataItems, groupVariable, dataType, browseName, results;
+  let dataItems, dataType, results;
   let interval = params.interval ? params.interval : _interval;
   let path = params.path ? params.path : _path;
   let id = params.myOpcuaServer.id;
@@ -105,24 +79,10 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
     // Remove file 
     removeFileSync(filePath);
 
-    // Get group variable list 
-    const groupVariableList = params.addedVariableList;
-    if (isDebug) inspector('histValueFromFile.groupVariableList:', groupVariableList);
-
-    loForEach(dataItems, function (value, key) {
-      groupVariable = groupVariableList.find(v => v.aliasName === key);
-      // Set value from source
-      if (groupVariable) {
-        browseName = formatUAVariable(groupVariable).browseName;
-
-        // Run setValueFromSource for groupVariable
-        const currentState = params.myOpcuaServer.getCurrentState();
-        const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
-        params.myOpcuaServer.setValueFromSource(variable, groupVariable, module.exports[variable.getter], value);
-
-        if (isDebug) console.log(chalk.green(`histValueFromFileForCH_M51.${browseName}:`), chalk.cyan(value));
-      }
-    });
+    // Set value from source for group 
+    if (params.addedVariableList) {
+      setValueFromSourceForGroup(params, dataItems, module.exports);
+    }
 
   });
   // Write file
@@ -141,11 +101,7 @@ function histValueFromFileForCH_M51(params = {}, addedValue) {
   }, interval);
 }
 
-function histValueFromFileForCH_M52(params = {}, addedValue) {
-  return 'histValueFromFileForCH_M52';
-}
 
 module.exports = {
   histValueFromFileForCH_M51,
-  histValueFromFileForCH_M52,
 };

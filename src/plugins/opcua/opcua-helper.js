@@ -154,7 +154,7 @@ const getEngineeringUnit = function (type, locale) {
     result = makeEUInformation(...args);
   }
   return result;
-}
+};
 
 /**
  * @method formatUAVariable
@@ -311,7 +311,13 @@ const getOpcuaConfig = function (id = '') {
 const getOpcuaConfigOptions = function (id, browseName = '') {
   // Get opcuaOption 
   let opcuaOptions = getOpcuaConfig(id);
-  opcuaOptions = require(`${appRoot}${opcuaOptions.paths.options}`);
+  if(opcuaOptions.paths['base-options']){
+    const baseOptions = require(`${appRoot}${opcuaOptions.paths['base-options']}`);
+    const options = require(`${appRoot}${opcuaOptions.paths.options}`);
+    opcuaOptions = loMerge(baseOptions, options);
+  } else {
+    opcuaOptions = require(`${appRoot}${opcuaOptions.paths.options}`);
+  }
   opcuaOptions = loConcat(opcuaOptions.objects, opcuaOptions.variables, opcuaOptions.groups, opcuaOptions.methods);
   opcuaOptions = browseName ? opcuaOptions.find(opt => opt.browseName === browseName) : opcuaOptions;
   return opcuaOptions;
@@ -527,28 +533,32 @@ const executeOpcuaClientScript = async (service, id) => {
  * @method setValueFromSourceForGroup 
  * @param {Object} params 
  * @param {Object} dataItems 
+ * e.g. { "02NG_F5": 10.234, "02NG_P5": 2.444 }
  * @param {Object} getters 
  * @returns {void}
  */
 const setValueFromSourceForGroup = (params = {}, dataItems = {}, getters) => {
   let groupVariable, browseName;
   // Get group variable list 
-  const groupVariableList = params.addedVariableList;
-  if (isDebug) inspector('histValueFromFileForCH_M52.groupVariableList:', groupVariableList);
+  let groupVariableList = params.addedVariableList;
+  if (isDebug) inspector('setValueFromSourceForGroup.groupVariableList.aliasNames:', groupVariableList.map(v => v.aliasName));
+  if (isDebug) inspector('setValueFromSourceForGroup.dataItems:', dataItems);
 
   loForEach(dataItems, function (value, key) {
     groupVariable = groupVariableList.find(v => v.aliasName === key);
     // Set value from source
     if (groupVariable) {
+      if (isDebug) inspector('setValueFromSourceForGroup.groupVariable:', formatUAVariable(groupVariable));
       browseName = formatUAVariable(groupVariable).browseName;
       // Run setValueFromSource for groupVariable
       const currentState = params.myOpcuaServer.getCurrentState();
       const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
+      if (isDebug) inspector('setValueFromSourceForGroup.variable:', variable);
       params.myOpcuaServer.setValueFromSource(variable, groupVariable, getters[variable.getter], value);
-      if (isDebug) console.log(chalk.green(`histValueFromFileForCH_M52.${browseName}:`), chalk.cyan(value));
+      if(isDebug) debug('setValueFromSourceForGroup.browseName:', `"${browseName}" =`, value);
     }
   });
-}
+};
 
 /**
  * @method convertTo
@@ -559,17 +569,17 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}, getters) => {
 const convertTo = function (convertType, value) {
   let result = null;
   switch (convertType) {
-    // (kg/h -> m3/h) for ammonia
-    case 'ammonia_kg/h_to_m3/h':
-      result = value * 1.4;
-      break;
+  // (kg/h -> m3/h) for ammonia
+  case 'ammonia_kg/h_to_m3/h':
+    result = value * 1.4;
+    break;
     // (m3/h -> kg/h) for ammonia
-    case 'ammonia_m3/h_to_kg/h':
-      result = value * 0.716;
-      break;
+  case 'ammonia_m3/h_to_kg/h':
+    result = value * 0.716;
+    break;
 
-    default:
-      break;
+  default:
+    break;
   }
   return result;
 };
@@ -582,7 +592,7 @@ const convertTo = function (convertType, value) {
  * e.g. 'Double'
  */
 const opcuaDataTypeToString = function (dataType) {
-  const convertToInteger = loToInteger(dataType)
+  const convertToInteger = loToInteger(dataType);
   const dataTypeList = loToPairs(DataType);
   if (convertToInteger > 0) {// dataType -> 'Integer'
     dataType = dataTypeList.find(item => {
@@ -591,7 +601,7 @@ const opcuaDataTypeToString = function (dataType) {
     dataType = dataType[0];
   }
   return dataType;
-}
+};
 
 /**
  * @method getInitValueForDataType
@@ -603,33 +613,33 @@ const getInitValueForDataType = function (dataType) {
   dataType = opcuaDataTypeToString(dataType);
   dataType = dataType.toLowerCase();
   switch (dataType) {
-    case 'boolean':
-      result = false;
-      break;
-    case 'sbyte':
-    case 'byte':
-    case 'uint16':
-    case 'int32':
-    case 'uint32':
-    case 'int64':
-      result = 0;
-      break;
-    case 'float':
-    case 'double':
-      result = 0.0;
-      break;
-    case 'string':
-      result = '';
-      break;
-    case 'datetime':
-      result = moment().format();
-      break;
-    default:
-      break;
+  case 'boolean':
+    result = false;
+    break;
+  case 'sbyte':
+  case 'byte':
+  case 'uint16':
+  case 'int32':
+  case 'uint32':
+  case 'int64':
+    result = 0;
+    break;
+  case 'float':
+  case 'double':
+    result = 0.0;
+    break;
+  case 'string':
+    result = '';
+    break;
+  case 'datetime':
+    result = moment().format();
+    break;
+  default:
+    break;
   }
-  debug('getInitValueForDataType.dataType:', dataType, ';result:', result);
+  if(isDebug) debug('getInitValueForDataType.dataType:', dataType, result);
   return result;
-}
+};
 
 /**
  * @method getTimestamp

@@ -21,6 +21,7 @@
     "srvServiceUrl": "http://localhost:3030",
     "clientServiceUrl": "http://localhost:3030",
     "paths": {
+      "base-options": "/src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json",
       "options": "/src/api/opcua/ua-cherkassy-azot-m5_test1/AddressSpaceOptions.json",
       "getters": "/src/api/opcua/ua-cherkassy-azot-m5_test1/opcua-addressspace-getters",
       "methods": "/src/api/opcua/ua-cherkassy-azot-m5_test1/opcua-addressspace-methods",
@@ -36,6 +37,7 @@
     "clientServiceUrl": "http://10.60.0.220:3030",
     "clientScript": "subscriptionMonitor_CH_M5",
     "paths": {
+      "base-options": "/src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json",
       "options": "/src/api/opcua/ua-cherkassy-azot-m5_test2/AddressSpaceOptions.json",
       "getters": "/src/api/opcua/ua-cherkassy-azot-m5_test2/opcua-addressspace-getters",
       "methods": "/src/api/opcua/ua-cherkassy-azot-m5_test2/opcua-addressspace-methods",

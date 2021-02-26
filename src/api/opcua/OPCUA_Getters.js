@@ -1,5 +1,9 @@
 /* eslint-disable no-unused-vars */
 const {
+  inspector,
+} = require('../../plugins/lib');
+
+const {
   formatUAVariable,
   getInitValueForDataType
 } = require('../../plugins/opcua/opcua-helper');
@@ -12,19 +16,6 @@ const loOmit = require('lodash/omit');
 
 const debug = require('debug')('app:OPCUA_Getters');
 const isDebug = false;
-
-
-/**
- * @method histPlugForGroupVariables
- * 
- * @param {Object} params
- * @param {Object} addedValue 
- */
-function histPlugForGroupVariables(params = {}) {
-  params = loOmit(params, ['myOpcuaServer']);
-  if (isDebug) debug('histPlugForGroupVariables.params:', params);
-  return params.value ? params.value : undefined;
-}
 
 /**
  * @method plugForVariable
@@ -49,7 +40,7 @@ function plugForVariable(params = {}, addedValue) {
         const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
         value = getInitValueForDataType(variable.dataType);
         params.myOpcuaServer.setValueFromSource(variable, groupVariable, module.exports[variable.getter], value);
-      })
+      });
     }
   } else {
     if (params.value) {
@@ -63,5 +54,4 @@ function plugForVariable(params = {}, addedValue) {
 
 module.exports = {
   plugForVariable,
-  histPlugForGroupVariables,
 };
