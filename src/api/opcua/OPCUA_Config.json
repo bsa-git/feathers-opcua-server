@@ -49,7 +49,7 @@
     "id": "ua-cherkassy-azot-m5",
     "name": "380-472-00203826-m5",
     "endpointUrl": "",
-    "endpointPort": 26580,
+    "endpointPort": 26570,
     "srvServiceUrl": "http://192.168.3.5:3030",
     "clientServiceUrl": "http://192.168.3.5:3030",
     "clientScript": "subscriptionMonitor_CH_M5",

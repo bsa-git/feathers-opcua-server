@@ -21,7 +21,6 @@ const isLog = false;
 function onChangedCH_M5Handler(params, dataValue) {
   if (isLog) inspector('subscriptions.onChangedCH_M5Handler.params:', params);
   if (isLog) inspector('subscriptions.onChangedCH_M5Handler.dataValue:', dataValue);
-  // inspector('subscriptions.onChangedCH_M5Handler.dataValue:', dataValue);
   const browseName = getValueFromNodeId(params.nodeId);
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
   if (isLog) inspector('subscriptions.onChangedCH_M5Handler.formatDataValue:', dataValue);

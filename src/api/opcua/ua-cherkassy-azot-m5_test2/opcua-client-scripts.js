@@ -18,7 +18,6 @@ const isLog = false;
  */
 async function subscriptionMonitor_CH_M5(id, service) {
   let groups;
-  
   // Subscription create
   await service.subscriptionCreate(id);
 
