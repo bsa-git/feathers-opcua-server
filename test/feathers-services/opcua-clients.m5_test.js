@@ -5,7 +5,6 @@ const port = app.get('port') || 3030;
 const {
   getServerService,
   getClientService,
-  getSubscriptionResult,
 } = require('../../src/plugins/opcua/opcua-helper');
 
 const {
@@ -17,18 +16,12 @@ const {
 } = require('../../src/plugins/lib');
 
 const {
-  getFileName,
   makeDirSync,
-  clearDirSync,
-  removeFilesFromDirSync,
-  removeDirFromDirSync,
-  writeFileSync
 } = require('../../src/plugins/lib/file-operations');
 
 const chalk = require('chalk');
 const moment = require('moment');
 
-const loRound = require('lodash/round');
 const loForEach = require('lodash/forEach');
 
 const {

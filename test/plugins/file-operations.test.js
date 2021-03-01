@@ -8,6 +8,7 @@ const {
 } = require('../../src/plugins/lib/util');
 
 const {
+  fsAccess,
   doesDirExist,
   makeDirSync,
   clearDirSync,
@@ -188,7 +189,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
   });
 
   // it('FileOperations: update AddressSpaceOptions.json', () => {
-    
+
   //   let path = 'src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json';
   //   let options = readFileSync([appRoot, path]);
   //   options = JSON.parse(options);
