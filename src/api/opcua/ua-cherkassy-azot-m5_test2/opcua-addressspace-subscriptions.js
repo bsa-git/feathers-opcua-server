@@ -21,12 +21,20 @@ function onChangedCH_M5Handler(params, dataValue) {
   if (isLog) inspector('subscriptions.onChangedCH_M5Handler.params:', params);
   if (isLog) inspector('subscriptions.onChangedCH_M5Handler.dataValue:', dataValue);
   const browseName = getValueFromNodeId(params.nodeId);
+  const addressSpaceOption = params.addressSpaceOption;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
+  let value = dataValue.value.value;
   if (isLog) inspector('subscriptions.onChangedCH_M5Handler.formatDataValue:', dataValue);
-  const value = loRound(dataValue.value.value, 3);
-  const engineeringUnits = dataValue.valueParams.engineeringUnits;
+  value = (addressSpaceOption.dataType === 'Double')? loRound(value, 3) : value;
+  let engineeringUnits = (dataValue.valueParams && dataValue.valueParams.engineeringUnits)? dataValue.valueParams.engineeringUnits : '';
   const timestamp = dataValue.serverTimestamp;
-  console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} (${engineeringUnits}) Timestamp=${timestamp}`));
+  engineeringUnits = engineeringUnits? `(${engineeringUnits})` : '';
+  if(addressSpaceOption.browseName === 'CH_M51::ValueFromFile'){
+    console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} ${engineeringUnits} Timestamp=${timestamp}`));
+  }
+  if(addressSpaceOption.ownerGroup === 'CH_M51::ValueFromFile'){
+    console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} ${engineeringUnits} Timestamp=${timestamp}`));
+  }
 }
 
 module.exports = {

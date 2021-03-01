@@ -1088,6 +1088,7 @@ class OpcuaClient {
         if (isLog) inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
         itemToMonitor.id = this.id;
         itemToMonitor.locale = this.locale;
+        itemToMonitor.addressSpaceOption = itemNodeId;
         dataValue.serverTimestamp = moment().format();
         if (cb) {
           cb(itemToMonitor, dataValue);

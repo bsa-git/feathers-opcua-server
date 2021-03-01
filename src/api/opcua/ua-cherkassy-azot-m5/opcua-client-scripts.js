@@ -17,16 +17,27 @@ const isLog = false;
  * @returns {void}
  */
 async function subscriptionMonitor_CH_M5(id, service) {
-  let groups;
+  let groups, browseNames;
   // Subscription create
   await service.subscriptionCreate(id);
 
   const srvCurrentState = await service.getSrvCurrentState(id);
-  //--- Start subscriptionMonitor ---
+  // Start subscriptionMonitor
   const allVariables = srvCurrentState.paramsAddressSpace.variables;
-  //---- CH_M51 ---//
-  let variables = allVariables.filter(v => v.ownerGroup === 'CH_M51::ValueFromFile').map(v => v.browseName);
-  groups = getGroupsFromArray(variables, 10);
+  //---- Group owners  ---//
+  browseNames = allVariables.filter(v => v.group).map(v => v.browseName);
+  for (let index = 0; index < browseNames.length; index++) {
+    const browseName = browseNames[index];
+    const nodeIds = await service.getNodeIds(id, browseName);
+    for (let index2 = 0; index2 < nodeIds.length; index2++) {
+      const nodeId = nodeIds[index2];
+      await service.subscriptionMonitor(id, 'onChangedCH_M5Handler', { nodeId });
+    }
+  }
+
+  //---- Group members for CH_M51 ---//
+  browseNames = allVariables.filter(v => v.ownerGroup === 'CH_M51::ValueFromFile').map(v => v.browseName);
+  groups = getGroupsFromArray(browseNames, 10);
   for (let index = 0; index < groups.length; index++) {
     const group = groups[index];
     const nodeIds = await service.getNodeIds(id, group);
@@ -35,9 +46,9 @@ async function subscriptionMonitor_CH_M5(id, service) {
       await service.subscriptionMonitor(id, 'onChangedCH_M5Handler', { nodeId });
     }
   }
-  //---- CH_M52 ---//
-  variables = allVariables.filter(v => v.ownerGroup === 'CH_M52::ValueFromFile').map(v => v.browseName);
-  groups = getGroupsFromArray(variables, 10);
+  //---- Group members for CH_M52 ---//
+  browseNames = allVariables.filter(v => v.ownerGroup === 'CH_M52::ValueFromFile').map(v => v.browseName);
+  groups = getGroupsFromArray(browseNames, 10);
   for (let index = 0; index < groups.length; index++) {
     const group = groups[index];
     const nodeIds = await service.getNodeIds(id, group);
