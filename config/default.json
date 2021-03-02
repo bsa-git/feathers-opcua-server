@@ -42,5 +42,9 @@
       "passwordField": "password"
     }
   },
-  "nedb": "../data"
+  "nedb": "../data",
+  "mssql": {
+    "client": "mssql",
+    "connection": "mssql://root:password@localhost:1433/feathers_opcua_server"
+  }
 }
