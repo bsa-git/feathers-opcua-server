@@ -26,7 +26,6 @@ const request = (opts = {}, cb) => {
 const urlExists = function (target) {
   return new Promise((resolve, reject) => {
     let uri;
-
     try {
       uri = url.parse(target);
     } catch (err) {
@@ -44,16 +43,13 @@ const urlExists = function (target) {
 
     const req = request(options, (res) => {
       const { statusCode } = res;
-
       if (statusCode >= 200 && statusCode < 300) {
         resolve(target);
       } else {
         reject(new Error(`Url ${target} not found.`));
       }
     });
-
     req.on('error', reject);
-
     req.end();
   });
 };

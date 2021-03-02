@@ -517,7 +517,7 @@ class OpcuaClient {
    * @returns {NodeAttributes[]}
    */
   async sessionReadAllAttributes(nameNodeIds) {
-    let itemNodeId = null, itemNodeIds = [], result = [];
+    let itemNodeIds = [], result = [];
     const self = this;
     this.sessionNotCreated();
     // Get nodeIds

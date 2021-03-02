@@ -4,9 +4,12 @@ const app = require('../../src/app');
 const port = app.get('port') || 3030;
 
 const {
-  urlExist,
   inspector,
-} = require('../../src/plugins/lib/util');
+} = require('../../src/plugins/lib');
+
+const {
+  urlExists,
+} = require('../../src/plugins/lib/http-operations');
 
 const chalk = require('chalk');
 
@@ -35,11 +38,8 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
   it('HttpOperations: https.get', async () => {
     const https = require('https');
     const url = 'https://jsonplaceholder.typicode.com/posts/1';
-    const exists = await urlExist('https://jsonplaceholder.typicode.com');
-    if (isDebug) debug('urlExist:', exists);
-    debug('urlExist:', exists);
-
-    if (exists) {
+    try {
+      await urlExists(url);
       https.get(url, res => {
         res.setEncoding('utf8');
         let body = '';
@@ -51,41 +51,56 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
           console.log(body);
         });
       });
+      assert.ok(true, 'HttpOperations: https.get');
+    } catch (err) {
+      debug('urlExists:', err.message);
+      assert.ok(true, 'HttpOperations: https.get');
     }
-    assert.ok(true, 'HttpOperations: https.get');
   });
 
-  it('HttpOperations: axios.get', () => {
+  it('HttpOperations: axios.get', async () => {
     const axios = require('axios');
-    const url = 'https://jsonplaceholder.typicode.com/posts/1';
+    const url = 'https://jsonplaceholder.typicode.com/posts/2';
+    try {
+      await urlExists(url);
+      const getData = async url => {
+        try {
+          const response = await axios.get(url);
+          const data = response.data;
+          console.log(data);
+        } catch (error) {
+          console.log(error);
+        }
+      };
 
-    const getData = async url => {
-      try {
-        const response = await axios.get(url);
-        const data = response.data;
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getData(url);
-    assert.ok(true, 'HttpOperations: axios.get');
+      await getData(url);
+      assert.ok(true, 'HttpOperations: axios.get');
+    } catch (err) {
+      debug('urlExists:', err.message);
+      assert.ok(true, 'HttpOperations: axios.get');
+    }
   });
 
-  it('HttpOperations: fetch.get', () => {
+  it('HttpOperations: fetch.get', async () => {
     const fetch = require('node-fetch');
+    const url = 'https://jsonplaceholder.typicode.com/users';
+    try {
+      await urlExists(url);
+      fetch(url)
+        .then(res => res.json())
+        .then(json => {
+          console.log('First user in the array:');
+          console.log(json[0]);
+          console.log('Name of the first user in the array:');
+          console.log(json[0].name);
+        });
+      assert.ok(true, 'HttpOperations: fetch.get');
+    } catch (err) {
+      debug('urlExists:', err.message);
+      assert.ok(true, 'HttpOperations: fetch.get');
+    }
 
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then(res => res.json())
-      .then(json => {
-        console.log('First user in the array:');
-        console.log(json[0]);
-        console.log('Name of the first user in the array:');
-        console.log(json[0].name);
-      });
 
-    assert.ok(true, 'HttpOperations: fetch.get');
   });
 
 });
