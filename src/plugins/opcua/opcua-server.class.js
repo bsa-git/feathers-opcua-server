@@ -5,7 +5,6 @@ const {
   OPCUAServer,
   DataType,
   VariantArrayType,
-  standardUnits,
   makeAccessLevelFlag,
 } = require('node-opcua');
 const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/OPCUA_ServerOptions`);

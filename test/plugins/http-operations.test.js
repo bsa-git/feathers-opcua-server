@@ -5,10 +5,12 @@ const port = app.get('port') || 3030;
 
 const {
   inspector,
+  pause
 } = require('../../src/plugins/lib');
 
 const {
   urlExists,
+  checkStatusFetch
 } = require('../../src/plugins/lib/http-operations');
 
 const chalk = require('chalk');
@@ -53,7 +55,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
       });
       assert.ok(true, 'HttpOperations: https.get');
     } catch (err) {
-      debug('urlExists:', err.message);
+      debug('ERROR:', err.message);
       assert.ok(true, 'HttpOperations: https.get');
     }
   });
@@ -76,7 +78,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
       await getData(url);
       assert.ok(true, 'HttpOperations: axios.get');
     } catch (err) {
-      debug('urlExists:', err.message);
+      debug('ERROR:', err.message);
       assert.ok(true, 'HttpOperations: axios.get');
     }
   });
@@ -96,11 +98,8 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
         });
       assert.ok(true, 'HttpOperations: fetch.get');
     } catch (err) {
-      debug('urlExists:', err.message);
+      debug('ERROR:', err.message);
       assert.ok(true, 'HttpOperations: fetch.get');
     }
-
-
   });
-
 });
