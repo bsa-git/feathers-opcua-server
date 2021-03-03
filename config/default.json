@@ -45,6 +45,6 @@
   "nedb": "../data",
   "mssql": {
     "client": "mssql",
-    "connection": "mssql://root:password@localhost:1433/feathers_opcua_server"
+    "connection": "mssql://sa:Sa#bsa2657@localhost:1433/feathers_opcua_server"
   }
 }

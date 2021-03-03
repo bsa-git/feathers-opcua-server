@@ -5,6 +5,8 @@ describe('\'mssql-tags\' service', () => {
   it('registered the service', () => {
     const service = app.service('mssql-tags');
 
+    service.create({text: 'Привет!'});
+
     assert.ok(service, 'Registered the service');
   });
 });
