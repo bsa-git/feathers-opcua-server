@@ -99,6 +99,16 @@ const getMyIp = function () {
   return getIpAddresses().length ? getIpAddresses()[0] : '';
 };
 
+/**
+ * @method isMyIp
+ * @param {Array} ips
+ * @returns {Boolean}
+ */
+const isMyIp = function (ips = []) {
+  const findedIp = ips.find(ip => ip === getMyIp());
+  return !!findedIp;
+};
+
 module.exports = {
   getLocalIpAddress,
   getIpAddresses,
@@ -106,4 +116,5 @@ module.exports = {
   getParseUrl,
   isIP,
   getMyIp,
+  isMyIp
 };
