@@ -1,7 +1,4 @@
 /* eslint-disable no-unused-vars */
-// const { join } = require('path');
-// const appRoot = join(__dirname, '../../../');
-
 const debug = require('debug')('app:net-operations');
 
 //---------------- NET -------------//

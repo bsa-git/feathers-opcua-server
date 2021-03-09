@@ -7,7 +7,8 @@ const {
   getHostname,
   getMyIp,
   strReplace,
-  getNumber
+  getNumber,
+  getPathBasename
 } = require('../lib');
 
 const {
@@ -303,6 +304,22 @@ const getOpcuaConfig = function (id = '') {
 };
 
 /**
+ * @method getOpcuaConfigForIp
+ * @param {String} ip 
+ * @returns {Array}
+ */
+const getOpcuaConfigForIp = function (ip = '') {
+  let opcuaOption = null;
+  const opcuaOptions = require(`${appRoot}/src/api/opcua/OPCUA_Config.json`);
+  opcuaOption = opcuaOptions.find(opt => {
+    const url = opt.srvServiceUrl ? opt.srvServiceUrl : opt.clientServiceUrl;
+    const parts = getParseUrl(url);
+    return parts.hostname === ip;
+  });
+  return opcuaOption;
+};
+
+/**
  * @method getOpcuaConfigOptions
  * @param {String} id 
  * @param {String} browseName 
@@ -311,7 +328,7 @@ const getOpcuaConfig = function (id = '') {
 const getOpcuaConfigOptions = function (id, browseName = '') {
   // Get opcuaOption 
   let opcuaOptions = getOpcuaConfig(id);
-  if(opcuaOptions.paths['base-options']){
+  if (opcuaOptions.paths['base-options']) {
     const baseOptions = require(`${appRoot}${opcuaOptions.paths['base-options']}`);
     const options = require(`${appRoot}${opcuaOptions.paths.options}`);
     opcuaOptions = loMerge(baseOptions, options);
@@ -555,7 +572,7 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}, getters) => {
       const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
       if (isDebug) inspector('setValueFromSourceForGroup.variable:', variable);
       params.myOpcuaServer.setValueFromSource(variable, groupVariable, getters[variable.getter], value);
-      if(isDebug) debug('setValueFromSourceForGroup.browseName:', `"${browseName}" =`, value);
+      if (isDebug) debug('setValueFromSourceForGroup.browseName:', `"${browseName}" =`, value);
     }
   });
 };
@@ -569,17 +586,17 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}, getters) => {
 const convertTo = function (convertType, value) {
   let result = null;
   switch (convertType) {
-  // (kg/h -> m3/h) for ammonia
-  case 'ammonia_kg/h_to_m3/h':
-    result = value * 1.4;
-    break;
+    // (kg/h -> m3/h) for ammonia
+    case 'ammonia_kg/h_to_m3/h':
+      result = value * 1.4;
+      break;
     // (m3/h -> kg/h) for ammonia
-  case 'ammonia_m3/h_to_kg/h':
-    result = value * 0.716;
-    break;
+    case 'ammonia_m3/h_to_kg/h':
+      result = value * 0.716;
+      break;
 
-  default:
-    break;
+    default:
+      break;
   }
   return result;
 };
@@ -613,31 +630,31 @@ const getInitValueForDataType = function (dataType) {
   dataType = opcuaDataTypeToString(dataType);
   dataType = dataType.toLowerCase();
   switch (dataType) {
-  case 'boolean':
-    result = false;
-    break;
-  case 'sbyte':
-  case 'byte':
-  case 'uint16':
-  case 'int32':
-  case 'uint32':
-  case 'int64':
-    result = 0;
-    break;
-  case 'float':
-  case 'double':
-    result = 0.0;
-    break;
-  case 'string':
-    result = '';
-    break;
-  case 'datetime':
-    result = moment().format();
-    break;
-  default:
-    break;
+    case 'boolean':
+      result = false;
+      break;
+    case 'sbyte':
+    case 'byte':
+    case 'uint16':
+    case 'int32':
+    case 'uint32':
+    case 'int64':
+      result = 0;
+      break;
+    case 'float':
+    case 'double':
+      result = 0.0;
+      break;
+    case 'string':
+      result = '';
+      break;
+    case 'datetime':
+      result = moment().format();
+      break;
+    default:
+      break;
   }
-  if(isDebug) debug('getInitValueForDataType.dataType:', dataType, result);
+  if (isDebug) debug('getInitValueForDataType.dataType:', dataType, result);
   return result;
 };
 
@@ -682,6 +699,30 @@ const Unece_to_Locale = function (pathFrom, pathTo) {
 };
 
 
+/**
+ * @method canTestRun
+ * @param {String} fileName 
+ * @returns {Boolean}
+ */
+const canTestRun = function (fileName) {
+  const myIp = getMyIp();
+  const myConfig = getOpcuaConfigForIp(myIp);
+  const isTest = (myConfig && myConfig.exclude && myConfig.exclude.tests) ? !myConfig.exclude.tests.find(name => name === fileName) : true;
+  return isTest;
+};
+
+/**
+ * @method canServiceRun 
+ * @param {String} serviceName 
+ * @returns {Boolean}
+ */
+const canServiceRun = function (serviceName) {
+  const myIp = getMyIp();
+  const myConfig = getOpcuaConfigForIp(myIp);
+  const isService = (myConfig && myConfig.exclude && myConfig.exclude.services) ? !myConfig.exclude.services.find(name => name === serviceName) : true;
+  return isService;
+};
+
 module.exports = {
   nodeIdToString,
   getNodeIdType,
@@ -694,6 +735,7 @@ module.exports = {
   formatHistoryResults,
   formatDataValue,
   getOpcuaConfig,
+  getOpcuaConfigForIp,
   getOpcuaConfigOptions,
   getSubscriptionHandler,
   getOpcuaClientScript,
@@ -711,5 +753,7 @@ module.exports = {
   convertTo,
   getInitValueForDataType,
   getTimestamp,
-  Unece_to_Locale
+  Unece_to_Locale,
+  canTestRun,
+  canServiceRun
 };

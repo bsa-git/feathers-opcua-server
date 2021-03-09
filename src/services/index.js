@@ -1,22 +1,21 @@
 /* eslint-disable no-unused-vars */
-const { isMyIp } = require('../plugins/lib/net-operations');
+const { canServiceRun } = require('../plugins');
+const debug = require('debug')('app:services.index');
 
-console.log('isMyFile:', __filename);
+const isDebug = false;
 
-const users = require('./users/users.service.js');
-const messages = require('./messages/messages.service.js');
-const opcuaServers = require('./opcua-servers/opcua-servers.service');
-const opcuaClients = require('./opcua-clients/opcua-clients.service.js');
-// if(isMyIp(['10.60.1.220'])) {
-  
-// } 
 module.exports = function (app) {
-  app.configure(users);
-  app.configure(messages);
-  app.configure(opcuaServers);
-  app.configure(opcuaClients);
-  if(isMyIp(['10.60.0.220'])) {
-    const mssqlTags = require('./mssql-tags/mssql-tags.service.js');
-    app.configure(mssqlTags);
-  } 
+  const dirTree = require('directory-tree');
+  const treeList = dirTree(__dirname).children.filter(child => child.type === 'directory').map(child => child.name);
+  if(isDebug) debug('serviceDirTree:', treeList);
+
+  treeList.forEach(serviceName => {
+    if (canServiceRun(serviceName)) {
+      if(isDebug) debug(`canServiceRun.${serviceName}: OK`);
+      const service = require(`./${serviceName}/${serviceName}.service.js`);
+      app.configure(service);
+    }
+  });
+
+
 };
