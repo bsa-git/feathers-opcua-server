@@ -15,7 +15,7 @@ module.exports = function (app) {
   app.configure(messages);
   app.configure(opcuaServers);
   app.configure(opcuaClients);
-  if(isMyIp(['10.60.1.220'])) {
+  if(isMyIp(['10.60.0.220'])) {
     const mssqlTags = require('./mssql-tags/mssql-tags.service.js');
     app.configure(mssqlTags);
   } 

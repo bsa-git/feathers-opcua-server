@@ -102,10 +102,11 @@ const getMyIp = function () {
 /**
  * @method isMyIp
  * @param {Array} ips
+ * @param {Boolean} exclude
  * @returns {Boolean}
  */
-const isMyIp = function (ips = []) {
-  const findedIp = ips.find(ip => ip === getMyIp());
+const isMyIp = function (ips = [], exclude = true) {
+  const findedIp = ips.find(ip => exclude ? ip !== getMyIp() : ip === getMyIp());
   return !!findedIp;
 };
 
