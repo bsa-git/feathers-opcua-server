@@ -2,7 +2,11 @@
 const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port') || 3030;
-const { inspector } = require('../../src/plugins');
+const { 
+  inspector,
+  startListenPort, 
+  stopListenPort, 
+} = require('../../src/plugins');
 const { getServerService } = require('../../src/plugins/opcua');
 
 const loMerge = require('lodash/merge');
@@ -33,19 +37,11 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
   let server;
 
   before(function (done) {
-    if (isDebug) debug('before Start!');
-    // debug('before Start!');
-    server = app.listen(port);
-    server.once('listening', () => {
-      setTimeout(() => done(), 500);
-    });
+    startListenPort(app, done);
   });
 
   after(function (done) {
-    if (isDebug) debug('after Start!');
-    // debug('after Start!');
-    server.close();
-    setTimeout(() => done(), 500);
+    stopListenPort(done);
   });
 
   it('New user: created the service', async () => {

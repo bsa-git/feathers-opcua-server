@@ -8,6 +8,7 @@ const {
   makeAccessLevelFlag,
 } = require('node-opcua');
 const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/OPCUA_ServerOptions`);
+const opcuaDefaultHistoricalDataNodeOptions = require(`${appRoot}/src/api/opcua/ServerHistoricalDataNodeOptions`);
 const opcuaDefaultGetters = require(`${appRoot}/src/api/opcua/OPCUA_Getters`);
 
 const loMerge = require('lodash/merge');
@@ -17,7 +18,6 @@ const chalk = require('chalk');
 const debug = require('debug')('app:plugins.opcua-server.class');
 const isLog = false;
 const isDebug = false;
-
 
 
 class OpcuaServer {
@@ -476,7 +476,13 @@ class OpcuaServer {
 
                 // If a variable has history
                 if (v.hist) {
-                  addressSpace.installHistoricalDataNode(addedVariable);
+                  /*
+                  InstallHistoricalDataNode does a few things for us:
+                    it instantiate a HA Configuration object
+                    it sets the historizing flag of the variable
+                    it starts recording value changes into a small online data storage of 2000 values.
+                  */
+                  addressSpace.installHistoricalDataNode(addedVariable, opcuaDefaultHistoricalDataNodeOptions);
                   // If a variable has group - get group variables
                   if (v.group) {
                     getterParams.addedVariableList = addedVariableList;
@@ -637,7 +643,13 @@ class OpcuaServer {
         ));
         // Install historical DataNode
         if (v.hist) {
-          addressSpace.installHistoricalDataNode(addedVariable);
+          /*
+          InstallHistoricalDataNode does a few things for us:
+            it instantiate a HA Configuration object
+            it sets the historizing flag of the variable
+            it starts recording value changes into a small online data storage of 2000 values.
+          */
+          addressSpace.installHistoricalDataNode(addedVariable, opcuaDefaultHistoricalDataNodeOptions);
         }
         // Run getter
         // addedVariable.strDataType = v.dataType;

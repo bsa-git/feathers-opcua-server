@@ -15,15 +15,13 @@ const {
   isObject,
   pause,
   getTime,
-  dtToObject
+  makeDirSync
 } = require('../../src/plugins/lib');
 
 const {
-  getFileName,
-  makeDirSync,
-  writeFileSync,
-  clearDirSync
-} = require('../../src/plugins/lib/file-operations');
+  startListenPort, 
+  stopListenPort,
+} = require('../../src/plugins/test-helpers');
 
 const chalk = require('chalk');
 const moment = require('moment');
@@ -68,19 +66,13 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
   let server;
 
   before(function (done) {
-    if (isDebug) debug('before Start!');
-    server = app.listen(port);
-    server.once('listening', () => {
-      setTimeout(() => done(), 500);
-    });
+    startListenPort(app, done);
     // Make dir
     const path = makeDirSync([appRoot, 'test/data/tmp/test1']);
   });
 
   after( function (done) {
-    if (isDebug) debug('after Start!');
-    server.close();
-    setTimeout(() => done(), 500);
+    stopListenPort(done);
   });
 
   it('OPC-UA clients: registered the service', async () => {

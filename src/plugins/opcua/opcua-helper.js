@@ -586,17 +586,17 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}, getters) => {
 const convertTo = function (convertType, value) {
   let result = null;
   switch (convertType) {
-    // (kg/h -> m3/h) for ammonia
-    case 'ammonia_kg/h_to_m3/h':
-      result = value * 1.4;
-      break;
+  // (kg/h -> m3/h) for ammonia
+  case 'ammonia_kg/h_to_m3/h':
+    result = value * 1.4;
+    break;
     // (m3/h -> kg/h) for ammonia
-    case 'ammonia_m3/h_to_kg/h':
-      result = value * 0.716;
-      break;
+  case 'ammonia_m3/h_to_kg/h':
+    result = value * 0.716;
+    break;
 
-    default:
-      break;
+  default:
+    break;
   }
   return result;
 };
@@ -630,29 +630,29 @@ const getInitValueForDataType = function (dataType) {
   dataType = opcuaDataTypeToString(dataType);
   dataType = dataType.toLowerCase();
   switch (dataType) {
-    case 'boolean':
-      result = false;
-      break;
-    case 'sbyte':
-    case 'byte':
-    case 'uint16':
-    case 'int32':
-    case 'uint32':
-    case 'int64':
-      result = 0;
-      break;
-    case 'float':
-    case 'double':
-      result = 0.0;
-      break;
-    case 'string':
-      result = '';
-      break;
-    case 'datetime':
-      result = moment().format();
-      break;
-    default:
-      break;
+  case 'boolean':
+    result = false;
+    break;
+  case 'sbyte':
+  case 'byte':
+  case 'uint16':
+  case 'int32':
+  case 'uint32':
+  case 'int64':
+    result = 0;
+    break;
+  case 'float':
+  case 'double':
+    result = 0.0;
+    break;
+  case 'string':
+    result = '';
+    break;
+  case 'datetime':
+    result = moment().format();
+    break;
+  default:
+    break;
   }
   if (isDebug) debug('getInitValueForDataType.dataType:', dataType, result);
   return result;

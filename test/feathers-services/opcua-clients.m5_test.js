@@ -12,12 +12,14 @@ const {
   inspector,
   pause,
   getTime,
-  getGroupsFromArray
+  getGroupsFromArray,
+  makeDirSync
 } = require('../../src/plugins/lib');
 
 const {
-  makeDirSync,
-} = require('../../src/plugins/lib/file-operations');
+  startListenPort, 
+  stopListenPort,
+} = require('../../src/plugins/test-helpers');
 
 const chalk = require('chalk');
 const moment = require('moment');
@@ -53,23 +55,16 @@ const clientData = {
 const id = srvData.params.serverInfo.applicationName;
 
 describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
-  let server;
 
   before(function (done) {
-    if (isDebug) debug('before Start!');
-    server = app.listen(port);
-    server.once('listening', () => {
-      setTimeout(() => done(), 500);
-    });
+    startListenPort(app, done);
     // Make dirs
     makeDirSync([appRoot, 'test/data/tmp/ch-m51']);
     makeDirSync([appRoot, 'test/data/tmp/ch-m52']);
   });
 
   after(function (done) {
-    if (isDebug) debug('after Start!');
-    server.close();
-    setTimeout(() => done(), 500);
+    stopListenPort(done);
   });
 
   it('OPC-UA clients: registered the service', async () => {
