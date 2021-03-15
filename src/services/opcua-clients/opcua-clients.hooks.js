@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const { authenticate } = require('@feathersjs/authentication').hooks;
 
 module.exports = {

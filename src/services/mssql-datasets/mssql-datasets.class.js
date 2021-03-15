@@ -1,6 +1,12 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { MssqlTedious, mssqlDatasetsMixins } = require('../../plugins/db-helpers');
+const { 
+  MssqlTedious, 
+  mssqlDatasetMixins, 
+  getIdFromMssqlConfig,
+  isMssqlDatasetInList,
+  getMssqlDatasetForProvider 
+} = require('../../plugins/db-helpers');
 
 const loRemove = require('lodash/remove');
 const loAt = require('lodash/at');
@@ -9,19 +15,19 @@ const debug = require('debug')('app:mssql-datasets.class');
 const isDebug = false;
 const isLog = false;
 
-class OpcuaServers {
+class MssqlDatasets {
 
   setup(app, path) {
     this.app = app;
-    this.opcuaServers = [];
+    this.mssqlDatasets = [];
   }
 
   async create(data, params) {
     let result;
-    // Execute an OPCUA action through a service method (create)
+    // Execute an DB action through a service method (create)
     if(data.id && data.action){
-      opcuaServerMixins(this);
-      const path = this.getPathForServerMixins(data.action);
+      mssqlDatasetMixins(this);
+      const path = this.getPathForMixins(data.action);
       if(path === null){
         throw new errors.BadRequest(`There is no path for the corresponding action - "${data.action}"`);  
       }
@@ -31,65 +37,61 @@ class OpcuaServers {
     }
 
     // Get id
-    const id = data.params.serverInfo.applicationName;
-    if (isOpcuaServerInList(this, id)) {
+    const id = getIdFromMssqlConfig(data.params.config);
+    if (isMssqlDatasetInList(this, id)) {
       throw new errors.BadRequest(`The opcua server already exists for this id = '${id}' in the server list`);
     }
-    // Create OPC-UA server
-    const server = new OpcuaServer(this.app, data.params);
-    // Server create
-    await server.opcuaServerCreate();
-    // Server constructAddressSpace
-    server.constructAddressSpace();
-    // Server start
-    await server.opcuaServerStart();
-    // Add opcuaServer to server list
-    const opcuaServer = {
-      id: server.getServerInfo().applicationName,
-      server,
+    // Create DB
+    const db = new MssqlTedious(data.params.config);
+    // DB connect
+    await db.connect();
+    // Add mssqlDataset to service list
+    const mssqlDataset = {
+      id,
+      db,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt
     };
-    this.opcuaServers.push(opcuaServer);
+    this.mssqlDatasets.push(mssqlDataset);
     // Get result
-    result = params.provider ? Object.assign({}, opcuaServer, getServerForProvider(opcuaServer.server)) : opcuaServer;
+    result = params.provider ? Object.assign({}, mssqlDataset, getMssqlDatasetForProvider(mssqlDataset.db)) : mssqlDataset;
     return result;
   }
 
   async get(id, params) {
-    let opcuaServer = null;
-    opcuaServer = this.opcuaServers.find(srv => srv.id === id);
-    if (!opcuaServer) {
-      throw new errors.BadRequest(`No opcua server found for this id = '${id}' in the server list`);
+    let mssqlDataset = null;
+    mssqlDataset = this.mssqlDatasets.find(obj => obj.id === id);
+    if (!mssqlDataset) {
+      throw new errors.BadRequest(`No mssqlDataset found for this id = '${id}' in the service list`);
     }
     if (params.provider) {
-      opcuaServer = {
-        id: opcuaServer.id,
-        server: { currentState: opcuaServer.server.getCurrentState() },
-        createdAt: opcuaServer.createdAt,
-        updatedAt: opcuaServer.updatedAt
+      mssqlDataset = {
+        id: mssqlDataset.id,
+        db: { currentState: mssqlDataset.db.getCurrentState() },
+        createdAt: mssqlDataset.createdAt,
+        updatedAt: mssqlDataset.updatedAt
       };
     }
-    return opcuaServer;
+    return mssqlDataset;
   }
 
   async find(params) {
-    let opcuaServers, opcuaServer;
-    // Just return all our opcuaServers
-    opcuaServers = this.opcuaServers.map(srv => {
+    let mssqlDatasets, mssqlDataset;
+    // Just return all our mssqlDataset
+    mssqlDatasets = this.mssqlDatasets.map(obj => {
       if (params.provider) {
-        opcuaServer = {
-          id: srv.id,
-          server: { currentState: srv.server.getCurrentState() },
-          createdAt: srv.createdAt,
-          updatedAt: srv.updatedAt
+        mssqlDataset = {
+          id: obj.id,
+          db: { currentState: obj.db.getCurrentState() },
+          createdAt: obj.createdAt,
+          updatedAt: obj.updatedAt
         };
       } else {
-        opcuaServer = srv;
+        mssqlDataset = obj;
       }
-      return opcuaServer;
+      return mssqlDataset;
     });
-    return opcuaServers;
+    return mssqlDatasets;
   }
 
   async update(id, data, params) {
@@ -106,21 +108,21 @@ class OpcuaServers {
     return result;
   }
 
-  // OPC-UA server remove
+  // mssqlDataset remove
   async remove(id, params) {
-    let opcuaServer;
-    opcuaServer = await this.get(id);
-    await opcuaServer.server.opcuaServerShutdown();
-    opcuaServer = Object.assign({}, {
-      id: opcuaServer.id,
-      server: { currentState: opcuaServer.server.getCurrentState() },
-      createdAt: opcuaServer.createdAt,
-      updatedAt: opcuaServer.updatedAt
+    let mssqlDataset;
+    mssqlDataset = await this.get(id);
+    await mssqlDataset.db.diconnect();
+    mssqlDataset = Object.assign({}, {
+      id: mssqlDataset.id,
+      db: { currentState: mssqlDataset.db.getCurrentState() },
+      createdAt: mssqlDataset.createdAt,
+      updatedAt: mssqlDataset.updatedAt
     });
 
-    loRemove(this.opcuaServers, srv => srv.id === id);
-    return opcuaServer;
+    loRemove(this.mssqlDatasets, obj => obj.id === id);
+    return mssqlDataset;
   }
 }
 
-exports.OpcuaServers = OpcuaServers;
+exports.MssqlDatasets = MssqlDatasets;

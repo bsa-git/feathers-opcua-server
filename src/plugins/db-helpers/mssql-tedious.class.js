@@ -1,49 +1,12 @@
 /* eslint-disable no-unused-vars */
 const loMerge = require('lodash/merge');
 const loForEach = require('lodash/forEach');
+const loOmit = require('lodash/omit');
 const { Connection, Request, TYPES } = require('tedious');
 
 const debug = require('debug')('app:mssql-tedious.class');
 
 const isDebug = false;
-
-const connectionConfig = {
-  server: 'server',
-  options: {
-    instanceName: 'instanceName',
-    encrypt: false,
-    database: 'database',
-    connectTimeout: 3000,
-    rowCollectionOnDone: true, // Only get row set instead of row by row
-    useColumnNames: true, // For easier JSON formatting
-    debug: {
-      data: false,
-      packet: false,
-      log: false,
-      payload: false,
-      token: false,
-    }
-  },
-  authentication: {
-    type: 'default',
-    options: {
-      userName: 'userName',
-      password: 'password',
-      domain: ''
-    }
-  },
-  events: {
-    debug: false,
-    infoMessage: false,
-    errorMessage: false,
-    databaseChange: false,
-    languageChange: false,
-    charsetChange: false,
-    secure: false,
-  }
-};
-
-let _rows = [];
 
 class MssqlTedious {
   /**
@@ -51,8 +14,110 @@ class MssqlTedious {
    * @param {Object} config
    */
   constructor(config) {
-    this.connectionConfig = loMerge({}, connectionConfig, config.connection);
+
+    const connectionConfig = {
+      server: 'server',
+      options: {
+        instanceName: 'instanceName',
+        encrypt: false,
+        database: 'database',
+        connectTimeout: 3000,
+        rowCollectionOnDone: true, // Only get row set instead of row by row
+        useColumnNames: true, // For easier JSON formatting
+        debug: {
+          data: false,
+          packet: false,
+          log: false,
+          payload: false,
+          token: false,
+        }
+      },
+      authentication: {
+        type: 'default',
+        options: {
+          userName: 'userName',
+          password: 'password',
+          domain: ''
+        }
+      },
+      events: {
+        connection: {
+          debug: {
+            enable: false,
+            cb: this.onDebugForConn
+          },
+          infoMessage: {
+            enable: false,
+            cb: this.onInfoMessageForConn
+          },
+          errorMessage: {
+            enable: false,
+            cb: this.onErrorMessageForConn
+          },
+          databaseChange: {
+            enable: false,
+            cb: this.onDatabaseChangeForConn
+          },
+          languageChange: {
+            enable: false,
+            cb: this.onLanguageChangeForConn
+          },
+          charsetChange: {
+            enable: false,
+            cb: this.onCharsetChangeForConn
+          },
+          secure: {
+            enable: false,
+            cb: this.onSecureForConn
+          },
+        },
+        request: {
+          columnMetadata: {
+            enable: false,
+            cb: this.onColumnMetadataForRequest
+          },
+          prepared: {
+            enable: false,
+            cb: this.onPreparedForRequest
+          },
+          error: {
+            enable: false,
+            cb: this.onErrorForRequest
+          },
+          requestCompleted: {
+            enable: false,
+            cb: this.onRequestCompletedForRequest
+          },
+          done: {
+            enable: false,
+            cb: this.onDoneForRequest
+          },
+          returnValue: {
+            enable: false,
+            cb: this.onReturnValueForRequest
+          },
+          order: {
+            enable: false,
+            cb: this.onOrderForRequest
+          }
+        }
+      }
+    };
+
+    this.config = loMerge({}, connectionConfig, config.connection);
+    this.id = this.config.server +
+      this.config.options.instanceName ? `.${this.config.options.instanceName}` : '' +
+    `.${this.config.options.database}`;
     this.connection = null;
+    this.currentState = {
+      id: this.id,
+      connectionConfig: loOmit(this.config, ['authentication.options.password']),
+      connError: '',
+      requestError: '',
+      isConnected: false,
+      isConnCanceled: false,
+      isConnReset: false
+    };
   }
 
   /**
@@ -63,27 +128,34 @@ class MssqlTedious {
     const self = this;
     // return Promise
     return new Promise((resolve, reject) => {
-      const connection = new Connection(this.connectionConfig);
-
+      const connection = new Connection(this.config);
+      // Subscribe to events
+      self.subscribeToConnEvent();
+      // The attempt to connect and validate has completed.
       connection.on('connect', function (err) {
+        // err - If successfully connected, will be falsey. If there was a problem (with either connecting or validation), will be an error object.
         if (err) {
-          console.log('connection.on("connect") -> Error: ', err);
-          reject('Connection ERR');
+          console.log('connection.on("connect") -> Error: ', err.message);
+          reject(err.message);
         } else {
           // If no error, then good to go...
           console.log('Connection OK');
-          self.connection = connection;//Object.assign({}, connection);
-          // console.log('Connection:', connection);
-          // Subscribe to event
-          self.subscribeToConnEvent();
+          self.connection = connection;
+          // Set current state
+          self.currentState.connError = '';
+          self.currentState.isConnected = true;
+          self.currentState.isConnCanceled = false;
+          self.currentState.isConnReset = false;
           resolve('Connection OK');
         }
       });
-
+      // Internal error occurs
       connection.on('error', function (err) {
         if (err) {
           console.log('Error: ', err);
-          reject('Connection ERR');
+          // Set current state
+          self.currentState.connError = err.message;
+          reject(err.message);
         }
       });
       connection.connect();
@@ -97,6 +169,8 @@ class MssqlTedious {
   connCancel() {
     this.connection.cancel();
     console.log('RequestCancel OK');
+    // Set current state
+    this.currentState.isConnCanceled = true;
   }
 
   /**
@@ -111,6 +185,10 @@ class MssqlTedious {
       self.connection.on('end', function () {
         self.connection = null;
         console.log('ConnectionDisconnect OK');
+        // Set current state
+        self.currentState.isConnected = false;
+        self.currentState.isConnCanceled = false;
+        self.currentState.isConnReset = false;
         resolve('ConnectionDisconnect OK');
       });
 
@@ -128,17 +206,28 @@ class MssqlTedious {
       self.connection.reset(function (err) {
         if (err) {
           console.log('ConnectionReset.error: ', err);
+          // Set current state
+          self.currentState.connError = err.message;
           reject('ConnectionReset ERR');
           return;
         }
         console.log('ConnectionReset OK');
+        // Set current state
+        self.currentState.isConnReset = true;
         resolve('ConnectionReset OK');
       });
 
     });
   }
 
-
+  /**
+   * Get current state
+   * @method getCurrentState
+   * @returns {Object}
+   */
+  getCurrentState() {
+    return this.currentState;
+  }
 
   /**
    * @method query
@@ -153,11 +242,16 @@ class MssqlTedious {
       const request = new Request(sql, (err, rowCount) => {
         if (err) {
           console.log('Request.error: ', err);
-          reject('Request ERR');
+          // Set current state
+          self.currentState.requestError = err.message;
+          reject(err.message);
           return;
         }
         resolve('Request OK');
       });
+
+      // Subscribe to request events
+      self.subscribeToRequestEvent(request);
 
       if (params.length > 0) {
         params.forEach(param => {
@@ -165,9 +259,16 @@ class MssqlTedious {
         });
       }
 
-      _rows = [];
+      let _rows = [];
 
       request.on('row', columns => {
+        // A row resulting from execution of the SQL statement.
+        /**
+          columns - An array or object (depends on config.options.useColumnNames), where the columns can be accessed by index/name. Each column has two properties, metadata and value.
+            metadata - The same data that is exposed in the columnMetadata event.
+            value - The column's value. It will be null for a NULL.
+                    If there are multiple columns with the same name, then this will be an array of the values.
+         */
         let _item = {};
         // Converting the response row to a JSON formatted object: [property]: value
         for (var name in columns) {
@@ -178,6 +279,13 @@ class MssqlTedious {
 
       // We return the set of rows after the query is complete, instead of returing row by row
       request.on('doneInProc', (rowCount, more, rows) => {
+        /**
+          Indicates the completion status of a SQL statement within a stored procedure. All rows from a statement in a stored procedure have been provided (through row events).
+          This event may also occur when executing multiple calls with the same query using execSql.
+          rowCount - The number of result rows. May be undefined if not available.
+          more - If there are more result sets to come, then true.
+          rows - Rows as a result of executing the SQL. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true.
+         */
         if (isDebug) console.log('Request result:', { params, sql, rows: _rows });
         callback(_rows);
       });
@@ -199,11 +307,16 @@ class MssqlTedious {
       const request = new Request(sql, (err, rowCount) => {
         if (err) {
           console.log('Request.error: ', err);
-          reject('Request ERR');
+          // Set current state
+          self.currentState.requestError = err.message;
+          reject(err.message);
           return;
         }
         resolve('Request OK');
       });
+
+      // Subscribe to request events
+      self.subscribeToRequestEvent(request);
 
       if (params.length > 0) {
         params.forEach(param => {
@@ -211,9 +324,16 @@ class MssqlTedious {
         });
       }
 
-      _rows = [];
+      let _rows = [];
 
       request.on('row', columns => {
+        // A row resulting from execution of the SQL statement.
+        /**
+          columns - An array or object (depends on config.options.useColumnNames), where the columns can be accessed by index/name. Each column has two properties, metadata and value.
+            metadata - The same data that is exposed in the columnMetadata event.
+            value - The column's value. It will be null for a NULL.
+                    If there are multiple columns with the same name, then this will be an array of the values.
+         */
         let _item = {};
         // Converting the response row to a JSON formatted object: [property]: value
         for (var name in columns) {
@@ -223,7 +343,15 @@ class MssqlTedious {
       });
 
       // We return the set of rows after the procedure is complete, instead of returing row by row
-      request.on('doneProc', (rowCount, more, rows) => {
+      request.on('doneProc', (rowCount, more, returnStatus, rows) => {
+        /**
+          Indicates the completion status of a stored procedure. This is also generated for stored procedures executed through SQL statements.
+          This event may also occur when executing multiple calls with the same query using execSql.
+          rowCount - The number of result rows. May be undefined if not available.
+          more - If there are more result sets to come, then true.
+          returnStatus - The value returned from a stored procedure.
+          rows - Rows as a result of executing the SQL. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true.
+         */
         if (isDebug) console.log('Request result:', { params, sql, rows: _rows });
         callback(_rows);
       });
@@ -251,47 +379,273 @@ class MssqlTedious {
    * @method subscribeToConnEvent
    */
   subscribeToConnEvent() {
-    loForEach(this.connectionConfig.events, (value, key) => {
+    loForEach(this.config.events.connection, (value, key) => {
       switch (key) {
       case 'debug':
-        if (value) this.connection.on('debug', function (messageText) {
-          console.log('MessageText: ', messageText);
+        // A debug message is available. It may be logged or ignored.
+        if (value.enable) this.connection.on('debug', function (messageText) {
+          // messageText - The debug message.
+          value.cb(messageText);
         });
         break;
       case 'infoMessage':
-        if (value) this.connection.on('infoMessage', function (info) {
-          console.log('Info: ', info);
+        // The server has issued an information message.
+        if (value.enable) this.connection.on('infoMessage', function (info) {
+          /**
+              info - An object with these properties:
+                number - Error number
+                state - The error state, used as a modifier to the error number.
+                class - The class (severity) of the error. A class of less than 10 indicates an informational message.
+                message - The message text.
+                procName - The stored procedure name (if a stored procedure generated the message).
+                lineNumber - The line number in the SQL batch or stored procedure that caused the error. 
+                             Line numbers begin at 1; therefore, if the line number is not applicable to the message, the value of LineNumber will be 0. 
+             */
+          value.cb(info);
         });
         break;
       case 'errorMessage':
-        if (value) this.connection.on('errorMessage', function (err) {
-          console.log('Error: ', err);
+        // The server has issued an error message.
+        if (value.enable) this.connection.on('errorMessage', function (err) {
+          // err - An object with the same properties as.listed for the infoMessage event.
+          value.cb(err);
         });
         break;
       case 'databaseChange':
-        if (value) this.connection.on('databaseChange', function (databaseName) {
-          console.log('DatabaseName: ', databaseName);
+        // The server has reported that the active database has changed. This may be as a result of a successful login, or a use statement.
+        if (value.enable) this.connection.on('databaseChange', function (databaseName) {
+          // databaseName - The name of the new active database
+          value.cb(databaseName);
         });
         break;
       case 'languageChange':
-        if (value) this.connection.on('languageChange', function (languageName) {
-          console.log('LanguageName: ', languageName);
+        // The server has reported that the language has changed.
+        if (value.enable) this.connection.on('languageChange', function (languageName) {
+          // languageName - The newly active language.
+          value.cb(languageName);
         });
         break;
       case 'charsetChange':
-        if (value) this.connection.on('charsetChange', function (charset) {
-          console.log('Charset: ', charset);
+        // The server has reported that the charset has changed.
+        if (value.enable) this.connection.on('charsetChange', function (charset) {
+          // charset - The new charset.
+          value.cb(charset);
         });
         break;
       case 'secure':
-        if (value) this.connection.on('secure', function (cleartext) {
-          console.log('Cleartext: ', cleartext);
+        // A secure connection has been established.
+        if (value.enable) this.connection.on('secure', function (cleartext) {
+          // cleartext - The cleartext stream of a tls SecurePair. The cipher and peer certificate (server certificate) may be inspected if desired.
+          value.cb(cleartext);
         });
         break;
       default:
         break;
       }
     });
+  }
+
+  /**
+   * @method subscribeToRequestEvent
+   * @param {Object} request
+   */
+  subscribeToRequestEvent(request) {
+    loForEach(this.config.events.request, (value, key) => {
+      switch (key) {
+      case 'columnMetadata':
+        //This event, describing result set columns, will be emitted before row events are emitted. 
+        // This event may be emited multiple times when more than one recordset is produced by the statement.
+        if (value.enable) request.on('columnMetadata', function (columns) {
+          /**
+              An array like object, where the columns can be accessed either by index or name. 
+              Columns with a name that is an integer are not accessible by name, as it would be interpreted as an array index.
+              Each column has these properties.
+                colName - The column's name.
+                type.name - The column's type, such as VarChar, Int or Binary.
+                precision - The precision. Only applicable to numeric and decimal.
+                scale - The scale. Only applicable to numeric, decimal, time, datetime2 and datetimeoffset.
+                dataLength - The length, for char, varchar, nvarchar and varbinary. 
+             */
+          value.cb(columns);
+        });
+        break;
+      case 'prepared':
+        // The request has been prepared and can be used in subsequent calls to execute and unprepare
+        if (value.enable) request.on('prepared', function () {
+          value.cb();
+        });
+        break;
+      case 'error':
+        if (value.enable) request.on('error', function (err) {
+          // The request encountered an error and has not been prepared
+          value.cb(err);
+        });
+        break;
+      case 'requestCompleted':
+        // This is the final event emitted by a request. This is emitted after the callback passed in a request is called
+        if (value.enable) request.on('requestCompleted', function () {
+          value.cb();
+        });
+        break;
+      case 'done':
+        /**
+           All rows from a result set have been provided (through row events). 
+           This token is used to indicate the completion of a SQL statement. 
+           As multiple SQL statements can be sent to the server in a single SQL batch, multiple done events can be generated. 
+           An done event is emited for each SQL statement in the SQL batch except variable declarations. 
+           For execution of SQL statements within stored procedures, doneProc and doneInProc events are used in place of done events.
+
+           If you are using execSql then SQL server may treat the multiple calls with the same query as a stored procedure. 
+           When this occurs, the doneProc or doneInProc events may be emitted instead. 
+           You must handle both events to ensure complete coverage. 
+           */
+        if (value.enable) request.on('done', function (rowCount, more, rows) {
+          /**
+              rowCount - The number of result rows. May be undefined if not available.
+              more - If there are more results to come (probably because multiple statements are being executed), then true.
+              rows - Rows as a result of executing the SQL statement. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true. 
+             */
+          value.cb(rowCount, more, rows);
+        });
+        break;
+      case 'returnValue':
+        // A value for an output parameter (that was added to the request with addOutputParameter(...)).
+        if (value.enable) request.on('returnValue', function (parameterName, value, metadata) {
+          /**
+              parameterName - The parameter name. (Does not start with '@'.)
+              value - The parameter's output value.
+              metadata - The same data that is exposed in the columnMetadata event. 
+             */
+          value.cb(parameterName, value, metadata);
+        });
+        break;
+      case 'order':
+        // This event gives the columns by which data is ordered, if ORDER BY clause is executed in SQL Server.
+        if (value.enable) request.on('order', function (orderColumns) {
+          /**
+              orderColumns - An array of column numbers in the result set by which data is ordered. 
+             */
+          value.cb(orderColumns);
+        });
+        break;
+      default:
+        break;
+      }
+    });
+  }
+
+  /**
+   * @method onDebugForConn
+   * @param {String} messageText 
+   */
+  onDebugForConn(messageText) {
+    console.log('connection.on(debug) messageText: ', messageText);
+  }
+
+  /**
+   * @method onInfoMessageForConn
+   * @param {Object} info 
+   */
+  onInfoMessageForConn(info) {
+    console.log('connection.on(infoMessage) info: ', info);
+  }
+
+  /**
+   * @method onErrorMessageForConn
+   * @param {Object} err 
+   */
+  onErrorMessageForConn(err) {
+    console.log('connection.on(errorMessage) error: ', err.message);
+  }
+
+  /**
+   * @method onDatabaseChangeForConn
+   * @param {String} databaseName 
+   */
+  onDatabaseChangeForConn(databaseName) {
+    console.log('connection.on(databaseChange) databaseName: ', databaseName);
+  }
+
+  /**
+   * @method onLanguageChangeForConn
+   * @param {String} languageName 
+   */
+  onLanguageChangeForConn(languageName) {
+    console.log('connection.on(languageChange) languageName: ', languageName);
+  }
+
+  /**
+   * @method onCharsetChangeForConn
+   * @param {String} charset 
+   */
+  onCharsetChangeForConn(charset) {
+    console.log('connection.on(charsetChange) charset: ', charset);
+  }
+
+  /**
+   * @method onSecureForConn
+   * @param {String} charset 
+   */
+  onSecureForConn(cleartext) {
+    console.log('connection.on(secure) cleartext: ', cleartext);
+  }
+
+  /**
+   * @method onColumnMetadataForRequest
+   * @param {Object} charset 
+   */
+  onColumnMetadataForRequest(columns) {
+    console.log('request.on(columnMetadata) columns: ', columns);
+  }
+
+  /**
+   * @method onPreparedForRequest
+   */
+  onPreparedForRequest() {
+    console.log('request.on(prepared): OK');
+  }
+
+  /**
+   * @method onErrorForRequest
+   * @param {Object} err 
+   */
+  onErrorForRequest(err) {
+    console.log('request.on(error) message:', err.message);
+  }
+
+  /**
+   * @method onRequestCompletedForRequest
+   */
+  onRequestCompletedForRequest() {
+    console.log('request.on(requestCompleted) OK');
+  }
+
+  /**
+   * @method onDoneForRequest
+   * @param {Number} rowCount 
+   * @param {Boolean} more 
+   * @param {Object[]} rows 
+   */
+  onDoneForRequest(rowCount, more, rows) {
+    console.log('request.on(done) rowCount, more, rows:', rowCount, more, rows);
+  }
+
+  /**
+   * @method onReturnValueForRequest
+   * @param {String} parameterName 
+   * @param {any} value 
+   * @param {Object} metadata 
+   */
+  onReturnValueForRequest(parameterName, value, metadata) {
+    console.log('request.on(returnValue) parameterName, value, metadata:', parameterName, value, metadata);
+  }
+
+  /**
+   * @method onOrderForRequest
+   * @param {Number[]} orderColumns
+   */
+  onOrderForRequest(orderColumns) {
+    console.log('request.on(order) orderColumns: ', orderColumns);
   }
 }
 

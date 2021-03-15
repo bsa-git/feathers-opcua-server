@@ -1,8 +1,9 @@
 
 const MssqlTedious = require('./mssql-tedious.class');
-const mssqlDatasetsMixins = require('./opcua-server.mixins');
+const mssqlDatasetMixins = require('./mssql-dataset.mixins');
+const dbHelper = require('./db-helper');
 
-module.exports = {
+module.exports = Object.assign({
   MssqlTedious,
-  mssqlDatasetsMixins
-};
+  mssqlDatasetMixins
+}, dbHelper);
