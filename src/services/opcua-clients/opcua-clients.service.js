@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 // Initializes the `opcua-clients` service on path `/opcua-clients`
 const { OpcuaClients } = require('./opcua-clients.class');
-const opcuaClientMixins = require('../../plugins/opcua/opcua-client-mixins');
+const opcuaClientMixins = require('./opcua-client.mixins');
 const hooks = require('./opcua-clients.hooks');
 
 module.exports = function (app) {

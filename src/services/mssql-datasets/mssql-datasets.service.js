@@ -1,6 +1,6 @@
 // Initializes the `opcua-servers` service on path `/opcua-servers`
 const { MssqlDatasets } = require('./mssql-datasets.class');
-const mssqlDatasetMixins = require('../../plugins/db-helpers/mssql-dataset.mixins');
+const mssqlDatasetMixins = require('./mssql-dataset.mixins');
 const hooks = require('./mssql-datasets.hooks');
 
 module.exports = function (app) {

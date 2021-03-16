@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { inspector, appRoot } = require('../lib');
-const { getClientForProvider, getSubscriptionHandler } = require('./opcua-helper');
+const { inspector, appRoot } = require('../../plugins/lib');
+const { getClientForProvider, getSubscriptionHandler } = require('../../plugins/opcua/opcua-helper');
 
 const {
   Variant,
@@ -12,12 +12,11 @@ const {
   makeBrowsePath
 } = require('node-opcua');
 
-const debug = require('debug')('app:opcua-client-mixins');
+const debug = require('debug')('app:opcua-client.mixins');
 const isLog = true;
 const isDebug = false;
 
 let result = null;
-
 
 module.exports = function opcuaClientMixins(service, path) {
 

@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { OpcuaServer, opcuaServerMixins } = require('../../plugins/opcua');
+const { OpcuaServer } = require('../../plugins/opcua');
+const opcuaServerMixins = require('./opcua-server.mixins');
 const { isOpcuaServerInList, getServerForProvider } = require('../../plugins/opcua/opcua-helper');
 
 const loRemove = require('lodash/remove');

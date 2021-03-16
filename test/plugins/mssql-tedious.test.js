@@ -2,11 +2,20 @@
 const assert = require('assert');
 const app = require('../../src/app');
 const {
+  inspector,
   startListenPort,
   stopListenPort,
-} = require('../../src/plugins/test-helpers');
-const { MssqlTedious } = require('../../src/plugins/db-helpers');
+  MssqlTedious,
+  canTestRun,
+  getPathBasename,
+} = require('../../src/plugins');
 const { TYPES } = require('tedious');
+
+const debug = require('debug')('app:mssql-tedious.class');
+
+const isDebug = false;
+const isLog = false;
+
 
 // 'dbBSA', 'bsa_u', 'bs@U$21' 'bs%40U%2421' 'OGMT-MZTP\\FIRST' ostchem.com.ua 10.60.0.49  
 const config = {
@@ -94,7 +103,11 @@ const config = {
   }
 };
 
-describe('MSSQL-Tedious Test', () => {
+describe('<<=== MSSQL-Tedious Test ===>>', async () => {
+
+  // const isTest =  await canTestRun(getPathBasename(__filename));
+  // debug('MSSQL-Tedious Test.isTest:', isTest);
+  // if(!isTest) return;
 
   before(function (done) {
     startListenPort(app, done);
@@ -116,6 +129,9 @@ describe('MSSQL-Tedious Test', () => {
     await db.query(params, sql, result => {
       console.log('Request result:', { params, sql, rows: result });
     });
+
+    if(isLog) inspector('Connecting and request.getCurrentState:', db.getCurrentState());
+
     await db.connDisconnect();
 
     assert.ok(true, 'Connecting to the database (tedious)');

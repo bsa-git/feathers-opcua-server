@@ -3,6 +3,7 @@ const loMerge = require('lodash/merge');
 const loForEach = require('lodash/forEach');
 const loOmit = require('lodash/omit');
 const { Connection, Request, TYPES } = require('tedious');
+const { getIdFromMssqlConfig } = require('./db-helper');
 
 const debug = require('debug')('app:mssql-tedious.class');
 
@@ -105,13 +106,11 @@ class MssqlTedious {
     };
 
     this.config = loMerge({}, connectionConfig, config.connection);
-    this.id = this.config.server +
-      this.config.options.instanceName ? `.${this.config.options.instanceName}` : '' +
-    `.${this.config.options.database}`;
+    this.id = getIdFromMssqlConfig(this.config);
     this.connection = null;
     this.currentState = {
       id: this.id,
-      connectionConfig: loOmit(this.config, ['authentication.options.password']),
+      connectionConfig: loOmit(this.config, ['options.debug', 'authentication.options.password', 'events']),
       connError: '',
       requestError: '',
       isConnected: false,
@@ -129,8 +128,6 @@ class MssqlTedious {
     // return Promise
     return new Promise((resolve, reject) => {
       const connection = new Connection(this.config);
-      // Subscribe to events
-      self.subscribeToConnEvent();
       // The attempt to connect and validate has completed.
       connection.on('connect', function (err) {
         // err - If successfully connected, will be falsey. If there was a problem (with either connecting or validation), will be an error object.
@@ -141,6 +138,8 @@ class MssqlTedious {
           // If no error, then good to go...
           console.log('Connection OK');
           self.connection = connection;
+          // Subscribe to events
+          self.subscribeToConnEvent();
           // Set current state
           self.currentState.connError = '';
           self.currentState.isConnected = true;
@@ -184,12 +183,12 @@ class MssqlTedious {
       self.connection.close();
       self.connection.on('end', function () {
         self.connection = null;
-        console.log('ConnectionDisconnect OK');
+        console.log('Disconnect OK');
         // Set current state
         self.currentState.isConnected = false;
         self.currentState.isConnCanceled = false;
         self.currentState.isConnReset = false;
-        resolve('ConnectionDisconnect OK');
+        resolve('Disconnect OK');
       });
 
     });
@@ -205,18 +204,17 @@ class MssqlTedious {
     return new Promise((resolve, reject) => {
       self.connection.reset(function (err) {
         if (err) {
-          console.log('ConnectionReset.error: ', err);
+          console.log('ConnReset.error: ', err);
           // Set current state
           self.currentState.connError = err.message;
-          reject('ConnectionReset ERR');
+          reject('ConnReset ERR');
           return;
         }
-        console.log('ConnectionReset OK');
+        console.log('ConnReset OK');
         // Set current state
         self.currentState.isConnReset = true;
-        resolve('ConnectionReset OK');
+        resolve('ConnReset OK');
       });
-
     });
   }
 
@@ -379,18 +377,19 @@ class MssqlTedious {
    * @method subscribeToConnEvent
    */
   subscribeToConnEvent() {
+    const self = this;
     loForEach(this.config.events.connection, (value, key) => {
       switch (key) {
       case 'debug':
         // A debug message is available. It may be logged or ignored.
-        if (value.enable) this.connection.on('debug', function (messageText) {
+        if (value.enable) self.connection.on('debug', function (messageText) {
           // messageText - The debug message.
           value.cb(messageText);
         });
         break;
       case 'infoMessage':
         // The server has issued an information message.
-        if (value.enable) this.connection.on('infoMessage', function (info) {
+        if (value.enable) self.connection.on('infoMessage', function (info) {
           /**
               info - An object with these properties:
                 number - Error number
@@ -406,35 +405,35 @@ class MssqlTedious {
         break;
       case 'errorMessage':
         // The server has issued an error message.
-        if (value.enable) this.connection.on('errorMessage', function (err) {
+        if (value.enable) self.connection.on('errorMessage', function (err) {
           // err - An object with the same properties as.listed for the infoMessage event.
           value.cb(err);
         });
         break;
       case 'databaseChange':
         // The server has reported that the active database has changed. This may be as a result of a successful login, or a use statement.
-        if (value.enable) this.connection.on('databaseChange', function (databaseName) {
+        if (value.enable) self.connection.on('databaseChange', function (databaseName) {
           // databaseName - The name of the new active database
           value.cb(databaseName);
         });
         break;
       case 'languageChange':
         // The server has reported that the language has changed.
-        if (value.enable) this.connection.on('languageChange', function (languageName) {
+        if (value.enable) self.connection.on('languageChange', function (languageName) {
           // languageName - The newly active language.
           value.cb(languageName);
         });
         break;
       case 'charsetChange':
         // The server has reported that the charset has changed.
-        if (value.enable) this.connection.on('charsetChange', function (charset) {
+        if (value.enable) self.connection.on('charsetChange', function (charset) {
           // charset - The new charset.
           value.cb(charset);
         });
         break;
       case 'secure':
         // A secure connection has been established.
-        if (value.enable) this.connection.on('secure', function (cleartext) {
+        if (value.enable) self.connection.on('secure', function (cleartext) {
           // cleartext - The cleartext stream of a tls SecurePair. The cipher and peer certificate (server certificate) may be inspected if desired.
           value.cb(cleartext);
         });
@@ -450,6 +449,7 @@ class MssqlTedious {
    * @param {Object} request
    */
   subscribeToRequestEvent(request) {
+    const self = this;
     loForEach(this.config.events.request, (value, key) => {
       switch (key) {
       case 'columnMetadata':

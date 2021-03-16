@@ -39,8 +39,8 @@ const isMssqlDatasetInList = (service, id) => {
  */
 const getIdFromMssqlConfig = (config) => {
   const id = config.server +
-    config.options.instanceName ? `.${config.options.instanceName}` : '' +
-  `.${config.options.database}`;
+    `${config.options.instanceName ? '.' + config.options.instanceName : ''}` +
+    `.${config.options.database}`;
   return id;
 };
 

@@ -320,6 +320,60 @@ const getOpcuaConfigForIp = function (ip = '') {
 };
 
 /**
+ * @method getOpcuaConfigForMe
+ * @returns {Object}
+ */
+const getOpcuaConfigForMe = async function () {
+  let opcuaOption = null;
+  const hostInfo = await getMyHostInfo();
+  /**
+   const hostInfo = {
+    hostname: myHostname,
+    domainName: myDomainName,
+    ip: myIp
+  }; 
+   */
+  if (isDebug) debug('getOpcuaConfigForMe.hostInfo:', hostInfo);
+  // debug('getOpcuaConfigForMe.hostInfo:', hostInfo);
+  const opcuaOptions = require(`${appRoot}/src/api/opcua/OPCUA_Config.json`);
+  opcuaOption = opcuaOptions.find(opt => {
+    const url = opt.srvServiceUrl ? opt.srvServiceUrl : opt.clientServiceUrl;
+    const parts = getParseUrl(url);
+    if (isDebug) debug('getOpcuaConfigForMe.getParseUrl:', parts);
+    // debug('getOpcuaConfigForMe.getParseUrl:', parts);
+    return (parts.hostname === hostInfo.hostname) || (parts.hostname === hostInfo.ip) || (parts.hostname === hostInfo.domainName);
+  });
+  return opcuaOption;
+};
+
+/**
+ * @method getOpcuaConfigsForMe
+ * @returns {Object[]}
+ */
+const getOpcuaConfigsForMe = async function () {
+  let opcuaOptions = [];
+  const hostInfo = await getMyHostInfo();
+  /**
+   const hostInfo = {
+    hostname: myHostname,
+    domainName: myDomainName,
+    ip: myIp
+  }; 
+   */
+  if (isDebug) debug('getOpcuaConfigForMe.hostInfo:', hostInfo);
+  debug('getOpcuaConfigForMe.hostInfo:', hostInfo);
+  const opcuaConfig = require(`${appRoot}/src/api/opcua/OPCUA_Config.json`);
+  opcuaOptions = opcuaConfig.filter(opt => {
+    const url = opt.srvServiceUrl ? opt.srvServiceUrl : opt.clientServiceUrl;
+    const parts = getParseUrl(url);
+    if (isDebug) debug('getOpcuaConfigForMe.getParseUrl:', parts);
+    debug('getOpcuaConfigForMe.getParseUrl:', parts);
+    return (parts.hostname === hostInfo.hostname) || (parts.hostname === hostInfo.ip) || (parts.hostname === hostInfo.domainName);
+  });
+  return opcuaOptions;
+};
+
+/**
  * @method getOpcuaConfigOptions
  * @param {String} id 
  * @param {String} browseName 
@@ -373,6 +427,26 @@ const getOpcuaClientScript = function (id, nameScript = '') {
   const opcuaClientScript = opcuaClientScripts[nameScript];
   if (isDebug) debug('getOpcuaClientScript.opcuaClientScript:', opcuaClientScript);
   return opcuaClientScript;
+};
+
+/**
+ * @method getMyHostInfo
+ * @async
+ * 
+ * @returns {Object}
+ */
+const getMyHostInfo = async function () {
+  let myHostname = getHostname();
+  myHostname = myHostname.toLowerCase();
+  let myDomainName = await extractFullyQualifiedDomainName();
+  myDomainName = myDomainName.toLowerCase();
+  const myIp = getMyIp();
+  const hostInfo = {
+    hostname: myHostname,
+    domainName: myDomainName,
+    ip: myIp
+  };
+  return hostInfo;
 };
 
 /**
@@ -704,10 +778,19 @@ const Unece_to_Locale = function (pathFrom, pathTo) {
  * @param {String} fileName 
  * @returns {Boolean}
  */
-const canTestRun = function (fileName) {
-  const myIp = getMyIp();
-  const myConfig = getOpcuaConfigForIp(myIp);
-  const isTest = (myConfig && myConfig.exclude && myConfig.exclude.tests) ? !myConfig.exclude.tests.find(name => name === fileName) : true;
+const canTestRun = async function (fileName) {
+  let isTest = true;
+  const myConfig = await getOpcuaConfigForMe();
+  if (isDebug) debug('canTestRun.fileName:', fileName);
+  // debug('canTestRun.fileName:', fileName);
+  if (isLog) inspector('canTestRun.myConfig:', myConfig);
+  // inspector('canTestRun.myConfig:', myConfig);
+  if (myConfig && myConfig.exclude && myConfig.exclude.tests && myConfig.exclude.tests.length) {
+    const finded = myConfig.exclude.tests.find(name => name === fileName);
+    isTest = !finded;
+  }
+  if (isDebug) debug('canTestRun.isTest:', isTest);
+  // debug('canTestRun.isTest:', isTest);
   return isTest;
 };
 
@@ -716,10 +799,15 @@ const canTestRun = function (fileName) {
  * @param {String} serviceName 
  * @returns {Boolean}
  */
-const canServiceRun = function (serviceName) {
-  const myIp = getMyIp();
-  const myConfig = getOpcuaConfigForIp(myIp);
-  const isService = (myConfig && myConfig.exclude && myConfig.exclude.services) ? !myConfig.exclude.services.find(name => name === serviceName) : true;
+const canServiceRun = async function (serviceName) {
+  let isService = true;
+  const myConfig = await getOpcuaConfigForMe();
+  if (isDebug) debug('canServiceRun.serviceName:', serviceName);
+  if (isLog) inspector('canServiceRun.myConfig:', myConfig);
+  if (myConfig && myConfig.exclude && myConfig.exclude.services && myConfig.exclude.services.length) {
+    const finded = myConfig.exclude.services.find(name => name === serviceName);
+    isService = !finded;
+  }
   return isService;
 };
 
@@ -736,9 +824,12 @@ module.exports = {
   formatDataValue,
   getOpcuaConfig,
   getOpcuaConfigForIp,
+  getOpcuaConfigForMe,
+  getOpcuaConfigsForMe,
   getOpcuaConfigOptions,
   getSubscriptionHandler,
   getOpcuaClientScript,
+  getMyHostInfo,
   isMyServiceHost,
   getServerService,
   getClientService,

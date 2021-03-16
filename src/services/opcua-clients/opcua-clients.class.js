@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { OpcuaClient, opcuaClientMixins, getPathForClientMixins } = require('../../plugins/opcua');
+const { OpcuaClient } = require('../../plugins/opcua');
+const opcuaClientMixins = require('./opcua-client.mixins');
 const {
   isOpcuaClientInList,
   getClientForProvider,

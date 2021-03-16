@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { inspector } = require('../lib');
-const { getServerForProvider } = require('./opcua-helper');
+const { inspector, getServerForProvider } = require('../../plugins');
 
 const {
   Variant,
@@ -12,7 +11,7 @@ const {
   makeBrowsePath
 } = require('node-opcua');
 
-const debug = require('debug')('app:opcua-server-mixins');
+const debug = require('debug')('app:opcua-server.mixins');
 const isLog = true;
 const isDebug = false;
 

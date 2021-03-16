@@ -5,6 +5,7 @@ const port = app.get('port') || 3030;
 const {
   getServerService,
   getClientService,
+  getOpcuaConfigForMe
 } = require('../../src/plugins/opcua/opcua-helper');
 
 const {

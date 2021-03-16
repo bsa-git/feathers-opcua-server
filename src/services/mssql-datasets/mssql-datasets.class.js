@@ -2,11 +2,12 @@
 const errors = require('@feathersjs/errors');
 const { 
   MssqlTedious, 
-  mssqlDatasetMixins, 
   getIdFromMssqlConfig,
   isMssqlDatasetInList,
   getMssqlDatasetForProvider 
 } = require('../../plugins/db-helpers');
+
+const mssqlDatasetMixins = require('./mssql-dataset.mixins');
 
 const loRemove = require('lodash/remove');
 const loAt = require('lodash/at');

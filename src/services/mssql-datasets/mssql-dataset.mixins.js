@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { inspector } = require('../lib'); 
-const { getMssqlDatasetForProvider } = require('./db-helper');
+const { inspector } = require('../../plugins/lib'); 
+const { getMssqlDatasetForProvider } = require('../../plugins/db-helpers');
 
 const debug = require('debug')('app:mssql-datasets.mixins');
 const isLog = true;

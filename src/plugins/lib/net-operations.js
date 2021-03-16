@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+const dns = require('dns');
 const debug = require('debug')('app:net-operations');
 
 //---------------- NET -------------//
@@ -69,13 +70,19 @@ const getHostname = function () {
 };// url.parse
 
 /**
+ * Get an instance of a class 'URL'
  * @method getPaseUrl
- * @param {String} aUrl
+ * The absolute or relative input URL to parse. If input is relative, then base is required. If input is absolute, the base is ignored.
+ * @param {String} url
+ * The base URL to resolve against if the input is not absolute. 
+ * @param {String} base 
  * @returns {Object}
  */
-const getParseUrl = function (aUrl) {
-  const url = require('url');
-  return url.parse(aUrl);
+const getParseUrl = function (url, base) {
+  // const url = require('url');
+  const URL = require('url').URL;
+  // return url.parse(aUrl);
+  return new URL(url, base);
 };
 
 /**
@@ -107,6 +114,27 @@ const isMyIp = function (ips = [], exclude = true) {
   return !!findedIp;
 };
 
+//---------------- DNS -------------//
+
+/**
+ * @method dnsLookup
+ * @param {String} url 
+ * @returns {Promise}
+ */
+const dnsLookup = function (url) {
+  return new Promise((resolve, reject) => {
+    dns.lookup(url, (err, addresses, family) => {
+      if (err) {
+        console.log('dnsLookup.error: ', err);
+        reject('dnsLookup ERR');
+        return;
+      }
+      resolve({addresses, family});
+    });
+  });
+};
+
+
 module.exports = {
   getLocalIpAddress,
   getIpAddresses,
@@ -114,5 +142,6 @@ module.exports = {
   getParseUrl,
   isIP,
   getMyIp,
-  isMyIp
+  isMyIp,
+  dnsLookup
 };

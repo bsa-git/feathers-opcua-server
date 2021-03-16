@@ -1,6 +1,6 @@
 // Initializes the `opcua-servers` service on path `/opcua-servers`
 const { OpcuaServers } = require('./opcua-servers.class');
-const opcuaServerMixins = require('../../plugins/opcua/opcua-server-mixins');
+const opcuaServerMixins = require('./opcua-server.mixins');
 const hooks = require('./opcua-servers.hooks');
 
 module.exports = function (app) {
