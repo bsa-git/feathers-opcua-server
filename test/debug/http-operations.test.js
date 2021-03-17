@@ -2,10 +2,18 @@
 const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port') || 3030;
+const axios = require('axios');
+const cheerio = require('cheerio');
+const chalk = require('chalk');
+const papa = require('papaparse');
 
 const {
-  startListenPort, 
+  inspector,
+  startListenPort,
   stopListenPort,
+  httpGetLastFileFromDir,
+  sortByString,
+  getFloat
 } = require('../../src/plugins');
 
 const {
@@ -13,7 +21,7 @@ const {
   checkStatusFetch
 } = require('../../src/plugins/lib/http-operations');
 
-const chalk = require('chalk');
+const loForEach = require('lodash/forEach');
 
 const debug = require('debug')('app:http-operations.test');
 const isDebug = false;
@@ -54,7 +62,6 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
   });
 
   it('HttpOperations: axios.get', async () => {
-    const axios = require('axios');
     const url = 'https://jsonplaceholder.typicode.com/posts/2';
     try {
       await urlExists(url);
@@ -93,6 +100,36 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     } catch (err) {
       debug('ERROR:', err.message);
       assert.ok(true, 'HttpOperations: fetch.get');
+    }
+  });
+
+  it('HttpOperations: get data from file', async () => {
+    let url = 'http://192.168.3.5/www_m5/m5_data2/';
+    let dataItems = null;
+    try {
+      await urlExists(url);
+      const getData = async url => {
+        try {
+          const file = await httpGetLastFileFromDir(url);
+          let result = papa.parse(file.data, { delimiter: ';', header: true });
+          result = result.data[0];
+          dataItems = {};
+          loForEach(result, (value, key) => {
+            dataItems[key] = getFloat(value);
+          });
+          if (isLog) inspector(`HttpOperations: get data from file (${file.filename}):`, dataItems);
+          inspector(`HttpOperations: get data from file (${file.filename}):`, dataItems);
+          return dataItems;
+        } catch (error) {
+          console.log(error);
+          assert.ok(false, 'HttpOperations: get data from file');
+        }
+      };
+      await getData(url);
+      assert.ok(true, 'HttpOperations: get data from file');
+    } catch (err) {
+      debug('ERROR:', err.message);
+      assert.ok(true, 'HttpOperations: get data from file');
     }
   });
 });

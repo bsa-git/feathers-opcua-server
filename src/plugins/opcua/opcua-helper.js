@@ -7,7 +7,7 @@ const {
   getHostname,
   getMyIp,
   strReplace,
-  getNumber,
+  getInt,
   getPathBasename
 } = require('../lib');
 
@@ -323,25 +323,19 @@ const getOpcuaConfigForIp = function (ip = '') {
  * @method getOpcuaConfigForMe
  * @returns {Object}
  */
-const getOpcuaConfigForMe = async function () {
+const getOpcuaConfigForMe = function () {
   let opcuaOption = null;
-  const hostInfo = await getMyHostInfo();
-  /**
-   const hostInfo = {
-    hostname: myHostname,
-    domainName: myDomainName,
-    ip: myIp
-  }; 
-   */
-  if (isDebug) debug('getOpcuaConfigForMe.hostInfo:', hostInfo);
-  // debug('getOpcuaConfigForMe.hostInfo:', hostInfo);
+  const myHostname = getHostname().toLowerCase();
+  const myIp = getMyIp();
+  if (isDebug) debug('getOpcuaConfigForMe.myHostname, myIp:', myHostname, myIp);
+  // debug('getOpcuaConfigForMe.myHostname, myIp:', myHostname, myIp);
   const opcuaOptions = require(`${appRoot}/src/api/opcua/OPCUA_Config.json`);
   opcuaOption = opcuaOptions.find(opt => {
-    const url = opt.srvServiceUrl ? opt.srvServiceUrl : opt.clientServiceUrl;
+    const url = opt.clientServiceUrl ? opt.clientServiceUrl : opt.srvServiceUrl;
     const parts = getParseUrl(url);
     if (isDebug) debug('getOpcuaConfigForMe.getParseUrl:', parts);
     // debug('getOpcuaConfigForMe.getParseUrl:', parts);
-    return (parts.hostname === hostInfo.hostname) || (parts.hostname === hostInfo.ip) || (parts.hostname === hostInfo.domainName);
+    return (parts.hostname.includes(myHostname)) || (parts.hostname === myIp);
   });
   return opcuaOption;
 };
@@ -350,25 +344,19 @@ const getOpcuaConfigForMe = async function () {
  * @method getOpcuaConfigsForMe
  * @returns {Object[]}
  */
-const getOpcuaConfigsForMe = async function () {
+const getOpcuaConfigsForMe = function () {
   let opcuaOptions = [];
-  const hostInfo = await getMyHostInfo();
-  /**
-   const hostInfo = {
-    hostname: myHostname,
-    domainName: myDomainName,
-    ip: myIp
-  }; 
-   */
-  if (isDebug) debug('getOpcuaConfigForMe.hostInfo:', hostInfo);
-  debug('getOpcuaConfigForMe.hostInfo:', hostInfo);
+  const myHostname = getHostname().toLowerCase();
+  const myIp = getMyIp();
+  if (isDebug) debug('getOpcuaConfigForMe.myHostname, myIp:', myHostname, myIp);
+  // debug('getOpcuaConfigForMe.myHostname, myIp:', myHostname, myIp);
   const opcuaConfig = require(`${appRoot}/src/api/opcua/OPCUA_Config.json`);
   opcuaOptions = opcuaConfig.filter(opt => {
-    const url = opt.srvServiceUrl ? opt.srvServiceUrl : opt.clientServiceUrl;
+    const url = opt.clientServiceUrl ? opt.clientServiceUrl : opt.srvServiceUrl;
     const parts = getParseUrl(url);
     if (isDebug) debug('getOpcuaConfigForMe.getParseUrl:', parts);
-    debug('getOpcuaConfigForMe.getParseUrl:', parts);
-    return (parts.hostname === hostInfo.hostname) || (parts.hostname === hostInfo.ip) || (parts.hostname === hostInfo.domainName);
+    // debug('getOpcuaConfigForMe.getParseUrl:', parts);
+    return (parts.hostname.includes(myHostname)) || (parts.hostname === myIp);
   });
   return opcuaOptions;
 };
@@ -460,7 +448,7 @@ const getMyHostInfo = async function () {
 const isMyServiceHost = async function (serviceUrl, myPort) {
   const serviceHostname = getParseUrl(serviceUrl).hostname.toLowerCase();
   let servicePort = getParseUrl(serviceUrl).port;
-  servicePort = getNumber(servicePort);
+  servicePort = getInt(servicePort);
   const myHostname = getHostname();
   let myDomainName = await extractFullyQualifiedDomainName();
   myDomainName = myDomainName.toLowerCase();
@@ -778,9 +766,9 @@ const Unece_to_Locale = function (pathFrom, pathTo) {
  * @param {String} fileName 
  * @returns {Boolean}
  */
-const canTestRun = async function (fileName) {
+const canTestRun = function (fileName) {
   let isTest = true;
-  const myConfig = await getOpcuaConfigForMe();
+  const myConfig = getOpcuaConfigForMe();
   if (isDebug) debug('canTestRun.fileName:', fileName);
   // debug('canTestRun.fileName:', fileName);
   if (isLog) inspector('canTestRun.myConfig:', myConfig);
@@ -799,9 +787,9 @@ const canTestRun = async function (fileName) {
  * @param {String} serviceName 
  * @returns {Boolean}
  */
-const canServiceRun = async function (serviceName) {
+const canServiceRun = function (serviceName) {
   let isService = true;
-  const myConfig = await getOpcuaConfigForMe();
+  const myConfig = getOpcuaConfigForMe();
   if (isDebug) debug('canServiceRun.serviceName:', serviceName);
   if (isLog) inspector('canServiceRun.myConfig:', myConfig);
   if (myConfig && myConfig.exclude && myConfig.exclude.services && myConfig.exclude.services.length) {

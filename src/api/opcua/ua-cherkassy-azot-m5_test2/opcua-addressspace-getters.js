@@ -155,6 +155,60 @@ function histValueFromFileForCH_M52(params = {}, addedValue) {
  * @param {Object} addedValue 
  * @returns {void}
  */
+function histValueFromHttpForCH_M52(params = {}, addedValue) {
+  const _interval = 5000;
+  const _path = 'http://192.168.3.5/www_m5/m5_data/';
+  let dataItems, dataType, results;
+  let interval = params.interval ? params.interval : _interval;
+  let path = params.path ? params.path : _path;
+  let id = params.myOpcuaServer.id;
+
+  // Create path
+  // path = createPath(path);
+
+  // Watch read only new file
+  readOnlyNewFile(path, (filePath, data) => {
+    // Show filePath, data
+    if (isDebug) console.log(chalk.green('histValueFromFileForCH_M52.file:'), chalk.cyan(getPathBasename(filePath)));
+    if (isDebug) console.log(chalk.green('histValueFromFileForCH_M52.data:'), chalk.cyan(data));
+    // Set value from source
+    dataType = formatUAVariable(addedValue).dataType[1];
+    results = papa.parse(data, { delimiter: ';', header: true });
+    dataItems = results.data[0];
+    addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
+
+    if (isLog) inspector('histValueFromFileForCH_M52.dataItems:', dataItems);
+
+    // Remove file 
+    removeFileSync(filePath);
+
+    // Set value from source for group 
+    if (params.addedVariableList) {
+      setValueFromSourceForGroup(params, dataItems, module.exports);
+    }
+  });
+  // Write file
+  setInterval(function () {
+    let csv = readFileSync([appRoot, '/src/api/opcua', id, 'data-CH_M52.csv']);
+    if (csv) {
+      results = papa.parse(csv, { delimiter: ';', header: true });
+      loForEach(results.data[0], function (value, key) {
+        results.data[0][key] = getTValue(value);
+      });
+      csv = papa.unparse(results.data, { delimiter: ';' });
+      if (isLog) inspector('histValueFromFileForCH_M52.csv:', csv);
+    }
+    const fileName = getFileName('data-', 'csv', true);
+    writeFileSync([path, fileName], csv);
+  }, interval);
+}
+
+/**
+ * @method histValueFromFileForCH_M51
+ * @param {Object} params 
+ * @param {Object} addedValue 
+ * @returns {void}
+ */
 function valueFromFileForCH_M52(params = {}, addedValue) {
   let dataItems, results;
   let id = params.myOpcuaServer.id;
@@ -177,5 +231,6 @@ function valueFromFileForCH_M52(params = {}, addedValue) {
 module.exports = {
   histValueFromFileForCH_M51,
   histValueFromFileForCH_M52,
+  histValueFromHttpForCH_M52,
   valueFromFileForCH_M52
 };

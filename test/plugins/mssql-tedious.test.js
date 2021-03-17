@@ -103,11 +103,11 @@ const config = {
   }
 };
 
-describe('<<=== MSSQL-Tedious Test ===>>', async () => {
+describe('<<=== MSSQL-Tedious Test ===>>', () => {
 
-  // const isTest =  await canTestRun(getPathBasename(__filename));
+  const isTest =  canTestRun(getPathBasename(__filename));
   // debug('MSSQL-Tedious Test.isTest:', isTest);
-  // if(!isTest) return;
+  if(!isTest) return;
 
   before(function (done) {
     startListenPort(app, done);

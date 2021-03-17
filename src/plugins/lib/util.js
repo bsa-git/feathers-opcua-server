@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const { join } = require('path');
 const moment = require('moment');
+const chalk = require('chalk');
 const appRoot = join(__dirname, '../../../');
 
 const debug = require('debug')('app:util');
@@ -106,7 +107,7 @@ const getDateTime = function (dt = '', isUtc = true) {
 /**
  * Strip slashes
  * @param value String
- * @return {XML|string|*|void}
+ * @return {String}
  */
 const stripSlashes = function (value) {
   return value.replace(/^(\/*)|(\/*)$/g, '');
@@ -170,12 +171,28 @@ const isTrue = function (value) {
 };
 
 /**
- * Get number from value
- * @param value
+ * Get int number from value
+ * @method getInt
+ * @param {any} value
  * @return {number}
  */
-const getNumber = function (value) {
+const getInt = function (value) {
+  if (Number.isNaN(Number.parseInt(value))) {
+    return 0;
+  }
   return Number.isInteger(value) ? value : Number.parseInt(value);
+};
+
+/**
+ * @method getFloat
+ * @param {any} value 
+ * @returns {Number}
+ */
+const  getFloat = function (value) {
+  if (Number.isNaN(Number.parseFloat(value))) {
+    return 0;
+  }
+  return parseFloat(value);
 };
 
 /**
@@ -253,7 +270,8 @@ const getRegex = function (type) {
  */
 const inspector = function (desc, obj, depth = 6) {
   const { inspect } = require('util');
-  console.log(`\n${desc}`);
+  // console.log(`\n${desc}`);
+  console.log('\n', chalk.cyan(desc));  
   console.log(inspect(obj, { depth, colors: true }));
 };
 
@@ -342,7 +360,8 @@ module.exports = {
   strReplace,
   getCapitalizeStr,
   isTrue,
-  getNumber,
+  getInt,
+  getFloat,
   getRegex,
   inspector,
   qlParams,
