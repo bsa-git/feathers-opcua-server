@@ -66,11 +66,11 @@ const urlExists = function (target) {
 };
 
 /**
- * @method httpGetLastFileFromDir
+ * @method httpGetNewFileFromDir
  * @param {String} url 
  * @returns {Object}
  */
-const httpGetLastFileFromDir = async function (url) {
+const httpGetNewFileFromDir = async function (url) {
   // Get fileNames from target 
   url = stripSlashes(url);
   let response = await axios.get(url);
@@ -83,7 +83,7 @@ const httpGetLastFileFromDir = async function (url) {
   filenames = filenames.filter(item => !(item.includes('[') && item.includes(']')));
   filenames = sortByString(filenames, false);
   if (isLog) inspector('httpGetLastFileFromDir.filenames:', filenames);
-  inspector('httpGetLastFileFromDir.filenames:', filenames);
+  // inspector('httpGetLastFileFromDir.filenames:', filenames);
   // Get content from last file
   if (filenames.length) {
     url = `${url}/${filenames[0]}`;
@@ -91,11 +91,11 @@ const httpGetLastFileFromDir = async function (url) {
     data = response.data;
     if (isLog) inspector(`httpGetLastFileFromDir (${filenames[0]}):`, data);
     // inspector(`HttpOperations: get data from file (${filenames[0]}):`, dataItems);
-    return { filename: filenames[0], data };
+    return { name: filenames[0], data };
   }
 };
 
 module.exports = {
   urlExists,
-  httpGetLastFileFromDir
+  httpGetNewFileFromDir
 };

@@ -38,12 +38,12 @@ class MssqlDatasets {
     }
 
     // Get id
-    const id = getIdFromMssqlConfig(data.params.config);
+    const id = getIdFromMssqlConfig(data.config);
     if (isMssqlDatasetInList(this, id)) {
-      throw new errors.BadRequest(`The opcua server already exists for this id = '${id}' in the server list`);
+      throw new errors.BadRequest(`The mssql dataset already exists for this id = '${id}' in the server list`);
     }
     // Create DB
-    const db = new MssqlTedious(data.params.config);
+    const db = new MssqlTedious(data.config);
     // DB connect
     await db.connect();
     // Add mssqlDataset to service list

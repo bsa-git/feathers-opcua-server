@@ -42,7 +42,7 @@ class OpcuaClient {
     this.locale = (params.locale === undefined)? process.env.LOCALE : params.locale;
     params.clientName = opcuaConfig.name;
     this.params = loMerge(defaultClientOptions, params);
-    this.app = app;
+    // this.app = app;
     this.srvCurrentState = null;
     this.currentState = {
       id: this.id,

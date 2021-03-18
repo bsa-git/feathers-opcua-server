@@ -22,7 +22,7 @@ module.exports = function mssqlDatasetsMixins(service, path) {
   service.getPathForMixins = function (action) {
     switch (action) {
     case 'connect':
-    case 'connDisconnect':  
+    case 'disconnect':  
     case 'connCancel':
     case 'connReset':
       result = ['id'];
@@ -61,9 +61,9 @@ module.exports = function mssqlDatasetsMixins(service, path) {
    * @param {String} id 
    * @returns {Object}
    */
-  service.connDisconnect = async function (id) {
+  service.disconnect = async function (id) {
     const mssqlDataset = await service.get(id);
-    await mssqlDataset.db.connDisconnect();
+    await mssqlDataset.db.disconnect();
     result = Object.assign({}, mssqlDataset, getMssqlDatasetForProvider(mssqlDataset.db));
     return result;
   };

@@ -9,10 +9,10 @@
       "hist": true,
       "group": true,
       "variableGetType": "valueFromSource",
-      "getter": "histValueFromFileForCH_M51",
+      "getter": "histValueFromHttpForCH_M52",
       "getterParams": {
-        "path": "//localhost/Share/ch-m51",
-        "interval": 5000
+        "path": "http://192.168.3.5/www_m5/m5_data2/",
+        "interval": 15000
       }
     },
     {

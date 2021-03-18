@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
+const loMerge = require('lodash/merge');
+
 const {
   inspector,
 } = require('../lib');
@@ -44,10 +46,33 @@ const getIdFromMssqlConfig = (config) => {
   return id;
 };
 
+/**
+ * @method getMssqlConfigFromEnv
+ * @param {Object} config 
+ * @param {String} prefix 
+ * @returns {Object}
+ */
+const getMssqlConfigFromEnv = (config, prefix) => {
+  const id = process.env[`${prefix}_ID`];
+  const user = process.env[`${prefix}_USER`];
+  const pass = process.env[`${prefix}_PASS`];
+  const server = id.split('.')[0];
+  const instanceName = id.split('.')[1];
+  const database = id.split('.')[2];
+  const _config = loMerge({}, config);
+  _config.server = server;
+  _config.options.instanceName = instanceName;
+  _config.options.database = database;
+  _config.authentication.options.userName = user;
+  _config.authentication.options.password = pass;
+  return _config;
+};
+
 
 
 module.exports = {
   getMssqlDatasetForProvider,
   isMssqlDatasetInList,
-  getIdFromMssqlConfig
+  getIdFromMssqlConfig,
+  getMssqlConfigFromEnv
 };

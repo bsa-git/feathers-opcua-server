@@ -11,8 +11,7 @@ const {
   inspector,
   startListenPort,
   stopListenPort,
-  httpGetLastFileFromDir,
-  sortByString,
+  httpGetNewFileFromDir,
   getFloat
 } = require('../../src/plugins');
 
@@ -110,15 +109,15 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
       await urlExists(url);
       const getData = async url => {
         try {
-          const file = await httpGetLastFileFromDir(url);
+          const file = await httpGetNewFileFromDir(url);
           let result = papa.parse(file.data, { delimiter: ';', header: true });
           result = result.data[0];
           dataItems = {};
           loForEach(result, (value, key) => {
             dataItems[key] = getFloat(value);
           });
-          if (isLog) inspector(`HttpOperations: get data from file (${file.filename}):`, dataItems);
-          inspector(`HttpOperations: get data from file (${file.filename}):`, dataItems);
+          if (isLog) inspector(`HttpOperations: get data from file (${file.name}):`, dataItems);
+          inspector(`HttpOperations: get data from file (${file.name}):`, dataItems);
           return dataItems;
         } catch (error) {
           console.log(error);

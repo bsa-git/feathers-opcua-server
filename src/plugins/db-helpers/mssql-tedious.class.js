@@ -9,103 +9,102 @@ const debug = require('debug')('app:mssql-tedious.class');
 
 const isDebug = false;
 
+const connectionConfig = {
+  server: 'server',
+  options: {
+    instanceName: 'instanceName',
+    encrypt: false,
+    database: 'database',
+    connectTimeout: 3000,
+    rowCollectionOnDone: true, // Only get row set instead of row by row
+    useColumnNames: true, // For easier JSON formatting
+    debug: {
+      data: false,
+      packet: false,
+      log: false,
+      payload: false,
+      token: false,
+    }
+  },
+  authentication: {
+    type: 'default',
+    options: {
+      userName: 'userName',
+      password: 'password',
+      domain: ''
+    }
+  },
+  events: {
+    connection: {
+      debug: {
+        enable: false,
+        cb: this.onDebugForConn
+      },
+      infoMessage: {
+        enable: false,
+        cb: this.onInfoMessageForConn
+      },
+      errorMessage: {
+        enable: false,
+        cb: this.onErrorMessageForConn
+      },
+      databaseChange: {
+        enable: false,
+        cb: this.onDatabaseChangeForConn
+      },
+      languageChange: {
+        enable: false,
+        cb: this.onLanguageChangeForConn
+      },
+      charsetChange: {
+        enable: false,
+        cb: this.onCharsetChangeForConn
+      },
+      secure: {
+        enable: false,
+        cb: this.onSecureForConn
+      },
+    },
+    request: {
+      columnMetadata: {
+        enable: false,
+        cb: this.onColumnMetadataForRequest
+      },
+      prepared: {
+        enable: false,
+        cb: this.onPreparedForRequest
+      },
+      error: {
+        enable: false,
+        cb: this.onErrorForRequest
+      },
+      requestCompleted: {
+        enable: false,
+        cb: this.onRequestCompletedForRequest
+      },
+      done: {
+        enable: false,
+        cb: this.onDoneForRequest
+      },
+      returnValue: {
+        enable: false,
+        cb: this.onReturnValueForRequest
+      },
+      order: {
+        enable: false,
+        cb: this.onOrderForRequest
+      }
+    }
+  }
+};
+
 class MssqlTedious {
   /**
    * Constructor
    * @param {Object} config
    */
   constructor(config) {
-
-    const connectionConfig = {
-      server: 'server',
-      options: {
-        instanceName: 'instanceName',
-        encrypt: false,
-        database: 'database',
-        connectTimeout: 3000,
-        rowCollectionOnDone: true, // Only get row set instead of row by row
-        useColumnNames: true, // For easier JSON formatting
-        debug: {
-          data: false,
-          packet: false,
-          log: false,
-          payload: false,
-          token: false,
-        }
-      },
-      authentication: {
-        type: 'default',
-        options: {
-          userName: 'userName',
-          password: 'password',
-          domain: ''
-        }
-      },
-      events: {
-        connection: {
-          debug: {
-            enable: false,
-            cb: this.onDebugForConn
-          },
-          infoMessage: {
-            enable: false,
-            cb: this.onInfoMessageForConn
-          },
-          errorMessage: {
-            enable: false,
-            cb: this.onErrorMessageForConn
-          },
-          databaseChange: {
-            enable: false,
-            cb: this.onDatabaseChangeForConn
-          },
-          languageChange: {
-            enable: false,
-            cb: this.onLanguageChangeForConn
-          },
-          charsetChange: {
-            enable: false,
-            cb: this.onCharsetChangeForConn
-          },
-          secure: {
-            enable: false,
-            cb: this.onSecureForConn
-          },
-        },
-        request: {
-          columnMetadata: {
-            enable: false,
-            cb: this.onColumnMetadataForRequest
-          },
-          prepared: {
-            enable: false,
-            cb: this.onPreparedForRequest
-          },
-          error: {
-            enable: false,
-            cb: this.onErrorForRequest
-          },
-          requestCompleted: {
-            enable: false,
-            cb: this.onRequestCompletedForRequest
-          },
-          done: {
-            enable: false,
-            cb: this.onDoneForRequest
-          },
-          returnValue: {
-            enable: false,
-            cb: this.onReturnValueForRequest
-          },
-          order: {
-            enable: false,
-            cb: this.onOrderForRequest
-          }
-        }
-      }
-    };
-
-    this.config = loMerge({}, connectionConfig, config.connection);
+    this.config = loMerge({}, connectionConfig, config);
     this.id = getIdFromMssqlConfig(this.config);
     this.connection = null;
     this.currentState = {
@@ -117,6 +116,16 @@ class MssqlTedious {
       isConnCanceled: false,
       isConnReset: false
     };
+  }
+
+  /**
+   * @method getConnConfig
+   * @static
+   * 
+   * @returns {Object}
+   */
+  static getConnConfig() {
+    return connectionConfig;
   }
 
   /**
@@ -162,22 +171,12 @@ class MssqlTedious {
   }
 
   /**
-   * Cancel currently executed request
-   * @method connCancel
-   */
-  connCancel() {
-    this.connection.cancel();
-    console.log('RequestCancel OK');
-    // Set current state
-    this.currentState.isConnCanceled = true;
-  }
-
-  /**
    * Closes the connection to the database
-   * @method connDisconnect 
+   * @method disconnect
+   *  
    * @returns {Promise}
    */
-  connDisconnect() {
+  disconnect() {
     const self = this;
     return new Promise((resolve, reject) => {
       self.connection.close();
@@ -192,6 +191,17 @@ class MssqlTedious {
       });
 
     });
+  }
+
+  /**
+   * Cancel currently executed request
+   * @method connCancel
+   */
+  connCancel() {
+    this.connection.cancel();
+    console.log('RequestCancel OK');
+    // Set current state
+    this.currentState.isConnCanceled = true;
   }
 
   /**
@@ -245,7 +255,7 @@ class MssqlTedious {
           reject(err.message);
           return;
         }
-        resolve('Request OK');
+        resolve(_rows);
       });
 
       // Subscribe to request events
@@ -285,7 +295,7 @@ class MssqlTedious {
           rows - Rows as a result of executing the SQL. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true.
          */
         if (isDebug) console.log('Request result:', { params, sql, rows: _rows });
-        callback(_rows);
+        if(callback) callback(_rows);
       });
 
       self.connection.execSql(request);
@@ -310,7 +320,7 @@ class MssqlTedious {
           reject(err.message);
           return;
         }
-        resolve('Request OK');
+        resolve(_rows);
       });
 
       // Subscribe to request events
@@ -351,7 +361,7 @@ class MssqlTedious {
           rows - Rows as a result of executing the SQL. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true.
          */
         if (isDebug) console.log('Request result:', { params, sql, rows: _rows });
-        callback(_rows);
+        if(callback) callback(_rows);
       });
       self.connection.callProcedure(request);
     });

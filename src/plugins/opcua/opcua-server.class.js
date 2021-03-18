@@ -28,7 +28,7 @@ class OpcuaServer {
    */
   constructor(app, params = {}) {
     this.id = params.serverInfo.applicationName;
-    this.app = app;
+    // this.app = app;
     // Set process.on to event 'SIGINT'
     this.isOnSignInt = true;
     // Get opcua config
@@ -339,16 +339,18 @@ class OpcuaServer {
    * @param {Object} methods  
    */
   constructAddressSpace(params = null, getters = null, methods = null) {
-    let addedVariable, addedMethod, object = null;
+    let addedVariable, addedMethod, object = null, baseOptions = {};
     let addedVariableList, getterParams, valueParams, engineeringUnit;
     this.opcuaServerNotCreated();
     const id = this.params.serverInfo.applicationName;
     const opcuaConfig = getOpcuaConfig(id);
     // Set arguments
     if (params === null) {
-      // params = require(`${appRoot}${opcuaConfig.paths.options}`);
       if(opcuaConfig.paths['base-options']){
-        const baseOptions = require(`${appRoot}${opcuaConfig.paths['base-options']}`);
+        opcuaConfig.paths['base-options'].forEach(opt => {
+          opt = require(`${appRoot}${opt}`);
+          baseOptions = loMerge(baseOptions, opt);
+        });
         const options = require(`${appRoot}${opcuaConfig.paths.options}`);
         params = loMerge(baseOptions, options);
       } else {

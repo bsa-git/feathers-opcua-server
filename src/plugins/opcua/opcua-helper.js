@@ -368,10 +368,14 @@ const getOpcuaConfigsForMe = function () {
  * @returns {Object}
  */
 const getOpcuaConfigOptions = function (id, browseName = '') {
+  let baseOptions = {};
   // Get opcuaOption 
   let opcuaOptions = getOpcuaConfig(id);
   if (opcuaOptions.paths['base-options']) {
-    const baseOptions = require(`${appRoot}${opcuaOptions.paths['base-options']}`);
+    opcuaOptions.paths['base-options'].forEach(opt => {
+      opt = require(`${appRoot}${opt}`);
+      baseOptions = loMerge(baseOptions, opt);
+    });
     const options = require(`${appRoot}${opcuaOptions.paths.options}`);
     opcuaOptions = loMerge(baseOptions, options);
   } else {
