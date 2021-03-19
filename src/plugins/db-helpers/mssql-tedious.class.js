@@ -9,7 +9,7 @@ const debug = require('debug')('app:mssql-tedious.class');
 
 const isDebug = false;
 
-const connectionConfig = {
+const defaultConnConfig = {
   server: 'server',
   options: {
     instanceName: 'instanceName',
@@ -37,62 +37,48 @@ const connectionConfig = {
   events: {
     connection: {
       debug: {
-        enable: false,
-        cb: this.onDebugForConn
+        enable: false
       },
       infoMessage: {
-        enable: false,
-        cb: this.onInfoMessageForConn
+        enable: false
       },
       errorMessage: {
-        enable: false,
-        cb: this.onErrorMessageForConn
+        enable: false
       },
       databaseChange: {
-        enable: false,
-        cb: this.onDatabaseChangeForConn
+        enable: false
       },
       languageChange: {
-        enable: false,
-        cb: this.onLanguageChangeForConn
+        enable: false
       },
       charsetChange: {
-        enable: false,
-        cb: this.onCharsetChangeForConn
+        enable: false
       },
       secure: {
-        enable: false,
-        cb: this.onSecureForConn
+        enable: false
       },
     },
     request: {
       columnMetadata: {
-        enable: false,
-        cb: this.onColumnMetadataForRequest
+        enable: false
       },
       prepared: {
-        enable: false,
-        cb: this.onPreparedForRequest
+        enable: false
       },
       error: {
-        enable: false,
-        cb: this.onErrorForRequest
+        enable: false
       },
       requestCompleted: {
-        enable: false,
-        cb: this.onRequestCompletedForRequest
+        enable: false
       },
       done: {
-        enable: false,
-        cb: this.onDoneForRequest
+        enable: false
       },
       returnValue: {
-        enable: false,
-        cb: this.onReturnValueForRequest
+        enable: false
       },
       order: {
-        enable: false,
-        cb: this.onOrderForRequest
+        enable: false
       }
     }
   }
@@ -104,12 +90,12 @@ class MssqlTedious {
    * @param {Object} config
    */
   constructor(config) {
-    this.config = loMerge({}, connectionConfig, config);
+    this.config = loMerge({}, defaultConnConfig, config);
     this.id = getIdFromMssqlConfig(this.config);
     this.connection = null;
     this.currentState = {
       id: this.id,
-      connectionConfig: loOmit(this.config, ['options.debug', 'authentication.options.password', 'events']),
+      connectionConfig: this.getConnConfigForCurrentState(),
       connError: '',
       requestError: '',
       isConnected: false,
@@ -124,8 +110,34 @@ class MssqlTedious {
    * 
    * @returns {Object}
    */
-  static getConnConfig() {
-    return connectionConfig;
+  static getDefaultConnConfig() {
+    return defaultConnConfig;
+  }
+
+  /**
+   * @method getConnConfig
+   * 
+   * @returns {Object}
+   */
+  getConnConfig() {
+    return loOmit(this.config, ['authentication.options.password']);
+  }
+
+  /**
+   * @method getCurrentState
+   * @returns {Object}
+   */
+  getCurrentState() {
+    return this.currentState;
+  }
+
+  /**
+   * @method getConnConfigForCurrentState
+   * 
+   * @returns {Object}
+   */
+  getConnConfigForCurrentState() {
+    return loOmit(this.config, ['options.debug', 'authentication.options.password', 'events']);
   }
 
   /**
@@ -137,18 +149,22 @@ class MssqlTedious {
     // return Promise
     return new Promise((resolve, reject) => {
       const connection = new Connection(this.config);
+      self.connection = connection;
+      // Subscribe to events
+      self.subscribeToConnEvent();
       // The attempt to connect and validate has completed.
       connection.on('connect', function (err) {
         // err - If successfully connected, will be falsey. If there was a problem (with either connecting or validation), will be an error object.
         if (err) {
           console.log('connection.on("connect") -> Error: ', err.message);
+          self.connection = null;
           reject(err.message);
         } else {
           // If no error, then good to go...
           console.log('Connection OK');
-          self.connection = connection;
+          // self.connection = connection;
           // Subscribe to events
-          self.subscribeToConnEvent();
+          // self.subscribeToConnEvent();
           // Set current state
           self.currentState.connError = '';
           self.currentState.isConnected = true;
@@ -228,15 +244,7 @@ class MssqlTedious {
     });
   }
 
-  /**
-   * Get current state
-   * @method getCurrentState
-   * @returns {Object}
-   */
-  getCurrentState() {
-    return this.currentState;
-  }
-
+  
   /**
    * @method query
    * @param {Object[]} params
@@ -295,7 +303,7 @@ class MssqlTedious {
           rows - Rows as a result of executing the SQL. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true.
          */
         if (isDebug) console.log('Request result:', { params, sql, rows: _rows });
-        if(callback) callback(_rows);
+        if (callback) callback(_rows);
       });
 
       self.connection.execSql(request);
@@ -361,7 +369,7 @@ class MssqlTedious {
           rows - Rows as a result of executing the SQL. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true.
          */
         if (isDebug) console.log('Request result:', { params, sql, rows: _rows });
-        if(callback) callback(_rows);
+        if (callback) callback(_rows);
       });
       self.connection.callProcedure(request);
     });
@@ -388,64 +396,66 @@ class MssqlTedious {
    */
   subscribeToConnEvent() {
     const self = this;
-    loForEach(this.config.events.connection, (value, key) => {
+    loForEach(self.config.events.connection, (value, key) => {
       switch (key) {
       case 'debug':
         // A debug message is available. It may be logged or ignored.
-        if (value.enable) self.connection.on('debug', function (messageText) {
-          // messageText - The debug message.
-          value.cb(messageText);
-        });
+        if (value.enable) {
+          self.connection.on('debug', function (messageText) {
+            // messageText - The debug message.
+            value.cb ? value.cb(messageText) : self.onDebugForConn(messageText);
+          });
+        }
         break;
       case 'infoMessage':
         // The server has issued an information message.
         if (value.enable) self.connection.on('infoMessage', function (info) {
           /**
-              info - An object with these properties:
-                number - Error number
-                state - The error state, used as a modifier to the error number.
-                class - The class (severity) of the error. A class of less than 10 indicates an informational message.
-                message - The message text.
-                procName - The stored procedure name (if a stored procedure generated the message).
-                lineNumber - The line number in the SQL batch or stored procedure that caused the error. 
-                             Line numbers begin at 1; therefore, if the line number is not applicable to the message, the value of LineNumber will be 0. 
-             */
-          value.cb(info);
+                  info - An object with these properties:
+                    number - Error number
+                    state - The error state, used as a modifier to the error number.
+                    class - The class (severity) of the error. A class of less than 10 indicates an informational message.
+                    message - The message text.
+                    procName - The stored procedure name (if a stored procedure generated the message).
+                    lineNumber - The line number in the SQL batch or stored procedure that caused the error. 
+                                 Line numbers begin at 1; therefore, if the line number is not applicable to the message, the value of LineNumber will be 0. 
+                 */
+          value.cb ? value.cb(info) : self.onInfoMessageForConn(info);
         });
         break;
       case 'errorMessage':
         // The server has issued an error message.
         if (value.enable) self.connection.on('errorMessage', function (err) {
           // err - An object with the same properties as.listed for the infoMessage event.
-          value.cb(err);
+          value.cb ? value.cb(err) : self.onErrorMessageForConn(err);
         });
         break;
       case 'databaseChange':
         // The server has reported that the active database has changed. This may be as a result of a successful login, or a use statement.
         if (value.enable) self.connection.on('databaseChange', function (databaseName) {
           // databaseName - The name of the new active database
-          value.cb(databaseName);
+          value.cb ? value.cb(databaseName) : self.onDatabaseChangeForConn(databaseName);
         });
         break;
       case 'languageChange':
         // The server has reported that the language has changed.
         if (value.enable) self.connection.on('languageChange', function (languageName) {
           // languageName - The newly active language.
-          value.cb(languageName);
+          value.cb ? value.cb(languageName) : self.onLanguageChangeForConn(languageName);
         });
         break;
       case 'charsetChange':
         // The server has reported that the charset has changed.
         if (value.enable) self.connection.on('charsetChange', function (charset) {
           // charset - The new charset.
-          value.cb(charset);
+          value.cb ? value.cb(charset) : self.onCharsetChangeForConn(charset);
         });
         break;
       case 'secure':
         // A secure connection has been established.
         if (value.enable) self.connection.on('secure', function (cleartext) {
           // cleartext - The cleartext stream of a tls SecurePair. The cipher and peer certificate (server certificate) may be inspected if desired.
-          value.cb(cleartext);
+          value.cb ? value.cb(cleartext) : self.onSecureForConn(cleartext);
         });
         break;
       default:
@@ -467,75 +477,75 @@ class MssqlTedious {
         // This event may be emited multiple times when more than one recordset is produced by the statement.
         if (value.enable) request.on('columnMetadata', function (columns) {
           /**
-              An array like object, where the columns can be accessed either by index or name. 
-              Columns with a name that is an integer are not accessible by name, as it would be interpreted as an array index.
-              Each column has these properties.
-                colName - The column's name.
-                type.name - The column's type, such as VarChar, Int or Binary.
-                precision - The precision. Only applicable to numeric and decimal.
-                scale - The scale. Only applicable to numeric, decimal, time, datetime2 and datetimeoffset.
-                dataLength - The length, for char, varchar, nvarchar and varbinary. 
-             */
-          value.cb(columns);
+                  An array like object, where the columns can be accessed either by index or name. 
+                  Columns with a name that is an integer are not accessible by name, as it would be interpreted as an array index.
+                  Each column has these properties.
+                    colName - The column's name.
+                    type.name - The column's type, such as VarChar, Int or Binary.
+                    precision - The precision. Only applicable to numeric and decimal.
+                    scale - The scale. Only applicable to numeric, decimal, time, datetime2 and datetimeoffset.
+                    dataLength - The length, for char, varchar, nvarchar and varbinary. 
+                 */
+          value.cb ? value.cb(columns) : self.onColumnMetadataForRequest(columns);
         });
         break;
       case 'prepared':
         // The request has been prepared and can be used in subsequent calls to execute and unprepare
         if (value.enable) request.on('prepared', function () {
-          value.cb();
+          value.cb ? value.cb() : self.onPreparedForRequest();
         });
         break;
       case 'error':
         if (value.enable) request.on('error', function (err) {
           // The request encountered an error and has not been prepared
-          value.cb(err);
+          value.cb ? value.cb(err) : self.onErrorForRequest(err);
         });
         break;
       case 'requestCompleted':
         // This is the final event emitted by a request. This is emitted after the callback passed in a request is called
         if (value.enable) request.on('requestCompleted', function () {
-          value.cb();
+          value.cb ? value.cb() : self.onRequestCompletedForRequest();
         });
         break;
       case 'done':
         /**
-           All rows from a result set have been provided (through row events). 
-           This token is used to indicate the completion of a SQL statement. 
-           As multiple SQL statements can be sent to the server in a single SQL batch, multiple done events can be generated. 
-           An done event is emited for each SQL statement in the SQL batch except variable declarations. 
-           For execution of SQL statements within stored procedures, doneProc and doneInProc events are used in place of done events.
-
-           If you are using execSql then SQL server may treat the multiple calls with the same query as a stored procedure. 
-           When this occurs, the doneProc or doneInProc events may be emitted instead. 
-           You must handle both events to ensure complete coverage. 
-           */
+               All rows from a result set have been provided (through row events). 
+               This token is used to indicate the completion of a SQL statement. 
+               As multiple SQL statements can be sent to the server in a single SQL batch, multiple done events can be generated. 
+               An done event is emited for each SQL statement in the SQL batch except variable declarations. 
+               For execution of SQL statements within stored procedures, doneProc and doneInProc events are used in place of done events.
+    
+               If you are using execSql then SQL server may treat the multiple calls with the same query as a stored procedure. 
+               When this occurs, the doneProc or doneInProc events may be emitted instead. 
+               You must handle both events to ensure complete coverage. 
+               */
         if (value.enable) request.on('done', function (rowCount, more, rows) {
           /**
-              rowCount - The number of result rows. May be undefined if not available.
-              more - If there are more results to come (probably because multiple statements are being executed), then true.
-              rows - Rows as a result of executing the SQL statement. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true. 
-             */
-          value.cb(rowCount, more, rows);
+                  rowCount - The number of result rows. May be undefined if not available.
+                  more - If there are more results to come (probably because multiple statements are being executed), then true.
+                  rows - Rows as a result of executing the SQL statement. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true. 
+                 */
+          value.cb ? value.cb(rowCount, more, rows) : self.onDoneForRequest(rowCount, more, rows);
         });
         break;
       case 'returnValue':
         // A value for an output parameter (that was added to the request with addOutputParameter(...)).
         if (value.enable) request.on('returnValue', function (parameterName, value, metadata) {
           /**
-              parameterName - The parameter name. (Does not start with '@'.)
-              value - The parameter's output value.
-              metadata - The same data that is exposed in the columnMetadata event. 
-             */
-          value.cb(parameterName, value, metadata);
+                  parameterName - The parameter name. (Does not start with '@'.)
+                  value - The parameter's output value.
+                  metadata - The same data that is exposed in the columnMetadata event. 
+                 */
+          value.cb ? value.cb(parameterName, value, metadata) : self.onReturnValueForRequest(parameterName, value, metadata);
         });
         break;
       case 'order':
         // This event gives the columns by which data is ordered, if ORDER BY clause is executed in SQL Server.
         if (value.enable) request.on('order', function (orderColumns) {
           /**
-              orderColumns - An array of column numbers in the result set by which data is ordered. 
-             */
-          value.cb(orderColumns);
+                  orderColumns - An array of column numbers in the result set by which data is ordered. 
+                 */
+          value.cb ? value.cb(orderColumns) : self.onOrderForRequest(orderColumns);
         });
         break;
       default:

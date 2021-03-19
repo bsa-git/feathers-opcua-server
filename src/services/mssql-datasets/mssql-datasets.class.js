@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
+const loMerge = require('lodash/merge');
+
 const { 
   MssqlTedious, 
   getIdFromMssqlConfig,
@@ -23,6 +25,7 @@ class MssqlDatasets {
     this.mssqlDatasets = [];
   }
 
+  // Create mssqlDataset
   async create(data, params) {
     let result;
     // Execute an DB action through a service method (create)
@@ -40,7 +43,7 @@ class MssqlDatasets {
     // Get id
     const id = getIdFromMssqlConfig(data.config);
     if (isMssqlDatasetInList(this, id)) {
-      throw new errors.BadRequest(`The mssql dataset already exists for this id = '${id}' in the server list`);
+      throw new errors.BadRequest(`The mssql dataset already exists for this id = '${id}' in the service list`);
     }
     // Create DB
     const db = new MssqlTedious(data.config);
@@ -59,6 +62,7 @@ class MssqlDatasets {
     return result;
   }
 
+  // Get mssqlDataset for id
   async get(id, params) {
     let mssqlDataset = null;
     mssqlDataset = this.mssqlDatasets.find(obj => obj.id === id);
@@ -76,6 +80,7 @@ class MssqlDatasets {
     return mssqlDataset;
   }
 
+  // Get all mssqlDataset
   async find(params) {
     let mssqlDatasets, mssqlDataset;
     // Just return all our mssqlDataset
@@ -95,25 +100,37 @@ class MssqlDatasets {
     return mssqlDatasets;
   }
 
+  // mssqlDataset update
   async update(id, data, params) {
     await this.remove(id);
-    data.action = 'create';
+    data.id = id;
+    data.action = 'createMssqlDataset';
     const result = await this.create(data);
-    return result;
+    const mssqlDataset = await this.get(result.id);
+    return params.provider ? result : mssqlDataset;
   }
 
+  // mssqlDataset patch
   async patch(id, data, params) {
-    await this.remove(id);
-    data.action = 'create';
-    const result = await this.create(data);
-    return result;
+    let mssqlDataset;
+    //---------------------------
+    // Get mssqlDataset and disconnect
+    mssqlDataset = await this.get(id);
+    await mssqlDataset.db.disconnect();
+    // Set patchConfig for mssqlDataset
+    const patchConfig = loMerge({}, mssqlDataset.db.config, data.config);
+    mssqlDataset.db.config = patchConfig;
+    mssqlDataset.db.currentState.connectionConfig = mssqlDataset.db.getConnConfigForCurrentState();
+    // Connect with patchConfig   
+    const result = await mssqlDataset.db.connect();
+    return params.provider ? result : mssqlDataset;
   }
 
   // mssqlDataset remove
   async remove(id, params) {
     let mssqlDataset;
     mssqlDataset = await this.get(id);
-    await mssqlDataset.db.diconnect();
+    await mssqlDataset.db.disconnect();
     mssqlDataset = Object.assign({}, {
       id: mssqlDataset.id,
       db: { currentState: mssqlDataset.db.getCurrentState() },

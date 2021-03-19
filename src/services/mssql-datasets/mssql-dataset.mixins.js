@@ -1,7 +1,15 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { inspector } = require('../../plugins/lib'); 
-const { getMssqlDatasetForProvider } = require('../../plugins/db-helpers');
+const moment = require('moment');
+const { inspector } = require('../../plugins/lib');
+
+const {
+  MssqlTedious,
+  getIdFromMssqlConfig,
+  isMssqlDatasetInList,
+  getMssqlDatasetForProvider
+} = require('../../plugins/db-helpers');
+
 
 const debug = require('debug')('app:mssql-datasets.mixins');
 const isLog = true;
@@ -21,8 +29,11 @@ module.exports = function mssqlDatasetsMixins(service, path) {
    */
   service.getPathForMixins = function (action) {
     switch (action) {
+    case 'createMssqlDataset':
+      result = ['config'];
+      break;
     case 'connect':
-    case 'disconnect':  
+    case 'disconnect':
     case 'connCancel':
     case 'connReset':
       result = ['id'];
@@ -31,12 +42,44 @@ module.exports = function mssqlDatasetsMixins(service, path) {
       result = ['id', 'params', 'paramName', 'paramType', 'paramValue'];
       break;
     case 'query':
-    case 'proc':  
+    case 'proc':
       result = ['id', 'params', 'sql', 'callback'];
       break;
     default:
       break;
     }
+    return result;
+  };
+
+  /**
+   * @method create
+   * @async
+   * 
+   * @param {String} id 
+   * @returns {Object}
+   */
+  service.createMssqlDataset = async function (config) {
+    // Get id
+    const id = getIdFromMssqlConfig(config);
+    if (isMssqlDatasetInList(service, id)) {
+      throw new errors.BadRequest(`The mssql dataset already exists for this id = '${id}' in the service list`);
+    }
+    // Create DB
+    const db = new MssqlTedious(config);
+    // DB connect
+    await db.connect();
+    // Get createdAt
+    const dt = moment().utc().valueOf();
+    // Add mssqlDataset to service list
+    const mssqlDataset = {
+      id,
+      db,
+      createdAt: dt,
+      updatedAt: dt
+    };
+    service.mssqlDatasets.push(mssqlDataset);
+    // Get result
+    result = Object.assign({}, mssqlDataset, getMssqlDatasetForProvider(mssqlDataset.db));
     return result;
   };
 
@@ -144,5 +187,5 @@ module.exports = function mssqlDatasetsMixins(service, path) {
     result = mssqlDataset.db.buildParams(params, paramName, paramType, paramValue);
     return result;
   };
-  
+
 };

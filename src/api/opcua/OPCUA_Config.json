@@ -66,7 +66,8 @@
         "mssql-datasets"
       ],
       "tests": [
-        "mssql-tedious.test.js"
+        "mssql-tedious.test.js",
+        "mssql-datasets.test.js"
       ]
     },
     "paths": {
