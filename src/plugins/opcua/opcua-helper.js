@@ -771,15 +771,15 @@ const Unece_to_Locale = function (pathFrom, pathTo) {
  * @returns {Boolean}
  */
 const canTestRun = function (fileName) {
-  let isTest = true;
+  let isTest = false;
   const myConfig = getOpcuaConfigForMe();
   if (isDebug) debug('canTestRun.fileName:', fileName);
   // debug('canTestRun.fileName:', fileName);
   if (isLog) inspector('canTestRun.myConfig:', myConfig);
   // inspector('canTestRun.myConfig:', myConfig);
-  if (myConfig && myConfig.exclude && myConfig.exclude.tests && myConfig.exclude.tests.length) {
-    const finded = myConfig.exclude.tests.find(name => name === fileName);
-    isTest = !finded;
+  if (myConfig && myConfig.include && myConfig.include.tests && myConfig.include.tests.length) {
+    const finded = myConfig.include.tests.find(name => name === fileName);
+    isTest = !!finded;
   }
   if (isDebug) debug('canTestRun.isTest:', isTest);
   // debug('canTestRun.isTest:', isTest);

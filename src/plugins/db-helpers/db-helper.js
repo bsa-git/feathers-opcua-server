@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const loMerge = require('lodash/merge');
+const loOmit = require('lodash/omit');
 
 const {
   inspector,
@@ -53,18 +54,29 @@ const getIdFromMssqlConfig = (config) => {
  * @returns {Object}
  */
 const getMssqlConfigFromEnv = (config, prefix) => {
+  let idParts = [], server = '', instanceName = '', database = '';
+  //---------------------------------------------------------------
+  let _config = loMerge({}, config);
   const id = process.env[`${prefix}_ID`];
   const user = process.env[`${prefix}_USER`];
   const pass = process.env[`${prefix}_PASS`];
-  const server = id.split('.')[0];
-  const instanceName = id.split('.')[1];
-  const database = id.split('.')[2];
-  const _config = loMerge({}, config);
+  idParts = id.split('.');
+  if (idParts.length === 3) {
+    server = idParts[0];
+    instanceName = idParts[1];
+    database = idParts[2];
+    _config.options.instanceName = instanceName;
+  } else {
+    _config = loOmit(_config, ['options.instanceName']);
+    server = idParts[0];
+    database = idParts[1];
+  }
+  
   _config.server = server;
-  _config.options.instanceName = instanceName;
   _config.options.database = database;
   _config.authentication.options.userName = user;
   _config.authentication.options.password = pass;
+  if(isLog) inspector('getMssqlConfigFromEnv._config:', _config);
   return _config;
 };
 

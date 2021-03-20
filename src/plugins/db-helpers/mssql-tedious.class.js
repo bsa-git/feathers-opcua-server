@@ -37,7 +37,7 @@ const defaultConnConfig = {
   events: {
     connection: {
       debug: {
-        enable: false
+        enable: true
       },
       infoMessage: {
         enable: false
@@ -90,7 +90,7 @@ class MssqlTedious {
    * @param {Object} config
    */
   constructor(config) {
-    this.config = loMerge({}, defaultConnConfig, config);
+    this.config = Object.assign({}, config);
     this.id = getIdFromMssqlConfig(this.config);
     this.connection = null;
     this.currentState = {
