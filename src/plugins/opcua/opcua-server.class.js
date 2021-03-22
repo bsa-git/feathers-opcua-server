@@ -357,10 +357,12 @@ class OpcuaServer {
         params = require(`${appRoot}${opcuaConfig.paths.options}`);
       }
     }
+    params.objects = params.objects.filter(item => !item.isDisable);
+    params.variables = params.variables.filter(item => !item.isDisable);
+    params.methods = params.methods.filter(item => !item.isDisable);
     if (getters === null) {
       getters = require(`${appRoot}${opcuaConfig.paths.getters}`);
     }
-    // getters = loMerge({}, opcuaDefaultGetters, getters);
     loMerge(getters, opcuaDefaultGetters);
     if (methods === null) {
       methods = require(`${appRoot}${opcuaConfig.paths.methods}`);
@@ -516,7 +518,7 @@ class OpcuaServer {
                 description: m.description ? m.description : ''
               };
               // Method inputArguments merge 
-              if (m.inputArguments.length) {
+              if (m.inputArguments && m.inputArguments.length) {
                 m.inputArguments = m.inputArguments.map(arg => {
                   arg.dataType = DataType[arg.dataType];
                   return arg;
@@ -524,7 +526,7 @@ class OpcuaServer {
                 loMerge(methodParams, { inputArguments: m.inputArguments });
               }
               // Method outputArguments merge 
-              if (m.outputArguments.length) {
+              if ( m.outputArguments && m.outputArguments.length) {
                 m.outputArguments = m.outputArguments.map(arg => {
                   arg.dataType = DataType[arg.dataType];
                   return arg;

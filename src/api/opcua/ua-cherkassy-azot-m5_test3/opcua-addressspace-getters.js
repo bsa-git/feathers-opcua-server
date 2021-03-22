@@ -164,7 +164,7 @@ function histValueFromHttpPath(params = {}, addedValue) {
     dataItems = results.data[0];
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
     if (isDebug) console.log(chalk.green('fileName:'), chalk.cyan(fileName));
-    if(isLog) inspector('histValueFromHttpPath.dataItems:', dataItems);
+    if(isLog) inspector('histValueFromHttpForCH_M52.dataItems:', dataItems);
 
     // Set value from source for group 
     if (params.addedVariableList) {

@@ -2,10 +2,12 @@
 const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port') || 3030;
-const { 
+const {
+  appRoot, 
   inspector,
   startListenPort, 
-  stopListenPort, 
+  stopListenPort,
+  makeDirSync 
 } = require('../../src/plugins');
 const { getServerService } = require('../../src/plugins/opcua');
 
@@ -38,6 +40,7 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
 
   before(function (done) {
     startListenPort(app, done);
+    makeDirSync([appRoot, 'test/data/tmp/test1']);
   });
 
   after(function (done) {

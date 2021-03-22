@@ -1,6 +1,7 @@
 {
   "variables": [
     {
+      "isDisable": true,
       "browseName": "CH_M51::ValueFromFile",
       "displayName": "Значения из файла для CH_M51",
       "ownerName": "CH_M51",
@@ -16,7 +17,6 @@
       }
     },
     {
-      "isDisable": true,
       "browseName": "CH_M52::ValueFromFile",
       "displayName": "Значения из файла для CH_M52",
       "ownerName": "CH_M52",

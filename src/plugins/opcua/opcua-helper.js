@@ -450,6 +450,7 @@ const getMyHostInfo = async function () {
  * @returns {Boolean}
  */
 const isMyServiceHost = async function (serviceUrl, myPort) {
+  if (!serviceUrl) return false;
   const serviceHostname = getParseUrl(serviceUrl).hostname.toLowerCase();
   let servicePort = getParseUrl(serviceUrl).port;
   servicePort = getInt(servicePort);
@@ -515,6 +516,84 @@ const getClientService = async function (app = null, id) {
 };
 
 /**
+ * @method getParamsAddressSpace
+ * @param {String} id 
+ * @returns {Object}
+ */
+const getParamsAddressSpace = (id) => {
+  // const opcuaOption = getOpcuaConfig(id);
+  const paramsAddressSpace = {
+    objects: [],
+    variables: [],
+    methods: []
+  };
+  let opcuaConfigOptions = getOpcuaConfigOptions(id);
+  opcuaConfigOptions = opcuaConfigOptions.filter(item => !item.isDisable);
+  let objects = opcuaConfigOptions.filter(opt => opt.type === 'object');
+  let variables = opcuaConfigOptions.filter(opt => opt.type === 'variable');
+  let methods = opcuaConfigOptions.filter(opt => opt.type === 'method');
+
+  paramsAddressSpace.objects = objects.map(o => {
+    return {
+      nodeId: `ns=1;s=${o.browseName}`,
+      browseName: o.browseName,
+      displayName: o.displayName,
+      description: o.description
+    };
+  });
+
+  paramsAddressSpace.variables = variables.map(v => {
+    return loMerge({
+      nodeId: `ns=1;s=${v.browseName}`,
+      browseName: v.browseName,
+      displayName: v.displayName,
+      description: v.description ? v.description : '',
+      ownerName: v.ownerName,
+      dataType: v.dataType,
+      type: v.type,
+    },
+    v.aliasName ? { aliasName: v.aliasName } : {},
+    v.group ? { group: v.group } : {},
+    v.variableGetType ? { variableGetType: v.variableGetType } : {},
+    v.getter ? { getter: v.getter } : {},
+    v.getterParams ? { getterParams: v.getterParams } : {},
+    v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
+    v.valueParams ? { valueParams: v.valueParams } : {},
+    );
+  });
+
+  paramsAddressSpace.methods = methods.map(m => {
+
+    // Method inputArguments merge 
+    if (m.inputArguments && m.inputArguments.length) {
+      m.inputArguments = m.inputArguments.map(arg => {
+        arg.dataType = DataType[arg.dataType];
+        return arg;
+      });
+    }
+    // Method outputArguments merge 
+    if (m.outputArguments && m.outputArguments.length) {
+      m.outputArguments = m.outputArguments.map(arg => {
+        arg.dataType = DataType[arg.dataType];
+        return arg;
+      });
+    }
+
+    return loMerge({
+      nodeId: `ns=1;s=${m.browseName}`,
+      browseName: m.browseName,
+      displayName: m.displayName,
+      description: m.description ? m.description : ''
+    },
+    (m.inputArguments && m.inputArguments.length) ? { inputArguments: m.inputArguments } : {},
+    (m.outputArguments && m.outputArguments.length) ? { outputArguments: m.outputArguments } : {},
+    );
+  });
+
+  return paramsAddressSpace;
+};
+
+/**
  * @method getSrvCurrentState
  * Get opcua server currentState
  * @async
@@ -524,9 +603,20 @@ const getClientService = async function (app = null, id) {
  * @returns {Object}
  */
 const getSrvCurrentState = async (app, id) => {
+  let currentState = {};
   const service = await getServerService(app, id);
-  const opcuaServer = await service.get(id);
-  return opcuaServer.server.currentState;
+  if (service) {
+    const opcuaServer = await service.get(id);
+    currentState = opcuaServer.server.currentState;
+  } else {
+    const opcuaOption = getOpcuaConfig(id);
+    currentState.id = id;
+    currentState.productName = opcuaOption.name;
+    currentState.port = opcuaOption.port;
+    currentState.endpointUrl = opcuaOption.endpointUrl;
+    currentState.paramsAddressSpace = getParamsAddressSpace(id);
+  }
+  return currentState;
 };
 
 /**
@@ -772,12 +862,13 @@ const Unece_to_Locale = function (pathFrom, pathTo) {
  */
 const canTestRun = function (fileName) {
   let isTest = false;
-  const myConfig = getOpcuaConfigForMe();
+  const myConfigs = getOpcuaConfigsForMe();
+  const myConfig = myConfigs.find(item => item.include && item.include.tests && item.include.tests.length);
   if (isDebug) debug('canTestRun.fileName:', fileName);
   // debug('canTestRun.fileName:', fileName);
   if (isLog) inspector('canTestRun.myConfig:', myConfig);
   // inspector('canTestRun.myConfig:', myConfig);
-  if (myConfig && myConfig.include && myConfig.include.tests && myConfig.include.tests.length) {
+  if (myConfig) {
     const finded = myConfig.include.tests.find(name => name === fileName);
     isTest = !!finded;
   }
@@ -819,6 +910,7 @@ module.exports = {
   getOpcuaConfigForMe,
   getOpcuaConfigsForMe,
   getOpcuaConfigOptions,
+  getParamsAddressSpace,
   getSubscriptionHandler,
   getOpcuaClientScript,
   getMyHostInfo,

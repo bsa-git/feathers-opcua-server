@@ -96,14 +96,12 @@ class OpcuaServers {
 
   async update(id, data, params) {
     await this.remove(id);
-    data.action = 'create';
     const result = await this.create(data);
     return result;
   }
 
   async patch(id, data, params) {
     await this.remove(id);
-    data.action = 'create';
     const result = await this.create(data);
     return result;
   }

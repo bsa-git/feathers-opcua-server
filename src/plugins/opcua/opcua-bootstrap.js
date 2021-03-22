@@ -2,8 +2,7 @@
 const errors = require('@feathersjs/errors');
 const fs = require('fs');
 const {
-  inspector,
-  readOnlyNewFile
+  inspector
 } = require('../lib');
 const {
   getOpcuaConfig,

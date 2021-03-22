@@ -106,14 +106,12 @@ class OpcuaClients {
 
   async update(id, data, params) {
     await this.remove(id);
-    data.action = 'create';
     const resultAction = await this.create(data);
     return resultAction;
   }
 
   async patch(id, data, params) {
     await this.remove(id);
-    data.action = 'create';
     const resultAction = await this.create(data);
     return resultAction;
   }

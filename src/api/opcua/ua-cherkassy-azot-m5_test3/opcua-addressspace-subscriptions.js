@@ -29,8 +29,10 @@ function onChangedCH_M5Handler(params, dataValue) {
   let engineeringUnits = (dataValue.valueParams && dataValue.valueParams.engineeringUnits)? dataValue.valueParams.engineeringUnits : '';
   const timestamp = dataValue.serverTimestamp;
   engineeringUnits = engineeringUnits? `(${engineeringUnits})` : '';
-
-  if(addressSpaceOption.ownerGroup === 'CH_M51::ValueFromFile'){
+  // if(addressSpaceOption.browseName === 'CH_M51::ValueFromFile'){
+  //   console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} ${engineeringUnits} Timestamp=${timestamp}`));
+  // }
+  if(addressSpaceOption.ownerGroup === 'CH_M52::ValueFromFile'){
     console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} ${engineeringUnits} Timestamp=${timestamp}`));
   }
 }

@@ -20,7 +20,7 @@ const isDebug = false;
 const isLog = false;
 
 let config = MssqlTedious.getDefaultConnConfig();
-config = getMssqlConfigFromEnv(config, 'MSSQL_BSAHOME_TEST');
+config = getMssqlConfigFromEnv(config, 'MSSQL_ASODU_TEST');
 inspector('getMssqlConfigFromEnv.config:', config);
 
 describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
