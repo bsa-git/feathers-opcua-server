@@ -68,7 +68,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
   before(function (done) {
     startListenPort(app, done);
     // Make dir
-    const path = makeDirSync([appRoot, 'test/data/tmp/test1']);
+    makeDirSync([appRoot, 'test/data/tmp/test1']);
   });
 
   after( function (done) {

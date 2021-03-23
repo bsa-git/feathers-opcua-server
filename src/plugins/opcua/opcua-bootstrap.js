@@ -26,7 +26,7 @@ module.exports = async function opcuaBootstrap(app) {
   const opcuaOptions = getOpcuaConfig();
   for (let index = 0; index < opcuaOptions.length; index++) {
     const option = opcuaOptions[index];
-    const myPort = app.get('port');
+    // const myPort = app.get('port');
     if (isDebug) debug('opcuaBootstrap.opcuaOptionID:', option.id);
     // Create service for OPC-UA server
     service = await getServerService(app, option.id);
@@ -38,6 +38,7 @@ module.exports = async function opcuaBootstrap(app) {
           serverInfo: { applicationName: option.id },
         }
       };
+      if (isLog) inspector('opcuaBootstrap.srvData:', srvData);
       opcuaServer = await service.create(srvData);
       if (isLog) inspector('opcuaBootstrap.opcuaServer:', opcuaServer.server.getCurrentState());
       // inspector('opcuaBootstrap.opcuaServer:', opcuaServer.server.getCurrentState());
@@ -51,6 +52,7 @@ module.exports = async function opcuaBootstrap(app) {
           applicationName: option.id,
         }
       };
+      if (isLog) inspector('opcuaBootstrap.clientData:', clientData);
       opcuaClient = await service.create(clientData);
       if (isLog) inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
       // Execute client script

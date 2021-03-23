@@ -368,22 +368,56 @@ const getOpcuaConfigsForMe = function () {
  * @returns {Object}
  */
 const getOpcuaConfigOptions = function (id, browseName = '') {
-  let baseOptions = {};
+  // Get opcuaOption 
+  opcuaOptions = mergeOpcuaConfigOptions(id);
+  opcuaOptions = loConcat(opcuaOptions.objects, opcuaOptions.variables, opcuaOptions.groups, opcuaOptions.methods);
+  if(browseName){
+    opcuaOptions =  opcuaOptions.find(opt => opt.browseName === browseName);
+  }
+  return opcuaOptions;
+};
+
+/**
+ * @method mergeOpcuaConfigOptions
+ * @param {String} id 
+ * @returns {Object}
+ */
+ const mergeOpcuaConfigOptions = function (id) {
+  let baseOptions = {}, mergeOpcuaOptions = {};
   // Get opcuaOption 
   let opcuaOptions = getOpcuaConfig(id);
   if (opcuaOptions.paths['base-options']) {
-    opcuaOptions.paths['base-options'].forEach(opt => {
-      opt = require(`${appRoot}${opt}`);
-      baseOptions = loMerge(baseOptions, opt);
+    opcuaOptions.paths['base-options'].forEach(path => {
+      const opt = loMerge({}, require(`${appRoot}${path}`));
+      loForEach(opt, (value, key) => {
+        if(baseOptions[key]){
+          baseOptions[key] =  loConcat(baseOptions[key], value);
+        } else {
+          baseOptions[key] = value;
+        }
+      })  
     });
     const options = require(`${appRoot}${opcuaOptions.paths.options}`);
-    opcuaOptions = loMerge(baseOptions, options);
+    loForEach(options, (value, key) => {
+      if(baseOptions[key]){
+        loForEach(value, (val) => {
+          const findedIndex = baseOptions[key].findIndex(opt => opt.browseName === val.browseName);
+          if(findedIndex > -1){
+            const mergeValue = loMerge({}, baseOptions[key][findedIndex], val);
+            baseOptions[key][findedIndex] = mergeValue;
+          }
+        })
+      } else {
+        baseOptions[key] = value;
+      }
+    })  
+    mergeOpcuaOptions = loMerge({}, baseOptions);
   } else {
-    opcuaOptions = require(`${appRoot}${opcuaOptions.paths.options}`);
+    mergeOpcuaOptions = loMerge({}, require(`${appRoot}${opcuaOptions.paths.options}`));
   }
-  opcuaOptions = loConcat(opcuaOptions.objects, opcuaOptions.variables, opcuaOptions.groups, opcuaOptions.methods);
-  opcuaOptions = browseName ? opcuaOptions.find(opt => opt.browseName === browseName) : opcuaOptions;
-  return opcuaOptions;
+  // opcuaOptions = loMerge({}, opcuaOptions);
+  // inspector('mergeOpcuaConfigOptions.opcuaOptions.objects:', opcuaOptions.objects);
+  return mergeOpcuaOptions;
 };
 
 
@@ -530,7 +564,7 @@ const getParamsAddressSpace = (id) => {
   let opcuaConfigOptions = getOpcuaConfigOptions(id);
   opcuaConfigOptions = opcuaConfigOptions.filter(item => !item.isDisable);
   let objects = opcuaConfigOptions.filter(opt => opt.type === 'object');
-  let variables = opcuaConfigOptions.filter(opt => opt.type === 'variable');
+  let variables = opcuaConfigOptions.filter(opt => opt.type.includes('variable'));
   let methods = opcuaConfigOptions.filter(opt => opt.type === 'method');
 
   paramsAddressSpace.objects = objects.map(o => {
@@ -910,6 +944,7 @@ module.exports = {
   getOpcuaConfigForMe,
   getOpcuaConfigsForMe,
   getOpcuaConfigOptions,
+  mergeOpcuaConfigOptions,
   getParamsAddressSpace,
   getSubscriptionHandler,
   getOpcuaClientScript,

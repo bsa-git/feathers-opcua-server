@@ -1,4 +1,12 @@
 {
+  "objects": [
+    {
+      "isDisable": true,
+      "browseName": "CH_M52",
+      "displayName": "Черкассы 'АЗОТ' цех M5-2",
+      "type": "object"
+    }
+  ],
   "variables": [
     {
       "browseName": "CH_M51::ValueFromFile",
@@ -13,22 +21,6 @@
       "getterParams": {
         "path": "http://192.168.3.5/www_m5/m5_data2/",
         "interval": 15000
-      }
-    },
-    {
-      "isDisable": true,
-      "browseName": "CH_M52::ValueFromFile",
-      "displayName": "Значения из файла для CH_M52",
-      "ownerName": "CH_M52",
-      "type": "variable.simple",
-      "dataType": "String",
-      "hist": true,
-      "group": true,
-      "variableGetType": "valueFromSource",
-      "getter": "histValueFromFileForCH_M52",
-      "getterParams": {
-        "path": "//localhost/Share/ch-m52",
-        "interval": 5000
       }
     }
   ]

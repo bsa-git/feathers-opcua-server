@@ -1,6 +1,10 @@
 /* eslint-disable no-unused-vars */
 const { appRoot, inspector } = require('../lib');
-const { getOpcuaConfig, getEngineeringUnit } = require('./opcua-helper');
+const { 
+  getOpcuaConfig, 
+  getEngineeringUnit,
+  mergeOpcuaConfigOptions
+} = require('./opcua-helper');
 const {
   OPCUAServer,
   DataType,
@@ -35,7 +39,7 @@ class OpcuaServer {
     const opcuaConfig = getOpcuaConfig(this.id);
     params.buildInfo = { productName: opcuaConfig.name };
     this.locale = (params.locale === undefined) ? process.env.LOCALE : params.locale;
-    this.params = loMerge(opcuaDefaultServerOptions, params);
+    this.params = loMerge({}, opcuaDefaultServerOptions, params);
     this.opcuaServer = null;
     this.addedItemList = [];
     this.currentState = {
@@ -117,6 +121,7 @@ class OpcuaServer {
     this.currentState.isCreated = true;
     // OPC-UA server created.
     console.log(chalk.yellow('OPCUAServer created'));
+    if(isLog) inspector('opcuaServerCreate.params:', this.params);
   }
 
   /**
@@ -144,7 +149,7 @@ class OpcuaServer {
     });
     this.currentState.endpoints = endpoints;
     this.currentState.isStarted = true;
-
+    if(isLog)  inspector('opcuaServerStart.currentState:', this.currentState);
     return endpoints;
   }
 
@@ -339,27 +344,30 @@ class OpcuaServer {
    * @param {Object} methods  
    */
   constructAddressSpace(params = null, getters = null, methods = null) {
-    let addedVariable, addedMethod, object = null, baseOptions = {};
+    let addedVariable, addedMethod, object = null;
     let addedVariableList, getterParams, valueParams, engineeringUnit;
     this.opcuaServerNotCreated();
     const id = this.params.serverInfo.applicationName;
+    if(isDebug) debug('constructAddressSpace.id:', id);
     const opcuaConfig = getOpcuaConfig(id);
     // Set arguments
     if (params === null) {
-      if(opcuaConfig.paths['base-options']){
-        opcuaConfig.paths['base-options'].forEach(opt => {
-          opt = require(`${appRoot}${opt}`);
-          baseOptions = loMerge(baseOptions, opt);
-        });
-        const options = require(`${appRoot}${opcuaConfig.paths.options}`);
-        params = loMerge(baseOptions, options);
-      } else {
-        params = require(`${appRoot}${opcuaConfig.paths.options}`);
-      }
+      params = mergeOpcuaConfigOptions(id);
     }
-    params.objects = params.objects.filter(item => !item.isDisable);
-    params.variables = params.variables.filter(item => !item.isDisable);
-    params.methods = params.methods.filter(item => !item.isDisable);
+    if(isLog) inspector('constructAddressSpace.params:', params);
+    if(Array.isArray(params.objects) && params.objects.length){
+      params.objects = params.objects.filter(item => !item.isDisable);
+    }
+    if(Array.isArray(params.variables) && params.variables.length){
+      params.variables = params.variables.filter(item => !item.isDisable);
+    }
+    if(Array.isArray(params.groups) && params.groups.length){
+      params.groups = params.groups.filter(item => !item.isDisable);
+    }
+    if(Array.isArray(params.methods) && params.methods.length){
+      params.methods = params.methods.filter(item => !item.isDisable);
+    }
+    if(isLog) inspector('constructAddressSpace.filterParams:', params);
     if (getters === null) {
       getters = require(`${appRoot}${opcuaConfig.paths.getters}`);
     }

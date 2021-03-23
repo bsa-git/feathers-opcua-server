@@ -1,11 +1,28 @@
 /* eslint-disable no-unused-vars */
+const chalk = require('chalk');
+const papa = require('papaparse');
+
 const {
+  appRoot,
   inspector,
+  httpGetNewFileFromDir,
+  readOnlyNewFile,
+  readFileSync,
+  writeFileSync,
+  removeFileSync,
+  getFileName,
+  getPathBasename,
+  createPath
 } = require('../../plugins/lib');
+
+
+const loRound = require('lodash/round');
+const loForEach = require('lodash/forEach');
 
 const {
   formatUAVariable,
-  getInitValueForDataType
+  getInitValueForDataType,
+  setValueFromSourceForGroup
 } = require('../../plugins/opcua/opcua-helper');
 
 const {
@@ -16,6 +33,20 @@ const loOmit = require('lodash/omit');
 
 const debug = require('debug')('app:OPCUA_Getters');
 const isDebug = false;
+const isLog = false;
+
+//=============================================================================
+
+/**
+ * @method getTValue
+ * @param {Number} t 
+ * @returns {Number}
+ */
+ const getTValue = function (t) {
+  let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
+  return loRound(value, 3);
+};
+
 
 /**
  * @method plugForVariable
@@ -52,6 +83,115 @@ function plugForVariable(params = {}, addedValue) {
   }
 }
 
+/**
+ * @method valueFromFile
+ * @param {Object} params 
+ * @param {Object} addedValue 
+ * @returns {String}
+ */
+ function valueFromFile(params = {}, addedValue) {
+  let dataItems, results;
+  let id = params.myOpcuaServer.id;
+
+  // Read file
+  let csv = readFileSync([appRoot, '/src/api/opcua', id, params.fromFile]);
+  results = papa.parse(csv, { delimiter: ';', header: true });
+  loForEach(results.data[0], function (value, key) {
+    results.data[0][key] = getTValue(value);
+  });
+  dataItems = results.data[0];
+  if (isLog) inspector('valueFromFile.dataItems:', dataItems);
+  // Set value from source for group 
+  if (params.addedVariableList) {
+    setValueFromSourceForGroup(params, dataItems, module.exports);
+  }
+  return JSON.stringify(dataItems);
+}
+
+/**
+ * @method histValueFromFile
+ * @param {Object} params 
+ * @param {Object} addedValue 
+ * @returns {void}
+ */
+ function histValueFromFile(params = {}, addedValue) {
+  let dataItems, dataType, results;
+  let id = params.myOpcuaServer.id;
+
+  // Create path
+  const path = createPath(params.path);
+
+  // Watch read only new file
+  readOnlyNewFile(path, (filePath, data) => {
+    // Show filePath, data
+    if (isDebug) console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
+    if (isDebug) console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
+    // Set value from source
+    dataType = formatUAVariable(addedValue).dataType[1];
+    results = papa.parse(data, { delimiter: ';', header: true });
+    dataItems = results.data[0];
+    addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
+
+    if (isLog) inspector('histValueFromFile.dataItems:', dataItems);
+
+    // Remove file 
+    removeFileSync(filePath);
+
+    // Set value from source for group 
+    if (params.addedVariableList) {
+      setValueFromSourceForGroup(params, dataItems, module.exports);
+    }
+  });
+  // Write file
+  setInterval(function () {
+    let csv = readFileSync([appRoot, '/src/api/opcua', id, params.fromFile]);
+    if (csv) {
+      results = papa.parse(csv, { delimiter: ';', header: true });
+      loForEach(results.data[0], function (value, key) {
+        results.data[0][key] = getTValue(value);
+      });
+      csv = papa.unparse(results.data, { delimiter: ';' });
+      if (isLog) inspector('histValueFromFileForCH_M52.csv:', csv);
+    }
+    const fileName = getFileName('data-', 'csv', true);
+    writeFileSync([path, fileName], csv);
+  }, params.interval);
+}
+
+/**
+ * @method histValueFromHttpPath
+ * @param {Object} params 
+ * @param {Object} addedValue 
+ * @returns {void}
+ */
+ function histValueFromHttpPath(params = {}, addedValue) {
+  let dataItems, dataType, results;
+  
+  // Set value from source
+  const setValueFromSource = (fileName, data) => {
+    // Set value from source
+    dataType = formatUAVariable(addedValue).dataType[1];
+    results = papa.parse(data, { delimiter: ';', header: true });
+    dataItems = results.data[0];
+    addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
+    if (isDebug) console.log(chalk.green('fileName:'), chalk.cyan(fileName));
+    if(isLog) inspector('histValueFromHttpPath.dataItems:', dataItems);
+
+    // Set value from source for group 
+    if (params.addedVariableList) {
+      setValueFromSourceForGroup(params, dataItems, module.exports);
+    }
+  };
+  // Write file
+  setInterval(async function () {
+    const file = await httpGetNewFileFromDir(params.path);
+    setValueFromSource(file.name, file.data);
+  }, params.interval);
+}
+
 module.exports = {
   plugForVariable,
+  valueFromFile,
+  histValueFromFile,
+  histValueFromHttpPath
 };
