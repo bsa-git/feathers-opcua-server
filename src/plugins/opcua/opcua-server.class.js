@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const { appRoot, inspector } = require('../lib');
-const { 
-  getOpcuaConfig, 
+const {
+  getOpcuaConfig,
   getEngineeringUnit,
   mergeOpcuaConfigOptions
 } = require('./opcua-helper');
@@ -13,11 +13,13 @@ const {
 } = require('node-opcua');
 const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/OPCUA_ServerOptions`);
 const opcuaDefaultHistoricalDataNodeOptions = require(`${appRoot}/src/api/opcua/ServerHistoricalDataNodeOptions`);
-const opcuaDefaultGetters = require(`${appRoot}/src/api/opcua/OPCUA_Getters`);
+const opcuaDefaultGetters = require('./opcua-getters');
 
 const loMerge = require('lodash/merge');
 const loOmit = require('lodash/omit');
 const chalk = require('chalk');
+
+// const opcuaDefaultGetters = loMerge({}, require(`${appRoot}/src/plugins/opcua/OPCUA_Getters`));
 
 const debug = require('debug')('app:plugins.opcua-server.class');
 const isLog = false;
@@ -121,7 +123,7 @@ class OpcuaServer {
     this.currentState.isCreated = true;
     // OPC-UA server created.
     console.log(chalk.yellow('OPCUAServer created'));
-    if(isLog) inspector('opcuaServerCreate.params:', this.params);
+    if (isLog) inspector('opcuaServerCreate.params:', this.params);
   }
 
   /**
@@ -149,7 +151,7 @@ class OpcuaServer {
     });
     this.currentState.endpoints = endpoints;
     this.currentState.isStarted = true;
-    if(isLog)  inspector('opcuaServerStart.currentState:', this.currentState);
+    if (isLog) inspector('opcuaServerStart.currentState:', this.currentState);
     return endpoints;
   }
 
@@ -348,36 +350,54 @@ class OpcuaServer {
     let addedVariableList, getterParams, valueParams, engineeringUnit;
     this.opcuaServerNotCreated();
     const id = this.params.serverInfo.applicationName;
-    if(isDebug) debug('constructAddressSpace.id:', id);
+    if (isDebug) debug('constructAddressSpace.id:', id);
     const opcuaConfig = getOpcuaConfig(id);
-    // Set arguments
+    // Merge params
     if (params === null) {
       params = mergeOpcuaConfigOptions(id);
     }
-    if(isLog) inspector('constructAddressSpace.params:', params);
-    if(Array.isArray(params.objects) && params.objects.length){
+    if (isLog) inspector('constructAddressSpace.params:', params);
+    if (Array.isArray(params.objects) && params.objects.length) {
       params.objects = params.objects.filter(item => !item.isDisable);
+    } else {
+      params.objects = [];
     }
-    if(Array.isArray(params.variables) && params.variables.length){
+    if (Array.isArray(params.variables) && params.variables.length) {
       params.variables = params.variables.filter(item => !item.isDisable);
+    } else {
+      params.variables = [];
     }
-    if(Array.isArray(params.groups) && params.groups.length){
+    if (Array.isArray(params.groups) && params.groups.length) {
       params.groups = params.groups.filter(item => !item.isDisable);
+    } else {
+      params.groups = [];
     }
-    if(Array.isArray(params.methods) && params.methods.length){
+    if (Array.isArray(params.methods) && params.methods.length) {
       params.methods = params.methods.filter(item => !item.isDisable);
+    } else {
+      params.methods = [];
     }
-    if(isLog) inspector('constructAddressSpace.filterParams:', params);
-    if (getters === null) {
+    if (isLog) inspector('constructAddressSpace.filterParams:', params);
+    // Merge getters
+    if (getters) {
+      getters = Object.assign({}, opcuaDefaultGetters, getters);
+    }
+    if (getters === null && opcuaConfig.paths.getters) {
       getters = require(`${appRoot}${opcuaConfig.paths.getters}`);
     }
-    loMerge(getters, opcuaDefaultGetters);
-    if (methods === null) {
+    if (!getters) {
+      getters = Object.assign({}, opcuaDefaultGetters);
+    }
+    // Merge methods
+    if (methods === null && opcuaConfig.paths.methods) {
       methods = require(`${appRoot}${opcuaConfig.paths.methods}`);
     }
+    methods = Object.assign({}, methods ? methods : {});
+
     // Get addressSpace and  namespace
     const addressSpace = this.opcuaServer.engine.addressSpace;
     const namespace = addressSpace.getOwnNamespace();
+    
     // Add objects
     if (params.objects.length) {
       params.objects.forEach(o => {
@@ -519,6 +539,7 @@ class OpcuaServer {
           const filterMethods = params.methods.filter(m => m.ownerName === o.browseName);
           if (filterMethods.length) {
             filterMethods.forEach(m => {
+              if (!methods[m.bindMethod]) return;
               let methodParams = {
                 nodeId: `s=${m.browseName}`,
                 browseName: m.browseName,
@@ -534,7 +555,7 @@ class OpcuaServer {
                 loMerge(methodParams, { inputArguments: m.inputArguments });
               }
               // Method outputArguments merge 
-              if ( m.outputArguments && m.outputArguments.length) {
+              if (m.outputArguments && m.outputArguments.length) {
                 m.outputArguments = m.outputArguments.map(arg => {
                   arg.dataType = DataType[arg.dataType];
                   return arg;

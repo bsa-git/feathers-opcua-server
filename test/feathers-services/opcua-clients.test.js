@@ -75,18 +75,18 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     stopListenPort(done);
   });
 
-  it('OPC-UA clients: registered the service', async () => {
+  it('1# OPC-UA clients: registered the service', async () => {
     const service = await getClientService(app, id);
     assert.ok(service, 'OPC-UA clients: registered the service');
   });
 
-  it('OPC-UA servers: registered the service', async () => {
+  it('2# OPC-UA servers: registered the service', async () => {
     const service = await getServerService(app, id);
     assert.ok(service, 'OPC-UA servers: registered the service');
   });
 
   //===== SERVER CREATE/CLIENT CREATE =======//
-  it('OPC-UA servers: created the service', async () => {
+  it('3# OPC-UA servers: created the service', async () => {
     const service = await getServerService(app, id);
     // service create
     const opcuaServer = await service.create(srvData);
@@ -94,7 +94,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     assert.ok(opcuaServer, 'OPC-UA servers: created the service');
   });
 
-  it('New user: created the service', async () => {
+  it('4# New user: created the service', async () => {
     const service = app.service('users');
     assert.ok(service, 'Users: registered the service');
     // service create
@@ -104,7 +104,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     assert.ok(newUser, 'newUser: created the service');
   });
 
-  it('OPC-UA clients: created the service', async () => {
+  it('5# OPC-UA clients: created the service', async () => {
     const service = await getClientService(app, id);
     // service create
     const params = { user: opcuaUser, provider: 'rest', authenticated: true };
@@ -114,7 +114,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     assert.ok(opcuaClient, 'OPC-UA clients: created the service');
   });
 
-  it('OPC-UA clients: Error in creating an existing service', async () => {
+  it('6# OPC-UA clients: Error in creating an existing service', async () => {
     try {
       const service = await getClientService(app, id);
       // service create
@@ -125,21 +125,21 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     }
   });
 
-  it('OPC-UA clients: get the service', async () => {
+  it('7# OPC-UA clients: get the service', async () => {
     const service = await getClientService(app, id);
     const opcuaClient = await service.get(id);
     if (isLog) inspector('get the service.currentState:', opcuaClient.client.getCurrentState());
     assert.ok(opcuaClient, 'OPC-UA servers: get the service');
   });
 
-  it('OPC-UA clients: find services', async () => {
+  it('8# OPC-UA clients: find services', async () => {
     const service = await getClientService(app, id);
     const opcuaClients = await service.find();
     if (isLog) inspector('find services.ids:', opcuaClients.map(cln => cln.id));
     assert.ok(opcuaClients.length, 'OPC-UA clients: find services');
   });
 
-  it('OPC-UA clients: remove the service', async () => {
+  it('9# OPC-UA clients: remove the service', async () => {
     try {
       // service remove
       const service = await getClientService(app, id);
@@ -153,7 +153,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     }
   });
 
-  it('OPC-UA clients: created the service', async () => {
+  it('10# OPC-UA clients: created the service', async () => {
     let opcuaClient;
     // service create
     const service = await getClientService(app, id);
@@ -167,14 +167,14 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     assert.ok(opcuaClient, 'OPC-UA clients: created the service');
   });
 
-  it('OPC-UA clients: update the service', async () => {
+  it('11# OPC-UA clients: update the service', async () => {
     const service = await getClientService(app, id);
     const opcuaClient = await service.update(id, clientData);
     if (isLog) inspector('Update the clients:', opcuaClient.client.getCurrentState());
     assert.ok(opcuaClient, 'OPC-UA clients: update the service');
   });
 
-  it('OPC-UA clients: patch the service', async () => {
+  it('12# OPC-UA clients: patch the service', async () => {
     const service = await getClientService(app, id);
     const opcuaClient = await service.patch(id, clientData);
     if (isLog) inspector('Patch the clients:', opcuaClient.client.getCurrentState());
@@ -183,14 +183,14 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
   //============== CLIENT SESSION-CLOSE / SESSION-CREATE ====================//
 
-  it('OPC-UA clients: session close the service', async () => {
+  it('13# OPC-UA clients: session close the service', async () => {
     const service = await getClientService(app, id);
     const opcuaClient = await service.sessionClose(id);
     if (isLog) inspector('Session close the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
   });
 
-  it('OPC-UA clients: session create the service', async () => {
+  it('14# OPC-UA clients: session create the service', async () => {
     const service = await getClientService(app, id);
     const opcuaClient = await service.sessionCreate(id);
     if (isLog) inspector('Session create the clients:', opcuaClient);
@@ -199,7 +199,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
   //============== CLIENT-DISCONNECT / CLIENT-CONNECT ====================//
 
-  it('OPC-UA clients: disconnect the service', async () => {
+  it('15# OPC-UA clients: disconnect the service', async () => {
     const service = await getClientService(app, id);
     let data = {id, action: 'sessionClose'};
     let opcuaClient = await service.create(data);
@@ -209,7 +209,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
   });
 
-  it('OPC-UA clients: connect the service', async () => {
+  it('16# OPC-UA clients: connect the service', async () => {
     const srvCurrentState = await getSrvCurrentState(app, id);
     const service = await getClientService(app, id);
     let data = {id, action: 'opcuaClientConnect', params: srvCurrentState};
@@ -222,7 +222,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
   //============== CLIENT SESSION READ NAMESPACE ARRAY ====================//
 
-  it('OPC-UA clients: session read namespace array', async () => {
+  it('17# OPC-UA clients: session read namespace array', async () => {
     const service = await getClientService(app, id);
     const result = await service.sessionReadNamespaceArray(id);
     console.log(chalk.green('sessionReadNamespaceArray:'), chalk.cyan(`[ ${result} ]`));
@@ -231,7 +231,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
   //============== SESSION BROWSE ====================//
 
-  it('OPC-UA clients: session browse', async () => {
+  it('18# OPC-UA clients: session browse', async () => {
     let browseResult = null, browseNames = '', nodeIds = '';
     const service = await getClientService(app, id);
     // service.sessionBrowse
@@ -249,7 +249,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     assert.ok(browseResult, 'OPC-UA client session browse');
   });
 
-  it('OPC-UA clients: session translate browse path', async () => {
+  it('19# OPC-UA clients: session translate browse path', async () => {
     const service = await getClientService(app, id);
     // service.sessionTranslateBrowsePath
     const folder = 'RootFolder';
@@ -266,7 +266,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
   //============== SESSION READ VALUES ====================//
 
-  it('OPC-UA clients: session read', async () => {
+  it('20# OPC-UA clients: session read', async () => {
     let nameNodeIds, attributeIds, readResult = null, value = null;
     const service = await getClientService(app, id);
     // service.sessionRead
@@ -300,7 +300,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     assert.ok(readResult, 'OPC-UA client session read');
   });
 
-  it('OPC-UA clients: session read variable value', async () => {
+  it('21# OPC-UA clients: session read variable value', async () => {
     let value = null, readResult = null;
     const service = await getClientService(app, id);
     // service.sessionReadVariableValue
@@ -318,7 +318,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     assert.ok(readResult, 'OPC-UA client session read');
   });
 
-  it('OPC-UA client session read all attributes for "Device1.Temperature"', async () => {
+  it('22# OPC-UA client session read all attributes for "Device1.Temperature"', async () => {
     let value = null, readResult = null;
     const service = await getClientService(app, id);
     // service.sessionReadAllAttributes
@@ -345,7 +345,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     }
   });
 
-  it('OPC-UA client session read all attributes for "Device2.PressureVesselDevice"', async () => {
+  it('23# OPC-UA client session read all attributes for "Device2.PressureVesselDevice"', async () => {
     let value = null, readResult = null;
     const service = await getClientService(app, id);
     // service.sessionReadAllAttributes
@@ -378,7 +378,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
   
   //============== SESSION HISTORY VALUES ====================//
 
-  it('OPC-UA clients: session history value', async () => {
+  it('24# OPC-UA clients: session history value', async () => {
     let data, readResult = null;
     const service = await getClientService(app, id);
 
@@ -423,7 +423,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     }
   });
 
-  it('OPC-UA clients: session history value from file', async () => {
+  it('25# OPC-UA clients: session history value from file', async () => {
     let dataItems, readResult = null, accumulator = '';
     const service = await getClientService(app, id);
 
@@ -470,7 +470,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     }
   });
 
-  it('OPC-UA clients: session history value from Device2.02F5', async () => {
+  it('26# OPC-UA clients: session history value from Device2.02F5', async () => {
     let dataItem, readResult = null;
     const service = await getClientService(app, id);
 
@@ -516,7 +516,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     }
   });
 
-  it('OPC-UA clients: session history value from Device2.02P5', async () => {
+  it('27# OPC-UA clients: session history value from Device2.02P5', async () => {
     let dataItem, readResult = null;
     const service = await getClientService(app, id);
 
@@ -563,7 +563,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
   //============== SESSION WRITE VALUE ====================//
 
-  it('OPC-UA clients: session write single node value', async () => {
+  it('28# OPC-UA clients: session write single node value', async () => {
     let readResult, statusCode = null;
     const service = await getClientService(app, id);
     // service.sessionWriteSingleNode
@@ -581,7 +581,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     assert.ok(readResult[0].value.value === dataForWrite.value, 'OPC-UA clients: session write single node value');
   });
 
-  it('OPC-UA clients: session write node value', async () => {
+  it('29# OPC-UA clients: session write node value', async () => {
     let statusCodes = [], readResult = null;
     const service = await getClientService(app, id);
     // service.sessionWrite
@@ -609,7 +609,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
   //============== SESSION CALL METHOD ====================//
 
-  it('OPC-UA clients: session call method', async () => {
+  it('30# OPC-UA clients: session call method', async () => {
     let callResults = [];
     const service = await getClientService(app, id);
     // service.sessionCallMethod
@@ -630,7 +630,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     assert.ok(callResults, 'OPC-UA clientS: session call method');
   });
 
-  it('OPC-UA clients: session get method argument definition', async () => {
+  it('31# OPC-UA clients: session get method argument definition', async () => {
     let argumentsDefinition = [];
     const service = await getClientService(app, id);
     // service.sessionGetArgumentDefinition
@@ -649,7 +649,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
   //============== START SUBSCRIPTION ====================//
 
-  it('OPC-UA clients: subscription create', async () => {
+  it('32# OPC-UA clients: subscription create', async () => {
     const service = await getClientService(app, id);
     // service.subscriptionCreate
     const result = await service.subscriptionCreate(id);
@@ -658,7 +658,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     assert.ok(true, 'OPC-UA clients: subscription create');
   });
 
-  it('OPC-UA clients: subscription monitor', async () => {
+  it('33# OPC-UA clients: subscription monitor', async () => {
     const service = await getClientService(app, id);
     // service.getNodeIds
     const nodeIds = await service.getNodeIds(id, ['Device1.Temperature']);
@@ -673,7 +673,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     }
   });
 
-  it('OPC-UA clients: subscription get monitored items', async () => {
+  it('34# OPC-UA clients: subscription get monitored items', async () => {
     const service = await getClientService(app, id);
     // service.sessionGetMonitoredItems
     const monitoredItems = await service.sessionGetMonitoredItems(id);
@@ -683,7 +683,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     assert.ok(true, 'OPC-UA client subscription monitor');
   });
 
-  it('OPC-UA clients: properties of service', async () => {
+  it('35# OPC-UA clients: properties of service', async () => {
     const service = await getClientService(app, id);
 
     let result = await service.sessionSubscriptionCount(id);
@@ -706,7 +706,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     assert.ok(true, 'OPC-UA clients: properties of client');
   });
 
-  it('OPC-UA servers: properties of service', async () => {
+  it('36# OPC-UA servers: properties of service', async () => {
     const service = await getServerService(app, id);
 
     let result = await service.getBytesWritten(id);
@@ -746,7 +746,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     assert.ok(true, 'OPC-UA servers: properties of server');
   });
 
-  it('OPC-UA clients: subscription terminate', async () => {
+  it('37# OPC-UA clients: subscription terminate', async () => {
     const service = await getClientService(app, id);
     await pause(1000);
     // service.subscriptionTerminate
@@ -758,21 +758,21 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
   //===== SESSION CLOSE/CLIENT DISCONNECT/SERVER SHUTDOWN =====//
 
-  it('OPC-UA clients: session close the service', async () => {
+  it('38# OPC-UA clients: session close the service', async () => {
     const service = await getClientService(app, id);
     const opcuaClient = await service.sessionClose(id);
     if (isLog) inspector('Session close the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
   });
 
-  it('OPC-UA clients: disconnect the service', async () => {
+  it('39# OPC-UA clients: disconnect the service', async () => {
     const service = await getClientService(app, id);
     const opcuaClient = await service.opcuaClientDisconnect(id);
     if (isLog) inspector('Session close the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
   });
 
-  it('OPC-UA servers: shutdown the service', async () => {
+  it('40# OPC-UA servers: shutdown the service', async () => {
     const service = await getServerService(app, id);
     // const opcuaServer = await service.opcuaServerShutdown(id, 1500);
     const opcuaServer = await service.opcuaServerShutdown(id);

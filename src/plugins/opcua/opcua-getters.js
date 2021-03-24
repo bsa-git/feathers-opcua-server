@@ -13,7 +13,7 @@ const {
   getFileName,
   getPathBasename,
   createPath
-} = require('../../plugins/lib');
+} = require('../lib');
 
 
 const loRound = require('lodash/round');
@@ -23,7 +23,7 @@ const {
   formatUAVariable,
   getInitValueForDataType,
   setValueFromSourceForGroup
-} = require('../../plugins/opcua/opcua-helper');
+} = require('./opcua-helper');
 
 const {
   DataType,
@@ -42,7 +42,7 @@ const isLog = false;
  * @param {Number} t 
  * @returns {Number}
  */
- const getTValue = function (t) {
+const getTValue = function (t) {
   let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
   return loRound(value, 3);
 };
@@ -89,7 +89,7 @@ function plugForVariable(params = {}, addedValue) {
  * @param {Object} addedValue 
  * @returns {String}
  */
- function valueFromFile(params = {}, addedValue) {
+function valueFromFile(params = {}, addedValue) {
   let dataItems, results;
   let id = params.myOpcuaServer.id;
 
@@ -114,7 +114,7 @@ function plugForVariable(params = {}, addedValue) {
  * @param {Object} addedValue 
  * @returns {void}
  */
- function histValueFromFile(params = {}, addedValue) {
+function histValueFromFile(params = {}, addedValue) {
   let dataItems, dataType, results;
   let id = params.myOpcuaServer.id;
 
@@ -164,7 +164,7 @@ function plugForVariable(params = {}, addedValue) {
  * @param {Object} addedValue 
  * @returns {void}
  */
- function histValueFromHttpPath(params = {}, addedValue) {
+function histValueFromHttpPath(params = {}, addedValue) {
   let dataItems, dataType, results;
   
   // Set value from source

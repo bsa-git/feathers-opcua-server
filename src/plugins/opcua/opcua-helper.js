@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
+
 const {
   inspector,
   appRoot,
@@ -35,6 +36,8 @@ const loConcat = require('lodash/concat');
 const loOmit = require('lodash/omit');
 const loAt = require('lodash/at');
 const loForEach = require('lodash/forEach');
+
+// const opcuaDefaultGetters = require(`${appRoot}/src/api/opcua/OPCUA_Getters`);
 
 
 const debug = require('debug')('app:opcua-helper');
@@ -369,7 +372,7 @@ const getOpcuaConfigsForMe = function () {
  */
 const getOpcuaConfigOptions = function (id, browseName = '') {
   // Get opcuaOption 
-  opcuaOptions = mergeOpcuaConfigOptions(id);
+  let opcuaOptions = mergeOpcuaConfigOptions(id);
   opcuaOptions = loConcat(opcuaOptions.objects, opcuaOptions.variables, opcuaOptions.groups, opcuaOptions.methods);
   if(browseName){
     opcuaOptions =  opcuaOptions.find(opt => opt.browseName === browseName);
@@ -382,7 +385,7 @@ const getOpcuaConfigOptions = function (id, browseName = '') {
  * @param {String} id 
  * @returns {Object}
  */
- const mergeOpcuaConfigOptions = function (id) {
+const mergeOpcuaConfigOptions = function (id) {
   let baseOptions = {}, mergeOpcuaOptions = {};
   // Get opcuaOption 
   let opcuaOptions = getOpcuaConfig(id);
@@ -395,7 +398,7 @@ const getOpcuaConfigOptions = function (id, browseName = '') {
         } else {
           baseOptions[key] = value;
         }
-      })  
+      });  
     });
     const options = require(`${appRoot}${opcuaOptions.paths.options}`);
     loForEach(options, (value, key) => {
@@ -406,11 +409,11 @@ const getOpcuaConfigOptions = function (id, browseName = '') {
             const mergeValue = loMerge({}, baseOptions[key][findedIndex], val);
             baseOptions[key][findedIndex] = mergeValue;
           }
-        })
+        });
       } else {
         baseOptions[key] = value;
       }
-    })  
+    });  
     mergeOpcuaOptions = loMerge({}, baseOptions);
   } else {
     mergeOpcuaOptions = loMerge({}, require(`${appRoot}${opcuaOptions.paths.options}`));
@@ -761,7 +764,16 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}, getters) => {
       const currentState = params.myOpcuaServer.getCurrentState();
       const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
       if (isDebug) inspector('setValueFromSourceForGroup.variable:', variable);
+      
+      // Merge opcuaDefaultGetters to getters
+      // if(getters[variable.getter]){
+      //   params.myOpcuaServer.setValueFromSource(variable, groupVariable, getters[variable.getter], value);
+      // } else {
+      //   params.myOpcuaServer.setValueFromSource(variable, groupVariable, opcuaDefaultGetters[variable.getter], value);
+      // }
+
       params.myOpcuaServer.setValueFromSource(variable, groupVariable, getters[variable.getter], value);
+      
       if (isDebug) debug('setValueFromSourceForGroup.browseName:', `"${browseName}" =`, value);
     }
   });

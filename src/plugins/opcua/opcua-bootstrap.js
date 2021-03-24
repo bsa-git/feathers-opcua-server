@@ -23,7 +23,8 @@ const isLog = false;
 module.exports = async function opcuaBootstrap(app) {
   let service = null, opcuaServer = null, opcuaClient = null;
 
-  const opcuaOptions = getOpcuaConfig();
+  let opcuaOptions = getOpcuaConfig();
+  opcuaOptions = opcuaOptions.filter(item => !item.isDisable);
   for (let index = 0; index < opcuaOptions.length; index++) {
     const option = opcuaOptions[index];
     // const myPort = app.get('port');

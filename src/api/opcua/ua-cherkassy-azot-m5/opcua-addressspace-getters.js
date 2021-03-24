@@ -15,9 +15,10 @@ const {
 
 const {
   readOnlyNewFile,
-  getPathBasename,
   createPath
 } = require('../../../plugins/lib/file-operations');
+
+const opcuaDefaultGetters = require('../../../plugins/opcua/opcua-getters');
 
 const loForEach = require('lodash/forEach');
 
@@ -91,7 +92,12 @@ function histValueFromFileForCH_M52(params = {}, addedValue) {
   });
 }
 
-module.exports = {
+// module.exports = {
+//   histValueFromFileForCH_M51,
+//   histValueFromFileForCH_M52,
+// };
+
+module.exports = Object.assign({}, opcuaDefaultGetters, {
   histValueFromFileForCH_M51,
   histValueFromFileForCH_M52,
-};
+});

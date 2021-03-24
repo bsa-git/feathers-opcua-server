@@ -9,9 +9,10 @@
       "hist": true,
       "group": true,
       "variableGetType": "valueFromSource",
-      "getter": "histValueFromFileForCH_M51",
+      "getter": "histValueFromFile",
       "getterParams": {
         "path": "test/data/tmp/ch-m51",
+        "fromFile": "data-CH_M51.csv",
         "interval": 500
       }
     },
@@ -24,9 +25,10 @@
       "hist": true,
       "group": false,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "histValueFromFile",
       "getterParams": {
         "path": "test/data/tmp/ch-m52",
+        "fromFile": "data-CH_M52.csv",
         "interval": 500
       }
     }

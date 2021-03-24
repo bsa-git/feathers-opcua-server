@@ -25,8 +25,8 @@
         "/src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json"
       ],
       "options": "/src/api/opcua/ua-cherkassy-azot-m5_test1/AddressSpaceOptions.json",
-      "getters": "/src/api/opcua/ua-cherkassy-azot-m5_test1/opcua-addressspace-getters",
-      "methods": "/src/api/opcua/ua-cherkassy-azot-m5_test1/opcua-addressspace-methods",
+      "getters": "",
+      "methods": "",
       "subscriptions": "/src/api/opcua/ua-cherkassy-azot-m5_test1/opcua-addressspace-subscriptions"
     }
   },
@@ -49,13 +49,14 @@
         "/src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json"
       ],
       "options": "/src/api/opcua/ua-cherkassy-azot-m5_test2/AddressSpaceOptions.json",
-      "getters": "/src/api/opcua/OPCUA_Getters",
-      "methods": "/src/api/opcua/ua-cherkassy-azot-m5_test2/opcua-addressspace-methods",
+      "getters": "",
+      "methods": "",
       "subscriptions": "/src/api/opcua/ua-cherkassy-azot-m5_test2/opcua-addressspace-subscriptions",
       "client-scripts": "/src/api/opcua/ua-cherkassy-azot-m5_test2/opcua-client-scripts"
     }
   },
   {
+    "isDisable": false,
     "id": "ua-cherkassy-azot-m5_test3",
     "name": "380-472-00203826-m5_test3",
     "endpointUrl": "",
@@ -63,19 +64,13 @@
     "srvServiceUrl": "http://10.60.0.220:3030",
     "clientServiceUrl": "http://10.60.0.220:3030",
     "clientScript": "subscriptionMonitor_CH_M5",
-    "include": {
-      "tests": [
-        "mssql-tedious.test.js",
-        "mssql-datasets.test.js"
-      ]
-    },
     "paths": {
       "base-options": [
         "/src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json"
       ],
       "options": "/src/api/opcua/ua-cherkassy-azot-m5_test3/AddressSpaceOptions.json",
-      "getters": "/src/api/opcua/OPCUA_Getters",
-      "methods": "/src/api/opcua/ua-cherkassy-azot-m5_test3/opcua-addressspace-methods",
+      "getters": "",
+      "methods": "",
       "subscriptions": "/src/api/opcua/ua-cherkassy-azot-m5_test3/opcua-addressspace-subscriptions",
       "client-scripts": "/src/api/opcua/ua-cherkassy-azot-m5_test3/opcua-client-scripts"
     }
@@ -91,7 +86,7 @@
     "paths": {
       "options": "/src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json",
       "getters": "/src/api/opcua/ua-cherkassy-azot-m5/opcua-addressspace-getters",
-      "methods": "/src/api/opcua/ua-cherkassy-azot-m5/opcua-addressspace-methods",
+      "methods": "",
       "subscriptions": "/src/api/opcua/ua-cherkassy-azot-m5/opcua-addressspace-subscriptions",
       "client-scripts": "/src/api/opcua/ua-cherkassy-azot-m5/opcua-client-scripts"
     }

@@ -26,6 +26,8 @@ const {
   getPathBasename
 } = require('../../../plugins/lib/file-operations');
 
+const opcuaDefaultGetters = require('../../../plugins/opcua/opcua-getters');
+
 const loRound = require('lodash/round');
 
 const debug = require('debug')('app:opcua-addressspace-getters');
@@ -164,11 +166,11 @@ function percentageMemUsed() {
   return new Variant({ dataType: DataType.Double, value: value });
 }
 
-module.exports = {
+module.exports = Object.assign({}, opcuaDefaultGetters, {
   valueSimulate1,
   valueFromSource1,
   valueFromSource2,
   histValueFromSource,
   histValueFromFile,
   percentageMemUsed
-};
+});

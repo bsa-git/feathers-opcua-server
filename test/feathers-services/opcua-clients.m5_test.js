@@ -5,7 +5,6 @@ const port = app.get('port') || 3030;
 const {
   getServerService,
   getClientService,
-  getOpcuaConfigForMe
 } = require('../../src/plugins/opcua/opcua-helper');
 
 const {
@@ -36,6 +35,7 @@ const {
 const debug = require('debug')('app:test.opcua-clients');
 const isDebug = false;
 const isLog = false;
+
 
 // Options
 const srvData = {
