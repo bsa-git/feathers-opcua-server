@@ -1,7 +1,15 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { inspector, appRoot } = require('../../plugins/lib');
-const { getClientForProvider, getSubscriptionHandler } = require('../../plugins/opcua/opcua-helper');
+const { 
+  inspector, 
+  appRoot 
+} = require('../../plugins/lib');
+
+const { 
+  getClientForProvider, 
+  getSubscriptionHandler,
+  getOpcuaConfig
+} = require('../../plugins/opcua/opcua-helper');
 
 const {
   Variant,
@@ -66,7 +74,7 @@ module.exports = function opcuaClientMixins(service, path) {
       result = ['id', 'nameNodeIds', 'attributeIds', 'maxAge'];
       break;
     case 'sessionReadHistoryValues':
-    case 'sessionReadHistoryValuesEx':  
+    case 'sessionReadHistoryValuesEx':
       result = ['id', 'nameNodeIds', 'start', 'end'];
       break;
     case 'sessionWriteSingleNode':
@@ -80,7 +88,7 @@ module.exports = function opcuaClientMixins(service, path) {
       break;
     case 'subscriptionMonitor':
       result = ['id', 'subscriptionHandlerName', 'itemToMonitor', 'requestedParameters', 'timestampsToReturn'];
-      break;  
+      break;
     default:
       break;
     }
@@ -523,8 +531,29 @@ module.exports = function opcuaClientMixins(service, path) {
    * @returns {ClientMonitoredItem}
    */
   service.subscriptionMonitor = async function (id, subscriptionHandlerName, itemToMonitor, requestedParameters, timestampsToReturn) {
+    let subscriptionHandler = null;
+    //------------------------------------
     const opcuaClient = await service.get(id);
-    const subscriptionHandler = getSubscriptionHandler(id, subscriptionHandlerName);
+
+    if (subscriptionHandlerName) {
+      subscriptionHandler = getSubscriptionHandler(id, subscriptionHandlerName);
+    } else {
+      // Get subscriptionHandlerName
+      const nodeId = itemToMonitor.nodeId;
+      const itemNodeId = service.getItemNodeId(id, nodeId);
+      // Get subscriptionHandler for variable
+      if (itemNodeId.subscription) {
+        subscriptionHandlerName = itemNodeId.subscription;
+        subscriptionHandler = getSubscriptionHandler(id, subscriptionHandlerName);
+      } else {
+        // Get opcuaOption 
+        const opcuaOption = getOpcuaConfig(id);
+        // Get subscriptionHandler for opcua option
+        if(opcuaOption.subscription){
+          subscriptionHandler = getSubscriptionHandler(id, opcuaOption.subscription);
+        }
+      }
+    }
     result = await opcuaClient.client.subscriptionMonitor(subscriptionHandler, itemToMonitor, requestedParameters, timestampsToReturn);
     return result;
   };

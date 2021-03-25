@@ -19,8 +19,6 @@ const loMerge = require('lodash/merge');
 const loOmit = require('lodash/omit');
 const chalk = require('chalk');
 
-// const opcuaDefaultGetters = loMerge({}, require(`${appRoot}/src/plugins/opcua/OPCUA_Getters`));
-
 const debug = require('debug')('app:plugins.opcua-server.class');
 const isLog = false;
 const isDebug = false;
@@ -490,6 +488,7 @@ class OpcuaServer {
               },
               v.aliasName ? { aliasName: v.aliasName } : {},
               v.group ? { group: v.group } : {},
+              v.hist ? { hist: v.hist } : {},
               v.variableGetType ? { variableGetType: v.variableGetType } : {},
               v.getter ? { getter: v.getter } : {},
               v.getterParams ? { getterParams: v.getterParams } : {},
@@ -670,6 +669,7 @@ class OpcuaServer {
         v.aliasName ? { aliasName: v.aliasName } : {},
         v.variableGetType ? { variableGetType: v.variableGetType } : {},
         v.getter ? { getter: v.getter } : {},
+        v.hist ? { hist: v.hist } : {},
         v.getterParams ? { getterParams: v.getterParams } : {},
         v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
         loOmit(v.valueParams, ['componentOf'])

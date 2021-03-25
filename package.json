@@ -32,7 +32,7 @@
     "eslint:debug": "eslint --fix src/. test/debug/.  --config .eslintrc.json",
     "clean": "shx rm -rf test/data/*.db",
     "shx": "shx rm test/data/*.db",
-    "dev": "cross-env NODE_ENV=development DEBUG=app:* nodemon src/",
+    "dev": "cross-env NODE_ENV=development DEBUG=app:* npm run eslint && nodemon src/",
     "start": "node src/",
     "update-dependencies": "ncu -u"
   },

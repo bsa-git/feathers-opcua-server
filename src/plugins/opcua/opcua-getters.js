@@ -56,6 +56,7 @@ const getTValue = function (t) {
  */
 function plugForVariable(params = {}, addedValue) {
   let value;
+  //-----------------------------------------------
   if (isDebug) debug('plugForVariable.params:', params);
   if (addedValue) {
     value = getInitValueForDataType(params.dataType);
@@ -92,7 +93,7 @@ function plugForVariable(params = {}, addedValue) {
 function valueFromFile(params = {}, addedValue) {
   let dataItems, results;
   let id = params.myOpcuaServer.id;
-
+  //------------------------------
   // Read file
   let csv = readFileSync([appRoot, '/src/api/opcua', id, params.fromFile]);
   results = papa.parse(csv, { delimiter: ';', header: true });
@@ -117,7 +118,7 @@ function valueFromFile(params = {}, addedValue) {
 function histValueFromFile(params = {}, addedValue) {
   let dataItems, dataType, results;
   let id = params.myOpcuaServer.id;
-
+  //------------------------------------
   // Create path
   const path = createPath(params.path);
 
@@ -151,11 +152,42 @@ function histValueFromFile(params = {}, addedValue) {
         results.data[0][key] = getTValue(value);
       });
       csv = papa.unparse(results.data, { delimiter: ';' });
-      if (isLog) inspector('histValueFromFileForCH_M52.csv:', csv);
+      if (isLog) inspector('histValueFromFile.csv:', csv);
     }
     const fileName = getFileName('data-', 'csv', true);
     writeFileSync([path, fileName], csv);
   }, params.interval);
+}
+
+/**
+ * @method histValueFromFileForCH_M51
+ * @param {Object} params 
+ * @param {Object} addedValue 
+ */
+function histValueFromPath(params = {}, addedValue) {
+  let dataItems, dataType, results;
+  //----------------------------------
+  // Create path
+  const path = createPath(params.path);
+
+  // Watch read only new file
+  readOnlyNewFile(path, (filePath, data) => {
+    // Show filePath, data
+    if (isDebug) console.log(chalk.green('histValueFromPath.file:'), chalk.cyan(filePath));
+    if (isDebug) console.log(chalk.green('histValueFromPath.data:'), chalk.cyan(data));
+    // Set value from source
+    dataType = formatUAVariable(addedValue).dataType[1];
+    results = papa.parse(data, { delimiter: ';', header: true });
+    dataItems = results.data[0];
+    addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
+
+    if (isLog) inspector('histValueFromPath.dataItems:', dataItems);
+
+    // Set value from source for group 
+    if (params.addedVariableList) {
+      setValueFromSourceForGroup(params, dataItems, module.exports);
+    }
+  });
 }
 
 /**
@@ -193,5 +225,6 @@ module.exports = {
   plugForVariable,
   valueFromFile,
   histValueFromFile,
+  histValueFromPath,
   histValueFromHttpPath
 };

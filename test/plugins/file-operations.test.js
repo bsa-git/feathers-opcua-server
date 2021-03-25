@@ -116,8 +116,8 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
 
     if (getOsPlatform() === 'win32') {
 
-      let path = winPathToUncPath([appRoot, 'src/api/opcua/ua-cherkassy-azot-m5_test1']);
-      let fileName = 'data-CH_M51.csv';
+      let path = winPathToUncPath([appRoot, 'src/api/opcua']);
+      let fileName = 'UNECE_to_OPCUA.csv';
       // Does UNC dir exist
       let isExist = doesDirExist(path);
 
@@ -135,7 +135,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
       // Make 'share' dir
       path = makeDirSync([path, 'share']);
       // Write file to UNC dir
-      fileName = 'data-CH_M51.json';
+      fileName = 'UNECE_to_OPCUA.json';
       isExist = doesDirExist(path);
       if (isExist) writeFileSync([path, fileName], data, true);
       // Clear dir

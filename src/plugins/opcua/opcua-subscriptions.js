@@ -1,12 +1,15 @@
 /* eslint-disable no-unused-vars */
 const { 
   inspector, 
+} = require('../lib');
+
+const { 
   getValueFromNodeId,
-} = require('../../plugins');
+} = require('./opcua-helper');
 
 const chalk = require('chalk');
 
-const debug = require('debug')('app:OPCUA_Subscriptions');
+const debug = require('debug')('app:opcua-subscriptions');
 const isDebug = false;
 const isLog = false;
 

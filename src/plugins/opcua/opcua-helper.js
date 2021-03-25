@@ -374,8 +374,8 @@ const getOpcuaConfigOptions = function (id, browseName = '') {
   // Get opcuaOption 
   let opcuaOptions = mergeOpcuaConfigOptions(id);
   opcuaOptions = loConcat(opcuaOptions.objects, opcuaOptions.variables, opcuaOptions.groups, opcuaOptions.methods);
-  if(browseName){
-    opcuaOptions =  opcuaOptions.find(opt => opt.browseName === browseName);
+  if (browseName) {
+    opcuaOptions = opcuaOptions.find(opt => opt.browseName === browseName);
   }
   return opcuaOptions;
 };
@@ -393,27 +393,29 @@ const mergeOpcuaConfigOptions = function (id) {
     opcuaOptions.paths['base-options'].forEach(path => {
       const opt = loMerge({}, require(`${appRoot}${path}`));
       loForEach(opt, (value, key) => {
-        if(baseOptions[key]){
-          baseOptions[key] =  loConcat(baseOptions[key], value);
+        if (baseOptions[key]) {
+          baseOptions[key] = loConcat(baseOptions[key], value);
         } else {
           baseOptions[key] = value;
         }
-      });  
+      });
     });
-    const options = require(`${appRoot}${opcuaOptions.paths.options}`);
-    loForEach(options, (value, key) => {
-      if(baseOptions[key]){
-        loForEach(value, (val) => {
-          const findedIndex = baseOptions[key].findIndex(opt => opt.browseName === val.browseName);
-          if(findedIndex > -1){
-            const mergeValue = loMerge({}, baseOptions[key][findedIndex], val);
-            baseOptions[key][findedIndex] = mergeValue;
-          }
-        });
-      } else {
-        baseOptions[key] = value;
-      }
-    });  
+    if (opcuaOptions.paths.options) {
+      const options = require(`${appRoot}${opcuaOptions.paths.options}`);
+      loForEach(options, (value, key) => {
+        if (baseOptions[key]) {
+          loForEach(value, (val) => {
+            const findedIndex = baseOptions[key].findIndex(opt => opt.browseName === val.browseName);
+            if (findedIndex > -1) {
+              const mergeValue = loMerge({}, baseOptions[key][findedIndex], val);
+              baseOptions[key][findedIndex] = mergeValue;
+            }
+          });
+        } else {
+          baseOptions[key] = value;
+        }
+      });
+    }
     mergeOpcuaOptions = loMerge({}, baseOptions);
   } else {
     mergeOpcuaOptions = loMerge({}, require(`${appRoot}${opcuaOptions.paths.options}`));
@@ -431,13 +433,22 @@ const mergeOpcuaConfigOptions = function (id) {
  * @returns {Function}
  */
 const getSubscriptionHandler = function (id, nameFile = '') {
-  const defaultNameFile = 'onChangedCommonHandler';
-  const subscriptionDefaultHandler = require(`${appRoot}/src/api/opcua/OPCUA_Subscriptions`)[defaultNameFile];
+  let defaultNameFile = 'onChangedCommonHandler', subscriptionHandler = null;
+  const subscriptionDefaultHandlers = require('./opcua-subscriptions');
+  //-------------------------------------------------------------------
+  // Get subscriptionDefaultHandler
+  if (nameFile) {
+    subscriptionHandler = subscriptionDefaultHandlers[nameFile];
+  }
   // Get opcuaOption 
   const opcuaOption = getOpcuaConfig(id);
   // Get subscriptionHandler
-  const subscriptionHandlers = require(`${appRoot}${opcuaOption.paths.subscriptions}`);
-  return (nameFile && subscriptionHandlers[nameFile]) ? subscriptionHandlers[nameFile] : subscriptionDefaultHandler;
+  if (opcuaOption.paths.subscriptions && nameFile) {
+    const subscriptionHandlers = require(`${appRoot}${opcuaOption.paths.subscriptions}`);
+    subscriptionHandler = subscriptionHandlers[nameFile];
+  }
+  subscriptionHandler = subscriptionHandler ? subscriptionHandler : subscriptionDefaultHandlers[defaultNameFile];
+  return subscriptionHandler;
 };
 
 /**
@@ -447,13 +458,23 @@ const getSubscriptionHandler = function (id, nameFile = '') {
  * @returns {Function}
  */
 const getOpcuaClientScript = function (id, nameScript = '') {
+  let opcuaClientScripts, opcuaClientScript;
+  //--------------------------------------------
   if (isDebug) debug('getOpcuaClientScript.id,nameScript:', id, nameScript);
   // Get opcuaOption 
   const opcuaOption = getOpcuaConfig(id);
   // Get opcuaClientScript
-  const opcuaClientScripts = require(`${appRoot}${opcuaOption.paths['client-scripts']}`);
+  if (opcuaOption.paths['client-scripts']) {
+    opcuaClientScripts = require(`${appRoot}${opcuaOption.paths['client-scripts']}`);
+    opcuaClientScript = opcuaClientScripts[nameScript];
+  } else {
+    opcuaClientScripts = require(`${appRoot}/src/plugins/opcua/opcua-client-scripts`);
+    opcuaClientScript = opcuaClientScripts[nameScript];
+  }
+  if (!opcuaClientScript) {
+    throw new Error(`It is not possible to find the opcua client script for id=${id} and nameScript="${nameScript}"`);
+  }
   if (isDebug) debug('getOpcuaClientScript.opcuaClientScripts:', opcuaClientScripts);
-  const opcuaClientScript = opcuaClientScripts[nameScript];
   if (isDebug) debug('getOpcuaClientScript.opcuaClientScript:', opcuaClientScript);
   return opcuaClientScript;
 };
@@ -567,7 +588,7 @@ const getParamsAddressSpace = (id) => {
   let opcuaConfigOptions = getOpcuaConfigOptions(id);
   opcuaConfigOptions = opcuaConfigOptions.filter(item => !item.isDisable);
   let objects = opcuaConfigOptions.filter(opt => opt.type === 'object');
-  let variables = opcuaConfigOptions.filter(opt => opt.type.includes('variable'));
+  let variables = opcuaConfigOptions.filter(opt =>  opt.type? opt.type.includes('variable') : false);
   let methods = opcuaConfigOptions.filter(opt => opt.type === 'method');
 
   paramsAddressSpace.objects = objects.map(o => {
@@ -649,7 +670,7 @@ const getSrvCurrentState = async (app, id) => {
     const opcuaOption = getOpcuaConfig(id);
     currentState.id = id;
     currentState.productName = opcuaOption.name;
-    currentState.port = opcuaOption.port;
+    // currentState.port = opcuaOption.port;
     currentState.endpointUrl = opcuaOption.endpointUrl;
     currentState.paramsAddressSpace = getParamsAddressSpace(id);
   }
@@ -764,16 +785,8 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}, getters) => {
       const currentState = params.myOpcuaServer.getCurrentState();
       const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
       if (isDebug) inspector('setValueFromSourceForGroup.variable:', variable);
-      
-      // Merge opcuaDefaultGetters to getters
-      // if(getters[variable.getter]){
-      //   params.myOpcuaServer.setValueFromSource(variable, groupVariable, getters[variable.getter], value);
-      // } else {
-      //   params.myOpcuaServer.setValueFromSource(variable, groupVariable, opcuaDefaultGetters[variable.getter], value);
-      // }
-
       params.myOpcuaServer.setValueFromSource(variable, groupVariable, getters[variable.getter], value);
-      
+
       if (isDebug) debug('setValueFromSourceForGroup.browseName:', `"${browseName}" =`, value);
     }
   });

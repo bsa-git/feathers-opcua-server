@@ -8,9 +8,9 @@
     "clientServiceUrl": "http://localhost:3030",
     "paths": {
       "options": "/src/api/opcua/ua-cherkassy-azot-test1/AddressSpaceOptions.json",
-      "getters": "/src/api/opcua/ua-cherkassy-azot-test1/opcua-addressspace-getters",
-      "methods": "/src/api/opcua/ua-cherkassy-azot-test1/opcua-addressspace-methods",
-      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-test1/opcua-addressspace-subscriptions"
+      "getters": "/src/api/opcua/ua-cherkassy-azot-test1/opcua-getters",
+      "methods": "/src/api/opcua/ua-cherkassy-azot-test1/opcua-methods",
+      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-test1/opcua-subscriptions"
     }
   },
   {
@@ -22,22 +22,23 @@
     "clientServiceUrl": "http://localhost:3030",
     "paths": {
       "base-options": [
-        "/src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json"
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json"
       ],
       "options": "/src/api/opcua/ua-cherkassy-azot-m5_test1/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
-      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-m5_test1/opcua-addressspace-subscriptions"
+      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-m5_test1/opcua-subscriptions"
     }
   },
   {
-    "id": "ua-cherkassy-azot-m5_test2",
-    "name": "380-472-00203826-m5_test2",
+    "id": "ua-cherkassy-azot-asutp_dev1",
+    "name": "380-472-00203826-asutp_dev1",
     "endpointUrl": "",
     "endpointPort": 26570,
     "srvServiceUrl": "http://10.60.0.220:3030",
-    "clientServiceUrl": "http://10.60.0.220:3030",
-    "clientScript": "subscriptionMonitor_CH_M5",
+    "clientServiceUrl": "",
+    "clientScript": "subscriptionMonitor",
+    "subscription": "onChangedCH_M5Handler",
     "include": {
       "tests": [
         "mssql-tedious.test.js",
@@ -46,49 +47,49 @@
     },
     "paths": {
       "base-options": [
-        "/src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json"
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json"
       ],
-      "options": "/src/api/opcua/ua-cherkassy-azot-m5_test2/AddressSpaceOptions.json",
+      "options": "/src/api/opcua/ua-cherkassy-azot-asutp_dev1/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
-      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-m5_test2/opcua-addressspace-subscriptions",
-      "client-scripts": "/src/api/opcua/ua-cherkassy-azot-m5_test2/opcua-client-scripts"
+      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-asutp_dev1/opcua-subscriptions",
+      "client-scripts": ""
     }
   },
   {
     "isDisable": false,
-    "id": "ua-cherkassy-azot-m5_test3",
-    "name": "380-472-00203826-m5_test3",
-    "endpointUrl": "",
-    "endpointPort": 26580,
-    "srvServiceUrl": "http://10.60.0.220:3030",
+    "id": "ua-cherkassy-azot-asutp_dev2",
+    "name": "380-472-00203826-asutp_dev2",
+    "endpointUrl": "opc.tcp://M5-0095488.OSTCHEM.COM.UA:26570",
+    "srvServiceUrl": "",
     "clientServiceUrl": "http://10.60.0.220:3030",
-    "clientScript": "subscriptionMonitor_CH_M5",
+    "clientScript": "subscriptionMonitor",
+    "subscription": "onChangedCH_M5Handler",
     "paths": {
       "base-options": [
-        "/src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json"
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json"
       ],
-      "options": "/src/api/opcua/ua-cherkassy-azot-m5_test3/AddressSpaceOptions.json",
+      "options": "",
       "getters": "",
       "methods": "",
-      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-m5_test3/opcua-addressspace-subscriptions",
-      "client-scripts": "/src/api/opcua/ua-cherkassy-azot-m5_test3/opcua-client-scripts"
+      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-asutp_dev2/opcua-subscriptions",
+      "client-scripts": ""
     }
   },
   {
-    "id": "ua-cherkassy-azot-m5",
-    "name": "380-472-00203826-m5",
+    "id": "ua-cherkassy-azot-m5_prod1",
+    "name": "380-472-00203826-m5_prod1",
     "endpointUrl": "",
     "endpointPort": 26570,
     "srvServiceUrl": "http://192.168.3.5:3030",
     "clientServiceUrl": "http://192.168.3.5:3030",
     "clientScript": "subscriptionMonitor_CH_M5",
     "paths": {
-      "options": "/src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json",
-      "getters": "/src/api/opcua/ua-cherkassy-azot-m5/opcua-addressspace-getters",
+      "options": "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
+      "getters": "",
       "methods": "",
-      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-m5/opcua-addressspace-subscriptions",
-      "client-scripts": "/src/api/opcua/ua-cherkassy-azot-m5/opcua-client-scripts"
+      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-m5_prod1/opcua-subscriptions",
+      "client-scripts": "/src/api/opcua/ua-cherkassy-azot-m5_prod1/opcua-client-scripts"
     }
   }
 ]

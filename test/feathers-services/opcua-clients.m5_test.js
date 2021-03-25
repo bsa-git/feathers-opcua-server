@@ -17,7 +17,7 @@ const {
 } = require('../../src/plugins/lib');
 
 const {
-  startListenPort, 
+  startListenPort,
   stopListenPort,
 } = require('../../src/plugins/test-helpers');
 
@@ -177,8 +177,6 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
                   assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
                 }
               });
-            } else {
-              assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
             }
           } else {
             assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
