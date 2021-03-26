@@ -29,11 +29,16 @@ function onChangedCH_M5Handler(params, dataValue) {
   let engineeringUnits = (dataValue.valueParams && dataValue.valueParams.engineeringUnits)? dataValue.valueParams.engineeringUnits : '';
   const timestamp = dataValue.serverTimestamp;
   engineeringUnits = engineeringUnits? `(${engineeringUnits})` : '';
-  // if(addressSpaceOption.browseName === 'CH_M51::ValueFromFile'){
+    
+  // if(addressSpaceOption.ownerGroup === 'CH_M51::ValueFromFile'){
   //   console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} ${engineeringUnits} Timestamp=${timestamp}`));
   // }
-  if(addressSpaceOption.ownerGroup === 'CH_M51::ValueFromFile'){
-    console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} ${engineeringUnits} Timestamp=${timestamp}`));
+
+  if(addressSpaceOption.group){
+    value = JSON.parse(value);
+    const valueKeys = Object.keys(value).length;
+    console.log('<<===', chalk.magentaBright(`ID="${params.id}"; `), chalk.greenBright(`Name="${browseName}"; `), chalk.cyanBright(`Number of values=(${valueKeys}); Timestamp=${timestamp}`), '===>>');
+    // console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} ${engineeringUnits} Timestamp=${timestamp}`));
   }
 }
 

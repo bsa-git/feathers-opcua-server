@@ -209,7 +209,7 @@ const formatConfigOption = function (configOption, locale) {
 /**
  * @method formatHistoryResults
  * @param {String} id 
- * e.g. 'ua-cherkassy-azot-test1'
+ * e.g. 'ua-cherkassy-azot_test1'
  * @param {Object[]} historyResults 
  * @param {String[]} nameNodeIds 
  * e.g. ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT'] ||
@@ -254,7 +254,7 @@ const formatHistoryResults = function (id, historyResults, nameNodeIds, locale =
 /**
  * @method formatDataValue
  * @param {String} id 
- * e.g. 'ua-cherkassy-azot-test1'
+ * e.g. 'ua-cherkassy-azot_test1'
  * @param {Object} dataValue 
  * @param {String} nameNodeId 
  * e.g. 'CH_M51::01AMIAK:01F4.PNT' | 'ns=1;s=CH_M51::01AMIAK:01F4.PNT'
@@ -587,41 +587,27 @@ const getParamsAddressSpace = (id) => {
   };
   let opcuaConfigOptions = getOpcuaConfigOptions(id);
   opcuaConfigOptions = opcuaConfigOptions.filter(item => !item.isDisable);
-  let objects = opcuaConfigOptions.filter(opt => opt.type === 'object');
-  let variables = opcuaConfigOptions.filter(opt =>  opt.type? opt.type.includes('variable') : false);
-  let methods = opcuaConfigOptions.filter(opt => opt.type === 'method');
+  let objects = opcuaConfigOptions.filter(opt => opt.type ? (opt.type === 'object') : false);
+  let methods = opcuaConfigOptions.filter(opt => (opt.type ? (opt.type === 'method') : false) && objects.find(o => o.browseName === opt.ownerName));
+  let variables = opcuaConfigOptions.filter(opt => (opt.type ? opt.type.includes('variable') : false) && objects.find(o => o.browseName === opt.ownerName));
+  // group and ownerGroup variables
+  const groupVariables = variables.filter(v => v.group);
+  const ownerGroupVariables = variables.filter(v => v.ownerGroup && groupVariables.find(gVar => gVar.browseName === v.ownerGroup));
+  variables = loConcat(groupVariables, ownerGroupVariables);
 
+  // Map of objects
   paramsAddressSpace.objects = objects.map(o => {
-    return {
-      nodeId: `ns=1;s=${o.browseName}`,
-      browseName: o.browseName,
-      displayName: o.displayName,
-      description: o.description
-    };
+    o.nodeId = `ns=1;s=${o.browseName}`;
+    return o;
   });
-
+  // Map of variables
   paramsAddressSpace.variables = variables.map(v => {
-    return loMerge({
-      nodeId: `ns=1;s=${v.browseName}`,
-      browseName: v.browseName,
-      displayName: v.displayName,
-      description: v.description ? v.description : '',
-      ownerName: v.ownerName,
-      dataType: v.dataType,
-      type: v.type,
-    },
-    v.aliasName ? { aliasName: v.aliasName } : {},
-    v.group ? { group: v.group } : {},
-    v.variableGetType ? { variableGetType: v.variableGetType } : {},
-    v.getter ? { getter: v.getter } : {},
-    v.getterParams ? { getterParams: v.getterParams } : {},
-    v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
-    v.valueParams ? { valueParams: v.valueParams } : {},
-    );
+    v.nodeId = `ns=1;s=${v.browseName}`;
+    return v;
   });
-
+  // Map of methods
   paramsAddressSpace.methods = methods.map(m => {
-
+    m.nodeId = `ns=1;s=${m.browseName}`;
     // Method inputArguments merge 
     if (m.inputArguments && m.inputArguments.length) {
       m.inputArguments = m.inputArguments.map(arg => {
@@ -636,16 +622,7 @@ const getParamsAddressSpace = (id) => {
         return arg;
       });
     }
-
-    return loMerge({
-      nodeId: `ns=1;s=${m.browseName}`,
-      browseName: m.browseName,
-      displayName: m.displayName,
-      description: m.description ? m.description : ''
-    },
-    (m.inputArguments && m.inputArguments.length) ? { inputArguments: m.inputArguments } : {},
-    (m.outputArguments && m.outputArguments.length) ? { outputArguments: m.outputArguments } : {},
-    );
+    return m;
   });
 
   return paramsAddressSpace;

@@ -22,6 +22,7 @@ async function subscriptionMonitor(id, service) {
   await service.subscriptionCreate(id);
 
   const srvCurrentState = await service.getSrvCurrentState(id);
+  // inspector('subscriptionMonitor.srvCurrentState:', srvCurrentState);
   // Start subscriptionMonitor
   const allVariables = srvCurrentState.paramsAddressSpace.variables;
   //---- Group owners  ---//

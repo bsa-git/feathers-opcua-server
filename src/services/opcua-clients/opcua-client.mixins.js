@@ -540,7 +540,7 @@ module.exports = function opcuaClientMixins(service, path) {
     } else {
       // Get subscriptionHandlerName
       const nodeId = itemToMonitor.nodeId;
-      const itemNodeId = service.getItemNodeId(id, nodeId);
+      const itemNodeId = await service.getItemNodeId(id, nodeId);
       // Get subscriptionHandler for variable
       if (itemNodeId.subscription) {
         subscriptionHandlerName = itemNodeId.subscription;

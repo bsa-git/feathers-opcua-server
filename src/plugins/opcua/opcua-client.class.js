@@ -1082,10 +1082,13 @@ class OpcuaClient {
         timestampsToReturn
       );
       if (isLog) inspector('opcua-client.class::subscriptionMonitor.monitoredItem:', monitoredItem);
+      // inspector('opcua-client.class::subscriptionMonitor.monitoredItem:', monitoredItem);
 
       // Run subscriptionHandler
       monitoredItem.on('changed', (dataValue) => {
         if (isLog) inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
+        const value = dataValue.value.value;
+        if(value === null) return;
         itemToMonitor.id = this.id;
         itemToMonitor.locale = this.locale;
         itemToMonitor.addressSpaceOption = itemNodeId;

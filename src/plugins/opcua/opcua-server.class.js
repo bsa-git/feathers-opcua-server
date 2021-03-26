@@ -395,7 +395,7 @@ class OpcuaServer {
     // Get addressSpace and  namespace
     const addressSpace = this.opcuaServer.engine.addressSpace;
     const namespace = addressSpace.getOwnNamespace();
-    
+
     // Add objects
     if (params.objects.length) {
       params.objects.forEach(o => {
@@ -407,12 +407,10 @@ class OpcuaServer {
           organizedBy: addressSpace.rootFolder.objects
         });
         // Push object to paramsAddressSpace.objects
-        this.currentState.paramsAddressSpace.objects.push({
-          nodeId: object.nodeId.toString(),
-          browseName: o.browseName,
-          displayName: o.displayName,
-          description: o.description,
-        });
+        this.currentState.paramsAddressSpace.objects.push(
+          loMerge({ nodeId: object.nodeId.toString() }, o)
+        );
+        // );
         // Add object to addedItemList
         this.addedItemList.push({
           type: 'object',
@@ -446,7 +444,6 @@ class OpcuaServer {
                 loMerge(varParams, valueParams);
               }
 
-
               getterParams = Object.assign({}, v.getterParams ? v.getterParams : {});
               // Add "dataType" to getterParams
               getterParams.dataType = v.dataType;
@@ -477,23 +474,9 @@ class OpcuaServer {
               });
 
               // Push variable to paramsAddressSpace.variables
-              this.currentState.paramsAddressSpace.variables.push(loMerge({
-                nodeId: addedVariable.nodeId.toString(),
-                browseName: v.browseName,
-                displayName: v.displayName,
-                description: v.description ? v.description : '',
-                ownerName: v.ownerName,
-                dataType: v.dataType,
-                type: v.type,
-              },
-              v.aliasName ? { aliasName: v.aliasName } : {},
-              v.group ? { group: v.group } : {},
-              v.hist ? { hist: v.hist } : {},
-              v.variableGetType ? { variableGetType: v.variableGetType } : {},
-              v.getter ? { getter: v.getter } : {},
-              v.getterParams ? { getterParams: v.getterParams } : {},
-              v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
-              loOmit(v.valueParams, ['componentOf'])));
+              this.currentState.paramsAddressSpace.variables.push(
+                loMerge({ nodeId: addedVariable.nodeId.toString() }, v)
+              );
 
               // Value from source
               if (v.variableGetType === 'valueFromSource') {
@@ -566,12 +549,9 @@ class OpcuaServer {
               addedMethod = namespace.addMethod(object, methodParams);
 
               // Push method to paramsAddressSpace.methods
-              this.currentState.paramsAddressSpace.methods.push(loMerge(
-                loOmit(methodParams, ['componentOf', 'propertyOf', 'organizedBy', 'encodingOf']),
-                {
-                  nodeId: addedMethod.nodeId.toString(),
-                  ownerName: m.ownerName,
-                }));
+              this.currentState.paramsAddressSpace.methods.push(
+                loMerge({ nodeId: addedMethod.nodeId.toString() }, m)
+              );
 
               // optionally, we can adjust userAccessLevel attribute 
               if (m.userAccessLevel && m.userAccessLevel.inputArguments) {
@@ -656,24 +636,10 @@ class OpcuaServer {
         });
 
         // Push variable to paramsAddressSpace.variables
-        currentState.paramsAddressSpace.variables.push(loMerge({
-          nodeId: addedVariable.nodeId.toString(),
-          browseName: v.browseName,
-          displayName: v.displayName,
-          description: v.description ? v.description : '',
-          ownerName: v.ownerName,
-          ownerGroup: v.ownerGroup,
-          dataType: v.dataType,
-          type: v.type,
-        },
-        v.aliasName ? { aliasName: v.aliasName } : {},
-        v.variableGetType ? { variableGetType: v.variableGetType } : {},
-        v.getter ? { getter: v.getter } : {},
-        v.hist ? { hist: v.hist } : {},
-        v.getterParams ? { getterParams: v.getterParams } : {},
-        v.valueFromSourceParams ? { valueFromSourceParams: v.valueFromSourceParams } : {},
-        loOmit(v.valueParams, ['componentOf'])
-        ));
+        currentState.paramsAddressSpace.variables.push(
+          loMerge({ nodeId: addedVariable.nodeId.toString() }, v)
+        );
+
         // Install historical DataNode
         if (v.hist) {
           /*

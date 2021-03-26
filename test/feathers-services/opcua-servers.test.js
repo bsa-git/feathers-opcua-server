@@ -22,7 +22,7 @@ const isLog = false;
 let srvData = {
   params: {
     port: 26570, // default - 26543, 26540 (opcua-class.test), 26550 (opcua-class.test2), 26560 (opcua-clients.test), 26570 (opcua-servers.test),
-    serverInfo: { applicationName: 'ua-cherkassy-azot-test1' },
+    serverInfo: { applicationName: 'ua-cherkassy-azot_test1' },
   }
 };
 
