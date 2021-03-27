@@ -137,5 +137,30 @@
       "subscriptions": "/src/api/opcua/ua-cherkassy-azot-asutp_dev1/opcua-subscriptions",
       "client-scripts": ""
     }
+  },
+  {
+    "id": "ua-cherkassy-bsahome_dev1",
+    "name": "380-472-bsahome_dev1",
+    "endpointUrl": "",
+    "endpointPort": 26570,
+    "srvServiceUrl": "http://BSA-HOME:3030",
+    "clientServiceUrl": "http://BSA-HOME:3030",
+    "clientScript": "subscriptionMonitor",
+    "subscription": "onChangedCH_M5Handler",
+    "include": {
+      "tests": [
+        "mssql-tedious.test2.js"
+      ]
+    },
+    "paths": {
+      "base-options": [
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json"
+      ],
+      "options": "/src/api/opcua/ua-cherkassy-bsahome_dev1/AddressSpaceOptions.json",
+      "getters": "",
+      "methods": "",
+      "subscriptions": "/src/api/opcua/ua-cherkassy-bsahome_dev1/opcua-subscriptions",
+      "client-scripts": ""
+    }
   }
 ]

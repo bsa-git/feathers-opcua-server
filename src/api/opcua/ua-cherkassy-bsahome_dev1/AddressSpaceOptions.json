@@ -1,0 +1,50 @@
+{
+  "objects": [
+    {
+      "isDisable": false,
+      "browseName": "CH_M51",
+      "displayName": "Черкассы 'АЗОТ' цех M5-1",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_M52",
+      "displayName": "Черкассы 'АЗОТ' цех M5-2",
+      "type": "object"
+    }
+  ],
+  "variables": [
+    {
+      "browseName": "CH_M51::ValueFromFile",
+      "displayName": "Значения из файла для CH_M51",
+      "ownerName": "CH_M51",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValueFromFile",
+      "getterParams": {
+        "path": "test/data/tmp/ch-m51",
+        "fromFile": "data-CH_M51.csv",
+        "interval": 5000
+      }
+    },
+    {
+      "browseName": "CH_M52::ValueFromFile",
+      "displayName": "Значения из файла для CH_M52",
+      "ownerName": "CH_M52",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValueFromFile",
+      "getterParams": {
+        "path": "test/data/tmp/ch-m52",
+        "fromFile": "data-CH_M52.csv",
+        "interval": 5000
+      }
+    }
+  ]
+}
