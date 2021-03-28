@@ -6,6 +6,7 @@ const port = app.get('port') || 3030;
 const {
   startListenPort, 
   stopListenPort,
+  getHostname,
   dnsLookup
 } = require('../../src/plugins');
 
@@ -26,7 +27,8 @@ describe('<<=== NetOperations: (net-operations.test) ===>>', () => {
   });
 
   it('DNS - Operations', async () => {
-    const dnsInfo = await dnsLookup('m5-0095488.ostchem.com.ua');
+    const hostName = getHostname();
+    const dnsInfo = await dnsLookup(hostName);
     debug('dnsInfo', dnsInfo);
   });
 });
