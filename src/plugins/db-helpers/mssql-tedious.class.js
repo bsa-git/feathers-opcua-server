@@ -37,7 +37,7 @@ const defaultConnConfig = {
   events: {
     connection: {
       debug: {
-        enable: true
+        enable: false
       },
       infoMessage: {
         enable: false
@@ -244,7 +244,7 @@ class MssqlTedious {
     });
   }
 
-  
+
   /**
    * @method query
    * @param {Object[]} params
@@ -254,6 +254,8 @@ class MssqlTedious {
    */
   query(params, sql, callback) {
     const self = this;
+    let _item;
+    //-----------------------------
     return new Promise((resolve, reject) => {
       const request = new Request(sql, (err, rowCount) => {
         if (err) {
@@ -269,43 +271,56 @@ class MssqlTedious {
       // Subscribe to request events
       self.subscribeToRequestEvent(request);
 
+      // Add parameters or add output parameters
       if (params.length > 0) {
         params.forEach(param => {
-          request.addParameter(param.name, param.type, param.value);
+          if (param.isOutput) {
+            request.addOutputParameter(param.name, param.type);
+          } else {
+            request.addParameter(param.name, param.type, param.value);
+          }
         });
       }
 
       let _rows = [];
 
-      request.on('row', columns => {
-        // A row resulting from execution of the SQL statement.
-        /**
-          columns - An array or object (depends on config.options.useColumnNames), where the columns can be accessed by index/name. Each column has two properties, metadata and value.
-            metadata - The same data that is exposed in the columnMetadata event.
-            value - The column's value. It will be null for a NULL.
-                    If there are multiple columns with the same name, then this will be an array of the values.
-         */
-        let _item = {};
-        // Converting the response row to a JSON formatted object: [property]: value
-        for (var name in columns) {
-          _item[name] = columns[name].value;
-        }
-        _rows.push(_item);
-      });
+      const isOutput = params.find(param => param.isOutput);
+      if (isOutput) {
+        request.on('returnValue', function (parameterName, value, metadata) {
+          _item = {};
+          _item[parameterName] = (metadata.type.name === 'Char') ? value.trim() : value;
+          _rows.push(_item);
+        });
+      } else {
+        request.on('row', columns => {
+          // A row resulting from execution of the SQL statement.
+          /**
+            columns - An array or object (depends on config.options.useColumnNames), where the columns can be accessed by index/name. Each column has two properties, metadata and value.
+              metadata - The same data that is exposed in the columnMetadata event.
+              value - The column's value. It will be null for a NULL.
+                      If there are multiple columns with the same name, then this will be an array of the values.
+           */
+          _item = {};
+          // Converting the response row to a JSON formatted object: [property]: value
+          for (var name in columns) {
+            _item[name] = columns[name].value;
+          }
+          _rows.push(_item);
+        });
 
-      // We return the set of rows after the query is complete, instead of returing row by row
-      request.on('doneInProc', (rowCount, more, rows) => {
-        /**
-          Indicates the completion status of a SQL statement within a stored procedure. All rows from a statement in a stored procedure have been provided (through row events).
-          This event may also occur when executing multiple calls with the same query using execSql.
-          rowCount - The number of result rows. May be undefined if not available.
-          more - If there are more result sets to come, then true.
-          rows - Rows as a result of executing the SQL. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true.
-         */
-        if (isDebug) console.log('Request result:', { params, sql, rows: _rows });
-        if (callback) callback(_rows);
-      });
-
+        // We return the set of rows after the query is complete, instead of returing row by row
+        request.on('doneInProc', (rowCount, more, rows) => {
+          /**
+            Indicates the completion status of a SQL statement within a stored procedure. All rows from a statement in a stored procedure have been provided (through row events).
+            This event may also occur when executing multiple calls with the same query using execSql.
+            rowCount - The number of result rows. May be undefined if not available.
+            more - If there are more result sets to come, then true.
+            rows - Rows as a result of executing the SQL. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true.
+           */
+          if (isDebug) console.log('Request result:', { params, sql, rows: _rows });
+          if (callback) callback(_rows);
+        });
+      }
       self.connection.execSql(request);
     });
   }
@@ -319,6 +334,8 @@ class MssqlTedious {
    */
   proc(params, sql, callback) {
     const self = this;
+    let _item;
+    //--------------------------------------
     return new Promise((resolve, reject) => {
       const request = new Request(sql, (err, rowCount) => {
         if (err) {
@@ -336,41 +353,54 @@ class MssqlTedious {
 
       if (params.length > 0) {
         params.forEach(param => {
-          request.addParameter(param.name, param.type, param.value);
+          if (param.isOutput) {
+            request.addOutputParameter(param.name, param.type);
+          } else {
+            request.addParameter(param.name, param.type, param.value);
+          }
         });
       }
 
       let _rows = [];
 
-      request.on('row', columns => {
-        // A row resulting from execution of the SQL statement.
-        /**
-          columns - An array or object (depends on config.options.useColumnNames), where the columns can be accessed by index/name. Each column has two properties, metadata and value.
-            metadata - The same data that is exposed in the columnMetadata event.
-            value - The column's value. It will be null for a NULL.
-                    If there are multiple columns with the same name, then this will be an array of the values.
-         */
-        let _item = {};
-        // Converting the response row to a JSON formatted object: [property]: value
-        for (var name in columns) {
-          _item[name] = columns[name].value;
-        }
-        _rows.push(_item);
-      });
-
-      // We return the set of rows after the procedure is complete, instead of returing row by row
-      request.on('doneProc', (rowCount, more, returnStatus, rows) => {
-        /**
-          Indicates the completion status of a stored procedure. This is also generated for stored procedures executed through SQL statements.
-          This event may also occur when executing multiple calls with the same query using execSql.
-          rowCount - The number of result rows. May be undefined if not available.
-          more - If there are more result sets to come, then true.
-          returnStatus - The value returned from a stored procedure.
-          rows - Rows as a result of executing the SQL. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true.
-         */
-        if (isDebug) console.log('Request result:', { params, sql, rows: _rows });
-        if (callback) callback(_rows);
-      });
+      const isOutput = params.find(param => param.isOutput);
+      if (isOutput) {
+        request.on('returnValue', function (parameterName, value, metadata) {
+          _item = {};
+          _item[parameterName] = (metadata.type.name === 'Char') ? value.trim() : value;
+          _rows.push(_item);
+        });
+      } else {
+        request.on('row', columns => {
+          // A row resulting from execution of the SQL statement.
+          /**
+            columns - An array or object (depends on config.options.useColumnNames), where the columns can be accessed by index/name. Each column has two properties, metadata and value.
+              metadata - The same data that is exposed in the columnMetadata event.
+              value - The column's value. It will be null for a NULL.
+                      If there are multiple columns with the same name, then this will be an array of the values.
+           */
+          _item = {};
+          // Converting the response row to a JSON formatted object: [property]: value
+          for (var name in columns) {
+            _item[name] = columns[name].value;
+          }
+          _rows.push(_item);
+        });
+  
+        // We return the set of rows after the procedure is complete, instead of returing row by row
+        request.on('doneProc', (rowCount, more, returnStatus, rows) => {
+          /**
+            Indicates the completion status of a stored procedure. This is also generated for stored procedures executed through SQL statements.
+            This event may also occur when executing multiple calls with the same query using execSql.
+            rowCount - The number of result rows. May be undefined if not available.
+            more - If there are more result sets to come, then true.
+            returnStatus - The value returned from a stored procedure.
+            rows - Rows as a result of executing the SQL. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true.
+           */
+          if (isDebug) console.log('Request result:', { params, sql, rows: _rows });
+          if (callback) callback(_rows);
+        });
+      }
       self.connection.callProcedure(request);
     });
   }
@@ -381,13 +411,15 @@ class MssqlTedious {
    * @param {String} paramName 
    * @param {TYPES} paramType 
    * @param {any} paramValue 
+   * @param {Boolean} isOutput
    * @returns {Array}
    */
-  buildParams(params, paramName, paramType, paramValue) {
+  buildParams(params, paramName, paramType, paramValue = null, isOutput = false) {
     return params.push({
       name: paramName,
       type: paramType,
-      value: paramValue
+      value: paramValue,
+      isOutput
     });
   }
 
@@ -411,15 +443,15 @@ class MssqlTedious {
         // The server has issued an information message.
         if (value.enable) self.connection.on('infoMessage', function (info) {
           /**
-                  info - An object with these properties:
-                    number - Error number
-                    state - The error state, used as a modifier to the error number.
-                    class - The class (severity) of the error. A class of less than 10 indicates an informational message.
-                    message - The message text.
-                    procName - The stored procedure name (if a stored procedure generated the message).
-                    lineNumber - The line number in the SQL batch or stored procedure that caused the error. 
-                                 Line numbers begin at 1; therefore, if the line number is not applicable to the message, the value of LineNumber will be 0. 
-                 */
+                    info - An object with these properties:
+                      number - Error number
+                      state - The error state, used as a modifier to the error number.
+                      class - The class (severity) of the error. A class of less than 10 indicates an informational message.
+                      message - The message text.
+                      procName - The stored procedure name (if a stored procedure generated the message).
+                      lineNumber - The line number in the SQL batch or stored procedure that caused the error. 
+                                   Line numbers begin at 1; therefore, if the line number is not applicable to the message, the value of LineNumber will be 0. 
+                   */
           value.cb ? value.cb(info) : self.onInfoMessageForConn(info);
         });
         break;
@@ -477,15 +509,15 @@ class MssqlTedious {
         // This event may be emited multiple times when more than one recordset is produced by the statement.
         if (value.enable) request.on('columnMetadata', function (columns) {
           /**
-                  An array like object, where the columns can be accessed either by index or name. 
-                  Columns with a name that is an integer are not accessible by name, as it would be interpreted as an array index.
-                  Each column has these properties.
-                    colName - The column's name.
-                    type.name - The column's type, such as VarChar, Int or Binary.
-                    precision - The precision. Only applicable to numeric and decimal.
-                    scale - The scale. Only applicable to numeric, decimal, time, datetime2 and datetimeoffset.
-                    dataLength - The length, for char, varchar, nvarchar and varbinary. 
-                 */
+                    An array like object, where the columns can be accessed either by index or name. 
+                    Columns with a name that is an integer are not accessible by name, as it would be interpreted as an array index.
+                    Each column has these properties.
+                      colName - The column's name.
+                      type.name - The column's type, such as VarChar, Int or Binary.
+                      precision - The precision. Only applicable to numeric and decimal.
+                      scale - The scale. Only applicable to numeric, decimal, time, datetime2 and datetimeoffset.
+                      dataLength - The length, for char, varchar, nvarchar and varbinary. 
+                   */
           value.cb ? value.cb(columns) : self.onColumnMetadataForRequest(columns);
         });
         break;
@@ -509,22 +541,22 @@ class MssqlTedious {
         break;
       case 'done':
         /**
-               All rows from a result set have been provided (through row events). 
-               This token is used to indicate the completion of a SQL statement. 
-               As multiple SQL statements can be sent to the server in a single SQL batch, multiple done events can be generated. 
-               An done event is emited for each SQL statement in the SQL batch except variable declarations. 
-               For execution of SQL statements within stored procedures, doneProc and doneInProc events are used in place of done events.
-    
-               If you are using execSql then SQL server may treat the multiple calls with the same query as a stored procedure. 
-               When this occurs, the doneProc or doneInProc events may be emitted instead. 
-               You must handle both events to ensure complete coverage. 
-               */
+                 All rows from a result set have been provided (through row events). 
+                 This token is used to indicate the completion of a SQL statement. 
+                 As multiple SQL statements can be sent to the server in a single SQL batch, multiple done events can be generated. 
+                 An done event is emited for each SQL statement in the SQL batch except variable declarations. 
+                 For execution of SQL statements within stored procedures, doneProc and doneInProc events are used in place of done events.
+      
+                 If you are using execSql then SQL server may treat the multiple calls with the same query as a stored procedure. 
+                 When this occurs, the doneProc or doneInProc events may be emitted instead. 
+                 You must handle both events to ensure complete coverage. 
+                 */
         if (value.enable) request.on('done', function (rowCount, more, rows) {
           /**
-                  rowCount - The number of result rows. May be undefined if not available.
-                  more - If there are more results to come (probably because multiple statements are being executed), then true.
-                  rows - Rows as a result of executing the SQL statement. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true. 
-                 */
+                    rowCount - The number of result rows. May be undefined if not available.
+                    more - If there are more results to come (probably because multiple statements are being executed), then true.
+                    rows - Rows as a result of executing the SQL statement. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true. 
+                   */
           value.cb ? value.cb(rowCount, more, rows) : self.onDoneForRequest(rowCount, more, rows);
         });
         break;
@@ -532,10 +564,10 @@ class MssqlTedious {
         // A value for an output parameter (that was added to the request with addOutputParameter(...)).
         if (value.enable) request.on('returnValue', function (parameterName, value, metadata) {
           /**
-                  parameterName - The parameter name. (Does not start with '@'.)
-                  value - The parameter's output value.
-                  metadata - The same data that is exposed in the columnMetadata event. 
-                 */
+                    parameterName - The parameter name. (Does not start with '@'.)
+                    value - The parameter's output value.
+                    metadata - The same data that is exposed in the columnMetadata event. 
+                   */
           value.cb ? value.cb(parameterName, value, metadata) : self.onReturnValueForRequest(parameterName, value, metadata);
         });
         break;
@@ -543,8 +575,8 @@ class MssqlTedious {
         // This event gives the columns by which data is ordered, if ORDER BY clause is executed in SQL Server.
         if (value.enable) request.on('order', function (orderColumns) {
           /**
-                  orderColumns - An array of column numbers in the result set by which data is ordered. 
-                 */
+                    orderColumns - An array of column numbers in the result set by which data is ordered. 
+                   */
           value.cb ? value.cb(orderColumns) : self.onOrderForRequest(orderColumns);
         });
         break;
