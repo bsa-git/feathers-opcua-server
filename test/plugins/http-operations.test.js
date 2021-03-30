@@ -12,7 +12,9 @@ const {
   startListenPort,
   stopListenPort,
   httpGetNewFileFromDir,
-  getFloat
+  getFloat,
+  canTestRun,
+  getPathBasename
 } = require('../../src/plugins');
 
 const {
@@ -27,6 +29,9 @@ const isDebug = false;
 const isLog = false;
 
 describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
+
+  const isTest =  canTestRun(getPathBasename(__filename));
+  if(!isTest) return;
 
   before(function (done) {
     startListenPort(app, done);

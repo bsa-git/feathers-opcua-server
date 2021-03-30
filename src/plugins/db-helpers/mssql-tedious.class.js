@@ -351,6 +351,7 @@ class MssqlTedious {
       // Subscribe to request events
       self.subscribeToRequestEvent(request);
 
+      // Add parameters for request
       if (params.length > 0) {
         params.forEach(param => {
           if (param.isOutput) {
