@@ -4,7 +4,7 @@ const result = require('dotenv').config();
 if (result.error) {
   throw result.error;
 }
- 
+
 console.log(result.parsed);
 
 const path = require('path');
@@ -27,6 +27,8 @@ const channels = require('./channels');
 
 const authentication = require('./authentication');
 
+const mongoose = require('./mongoose');
+
 const app = express(feathers());
 
 // Load app configuration
@@ -45,6 +47,8 @@ app.use('/', express.static(app.get('public')));
 // Set up Plugins and providers
 app.configure(express.rest());
 app.configure(socketio());
+
+app.configure(mongoose);
 
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);

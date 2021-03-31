@@ -46,5 +46,6 @@
   "mssql": {
     "client": "mssql",
     "connection": "mssql://sa:Sa#bsa2657@localhost:1433/feathers_opcua_server"
-  }
+  },
+  "mongodb": "mongodb://localhost:27017/feathers_opcua_server"
 }
