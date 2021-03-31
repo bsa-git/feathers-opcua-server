@@ -1,5 +1,11 @@
 // Loads environment variables from .env file.
-require('dotenv').config();
+// const result = require('dotenv').config({ path: `./.env.${process.env.NODE_ENV}` });
+const result = require('dotenv').config();
+if (result.error) {
+  throw result.error;
+}
+ 
+console.log(result.parsed);
 
 const path = require('path');
 const favicon = require('serve-favicon');
