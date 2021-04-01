@@ -1,0 +1,3 @@
+{"email":"bs261257@outlook.com","password":"$2a$10$lTbGdkbC.fvXGrQJp7r3qeg5vo4MIuUIBeiHPZTMjWo2nd9zurwV.","avatar":"https://s.gravatar.com/avatar/b57ebde757a253cd5882d2f592421e12?s=60","createdAt":1606214308662,"updatedAt":1606214308662,"_id":"0WGHGq7wAeG0VfFx"}
+{"email":"bs261257@gmail.com","name":"Сергей Бескоровайный","googleId":"110341449488589699610","avatar":"https://lh3.googleusercontent.com/a-/AOh14GhK4aTDMCzT-j_4CLTghf6qZVy9D4xdO4yIgY2JdQ=s96-c","createdAt":1606215306295,"updatedAt":1606215457797,"_id":"B6oQqfMI8qnzR5OG"}
+{"$$indexCreated":{"fieldName":"email","unique":true,"sparse":false}}

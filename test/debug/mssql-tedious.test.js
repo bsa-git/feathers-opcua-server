@@ -88,7 +88,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
   });
 
   
-  it('Insert rows to table', async () => {
+  it('Insert "CH_M51" rows to table', async () => {
     let sql = '', rows;
     //---------------------------------------------
     const db = new MssqlTedious(config);
@@ -119,7 +119,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     assert.deepStrictEqual(JSON.parse(rows[0]['text']), jsonText, 'Insert rows to table');
   });
 
-  it('Insert rows to table', async () => {
+  it('Insert "CH_M52" rows to table', async () => {
     let sql = '', rows;
     //---------------------------------------------
     const db = new MssqlTedious(config);
@@ -148,7 +148,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     assert.deepStrictEqual(JSON.parse(rows[0]['Text']), jsonText, 'Insert rows to table');
   });
 
-  it('Update value from table', async () => {
+  it('Update "CH_M51" value from table', async () => {
     let sql = '', rows;
     //---------------------------------------------
     const db = new MssqlTedious(config);
@@ -192,12 +192,34 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     db.buildParams(params, 'text', TYPES.Char, null, true);
     // db.buildParams(params, '@text', TYPES.Char, '');
     const rows = await db.proc(params, sql);
-    if(isLog) inspector('Request result:', { sql, rows });
+    if(isLog) inspector('Stored procedure result:', { sql, rows });
+    // inspector('Stored procedure result:', { sql, rows });
     
     await db.disconnect();
 
-    assert.ok(true, 'Execute Stored Procedure "dbo.MessagesSummary"');
+    assert.ok(rows[0].text, 'Execute Stored Procedure "dbo.MessagesSummary"');
   });
   
+  it('Select values for webM51 from SnapShot table', async () => {
+    let sql = '', rows;
+    //---------------------------------------------
+    const db = new MssqlTedious(config);
+    await db.connect();
+
+    // Select rows from tblMessages
+    const params = [];
+    // sql = 'SELECT * FROM dbMonitor.dbo.tblMessages WHERE Type = @type AND Value = @value';
+    sql = 'dbBSA.dbo.GetSnapShotValues';
+    db.buildParams(params, 'scanerName', TYPES.Char, 'webM51');
+    db.buildParams(params, 'tagID', TYPES.Int, null, true);
+    db.buildParams(params, 'tagValue', TYPES.Real, null, true);
+    rows = await db.proc(params, sql);
+    if(isLog) inspector('Request result:', { sql, rows });
+    inspector('Request result:', { sql, rows });
+    
+    await db.disconnect();
+
+    assert.ok(rows.length, 'Select values for webM51 from SnapShot table');
+  });
   
 });

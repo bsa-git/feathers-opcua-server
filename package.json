@@ -34,6 +34,7 @@
     "shx": "shx rm test/data/*.db",
     "dev": "cross-env NODE_ENV=development DEBUG=app:* npm run eslint && nodemon src/",
     "start": "node src/",
+    "start-mongod": "mongod -f mongod.config.yml",
     "update-dependencies": "ncu -u"
   },
   "dependencies": {

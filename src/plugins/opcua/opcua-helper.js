@@ -920,14 +920,33 @@ const canTestRun = function (fileName) {
  */
 const canServiceRun = function (serviceName) {
   let isService = true;
-  const myConfig = getOpcuaConfigForMe();
+  const myConfigs = getOpcuaConfigsForMe();
+  const myConfig = myConfigs.find(item => item.exclude && item.exclude.services && item.exclude.services.length);
   if (isDebug) debug('canServiceRun.serviceName:', serviceName);
   if (isLog) inspector('canServiceRun.myConfig:', myConfig);
-  if (myConfig && myConfig.exclude && myConfig.exclude.services && myConfig.exclude.services.length) {
+  if (myConfig) {
     const finded = myConfig.exclude.services.find(name => name === serviceName);
     isService = !finded;
   }
   return isService;
+};
+
+/**
+ * @method canDbClientRun 
+ * @param {String} serviceName 
+ * @returns {Boolean}
+ */
+const canDbClientRun = function (dbClientName) {
+  let isDbClientName = true;
+  const myConfigs = getOpcuaConfigsForMe();
+  const myConfig = myConfigs.find(item => item.exclude && item.exclude.dbClients && item.exclude.dbClients.length);
+  if (isDebug) debug('canDbClientRun.dbClientName:', dbClientName);
+  if (isLog) inspector('canDbClientRun.myConfig:', myConfig);
+  if (myConfig) {
+    const finded = myConfig.exclude.dbClients.find(name => name === dbClientName);
+    isDbClientName = !finded;
+  }
+  return isDbClientName;
 };
 
 module.exports = {
@@ -967,5 +986,6 @@ module.exports = {
   getTimestamp,
   Unece_to_Locale,
   canTestRun,
-  canServiceRun
+  canServiceRun,
+  canDbClientRun
 };

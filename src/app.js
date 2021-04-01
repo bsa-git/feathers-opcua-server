@@ -1,11 +1,10 @@
 // Loads environment variables from .env file.
-// const result = require('dotenv').config({ path: `./.env.${process.env.NODE_ENV}` });
 const result = require('dotenv').config();
 if (result.error) {
   throw result.error;
 }
 
-console.log(result.parsed);
+// console.log(result.parsed);
 
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -42,7 +41,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 // Host the public folder
 app.use('/', express.static(app.get('public')));
-// app.use('/chat', express.static(`${app.get('public')}/chat`));
 
 // Set up Plugins and providers
 app.configure(express.rest());
