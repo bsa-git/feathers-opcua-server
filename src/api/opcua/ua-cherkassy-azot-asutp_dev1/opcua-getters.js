@@ -48,71 +48,49 @@ const isLog = false;
 //=============================================================================
 
 /**
- * @method getValue
- * @param {Number} v 
- * @returns {Number}
+ * @method convertArray2Object
+ * @param {Object[]} array 
+ * @param {String} key 
+ * @param {String} value 
+ * @returns {Object}
  */
-const getValue = function (v) {
-  let value = (Math.sin(v / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
-  return loRound(value, 3);
-};
-
-/**
- * @method deleteValuesFromDB
- * @param {Object} db 
- */
-const deleteValuesFromDB = async function (db) {
-  const params = [];
-  const sql = 'DELETE FROM dbo.tblMessages WHERE Type = @type AND Value = @value';
-  db.buildParams(params, 'Type', TYPES.Char, 'tag');
-  db.buildParams(params, 'Value', TYPES.Char, 'CH_M52::ValueFromFile');
-  await db.query(params, sql);
-};
-
-/**
- * @method selValuesFromDB
- * @param {Object} db 
- * @returns {Object[]}
- */
-const selValuesFromDB = async function (db) {
-  const params = [];
-  const sql = 'SELECT * FROM dbo.tblMessages WHERE Type = @type AND Value = @value';
-  db.buildParams(params, 'Type', TYPES.Char, 'tag');
-  db.buildParams(params, 'Value', TYPES.Char, 'CH_M52::ValueFromFile');
-  const rows = await db.query(params, sql);
+const convertArray2Object = function (array, key, value) {
+  let rows = {};
+  loForEach(array, row => {
+    rows[row[key]] = loRound(row[value], 3);
+  });
   return rows;
 };
 
-/**
- * @method insertValuesToDB
- * @param {Object} db 
- * @param {Object} value 
- */
-const insertValuesToDB = async function (db, value) {
-  const params = [];
-  const sql = 'INSERT INTO dbo.tblMessages VALUES (@value, @type, @text)';
-  if (isLog) inspector('insertValuesToDB.value:', value);
-  db.buildParams(params, 'Value', TYPES.Char, 'CH_M52::ValueFromFile');
-  db.buildParams(params, 'Type', TYPES.Char, 'tag');
-  db.buildParams(params, 'Text', TYPES.Char, value);
-  await db.query(params, sql);
-};
 
 /**
- * @method updateValueFromDB
+ * @method selectValuesFromChAsoduDB
  * @param {Object} db 
- * @param {Object} value 
+ * @param {Object} params 
+ * @returns {Object}
  */
-const updateValueFromDB = async function (db, value) {
+const selectValuesFromChAsoduDB = async function (db, queryParams) {
   const params = [];
-  const sql = 'UPDATE dbo.tblMessages SET Text = @text WHERE Type = @type AND Value = @value';
-  if (isLog) inspector('updateValuesFromDB.value:', value);
-  db.buildParams(params, 'Value', TYPES.Char, 'CH_M52::ValueFromFile');
-  db.buildParams(params, 'Type', TYPES.Char, 'tag');
-  db.buildParams(params, 'Text', TYPES.Char, value);
-  await db.query(params, sql);
-};
+  const sql = `
+  SELECT sh.Value, sh.Time, tInfo.TagName, tInfo.ScanerName, tInfo.TagGroup, tInfo.KIPname
+  FROM dbMonitor.dbo.SnapShot AS sh
+  JOIN dbConfig.dbo.TagsInfo AS tInfo ON sh.TagID = tInfo.ID
+  WHERE sh.ScanerName = @scanerName AND tInfo.OnOff = 1
+  `;
+  db.buildParams(params, 'scanerName', TYPES.Char, queryParams.scanerName);
 
+  let rows = await db.query(params, sql);
+  if (isLog) inspector('selectValuesFromChAsoduDB.query.rows:', rows);
+  // inspector('selectValuesFromChAsoduDB.query.rows:', rows);
+  if (rows.length) {
+    rows = convertArray2Object(rows, 'TagName', 'Value');
+    if (isLog) inspector('selectValuesFromChAsoduDB.convertArray2Object.rows:', rows);
+    // inspector('selectValuesFromChAsoduDB.convertArray2Object.rows:', rows);
+  } else {
+    rows = null;
+  }
+  return rows;
+};
 
 /**
  * @method histValueFromFile
@@ -120,7 +98,7 @@ const updateValueFromDB = async function (db, value) {
  * @param {Object} addedValue 
  * @returns {void}
  */
-function histValueFromDB(params = {}, addedValue) {
+function histValuesFromDB(params = {}, addedValue) {
   let dataItems, dataType, results;
   let id = params.myOpcuaServer.id;
   //------------------------------------
@@ -129,16 +107,10 @@ function histValueFromDB(params = {}, addedValue) {
   config = getMssqlConfigFromEnv(config, params.dbEnv);
   if (isLog) inspector('getMssqlConfigFromEnv.config:', config);
 
-  // Select data from DB
-  const readValueFromDB = async function (db) {
-    const rows = await selValuesFromDB(db);
-    // Set value from source
-    
-    dataItems = rows[0]['Text'];
-    // inspector('histValueFromDB.dataItems:', dataItems);
-    dataItems = JSON.parse(dataItems);
-    if (isLog) inspector('histValueFromDB.dataItems:', dataItems);
-    // inspector('histValueFromDB.dataItems:', dataItems);
+  // Set values from source
+  const setValuesFromSource = function (dataItems) {
+    if (isLog) inspector('histValuesFromDB.dataItems:', dataItems);
+    // inspector('histValuesFromDB.dataItems:', dataItems);
     dataType = formatUAVariable(addedValue).dataType[1];
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
 
@@ -146,38 +118,28 @@ function histValueFromDB(params = {}, addedValue) {
     if (params.addedVariableList) {
       setValueFromSourceForGroup(params, dataItems, module.exports);
     }
-
-    await deleteValuesFromDB(db);
   };
-  // Write data to DB
+
+  // Gey data from DB
   setInterval(async function () {
-    let csv = '', json = '';
-    csv = readFileSync([appRoot, '/src/api/opcua', id, params.fromFile]);
-    if (csv) {
-      results = papa.parse(csv, { delimiter: ';', header: true });
-      json = results.data[0];
-      loForEach(json, function (value, key) {
-        json[key] = getValue(value);
-      });
-      if (isLog) inspector('histValueFromDB.json:', json);
-      // inspector('histValueFromDB.json:', json);
-    }
-    // Insert or Update values
+    let rows;
     const db = new MssqlTedious(config);
     await db.connect();
-    const rows = await selValuesFromDB(db);
-    if (rows.length) {
-      await updateValueFromDB(db, JSON.stringify(json));
-    } else {
-      await insertValuesToDB(db, JSON.stringify(json));
+    // Select values from DB
+    switch (params['queryFunc']) {
+    case 'selectValuesFromChAsoduDB':
+      rows = await selectValuesFromChAsoduDB(db, params.queryParams);
+      break;
+    default:
+      break;
     }
-
-    await readValueFromDB(db);
-
+    if (rows) {
+      setValuesFromSource(rows);
+    }
     await db.disconnect();
   }, params.interval);
 }
 
 module.exports = Object.assign({}, opcuaGetters, {
-  histValueFromDB,
+  histValuesFromDB,
 });

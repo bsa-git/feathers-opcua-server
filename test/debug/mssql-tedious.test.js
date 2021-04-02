@@ -206,16 +206,19 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     const db = new MssqlTedious(config);
     await db.connect();
 
-    // Select rows from tblMessages
+    // Select rows from SnapShot table
     const params = [];
-    // sql = 'SELECT * FROM dbMonitor.dbo.tblMessages WHERE Type = @type AND Value = @value';
-    sql = 'dbBSA.dbo.GetSnapShotValues';
+    sql = `
+    SELECT sh.Value, sh.Time, tInfo.TagName, tInfo.ScanerName, tInfo.TagGroup, tInfo.KIPname
+    FROM dbMonitor.dbo.SnapShot AS sh
+    JOIN dbConfig.dbo.TagsInfo AS tInfo ON sh.TagID = tInfo.ID
+    WHERE sh.ScanerName = @scanerName AND tInfo.OnOff = 1
+    `;
     db.buildParams(params, 'scanerName', TYPES.Char, 'webM51');
-    db.buildParams(params, 'tagID', TYPES.Int, null, true);
-    db.buildParams(params, 'tagValue', TYPES.Real, null, true);
-    rows = await db.proc(params, sql);
+    
+    rows = await db.query(params, sql);
     if(isLog) inspector('Request result:', { sql, rows });
-    inspector('Request result:', { sql, rows });
+    // inspector('Request result:', rows);
     
     await db.disconnect();
 
