@@ -53,7 +53,7 @@
         "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-A3_Options.json"
       ],
       "options": "/src/api/opcua/ua-cherkassy-azot-asutp_dev1/AddressSpaceOptions.json",
-      "getters": "/src/api/opcua/ua-cherkassy-azot-asutp_dev1/opcua-getters",
+      "getters": "",
       "methods": "",
       "subscriptions": "/src/api/opcua/ua-cherkassy-azot-asutp_dev1/opcua-subscriptions",
       "client-scripts": ""

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-const { join } = require('path');
-const moment = require('moment');
-const appRoot = join(__dirname, '../../../');
+const loRound = require('lodash/round');
+const loForEach = require('lodash/forEach');
+const loIsFinite = require('lodash/isFinite');
 
 const debug = require('debug')('app:util');
 
@@ -100,11 +100,28 @@ const getGroupsFromArray = function (array = [], minCount = 10) {
   return grArray;
 };
 
+/**
+ * @method convertArray2Object
+ * @param {Object[]} array 
+ * @param {String} keyName 
+ * @param {String} valueName 
+ * @returns {Object}
+ */
+const convertArray2Object = function (array, keyName, valueName) {
+  let rows = {};
+  loForEach(array, row => {
+    const value = row[valueName];
+    rows[row[keyName]] = loIsFinite(value) ? loRound(row[valueName], 3) : value;
+  });
+  return rows;
+};
+
 
 module.exports = {
   sortByStringField,
   sortByNumberField,
   sortByString,
   sortByNumber,
-  getGroupsFromArray
+  getGroupsFromArray,
+  convertArray2Object
 };

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
 const app = require('../../src/app');
-const port = app.get('port') || 3030;
+
 const {
   getServerService,
   getClientService,
@@ -26,11 +26,6 @@ const moment = require('moment');
 
 const loForEach = require('lodash/forEach');
 
-const {
-  StatusCodes,
-  DataType,
-  AttributeIds,
-} = require('node-opcua');
 
 const debug = require('debug')('app:test.opcua-clients');
 const isDebug = false;
@@ -96,7 +91,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
   });
 
   //============== SESSION HISTORY VALUES ====================//
-
+  
   it('OPC-UA clients: session history values for "CH_M51"', async () => {
     let dataItems, readResult = null, accumulator = '';
     const service = await getClientService(app, id);
@@ -189,7 +184,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
     }
   });
-
+  
   //============== START SUBSCRIPTION ====================//
 
   it('OPC-UA clients: subscription create', async () => {

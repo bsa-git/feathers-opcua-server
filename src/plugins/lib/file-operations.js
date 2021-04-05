@@ -13,6 +13,7 @@ const {
 
 const loEndsWith = require('lodash/endsWith');
 const loStartsWith = require('lodash/startsWith');
+const loIsString = require('lodash/isString');
 
 const debug = require('debug')('app:opcua-operations');
 const isDebug = false;
@@ -268,7 +269,7 @@ const createPath = function (path) {
     path = makeDirSync(path);
   } else {
     path = toPathWithSep(path);
-    path = loStartsWith(path, Path.sep)? makeDirSync([appRoot, path]) : makeDirSync(path);
+    path = loStartsWith(path, Path.sep) ? makeDirSync([appRoot, path]) : makeDirSync(path);
   }
   return path;
 };
@@ -279,8 +280,12 @@ const createPath = function (path) {
  * @returns {Boolean}
  */
 const isUncPath = function (path) {
+  // if (loIsString(path)) {
   const isUncPath = require('is-unc-path');
   return isUncPath(path);
+  // } else {
+  //   return false;
+  // }
 };
 
 /**

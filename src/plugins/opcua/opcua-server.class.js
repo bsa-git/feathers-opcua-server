@@ -19,10 +19,9 @@ const loMerge = require('lodash/merge');
 const loOmit = require('lodash/omit');
 const chalk = require('chalk');
 
-const debug = require('debug')('app:plugins.opcua-server.class');
+const debug = require('debug')('app:opcua-server.class');
 const isLog = false;
 const isDebug = false;
-
 
 class OpcuaServer {
   /**
@@ -385,6 +384,7 @@ class OpcuaServer {
     }
     if (!getters) {
       getters = Object.assign({}, opcuaDefaultGetters);
+      // debug('constructAddressSpace.getters:', getters);
     }
     // Merge methods
     if (methods === null && opcuaConfig.paths.methods) {

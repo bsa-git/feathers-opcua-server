@@ -9,7 +9,6 @@ const {
   getMyIp,
   strReplace,
   getInt,
-  getPathBasename
 } = require('../lib');
 
 const {
@@ -24,12 +23,13 @@ const {
 } = require('node-opcua');
 
 const moment = require('moment');
-const papa = require('papaparse');
+const chalk = require('chalk');
 
 const loToInteger = require('lodash/toInteger');
 const loIsObject = require('lodash/isObject');
 const loIsString = require('lodash/isString');
 const loIsEqual = require('lodash/isEqual');
+const loIsFunction = require('lodash/isFunction');
 const loToPairs = require('lodash/toPairs');
 const loMerge = require('lodash/merge');
 const loConcat = require('lodash/concat');
@@ -37,14 +37,9 @@ const loOmit = require('lodash/omit');
 const loAt = require('lodash/at');
 const loForEach = require('lodash/forEach');
 
-// const opcuaDefaultGetters = require(`${appRoot}/src/api/opcua/OPCUA_Getters`);
-
-
 const debug = require('debug')('app:opcua-helper');
 const isLog = false;
 const isDebug = false;
-
-// debug('loToInteger:', loToInteger('w'));
 
 /**
  * @method nodeIdToString
@@ -747,10 +742,17 @@ const executeOpcuaClientScript = async (service, id) => {
  */
 const setValueFromSourceForGroup = (params = {}, dataItems = {}, getters) => {
   let groupVariable, browseName;
+  //-----------------------------------------------------------------------
+
+  if(isDebug) debug('setValueFromSourceForGroup.getters:', getters);
+  debug('setValueFromSourceForGroup.getters:', getters);
+
   // Get group variable list 
   let groupVariableList = params.addedVariableList;
   if (isDebug) inspector('setValueFromSourceForGroup.groupVariableList.aliasNames:', groupVariableList.map(v => v.aliasName));
   if (isDebug) inspector('setValueFromSourceForGroup.dataItems:', dataItems);
+
+
 
   loForEach(dataItems, function (value, key) {
     groupVariable = groupVariableList.find(v => v.aliasName === key);
@@ -762,9 +764,16 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}, getters) => {
       const currentState = params.myOpcuaServer.getCurrentState();
       const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
       if (isDebug) inspector('setValueFromSourceForGroup.variable:', variable);
-      params.myOpcuaServer.setValueFromSource(variable, groupVariable, getters[variable.getter], value);
 
-      if (isDebug) debug('setValueFromSourceForGroup.browseName:', `"${browseName}" =`, value);
+      if (loIsFunction(getters[variable.getter])) {
+        params.myOpcuaServer.setValueFromSource(variable, groupVariable, getters[variable.getter], value);
+        if (isDebug) debug('setValueFromSourceForGroup.browseName:', `"${browseName}" =`, value);
+      } else {
+        debug('setValueFromSourceForGroup.getters:', getters);
+        // console.log(chalk.green('SessionHistoryValue_ForCH_M51.ValueFromFile:'), chalk.cyan(`${accumulator} Timestamp=${dataValue.sourceTimestamp}`));
+        console.log( chalk.red(`Error: is absent getter - "${variable.getter}" for browseName: "${browseName}"`));
+        // throw new Error(`Error: is absent getter - "${variable.getter}" for browseName: "${browseName}"`);
+      }
     }
   });
 };

@@ -25,7 +25,7 @@ const chalk = require('chalk');
 const loMerge = require('lodash/merge');
 const loConcat = require('lodash/concat');
 
-const debug = require('debug')('app:plugins.opcua-client.class');
+const debug = require('debug')('app:opcua-client.class');
 const isLog = false;
 const isDebug = false;
 

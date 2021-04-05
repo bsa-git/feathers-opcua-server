@@ -4,6 +4,8 @@ const moment = require('moment');
 const chalk = require('chalk');
 const appRoot = join(__dirname, '../../../');
 
+const loRound = require('lodash/round');
+
 const debug = require('debug')('app:util');
 
 /**
@@ -346,6 +348,16 @@ const dbNullIdValue = function () {
   return result;
 };
 
+/**
+ * @method getRandomValue
+ * @param {Number} v 
+ * @returns {Number}
+ */
+const getRandomValue = function (v = 10) {
+  let value = (Math.sin(v / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
+  return loRound(value, 3);
+};
+
 module.exports = {
   appRoot,
   delayTime,
@@ -368,4 +380,5 @@ module.exports = {
   stringify,
   cloneObject,
   dbNullIdValue,
+  getRandomValue
 };

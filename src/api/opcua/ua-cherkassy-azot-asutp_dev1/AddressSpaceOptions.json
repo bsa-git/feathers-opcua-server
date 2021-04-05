@@ -7,9 +7,15 @@
       "type": "object"
     },
     {
-      "isDisable": false,
+      "isDisable": true,
       "browseName": "CH_M52",
       "displayName": "Черкассы 'АЗОТ' цех M5-2",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_A3",
+      "displayName": "Черкассы 'АЗОТ' цех A3",
       "type": "object"
     }
   ],

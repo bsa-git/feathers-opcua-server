@@ -1,22 +1,25 @@
 /* eslint-disable no-unused-vars */
 const {
   inspector,
-  MssqlTedious,
-  getMssqlConfigFromEnv,
-  formatUAVariable,
-  setValueFromSourceForGroup,
   convertArray2Object
-} = require('../../../plugins');
-
-const opcuaGetters = require('../../../plugins/opcua/opcua-getters');
+} = require('../../lib');
 
 const {
-  DataType,
-} = require('node-opcua');
+  MssqlTedious,
+  getMssqlConfigFromEnv,
+} = require('../../db-helpers');
+
+const {
+  formatUAVariable,
+  setValueFromSourceForGroup,
+} = require('../opcua-helper');
+
+const plugForVariable = require('./plugForVariable');
+const opcuaDefaultGetters = { plugForVariable };
 
 const { TYPES } = require('tedious');
 
-const debug = require('debug')('app:opcua-getters');
+const debug = require('debug')('app:opcua-getters/histValuesFromDB');
 const isDebug = false;
 const isLog = false;
 
@@ -27,7 +30,7 @@ const isLog = false;
  * @param {Object} params 
  * @returns {Object}
  */
-const selectValuesFromChAsoduDB = async function (db, queryParams) {
+const getValuesFromChAsoduDB = async function (db, queryParams) {
   const params = [];
   const sql = `
   SELECT sh.Value, sh.Time, tInfo.TagName, tInfo.ScanerName, tInfo.TagGroup, tInfo.KIPname
@@ -51,7 +54,7 @@ const selectValuesFromChAsoduDB = async function (db, queryParams) {
 };
 
 /**
- * @method histValueFromFile
+ * @method histValuesFromDB
  * @param {Object} params 
  * @param {Object} addedValue 
  * @returns {void}
@@ -74,7 +77,7 @@ function histValuesFromDB(params = {}, addedValue) {
 
     // Set value from source for group 
     if (params.addedVariableList) {
-      setValueFromSourceForGroup(params, dataItems, module.exports);
+      setValueFromSourceForGroup(params, dataItems, opcuaDefaultGetters);
     }
   };
 
@@ -86,7 +89,7 @@ function histValuesFromDB(params = {}, addedValue) {
     // Select values from DB
     switch (params['queryFunc']) {
     case 'selectValuesFromChAsoduDB':
-      rows = await selectValuesFromChAsoduDB(db, params.queryParams);
+      rows = await getValuesFromChAsoduDB(db, params.queryParams);
       break;
     default:
       break;
@@ -98,6 +101,4 @@ function histValuesFromDB(params = {}, addedValue) {
   }, params.interval);
 }
 
-module.exports = Object.assign({}, opcuaGetters, {
-  histValuesFromDB,
-});
+module.exports = histValuesFromDB;
