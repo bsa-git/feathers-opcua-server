@@ -20,8 +20,8 @@
       "shortName": "м3/ч",
       "longName": "метр кубический в час"
     },
-    "normal_cubic_metre_per_hour ": {
-      "symbol": "MQH",
+    "normal_cubic_metre_per_hour": {
+      "symbol": "MQH?",
       "shortName": "н.м3/ч",
       "longName": "нормальный метр кубический в час"
     },

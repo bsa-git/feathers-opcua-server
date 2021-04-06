@@ -3,7 +3,8 @@ const { appRoot, inspector } = require('../lib');
 const {
   getOpcuaConfig,
   getEngineeringUnit,
-  mergeOpcuaConfigOptions
+  mergeOpcuaConfigOptions,
+  getInitValueForDataType
 } = require('./opcua-helper');
 const {
   OPCUAServer,
@@ -672,6 +673,9 @@ class OpcuaServer {
     // Add "value" to getterParams
     loMerge(getterParams, value === undefined ? {} : { value });
     getterParams.dataType = variable.dataType;
+    if(getterParams.value === null && getterParams.dataType){
+      getterParams.value = getInitValueForDataType(getterParams.dataType);
+    }
     // Add "this" to getterParams
     getterParams.myOpcuaServer = this;
     // Add "group" to getterParams.addedVariableList

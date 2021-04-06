@@ -34,12 +34,12 @@ function onChangedCH_M5Handler(params, dataValue) {
     value = JSON.parse(value);
     const valueKeys = Object.keys(value).length;
     console.log('<<===', chalk.magentaBright(`ID="${params.id}"; `), chalk.greenBright(`Name="${browseName}"; `), chalk.cyanBright(`Number of values=(${valueKeys}); Timestamp=${timestamp}`), '===>>');
-    // console.log(chalk.white(`${JSON.stringify(value)}`));
+    console.log(chalk.white(`${JSON.stringify(value)}`));
   }
 
-  // if(addressSpaceOption.ownerGroup === 'CH_M52::ValueFromFile'){
-  //   console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} ${engineeringUnits} Timestamp=${timestamp}`));
-  // }
+  if(addressSpaceOption.ownerGroup === 'CH_A3::ValuesFromDB'){
+    console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} ${engineeringUnits} Timestamp=${timestamp}`));
+  }
 }
 
 module.exports = {

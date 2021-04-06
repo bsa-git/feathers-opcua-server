@@ -12,9 +12,6 @@ const {
   setValueFromSourceForGroup
 } = require('../opcua-helper');
 
-const plugForVariable = require('./plugForVariable');
-const opcuaDefaultGetters = { plugForVariable };
-
 const debug = require('debug')('app:opcua-getters/histValueFromHttpPath');
 const isDebug = false;
 const isLog = false;
@@ -42,7 +39,7 @@ const histValueFromHttpPath = function (params = {}, addedValue) {
 
     // Set value from source for group 
     if (params.addedVariableList) {
-      setValueFromSourceForGroup(params, dataItems, opcuaDefaultGetters);
+      setValueFromSourceForGroup(params, dataItems);
     }
   };
   // Write file

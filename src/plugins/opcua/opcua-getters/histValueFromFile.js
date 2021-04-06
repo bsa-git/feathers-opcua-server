@@ -15,9 +15,6 @@ const {
   getRandomValue
 } = require('../../lib');
 
-const plugForVariable = require('./plugForVariable');
-const opcuaDefaultGetters = { plugForVariable };
-
 const loForEach = require('lodash/forEach');
 
 const {
@@ -64,7 +61,7 @@ const histValueFromFile = function (params = {}, addedValue) {
 
     // Set value from source for group 
     if (params.addedVariableList) {
-      setValueFromSourceForGroup(params, dataItems, opcuaDefaultGetters);
+      setValueFromSourceForGroup(params, dataItems);
     }
   });
   // Write file

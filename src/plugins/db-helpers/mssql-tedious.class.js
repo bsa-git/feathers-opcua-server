@@ -161,7 +161,7 @@ class MssqlTedious {
           reject(err.message);
         } else {
           // If no error, then good to go...
-          console.log('Connection OK');
+          console.log(`Connection to "${self.id}" OK`);
           // self.connection = connection;
           // Subscribe to events
           // self.subscribeToConnEvent();
@@ -198,7 +198,7 @@ class MssqlTedious {
       self.connection.close();
       self.connection.on('end', function () {
         self.connection = null;
-        console.log('Disconnect OK');
+        console.log(`Disconnect from "${self.id}" OK`);
         // Set current state
         self.currentState.isConnected = false;
         self.currentState.isConnCanceled = false;

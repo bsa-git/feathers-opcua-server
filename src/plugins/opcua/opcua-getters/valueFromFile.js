@@ -15,9 +15,6 @@ const {
   setValueFromSourceForGroup
 } = require('../opcua-helper');
 
-const plugForVariable = require('./plugForVariable');
-const opcuaDefaultGetters = { plugForVariable };
-
 const debug = require('debug')('app:opcua-getters/valueFromFile');
 const isDebug = false;
 const isLog = false;
@@ -44,7 +41,7 @@ const valueFromFile = function (params = {}, addedValue) {
   if (isLog) inspector('valueFromFile.dataItems:', dataItems);
   // Set value from source for group 
   if (params.addedVariableList) {
-    setValueFromSourceForGroup(params, dataItems, opcuaDefaultGetters);
+    setValueFromSourceForGroup(params, dataItems);
   }
   return JSON.stringify(dataItems);
 };

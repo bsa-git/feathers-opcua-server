@@ -737,22 +737,19 @@ const executeOpcuaClientScript = async (service, id) => {
  * @param {Object} params 
  * @param {Object} dataItems 
  * e.g. { "02NG_F5": 10.234, "02NG_P5": 2.444 }
- * @param {Object} getters 
  * @returns {void}
  */
-const setValueFromSourceForGroup = (params = {}, dataItems = {}, getters) => {
+const setValueFromSourceForGroup = (params = {}, dataItems = {}) => {
   let groupVariable, browseName;
+  const opcuaGetters = require(`${appRoot}src/plugins/opcua/opcua-getters`);
   //-----------------------------------------------------------------------
 
-  if(isDebug) debug('setValueFromSourceForGroup.getters:', getters);
-  debug('setValueFromSourceForGroup.getters:', getters);
+  if(isDebug) debug('setValueFromSourceForGroup.opcuaGetters:', opcuaGetters);
 
   // Get group variable list 
   let groupVariableList = params.addedVariableList;
   if (isDebug) inspector('setValueFromSourceForGroup.groupVariableList.aliasNames:', groupVariableList.map(v => v.aliasName));
   if (isDebug) inspector('setValueFromSourceForGroup.dataItems:', dataItems);
-
-
 
   loForEach(dataItems, function (value, key) {
     groupVariable = groupVariableList.find(v => v.aliasName === key);
@@ -765,14 +762,12 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}, getters) => {
       const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
       if (isDebug) inspector('setValueFromSourceForGroup.variable:', variable);
 
-      if (loIsFunction(getters[variable.getter])) {
-        params.myOpcuaServer.setValueFromSource(variable, groupVariable, getters[variable.getter], value);
+      if (loIsFunction(opcuaGetters[variable.getter])) {
+        params.myOpcuaServer.setValueFromSource(variable, groupVariable, opcuaGetters[variable.getter], value);
         if (isDebug) debug('setValueFromSourceForGroup.browseName:', `"${browseName}" =`, value);
       } else {
-        debug('setValueFromSourceForGroup.getters:', getters);
-        // console.log(chalk.green('SessionHistoryValue_ForCH_M51.ValueFromFile:'), chalk.cyan(`${accumulator} Timestamp=${dataValue.sourceTimestamp}`));
         console.log( chalk.red(`Error: is absent getter - "${variable.getter}" for browseName: "${browseName}"`));
-        // throw new Error(`Error: is absent getter - "${variable.getter}" for browseName: "${browseName}"`);
+        throw new Error(`Error: is absent getter - "${variable.getter}" for browseName: "${browseName}"`);
       }
     }
   });

@@ -3,17 +3,6 @@ const {
   inspector,
 } = require('../../lib');
 
-const histValueFromFile = require('./histValueFromFile');
-const histValueFromHttpPath = require('./histValueFromHttpPath');
-const histValueFromPath = require('./histValueFromPath');
-const valueFromFile = require('./valueFromFile');
-const opcuaDefaultGetters = { 
-  histValueFromFile, 
-  histValueFromHttpPath, 
-  histValueFromPath, 
-  valueFromFile 
-};
-
 const {
   formatUAVariable,
   getInitValueForDataType,
@@ -22,8 +11,6 @@ const {
 const {
   DataType,
 } = require('node-opcua');
-
-const loIsFunction = require('lodash/isFunction');
 
 const debug = require('debug')('app:opcua-getters/plugForVariable');
 const isDebug = false;
@@ -53,10 +40,8 @@ const plugForVariable = function (params = {}, addedValue) {
         const browseName = formatUAVariable(groupVariable).browseName;
         const currentState = params.myOpcuaServer.getCurrentState();
         const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
-        if(loIsFunction(opcuaDefaultGetters[variable.getter])){
-          value = getInitValueForDataType(variable.dataType);
-          params.myOpcuaServer.setValueFromSource(variable, groupVariable, opcuaDefaultGetters[variable.getter], value);
-        }
+        value = getInitValueForDataType(variable.dataType);
+        params.myOpcuaServer.setValueFromSource(variable, groupVariable, module.exports, value);
       });
     }
   } else {

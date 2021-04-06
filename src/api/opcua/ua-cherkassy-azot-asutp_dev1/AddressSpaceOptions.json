@@ -7,7 +7,7 @@
       "type": "object"
     },
     {
-      "isDisable": true,
+      "isDisable": false,
       "browseName": "CH_M52",
       "displayName": "Черкассы 'АЗОТ' цех M5-2",
       "type": "object"
@@ -62,7 +62,7 @@
       "getter": "histValuesFromDB",
       "getterParams": {
         "dbEnv": "MSSQL_ASODU_TEST",
-        "queryFunc": "selectValuesFromChAsoduDB",
+        "queryFunc": "getValuesFromChAsoduDB",
         "queryParams": {
           "scanerName": "xlsxGA10(A3)"
         },

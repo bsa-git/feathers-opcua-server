@@ -14,9 +14,6 @@ const {
   setValueFromSourceForGroup,
 } = require('../opcua-helper');
 
-const plugForVariable = require('./plugForVariable');
-const opcuaDefaultGetters = { plugForVariable };
-
 const { TYPES } = require('tedious');
 
 const debug = require('debug')('app:opcua-getters/histValuesFromDB');
@@ -68,7 +65,7 @@ function histValuesFromDB(params = {}, addedValue) {
   config = getMssqlConfigFromEnv(config, params.dbEnv);
   if (isLog) inspector('getMssqlConfigFromEnv.config:', config);
 
-  // Set values from source
+  //--- Set values from source ---
   const setValuesFromSource = function (dataItems) {
     if (isLog) inspector('histValuesFromDB.dataItems:', dataItems);
     // inspector('histValuesFromDB.setValuesFromSource.dataItems:', dataItems);
@@ -77,7 +74,7 @@ function histValuesFromDB(params = {}, addedValue) {
 
     // Set value from source for group 
     if (params.addedVariableList) {
-      setValueFromSourceForGroup(params, dataItems, opcuaDefaultGetters);
+      setValueFromSourceForGroup(params, dataItems);
     }
   };
 
@@ -88,7 +85,7 @@ function histValuesFromDB(params = {}, addedValue) {
     await db.connect();
     // Select values from DB
     switch (params['queryFunc']) {
-    case 'selectValuesFromChAsoduDB':
+    case 'getValuesFromChAsoduDB':
       rows = await getValuesFromChAsoduDB(db, params.queryParams);
       break;
     default:
