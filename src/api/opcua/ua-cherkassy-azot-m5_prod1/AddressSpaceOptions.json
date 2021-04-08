@@ -46,7 +46,7 @@
       "01GE": "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
     },
     {
-      "browseName": "CH_M51::01AMIAK:01T4.PNT",
+      "browseName": "CH_M51::01AMIAK:01T4",
       "aliasName": "01NH3_T4",
       "displayName": "01NH3_T4",
       "ownerName": "CH_M51",
@@ -66,7 +66,7 @@
       "description": "Т ГА в заводскую сеть"
     },
     {
-      "browseName": "CH_M51::01AMIAK:01P4_1.PNT",
+      "browseName": "CH_M51::01AMIAK:01P4_1",
       "aliasName": "01NH3_P4",
       "displayName": "01NH3_P4",
       "ownerName": "CH_M51",
@@ -86,7 +86,7 @@
       "description": "Р ГА в заводскую сеть"
     },
     {
-      "browseName": "CH_M51::01AMIAK:01F4.PNT",
+      "browseName": "CH_M51::01AMIAK:01F4",
       "aliasName": "01NH3_F4",
       "displayName": "01NH3_F4",
       "ownerName": "CH_M51",
@@ -106,7 +106,7 @@
       "description": "F ГА в заводскую сеть"
     },
     {
-      "browseName": "CH_M51::01PGAZ:01T16.PNT",
+      "browseName": "CH_M51::01PGAZ:01T16",
       "aliasName": "01PGAZ_T16",
       "displayName": "01PGAZ_T16",
       "ownerName": "CH_M51",
@@ -126,7 +126,7 @@
       "description": "Т ПГ в цех"
     },
     {
-      "browseName": "CH_M51::01PGAZ:01P5.PNT",
+      "browseName": "CH_M51::01PGAZ:01P5",
       "aliasName": "01PGAZ_P5",
       "displayName": "01PGAZ_P5",
       "ownerName": "CH_M51",
@@ -146,7 +146,7 @@
       "description": "Р ПГ в цех"
     },
     {
-      "browseName": "CH_M51::01PGAZ:01F5.PNT",
+      "browseName": "CH_M51::01PGAZ:01F5",
       "aliasName": "01PGAZ_F5",
       "displayName": "01PGAZ_F5",
       "ownerName": "CH_M51",
@@ -166,7 +166,7 @@
       "description": "F ПГ в цех"
     },
     {
-      "browseName": "CH_M51::01AMIAK:01T21_1.PNT",
+      "browseName": "CH_M51::01AMIAK:01T21_1",
       "aliasName": "01JAM_T21_1",
       "displayName": "01JAM_T21_1",
       "ownerName": "CH_M51",
@@ -186,7 +186,7 @@
       "description": "Т ЖА в цех 1-коллектор"
     },
     {
-      "browseName": "CH_M51::01AMIAK:01P21_1.PNT",
+      "browseName": "CH_M51::01AMIAK:01P21_1",
       "aliasName": "01JAM_P21_1",
       "displayName": "01JAM_P21_1",
       "ownerName": "CH_M51",
@@ -206,7 +206,7 @@
       "description": "Р ЖА в цех 1-коллектор"
     },
     {
-      "browseName": "CH_M51::01AMIAK:01F21_1.PNT",
+      "browseName": "CH_M51::01AMIAK:01F21_1",
       "aliasName": "01JAM_F21_1",
       "displayName": "01JAM_F21_1",
       "ownerName": "CH_M51",
@@ -226,7 +226,7 @@
       "description": "F ЖА в цех 1-коллектор"
     },
     {
-      "browseName": "CH_M51::01PAR:01T2_1.PNT",
+      "browseName": "CH_M51::01PAR:01T2_1",
       "aliasName": "01PAR_T2_1",
       "displayName": "01PAR_T2_1",
       "ownerName": "CH_M51",
@@ -246,7 +246,7 @@
       "description": "Т ПАР из цеха 1-коллектор"
     },
     {
-      "browseName": "CH_M51::01PAR:01P2_1.PNT",
+      "browseName": "CH_M51::01PAR:01P2_1",
       "aliasName": "01PAR_P2_1",
       "displayName": "01PAR_P2_1",
       "ownerName": "CH_M51",
@@ -266,7 +266,7 @@
       "description": "Р ПАР из цеха 1-коллектор"
     },
     {
-      "browseName": "CH_M51::01PAR:01F2_1.PNT",
+      "browseName": "CH_M51::01PAR:01F2_1",
       "aliasName": "01PAR_F2_1",
       "displayName": "01PAR_F2_1",
       "ownerName": "CH_M51",
@@ -286,7 +286,7 @@
       "description": "F ПАР из цеха 1-коллектор"
     },
     {
-      "browseName": "CH_M51::01PAR:01T2_2.PNT",
+      "browseName": "CH_M51::01PAR:01T2_2",
       "aliasName": "01PAR_T2_2",
       "displayName": "01PAR_T2_2",
       "ownerName": "CH_M51",
@@ -306,7 +306,7 @@
       "description": "Т ПАР из цеха 2-коллектор"
     },
     {
-      "browseName": "CH_M51::01PAR:01P2_2.PNT",
+      "browseName": "CH_M51::01PAR:01P2_2",
       "aliasName": "01PAR_P2_2",
       "displayName": "01PAR_P2_2",
       "ownerName": "CH_M51",
@@ -326,7 +326,7 @@
       "description": "Р ПАР из цеха 2-коллектор"
     },
     {
-      "browseName": "CH_M51::01PAR:01F2_2.PNT",
+      "browseName": "CH_M51::01PAR:01F2_2",
       "aliasName": "01PAR_F2_2",
       "displayName": "01PAR_F2_2",
       "ownerName": "CH_M51",
@@ -346,7 +346,7 @@
       "description": "F ПАР из цеха 1-коллектор"
     },
     {
-      "browseName": "CH_M51::01SKLAD:01L26_SUM.PNT",
+      "browseName": "CH_M51::01SKLAD:01L26_SUM",
       "aliasName": "01SKLAD_L26",
       "displayName": "01SKLAD_L26",
       "ownerName": "CH_M51",
@@ -366,7 +366,7 @@
       "description": "Кислота на складе 1-отделения"
     },
     {
-      "browseName": "CH_M51::01VODA_XOB:01T1.PNT",
+      "browseName": "CH_M51::01VODA_XOB:01T1",
       "aliasName": "01XOB_T1",
       "displayName": "01XOB_T1",
       "ownerName": "CH_M51",
@@ -386,7 +386,7 @@
       "description": "Т ХОВ в цех"
     },
     {
-      "browseName": "CH_M51::01VODA_XOB:01P4.PNT",
+      "browseName": "CH_M51::01VODA_XOB:01P4",
       "aliasName": "01XOB_P4",
       "displayName": "01XOB_P4",
       "ownerName": "CH_M51",
@@ -406,7 +406,7 @@
       "description": "Р ХОВ в цех"
     },
     {
-      "browseName": "CH_M51::01VODA_XOB:01F1.PNT",
+      "browseName": "CH_M51::01VODA_XOB:01F1",
       "aliasName": "01XOB_F1",
       "displayName": "01XOB_F1",
       "ownerName": "CH_M51",
@@ -426,7 +426,7 @@
       "description": "F ХОВ в цех"
     },
     {
-      "browseName": "CH_M51::01VODA:01T1_1.PNT",
+      "browseName": "CH_M51::01VODA:01T1_1",
       "aliasName": "01OB_T1_1",
       "displayName": "01OB_T1_1",
       "ownerName": "CH_M51",
@@ -446,7 +446,7 @@
       "description": "Т ОВ в цех (маш. зал)"
     },
     {
-      "browseName": "CH_M51::01VODA:01T1_2.PNT",
+      "browseName": "CH_M51::01VODA:01T1_2",
       "aliasName": "01OB_T1_2",
       "displayName": "01OB_T1_2",
       "ownerName": "CH_M51",
@@ -466,7 +466,7 @@
       "description": "Т ОВ в цех (абсорбц. колона)"
     },
     {
-      "browseName": "CH_M51::01VODA:01P5_1.PNT",
+      "browseName": "CH_M51::01VODA:01P5_1",
       "aliasName": "01OB_P5_1",
       "displayName": "01OB_P5_1",
       "ownerName": "CH_M51",
@@ -486,7 +486,7 @@
       "description": "Р ОВ в цех"
     },
     {
-      "browseName": "CH_M51::01SBS_OC:01PS10.PNT",
+      "browseName": "CH_M51::01SBS_OC:01PS10",
       "aliasName": "01PS10",
       "displayName": "01PS10",
       "ownerName": "CH_M51",
@@ -509,7 +509,7 @@
       "AGR21": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M51::21SBS_AO:21PS180.PNT",
+      "browseName": "CH_M51::21SBS_AO:21PS180",
       "aliasName": "21VZ_PS180",
       "displayName": "21VZ_PS180",
       "ownerName": "CH_M51",
@@ -529,7 +529,7 @@
       "description": "Р воздуха после компрессора"
     },
     {
-      "browseName": "CH_M51::21GTT:21P181.PNT",
+      "browseName": "CH_M51::21GTT:21P181",
       "aliasName": "21VZ_P181",
       "displayName": "21VZ_P181",
       "ownerName": "CH_M51",
@@ -549,7 +549,7 @@
       "description": "Р воздуха за нагнетателем"
     },
     {
-      "browseName": "CH_M51::21KONV:21P127A.PNT",
+      "browseName": "CH_M51::21KONV:21P127A",
       "aliasName": "21VZ_P127A",
       "displayName": "21VZ_P127A",
       "ownerName": "CH_M51",
@@ -569,7 +569,7 @@
       "description": "Р воздуха в смеситель"
     },
     {
-      "browseName": "CH_M51::21UKST:21FCC_TS174.PNT",
+      "browseName": "CH_M51::21UKST:21FCC_TS174",
       "aliasName": "21VZ_TS174",
       "displayName": "21VZ_TS174",
       "ownerName": "CH_M51",
@@ -609,7 +609,7 @@
       "description": "Т под сетками"
     },
     {
-      "browseName": "CH_M51::21KONV:21F102.PNT",
+      "browseName": "CH_M51::21KONV:21F102",
       "aliasName": "21VZ_F102",
       "displayName": "21VZ_F102",
       "ownerName": "CH_M51",
@@ -629,7 +629,7 @@
       "description": "F воздуха в смеситель"
     },
     {
-      "browseName": "CH_M51::21ABSOR:21F103.PNT",
+      "browseName": "CH_M51::21ABSOR:21F103",
       "aliasName": "21VZ_F103",
       "displayName": "21VZ_F103",
       "ownerName": "CH_M51",
@@ -649,7 +649,7 @@
       "description": "F добавочного воздуха в линию НГ и продувочной колоны"
     },
     {
-      "browseName": "CH_M51::21KONV:21FC101.PNT",
+      "browseName": "CH_M51::21KONV:21FC101",
       "aliasName": "21NH3_F101",
       "displayName": "21NH3_F101",
       "ownerName": "CH_M51",
@@ -669,7 +669,7 @@
       "description": "F ГА в смеситель"
     },
     {
-      "browseName": "CH_M51::21OXG:21FC106.PNT",
+      "browseName": "CH_M51::21OXG:21FC106",
       "aliasName": "21NH3_F106",
       "displayName": "21NH3_F106",
       "ownerName": "CH_M51",
@@ -689,7 +689,7 @@
       "description": "F ГА в РСО"
     },
     {
-      "browseName": "CH_M51::21ABSOR:21F105.PNT",
+      "browseName": "CH_M51::21ABSOR:21F105",
       "aliasName": "21HNO3_F105",
       "displayName": "21HNO3_F105",
       "ownerName": "CH_M51",
@@ -709,7 +709,7 @@
       "description": "F кислоты с агрегата"
     },
     {
-      "browseName": "CH_M51::21UKST:21FCC_F171.PNT",
+      "browseName": "CH_M51::21UKST:21FCC_F171",
       "aliasName": "21NG_F171",
       "displayName": "21NG_F171",
       "ownerName": "CH_M51",
@@ -729,7 +729,7 @@
       "description": "F ПГ в УКСТ"
     },
     {
-      "browseName": "CH_M51::21RD:21EA_RD.PNT",
+      "browseName": "CH_M51::21RD:21EA_RD",
       "aliasName": "21EA_RD",
       "displayName": "21EA_RD",
       "ownerName": "CH_M51",
@@ -752,7 +752,7 @@
       "AGR31": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M51::31SBS_AO:31PS180.PNT",
+      "browseName": "CH_M51::31SBS_AO:31PS180",
       "aliasName": "31VZ_PS180",
       "displayName": "31VZ_PS180",
       "ownerName": "CH_M51",
@@ -772,7 +772,7 @@
       "description": "Р воздуха после компрессора"
     },
     {
-      "browseName": "CH_M51::31GTT:31P181.PNT",
+      "browseName": "CH_M51::31GTT:31P181",
       "aliasName": "31VZ_P181",
       "displayName": "31VZ_P181",
       "ownerName": "CH_M51",
@@ -792,7 +792,7 @@
       "description": "Р воздуха за нагнетателем"
     },
     {
-      "browseName": "CH_M51::31KONV:31P127A.PNT",
+      "browseName": "CH_M51::31KONV:31P127A",
       "aliasName": "31VZ_P127A",
       "displayName": "31VZ_P127A",
       "ownerName": "CH_M51",
@@ -812,7 +812,7 @@
       "description": "Р воздуха в смеситель"
     },
     {
-      "browseName": "CH_M51::31UKST:31FCC_TS174.PNT",
+      "browseName": "CH_M51::31UKST:31FCC_TS174",
       "aliasName": "31VZ_TS174",
       "displayName": "31VZ_TS174",
       "ownerName": "CH_M51",
@@ -852,7 +852,7 @@
       "description": "Т под сетками"
     },
     {
-      "browseName": "CH_M51::31KONV:31F102.PNT",
+      "browseName": "CH_M51::31KONV:31F102",
       "aliasName": "31VZ_F102",
       "displayName": "31VZ_F102",
       "ownerName": "CH_M51",
@@ -872,7 +872,7 @@
       "description": "F воздуха в смеситель"
     },
     {
-      "browseName": "CH_M51::31ABSOR:31F103.PNT",
+      "browseName": "CH_M51::31ABSOR:31F103",
       "aliasName": "31VZ_F103",
       "displayName": "31VZ_F103",
       "ownerName": "CH_M51",
@@ -892,7 +892,7 @@
       "description": "F добавочного воздуха в линию НГ и продувочной колоны"
     },
     {
-      "browseName": "CH_M51::31KONV:31FC101.PNT",
+      "browseName": "CH_M51::31KONV:31FC101",
       "aliasName": "31NH3_F101",
       "displayName": "31NH3_F101",
       "ownerName": "CH_M51",
@@ -912,7 +912,7 @@
       "description": "F ГА в смеситель"
     },
     {
-      "browseName": "CH_M51::31OXG:31FC106.PNT",
+      "browseName": "CH_M51::31OXG:31FC106",
       "aliasName": "31NH3_F106",
       "displayName": "31NH3_F106",
       "ownerName": "CH_M51",
@@ -932,7 +932,7 @@
       "description": "F ГА в РСО"
     },
     {
-      "browseName": "CH_M51::31ABSOR:31F105.PNT",
+      "browseName": "CH_M51::31ABSOR:31F105",
       "aliasName": "31HNO3_F105",
       "displayName": "31HNO3_F105",
       "ownerName": "CH_M51",
@@ -952,7 +952,7 @@
       "description": "F кислоты с агрегата"
     },
     {
-      "browseName": "CH_M51::31UKST:31FCC_F171.PNT",
+      "browseName": "CH_M51::31UKST:31FCC_F171",
       "aliasName": "31NG_F171",
       "displayName": "31NG_F171",
       "ownerName": "CH_M51",
@@ -972,7 +972,7 @@
       "description": "F ПГ в УКСТ"
     },
     {
-      "browseName": "CH_M51::31RD:31EA_RD.PNT",
+      "browseName": "CH_M51::31RD:31EA_RD",
       "aliasName": "31EA_RD",
       "displayName": "31EA_RD",
       "ownerName": "CH_M51",
@@ -995,7 +995,7 @@
       "02GE": "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
     },
     {
-      "browseName": "CH_M52::02AMIAK:02T4.PNT",
+      "browseName": "CH_M52::02AMIAK:02T4",
       "aliasName": "02NH3_T4",
       "displayName": "02NH3_T4",
       "ownerName": "CH_M52",
@@ -1015,7 +1015,7 @@
       "description": "Т ГА в заводскую сеть"
     },
     {
-      "browseName": "CH_M52::02AMIAK:02P4_1.PNT",
+      "browseName": "CH_M52::02AMIAK:02P4_1",
       "aliasName": "02NH3_P4",
       "displayName": "02NH3_P4",
       "ownerName": "CH_M52",
@@ -1035,7 +1035,7 @@
       "description": "Р ГА в заводскую сеть"
     },
     {
-      "browseName": "CH_M52::02AMIAK:02F4.PNT",
+      "browseName": "CH_M52::02AMIAK:02F4",
       "aliasName": "02NH3_F4",
       "displayName": "02NH3_F4",
       "ownerName": "CH_M52",
@@ -1055,7 +1055,7 @@
       "description": "F ГА в заводскую сеть"
     },
     {
-      "browseName": "CH_M52::02PGAZ:02T16.PNT",
+      "browseName": "CH_M52::02PGAZ:02T16",
       "aliasName": "02PGAZ_T16",
       "displayName": "02PGAZ_T16",
       "ownerName": "CH_M52",
@@ -1075,7 +1075,7 @@
       "description": "Т ПГ в цех"
     },
     {
-      "browseName": "CH_M52::02PGAZ:02P5.PNT",
+      "browseName": "CH_M52::02PGAZ:02P5",
       "aliasName": "02PGAZ_P5",
       "displayName": "02PGAZ_P5",
       "ownerName": "CH_M52",
@@ -1095,7 +1095,7 @@
       "description": "Р ПГ в цех"
     },
     {
-      "browseName": "CH_M52::02PGAZ:02F5.PNT",
+      "browseName": "CH_M52::02PGAZ:02F5",
       "aliasName": "02PGAZ_F5",
       "displayName": "02PGAZ_F5",
       "ownerName": "CH_M52",
@@ -1115,7 +1115,7 @@
       "description": "F ПГ в цех"
     },
     {
-      "browseName": "CH_M52::02AMIAK:02T21_1.PNT",
+      "browseName": "CH_M52::02AMIAK:02T21_1",
       "aliasName": "02JAM_T21_1",
       "displayName": "02JAM_T21_1",
       "ownerName": "CH_M52",
@@ -1135,7 +1135,7 @@
       "description": "Т ЖА в цех 1-коллектор"
     },
     {
-      "browseName": "CH_M52::02AMIAK:02P21_1.PNT",
+      "browseName": "CH_M52::02AMIAK:02P21_1",
       "aliasName": "02JAM_P21_1",
       "displayName": "02JAM_P21_1",
       "ownerName": "CH_M52",
@@ -1155,7 +1155,7 @@
       "description": "Р ЖА в цех 1-коллектор"
     },
     {
-      "browseName": "CH_M52::02AMIAK:02F21_1.PNT",
+      "browseName": "CH_M52::02AMIAK:02F21_1",
       "aliasName": "02JAM_F21_1",
       "displayName": "02JAM_F21_1",
       "ownerName": "CH_M52",
@@ -1175,7 +1175,7 @@
       "description": "F ЖА в цех 1-коллектор"
     },
     {
-      "browseName": "CH_M52::02AMIAK:02T21_2.PNT",
+      "browseName": "CH_M52::02AMIAK:02T21_2",
       "aliasName": "02JAM_T21_2",
       "displayName": "02JAM_T21_2",
       "ownerName": "CH_M52",
@@ -1195,7 +1195,7 @@
       "description": "Т ЖА в цех 2-коллектор"
     },
     {
-      "browseName": "CH_M52::02AMIAK:02P21_2.PNT",
+      "browseName": "CH_M52::02AMIAK:02P21_2",
       "aliasName": "02JAM_P21_2",
       "displayName": "02JAM_P21_2",
       "ownerName": "CH_M52",
@@ -1215,7 +1215,7 @@
       "description": "Р ЖА в цех 2-коллектор"
     },
     {
-      "browseName": "CH_M52::02AMIAK:02F21_2.PNT",
+      "browseName": "CH_M52::02AMIAK:02F21_2",
       "aliasName": "02JAM_F21_2",
       "displayName": "02JAM_F21_2",
       "ownerName": "CH_M52",
@@ -1235,7 +1235,7 @@
       "description": "F ЖА в цех 2-коллектор"
     },
     {
-      "browseName": "CH_M52::02PAR:02T2_1.PNT",
+      "browseName": "CH_M52::02PAR:02T2_1",
       "aliasName": "02PAR_T2_1",
       "displayName": "02PAR_T2_1",
       "ownerName": "CH_M52",
@@ -1255,7 +1255,7 @@
       "description": "Т ПАР из цеха 1-коллектор"
     },
     {
-      "browseName": "CH_M52::02PAR:02P2_1.PNT",
+      "browseName": "CH_M52::02PAR:02P2_1",
       "aliasName": "02PAR_P2_1",
       "displayName": "02PAR_P2_1",
       "ownerName": "CH_M52",
@@ -1275,7 +1275,7 @@
       "description": "Р ПАР из цеха 1-коллектор"
     },
     {
-      "browseName": "CH_M52::02PAR:02F2_1.PNT",
+      "browseName": "CH_M52::02PAR:02F2_1",
       "aliasName": "02PAR_F2_1",
       "displayName": "02PAR_F2_1",
       "ownerName": "CH_M52",
@@ -1295,7 +1295,7 @@
       "description": "F ПАР из цеха 1-коллектор"
     },
     {
-      "browseName": "CH_M52::02PAR:02T2_2.PNT",
+      "browseName": "CH_M52::02PAR:02T2_2",
       "aliasName": "02PAR_T2_2",
       "displayName": "02PAR_T2_2",
       "ownerName": "CH_M52",
@@ -1315,7 +1315,7 @@
       "description": "Т ПАР из цеха 2-коллектор"
     },
     {
-      "browseName": "CH_M52::02PAR:02P2_2.PNT",
+      "browseName": "CH_M52::02PAR:02P2_2",
       "aliasName": "02PAR_P2_2",
       "displayName": "02PAR_P2_2",
       "ownerName": "CH_M52",
@@ -1335,7 +1335,7 @@
       "description": "Р ПАР из цеха 2-коллектор"
     },
     {
-      "browseName": "CH_M52::02PAR:02F2_2.PNT",
+      "browseName": "CH_M52::02PAR:02F2_2",
       "aliasName": "02PAR_F2_2",
       "displayName": "02PAR_F2_2",
       "ownerName": "CH_M52",
@@ -1355,7 +1355,7 @@
       "description": "F ПАР из цеха 1-коллектор"
     },
     {
-      "browseName": "CH_M52::02SKLAD:01L26_SUM.PNT",
+      "browseName": "CH_M52::02SKLAD:01L26_SUM",
       "aliasName": "01SKLAD_L26",
       "displayName": "01SKLAD_L26",
       "ownerName": "CH_M52",
@@ -1375,7 +1375,7 @@
       "description": "Кислота на складе 1-отделения"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02L26_SUM.PNT",
+      "browseName": "CH_M52::02SKLAD:02L26_SUM",
       "aliasName": "02SKLAD_L26",
       "displayName": "02SKLAD_L26",
       "ownerName": "CH_M52",
@@ -1415,7 +1415,7 @@
       "description": "Кислота на складе 1+2-отделения"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02Q20.PNT",
+      "browseName": "CH_M52::02SKLAD:02Q20",
       "aliasName": "02HNO3_Q20",
       "displayName": "02HNO3_Q20",
       "ownerName": "CH_M52",
@@ -1435,7 +1435,7 @@
       "description": "Q кислоты в хранилище"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02T20.PNT",
+      "browseName": "CH_M52::02SKLAD:02T20",
       "aliasName": "02HNO3_T20",
       "displayName": "02HNO3_T20",
       "ownerName": "CH_M52",
@@ -1455,7 +1455,7 @@
       "description": "Т кислоты в хранилище"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02P20_1.PNT",
+      "browseName": "CH_M52::02SKLAD:02P20_1",
       "aliasName": "02HNO3_P20_1",
       "displayName": "02HNO3_P20_1",
       "ownerName": "CH_M52",
@@ -1475,7 +1475,7 @@
       "description": "Р кислоты в коллекторе-1"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02P20_2.PNT",
+      "browseName": "CH_M52::02SKLAD:02P20_2",
       "aliasName": "02HNO3_P20_2",
       "displayName": "02HNO3_P20_2",
       "ownerName": "CH_M52",
@@ -1495,7 +1495,7 @@
       "description": "Р кислоты в коллекторе-2"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02P22_1.PNT",
+      "browseName": "CH_M52::02SKLAD:02P22_1",
       "aliasName": "02HNO3_P22_1",
       "displayName": "02HNO3_P22_1",
       "ownerName": "CH_M52",
@@ -1515,7 +1515,7 @@
       "description": "Р кислоты в М9 коллекторе-1"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02P22_2.PNT",
+      "browseName": "CH_M52::02SKLAD:02P22_2",
       "aliasName": "02HNO3_P22_2",
       "displayName": "02HNO3_P22_2",
       "ownerName": "CH_M52",
@@ -1535,7 +1535,7 @@
       "description": "Р кислоты в М9 коллекторе-2"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02F20_1.PNT",
+      "browseName": "CH_M52::02SKLAD:02F20_1",
       "aliasName": "02HNO3_F20_1",
       "displayName": "02HNO3_F20_1",
       "ownerName": "CH_M52",
@@ -1555,7 +1555,7 @@
       "description": "F кислоты в коллекторе-1"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02F20_2.PNT",
+      "browseName": "CH_M52::02SKLAD:02F20_2",
       "aliasName": "02HNO3_F20_2",
       "displayName": "02HNO3_F20_2",
       "ownerName": "CH_M52",
@@ -1575,7 +1575,7 @@
       "description": "F кислоты в коллекторе-2"
     },
     {
-      "browseName": "CH_M52::02VODA_XOB:02T1.PNT",
+      "browseName": "CH_M52::02VODA_XOB:02T1",
       "aliasName": "02XOB_T1",
       "displayName": "02XOB_T1",
       "ownerName": "CH_M52",
@@ -1595,7 +1595,7 @@
       "description": "Т ХОВ в цех"
     },
     {
-      "browseName": "CH_M52::02VODA_XOB:02P4.PNT",
+      "browseName": "CH_M52::02VODA_XOB:02P4",
       "aliasName": "02XOB_P4",
       "displayName": "02XOB_P4",
       "ownerName": "CH_M52",
@@ -1615,7 +1615,7 @@
       "description": "Р ХОВ в цех"
     },
     {
-      "browseName": "CH_M52::02VODA_XOB:02F1.PNT",
+      "browseName": "CH_M52::02VODA_XOB:02F1",
       "aliasName": "02XOB_F1",
       "displayName": "02XOB_F1",
       "ownerName": "CH_M52",
@@ -1635,7 +1635,7 @@
       "description": "F ХОВ в цех"
     },
     {
-      "browseName": "CH_M52::02VODA:02T1_1.PNT",
+      "browseName": "CH_M52::02VODA:02T1_1",
       "aliasName": "02OB_T1_1",
       "displayName": "02OB_T1_1",
       "ownerName": "CH_M52",
@@ -1655,7 +1655,7 @@
       "description": "Т ОВ в цех (маш. зал)"
     },
     {
-      "browseName": "CH_M52::02VODA:02T1_2.PNT",
+      "browseName": "CH_M52::02VODA:02T1_2",
       "aliasName": "02OB_T1_2",
       "displayName": "02OB_T1_2",
       "ownerName": "CH_M52",
@@ -1675,7 +1675,7 @@
       "description": "Т ОВ в цех (абсорбц. колона)"
     },
     {
-      "browseName": "CH_M52::02VODA:02P5_1.PNT",
+      "browseName": "CH_M52::02VODA:02P5_1",
       "aliasName": "02OB_P5_1",
       "displayName": "02OB_P5_1",
       "ownerName": "CH_M52",
@@ -1695,7 +1695,7 @@
       "description": "Р ОВ в цех"
     },
     {
-      "browseName": "CH_M52::02SBS_OC:02PS10.PNT",
+      "browseName": "CH_M52::02SBS_OC:02PS10",
       "aliasName": "02PS10",
       "displayName": "02PS10",
       "ownerName": "CH_M52",
@@ -1718,7 +1718,7 @@
       "12AGR": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M52::12SBS_AO:12PS180.PNT",
+      "browseName": "CH_M52::12SBS_AO:12PS180",
       "aliasName": "12VZ_PS180",
       "displayName": "12VZ_PS180",
       "ownerName": "CH_M52",
@@ -1738,7 +1738,7 @@
       "description": "Р воздуха после компрессора"
     },
     {
-      "browseName": "CH_M52::12GTT:12P181.PNT",
+      "browseName": "CH_M52::12GTT:12P181",
       "aliasName": "12VZ_P181",
       "displayName": "12VZ_P181",
       "ownerName": "CH_M52",
@@ -1758,7 +1758,7 @@
       "description": "Р воздуха за нагнетателем"
     },
     {
-      "browseName": "CH_M52::12KONV:12P127A.PNT",
+      "browseName": "CH_M52::12KONV:12P127A",
       "aliasName": "12VZ_P127A",
       "displayName": "12VZ_P127A",
       "ownerName": "CH_M52",
@@ -1778,7 +1778,7 @@
       "description": "Р воздуха в смеситель"
     },
     {
-      "browseName": "CH_M52::12UKST:12FCC_TS174.PNT",
+      "browseName": "CH_M52::12UKST:12FCC_TS174",
       "aliasName": "12VZ_TS174",
       "displayName": "12VZ_TS174",
       "ownerName": "CH_M52",
@@ -1818,7 +1818,7 @@
       "description": "Т под сетками"
     },
     {
-      "browseName": "CH_M52::12KONV:12F102.PNT",
+      "browseName": "CH_M52::12KONV:12F102",
       "aliasName": "12VZ_F102",
       "displayName": "12VZ_F102",
       "ownerName": "CH_M52",
@@ -1838,7 +1838,7 @@
       "description": "F воздуха в смеситель"
     },
     {
-      "browseName": "CH_M52::12ABSOR:12F103.PNT",
+      "browseName": "CH_M52::12ABSOR:12F103",
       "aliasName": "12VZ_F103",
       "displayName": "12VZ_F103",
       "ownerName": "CH_M52",
@@ -1858,7 +1858,7 @@
       "description": "F добавочного воздуха в линию НГ и продувочной колоны"
     },
     {
-      "browseName": "CH_M52::12KONV:12FC101.PNT",
+      "browseName": "CH_M52::12KONV:12FC101",
       "aliasName": "12NH3_F101",
       "displayName": "12NH3_F101",
       "ownerName": "CH_M52",
@@ -1878,7 +1878,7 @@
       "description": "F ГА в смеситель"
     },
     {
-      "browseName": "CH_M52::12OXG:12FC106.PNT",
+      "browseName": "CH_M52::12OXG:12FC106",
       "aliasName": "12NH3_F106",
       "displayName": "12NH3_F106",
       "ownerName": "CH_M52",
@@ -1898,7 +1898,7 @@
       "description": "F ГА в РСО"
     },
     {
-      "browseName": "CH_M52::12ABSOR:12F105.PNT",
+      "browseName": "CH_M52::12ABSOR:12F105",
       "aliasName": "12HNO3_F105",
       "displayName": "12HNO3_F105",
       "ownerName": "CH_M52",
@@ -1918,7 +1918,7 @@
       "description": "F кислоты с агрегата"
     },
     {
-      "browseName": "CH_M52::12UKST:12FCC_F171.PNT",
+      "browseName": "CH_M52::12UKST:12FCC_F171",
       "aliasName": "12NG_F171",
       "displayName": "12NG_F171",
       "ownerName": "CH_M52",
@@ -1938,7 +1938,7 @@
       "description": "F ПГ в УКСТ"
     },
     {
-      "browseName": "CH_M52::12RD:12EA_RD.PNT",
+      "browseName": "CH_M52::12RD:12EA_RD",
       "aliasName": "12EA_RD",
       "displayName": "12EA_RD",
       "ownerName": "CH_M52",
@@ -1961,7 +1961,7 @@
       "22AGR": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M52::22SBS_AO:22PS180.PNT",
+      "browseName": "CH_M52::22SBS_AO:22PS180",
       "aliasName": "22VZ_PS180",
       "displayName": "22VZ_PS180",
       "ownerName": "CH_M52",
@@ -1981,7 +1981,7 @@
       "description": "Р воздуха после компрессора"
     },
     {
-      "browseName": "CH_M52::22GTT:22P181.PNT",
+      "browseName": "CH_M52::22GTT:22P181",
       "aliasName": "22VZ_P181",
       "displayName": "22VZ_P181",
       "ownerName": "CH_M52",
@@ -2001,7 +2001,7 @@
       "description": "Р воздуха за нагнетателем"
     },
     {
-      "browseName": "CH_M52::22KONV:22P127A.PNT",
+      "browseName": "CH_M52::22KONV:22P127A",
       "aliasName": "22VZ_P127A",
       "displayName": "22VZ_P127A",
       "ownerName": "CH_M52",
@@ -2021,7 +2021,7 @@
       "description": "Р воздуха в смеситель"
     },
     {
-      "browseName": "CH_M52::22UKST:22FCC_TS174.PNT",
+      "browseName": "CH_M52::22UKST:22FCC_TS174",
       "aliasName": "22VZ_TS174",
       "displayName": "22VZ_TS174",
       "ownerName": "CH_M52",
@@ -2061,7 +2061,7 @@
       "description": "Т под сетками"
     },
     {
-      "browseName": "CH_M52::22KONV:22F102.PNT",
+      "browseName": "CH_M52::22KONV:22F102",
       "aliasName": "22VZ_F102",
       "displayName": "22VZ_F102",
       "ownerName": "CH_M52",
@@ -2081,7 +2081,7 @@
       "description": "F воздуха в смеситель"
     },
     {
-      "browseName": "CH_M52::22ABSOR:22F103.PNT",
+      "browseName": "CH_M52::22ABSOR:22F103",
       "aliasName": "22VZ_F103",
       "displayName": "22VZ_F103",
       "ownerName": "CH_M52",
@@ -2101,7 +2101,7 @@
       "description": "F добавочного воздуха в линию НГ и продувочной колоны"
     },
     {
-      "browseName": "CH_M52::22KONV:22FC101.PNT",
+      "browseName": "CH_M52::22KONV:22FC101",
       "aliasName": "22NH3_F101",
       "displayName": "22NH3_F101",
       "ownerName": "CH_M52",
@@ -2121,7 +2121,7 @@
       "description": "F ГА в смеситель"
     },
     {
-      "browseName": "CH_M52::22OXG:22FC106.PNT",
+      "browseName": "CH_M52::22OXG:22FC106",
       "aliasName": "22NH3_F106",
       "displayName": "22NH3_F106",
       "ownerName": "CH_M52",
@@ -2141,7 +2141,7 @@
       "description": "F ГА в РСО"
     },
     {
-      "browseName": "CH_M52::22ABSOR:22F105.PNT",
+      "browseName": "CH_M52::22ABSOR:22F105",
       "aliasName": "22HNO3_F105",
       "displayName": "22HNO3_F105",
       "ownerName": "CH_M52",
@@ -2161,7 +2161,7 @@
       "description": "F кислоты с агрегата"
     },
     {
-      "browseName": "CH_M52::22UKST:22FCC_F171.PNT",
+      "browseName": "CH_M52::22UKST:22FCC_F171",
       "aliasName": "22NG_F171",
       "displayName": "22NG_F171",
       "ownerName": "CH_M52",
@@ -2181,7 +2181,7 @@
       "description": "F ПГ в УКСТ"
     },
     {
-      "browseName": "CH_M52::22RD:22EA_RD.PNT",
+      "browseName": "CH_M52::22RD:22EA_RD",
       "aliasName": "22EA_RD",
       "displayName": "22EA_RD",
       "ownerName": "CH_M52",
@@ -2204,7 +2204,7 @@
       "32AGR": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M52::32SBS_AO:32PS180.PNT",
+      "browseName": "CH_M52::32SBS_AO:32PS180",
       "aliasName": "32VZ_PS180",
       "displayName": "32VZ_PS180",
       "ownerName": "CH_M52",
@@ -2224,7 +2224,7 @@
       "description": "Р воздуха после компрессора"
     },
     {
-      "browseName": "CH_M52::32GTT:32P181.PNT",
+      "browseName": "CH_M52::32GTT:32P181",
       "aliasName": "32VZ_P181",
       "displayName": "32VZ_P181",
       "ownerName": "CH_M52",
@@ -2244,7 +2244,7 @@
       "description": "Р воздуха за нагнетателем"
     },
     {
-      "browseName": "CH_M52::32KONV:32P127A.PNT",
+      "browseName": "CH_M52::32KONV:32P127A",
       "aliasName": "32VZ_P127A",
       "displayName": "32VZ_P127A",
       "ownerName": "CH_M52",
@@ -2264,7 +2264,7 @@
       "description": "Р воздуха в смеситель"
     },
     {
-      "browseName": "CH_M52::32UKST:32FCC_TS174.PNT",
+      "browseName": "CH_M52::32UKST:32FCC_TS174",
       "aliasName": "32VZ_TS174",
       "displayName": "32VZ_TS174",
       "ownerName": "CH_M52",
@@ -2304,7 +2304,7 @@
       "description": "Т под сетками"
     },
     {
-      "browseName": "CH_M52::32KONV:32F102.PNT",
+      "browseName": "CH_M52::32KONV:32F102",
       "aliasName": "32VZ_F102",
       "displayName": "32VZ_F102",
       "ownerName": "CH_M52",
@@ -2324,7 +2324,7 @@
       "description": "F воздуха в смеситель"
     },
     {
-      "browseName": "CH_M52::32ABSOR:32F103.PNT",
+      "browseName": "CH_M52::32ABSOR:32F103",
       "aliasName": "32VZ_F103",
       "displayName": "32VZ_F103",
       "ownerName": "CH_M52",
@@ -2344,7 +2344,7 @@
       "description": "F добавочного воздуха в линию НГ и продувочной колоны"
     },
     {
-      "browseName": "CH_M52::32KONV:32FC101.PNT",
+      "browseName": "CH_M52::32KONV:32FC101",
       "aliasName": "32NH3_F101",
       "displayName": "32NH3_F101",
       "ownerName": "CH_M52",
@@ -2364,7 +2364,7 @@
       "description": "F ГА в смеситель"
     },
     {
-      "browseName": "CH_M52::32OXG:32FC106.PNT",
+      "browseName": "CH_M52::32OXG:32FC106",
       "aliasName": "32NH3_F106",
       "displayName": "32NH3_F106",
       "ownerName": "CH_M52",
@@ -2384,7 +2384,7 @@
       "description": "F ГА в РСО"
     },
     {
-      "browseName": "CH_M52::32ABSOR:32F105.PNT",
+      "browseName": "CH_M52::32ABSOR:32F105",
       "aliasName": "32HNO3_F105",
       "displayName": "32HNO3_F105",
       "ownerName": "CH_M52",
@@ -2404,7 +2404,7 @@
       "description": "F кислоты с агрегата"
     },
     {
-      "browseName": "CH_M52::32UKST:32FCC_F171.PNT",
+      "browseName": "CH_M52::32UKST:32FCC_F171",
       "aliasName": "32NG_F171",
       "displayName": "32NG_F171",
       "ownerName": "CH_M52",
@@ -2424,7 +2424,7 @@
       "description": "F ПГ в УКСТ"
     },
     {
-      "browseName": "CH_M52::32RD:32EA_RD.PNT",
+      "browseName": "CH_M52::32RD:32EA_RD",
       "aliasName": "32EA_RD",
       "displayName": "32EA_RD",
       "ownerName": "CH_M52",
@@ -2447,7 +2447,7 @@
       "42AGR": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M52::42SBS_AO:42PS180.PNT",
+      "browseName": "CH_M52::42SBS_AO:42PS180",
       "aliasName": "42VZ_PS180",
       "displayName": "42VZ_PS180",
       "ownerName": "CH_M52",
@@ -2467,7 +2467,7 @@
       "description": "Р воздуха после компрессора"
     },
     {
-      "browseName": "CH_M52::42GTT:42P181.PNT",
+      "browseName": "CH_M52::42GTT:42P181",
       "aliasName": "42VZ_P181",
       "displayName": "42VZ_P181",
       "ownerName": "CH_M52",
@@ -2487,7 +2487,7 @@
       "description": "Р воздуха за нагнетателем"
     },
     {
-      "browseName": "CH_M52::42KONV:42P127A.PNT",
+      "browseName": "CH_M52::42KONV:42P127A",
       "aliasName": "42VZ_P127A",
       "displayName": "42VZ_P127A",
       "ownerName": "CH_M52",
@@ -2507,7 +2507,7 @@
       "description": "Р воздуха в смеситель"
     },
     {
-      "browseName": "CH_M52::42UKST:42FCC_TS174.PNT",
+      "browseName": "CH_M52::42UKST:42FCC_TS174",
       "aliasName": "42VZ_TS174",
       "displayName": "42VZ_TS174",
       "ownerName": "CH_M52",
@@ -2547,7 +2547,7 @@
       "description": "Т под сетками"
     },
     {
-      "browseName": "CH_M52::42KONV:42F102.PNT",
+      "browseName": "CH_M52::42KONV:42F102",
       "aliasName": "42VZ_F102",
       "displayName": "42VZ_F102",
       "ownerName": "CH_M52",
@@ -2567,7 +2567,7 @@
       "description": "F воздуха в смеситель"
     },
     {
-      "browseName": "CH_M52::42ABSOR:42F103.PNT",
+      "browseName": "CH_M52::42ABSOR:42F103",
       "aliasName": "42VZ_F103",
       "displayName": "42VZ_F103",
       "ownerName": "CH_M52",
@@ -2587,7 +2587,7 @@
       "description": "F добавочного воздуха в линию НГ и продувочной колоны"
     },
     {
-      "browseName": "CH_M52::42KONV:42FC101.PNT",
+      "browseName": "CH_M52::42KONV:42FC101",
       "aliasName": "42NH3_F101",
       "displayName": "42NH3_F101",
       "ownerName": "CH_M52",
@@ -2607,7 +2607,7 @@
       "description": "F ГА в смеситель"
     },
     {
-      "browseName": "CH_M52::42OXG:42FC106.PNT",
+      "browseName": "CH_M52::42OXG:42FC106",
       "aliasName": "42NH3_F106",
       "displayName": "42NH3_F106",
       "ownerName": "CH_M52",
@@ -2627,7 +2627,7 @@
       "description": "F ГА в РСО"
     },
     {
-      "browseName": "CH_M52::42ABSOR:42F105.PNT",
+      "browseName": "CH_M52::42ABSOR:42F105",
       "aliasName": "42HNO3_F105",
       "displayName": "42HNO3_F105",
       "ownerName": "CH_M52",
@@ -2647,7 +2647,7 @@
       "description": "F кислоты с агрегата"
     },
     {
-      "browseName": "CH_M52::42UKST:42FCC_F171.PNT",
+      "browseName": "CH_M52::42UKST:42FCC_F171",
       "aliasName": "42NG_F171",
       "displayName": "42NG_F171",
       "ownerName": "CH_M52",
@@ -2667,7 +2667,7 @@
       "description": "F ПГ в УКСТ"
     },
     {
-      "browseName": "CH_M52::42RD:42EA_RD.PNT",
+      "browseName": "CH_M52::42RD:42EA_RD",
       "aliasName": "42EA_RD",
       "displayName": "42EA_RD",
       "ownerName": "CH_M52",
@@ -2690,7 +2690,7 @@
       "52AGR": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M52::52SBS_AO:52PS180.PNT",
+      "browseName": "CH_M52::52SBS_AO:52PS180",
       "aliasName": "52VZ_PS180",
       "displayName": "52VZ_PS180",
       "ownerName": "CH_M52",
@@ -2710,7 +2710,7 @@
       "description": "Р воздуха после компрессора"
     },
     {
-      "browseName": "CH_M52::52GTT:52P181.PNT",
+      "browseName": "CH_M52::52GTT:52P181",
       "aliasName": "52VZ_P181",
       "displayName": "52VZ_P181",
       "ownerName": "CH_M52",
@@ -2730,7 +2730,7 @@
       "description": "Р воздуха за нагнетателем"
     },
     {
-      "browseName": "CH_M52::52KONV:52P127A.PNT",
+      "browseName": "CH_M52::52KONV:52P127A",
       "aliasName": "52VZ_P127A",
       "displayName": "52VZ_P127A",
       "ownerName": "CH_M52",
@@ -2750,7 +2750,7 @@
       "description": "Р воздуха в смеситель"
     },
     {
-      "browseName": "CH_M52::52UKST:52FCC_TS174.PNT",
+      "browseName": "CH_M52::52UKST:52FCC_TS174",
       "aliasName": "52VZ_TS174",
       "displayName": "52VZ_TS174",
       "ownerName": "CH_M52",
@@ -2790,7 +2790,7 @@
       "description": "Т под сетками"
     },
     {
-      "browseName": "CH_M52::52KONV:52F102.PNT",
+      "browseName": "CH_M52::52KONV:52F102",
       "aliasName": "52VZ_F102",
       "displayName": "52VZ_F102",
       "ownerName": "CH_M52",
@@ -2810,7 +2810,7 @@
       "description": "F воздуха в смеситель"
     },
     {
-      "browseName": "CH_M52::52ABSOR:52F103.PNT",
+      "browseName": "CH_M52::52ABSOR:52F103",
       "aliasName": "52VZ_F103",
       "displayName": "52VZ_F103",
       "ownerName": "CH_M52",
@@ -2830,7 +2830,7 @@
       "description": "F добавочного воздуха в линию НГ и продувочной колоны"
     },
     {
-      "browseName": "CH_M52::52KONV:52FC101.PNT",
+      "browseName": "CH_M52::52KONV:52FC101",
       "aliasName": "52NH3_F101",
       "displayName": "52NH3_F101",
       "ownerName": "CH_M52",
@@ -2850,7 +2850,7 @@
       "description": "F ГА в смеситель"
     },
     {
-      "browseName": "CH_M52::52OXG:52FC106.PNT",
+      "browseName": "CH_M52::52OXG:52FC106",
       "aliasName": "52NH3_F106",
       "displayName": "52NH3_F106",
       "ownerName": "CH_M52",
@@ -2870,7 +2870,7 @@
       "description": "F ГА в РСО"
     },
     {
-      "browseName": "CH_M52::52ABSOR:52F105.PNT",
+      "browseName": "CH_M52::52ABSOR:52F105",
       "aliasName": "52HNO3_F105",
       "displayName": "52HNO3_F105",
       "ownerName": "CH_M52",
@@ -2890,7 +2890,7 @@
       "description": "F кислоты с агрегата"
     },
     {
-      "browseName": "CH_M52::52UKST:52FCC_F171.PNT",
+      "browseName": "CH_M52::52UKST:52FCC_F171",
       "aliasName": "52NG_F171",
       "displayName": "52NG_F171",
       "ownerName": "CH_M52",
@@ -2910,7 +2910,7 @@
       "description": "F ПГ в УКСТ"
     },
     {
-      "browseName": "CH_M52::52RD:52EA_RD.PNT",
+      "browseName": "CH_M52::52RD:52EA_RD",
       "aliasName": "52EA_RD",
       "displayName": "52EA_RD",
       "ownerName": "CH_M52",
@@ -2933,7 +2933,7 @@
       "62AGR": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M52::62SBS_AO:62PS180.PNT",
+      "browseName": "CH_M52::62SBS_AO:62PS180",
       "aliasName": "62VZ_PS180",
       "displayName": "62VZ_PS180",
       "ownerName": "CH_M52",
@@ -2953,7 +2953,7 @@
       "description": "Р воздуха после компрессора"
     },
     {
-      "browseName": "CH_M52::62GTT:62P181.PNT",
+      "browseName": "CH_M52::62GTT:62P181",
       "aliasName": "62VZ_P181",
       "displayName": "62VZ_P181",
       "ownerName": "CH_M52",
@@ -2973,7 +2973,7 @@
       "description": "Р воздуха за нагнетателем"
     },
     {
-      "browseName": "CH_M52::62KONV:62P127A.PNT",
+      "browseName": "CH_M52::62KONV:62P127A",
       "aliasName": "62VZ_P127A",
       "displayName": "62VZ_P127A",
       "ownerName": "CH_M52",
@@ -2993,7 +2993,7 @@
       "description": "Р воздуха в смеситель"
     },
     {
-      "browseName": "CH_M52::62UKST:62FCC_TS174.PNT",
+      "browseName": "CH_M52::62UKST:62FCC_TS174",
       "aliasName": "62VZ_TS174",
       "displayName": "62VZ_TS174",
       "ownerName": "CH_M52",
@@ -3033,7 +3033,7 @@
       "description": "Т под сетками"
     },
     {
-      "browseName": "CH_M52::62KONV:62F102.PNT",
+      "browseName": "CH_M52::62KONV:62F102",
       "aliasName": "62VZ_F102",
       "displayName": "62VZ_F102",
       "ownerName": "CH_M52",
@@ -3053,7 +3053,7 @@
       "description": "F воздуха в смеситель"
     },
     {
-      "browseName": "CH_M52::62ABSOR:62F103.PNT",
+      "browseName": "CH_M52::62ABSOR:62F103",
       "aliasName": "62VZ_F103",
       "displayName": "62VZ_F103",
       "ownerName": "CH_M52",
@@ -3073,7 +3073,7 @@
       "description": "F добавочного воздуха в линию НГ и продувочной колоны"
     },
     {
-      "browseName": "CH_M52::62KONV:62FC101.PNT",
+      "browseName": "CH_M52::62KONV:62FC101",
       "aliasName": "62NH3_F101",
       "displayName": "62NH3_F101",
       "ownerName": "CH_M52",
@@ -3093,7 +3093,7 @@
       "description": "F ГА в смеситель"
     },
     {
-      "browseName": "CH_M52::62OXG:62FC106.PNT",
+      "browseName": "CH_M52::62OXG:62FC106",
       "aliasName": "62NH3_F106",
       "displayName": "62NH3_F106",
       "ownerName": "CH_M52",
@@ -3113,7 +3113,7 @@
       "description": "F ГА в РСО"
     },
     {
-      "browseName": "CH_M52::62ABSOR:62F105.PNT",
+      "browseName": "CH_M52::62ABSOR:62F105",
       "aliasName": "62HNO3_F105",
       "displayName": "62HNO3_F105",
       "ownerName": "CH_M52",
@@ -3133,7 +3133,7 @@
       "description": "F кислоты с агрегата"
     },
     {
-      "browseName": "CH_M52::62UKST:62FCC_F171.PNT",
+      "browseName": "CH_M52::62UKST:62FCC_F171",
       "aliasName": "62NG_F171",
       "displayName": "62NG_F171",
       "ownerName": "CH_M52",
@@ -3153,7 +3153,7 @@
       "description": "F ПГ в УКСТ"
     },
     {
-      "browseName": "CH_M52::62RD:62EA_RD.PNT",
+      "browseName": "CH_M52::62RD:62EA_RD",
       "aliasName": "62EA_RD",
       "displayName": "62EA_RD",
       "ownerName": "CH_M52",
@@ -3176,7 +3176,7 @@
       "72AGR": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M52::72SBS_AO:72PS180.PNT",
+      "browseName": "CH_M52::72SBS_AO:72PS180",
       "aliasName": "72VZ_PS180",
       "displayName": "72VZ_PS180",
       "ownerName": "CH_M52",
@@ -3196,7 +3196,7 @@
       "description": "Р воздуха после компрессора"
     },
     {
-      "browseName": "CH_M52::72GTT:72P181.PNT",
+      "browseName": "CH_M52::72GTT:72P181",
       "aliasName": "72VZ_P181",
       "displayName": "72VZ_P181",
       "ownerName": "CH_M52",
@@ -3216,7 +3216,7 @@
       "description": "Р воздуха за нагнетателем"
     },
     {
-      "browseName": "CH_M52::72KONV:72P127A.PNT",
+      "browseName": "CH_M52::72KONV:72P127A",
       "aliasName": "72VZ_P127A",
       "displayName": "72VZ_P127A",
       "ownerName": "CH_M52",
@@ -3236,7 +3236,7 @@
       "description": "Р воздуха в смеситель"
     },
     {
-      "browseName": "CH_M52::72UKST:72FCC_TS174.PNT",
+      "browseName": "CH_M52::72UKST:72FCC_TS174",
       "aliasName": "72VZ_TS174",
       "displayName": "72VZ_TS174",
       "ownerName": "CH_M52",
@@ -3276,7 +3276,7 @@
       "description": "Т под сетками"
     },
     {
-      "browseName": "CH_M52::72KONV:72F102.PNT",
+      "browseName": "CH_M52::72KONV:72F102",
       "aliasName": "72VZ_F102",
       "displayName": "72VZ_F102",
       "ownerName": "CH_M52",
@@ -3296,7 +3296,7 @@
       "description": "F воздуха в смеситель"
     },
     {
-      "browseName": "CH_M52::72ABSOR:72F103.PNT",
+      "browseName": "CH_M52::72ABSOR:72F103",
       "aliasName": "72VZ_F103",
       "displayName": "72VZ_F103",
       "ownerName": "CH_M52",
@@ -3316,7 +3316,7 @@
       "description": "F добавочного воздуха в линию НГ и продувочной колоны"
     },
     {
-      "browseName": "CH_M52::72KONV:72FC101.PNT",
+      "browseName": "CH_M52::72KONV:72FC101",
       "aliasName": "72NH3_F101",
       "displayName": "72NH3_F101",
       "ownerName": "CH_M52",
@@ -3336,7 +3336,7 @@
       "description": "F ГА в смеситель"
     },
     {
-      "browseName": "CH_M52::72OXG:72FC106.PNT",
+      "browseName": "CH_M52::72OXG:72FC106",
       "aliasName": "72NH3_F106",
       "displayName": "72NH3_F106",
       "ownerName": "CH_M52",
@@ -3356,7 +3356,7 @@
       "description": "F ГА в РСО"
     },
     {
-      "browseName": "CH_M52::72ABSOR:72F105.PNT",
+      "browseName": "CH_M52::72ABSOR:72F105",
       "aliasName": "72HNO3_F105",
       "displayName": "72HNO3_F105",
       "ownerName": "CH_M52",
@@ -3376,7 +3376,7 @@
       "description": "F кислоты с агрегата"
     },
     {
-      "browseName": "CH_M52::72UKST:72FCC_F171.PNT",
+      "browseName": "CH_M52::72UKST:72FCC_F171",
       "aliasName": "72NG_F171",
       "displayName": "72NG_F171",
       "ownerName": "CH_M52",
@@ -3396,7 +3396,7 @@
       "description": "F ПГ в УКСТ"
     },
     {
-      "browseName": "CH_M52::72RD:72EA_RD.PNT",
+      "browseName": "CH_M52::72RD:72EA_RD",
       "aliasName": "72EA_RD",
       "displayName": "72EA_RD",
       "ownerName": "CH_M52",

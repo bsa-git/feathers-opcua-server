@@ -37,8 +37,8 @@
     "endpointPort": 26570,
     "srvServiceUrl": "http://10.60.0.220:3030",
     "clientServiceUrl": "http://10.60.0.220:3030",
-    "clientScript": "subscriptionMonitor",
-    "subscription": "onChangedCH_M5Handler",
+    "clientScript": "startSubscriptionMonitor",
+    "subscription": "onChangedGroupItemsHandler",
     "include": {
       "tests": [
         "mssql-tedious.test.js",
@@ -55,7 +55,7 @@
       "options": "/src/api/opcua/ua-cherkassy-azot-asutp_dev1/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
-      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-asutp_dev1/opcua-subscriptions",
+      "subscriptions": "",
       "client-scripts": ""
     }
   },
@@ -66,8 +66,8 @@
     "endpointUrl": "opc.tcp://M5-0095488.OSTCHEM.COM.UA:26570",
     "srvServiceUrl": "",
     "clientServiceUrl": "http://10.60.0.220:3030",
-    "clientScript": "subscriptionMonitor",
-    "subscription": "onChangedCH_M5Handler",
+    "clientScript": "startSubscriptionMonitor",
+    "subscription": "onChangedGroupHandler",
     "paths": {
       "base-options": [
         "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json"
@@ -75,7 +75,7 @@
       "options": "",
       "getters": "",
       "methods": "",
-      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-asutp_dev2/opcua-subscriptions",
+      "subscriptions": "",
       "client-scripts": ""
     }
   },
@@ -86,7 +86,8 @@
     "endpointPort": 26570,
     "srvServiceUrl": "http://192.168.3.5:3030",
     "clientServiceUrl": "http://192.168.3.5:3030",
-    "clientScript": "subscriptionMonitor_CH_M5",
+    "clientScript": "startSubscriptionMonitor",
+    "subscription": "onChangedGroupItemsHandler",
     "exclude": {
       "services": [
         "log-messages"
@@ -99,35 +100,7 @@
       "options": "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
-      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-m5_prod1/opcua-subscriptions",
-      "client-scripts": "/src/api/opcua/ua-cherkassy-azot-m5_prod1/opcua-client-scripts"
-    }
-  },
-  {
-    "id": "ua-cherkassy-azot-srvelf_prod1",
-    "name": "380-472-00203826-srvelf_prod1",
-    "endpointUrl": "",
-    "endpointPort": 26570,
-    "srvServiceUrl": "http://10.60.0.71:3030",
-    "clientServiceUrl": "http://10.60.0.71:3030",
-    "clientScript": "subscriptionMonitor",
-    "subscription": "onChangedCH_M5Handler",
-    "exclude": {
-      "services": [
-        "log-messages"
-      ],
-      "dbClients": [
-        "mongoose.js"
-      ]
-    },
-    "paths": {
-      "base-options": [
-        "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json"
-      ],
-      "options": "/src/api/opcua/ua-cherkassy-azot-srvelf_prod1/AddressSpaceOptions.json",
-      "getters": "",
-      "methods": "",
-      "subscriptions": "/src/api/opcua/ua-cherkassy-azot-srvelf_prod1/opcua-subscriptions",
+      "subscriptions": "",
       "client-scripts": ""
     }
   },
@@ -138,8 +111,8 @@
     "endpointPort": 26570,
     "srvServiceUrl": "http://10.60.0.49:3030",
     "clientServiceUrl": "http://10.60.0.49:3030",
-    "clientScript": "subscriptionMonitor",
-    "subscription": "onChangedCH_M5Handler",
+    "clientScript": "startSubscriptionMonitor",
+    "subscription": "onChangedGroupItemsHandler",
     "exclude": {
       "services": [
         "log-messages"
@@ -156,7 +129,7 @@
       "options": "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
-      "subscriptions": "/src/api/ua-cherkassy-azot-ogmtmztp_prod1/opcua-subscriptions",
+      "subscriptions": "",
       "client-scripts": ""
     }
   },
@@ -167,8 +140,8 @@
     "endpointPort": 26570,
     "srvServiceUrl": "http://BSA-HOME:3030",
     "clientServiceUrl": "http://BSA-HOME:3030",
-    "clientScript": "subscriptionMonitor",
-    "subscription": "onChangedCH_M5Handler",
+    "clientScript": "startSubscriptionMonitor",
+    "subscription": "onChangedGroupItemsHandler",
     "include": {
       "tests": [
         "mssql-tedious.test2.js",
@@ -183,7 +156,7 @@
       "options": "/src/api/opcua/ua-cherkassy-bsahome_dev1/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
-      "subscriptions": "/src/api/opcua/ua-cherkassy-bsahome_dev1/opcua-subscriptions",
+      "subscriptions": "",
       "client-scripts": ""
     }
   }

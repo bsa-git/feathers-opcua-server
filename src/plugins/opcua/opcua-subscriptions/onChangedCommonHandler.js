@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
 const { 
   inspector, 
-} = require('../lib');
+} = require('../../lib');
 
 const { 
   getValueFromNodeId,
-} = require('./opcua-helper');
+} = require('../opcua-helper');
 
 const chalk = require('chalk');
 
-const debug = require('debug')('app:opcua-subscriptions');
+const debug = require('debug')('app:opcua-subscriptions/onChangedCommonHandler');
 const isDebug = false;
 const isLog = false;
 
@@ -28,6 +28,4 @@ function onChangedCommonHandler(params, dataValue) {
   console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(value));
 }
 
-module.exports = {
-  onChangedCommonHandler,
-};
+module.exports = onChangedCommonHandler;

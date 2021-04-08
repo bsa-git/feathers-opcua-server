@@ -440,7 +440,9 @@ const getSubscriptionHandler = function (id, nameFile = '') {
   // Get subscriptionHandler
   if (opcuaOption.paths.subscriptions && nameFile) {
     const subscriptionHandlers = require(`${appRoot}${opcuaOption.paths.subscriptions}`);
-    subscriptionHandler = subscriptionHandlers[nameFile];
+    if (subscriptionHandlers[nameFile]) {
+      subscriptionHandler = subscriptionHandlers[nameFile];
+    }
   }
   subscriptionHandler = subscriptionHandler ? subscriptionHandler : subscriptionDefaultHandlers[defaultNameFile];
   return subscriptionHandler;
@@ -453,19 +455,26 @@ const getSubscriptionHandler = function (id, nameFile = '') {
  * @returns {Function}
  */
 const getOpcuaClientScript = function (id, nameScript = '') {
-  let opcuaClientScripts, opcuaClientScript;
+  let opcuaClientScripts, opcuaClientScript = null;
+  const defaultOpcuaClientScripts = require('./opcua-client-scripts');
   //--------------------------------------------
   if (isDebug) debug('getOpcuaClientScript.id,nameScript:', id, nameScript);
+
+  // Get defaultOpcuaClientScript
+  if (nameScript) {
+    opcuaClientScript = defaultOpcuaClientScripts[nameScript];
+  }
+
   // Get opcuaOption 
   const opcuaOption = getOpcuaConfig(id);
   // Get opcuaClientScript
   if (opcuaOption.paths['client-scripts']) {
     opcuaClientScripts = require(`${appRoot}${opcuaOption.paths['client-scripts']}`);
-    opcuaClientScript = opcuaClientScripts[nameScript];
-  } else {
-    opcuaClientScripts = require(`${appRoot}/src/plugins/opcua/opcua-client-scripts`);
-    opcuaClientScript = opcuaClientScripts[nameScript];
-  }
+    if(opcuaClientScripts[nameScript]){
+      opcuaClientScript = opcuaClientScripts[nameScript];
+    }
+  } 
+
   if (!opcuaClientScript) {
     throw new Error(`It is not possible to find the opcua client script for id=${id} and nameScript="${nameScript}"`);
   }
@@ -720,16 +729,14 @@ const isOpcuaClientInList = (service, id) => {
  * @param {String} id 
  */
 const executeOpcuaClientScript = async (service, id) => {
+  const defaultScriptName = 'startSubscriptionMonitor';
+  //----------------------------------------------------
   const opcuaOption = getOpcuaConfig(id);
   if (isDebug) debug('getOpcuaClientScript.opcuaOption:', opcuaOption);
-  const scriptName = opcuaOption.clientScript;
+  const scriptName = opcuaOption.clientScript ? opcuaOption.clientScript : defaultScriptName;
   if (isDebug) debug('getOpcuaClientScript.scriptName:', scriptName);
-  if (scriptName) {
-    const script = getOpcuaClientScript(id, scriptName);
-    if (script) {
-      await script(id, service);
-    }
-  }
+  const script = getOpcuaClientScript(id, scriptName);
+  await script(id, service);
 };
 
 /**
@@ -744,7 +751,7 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}) => {
   const opcuaGetters = require(`${appRoot}src/plugins/opcua/opcua-getters`);
   //-----------------------------------------------------------------------
 
-  if(isDebug) debug('setValueFromSourceForGroup.opcuaGetters:', opcuaGetters);
+  if (isDebug) debug('setValueFromSourceForGroup.opcuaGetters:', opcuaGetters);
 
   // Get group variable list 
   let groupVariableList = params.addedVariableList;
@@ -766,7 +773,7 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}) => {
         params.myOpcuaServer.setValueFromSource(variable, groupVariable, opcuaGetters[variable.getter], value);
         if (isDebug) debug('setValueFromSourceForGroup.browseName:', `"${browseName}" =`, value);
       } else {
-        console.log( chalk.red(`Error: is absent getter - "${variable.getter}" for browseName: "${browseName}"`));
+        console.log(chalk.red(`Error: is absent getter - "${variable.getter}" for browseName: "${browseName}"`));
         throw new Error(`Error: is absent getter - "${variable.getter}" for browseName: "${browseName}"`);
       }
     }

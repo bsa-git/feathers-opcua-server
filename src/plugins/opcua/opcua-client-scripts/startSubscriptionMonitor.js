@@ -2,7 +2,7 @@
 const {
   inspector,
   getGroupsFromArray
-} = require('../lib');
+} = require('../../lib');
 
 
 const debug = require('debug')('app:opcua-client-scripts');
@@ -11,12 +11,12 @@ const isLog = false;
 
 
 /**
- * @method subscriptionMonitor_CH_M5
+ * @method startSubscriptionMonitor
  * @param {String} id 
  * @param {Object} service 
  * @returns {void}
  */
-async function subscriptionMonitor(id, service) {
+async function startSubscriptionMonitor(id, service) {
   let groups, browseNames;
   // Subscription create
   await service.subscriptionCreate(id);
@@ -27,7 +27,7 @@ async function subscriptionMonitor(id, service) {
   const allVariables = srvCurrentState.paramsAddressSpace.variables;
   //---- Group owners  ---//
   browseNames = allVariables.filter(v => v.hist && v.group).map(v => v.browseName);
-  if(isLog) inspector('subscriptionMonitor.groupOwners.browseNames:', browseNames);
+  if(isLog) inspector('startSubscriptionMonitor.groupOwners.browseNames:', browseNames);
   // inspector('subscriptionMonitor.groupOwners.browseNames:', browseNames);
   for (let index = 0; index < browseNames.length; index++) {
     const browseName = browseNames[index];
@@ -52,7 +52,7 @@ async function subscriptionMonitor(id, service) {
 
   //---- Only hist values  ---//
   browseNames = allVariables.filter(v => v.hist && !v.group && !v.ownerGroup).map(v => v.browseName);
-  if(isLog) inspector('subscriptionMonitor.histValues.browseNames:', browseNames);
+  if(isLog) inspector('startSubscriptionMonitor.histValues.browseNames:', browseNames);
   // inspector('subscriptionMonitor.histValues.browseNames:', browseNames);
   for (let index = 0; index < browseNames.length; index++) {
     const browseName = browseNames[index];
@@ -65,6 +65,4 @@ async function subscriptionMonitor(id, service) {
   }
 }
 
-module.exports = {
-  subscriptionMonitor
-};
+module.exports = startSubscriptionMonitor;
