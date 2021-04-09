@@ -25,6 +25,11 @@
       "shortName": "н.м3/ч",
       "longName": "нормальный метр кубический в час"
     },
+    "thousand_normal_cubic_metre_per_hour": {
+      "symbol": "MQH??",
+      "shortName": "тыс н.м3/ч",
+      "longName": "тысяч нормальных метров кубических в час"
+    },
     "kilogram_per_cubic_metre": {
       "symbol": "KMQ",
       "shortName": "кг/м3",
@@ -44,6 +49,11 @@
       "symbol": "KWT",
       "shortName": "кВт",
       "longName": "киловатт"
+    },
+    "conventional_millimetre_of_mercury": {
+      "symbol": "HN",
+      "shortName": "мм рт.ст.",
+      "longName": "миллиметры ртутного столба"
     }
   }
 }

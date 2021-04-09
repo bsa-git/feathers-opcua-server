@@ -50,7 +50,8 @@
     "paths": {
       "base-options": [
         "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
-        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-A3_Options.json"
+        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-A3_Options.json",
+        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-NG-UPG2_Options.json"
       ],
       "options": "/src/api/opcua/ua-cherkassy-azot-asutp_dev1/AddressSpaceOptions.json",
       "getters": "",
@@ -124,7 +125,8 @@
     "paths": {
       "base-options": [
         "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
-        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-A3_Options.json"
+        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-A3_Options.json",
+        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-NG-UPG2_Options.json"
       ],
       "options": "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/AddressSpaceOptions.json",
       "getters": "",

@@ -200,7 +200,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     assert.ok(rows[0].text, 'Execute Stored Procedure "dbo.MessagesSummary"');
   });
   
-  it('Select values for webM51 from SnapShot table', async () => {
+  it('Select values for "webM51" from SnapShot table', async () => {
     let sql = '', rows;
     //---------------------------------------------
     const db = new MssqlTedious(config);
@@ -222,7 +222,32 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     
     await db.disconnect();
 
-    assert.ok(rows.length, 'Select values for webM51 from SnapShot table');
+    assert.ok(rows.length, 'Select values for "webM51" from SnapShot table');
+  });
+
+  it('Select values for "opcUPG2" from SnapShot table', async () => {
+    let sql = '', rows;
+    //---------------------------------------------
+    const db = new MssqlTedious(config);
+    await db.connect();
+
+    // Select rows from SnapShot table
+    const params = [];
+    sql = `
+    SELECT sh.Value, sh.Time, tInfo.TagName, tInfo.ScanerName, tInfo.TagGroup, tInfo.KIPname
+    FROM dbMonitor.dbo.SnapShot AS sh
+    JOIN dbConfig.dbo.TagsInfo AS tInfo ON sh.TagID = tInfo.ID
+    WHERE sh.ScanerName = @scanerName AND tInfo.OnOff = 1
+    `;
+    db.buildParams(params, 'scanerName', TYPES.Char, 'opcUPG2');
+    
+    rows = await db.query(params, sql);
+    if(isLog) inspector('Request result:', { sql, rows });
+    inspector('Request result:', rows);
+    
+    await db.disconnect();
+
+    assert.ok(rows.length, 'Select values for "opcUPG2" from SnapShot table');
   });
   
 });

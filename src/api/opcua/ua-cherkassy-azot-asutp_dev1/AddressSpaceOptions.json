@@ -17,6 +17,12 @@
       "browseName": "CH_A3",
       "displayName": "Черкассы 'АЗОТ' цех A3",
       "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_NG-UPG2",
+      "displayName": "Черкассы 'АЗОТ' узел природного газа №2",
+      "type": "object"
     }
   ],
   "variables": [
@@ -65,6 +71,25 @@
         "queryFunc": "getValuesFromChAsoduDB",
         "queryParams": {
           "scanerName": "xlsxGA10(A3)"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_NG-UPG2::ValuesFromDB",
+      "displayName": "Значения из DB для CH_NG-UPG2",
+      "ownerName": "CH_NG-UPG2",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "opcUPG2"
         },
         "interval": 20000
       }

@@ -1,4 +1,30 @@
 {
+  "objects": [
+    {
+      "isDisable": false,
+      "browseName": "CH_M51",
+      "displayName": "Черкассы 'АЗОТ' цех M5-1",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_M52",
+      "displayName": "Черкассы 'АЗОТ' цех M5-2",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_A3",
+      "displayName": "Черкассы 'АЗОТ' цех A3",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_NG-UPG2",
+      "displayName": "Черкассы 'АЗОТ' узел природного газа №2",
+      "type": "object"
+    }
+  ],
   "variables": [
     {
       "browseName": "CH_M51::ValueFromFile",
