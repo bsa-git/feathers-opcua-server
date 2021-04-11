@@ -147,7 +147,6 @@
     "include": {
       "tests": [
         "mssql-tedious.test2.js",
-        "http-operations.test.js",
         "log-messages.test.js"
       ]
     },

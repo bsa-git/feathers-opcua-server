@@ -1,14 +1,16 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
 const app = require('../../src/app');
-const { 
+const {
+  appRoot,
+  inspector,
+  makeDirSync, 
   getTime, 
   getValueFromNodeId, 
   OpcuaServer, 
   OpcuaClient, 
   pause, 
-  isObject, 
-  inspector 
+  isObject 
 } = require('../../src/plugins');
 
 const chalk = require('chalk');
@@ -47,6 +49,8 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
     server = new OpcuaServer(app, srvParams);
     // Create OPC-UA client
     client = new OpcuaClient(app, clientParams);
+    // Make dirs
+    makeDirSync([appRoot, 'test/data/tmp/test1']);
     debug('OPCUA - Test::before: Done');
   });
 

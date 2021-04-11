@@ -84,5 +84,6 @@ module.exports = {
   /**
    * set to false if the client should accept server endpoint mismatch
    */
-  endpoint_must_exist: false
+  // endpoint_must_exist: false
+  endpointMustExist: false
 };

@@ -899,6 +899,7 @@ class OpcuaClient {
   async subscriptionTerminate() {
     this.subscriptionNotCreated();
     await this.subscription.terminate();
+    this.subscription = null;
     this.currentState.isSubscriptionCreated = false;
   }
 
