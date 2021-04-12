@@ -348,6 +348,7 @@ class OpcuaServer {
     let addedVariableList, getterParams, valueParams, engineeringUnit;
     this.opcuaServerNotCreated();
     const id = this.params.serverInfo.applicationName;
+    //------------------------------------------------------------------
     if (isDebug) debug('constructAddressSpace.id:', id);
     const opcuaConfig = getOpcuaConfig(id);
     // Merge params
@@ -355,6 +356,7 @@ class OpcuaServer {
       params = mergeOpcuaConfigOptions(id);
     }
     if (isLog) inspector('constructAddressSpace.params:', params);
+    // inspector('constructAddressSpace.params:', params);
     if (Array.isArray(params.objects) && params.objects.length) {
       params.objects = params.objects.filter(item => !item.isDisable);
     } else {

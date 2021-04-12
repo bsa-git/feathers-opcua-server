@@ -1,5 +1,9 @@
 /* eslint-disable no-unused-vars */
-const { inspector, getValueFromNodeId } = require('../../../plugins');
+const { 
+  inspector, 
+  getValueFromNodeId,
+  formatDataValue 
+} = require('../../../plugins');
 const chalk = require('chalk');
 const loRound = require('lodash/round');
 

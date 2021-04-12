@@ -382,6 +382,7 @@ const getOpcuaConfigOptions = function (id, browseName = '') {
  */
 const mergeOpcuaConfigOptions = function (id) {
   let baseOptions = {}, mergeOpcuaOptions = {};
+  //---------------------------------------------
   // Get opcuaOption 
   let opcuaOptions = getOpcuaConfig(id);
   if (opcuaOptions.paths['base-options']) {
