@@ -98,7 +98,7 @@
     },
     {
       "browseName": "CH_M7-313::TPG:P-11",
-      "aliasName": "Tag 0011",
+      "aliasName": "Tag 0008",
       "displayName": "ТПГ(PIR-11)",
       "ownerName": "CH_M7-313",
       "ownerGroup": "CH_M7-313::ValuesFromDB",
@@ -119,7 +119,7 @@
     {
       "browseName": "CH_M7-313::GAM:P-10",
       "aliasName": "Tag 0002",
-      "displayName": "Г/о аммиак(PIR-10)",
+      "displayName": "Г/о амм. из Л-128(PIR-10)",
       "ownerName": "CH_M7-313",
       "ownerGroup": "CH_M7-313::ValuesFromDB",
       "type": "variable.analog",
@@ -139,7 +139,7 @@
     {
       "browseName": "CH_M7-313::GAM:T-1h",
       "aliasName": "Tag 0001",
-      "displayName": "Г/о аммиак(TIR-1h)",
+      "displayName": "Г/о амм. из Л-128(TIR-1h)",
       "ownerName": "CH_M7-313",
       "ownerGroup": "CH_M7-313::ValuesFromDB",
       "type": "variable.analog",
@@ -159,7 +159,7 @@
     {
       "browseName": "CH_M7-313::GAM:T-10",
       "aliasName": "Tag 0019",
-      "displayName": "Г/о аммиак(TIR-10)",
+      "displayName": "Г/о амм. из М-6(TIR-10)",
       "ownerName": "CH_M7-313",
       "ownerGroup": "CH_M7-313::ValuesFromDB",
       "type": "variable.analog",
@@ -239,7 +239,7 @@
     {
       "browseName": "CH_M7-313::OTBG:T-47",
       "aliasName": "Tag 0018",
-      "displayName": "Отбросные газы(TIR-47)",
+      "displayName": "Отбр.газы в КЦ(TIR-47)",
       "ownerName": "CH_M7-313",
       "ownerGroup": "CH_M7-313::ValuesFromDB",
       "type": "variable.analog",
@@ -259,7 +259,7 @@
     {
       "browseName": "CH_M7-313::AMV:P-113/1",
       "aliasName": "Tag 0005",
-      "displayName": "Колонны амводы(PIR-113/1)",
+      "displayName": "Колонны амводы 1a2(PIR-113/1)",
       "ownerName": "CH_M7-313",
       "ownerGroup": "CH_M7-313::ValuesFromDB",
       "type": "variable.analog",
@@ -279,7 +279,7 @@
     {
       "browseName": "CH_M7-313::AMV:P-113/2",
       "aliasName": "Tag 0006",
-      "displayName": "Колонны амводы(PIR-113/2)",
+      "displayName": "Колонны амводы 1a3(PIR-113/2)",
       "ownerName": "CH_M7-313",
       "ownerGroup": "CH_M7-313::ValuesFromDB",
       "type": "variable.analog",
@@ -299,7 +299,7 @@
     {
       "browseName": "CH_M7-313::AMV:P-113/3",
       "aliasName": "Tag 0007",
-      "displayName": "Колонны амводы(PIR-113/3)",
+      "displayName": "Колонны амводы 1,4(PIR-113/3)",
       "ownerName": "CH_M7-313",
       "ownerGroup": "CH_M7-313::ValuesFromDB",
       "type": "variable.analog",
@@ -398,7 +398,7 @@
     },
     {
       "browseName": "CH_M7-313::UMV:T-6",
-      "aliasName": "Tag 0003",
+      "aliasName": "Tag 0015",
       "displayName": "Умягченная вода(TIR-6)",
       "ownerName": "CH_M7-313",
       "ownerGroup": "CH_M7-313::ValuesFromDB",
@@ -418,7 +418,7 @@
     },
     {
       "browseName": "CH_M7-313::UMV:F-6",
-      "aliasName": "Tag 0003",
+      "aliasName": "Tag 0016",
       "displayName": "Умягченная вода(FQIR-6)",
       "ownerName": "CH_M7-313",
       "ownerGroup": "CH_M7-313::ValuesFromDB",
@@ -439,7 +439,7 @@
     {
       "browseName": "CH_M7-357::JAM:F-2b",
       "aliasName": "Tag 0009",
-      "displayName": "ЖА из А-3(FIR 2b)",
+      "displayName": "ЖА из А-3 по Л-110(FIR 2b)",
       "ownerName": "CH_M7-357",
       "ownerGroup": "CH_M7-357::ValuesFromDB",
       "type": "variable.analog",
@@ -459,7 +459,7 @@
     {
       "browseName": "CH_M7-357::JAM:F-1b",
       "aliasName": "Tag 0012",
-      "displayName": "ЖА из А-3(FIR 1b)",
+      "displayName": "ЖА из А-3 по Л-111(FIR 1b)",
       "ownerName": "CH_M7-357",
       "ownerGroup": "CH_M7-357::ValuesFromDB",
       "type": "variable.analog",
@@ -479,7 +479,7 @@
     {
       "browseName": "CH_M7-357::JAM:P-2b",
       "aliasName": "Tag 0010",
-      "displayName": "ЖА из А-3(PIR 2b)",
+      "displayName": "ЖА из А-3 по Л-110(PIR 2b)",
       "ownerName": "CH_M7-357",
       "ownerGroup": "CH_M7-357::ValuesFromDB",
       "type": "variable.analog",
@@ -499,7 +499,7 @@
     {
       "browseName": "CH_M7-357::JAM:P-1b",
       "aliasName": "Tag 0013",
-      "displayName": "ЖА из А-3(PIR 1b)",
+      "displayName": "ЖА из А-3 по Л-111(PIR 1b)",
       "ownerName": "CH_M7-357",
       "ownerGroup": "CH_M7-357::ValuesFromDB",
       "type": "variable.analog",
@@ -519,7 +519,7 @@
     {
       "browseName": "CH_M7-357::JAM:T-2a",
       "aliasName": "Tag 0011",
-      "displayName": "ЖА из А-3(TIR 2a)",
+      "displayName": "ЖА из А-3 по Л-110(TIR 2a)",
       "ownerName": "CH_M7-357",
       "ownerGroup": "CH_M7-357::ValuesFromDB",
       "type": "variable.analog",
@@ -539,7 +539,7 @@
     {
       "browseName": "CH_M7-357::JAM:T-1a",
       "aliasName": "Tag 0014",
-      "displayName": "ЖА из А-3(TIR 1a)",
+      "displayName": "ЖА из А-3 по Л-111(TIR 1a)",
       "ownerName": "CH_M7-357",
       "ownerGroup": "CH_M7-357::ValuesFromDB",
       "type": "variable.analog",
@@ -739,7 +739,7 @@
     {
       "browseName": "CH_M7-657::JAM:F-49",
       "aliasName": "Tag 0001",
-      "displayName": "ЖА в М-5-2(FIR-49)",
+      "displayName": "ЖА в М-5-2 нитка А(FIR-49)",
       "ownerName": "CH_M7-657",
       "ownerGroup": "CH_M7-657::ValuesFromDB",
       "type": "variable.analog",
@@ -758,8 +758,8 @@
     },
     {
       "browseName": "CH_M7-657::JAM:F-50",
-      "aliasName": "Tag 0001",
-      "displayName": "ЖА в М-5-2(FIR-50)",
+      "aliasName": "Tag 0002",
+      "displayName": "ЖА в М-5-2 нитка B(FIR-50)",
       "ownerName": "CH_M7-657",
       "ownerGroup": "CH_M7-657::ValuesFromDB",
       "type": "variable.analog",
@@ -779,7 +779,7 @@
     {
       "browseName": "CH_M7-657::JAM:P-10",
       "aliasName": "Tag 0009",
-      "displayName": "ЖА в М-5-2(PIR-10)",
+      "displayName": "ЖА в М-5-2 нитка А(PIR-10)",
       "ownerName": "CH_M7-657",
       "ownerGroup": "CH_M7-657::ValuesFromDB",
       "type": "variable.analog",
@@ -799,7 +799,7 @@
     {
       "browseName": "CH_M7-657::JAM:P-11",
       "aliasName": "Tag 0004",
-      "displayName": "ЖА в М-5-2(PIR-11)",
+      "displayName": "ЖА в М-5-2 нитка B(PIR-11)",
       "ownerName": "CH_M7-657",
       "ownerGroup": "CH_M7-657::ValuesFromDB",
       "type": "variable.analog",
@@ -819,7 +819,7 @@
     {
       "browseName": "CH_M7-657::JAM:T-21",
       "aliasName": "Tag 0006",
-      "displayName": "ЖА в М-5-2(TIR-21)",
+      "displayName": "ЖА в М-5-2 нитка А(TIR-21)",
       "ownerName": "CH_M7-657",
       "ownerGroup": "CH_M7-657::ValuesFromDB",
       "type": "variable.analog",
@@ -839,7 +839,7 @@
     {
       "browseName": "CH_M7-657::JAM:T-22",
       "aliasName": "Tag 0012",
-      "displayName": "ЖА в М-5-2(TIR-22)",
+      "displayName": "ЖА в М-5-2 нитка B(TIR-22)",
       "ownerName": "CH_M7-657",
       "ownerGroup": "CH_M7-657::ValuesFromDB",
       "type": "variable.analog",

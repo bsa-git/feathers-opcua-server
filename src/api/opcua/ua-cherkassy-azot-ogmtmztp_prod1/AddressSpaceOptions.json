@@ -21,7 +21,25 @@
     {
       "isDisable": false,
       "browseName": "CH_NG-UPG2",
-      "displayName": "Черкассы 'АЗОТ' узел природного газа №2",
+      "displayName": "Черкассы 'АЗОТ' узел ПГ №2",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_M7-313",
+      "displayName": "Черкассы 'АЗОТ' цех М7-313",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_M7-357",
+      "displayName": "Черкассы 'АЗОТ' цех М7-357",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_M7-657",
+      "displayName": "Черкассы 'АЗОТ' цех М7-657",
       "type": "object"
     }
   ],

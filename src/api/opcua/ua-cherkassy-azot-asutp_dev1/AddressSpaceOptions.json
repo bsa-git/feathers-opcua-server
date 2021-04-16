@@ -21,7 +21,25 @@
     {
       "isDisable": false,
       "browseName": "CH_NG-UPG2",
-      "displayName": "Черкассы 'АЗОТ' узел природного газа №2",
+      "displayName": "Черкассы 'АЗОТ' узел ПГ №2",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_M7-313",
+      "displayName": "Черкассы 'АЗОТ' цех М7-313",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_M7-357",
+      "displayName": "Черкассы 'АЗОТ' цех М7-357",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_M7-657",
+      "displayName": "Черкассы 'АЗОТ' цех М7-657",
       "type": "object"
     }
   ],
@@ -90,6 +108,63 @@
         "queryFunc": "getValuesFromChAsoduDB",
         "queryParams": {
           "scanerName": "opcUPG2"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M7-313::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M7-313",
+      "ownerName": "CH_M7-313",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M7-313)"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M7-357::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M7-357",
+      "ownerName": "CH_M7-357",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M7-357)"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M7-657::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M7-657",
+      "ownerName": "CH_M7-657",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M7-657)"
         },
         "interval": 20000
       }

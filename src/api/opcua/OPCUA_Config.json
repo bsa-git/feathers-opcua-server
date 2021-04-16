@@ -38,7 +38,7 @@
     "srvServiceUrl": "http://10.60.0.220:3030",
     "clientServiceUrl": "http://10.60.0.220:3030",
     "clientScript": "startSubscriptionMonitor",
-    "subscription": "onChangedGroupItemsHandler",
+    "subscription": "onChangedGroupHandler",
     "include": {
       "tests": [
         "mssql-tedious.test.js",
@@ -51,7 +51,8 @@
       "base-options": [
         "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
         "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-A3_Options.json",
-        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-NG-UPG2_Options.json"
+        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-NG-UPG2_Options.json",
+        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-M7_Options.json"
       ],
       "options": "/src/api/opcua/ua-cherkassy-azot-asutp_dev1/AddressSpaceOptions.json",
       "getters": "",
@@ -126,7 +127,8 @@
       "base-options": [
         "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
         "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-A3_Options.json",
-        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-NG-UPG2_Options.json"
+        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-NG-UPG2_Options.json",
+        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-M7_Options.json"
       ],
       "options": "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/AddressSpaceOptions.json",
       "getters": "",
