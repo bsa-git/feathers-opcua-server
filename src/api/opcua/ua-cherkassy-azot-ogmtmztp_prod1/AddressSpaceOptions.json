@@ -41,6 +41,12 @@
       "browseName": "CH_M7-657",
       "displayName": "Черкассы 'АЗОТ' цех М7-657",
       "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_M9",
+      "displayName": "Черкассы 'АЗОТ' цех М9",
+      "type": "object"
     }
   ],
   "variables": [

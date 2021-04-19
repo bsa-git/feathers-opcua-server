@@ -77,6 +77,46 @@
   ],
   "groups": [
     {
+      "browseName": "CH_M7-313::TPG:F-21/1",
+      "aliasName": "Tag 0009",
+      "displayName": "ТПГ(FIR 21/1)",
+      "ownerName": "CH_M7-313",
+      "ownerGroup": "CH_M7-313::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 11000
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "F ТПГ в к.101/1"
+    },
+    {
+      "browseName": "CH_M7-313::TPG:F-21/2",
+      "aliasName": "Tag 0010",
+      "displayName": "ТПГ(FIR 21/2)",
+      "ownerName": "CH_M7-313",
+      "ownerGroup": "CH_M7-313::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 8000
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "F ТПГ в к.101/2"
+    },
+    {
       "browseName": "CH_M7-313::TPG:T-1",
       "aliasName": "Tag 0011",
       "displayName": "ТПГ(TIR-1)",

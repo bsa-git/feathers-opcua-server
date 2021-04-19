@@ -1,0 +1,192 @@
+{
+  "objects": [
+    {
+      "browseName": "CH_M9",
+      "displayName": "Черкассы 'АЗОТ' цех М-9",
+      "type": "object"
+    }
+  ],
+  "variables": [
+    {
+      "browseName": "CH_M9::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M9",
+      "ownerName": "CH_M9",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M9)"
+        },
+        "interval": 20000
+      }
+    }
+  ],
+  "groups": [
+    {
+      "browseName": "CH_M9::GAM:F-1005",
+      "aliasName": "Tag 0001",
+      "displayName": "Г/о амм. Агр1(FIR-1005)",
+      "ownerName": "CH_M9",
+      "ownerGroup": "CH_M9::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 16000
+        },
+        "engineeringUnits": "kilogram_per_hour"
+      },
+      "description": "F Агр1 Г/о амм."
+    },
+    {
+      "browseName": "CH_M9::GAM:FN-1005",
+      "aliasName": "Tag 0049",
+      "displayName": "Г/о амм. Агр1(FIR-1005N)",
+      "ownerName": "CH_M9",
+      "ownerGroup": "CH_M9::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 16000
+        },
+        "engineeringUnits": "normal_kilogram_per_hour"
+      },
+      "description": "FN Г/о амм. Агр1"
+    },
+    {
+      "browseName": "CH_M9::GAM:P-1005",
+      "aliasName": "Tag 0002",
+      "displayName": "Г/о амм. Агр1(PIR-1005)",
+      "ownerName": "CH_M9",
+      "ownerGroup": "CH_M9::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 2.5
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "P Г/о амм. Агр1"
+    },
+    {
+      "browseName": "CH_M9::GAM:T-1005",
+      "aliasName": "Tag 0003",
+      "displayName": "Г/о амм. Агр1(TIR-1005)",
+      "ownerName": "CH_M9",
+      "ownerGroup": "CH_M9::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -200,
+          "high": 600
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "T Г/о амм. Агр1"
+    },
+    {
+      "browseName": "CH_M9::GAM:F-2005",
+      "aliasName": "Tag 0004",
+      "displayName": "Г/о амм. Агр2(FIR-2005)",
+      "ownerName": "CH_M9",
+      "ownerGroup": "CH_M9::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 16000
+        },
+        "engineeringUnits": "kilogram_per_hour"
+      },
+      "description": "F Г/о амм. Агр2"
+    },
+    {
+      "browseName": "CH_M9::GAM:FN-2005",
+      "aliasName": "Tag 0050",
+      "displayName": "Г/о амм. Агр2(FIR-2005N)",
+      "ownerName": "CH_M9",
+      "ownerGroup": "CH_M9::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 16000
+        },
+        "engineeringUnits": "normal_kilogram_per_hour"
+      },
+      "description": "FN Г/о амм. Агр2"
+    },
+    {
+      "browseName": "CH_M9::GAM:P-2005",
+      "aliasName": "Tag 0004",
+      "displayName": "Г/о амм. Агр2(PIR-2005)",
+      "ownerName": "CH_M9",
+      "ownerGroup": "CH_M9::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 2.5
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "P Г/о амм. Агр2"
+    },
+    {
+      "browseName": "CH_M9::GAM:T-2005",
+      "aliasName": "Tag 0005",
+      "displayName": "Г/о амм. Агр2(TIR-2005)",
+      "ownerName": "CH_M9",
+      "ownerGroup": "CH_M9::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -200,
+          "high": 600
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "T Г/о амм. Агр2"
+    }
+  ]
+}

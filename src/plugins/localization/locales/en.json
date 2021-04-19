@@ -3010,6 +3010,11 @@
       "shortName": "kg/h",
       "longName": "kilogram per hour"
     },
+    "normal_kilogram_per_hour": {
+      "symbol": "E93?",
+      "shortName": "n.kg/h",
+      "longName": "normal kilogram per hour"
+    },
     "kilogram_per_hour_bar": {
       "symbol": "F67",
       "shortName": "kg/(h·bar)",

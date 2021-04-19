@@ -54,6 +54,16 @@
       "symbol": "HN",
       "shortName": "мм рт.ст.",
       "longName": "миллиметры ртутного столба"
+    },
+    "kilogram_per_hour": {
+      "symbol": "E93",
+      "shortName": "кг/ч",
+      "longName": "килограмм в час"
+    },
+    "normal_kilogram_per_hour": {
+      "symbol": "E93?",
+      "shortName": "н.кг/ч",
+      "longName": "нормальный килограмм в час"
     }
   }
 }

@@ -41,6 +41,12 @@
       "browseName": "CH_M7-657",
       "displayName": "Черкассы 'АЗОТ' цех М7-657",
       "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_M9",
+      "displayName": "Черкассы 'АЗОТ' цех М9",
+      "type": "object"
     }
   ],
   "variables": [
@@ -165,6 +171,25 @@
         "queryFunc": "getValuesFromChAsoduDB",
         "queryParams": {
           "scanerName": "xlsxGA10(M7-657)"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M9::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M9",
+      "ownerName": "CH_M9",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M9)"
         },
         "interval": 20000
       }
