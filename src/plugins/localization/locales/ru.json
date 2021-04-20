@@ -64,6 +64,11 @@
       "symbol": "E93?",
       "shortName": "н.кг/ч",
       "longName": "нормальный килограмм в час"
+    },
+    "kilopascal": {
+      "symbol": "KPA",
+      "shortName": "кПа",
+      "longName": "килопаскаль"
     }
   }
 }

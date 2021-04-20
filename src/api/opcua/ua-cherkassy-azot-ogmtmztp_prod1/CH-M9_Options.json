@@ -150,7 +150,7 @@
     },
     {
       "browseName": "CH_M9::GAM:P-2005",
-      "aliasName": "Tag 0004",
+      "aliasName": "Tag 0005",
       "displayName": "Г/о амм. Агр2(PIR-2005)",
       "ownerName": "CH_M9",
       "ownerGroup": "CH_M9::ValuesFromDB",
@@ -170,7 +170,7 @@
     },
     {
       "browseName": "CH_M9::GAM:T-2005",
-      "aliasName": "Tag 0005",
+      "aliasName": "Tag 0006",
       "displayName": "Г/о амм. Агр2(TIR-2005)",
       "ownerName": "CH_M9",
       "ownerGroup": "CH_M9::ValuesFromDB",
