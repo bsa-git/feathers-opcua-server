@@ -31,7 +31,6 @@ const debug = require('debug')('app:test.opcua-clients');
 const isDebug = false;
 const isLog = false;
 
-
 // Options
 const srvData = {
   params: {
