@@ -429,7 +429,7 @@
       "description": "FN Топл.газ ПГС №2"
     },
     {
-      "browseName": "CH_A3::JA_M7:P-3040",
+      "browseName": "CH_A3::JAM_M7:P-3040",
       "aliasName": "Tag 0004",
       "displayName": "ЖА в М-7(PIR-3040)",
       "ownerName": "CH_A3",
@@ -449,7 +449,7 @@
       "description": "P ЖА в М-7"
     },
     {
-      "browseName": "CH_A3::JA_M7:F-3240",
+      "browseName": "CH_A3::JAM_M7:F-3240",
       "aliasName": "Tag 0005",
       "displayName": "ЖА в М-7(FIR-3240)",
       "ownerName": "CH_A3",
@@ -469,7 +469,7 @@
       "description": "F ЖА в М-7"
     },
     {
-      "browseName": "CH_A3::JA_M7:T-3240",
+      "browseName": "CH_A3::JAM_M7:T-3240",
       "aliasName": "Tag 0006",
       "displayName": "ЖА в М-7(TIR-3240)",
       "ownerName": "CH_A3",
@@ -489,7 +489,7 @@
       "description": "T ЖА в М-7"
     },
     {
-      "browseName": "CH_A3::JA_M7:D-3040",
+      "browseName": "CH_A3::JAM_M7:D-3040",
       "aliasName": "Tag 0037",
       "displayName": "ЖА в М-7(DIR-3040)",
       "ownerName": "CH_A3",

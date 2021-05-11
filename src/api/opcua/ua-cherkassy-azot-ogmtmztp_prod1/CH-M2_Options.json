@@ -447,6 +447,166 @@
         "engineeringUnits": "cubic_metre_per_hour"
       },
       "description": "F Конденсата"
+    },
+    {
+      "browseName": "CH_M2::JAM:F-2001",
+      "aliasName": "Tag 0007",
+      "displayName": "ЖА в цех(FIR-2001)",
+      "ownerName": "CH_M2",
+      "ownerGroup": "CH_M2::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 50
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "F ЖА в цех"
+    },
+    {
+      "browseName": "CH_M2::JAM:PD-2001",
+      "aliasName": "Tag 0033",
+      "displayName": "ЖА в цех(PdIR-2001)",
+      "ownerName": "CH_M2",
+      "ownerGroup": "CH_M2::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 85
+        },
+        "engineeringUnits": "kilopascal"
+      },
+      "description": "PD ЖА в цех"
+    },
+    {
+      "browseName": "CH_M2::JAM:P-2113",
+      "aliasName": "Tag 0008",
+      "displayName": "ЖА в цех(PIR-2113)",
+      "ownerName": "CH_M2",
+      "ownerGroup": "CH_M2::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 30
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "P ЖА в цех"
+    },
+    {
+      "browseName": "CH_M2::JAM:T-2301",
+      "aliasName": "Tag 0009",
+      "displayName": "ЖА в цех(TIR-2301)",
+      "ownerName": "CH_M2",
+      "ownerGroup": "CH_M2::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -50,
+          "high": 50
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "T ЖА в цех"
+    },
+    {
+      "browseName": "CH_M2::KAC:F-2046",
+      "aliasName": "Tag 0021",
+      "displayName": "Карб. на КАС с раств.(FIR-2046)",
+      "ownerName": "CH_M2",
+      "ownerGroup": "CH_M2::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 51
+        },
+        "engineeringUnits": "tonne_per_hour"
+      },
+      "description": "F Карб. на КАС с раств."
+    },
+    {
+      "browseName": "CH_M2::KAC:F-3005",
+      "aliasName": "Tag 0020",
+      "displayName": "Карб. на КАС К-1(FIR-3005)",
+      "ownerName": "CH_M2",
+      "ownerGroup": "CH_M2::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 80
+        },
+        "engineeringUnits": "tonne_per_hour"
+      },
+      "description": "F Карб. на КАС К-1"
+    },
+    {
+      "browseName": "CH_M2::KAC:T-23104",
+      "aliasName": "Tag 0023",
+      "displayName": "Карб. на КАС с раств.(TIR-23104)",
+      "ownerName": "CH_M2",
+      "ownerGroup": "CH_M2::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -200,
+          "high": 800
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "T Карб. на КАС с раств."
+    },
+    {
+      "browseName": "CH_M2::KAC:D-2146",
+      "aliasName": "Tag 0022",
+      "displayName": "Карб. на КАС с раств.(DIR-2146)",
+      "ownerName": "CH_M2",
+      "ownerGroup": "CH_M2::ValuesFromDB",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 1.5
+        },
+        "engineeringUnits": "kilogram_per_litre"
+      },
+      "description": "D Карб. на КАС с раств."
     }
   ]
 }

@@ -35,6 +35,11 @@
       "shortName": "кг/м3",
       "longName": "килограмм на метр кубический"
     },
+    "kilogram_per_litre": {
+      "symbol": "B35",
+      "shortName": "кг/литр",
+      "longName": "килограмм на литр"
+    },
     "tonne_per_hour": {
       "symbol": "E18",
       "shortName": "т/ч",

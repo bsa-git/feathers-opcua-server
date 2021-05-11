@@ -347,8 +347,8 @@
     },
     {
       "browseName": "CH_M51::01SKLAD:01L26_SUM",
-      "aliasName": "01SKLAD_L26",
-      "displayName": "01SKLAD_L26",
+      "aliasName": "01SKLAD_01L26",
+      "displayName": "01SKLAD_01L26",
       "ownerName": "CH_M51",
       "ownerGroup": "CH_M51::ValueFromFile",
       "type": "variable.analog",
@@ -1356,8 +1356,8 @@
     },
     {
       "browseName": "CH_M52::02SKLAD:01L26_SUM",
-      "aliasName": "01SKLAD_L26",
-      "displayName": "01SKLAD_L26",
+      "aliasName": "02SKLAD_01L26",
+      "displayName": "02SKLAD_01L26",
       "ownerName": "CH_M52",
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
@@ -1376,8 +1376,8 @@
     },
     {
       "browseName": "CH_M52::02SKLAD:02L26_SUM",
-      "aliasName": "02SKLAD_L26",
-      "displayName": "02SKLAD_L26",
+      "aliasName": "02SKLAD_02L26",
+      "displayName": "02SKLAD_02L26",
       "ownerName": "CH_M52",
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
@@ -1395,7 +1395,7 @@
       "description": "Кислота на складе 2-отделения"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02L26_CALSUM.RO03",
+      "browseName": "CH_M52::02SKLAD:02L26_CALSUM",
       "aliasName": "02SKLAD_SUM",
       "displayName": "02SKLAD_SUM",
       "ownerName": "CH_M52",
