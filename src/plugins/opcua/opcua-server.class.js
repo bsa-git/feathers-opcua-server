@@ -27,12 +27,10 @@ const isDebug = false;
 class OpcuaServer {
   /**
    * Constructor
-   * @param app {Object}
    * @param params {Object}
    */
-  constructor(app, params = {}) {
+  constructor(params = {}) {
     this.id = params.serverInfo.applicationName;
-    // this.app = app;
     // Set process.on to event 'SIGINT'
     this.isOnSignInt = true;
     // Get opcua config
@@ -45,7 +43,9 @@ class OpcuaServer {
     this.currentState = {
       id: this.id,
       locale: this.locale,
+      serverInfo: null,
       productName: this.params.buildInfo.productName,
+      applicationUri: '',
       port: this.params.port,
       endpointUrl: '',
       endpoints: null,
@@ -138,8 +138,11 @@ class OpcuaServer {
     const endpointUrl = this.opcuaServer.endpoints[0].endpointDescriptions()[0].endpointUrl;
     this.currentState.endpointUrl = endpointUrl;
     const port = this.opcuaServer.endpoints[0].port;
-    console.log(chalk.yellow('Server started and now listening ...'), 'Port:', chalk.cyan(port));
+    this.currentState.serverInfo = this.getServerInfo();
+    const applicationUri = this.currentState.serverInfo.applicationUri;
+    this.currentState.applicationUri = applicationUri;
     console.log(chalk.yellow('Server started and now listening ...'), 'EndPoint URL:', chalk.cyan(endpointUrl));
+    console.log(chalk.yellow('Server started and now listening ...'), 'applicationUri:', chalk.cyan(applicationUri));
     const endpoints = this.opcuaServer.endpoints[0].endpointDescriptions().map(endpoint => {
       return {
         endpointUrl: endpoint.endpointUrl,
@@ -147,9 +150,11 @@ class OpcuaServer {
         securityPolicyUri: endpoint.securityPolicyUri.toString()
       };
     });
+    
     this.currentState.endpoints = endpoints;
     this.currentState.isStarted = true;
     if (isLog) inspector('opcuaServerStart.currentState:', this.currentState);
+    // inspector('opcuaServerStart.endpoints:', endpoints);
     return endpoints;
   }
 
@@ -700,7 +705,6 @@ class OpcuaServer {
     if (!valueFromSourceParams.dataType) {
       valueFromSourceParams.dataType = DataType[variable.dataType];
     }
-    if (isDebug) debug('setValueFromSource.valueFromSourceParams:', valueFromSourceParams);
     addedVariable.setValueFromSource(valueFromSourceParams);
   }
 }

@@ -48,7 +48,7 @@ class OpcuaClients {
       throw new errors.BadRequest(`The opcua client already exists for this id = '${id}' in the client list`);
     }
     // Create OPC-UA client
-    const client = new OpcuaClient(this.app, data.params);
+    const client = new OpcuaClient(data.params);
     // Client create
     await client.opcuaClientCreate();
 

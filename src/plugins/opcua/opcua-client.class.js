@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const { inspector, isString, isObject, appRoot } = require('../lib');
-const { 
-  getOpcuaConfig, 
+const {
+  getOpcuaConfig,
   getSubscriptionHandler,
   formatHistoryResults
 } = require('./opcua-helper');
@@ -32,22 +32,21 @@ const isDebug = false;
 class OpcuaClient {
   /**
    * Constructor
-   * @param app {Object}
    * @param params {Object}
    */
-  constructor(app, params = {}) {
+  constructor(params = {}) {
     this.id = params.applicationName;
     // Get opcua config
     const opcuaConfig = getOpcuaConfig(this.id);
-    this.locale = (params.locale === undefined)? process.env.LOCALE : params.locale;
+    this.locale = (params.locale === undefined) ? process.env.LOCALE : params.locale;
     params.clientName = opcuaConfig.name;
     this.params = loMerge(defaultClientOptions, params);
-    // this.app = app;
     this.srvCurrentState = null;
     this.currentState = {
       id: this.id,
       locale: this.locale,
       clientName: this.params.clientName,
+      applicationUri: '',
       port: null,
       endpointUrl: '',
       isCreated: false,
@@ -58,7 +57,6 @@ class OpcuaClient {
     this.opcuaClient = null;
     this.session = null;
     this.subscription = null;
-    if (isDebug) debug('OpcuaClient created - OK');
   }
 
   /**
@@ -97,12 +95,17 @@ class OpcuaClient {
    */
   opcuaClientCreate(params = null) {
     // Create OPCUAClient
-    params = params ? params : this.params;
-    this.opcuaClient = OPCUAClient.create(this.params);
+    params = params ? loMerge(this.params, params) : this.params;
+    this.opcuaClient = OPCUAClient.create(params);
     // Retrying connection
     this.opcuaClient.on('backoff', (retry) => console.log(chalk.yellow('Retrying to connect to:'), this.srvCurrentState.endpointUrl, ' attempt: ', retry));
     this.currentState.isCreated = true;
     console.log(chalk.yellow('OPCUAClient created'));
+
+    if (isDebug) debug('securityMode = ', this.opcuaClient.securityMode);
+    if (isDebug) debug('securityPolicy = ', this.opcuaClient.securityPolicy);
+    if (isDebug) debug('certificateFile = ', this.opcuaClient.certificateFile);
+    if (isDebug) debug('privateKeyFile  = ', this.opcuaClient.privateKeyFile);
   }
 
   /**
@@ -119,7 +122,9 @@ class OpcuaClient {
     this.currentState.isConnect = true;
     this.currentState.endpointUrl = params.endpointUrl;
     this.currentState.port = params.endpointUrl.split(':')[2];
+    this.currentState.applicationUri = this.getApplicationUri();
     console.log(chalk.yellow('Client connected to:'), chalk.cyan(params.endpointUrl));
+    console.log(chalk.yellow('Client applicationUri:'), chalk.cyan(this.currentState.applicationUri));
   }
 
   /**
@@ -145,7 +150,7 @@ class OpcuaClient {
     this.session = await this.opcuaClient.createSession();
     this.currentState.isSessionCreated = true;
     console.log(chalk.yellow('Client session created'));
-    if (isLog) inspector('plugins.opcua-client.class::sessionCreate.info:', this.sessionToString());
+    if (isLog) inspector('opcua-client.class::sessionCreate.sessionToString:', this.sessionToString());
   }
 
   /**
@@ -196,6 +201,27 @@ class OpcuaClient {
   sessionToString() {
     this.sessionNotCreated();
     return this.session.toString();
+  }
+
+  /**
+ * Get server certificate
+ * @returns {Buffer}
+ */
+  getServerCertificate() {
+    this.sessionNotCreated();
+    const sessionEndpoint = this.session && this.session.endpoint ? this.sessionEndpoint() : null;
+    return sessionEndpoint.serverCertificate;
+  }
+
+  /**
+ * Get application uri
+ * @returns {String}
+ */
+  getApplicationUri() {
+    if(!this.getSrvCurrentState()) return '';
+    const srvApplicationUri = this.getSrvCurrentState()['applicationUri'];
+    const applicationUri = `urn:${srvApplicationUri.split(':')[1]}:${this.currentState.id}`;
+    return applicationUri;
   }
 
   /**
@@ -1089,7 +1115,7 @@ class OpcuaClient {
       monitoredItem.on('changed', (dataValue) => {
         if (isLog) inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
         const value = dataValue.value.value;
-        if(value === null) return;
+        if (value === null) return;
         itemToMonitor.id = this.id;
         itemToMonitor.locale = this.locale;
         itemToMonitor.addressSpaceOption = itemNodeId;
@@ -1147,7 +1173,7 @@ class OpcuaClient {
         itemNodeIds.push(nameNodeIds);
       }
     }
-    if (isDebug) debug('getNodeIds.result:', itemNodeIds);
+    if (isLog) inspector('getNodeIds.result:', itemNodeIds);
     return itemNodeIds;
   }
 

@@ -38,7 +38,7 @@ class OpcuaServers {
       throw new errors.BadRequest(`The opcua server already exists for this id = '${id}' in the server list`);
     }
     // Create OPC-UA server
-    const server = new OpcuaServer(this.app, data.params);
+    const server = new OpcuaServer(data.params);
     // Server create
     await server.opcuaServerCreate();
     // Server constructAddressSpace
