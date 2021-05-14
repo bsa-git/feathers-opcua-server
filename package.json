@@ -5,7 +5,10 @@
   "homepage": "https://feathersjs.com",
   "main": "src",
   "keywords": [
-    "feathers"
+    "feathers",
+    "opcua",
+    "opc ua",
+    "opc-ua"
   ],
   "author": {
     "name": "BSA Lab.",

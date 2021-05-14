@@ -1,5 +1,9 @@
 /* eslint-disable no-unused-vars */
-const { appRoot, inspector } = require('../lib');
+const { 
+  appRoot, 
+  inspector,
+  inspectorToLog,
+} = require('../lib');
 const {
   getOpcuaConfig,
   getEngineeringUnit,
@@ -22,7 +26,7 @@ const chalk = require('chalk');
 
 const debug = require('debug')('app:opcua-server.class');
 const isLog = false;
-const isDebug = false;
+const isDebug = true;
 
 class OpcuaServer {
   /**
@@ -35,7 +39,7 @@ class OpcuaServer {
     this.isOnSignInt = true;
     // Get opcua config
     const opcuaConfig = getOpcuaConfig(this.id);
-    params.buildInfo = { productName: opcuaConfig.name };
+    params.buildInfo = { productName: opcuaConfig.name };// productUri: this.id
     this.locale = (params.locale === undefined) ? process.env.LOCALE : params.locale;
     this.params = loMerge({}, opcuaDefaultServerOptions, params);
     this.opcuaServer = null;
@@ -122,6 +126,8 @@ class OpcuaServer {
     // OPC-UA server created.
     console.log(chalk.yellow('OPCUAServer created'));
     if (isLog) inspector('opcuaServerCreate.params:', this.params);
+
+    inspectorToLog('opcuaServerCreate.opcuaServer:', this.opcuaServer, 'inspector2.log');
   }
 
   /**

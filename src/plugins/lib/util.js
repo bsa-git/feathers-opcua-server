@@ -190,7 +190,7 @@ const getInt = function (value) {
  * @param {any} value 
  * @returns {Number}
  */
-const  getFloat = function (value) {
+const getFloat = function (value) {
   if (Number.isNaN(Number.parseFloat(value))) {
     return 0;
   }
@@ -209,54 +209,54 @@ const getRegex = function (type) {
   switch (type) {
   case 'phone':
     /*
-                  (123) 456-7890
-                  +(123) 456-7890
-                  +(123)-456-7890
-                  +(123) - 456-7890
-                  +(123) - 456-78-90
-                  123-456-7890
-                  123.456.7890
-                  1234567890
-                  +31636363634
-                  +380980029669
-                  075-63546725
-                  */
+                    (123) 456-7890
+                    +(123) 456-7890
+                    +(123)-456-7890
+                    +(123) - 456-7890
+                    +(123) - 456-78-90
+                    123-456-7890
+                    123.456.7890
+                    1234567890
+                    +31636363634
+                    +380980029669
+                    075-63546725
+                    */
     return '^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\\./0-9]*$';
   case 'zip_code':
     /*
-                  12345
-                  12345-6789
-                  */
+                    12345
+                    12345-6789
+                    */
     return '^[0-9]{5}(?:-[0-9]{4})?$';
   case 'lat':
     /*
-                  +90.0
-                  45
-                  -90
-                  -90.000
-                  +90
-                  47.123123
-                  */
+                    +90.0
+                    45
+                    -90
+                    -90.000
+                    +90
+                    47.123123
+                    */
     return '^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'long':
     /*
-                  -127.554334
-                  180
-                  -180
-                  -180.0000
-                  +180
-                  179.999999
-                  */
+                    -127.554334
+                    180
+                    -180
+                    -180.0000
+                    +180
+                    179.999999
+                    */
     return '^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'lat_and_long':
     /*
-                  +90.0, -127.554334
-                  45, 180
-                  -90, -180
-                  -90.000, -180.0000
-                  +90, +180
-                  47.1231231, 179.99999999
-                  */
+                    +90.0, -127.554334
+                    45, 180
+                    -90, -180
+                    -90.000, -180.0000
+                    +90, +180
+                    47.1231231, 179.99999999
+                    */
     return '^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$';
   default:
     return '//g';
@@ -273,8 +273,23 @@ const getRegex = function (type) {
 const inspector = function (desc, obj, depth = 6) {
   const { inspect } = require('util');
   // console.log(`\n${desc}`);
-  console.log('\n', chalk.cyan(desc));  
+  console.log('\n', chalk.cyan(desc));
   console.log(inspect(obj, { depth, colors: true }));
+};
+
+/**
+ * inspectorForLog to save returned inspect info to "data/app-log/inspector.log"
+ * @param {String} desc
+ * @param {Object} obj
+ * @param {String} logName
+ * @param {Number} depth
+ */
+const inspectorToLog = function (desc, obj, logName = 'inspector.log', depth = 6) {
+  const { inspect } = require('util');
+  const { writeFileSync } = require('./file-operations');
+  desc = '\n' + desc;
+  let log = desc + inspect(obj, { depth, colors: false });
+  writeFileSync([appRoot, `data/app-log/${logName}`], log);
 };
 
 /**
@@ -376,6 +391,7 @@ module.exports = {
   getFloat,
   getRegex,
   inspector,
+  inspectorToLog,
   qlParams,
   stringify,
   cloneObject,

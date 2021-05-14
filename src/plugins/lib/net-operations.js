@@ -67,7 +67,7 @@ const getIpAddresses = function () {
 const getHostname = function () {
   const os = require('os');
   return os.hostname().toLowerCase();
-};// url.parse
+};
 
 /**
  * Get an instance of a class 'URL'

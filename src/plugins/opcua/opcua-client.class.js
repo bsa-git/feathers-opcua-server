@@ -1,5 +1,11 @@
 /* eslint-disable no-unused-vars */
-const { inspector, isString, isObject, appRoot } = require('../lib');
+const { 
+  inspector, 
+  isString, 
+  isObject, 
+  appRoot,
+  getHostname
+} = require('../lib');
 const {
   getOpcuaConfig,
   getSubscriptionHandler,
@@ -27,7 +33,7 @@ const loConcat = require('lodash/concat');
 
 const debug = require('debug')('app:opcua-client.class');
 const isLog = false;
-const isDebug = false;
+const isDebug = true;
 
 class OpcuaClient {
   /**
@@ -99,8 +105,10 @@ class OpcuaClient {
     this.opcuaClient = OPCUAClient.create(params);
     // Retrying connection
     this.opcuaClient.on('backoff', (retry) => console.log(chalk.yellow('Retrying to connect to:'), this.srvCurrentState.endpointUrl, ' attempt: ', retry));
+    this.currentState.applicationUri = this.opcuaClient._applicationUri;
     this.currentState.isCreated = true;
     console.log(chalk.yellow('OPCUAClient created'));
+    console.log(chalk.yellow('Client applicationUri:'), chalk.cyan(this.currentState.applicationUri));
 
     if (isDebug) debug('securityMode = ', this.opcuaClient.securityMode);
     if (isDebug) debug('securityPolicy = ', this.opcuaClient.securityPolicy);
@@ -122,9 +130,7 @@ class OpcuaClient {
     this.currentState.isConnect = true;
     this.currentState.endpointUrl = params.endpointUrl;
     this.currentState.port = params.endpointUrl.split(':')[2];
-    this.currentState.applicationUri = this.getApplicationUri();
     console.log(chalk.yellow('Client connected to:'), chalk.cyan(params.endpointUrl));
-    console.log(chalk.yellow('Client applicationUri:'), chalk.cyan(this.currentState.applicationUri));
   }
 
   /**
@@ -134,6 +140,9 @@ class OpcuaClient {
    */
   async opcuaClientDisconnect() {
     this.opcuaClientNotCreated();
+
+    // inspector('opcuaClientDisconnect.opcuaClient:', this.opcuaClient);
+
     await this.opcuaClient.disconnect();
     this.currentState.isConnect = false;
     this.currentState.endpointUrl = '';
@@ -211,17 +220,6 @@ class OpcuaClient {
     this.sessionNotCreated();
     const sessionEndpoint = this.session && this.session.endpoint ? this.sessionEndpoint() : null;
     return sessionEndpoint.serverCertificate;
-  }
-
-  /**
- * Get application uri
- * @returns {String}
- */
-  getApplicationUri() {
-    if(!this.getSrvCurrentState()) return '';
-    const srvApplicationUri = this.getSrvCurrentState()['applicationUri'];
-    const applicationUri = `urn:${srvApplicationUri.split(':')[1]}:${this.currentState.id}`;
-    return applicationUri;
   }
 
   /**
