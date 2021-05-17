@@ -23,6 +23,16 @@ const default_build_info = {
   buildDate: fs.statSync(packageFile).mtime
 };
 
+// const packageFile = `${appRoot}/package.json`;
+// const packageInfo = require(packageFile); 
+// const default_build_info = {
+//   manufacturerName: 'Feathers-OPCUA-Server : MIT Licence ( see https://github.com/bsa-git/feathers-opcua-server)',
+//   productName: packageInfo.name,
+//   productUri: null, // << should be same as default_server_info.productUri?
+//   softwareVersion: packageInfo.version,
+//   buildDate: fs.statSync(packageFile).mtime
+// };
+
 module.exports = {
   /**
     * the TCP port to listen to.

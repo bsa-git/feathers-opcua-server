@@ -39,7 +39,7 @@ class OpcuaServer {
     this.isOnSignInt = true;
     // Get opcua config
     const opcuaConfig = getOpcuaConfig(this.id);
-    params.buildInfo = { productName: opcuaConfig.name };// productUri: this.id
+    // params.buildInfo = { productName: opcuaConfig.name };// productUri: this.id
     this.locale = (params.locale === undefined) ? process.env.LOCALE : params.locale;
     this.params = loMerge({}, opcuaDefaultServerOptions, params);
     this.opcuaServer = null;
@@ -160,7 +160,8 @@ class OpcuaServer {
     this.currentState.endpoints = endpoints;
     this.currentState.isStarted = true;
     if (isLog) inspector('opcuaServerStart.currentState:', this.currentState);
-    // inspector('opcuaServerStart.endpoints:', endpoints);
+    inspector('opcuaServerStart.getServerInfo:', this.getServerInfo());
+    inspector('opcuaServerStart.getBuildInfo:', this.getBuildInfo());
     return endpoints;
   }
 

@@ -45,6 +45,7 @@ class OpcuaClient {
     // Get opcua config
     const opcuaConfig = getOpcuaConfig(this.id);
     this.locale = (params.locale === undefined) ? process.env.LOCALE : params.locale;
+    params.applicationName = 'NodeOPCUA-Client';
     params.clientName = opcuaConfig.name;
     this.params = loMerge(defaultClientOptions, params);
     this.srvCurrentState = null;

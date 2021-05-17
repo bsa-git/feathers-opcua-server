@@ -1,7 +1,7 @@
 {
   "name": "feathers-opcua-server",
-  "description": "A FeathersJS OpcUA application",
-  "version": "4.0.0",
+  "description": "A FeathersJS OPC-UA application",
+  "version": "0.0.1",
   "homepage": "https://feathersjs.com",
   "main": "src",
   "keywords": [
