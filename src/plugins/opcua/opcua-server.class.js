@@ -359,7 +359,7 @@ class OpcuaServer {
     let addedVariable, addedMethod, object = null;
     let addedVariableList, getterParams, valueParams, engineeringUnit;
     this.opcuaServerNotCreated();
-    const id = this.params.serverInfo.applicationName;
+    const id = this.id;//this.params.serverInfo.applicationName;
     //------------------------------------------------------------------
     if (isDebug) debug('constructAddressSpace.id:', id);
     const opcuaConfig = getOpcuaConfig(id);
