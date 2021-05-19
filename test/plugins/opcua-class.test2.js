@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
-const app = require('../../src/app');
+require('../../src/app');
 const { 
   OpcuaServer, 
   OpcuaClient, 
@@ -41,9 +41,9 @@ describe('<<=== OPC-UA: Test (opcua-class.test2) ===>>', () => {
 
   before(async () => {
     // Create OPC-UA server
-    server = new OpcuaServer(app, srvParams);
+    server = new OpcuaServer(srvParams);
     // Create OPC-UA client
-    client = new OpcuaClient(app, clientParams);
+    client = new OpcuaClient(clientParams);
     debug('OPCUA - Test2::before: Done');
   });
 

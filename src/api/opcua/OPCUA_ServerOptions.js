@@ -23,16 +23,6 @@ const default_build_info = {
   buildDate: fs.statSync(packageFile).mtime
 };
 
-// const packageFile = `${appRoot}/package.json`;
-// const packageInfo = require(packageFile); 
-// const default_build_info = {
-//   manufacturerName: 'Feathers-OPCUA-Server : MIT Licence ( see https://github.com/bsa-git/feathers-opcua-server)',
-//   productName: packageInfo.name,
-//   productUri: null, // << should be same as default_server_info.productUri?
-//   softwareVersion: packageInfo.version,
-//   buildDate: fs.statSync(packageFile).mtime
-// };
-
 module.exports = {
   /**
     * the TCP port to listen to.
@@ -42,9 +32,34 @@ module.exports = {
   port: 26543,
   /**
     * the possible security policies that the server will expose
+    Basic128 = "http://opcfoundation.org/UA/SecurityPolicy#Basic128",
+    Basic192 = "http://opcfoundation.org/UA/SecurityPolicy#Basic192",
+    Basic192Rsa15 = "http://opcfoundation.org/UA/SecurityPolicy#Basic192Rsa15",
+    Basic256Rsa15 = "http://opcfoundation.org/UA/SecurityPolicy#Basic256Rsa15",
+    Basic256Sha256 = "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256",
+    Aes128_Sha256_RsaOaep = "http://opcfoundation.org/UA/SecurityPolicy#Aes128_Sha256_RsaOaep",
+    PubSub_Aes128_CTR = "http://opcfoundation.org/UA/SecurityPolicy#PubSub_Aes128_CTR",
+    PubSub_Aes256_CTR = "http://opcfoundation.org/UA/SecurityPolicy#PubSub_Aes256_CTR",
+    Basic128Rsa15 = "http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15",
+    Basic256
     * @type {Array<SecurityPolicy>}
     */
-  securityPolicies: [SecurityPolicy.None, SecurityPolicy.Basic128Rsa15, SecurityPolicy.Basic256Sha256],
+  securityPolicies: [
+    SecurityPolicy.None, 
+    SecurityPolicy.Basic128,
+    SecurityPolicy.Basic192,
+    SecurityPolicy.Basic192Rsa15,
+    SecurityPolicy.Basic256Rsa15,
+    SecurityPolicy.Basic256Sha256,
+    // New
+    SecurityPolicy.Aes128_Sha256_RsaOaep,
+    SecurityPolicy.PubSub_Aes128_CTR,
+    SecurityPolicy.PubSub_Aes256_CTR,
+    // Obsoletes
+    SecurityPolicy.Basic128Rsa15, 
+    SecurityPolicy.Basic256
+  ],
+
   /**
     * the possible security mode that the server will expose
     * @type {Array<MessageSecurityMode>}

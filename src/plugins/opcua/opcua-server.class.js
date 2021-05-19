@@ -34,14 +34,15 @@ class OpcuaServer {
    * @param params {Object}
    */
   constructor(params = {}) {
-    this.id = params.serverInfo.applicationName;
+    const params_ = Object.assign({}, params);
+    this.id = params_.serverInfo.applicationName;
     // Set process.on to event 'SIGINT'
     this.isOnSignInt = true;
     // Get opcua config
     const opcuaConfig = getOpcuaConfig(this.id);
     // params.buildInfo = { productName: opcuaConfig.name };// productUri: this.id
-    this.locale = (params.locale === undefined) ? process.env.LOCALE : params.locale;
-    this.params = loMerge({}, opcuaDefaultServerOptions, params);
+    this.locale = (params_.locale === undefined) ? process.env.LOCALE : params_.locale;
+    this.params = loMerge({}, opcuaDefaultServerOptions, params_);
     this.opcuaServer = null;
     this.addedItemList = [];
     this.currentState = {
@@ -124,10 +125,10 @@ class OpcuaServer {
 
     this.currentState.isCreated = true;
     // OPC-UA server created.
-    console.log(chalk.yellow('OPCUAServer created'));
+    console.log(chalk.yellow('OPCUAServer created ...'), 'opcuaServer.id:', chalk.cyan(this.id));
     if (isLog) inspector('opcuaServerCreate.params:', this.params);
 
-    inspectorToLog('opcuaServerCreate.opcuaServer:', this.opcuaServer, 'inspector2.log');
+    // inspectorToLog('opcuaServerCreate.opcuaServer:', this.opcuaServer, 'inspector2.log');
   }
 
   /**
@@ -361,7 +362,6 @@ class OpcuaServer {
     this.opcuaServerNotCreated();
     const id = this.id;//this.params.serverInfo.applicationName;
     //------------------------------------------------------------------
-    if (isDebug) debug('constructAddressSpace.id:', id);
     const opcuaConfig = getOpcuaConfig(id);
     // Merge params
     if (params === null) {

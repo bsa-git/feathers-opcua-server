@@ -41,13 +41,14 @@ class OpcuaClient {
    * @param params {Object}
    */
   constructor(params = {}) {
-    this.id = params.applicationName;
+    const params_ = Object.assign({}, params);
+    this.id = params_.applicationName;
     // Get opcua config
     const opcuaConfig = getOpcuaConfig(this.id);
-    this.locale = (params.locale === undefined) ? process.env.LOCALE : params.locale;
-    params.applicationName = 'NodeOPCUA-Client';
-    params.clientName = opcuaConfig.name;
-    this.params = loMerge(defaultClientOptions, params);
+    this.locale = (params_.locale === undefined) ? process.env.LOCALE : params_.locale;
+    params_.applicationName = defaultClientOptions.applicationName;
+    params_.clientName = opcuaConfig.name;
+    this.params = loMerge(defaultClientOptions, params_);
     this.srvCurrentState = null;
     this.currentState = {
       id: this.id,
@@ -108,7 +109,7 @@ class OpcuaClient {
     this.opcuaClient.on('backoff', (retry) => console.log(chalk.yellow('Retrying to connect to:'), this.srvCurrentState.endpointUrl, ' attempt: ', retry));
     this.currentState.applicationUri = this.opcuaClient._applicationUri;
     this.currentState.isCreated = true;
-    console.log(chalk.yellow('OPCUAClient created'));
+    console.log(chalk.yellow('OPCUAClient created ...'), 'opcuaClient.id:', chalk.cyan(this.id));
     console.log(chalk.yellow('Client applicationUri:'), chalk.cyan(this.currentState.applicationUri));
 
     if (isDebug) debug('securityMode = ', this.opcuaClient.securityMode);

@@ -1,12 +1,11 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
-const app = require('../../src/app');
+require('../../src/app');
 const {
   appRoot,
   inspector,
   makeDirSync, 
   getTime, 
-  getValueFromNodeId, 
   OpcuaServer, 
   OpcuaClient, 
   pause, 
@@ -22,7 +21,9 @@ const {
   DataType,
   AttributeIds,
   StatusCodes,
-  makeBrowsePath
+  makeBrowsePath,
+  MessageSecurityMode,
+  SecurityPolicy
 } = require('node-opcua');
 const debug = require('debug')('app:opcua-class.test');
 const isDebug = false;
@@ -36,6 +37,8 @@ const srvParams = {
 
 const clientParams = {
   applicationName: 'ua-cherkassy-azot_test1',
+  securityMode: MessageSecurityMode.SignAndEncrypt,
+  securityPolicy: SecurityPolicy.Basic256Sha256
 };
 
 let server = null, client = null;
@@ -46,9 +49,9 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
 
   before(async () => {
     // Create OPC-UA server
-    server = new OpcuaServer(app, srvParams);
+    server = new OpcuaServer(srvParams);
     // Create OPC-UA client
-    client = new OpcuaClient(app, clientParams);
+    client = new OpcuaClient(clientParams);
     // Make dirs
     makeDirSync([appRoot, 'test/data/tmp/test1']);
     debug('OPCUA - Test::before: Done');
