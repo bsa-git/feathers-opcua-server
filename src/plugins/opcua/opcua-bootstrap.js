@@ -11,6 +11,11 @@ const {
   executeOpcuaClientScript,
 } = require('./opcua-helper');
 
+const {
+  MessageSecurityMode,
+  SecurityPolicy
+} = require('node-opcua');
+
 const debug = require('debug')('app:opcua-bootstrap');
 const isDebug = false;
 const isLog = false;
@@ -53,7 +58,17 @@ module.exports = async function opcuaBootstrap(app) {
           applicationName: option.id,
         }
       };
+
+      // Set securityMode or securityPolicy
+      if(option.securityMode){
+        clientData.params.securityMode = MessageSecurityMode[option.securityMode];
+      }
+      
+      if(option.securityPolicy){
+        clientData.params.securityPolicy = SecurityPolicy[option.securityPolicy];
+      }
       if (isLog) inspector('opcuaBootstrap.clientData:', clientData);
+      // Create client service
       opcuaClient = await service.create(clientData);
       if (isLog) inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
       // Execute client script

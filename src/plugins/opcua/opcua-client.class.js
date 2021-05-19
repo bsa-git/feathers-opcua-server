@@ -9,7 +9,9 @@ const {
 const {
   getOpcuaConfig,
   getSubscriptionHandler,
-  formatHistoryResults
+  formatHistoryResults,
+  getSecurityMode,
+  getSecurityPolicy
 } = require('./opcua-helper');
 const {
   OPCUAClient,
@@ -110,10 +112,7 @@ class OpcuaClient {
     this.currentState.applicationUri = this.opcuaClient._applicationUri;
     this.currentState.isCreated = true;
     console.log(chalk.yellow('OPCUAClient created ...'), 'opcuaClient.id:', chalk.cyan(this.id));
-    console.log(chalk.yellow('Client applicationUri:'), chalk.cyan(this.currentState.applicationUri));
 
-    if (isDebug) debug('securityMode = ', this.opcuaClient.securityMode);
-    if (isDebug) debug('securityPolicy = ', this.opcuaClient.securityPolicy);
     if (isDebug) debug('certificateFile = ', this.opcuaClient.certificateFile);
     if (isDebug) debug('privateKeyFile  = ', this.opcuaClient.privateKeyFile);
   }
@@ -133,6 +132,9 @@ class OpcuaClient {
     this.currentState.endpointUrl = params.endpointUrl;
     this.currentState.port = params.endpointUrl.split(':')[2];
     console.log(chalk.yellow('Client connected to:'), chalk.cyan(params.endpointUrl));
+    console.log(chalk.yellow('Client applicationUri:'), chalk.cyan(this.currentState.applicationUri));
+    console.log(chalk.yellow('Client securityMode:'), chalk.cyan(getSecurityMode(this.opcuaClient.securityMode)));
+    console.log(chalk.yellow('Client securityPolicy:'), chalk.cyan(getSecurityPolicy(this.opcuaClient.securityPolicy)));
   }
 
   /**

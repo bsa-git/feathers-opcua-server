@@ -471,10 +471,10 @@ const getOpcuaClientScript = function (id, nameScript = '') {
   // Get opcuaClientScript
   if (opcuaOption.paths['client-scripts']) {
     opcuaClientScripts = require(`${appRoot}${opcuaOption.paths['client-scripts']}`);
-    if(opcuaClientScripts[nameScript]){
+    if (opcuaClientScripts[nameScript]) {
       opcuaClientScript = opcuaClientScripts[nameScript];
     }
-  } 
+  }
 
   if (!opcuaClientScript) {
     throw new Error(`It is not possible to find the opcua client script for id=${id} and nameScript="${nameScript}"`);
@@ -961,6 +961,40 @@ const canDbClientRun = function (dbClientName) {
   return isDbClientName;
 };
 
+/**
+ * @method getSecurityMode 
+ * @param {Number} num 
+ * @returns {String}
+ */
+const getSecurityMode = function (num) {
+  let result = '';
+  switch (num) {
+  case 1:
+    result = 'None';
+    break;
+  case 2:
+    result = 'Sign';
+    break;
+  case 3:
+    result = 'SignAndEncrypt';
+    break;
+  default:
+    result = 'None';
+    break;
+  }
+  return result;
+};
+
+/**
+ * @method getSecurityPolicy 
+ * @param {String} value 
+ * @returns {String}
+ */
+const getSecurityPolicy = function (value) {
+  return value.split('#')[1];
+};
+
+
 module.exports = {
   nodeIdToString,
   getNodeIdType,
@@ -999,5 +1033,7 @@ module.exports = {
   Unece_to_Locale,
   canTestRun,
   canServiceRun,
-  canDbClientRun
+  canDbClientRun,
+  getSecurityMode,
+  getSecurityPolicy
 };

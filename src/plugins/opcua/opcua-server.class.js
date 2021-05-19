@@ -148,8 +148,8 @@ class OpcuaServer {
     this.currentState.serverInfo = this.getServerInfo();
     const applicationUri = this.currentState.serverInfo.applicationUri;
     this.currentState.applicationUri = applicationUri;
+    console.log(chalk.yellow('Server applicationUri:'), chalk.cyan(applicationUri));
     console.log(chalk.yellow('Server started and now listening ...'), 'EndPoint URL:', chalk.cyan(endpointUrl));
-    console.log(chalk.yellow('Server started and now listening ...'), 'applicationUri:', chalk.cyan(applicationUri));
     const endpoints = this.opcuaServer.endpoints[0].endpointDescriptions().map(endpoint => {
       return {
         endpointUrl: endpoint.endpointUrl,
