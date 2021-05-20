@@ -163,6 +163,15 @@ class OpcuaServer {
     if (isLog) inspector('opcuaServerStart.currentState:', this.currentState);
     inspector('opcuaServerStart.getServerInfo:', this.getServerInfo());
     inspector('opcuaServerStart.getBuildInfo:', this.getBuildInfo());
+
+    // 
+    if(this.opcuaServer.userManager){
+      this.opcuaServer.userManager.isValidUser = ( userName, password) => {
+        console.log(chalk.green('Server userManager: OK'), 'userName:', chalk.cyan(userName), 'password:', chalk.cyan(password));
+        return true;
+      };
+    }
+
     return endpoints;
   }
 
