@@ -154,13 +154,15 @@ class OpcuaServer {
       return {
         endpointUrl: endpoint.endpointUrl,
         securityMode: endpoint.securityMode.toString(),
-        securityPolicyUri: endpoint.securityPolicyUri.toString()
+        securityPolicyUri: endpoint.securityPolicyUri.toString(),
+        userIdentityTokens: endpoint.userIdentityTokens
       };
     });
     
     this.currentState.endpoints = endpoints;
     this.currentState.isStarted = true;
-    if (isLog) inspector('opcuaServerStart.currentState:', this.currentState);
+    if (isLog) inspector('opcuaServerStart.currentState.endpoints:', this.currentState.endpoints);
+    // inspector('opcuaServerStart.currentState.endpoints:', this.currentState.endpoints);
     inspector('opcuaServerStart.getServerInfo:', this.getServerInfo());
     inspector('opcuaServerStart.getBuildInfo:', this.getBuildInfo());
 

@@ -1,6 +1,9 @@
 
 /* eslint-disable no-unused-vars */
-const { readFileSync, appRoot } = require('../../plugins/lib');
+const {
+  isValidUser,
+  appRoot
+} = require('../../plugins/lib');
 const {
   SecurityPolicy,
   MessageSecurityMode,
@@ -14,7 +17,7 @@ const {
 
 const fs = require('fs');
 const packageFile = `${appRoot}/node_modules/node-opcua-server/package.json`;
-const packageInfo = require(packageFile); 
+const packageInfo = require(packageFile);
 const default_build_info = {
   manufacturerName: 'Node-OPCUA : MIT Licence ( see http://node-opcua.github.io/)',
   productName: packageInfo.name,
@@ -45,7 +48,7 @@ module.exports = {
     * @type {Array<SecurityPolicy>}
     */
   securityPolicies: [
-    SecurityPolicy.None, 
+    SecurityPolicy.None,
     SecurityPolicy.Basic128,
     SecurityPolicy.Basic192,
     SecurityPolicy.Basic192Rsa15,
@@ -56,7 +59,7 @@ module.exports = {
     SecurityPolicy.PubSub_Aes128_CTR,
     SecurityPolicy.PubSub_Aes256_CTR,
     // Obsoletes
-    SecurityPolicy.Basic128Rsa15, 
+    SecurityPolicy.Basic128Rsa15,
     SecurityPolicy.Basic256
   ],
 
@@ -180,7 +183,7 @@ module.exports = {
     *  an object that implements user authentication methods
     *  @type {UserManagerOptions}
     */
-  userManager: null,
+  userManager: { isValidUser },
 
   /** 
     * resource Path is a string added at the end of the url such as "/UA/Server" 
