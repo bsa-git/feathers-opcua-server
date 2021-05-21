@@ -165,14 +165,17 @@ class OpcuaServer {
     // inspector('opcuaServerStart.currentState.endpoints:', this.currentState.endpoints);
     inspector('opcuaServerStart.getServerInfo:', this.getServerInfo());
     inspector('opcuaServerStart.getBuildInfo:', this.getBuildInfo());
+    
+    // console.log('OPCUA_USER_NAME:', process.env.OPCUA_USER_NAME, 'OPCUA_USER_PASS', process.env.OPCUA_USER_PASS);
+    // console.log('OPCUA_ADMIN_NAME:', process.env.OPCUA_ADMIN_NAME, 'OPCUA_ADMIN_PASS', process.env.OPCUA_ADMIN_PASS);
 
     // 
-    if(this.opcuaServer.userManager){
-      this.opcuaServer.userManager.isValidUser = ( userName, password) => {
-        console.log(chalk.green('Server userManager: OK'), 'userName:', chalk.cyan(userName), 'password:', chalk.cyan(password));
-        return true;
-      };
-    }
+    // if(this.opcuaServer.userManager){
+    //   this.opcuaServer.userManager.isValidUser = ( userName, password) => {
+    //     console.log(chalk.green('Server userManager: OK'), 'userName:', chalk.cyan(userName), 'password:', chalk.cyan(password));
+    //     return true;
+    //   };
+    // }
 
     return endpoints;
   }
