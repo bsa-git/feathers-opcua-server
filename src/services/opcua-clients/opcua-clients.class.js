@@ -55,7 +55,7 @@ class OpcuaClients {
     // Client connect and sessionCreate
     const srvCurrentState = await getSrvCurrentState(this.app, id);
     await client.opcuaClientConnect(srvCurrentState);
-    await client.sessionCreate();
+    await client.sessionCreate(data.userIdentityInfo);
 
     // Add opcuaClient to client list
     const opcuaClient = {

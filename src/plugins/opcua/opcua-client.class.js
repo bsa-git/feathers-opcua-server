@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
-const { 
-  inspector, 
-  isString, 
-  isObject, 
+const {
+  inspector,
+  isString,
+  isObject,
   appRoot,
   getHostname
 } = require('../lib');
@@ -19,6 +19,7 @@ const {
   AttributeIds,
   TimestampsToReturn,
   Variant,
+  UserTokenType
 } = require('node-opcua');
 
 const moment = require('moment');
@@ -57,6 +58,7 @@ class OpcuaClient {
       locale: this.locale,
       clientName: this.params.clientName,
       applicationUri: '',
+      userIdentityInfo: { type: UserTokenType.Anonymous },
       port: null,
       endpointUrl: '',
       isCreated: false,
@@ -122,7 +124,7 @@ class OpcuaClient {
    * @async
    * Connect opc-ua client to server
    * 
-   * @param params {Object}
+   * @param {Object} params
    */
   async opcuaClientConnect(params = {}) {
     this.opcuaClientNotCreated();
@@ -155,12 +157,40 @@ class OpcuaClient {
   }
 
   /**
+   * @method sessionCreate
    * Create session opc-ua client
    * @async
+   * 
+   * @param {AnonymousIdentity | UserIdentityInfoX509 | UserIdentityInfoUserName} userIdentityInfo
+   * @example
+   export interface UserIdentityInfoUserName {
+        type: UserTokenType.UserName;
+        userName: string;
+        password: string;
+    }
+    export interface UserIdentityInfoX509 extends X509IdentityTokenOptions {
+        type: UserTokenType.Certificate;
+        certificateData: ByteString;
+        privateKey: PrivateKeyPEM;
+    }
+    export interface AnonymousIdentity {
+        type: UserTokenType.Anonymous;
+    }
    */
-  async sessionCreate() {
+  async sessionCreate(userIdentityInfo = { type: UserTokenType.Anonymous }) {
     this.opcuaClientNotCreated();
-    this.session = await this.opcuaClient.createSession();
+    this.session = await this.opcuaClient.createSession(userIdentityInfo);
+    // Set this.currentState.userIdentityInfo
+    if(userIdentityInfo.type === UserTokenType.Anonymous){
+      this.currentState.userIdentityInfo = userIdentityInfo;
+    } else {
+      this.currentState.userIdentityInfo.type = userIdentityInfo.type;
+      if(userIdentityInfo.type === UserTokenType.UserName){
+        this.currentState.userIdentityInfo.userName = userIdentityInfo.userName;
+      }else{
+        this.currentState.userIdentityInfo.certificateData = userIdentityInfo.certificateData;
+      }
+    }
     this.currentState.isSessionCreated = true;
     console.log(chalk.yellow('Client session created'));
     if (isLog) inspector('opcua-client.class::sessionCreate.sessionToString:', this.sessionToString());

@@ -3,6 +3,10 @@ const assert = require('assert');
 const app = require('../../src/app');
 
 const {
+  UserTokenType
+} = require('node-opcua');
+
+const {
   getServerService,
   getClientService,
 } = require('../../src/plugins/opcua/opcua-helper');
@@ -40,7 +44,11 @@ const srvData = {
   }
 };
 
+// Default user identity info
+const userIdentityInfo = { type: UserTokenType.UserName, userName: process.env.OPCUA_ADMIN_NAME, password: process.env.OPCUA_ADMIN_PASS };
+
 const clientData = {
+  userIdentityInfo,
   params: {
     applicationName: 'ua-cherkassy-azot_test2',
     locale: 'ru'

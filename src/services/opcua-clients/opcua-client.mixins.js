@@ -13,10 +13,6 @@ const {
 
 const {
   Variant,
-  DataType,
-  VariantArrayType,
-  AttributeIds,
-  StatusCodes,
   makeBrowsePath
 } = require('node-opcua');
 
@@ -37,7 +33,6 @@ module.exports = function opcuaClientMixins(service, path) {
   service.getPathForClientMixins = function (action) {
     switch (action) {
     case 'opcuaClientDisconnect':
-    case 'sessionCreate':
     case 'sessionClose':
     case 'subscriptionCreate':
     case 'subscriptionTerminate':
@@ -56,6 +51,9 @@ module.exports = function opcuaClientMixins(service, path) {
     case 'opcuaClientCreate':
     case 'opcuaClientConnect':
       result = ['id', 'params'];
+      break;
+    case 'sessionCreate':
+      result = ['id', 'userIdentityInfo'];
       break;
     case 'getNodeIds':
     case 'sessionBrowse':
@@ -144,11 +142,26 @@ module.exports = function opcuaClientMixins(service, path) {
    * @async
    * 
    * @param {String} id 
+   * @param {AnonymousIdentity | UserIdentityInfoX509 | UserIdentityInfoUserName} userIdentityInfo 
+   * @example
+   export interface UserIdentityInfoUserName {
+        type: UserTokenType.UserName;
+        userName: string;
+        password: string;
+    }
+    export interface UserIdentityInfoX509 extends X509IdentityTokenOptions {
+        type: UserTokenType.Certificate;
+        certificateData: ByteString;
+        privateKey: PrivateKeyPEM;
+    }
+    export interface AnonymousIdentity {
+        type: UserTokenType.Anonymous;
+    }
    * @returns {Object}
    */
-  service.sessionCreate = async function (id) {
+  service.sessionCreate = async function (id, userIdentityInfo) {
     const opcuaClient = await service.get(id);
-    await opcuaClient.client.sessionCreate();
+    await opcuaClient.client.sessionCreate(userIdentityInfo);
     result = Object.assign({}, opcuaClient, getClientForProvider(opcuaClient.client));
     return result;
   };
