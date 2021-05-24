@@ -1,5 +1,10 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
+
+const {
+  UserTokenType
+} = require('node-opcua');
+
 require('../../src/app');
 const {
   appRoot,
@@ -34,6 +39,9 @@ const srvParams = {
   port: 26540, // default - 26543, 26540 (opcua.test), 26550 (opcua.test2), 26560 (opcua-clients.test), 26570 (opcua-servers.test),
   serverInfo: { applicationName: 'ua-cherkassy-azot_test1' },
 };
+
+// Default user identity info
+const userIdentityInfo = { type: UserTokenType.UserName, userName: process.env.OPCUA_ADMIN_NAME, password: process.env.OPCUA_ADMIN_PASS };
 
 const clientParams = {
   applicationName: 'ua-cherkassy-azot_test1',
@@ -98,7 +106,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
     });
 
     it('OPC-UA client session create', async () => {
-      await client.sessionCreate();
+      await client.sessionCreate(userIdentityInfo);
       assert.ok(true, 'OPC-UA client session create');
     });
 

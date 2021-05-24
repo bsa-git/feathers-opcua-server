@@ -192,7 +192,9 @@ class OpcuaClient {
       }
     }
     this.currentState.isSessionCreated = true;
-    console.log(chalk.yellow('Client session created'));
+    const msg = userIdentityInfo.type === UserTokenType.UserName? `user: "${userIdentityInfo.userName}" is authenticated` : '';
+    
+    console.log(chalk.yellow('Client session is created.'), chalk.cyan(msg));
     if (isLog) inspector('opcua-client.class::sessionCreate.sessionToString:', this.sessionToString());
   }
 

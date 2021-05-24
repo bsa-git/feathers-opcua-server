@@ -6,7 +6,14 @@ const {
   isOpcuaClientInList,
   getClientForProvider,
   getSrvCurrentState,
+  getOpcuaConfig
 } = require('../../plugins/opcua/opcua-helper');
+
+const {
+  MessageSecurityMode,
+  SecurityPolicy,
+  UserTokenType
+} = require('node-opcua');
 
 const loRemove = require('lodash/remove');
 const loAt = require('lodash/at');
@@ -47,6 +54,26 @@ class OpcuaClients {
     if (isOpcuaClientInList(this, id)) {
       throw new errors.BadRequest(`The opcua client already exists for this id = '${id}' in the client list`);
     }
+
+    const option = getOpcuaConfig(id);
+
+    // Set securityMode and securityPolicy
+    if(option.security && option.security.mode && option.security.policy){
+      data.params.securityMode = MessageSecurityMode[option.security.mode];
+      data.params.securityPolicy = SecurityPolicy[option.security.policy];
+    }
+    
+    // Set userIdentityInfo (userName, password)
+    if(option.security && option.security.userName && option.security.password){
+      const userIdentityInfo = { 
+        type: UserTokenType.UserName, 
+        userName: process.env[option.security.userName], 
+        password: process.env[option.security.password] 
+      };        
+      data.userIdentityInfo = userIdentityInfo;
+    }
+
+
     // Create OPC-UA client
     const client = new OpcuaClient(data.params);
     // Client create

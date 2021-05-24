@@ -45,10 +45,10 @@ const srvData = {
 };
 
 // Default user identity info
-const userIdentityInfo = { type: UserTokenType.UserName, userName: process.env.OPCUA_ADMIN_NAME, password: process.env.OPCUA_ADMIN_PASS };
+// const userIdentityInfo = { type: UserTokenType.UserName, userName: process.env.OPCUA_ADMIN_NAME, password: process.env.OPCUA_ADMIN_PASS };
 
 const clientData = {
-  userIdentityInfo,
+  // userIdentityInfo,
   params: {
     applicationName: 'ua-cherkassy-azot_test2',
     locale: 'ru'
