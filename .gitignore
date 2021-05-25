@@ -109,6 +109,8 @@ $RECYCLE.BIN/
 # Others
 data/db/*
 !data/db/README.md
+data/nedb/*
+!data/nedb/README.md
 data/db-log/*
 !data/db-log/README.md
 data/app-log/*

@@ -16,7 +16,7 @@ server.on('listening', () => {
   logger.info('Feathers application started on env="%s"', app.get('env'));
 });
 
-// Run opcuaBootstrap
+// Run opcuaBootstrap 
 if (isTrue(process.env.OPCUA_BOOTSTRAP_ENABLE)) {
   Promise.resolve(opcuaBootstrap(app));
 }

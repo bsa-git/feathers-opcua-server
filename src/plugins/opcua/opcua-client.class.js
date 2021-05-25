@@ -36,7 +36,7 @@ const loConcat = require('lodash/concat');
 
 const debug = require('debug')('app:opcua-client.class');
 const isLog = false;
-const isDebug = true;
+const isDebug = false;
 
 class OpcuaClient {
   /**

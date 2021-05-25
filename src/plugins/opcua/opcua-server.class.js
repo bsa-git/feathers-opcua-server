@@ -26,7 +26,7 @@ const chalk = require('chalk');
 
 const debug = require('debug')('app:opcua-server.class');
 const isLog = false;
-const isDebug = true;
+const isDebug = false;
 
 class OpcuaServer {
   /**
@@ -163,20 +163,8 @@ class OpcuaServer {
     this.currentState.isStarted = true;
     if (isLog) inspector('opcuaServerStart.currentState.endpoints:', this.currentState.endpoints);
     // inspector('opcuaServerStart.currentState.endpoints:', this.currentState.endpoints);
-    inspector('opcuaServerStart.getServerInfo:', this.getServerInfo());
-    inspector('opcuaServerStart.getBuildInfo:', this.getBuildInfo());
-    
-    // console.log('OPCUA_USER_NAME:', process.env.OPCUA_USER_NAME, 'OPCUA_USER_PASS', process.env.OPCUA_USER_PASS);
-    // console.log('OPCUA_ADMIN_NAME:', process.env.OPCUA_ADMIN_NAME, 'OPCUA_ADMIN_PASS', process.env.OPCUA_ADMIN_PASS);
-
-    // 
-    // if(this.opcuaServer.userManager){
-    //   this.opcuaServer.userManager.isValidUser = ( userName, password) => {
-    //     console.log(chalk.green('Server userManager: OK'), 'userName:', chalk.cyan(userName), 'password:', chalk.cyan(password));
-    //     return true;
-    //   };
-    // }
-
+    if (isLog) inspector('opcuaServerStart.getServerInfo:', this.getServerInfo());
+    if (isLog) inspector('opcuaServerStart.getBuildInfo:', this.getBuildInfo());
     return endpoints;
   }
 

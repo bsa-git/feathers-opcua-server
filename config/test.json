@@ -1,3 +1,4 @@
 {
-  "nedb": "../test/data"
+  "nedb": "NEDB_TEST_PATH",
+  "mongodb": "MONGODB_TEST_URL"
 }

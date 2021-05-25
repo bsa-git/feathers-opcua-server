@@ -1,3 +1,3 @@
 ## About
 
-This folder is for storing data.
+This folder is for storing mongodb data.

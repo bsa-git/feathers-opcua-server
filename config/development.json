@@ -1,0 +1,4 @@
+{
+  "nedb": "NEDB_DEV_PATH",
+  "mongodb": "MONGODB_DEV_URL"
+}
