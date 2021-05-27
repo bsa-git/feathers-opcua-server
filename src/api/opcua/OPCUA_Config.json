@@ -104,7 +104,7 @@
     "srvServiceUrl": "http://192.168.3.5:3030",
     "clientServiceUrl": "http://192.168.3.5:3030",
     "clientScript": "startSubscriptionMonitor",
-    "subscription": "onChangedGroupItemsHandler",
+    "subscription": "onChangedGroupHandler",
     "exclude": {
       "services": [
         "log-messages"
@@ -129,7 +129,7 @@
     "srvServiceUrl": "http://10.60.0.49:3030",
     "clientServiceUrl": "http://10.60.0.49:3030",
     "clientScript": "startSubscriptionMonitor",
-    "subscription": "onChangedGroupItemsHandler",
+    "subscription": "onChangedGroupHandler",
     "exclude": {
       "services": [
         "log-messages"
@@ -162,7 +162,7 @@
     "srvServiceUrl": "http://BSA-HOME:3030",
     "clientServiceUrl": "http://BSA-HOME:3030",
     "clientScript": "startSubscriptionMonitor",
-    "subscription": "onChangedGroupItemsHandler",
+    "subscription": "onChangedGroupHandler",
     "include": {
       "tests": [
         "mssql-tedious.test2.js",
