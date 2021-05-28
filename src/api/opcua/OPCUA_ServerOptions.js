@@ -17,6 +17,8 @@ const {
   RegisterServerMethod
 } = require('node-opcua');
 
+const loDrop = require('lodash/drop');
+
 const fs = require('fs');
 const packageFile = `${appRoot}/node_modules/node-opcua-server/package.json`;
 const packageInfo = require(packageFile);
@@ -27,6 +29,59 @@ const default_build_info = {
   softwareVersion: packageInfo.version,
   buildDate: fs.statSync(packageFile).mtime
 };
+
+
+/**
+    * the possible security policies that the server will expose
+    Basic128 = "http://opcfoundation.org/UA/SecurityPolicy#Basic128",
+    Basic192 = "http://opcfoundation.org/UA/SecurityPolicy#Basic192",
+    Basic192Rsa15 = "http://opcfoundation.org/UA/SecurityPolicy#Basic192Rsa15",
+    Basic256Rsa15 = "http://opcfoundation.org/UA/SecurityPolicy#Basic256Rsa15",
+    Basic256Sha256 = "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256",
+    Aes128_Sha256_RsaOaep = "http://opcfoundation.org/UA/SecurityPolicy#Aes128_Sha256_RsaOaep",
+    PubSub_Aes128_CTR = "http://opcfoundation.org/UA/SecurityPolicy#PubSub_Aes128_CTR",
+    PubSub_Aes256_CTR = "http://opcfoundation.org/UA/SecurityPolicy#PubSub_Aes256_CTR",
+    Basic128Rsa15 = "http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15",
+    Basic256
+    * @type {Array<SecurityPolicy>}
+    */
+let securityPolicies = [
+  SecurityPolicy.None,
+  SecurityPolicy.Basic128,
+  SecurityPolicy.Basic192,
+  SecurityPolicy.Basic192Rsa15,
+  SecurityPolicy.Basic256Rsa15,
+  SecurityPolicy.Basic256Sha256,
+  // New
+  SecurityPolicy.Aes128_Sha256_RsaOaep,
+  SecurityPolicy.PubSub_Aes128_CTR,
+  SecurityPolicy.PubSub_Aes256_CTR,
+  // Obsoletes
+  SecurityPolicy.Basic128Rsa15,
+  SecurityPolicy.Basic256
+];
+
+if (process.env.NODE_ENV === 'production') {
+  securityPolicies = loDrop(securityPolicies);
+}
+
+/**
+ * the possible security mode that the server will expose
+ * @type {Array<MessageSecurityMode>}
+ */
+let securityModes = [MessageSecurityMode.None, MessageSecurityMode.Sign, MessageSecurityMode.SignAndEncrypt];
+if (process.env.NODE_ENV === 'production') {
+  securityModes = loDrop(securityModes);
+}
+
+/**
+ * tells if the server default endpoints should allow anonymous connection.
+ * @type {Boolean}
+ */
+let allowAnonymous = true;
+if (process.env.NODE_ENV === 'production') {
+  allowAnonymous = false;
+}
 
 module.exports = {
   /**
@@ -49,32 +104,18 @@ module.exports = {
     Basic256
     * @type {Array<SecurityPolicy>}
     */
-  securityPolicies: [
-    SecurityPolicy.None,
-    SecurityPolicy.Basic128,
-    SecurityPolicy.Basic192,
-    SecurityPolicy.Basic192Rsa15,
-    SecurityPolicy.Basic256Rsa15,
-    SecurityPolicy.Basic256Sha256,
-    // New
-    SecurityPolicy.Aes128_Sha256_RsaOaep,
-    SecurityPolicy.PubSub_Aes128_CTR,
-    SecurityPolicy.PubSub_Aes256_CTR,
-    // Obsoletes
-    SecurityPolicy.Basic128Rsa15,
-    SecurityPolicy.Basic256
-  ],
+  securityPolicies,
 
   /**
     * the possible security mode that the server will expose
     * @type {Array<MessageSecurityMode>}
     */
-  securityModes: [MessageSecurityMode.None, MessageSecurityMode.Sign, MessageSecurityMode.SignAndEncrypt],
+  securityModes,
   /**
     * tells if the server default endpoints should allow anonymous connection.
     * @type {Boolean}
     */
-  allowAnonymous: true,
+  allowAnonymous,
 
   /** 
     * alternate hostname  or IP to use 

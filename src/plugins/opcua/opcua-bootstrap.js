@@ -34,8 +34,6 @@ module.exports = async function opcuaBootstrap(app) {
   opcuaOptions = opcuaOptions.filter(item => !item.isDisable);
   for (let index = 0; index < opcuaOptions.length; index++) {
     const option = opcuaOptions[index];
-    // const myPort = app.get('port');
-    if (isDebug) debug('opcuaBootstrap.opcuaOptionID:', option.id);
     // Create service for OPC-UA server
     service = await getServerService(app, option.id);
     if (service) {

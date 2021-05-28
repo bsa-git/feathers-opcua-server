@@ -26,6 +26,9 @@
     "npm": "= 6.x"
   },
   "scripts": {
+    "start": "cross-env NODE_ENV=production node src/",
+    "dev": "cross-env NODE_ENV=development DEBUG=app:* npm run eslint && nodemon src/",
+    "start-mongod": "mongod -f mongod.config.yml",
     "test:all": "npm run eslint && npm run mocha ",
     "test:debug": "npm run eslint:debug && npm run mocha:debug",
     "coverage": "nyc npm run mocha",
@@ -35,9 +38,6 @@
     "eslint:debug": "eslint --fix src/. test/debug/.  --config .eslintrc.json",
     "clean": "shx rm -rf test/data/*.db",
     "shx": "shx rm test/data/*.db",
-    "dev": "cross-env NODE_ENV=development DEBUG=app:* npm run eslint && nodemon src/",
-    "start": "node src/",
-    "start-mongod": "mongod -f mongod.config.yml",
     "update-dependencies": "ncu -u"
   },
   "dependencies": {

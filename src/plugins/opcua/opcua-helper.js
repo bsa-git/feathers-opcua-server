@@ -513,7 +513,10 @@ const getMyHostInfo = async function () {
  * @returns {Boolean}
  */
 const isMyServiceHost = async function (serviceUrl, myPort) {
-  if (!serviceUrl) return false;
+  if (!serviceUrl || !myPort) return false;
+  if(loIsString(myPort)){
+    myPort = getInt(myPort);
+  }
   const serviceHostname = getParseUrl(serviceUrl).hostname.toLowerCase();
   let servicePort = getParseUrl(serviceUrl).port;
   servicePort = getInt(servicePort);

@@ -178,24 +178,30 @@ class OpcuaClient {
     }
    */
   async sessionCreate(userIdentityInfo = { type: UserTokenType.Anonymous }) {
-    this.opcuaClientNotCreated();
-    this.session = await this.opcuaClient.createSession(userIdentityInfo);
-    // Set this.currentState.userIdentityInfo
-    if(userIdentityInfo.type === UserTokenType.Anonymous){
-      this.currentState.userIdentityInfo = userIdentityInfo;
-    } else {
-      this.currentState.userIdentityInfo.type = userIdentityInfo.type;
-      if(userIdentityInfo.type === UserTokenType.UserName){
-        this.currentState.userIdentityInfo.userName = userIdentityInfo.userName;
-      }else{
-        this.currentState.userIdentityInfo.certificateData = userIdentityInfo.certificateData;
+    try {
+      this.opcuaClientNotCreated();
+      this.session = await this.opcuaClient.createSession(userIdentityInfo);
+      // Set this.currentState.userIdentityInfo
+      if (userIdentityInfo.type === UserTokenType.Anonymous) {
+        this.currentState.userIdentityInfo = userIdentityInfo;
+      } else {
+        this.currentState.userIdentityInfo.type = userIdentityInfo.type;
+        if (userIdentityInfo.type === UserTokenType.UserName) {
+          this.currentState.userIdentityInfo.userName = userIdentityInfo.userName;
+        } else {
+          this.currentState.userIdentityInfo.certificateData = userIdentityInfo.certificateData;
+        }
       }
+      this.currentState.isSessionCreated = true;
+      const msg = userIdentityInfo.type === UserTokenType.UserName ? `user: "${userIdentityInfo.userName}" is authenticated` : '';
+      console.log(chalk.yellow('Client session is created.'), chalk.cyan(msg));
+      if (isLog) inspector('opcua-client.class::sessionCreate.sessionToString:', this.sessionToString());
+    } catch (error) {
+      if (error.message.includes('End point must exist') && process.env.NODE_ENV === 'production') {
+        console.log(chalk.red('In production mode, the client must be authenticated, and must also encrypt and digitally sign the transmitted messages!'));
+      }
+      throw error;
     }
-    this.currentState.isSessionCreated = true;
-    const msg = userIdentityInfo.type === UserTokenType.UserName? `user: "${userIdentityInfo.userName}" is authenticated` : '';
-    
-    console.log(chalk.yellow('Client session is created.'), chalk.cyan(msg));
-    if (isLog) inspector('opcua-client.class::sessionCreate.sessionToString:', this.sessionToString());
   }
 
   /**
