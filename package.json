@@ -38,7 +38,9 @@
     "eslint:debug": "eslint --fix src/. test/debug/.  --config .eslintrc.json",
     "clean": "shx rm -rf test/data/*.db",
     "shx": "shx rm test/data/*.db",
-    "update-dependencies": "ncu -u"
+    "update-dependencies": "ncu -u",
+    "nedb-find-users": "nedb ./data/nedb/users.db",
+    "nedb-find-messages": "nedb ./data/nedb/messages.db"
   },
   "dependencies": {
     "@feathersjs/authentication": "^4.5.3",

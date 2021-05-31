@@ -1,0 +1,279 @@
+[
+  {
+    "isConfig": true,
+    "excludeGroups": ["TEST"],
+    "groupColors": {
+      "TEST": "shades:black",
+      "ERROR": "red",
+      "USER": "teal",
+      "ROLE": "purple",
+      "TEAM": "indigo",
+      "USER-TEAM": "green",
+      "AUTH": "orange",
+      "EMAIL": "brown",
+      "DATA": "brown",
+      "LOG-MESSAGE": "brown"
+    }
+  },
+  {
+    "gr": "TEST",
+    "pr": 10,
+    "name": "TEST",
+    "title": "Test log message",
+    "icon": "mdi-ab-testing",
+    "isEnable": false,
+    "isServer": true
+  },
+  {
+    "gr": "ERROR",
+    "pr": 12,
+    "name": "ERROR-SRV",
+    "title": "Server error",
+    "icon": "mdi-alert",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "ERROR",
+    "pr": 13,
+    "name": "ERROR-CLIENT",
+    "title": "Client error",
+    "icon": "mdi-alert",
+    "isEnable": true,
+    "isServer": false
+  },
+  {
+    "gr": "USER",
+    "pr": 20,
+    "name": "LOGIN",
+    "title": "Login",
+    "icon": "mdi-login",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "USER",
+    "pr": 21,
+    "name": "LOGOUT",
+    "title": "Logout",
+    "icon": "mdi-logout",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "USER",
+    "pr": 22,
+    "name": "USER-CREATE",
+    "title": "User created",
+    "icon": "mdi-account-plus",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "USER",
+    "pr": 23,
+    "name": "USER-REMOVE",
+    "title": "User removed",
+    "icon": "mdi-account-remove",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "USER",
+    "pr": 24,
+    "name": "USER-CHANGE",
+    "title": "User changed",
+    "icon": "mdi-account-edit",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "USER",
+    "pr": 25,
+    "name": "PROFILE-CHANGE",
+    "title": "Profile changed",
+    "icon": "mdi-account-edit-outline",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "ROLE",
+    "pr": 30,
+    "name": "ROLE-CREATE",
+    "title": "Role created",
+    "icon": "mdi-shield-plus",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "ROLE",
+    "pr": 31,
+    "name": "ROLE-REMOVE",
+    "title": "Role removed",
+    "icon": "mdi-shield-remove",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "ROLE",
+    "pr": 32,
+    "name": "ROLE-CHANGE",
+    "title": "Role changed",
+    "icon": "mdi-shield-edit",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "TEAM",
+    "pr": 40,
+    "name": "TEAM-CREATE",
+    "title": "Team created",
+    "icon": "mdi-account-multiple-plus",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "TEAM",
+    "pr": 41,
+    "name": "TEAM-REMOVE",
+    "title": "Role removed",
+    "icon": "mdi-account-multiple-minus",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "TEAM",
+    "pr": 42,
+    "name": "TEAM-CHANGE",
+    "title": "Role changed",
+    "icon": "mdi-account-multiple-check",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "USER-TEAM",
+    "pr": 50,
+    "name": "USER-TEAM-CREATE",
+    "title": "User-team created",
+    "icon": "mdi-account-multiple-plus",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "USER-TEAM",
+    "pr": 51,
+    "name": "USER-TEAM-REMOVE",
+    "title": "User-team removed",
+    "icon": "mdi-account-multiple-minus",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "AUTH",
+    "pr": 60,
+    "name": "CHECK-UNIQUE",
+    "title": "Check uniqueness",
+    "icon": "mdi-account-check",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "AUTH",
+    "pr": 61,
+    "name": "RESEND-VERIFY-SIGNUP",
+    "title": "Resend verify signup",
+    "icon": "mdi-account-check",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "AUTH",
+    "pr": 62,
+    "name": "VERIFY-SIGNUP-LONG",
+    "title": "Verify signup long",
+    "icon": "mdi-account-check",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "AUTH",
+    "pr": 63,
+    "name": "VERIFY-SIGNUP-SHORT",
+    "title": "Verify signup short",
+    "icon": "mdi-account-check",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "AUTH",
+    "pr": 64,
+    "name": "SEND-RESET-PWD",
+    "title": "Send reset Pwd",
+    "icon": "mdi-shield-lock",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "AUTH",
+    "pr": 65,
+    "name": "RESET-PWD-LONG",
+    "title": "Reset Pwd long",
+    "icon": "mdi-shield-lock",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "AUTH",
+    "pr": 66,
+    "name": "RESET-PWD-SHORT",
+    "title": "Reset Pwd short",
+    "icon": "mdi-shield-lock",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "AUTH",
+    "pr": 67,
+    "name": "PASSWORD-CHANGE",
+    "title": "Password change",
+    "icon": "mdi-shield-refresh",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "AUTH",
+    "pr": 68,
+    "name": "IDENTITY-CHANGE",
+    "title": "Identity change",
+    "icon": "mdi-email-edit",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "EMAIL",
+    "pr": 70,
+    "name": "MAILER-CREATE",
+    "title": "Mailer created",
+    "icon": "mdi-email-send",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "DATA",
+    "pr": 71,
+    "name": "DATA-REQUEST",
+    "title": "Data request",
+    "icon": "mdi-database-search",
+    "isEnable": true,
+    "isServer": true
+  },
+  {
+    "gr": "LOG-MESSAGE",
+    "pr": 72,
+    "name": "LOG-MESSAGE-REMOVE",
+    "title": "Log message removed",
+    "icon": "mdi-math-log",
+    "isEnable": true,
+    "isServer": false
+  }
+]

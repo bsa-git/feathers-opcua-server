@@ -42,6 +42,6 @@
       "passwordField": "password"
     }
   },
-  "nedb": "../data/nedb",
+  "nedb": "nedb://../data/nedb",
   "mongodb": "mongodb://localhost:27017/feathers_opcua_server"
 }
