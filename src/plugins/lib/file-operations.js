@@ -629,7 +629,7 @@ const readOnlyModifiedFile = function (path, cb) {
  * @param {String|Array} path 
  * @param {String} encoding 
  * e.g. 'utf8'
- * @returns {String|Object}
+ * @returns {String|Buffer}
  */
 const readFileSync = function (path, encoding = 'utf8') {
   let result = null;
@@ -641,6 +641,25 @@ const readFileSync = function (path, encoding = 'utf8') {
     result = fs.readFileSync(path, encoding);
   }
   return result;
+};
+
+/**
+ * @method readJsonFileSync
+ * @param {String|Array} path 
+ * @param {String} encoding 
+ * e.g. 'utf8'
+ * @returns {Object}
+ */
+const readJsonFileSync = function (path, encoding = 'utf8') {
+  let result = null;
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  const isAccess = fsAccess(path, fs.constants.F_OK) && fsAccess(path, fs.constants.R_OK);
+  if (isAccess) {
+    result = fs.readFileSync(path, encoding);
+  }
+  return JSON.parse(result);
 };
 
 /**
@@ -713,6 +732,7 @@ module.exports = {
   readOnlyNewFile,
   readOnlyModifiedFile,
   readFileSync,
+  readJsonFileSync,
   writeFileSync,
   removeFileSync
 };

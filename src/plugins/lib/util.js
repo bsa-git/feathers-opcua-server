@@ -360,6 +360,7 @@ const cloneObject = function (obj) {
 const dbNullIdValue = function () {
   let result = null;
   if (process.env.TYPE_DB === 'mongodb') result = process.env.MONGODB_NULL_ID_VALUE;
+  if (process.env.TYPE_DB === 'nedb') result = process.env.NEDB_NULL_ID_VALUE;
   return result;
 };
 
