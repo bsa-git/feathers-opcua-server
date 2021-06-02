@@ -1,12 +1,15 @@
-// Initializes the `log-messages` service on path `/log-messages`
+// Initializes the `messages` service on path `/messages`
 const { LogMessages } = require('./log-messages.class');
 const createModel = require('../../models/log-messages.model');
 const hooks = require('./log-messages.hooks');
 
 module.exports = function (app) {
+  const Model = createModel(app);
+  const paginate = app.get('paginate');
+
   const options = {
-    Model: createModel(app),
-    paginate: app.get('paginate')
+    Model,
+    paginate
   };
 
   // Initialize our service with any options it requires

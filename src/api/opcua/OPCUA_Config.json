@@ -59,14 +59,6 @@
         "http-operations.test.js"
       ]
     },
-    "exclude": {
-      "services": [
-        "log-messages"
-      ],
-      "dbClients": [
-        "mongoose.js"
-      ]
-    },
     "paths": {
       "base-options": [
         "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
@@ -124,14 +116,6 @@
       "userName": "OPCUA_ADMIN_NAME",
       "password": "OPCUA_ADMIN_PASS"
     },
-    "exclude": {
-      "services": [
-        "log-messages"
-      ],
-      "dbClients": [
-        "mongoose.js"
-      ]
-    },
     "paths": {
       "options": "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
       "getters": "",
@@ -154,14 +138,6 @@
       "policy": "Basic256Sha256",
       "userName": "OPCUA_ADMIN_NAME",
       "password": "OPCUA_ADMIN_PASS"
-    },
-    "exclude": {
-      "services": [
-        "log-messages"
-      ],
-      "dbClients": [
-        "mongoose.js"
-      ]
     },
     "paths": {
       "base-options": [

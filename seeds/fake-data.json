@@ -1,0 +1,249 @@
+{
+  "users": [
+    {
+      "_id": "60af3870270f24162c049c09",
+      "email": "Nelle1@hotmail.com",
+      "password": "Nelle1",
+      "firstName": "Laila",
+      "lastName": "Sporer",
+      "roleId": "60af3870270f24162c049c0c",
+      "profileId": "60af3870270f24162c049c15",
+      "active": true,
+      "isVerified": true,
+      "verifyToken": "",
+      "verifyShortToken": "",
+      "verifyExpires": "1970-01-01T00:00:00.000Z",
+      "verifyChanges": {},
+      "resetToken": "",
+      "resetShortToken": "",
+      "resetExpires": "1970-01-01T00:00:00.000Z",
+      "googleId": "4943272568946688",
+      "githubId": "5339869586915328",
+      "googleAccessToken": "84838145-2e9a-5e12-9241-8bfb5af807c8",
+      "googleRefreshToken": "02772375-654c-5073-bec7-2d4caf4c4d41",
+      "githubAccessToken": "952f4196-a055-5cdf-94ff-a2500b5d5c05",
+      "githubRefreshToken": "e122d4cf-55fc-5d0f-9b48-b009230a426a",
+      "loginAt": "1970-01-01T00:00:00.000Z",
+      "avatar": "/img/avatar/people_1.png"
+    },
+    {
+      "_id": "60af3870270f24162c049c0a",
+      "email": "Victoria.McKenzie@gmail.com",
+      "password": "Victoria.McKenzie",
+      "firstName": "Kristoffer",
+      "lastName": "Von",
+      "roleId": "60af3870270f24162c049c0d",
+      "profileId": "60af3870270f24162c049c16",
+      "active": true,
+      "isVerified": true,
+      "verifyToken": "",
+      "verifyShortToken": "",
+      "verifyExpires": "1970-01-01T00:00:00.000Z",
+      "verifyChanges": {},
+      "resetToken": "",
+      "resetShortToken": "",
+      "resetExpires": "1970-01-01T00:00:00.000Z",
+      "googleId": "352972223545344",
+      "githubId": "3978578282676224",
+      "googleAccessToken": "0bfe2b6f-19bd-5448-89b9-b9efa58c568e",
+      "googleRefreshToken": "c143ac8f-c54e-56e0-a414-45d90522806b",
+      "githubAccessToken": "781159d4-9064-5533-a114-2a2e65ee1461",
+      "githubRefreshToken": "cbeb4f43-a505-51d9-b109-7362bb9f6208",
+      "loginAt": "1970-01-01T00:00:00.000Z",
+      "avatar": "/img/avatar/people_2.png"
+    },
+    {
+      "_id": "60af3870270f24162c049c0b",
+      "email": "Annalise.Reilly53@gmail.com",
+      "password": "Annalise.Reilly53",
+      "firstName": "Jared",
+      "lastName": "Hoppe",
+      "roleId": "60af3870270f24162c049c0e",
+      "profileId": "60af3870270f24162c049c17",
+      "active": true,
+      "isVerified": true,
+      "verifyToken": "",
+      "verifyShortToken": "",
+      "verifyExpires": "1970-01-01T00:00:00.000Z",
+      "verifyChanges": {},
+      "resetToken": "",
+      "resetShortToken": "",
+      "resetExpires": "1970-01-01T00:00:00.000Z",
+      "googleId": "1346110658445312",
+      "githubId": "8148342487908352",
+      "googleAccessToken": "ac34cb78-714c-5ab0-b16a-f0a8da7f066c",
+      "googleRefreshToken": "32afdcac-2d8f-5946-ac34-46d09e453847",
+      "githubAccessToken": "0e31dddc-0462-50d5-aa12-96014c3a8b65",
+      "githubRefreshToken": "25349602-259e-5ad7-b154-835a8ee179c5",
+      "loginAt": "1970-01-01T00:00:00.000Z",
+      "avatar": "/img/avatar/people_3.png"
+    }
+  ],
+  "roles": [
+    {
+      "_id": "60af3870270f24162c049c0c",
+      "name": "Administrator",
+      "alias": "isAdministrator",
+      "description": "Sed sint ea doloribus id quibusdam numquam quaerat."
+    },
+    {
+      "_id": "60af3870270f24162c049c0d",
+      "name": "Guest",
+      "alias": "isGuest",
+      "description": "Consequatur suscipit ut."
+    },
+    {
+      "_id": "60af3870270f24162c049c0e",
+      "name": "Customer Security Strategist",
+      "alias": "isCustomerSecurityStrategist",
+      "description": "Impedit ducimus earum quaerat qui omnis atque distinctio."
+    }
+  ],
+  "teams": [
+    {
+      "_id": "60af3870270f24162c049c0f",
+      "name": "Ergonomic Fresh Mouse",
+      "alias": "isErgonomicFreshMouse",
+      "description": "Nulla nihil molestiae non saepe aperiam adipisci voluptate."
+    },
+    {
+      "_id": "60af3870270f24162c049c10",
+      "name": "Licensed Concrete Salad",
+      "alias": "isLicensedConcreteSalad",
+      "description": "Ut velit dolores sint."
+    },
+    {
+      "_id": "60af3870270f24162c049c11",
+      "name": "Gorgeous Wooden Pizza",
+      "alias": "isGorgeousWoodenPizza",
+      "description": "Velit exercitationem eum autem fugiat."
+    }
+  ],
+  "userTeams": [
+    {
+      "_id": "60af3870270f24162c049c12",
+      "teamId": "60af3870270f24162c049c0f",
+      "userId": "60af3870270f24162c049c0a"
+    },
+    {
+      "_id": "60af3870270f24162c049c13",
+      "teamId": "60af3870270f24162c049c10",
+      "userId": "60af3870270f24162c049c0b"
+    },
+    {
+      "_id": "60af3870270f24162c049c14",
+      "teamId": "60af3870270f24162c049c11",
+      "userId": "60af3870270f24162c049c09"
+    }
+  ],
+  "userProfiles": [
+    {
+      "_id": "60af3870270f24162c049c15",
+      "personalPhone": "586-410-1968",
+      "personalWebSite": "https://johnpaul.org",
+      "addressSuite": "Apt. 134",
+      "addressStreet": "0107 Ebony Mountains",
+      "addressCity": "East Turner",
+      "addressState": "Indiana",
+      "addressStateAbbr": "LA",
+      "addressCountry": "Macedonia",
+      "addressCountryCode": "HM",
+      "addressZipCode": "64901-8555",
+      "addressLatitude": "-1.4416",
+      "addressLongitude": "-34.2463",
+      "jobCompanyName": "Fritsch - Prohaska",
+      "jobTitle": "Forward Markets Orchestrator",
+      "jobType": "Assistant",
+      "jobPhone": "894-856-7672",
+      "jobWebSite": "http://nelda.name",
+      "jobEmail": "Meghan41@example.org"
+    },
+    {
+      "_id": "60af3870270f24162c049c16",
+      "personalPhone": "119-109-1273",
+      "personalWebSite": "https://ralph.name",
+      "addressSuite": "Suite 689",
+      "addressStreet": "2294 Hayes Points",
+      "addressCity": "Turcotteton",
+      "addressState": "Kansas",
+      "addressStateAbbr": "KS",
+      "addressCountry": "Greenland",
+      "addressCountryCode": "MK",
+      "addressZipCode": "42759-6481",
+      "addressLatitude": "-36.7441",
+      "addressLongitude": "-85.1005",
+      "jobCompanyName": "Larson LLC",
+      "jobTitle": "Regional Quality Consultant",
+      "jobType": "Developer",
+      "jobPhone": "994-202-5576",
+      "jobWebSite": "http://armand.name",
+      "jobEmail": "Magnus22@example.org"
+    },
+    {
+      "_id": "60af3870270f24162c049c17",
+      "personalPhone": "374-691-1193",
+      "personalWebSite": "https://brennon.com",
+      "addressSuite": "Suite 669",
+      "addressStreet": "404 Gottlieb Forges",
+      "addressCity": "Leaview",
+      "addressState": "Oregon",
+      "addressStateAbbr": "RI",
+      "addressCountry": "Grenada",
+      "addressCountryCode": "DM",
+      "addressZipCode": "57128-4557",
+      "addressLatitude": "84.5519",
+      "addressLongitude": "71.6565",
+      "jobCompanyName": "O'Hara and Sons",
+      "jobTitle": "Product Solutions Developer",
+      "jobType": "Analyst",
+      "jobPhone": "611-132-1981",
+      "jobWebSite": "https://carmine.biz",
+      "jobEmail": "Blanca.Watsica@example.org"
+    }
+  ],
+  "logMessages": [
+    {
+      "_id": "60af3870270f24162c049c18",
+      "gr": "TEST",
+      "pr": 10,
+      "name": "TEST",
+      "ownerId": "60af3870270f24162c049c09",
+      "userId": "60af3870270f24162c049c09",
+      "msg": "{\"message\":\"Ullam eum enim incidunt unde omnis laborum voluptatum explicabo.\"}"
+    }
+  ],
+  "chatMessages": [
+    {
+      "_id": "60af3870270f24162c049c19",
+      "ownerId": "60af3870270f24162c049c09",
+      "userId": "000000000000000000000000",
+      "teamId": "000000000000000000000000",
+      "roleId": "60af3870270f24162c049c0e",
+      "msg": "Eaque dolores asperiores in delectus excepturi id vel."
+    },
+    {
+      "_id": "60af3870270f24162c049c1a",
+      "ownerId": "60af3870270f24162c049c09",
+      "userId": "000000000000000000000000",
+      "teamId": "60af3870270f24162c049c0f",
+      "roleId": "000000000000000000000000",
+      "msg": "Mollitia et id et esse."
+    },
+    {
+      "_id": "60af3870270f24162c049c1b",
+      "ownerId": "60af3870270f24162c049c09",
+      "userId": "60af3870270f24162c049c0a",
+      "teamId": "000000000000000000000000",
+      "roleId": "000000000000000000000000",
+      "msg": "Sit pariatur labore ullam in."
+    },
+    {
+      "_id": "60af3870270f24162c049c1c",
+      "ownerId": "60af3870270f24162c049c09",
+      "userId": "60af3870270f24162c049c0b",
+      "teamId": "000000000000000000000000",
+      "roleId": "000000000000000000000000",
+      "msg": "Qui sequi non sit ut delectus quam rem et sapiente."
+    }
+  ]
+}
