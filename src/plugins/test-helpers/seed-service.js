@@ -1,35 +1,37 @@
-// const {join} = require('path');
+/* eslint-disable no-unused-vars */
 const {readJsonFileSync, inspector, appRoot} = require('../lib');
-const config = require(`${appRoot}/config/default.json`);
 const chalk = require('chalk');
 
 const isDebug = false;
 const isLog = false;
 
-// Determine if environment allows test to mutate existing DB data.
-let env = (config.tests || {}).environmentsAllowingSeedData || [];
-let ifDbChangesAllowed = env.includes(process.env.NODE_ENV);
-
 // Get generated fake data
 let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
+// Get feathers-specs data
+const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) || {};
+
 // Get generated services
-let services = (readJsonFileSync(`${appRoot}/feathers-gen-specs.json`) || {}).services;
+const services = feathersSpecs.services;
 
 module.exports = async function (app, aServiceName, aAddFakeData = true) {
+  
+  // Determine if environment allows test to mutate existing DB data.
+  const ifDbChangesAllowed = app.get('env') === feathersSpecs.app.environmentsAllowingSeedData;
   if (!ifDbChangesAllowed) return;
 
   if (!Object.keys(fakeData).length) {
     console.error(chalk.red('Cannot seed services as seed/fake-data.json doesn\'t have seed data.'));
     return;
   }
+
   if (!services || !Object.keys(services).length) {
     console.error(chalk.red('Cannot seed services as feathers-gen-specs.json has no services.'));
     return;
   }
 
   for (const serviceName in services) {
-    if (/*services.hasOwnProperty(serviceName) && */(serviceName === aServiceName)) {
+    if (services[serviceName] && (serviceName === aServiceName)) {
       const {name, adapter, path} = services[serviceName];
       const doSeed = adapter !== 'generic';
       let result = [];

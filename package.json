@@ -27,6 +27,7 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=production node src/",
+    "start:seed": "cross-env NODE_ENV=test node src/ --seed",
     "dev": "cross-env NODE_ENV=development DEBUG=app:* npm run eslint && nodemon src/",
     "test:all": "npm run eslint && npm run mocha ",
     "test:debug": "npm run eslint:debug && npm run mocha:debug",
@@ -36,8 +37,8 @@
     "mocha:debug": "npm run clean && cross-env NODE_ENV=test DEBUG=app:* mocha test/debug/ --recursive --exit --timeout 60000",
     "eslint": "eslint --fix src/. test/.  --config .eslintrc.json",
     "eslint:debug": "eslint --fix src/. test/debug/.  --config .eslintrc.json",
-    "clean": "shx rm -rf test/data/*.db",
-    "shx": "shx rm test/data/*.db",
+    "clean": "shx rm -rf test/data/nedb/*.db",
+    "shx": "shx rm test/data/nedb/*.db",    
     "update-dependencies": "ncu -u",
     "nedb-find-users": "nedb ./data/nedb/users.db",
     "nedb-find-messages": "nedb ./data/nedb/messages.db",

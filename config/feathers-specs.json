@@ -1,0 +1,79 @@
+{
+  "app": {
+    "environmentsAllowingSeedData": "test",
+    "environmentsAllowingOpcuaBootstrap": ["development", "production"],
+    "seedData": true,
+    "name": "feathers-opcua-server",
+    "description": "Project feathers-opcua-server",
+    "src": "src",
+    "providers": [
+      "rest",
+      "socketio"
+    ]
+  },
+  "services": {
+    "users": {
+      "name": "users",
+      "nameSingular": "user",
+      "subFolder": "",
+      "fileName": "users",
+      "adapter": "nedb",
+      "path": "/users",
+      "isAuthEntity": true,
+      "requiresAuth": true
+    },
+    "roles": {
+      "name": "roles",
+      "nameSingular": "role",
+      "subFolder": "",
+      "fileName": "roles",
+      "adapter": "mongoose",
+      "path": "/roles",
+      "isAuthEntity": false,
+      "requiresAuth": true,
+      "graphql": true
+    },
+    "userProfiles": {
+      "name": "userProfiles",
+      "nameSingular": "userProfile",
+      "subFolder": "",
+      "fileName": "user-profiles",
+      "adapter": "mongoose",
+      "path": "/user-profiles",
+      "isAuthEntity": false,
+      "requiresAuth": true,
+      "graphql": true
+    },
+    "logMessages": {
+      "name": "logMessages",
+      "nameSingular": "logMessage",
+      "subFolder": "",
+      "fileName": "log-messages",
+      "adapter": "mongoose",
+      "path": "/log-messages",
+      "isAuthEntity": false,
+      "requiresAuth": true,
+      "graphql": true
+    }
+  },
+  "hooks": {
+    "normalize": {
+      "fileName": "normalize",
+      "camelName": "normalize",
+      "ifMulti": "y",
+      "multiServices": [
+        "*app"
+      ],
+      "singleService": ""
+    },
+    "log": {
+      "fileName": "log",
+      "camelName": "log",
+      "ifMulti": "y",
+      "multiServices": [
+        "*app"
+      ],
+      "singleService": ""
+    }
+  }
+}

@@ -55,9 +55,5 @@ describe('<<=== Log-Messages Service Test (log-messages.test.js) ===>>', () => {
     assert.strictEqual(logMessage.owner.email, owner.email);
     // `user` has been populated
     assert.strictEqual(logMessage.user.email, user.email);
-    
-    // if(isLog) inspector('logMessage.user:', logMessage.user);
-    
-    // if(isDebug) debug('user:', user);
   });
 });

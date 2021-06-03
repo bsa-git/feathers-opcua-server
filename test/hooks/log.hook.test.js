@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
-const myLog = require('../../src/hooks/log');
+const logHook = require('../../src/hooks/log');
 const {appRoot, inspector, readJsonFileSync, HookHelper, serviceHelper} = require('../../src/plugins');
-const app = require(`${appRoot}/src/app`);
+const app = require('../../src/app');
 const chalk = require('chalk');
-const debug = require('debug')('app:my-log.unit.test');
+const debug = require('debug')('app:log.hook.test');
 
 const isLog = false;
 const isDebug = false;
@@ -13,10 +13,10 @@ const isTest = false;
 // Get generated fake data
 const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
-describe('<<< Test /hooks/my-log.unit.test.js >>>', () => {
+describe('<<=== Log Hook Test (log.hook.test.js) ===>>', () => {
 
   if(!isTest) {
-    debug('<<< Test /hooks/my-log.unit.test.js - NOT >>>');
+    debug('<<< Log Hook Test (log.hook.test.js) - NOT >>>');
     return;
   }
 
@@ -29,42 +29,32 @@ describe('<<< Test /hooks/my-log.unit.test.js >>>', () => {
     contextBefore = {
       type: 'before',
       params: { provider: 'socketio' },
-      data: {
-
-      }
+      data: {}
     };
 
     contextAfter = {
       type: 'after',
       params: { provider: 'socketio' },
-      result: {
-
-      }
+      result: {}
     };
 
     contextAfterMultiple = {
       type: 'after',
       params: { provider: 'socketio' },
-      result: [
-
-      ]
+      result: []
     };
 
     contextAfterPaginated = {
       type: 'after',
       method: 'find',
       params: { provider: 'socketio' },
-      result: {
-        data: [
-
-        ]
-      }
+      result: { data: [] }
     };
     contextAfterPaginated.result.total = contextAfterPaginated.result.data.length;
   });
 
   it('Hook exists', () => {
-    assert(typeof myLog === 'function', 'Hook is not a function.');
+    assert(typeof logHook === 'function', 'Hook is not a function.');
   });
 
   it('Save fake data to \'users\' service', async () => {
@@ -88,8 +78,8 @@ describe('<<< Test /hooks/my-log.unit.test.js >>>', () => {
       const hookHelper = new HookHelper(contextAfter);
       // Get count messages before
       const countMessagesBefore = await hookHelper.getCountItems('log-messages');
-      // Test myLog for contextAfter
-      await myLog(true)(contextAfter);
+      // Test logHook for contextAfter
+      await logHook(true)(contextAfter);
       // Get count messages after
       const countMessagesAfter = await hookHelper.getCountItems('log-messages');
       if(isDebug) debug('countMessagesBefore:', countMessagesBefore, ', countMessagesAfter:', countMessagesAfter);

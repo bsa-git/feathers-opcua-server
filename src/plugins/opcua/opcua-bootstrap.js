@@ -2,7 +2,10 @@
 const errors = require('@feathersjs/errors');
 const fs = require('fs');
 const {
-  inspector
+  readJsonFileSync, 
+  inspector, 
+  appRoot,
+  isTrue
 } = require('../lib');
 
 const {
@@ -22,6 +25,9 @@ const debug = require('debug')('app:opcua-bootstrap');
 const isDebug = false;
 const isLog = false;
 
+// Get feathers-specs data
+const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) || {};
+
 
 /**
  * Bootstrap of OPC-UA services
@@ -30,6 +36,14 @@ const isLog = false;
 module.exports = async function opcuaBootstrap(app) {
   let service = null, opcuaServer = null, opcuaClient = null;
   //--------------------------------------------------------
+  
+  // Check is opcua bootstrap enable
+  const isOpcuaBootstrapEnable = isTrue(process.env.OPCUA_BOOTSTRAP_ENABLE);
+  if (!isOpcuaBootstrapEnable) return;
+  // Check is opcua bootstrap allowed
+  const isOpcuaBootstrapAllowed = feathersSpecs.app.environmentsAllowingOpcuaBootstrap.find(item => item === app.get('env'));
+  if (!isOpcuaBootstrapAllowed) return;
+  
   let opcuaOptions = getOpcuaConfig();
   opcuaOptions = opcuaOptions.filter(item => !item.isDisable);
   for (let index = 0; index < opcuaOptions.length; index++) {

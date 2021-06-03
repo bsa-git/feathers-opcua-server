@@ -114,6 +114,7 @@ data/db-log/*
 !data/db-log/README.md
 data/app-log/*
 !data/app-log/README.md
-.nyc_output
-test/data
+test/data/nedb/*
+!test/data/nedb/README.md
 .env
+

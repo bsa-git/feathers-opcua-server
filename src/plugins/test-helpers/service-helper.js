@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const seedService = require('./seed-service');
 const {readJsonFileSync, appRoot} = require('../lib');
 const typeOf = require('../lib/type-of');
-const debug = require('debug')('app:plugins.service-helper');
+const debug = require('debug')('app:plugin.service-helper');
 
 const isLog = false;
 const isDebug = false;
