@@ -1,25 +1,22 @@
 /* eslint-disable no-unused-vars */
 const { authenticate } = require('@feathersjs/authentication').hooks;
 
-// const processMessage = require('../../hooks/process-message');
-// const populateUser = require('../../hooks/populate-user');
+const processLog = require('./hooks/process-log');
+const populateUsers = require('./hooks/populate-users');
 
 module.exports = {
   before: {
-    // all: [ authenticate('jwt') ],
-    all: [],
+    all: [ authenticate('jwt') ],
     find: [],
     get: [],
-    // create: [processMessage()],
-    create: [],
+    create: [processLog()],
     update: [],
     patch: [],
     remove: []
   },
 
   after: {
-    // all: [populateUser()],
-    all: [],
+    all: [populateUsers()],
     find: [],
     get: [],
     create: [],

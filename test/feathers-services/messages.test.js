@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const assert = require('assert');
 const app = require('../../src/app');
 const debug = require('debug')('app:test.messages');
@@ -14,7 +15,7 @@ describe('\'messages\' service', () => {
   it('creates and processes message, adds user information', async () => {
     // Create a new user we can use for testing
     const user = await app.service('users').create({
-      email: 'messagetest@example.com',
+      email: 'messageTest@example.com',
       password: 'supersecret'
     });
 

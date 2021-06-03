@@ -28,9 +28,9 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node src/",
     "dev": "cross-env NODE_ENV=development DEBUG=app:* npm run eslint && nodemon src/",
-    "start-mongod": "mongod -f mongod.config.yml",
     "test:all": "npm run eslint && npm run mocha ",
     "test:debug": "npm run eslint:debug && npm run mocha:debug",
+    "start-mongod": "mongod -f mongod.config.yml",
     "coverage": "nyc npm run mocha",
     "mocha": "npm run clean && cross-env NODE_ENV=test DEBUG=app:* mocha test/ --recursive --exit --timeout 60000",
     "mocha:debug": "npm run clean && cross-env NODE_ENV=test DEBUG=app:* mocha test/debug/ --recursive --exit --timeout 60000",
@@ -40,7 +40,8 @@
     "shx": "shx rm test/data/*.db",
     "update-dependencies": "ncu -u",
     "nedb-find-users": "nedb ./data/nedb/users.db",
-    "nedb-find-logs": "nedb ./data/nedb/logs.db"
+    "nedb-find-messages": "nedb ./data/nedb/messages.db",
+    "nedb-find-logs": "nedb ./data/nedb/log-messages.db"
   },
   "dependencies": {
     "@feathersjs/authentication": "^4.5.3",

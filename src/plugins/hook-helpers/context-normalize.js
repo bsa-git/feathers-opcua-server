@@ -14,10 +14,7 @@ const isLog = false;
  */
 const baseNormalize = async (record) => {
   if (!record) return;
-  // let _cloneObject = JSON.parse(JSON.stringify(record));
-  let _cloneObject = loToPlainObject(record);
-  // Object.assign(record, _cloneObject);
-  loAssign(record, _cloneObject);
+  record = loToPlainObject(record);
   if (isLog) inspector('plugins.contextNormalize::record:', record);
 };
 
