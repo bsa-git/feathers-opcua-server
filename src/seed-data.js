@@ -1,17 +1,11 @@
 /* eslint-disable no-unused-vars */
-const { readJsonFileSync, inspector, appRoot } = require('./plugins/lib');
-
-// Determine if command line argument exists for seeding data
-let ifSeedServices = ['--seed', '-s'].some(str => process.argv.slice(2).includes(str));
-
-// Determine if environment allows test to mutate existing DB data.
-function areDbChangesAllowed(testConfig) {
-  let { environmentsAllowingSeedData = [] } = testConfig;
-  if (process.env.NODE_ENV) {
-    return environmentsAllowingSeedData.includes(process.env.NODE_ENV);
-  }
-  return false;
-}
+const {
+  inspector,
+  readJsonFileSync,
+  appRoot,
+  HookHelper,
+  getEnvTypeDB
+} = require('./plugins');
 
 // Get generated fake data
 let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
@@ -23,10 +17,15 @@ const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) 
 let services = feathersSpecs.services;
 
 module.exports = async function (app) {
-  const ifDbChangesAllowed = app.get('env') === feathersSpecs.app.environmentsAllowingSeedData;
-  // !code: func_init // !end
-  if (!ifSeedServices) return;
-  if (!ifDbChangesAllowed) return;
+  let created = [], deleted = [], finded = [];
+  let idField = '';
+  //------------------------
+  // Determine if command line argument exists for seeding data
+  const isSeedServices = ['--seed', '-s'].some(str => process.argv.slice(2).includes(str));
+  if (!isSeedServices) return;
+  // Determine if 'env' === environmentsAllowingSeedData
+  const isDbChangesAllowed = feathersSpecs.app.environmentsAllowingSeedData.find(item => item === app.get('env'));
+  if (!isDbChangesAllowed) return;
 
   if (!Object.keys(fakeData).length) {
     console.log('Cannot seed services as seed/fake-data.json doesn\'t have seed data.');
@@ -40,20 +39,35 @@ module.exports = async function (app) {
   for (const serviceName in services) {
     if (services[serviceName]) {
       const { name, adapter, path } = services[serviceName];
-      // !<DEFAULT> code: seed_select
       const doSeed = adapter !== 'generic';
-      // !end
-
       if (doSeed) {
         if (fakeData[name] && fakeData[name].length) {
           try {
+            created = []; deleted = []; finded = [];
             const service = app.service(path);
-
-            // !<DEFAULT> code: seed_try
-            const deleted = await service.remove(null);
-            const result = await service.create(fakeData[name]);
-            console.log(`Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${result.length}.`);
-            // !end
+            if (getEnvTypeDB() === 'mongodb') {
+              // Delete items from service
+              deleted = await service.remove(null);
+              // Add items to service
+              created = await service.create(fakeData[name]);
+            }
+            if (getEnvTypeDB() === 'nedb') {
+              // Delete items from service
+              finded = await service.find({ query: {} });
+              finded = finded.data;
+              if (finded.length) {
+                idField = HookHelper.getIdField(finded);
+                for (let index = 0; index < finded.length; index++) {
+                  const item = finded[index];
+                  deleted.push(await service.remove(item[idField]));
+                }
+              }
+              // Add items to service
+              for (let index = 0; index < fakeData[name].length; index++) {
+                created.push(await service.create(fakeData[name][index]));
+              }
+            }
+            console.log(`Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${created.length}.`);
           } catch (err) {
             console.log(`Error on seeding service ${name} on path ${path}`, err.message);
           }
@@ -65,8 +79,4 @@ module.exports = async function (app) {
       }
     }
   }
-  // !code: func_return // !end
 };
-
-// !code: funcs // !end
-// !code: end // !end

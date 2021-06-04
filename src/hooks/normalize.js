@@ -1,6 +1,10 @@
 /* eslint-disable no-unused-vars */
 const {getItems, replaceItems} = require('feathers-hooks-common');
-const {inspector, HookHelper, contextNormalize} = require('../plugins');
+const {
+  inspector, 
+  HookHelper, 
+  contextNormalize
+} = require('../plugins');
  
 const isLog = false;
 

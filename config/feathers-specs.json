@@ -1,6 +1,6 @@
 {
   "app": {
-    "environmentsAllowingSeedData": "test",
+    "environmentsAllowingSeedData": ["development", "test"],
     "environmentsAllowingOpcuaBootstrap": ["development", "production"],
     "seedData": true,
     "name": "feathers-opcua-server",

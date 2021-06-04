@@ -19,12 +19,8 @@ server.on('listening', async () => {
   logger.info('Feathers application started on http://%s:%d', app.get('host'), port);
   logger.info('Feathers application started on env="%s"', app.get('env'));
 
-  // await seedData(app);
-
+  // Start seed data
+  await seedData(app);
+  // Start opcua bootstrap
   await opcuaBootstrap(app);
 });
-
-// Run opcuaBootstrap 
-// if (isTrue(process.env.OPCUA_BOOTSTRAP_ENABLE)) {
-//   Promise.resolve(opcuaBootstrap(app));
-// }

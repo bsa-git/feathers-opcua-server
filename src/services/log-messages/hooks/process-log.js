@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const { inspector, dbNullIdValue } = require('../../../plugins/lib');
+const { inspector, dbNullIdValue, HookHelper } = require('../../../plugins');
 const debug = require('debug')('app:hook.process-log');
 
 const isLog = false;
@@ -7,39 +7,35 @@ const isDebug = false;
 
 module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
   return async context => {
+    let updateData = {};
+    //--------------------
     const { data } = context;
 
+    // Get IdField
+    const idField = HookHelper.getIdField(data);
+    if (data[idField]) {
+      updateData[idField] = data[idField];
+    }
+
     // Throw an error if we didn't get a text
-    if(!data.msg) {
+    if (!data.msg) {
       throw new Error('A log message must have a msg');
     }
 
     // The logged in user
     const { user } = context.params;
-    
-    // Update the original data (so that people can't submit additional stuff)
-    const updateData = {
-      gr: data.gr,
-      pr: data.pr,
-      name: data.name,
-      msg: data.msg,
-      // Set the user id
-      ownerId: user._id,
-      userId: data.userId? data.userId : dbNullIdValue(),
-      createdAt: context.data.createdAt,
-      updatedAt: context.data.updatedAt
-    };
 
-    /*
-    id: {type: 'ID'},
-    _id: {type: 'ID'},
-    gr: {faker: 'name.title'},
-    pr: {type: 'integer'},
-    name: {faker: 'name.title'},
-    ownerId: {type: 'ID', faker: {fk: 'users:random'}},
-    userId: {type: 'ID', faker: {fk: 'users:random'}},
-    msg: {faker: 'lorem.sentence'}
-    */
+    // Update the original data (so that people can't submit additional stuff)
+    updateData.gr = data.gr;
+    updateData.pr = data.pr;
+    updateData.name = data.name;
+    updateData.msg = data.msg;
+    // Set the user id
+    updateData.ownerId = data.ownerId ? data.ownerId : user ? user[idField] : dbNullIdValue();
+    updateData.userId = data.userId ? data.userId : dbNullIdValue();
+    updateData.createdAt = context.data.createdAt;
+    updateData.updatedAt = context.data.updatedAt;
+
 
     context.data = updateData;
 

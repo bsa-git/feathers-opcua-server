@@ -5,6 +5,7 @@ const chalk = require('chalk');
 const appRoot = join(__dirname, '../../../');
 
 const loRound = require('lodash/round');
+const loToPlainObject = require('lodash/toPlainObject');
 
 const debug = require('debug')('app:util');
 
@@ -349,7 +350,7 @@ const cloneObject = function (obj) {
       obj1 = obj1.toJSON ? obj1.toJSON() : obj1.toObject();
     }
   }
-  return Object.assign({}, obj1);
+  return loToPlainObject(obj1);
 };
 
 /**
@@ -359,9 +360,18 @@ const cloneObject = function (obj) {
  */
 const dbNullIdValue = function () {
   let result = null;
-  if (process.env.TYPE_DB === 'mongodb') result = process.env.MONGODB_NULL_ID_VALUE;
-  if (process.env.TYPE_DB === 'nedb') result = process.env.NEDB_NULL_ID_VALUE;
+  if (getEnvTypeDB() === 'mongodb') result = process.env.MONGODB_NULL_ID_VALUE;
+  if (getEnvTypeDB() === 'nedb') result = process.env.NEDB_NULL_ID_VALUE;
   return result;
+};
+
+/**
+ * @name getEnvTypeDB
+ * Get type DB from env
+ * @returns {String}
+ */
+const getEnvTypeDB = function () {
+  return process.env.TYPE_DB;
 };
 
 /**
@@ -397,5 +407,6 @@ module.exports = {
   stringify,
   cloneObject,
   dbNullIdValue,
+  getEnvTypeDB,
   getRandomValue
 };

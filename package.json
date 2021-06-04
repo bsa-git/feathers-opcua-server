@@ -27,10 +27,11 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=production node src/",
-    "start:seed": "cross-env NODE_ENV=test node src/ --seed",
     "dev": "cross-env NODE_ENV=development DEBUG=app:* npm run eslint && nodemon src/",
     "test:all": "npm run eslint && npm run mocha ",
     "test:debug": "npm run eslint:debug && npm run mocha:debug",
+    "start:test-seed": "cross-env NODE_ENV=test node src/ --seed",    
+    "start:dev-seed": "cross-env NODE_ENV=development node src/ --seed",    
     "start-mongod": "mongod -f mongod.config.yml",
     "coverage": "nyc npm run mocha",
     "mocha": "npm run clean && cross-env NODE_ENV=test DEBUG=app:* mocha test/ --recursive --exit --timeout 60000",
