@@ -17,8 +17,8 @@ const services = feathersSpecs.services;
 module.exports = async function (app, aServiceName, aAddFakeData = true) {
   
   // Determine if environment allows test to mutate existing DB data.
-  const ifDbChangesAllowed = app.get('env') === feathersSpecs.app.environmentsAllowingSeedData;
-  if (!ifDbChangesAllowed) return;
+  const isDbChangesAllowed = app.get('env') === feathersSpecs.app.envAllowingSeedData;
+  if (!isDbChangesAllowed) return;
 
   if (!Object.keys(fakeData).length) {
     console.error(chalk.red('Cannot seed services as seed/fake-data.json doesn\'t have seed data.'));

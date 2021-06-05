@@ -41,7 +41,7 @@ module.exports = async function opcuaBootstrap(app) {
   const isOpcuaBootstrapEnable = isTrue(process.env.OPCUA_BOOTSTRAP_ENABLE);
   if (!isOpcuaBootstrapEnable) return;
   // Check is opcua bootstrap allowed
-  const isOpcuaBootstrapAllowed = feathersSpecs.app.environmentsAllowingOpcuaBootstrap.find(item => item === app.get('env'));
+  const isOpcuaBootstrapAllowed = feathersSpecs.app.envAllowingOpcuaBootstrap.find(item => item === app.get('env'));
   if (!isOpcuaBootstrapAllowed) return;
   
   let opcuaOptions = getOpcuaConfig();

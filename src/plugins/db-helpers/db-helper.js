@@ -2,6 +2,7 @@
 const errors = require('@feathersjs/errors');
 const loMerge = require('lodash/merge');
 const loOmit = require('lodash/omit');
+const loIsObject = require('lodash/isObject');
 
 const {
   inspector,
@@ -80,11 +81,50 @@ const getMssqlConfigFromEnv = (config, prefix) => {
   return _config;
 };
 
+/**
+ * Get dbNullIdValue
+ * e.g. for mongodb -> '000000000000000000000000'
+ * e.g. for nedb -> '0000000000000000'
+ * @return {*}
+ */
+const dbNullIdValue = function () {
+  let result = null;
+  if (getEnvTypeDB() === 'mongodb') result = '000000000000000000000000';
+  if (getEnvTypeDB() === 'nedb') result = '0000000000000000';
+  return result;
+};
 
+/**
+ * @name getEnvTypeDB
+ * Get type DB from env
+ * @returns {String}
+ */
+const getEnvTypeDB = function () {
+  return process.env.TYPE_DB;
+};
+
+/**
+   * Get id field
+   * @param {Array|Object} items
+   * @return {string}
+   */
+const getIdField = function(items) {
+  let idField = '';
+  if (Array.isArray(items) && items.length) {
+    idField = 'id' in items[0] ? 'id' : '_id';
+  }
+  if (loIsObject(items) && Object.keys(items).length) {
+    idField = 'id' in items ? 'id' : '_id';
+  }
+  return idField ? idField : new Error('Items argument is not an array or object');
+};
 
 module.exports = {
   getMssqlDatasetForProvider,
   isMssqlDatasetInList,
   getIdFromMssqlConfig,
-  getMssqlConfigFromEnv
+  getMssqlConfigFromEnv,
+  dbNullIdValue,
+  getEnvTypeDB,
+  getIdField
 };

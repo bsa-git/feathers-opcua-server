@@ -1,8 +1,8 @@
-const {authenticate} = require('@feathersjs/authentication').hooks;
-const {checkContext, getItems} = require('feathers-hooks-common');
+const { authenticate } = require('@feathersjs/authentication').hooks;
+const { checkContext, getItems } = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
 const crypto = require('crypto');
-const {inspector, readJsonFileSync, stripSpecific, isTrue, appRoot} = require('../lib');
+const { inspector, readJsonFileSync, stripSpecific, isTrue, appRoot } = require('../lib');
 const typeOf = require('../lib/type-of');
 const debug = require('debug')('app:plugins.auth-server.class');
 
@@ -74,14 +74,14 @@ class AuthServer {
     // context.type is a read only property with the hook type (one of before, after or error)
     this.contextType = this.context.type;
     // context.params is a writeable property that contains the service method parameters
-    this.contextParams = this.context.params? this.context.params : null;
+    this.contextParams = this.context.params ? this.context.params : null;
     // Get the authenticated user.
     // eslint-disable-next-line no-unused-vars
-    this.contextUser = (this.contextParams && this.contextParams.user)? this.contextParams.user : null;
+    this.contextUser = (this.contextParams && this.contextParams.user) ? this.contextParams.user : null;
     // Get context.params.authenticated
-    this.contextAuthenticated = this.contextParams && this.contextParams.authenticated? this.contextParams.authenticated : null;
+    this.contextAuthenticated = this.contextParams && this.contextParams.authenticated ? this.contextParams.authenticated : null;
     // Get contextParams.payload
-    this.contextPayload = this.contextParams && this.contextParams.payload? this.contextParams.payload : null;
+    this.contextPayload = this.contextParams && this.contextParams.payload ? this.contextParams.payload : null;
     // Get the record(s) from context.data (before), context.result.data or context.result (after).
     // getItems always returns an array to simplify your processing.
     this.contextRecords = getItems(this.context);
@@ -91,7 +91,7 @@ class AuthServer {
     // It is only available in after hooks.
     this.contextResult = this.context.result ? this.context.result : null;
     // Get contextResult.accessToken
-    this.contextAccessToken = this.contextResult && this.contextResult.accessToken? this.contextResult.accessToken : '';
+    this.contextAccessToken = this.contextResult && this.contextResult.accessToken ? this.contextResult.accessToken : '';
     // context.dispatch is a writeable, optional property and contains a "safe" version of the data that should be sent to any client.
     // If context.dispatch has not been set context.result will be sent to the client instead
     this.contextDispatch = this.context.dispatch ? this.context.dispatch : null;
@@ -166,9 +166,9 @@ class AuthServer {
     const service = this.app.service('roles');
     if (service) {
       const roleName = AuthServer.getRoles(isRole);
-      let findResults = await service.find({query: {name: roleName}});
+      let findResults = await service.find({ query: { name: roleName } });
       findResults = findResults.data;
-      if(findResults.length){
+      if (findResults.length) {
         let idField = 'id' in findResults[0] ? 'id' : '_id';
         roleId = findResults[0][idField].toString();
       }
@@ -240,7 +240,7 @@ class AuthServer {
 
     const isAdmin = await this.isAdmin();
     const notAccess = (!!this.contextProvider && !this.isAuth() && !isPublicAccess) ||
-      (  !!this.contextProvider && this.isAuth() && !isAdmin && isAdminAccess);
+      (!!this.contextProvider && this.isAuth() && !isAdmin && isAdminAccess);
 
     // --- DEBUG ---
     const myRole = await this.getRoleName();
@@ -260,17 +260,17 @@ class AuthServer {
    */
   async isLogin() {
     let payload = this.contextPayload;
-    if(!payload){
+    if (!payload) {
       payload = await AuthServer.verifyJWT(this.contextAccessToken);
     }
-    if(!payload){
+    if (!payload) {
       throw new errors.BadRequest('There is no payload');
     }
     const service = this.app.service('users');
     if (service) {
       const user = await service.get(payload.userId);
       if (isLog) inspector('plugins::auth-server.class::isLogin.user:', user);
-      return  Promise.resolve(user.active);
+      return Promise.resolve(user.active);
     } else {
       throw new errors.BadRequest('There is no service for the path - "users"');
     }
@@ -283,18 +283,18 @@ class AuthServer {
   async setLoginAt() {
     const moment = require('moment');
     let payload = this.contextPayload;
-    if(!payload){
+    if (!payload) {
       payload = await AuthServer.verifyJWT(this.contextAccessToken);
     }
-    if(!payload){
+    if (!payload) {
       throw new errors.BadRequest('There is no payload');
     }
     const service = this.app.service('users');
     if (service) {
       const dt = moment.utc().format();
-      const user = await service.patch(payload.userId, {loginAt: dt});
+      const user = await service.patch(payload.userId, { loginAt: dt });
       if (isLog) inspector('plugins::auth-server.class::setLoginAt.user:', user);
-      return  user;
+      return user;
     } else {
       throw new errors.BadRequest('There is no service for the path - "users"');
     }
@@ -302,13 +302,13 @@ class AuthServer {
 
   getHookContext() {
     let target = {};
-    let {path, method, type, params, id, data, result, /*dispatch,*/ statusCode, grapql} = this.context;
+    let { path, method, type, params, id, data, result, /*dispatch,*/ statusCode, grapql } = this.context;
 
     if (path) target.path = path;
     if (method) target.method = method;
     if (type) target.type = type;
     if (params) {
-      if(params.connection){
+      if (params.connection) {
         delete params.connection;
       }
       target.params = params;
@@ -320,7 +320,7 @@ class AuthServer {
     if (statusCode) target.statusCode = statusCode;
     // if (error) target.error = error;
     if (grapql) target.grapql = grapql;
-    return  Object.assign({}, target);
+    return Object.assign({}, target);
   }
 
   /**
@@ -330,7 +330,7 @@ class AuthServer {
    * @param token
    * @return {Promise.<void>}
    */
-  static async verifyJWT (token) {
+  static async verifyJWT(token) {
     const decode = require('jwt-decode');
     //-----------------------------------
     const payloadIsValid = function payloadIsValid(payload) {
@@ -362,7 +362,7 @@ class AuthServer {
     const _services = {};
     const services = stripSpecific(envServices, ';').split(';').map(service => {
       const items = service.trim().split('.').map(item => item.trim());
-      return {[items[0]]: items[1] === '*' ? all : stripSpecific(items[1], ',').split(',').map(item => item.trim())};
+      return { [items[0]]: items[1] === '*' ? all : stripSpecific(items[1], ',').split(',').map(item => item.trim()) };
     });
     services.forEach(service => {
       Object.assign(_services, service);
@@ -380,7 +380,7 @@ class AuthServer {
     const _roles = {};
     const envRoles = stripSpecific(process.env.ROLES, ';').split(';').map(role => {
       const items = role.trim().split(':').map(item => item.trim());
-      return {[items[0]]: items[1]};
+      return { [items[0]]: items[1] };
     });
     envRoles.forEach(role => {
       Object.assign(_roles, role);
@@ -399,7 +399,7 @@ class AuthServer {
     const _baseRoles = stripSpecific(process.env.BASE_ROLES, ';').split(';').map(item => item.trim());
     const _envRoles = stripSpecific(process.env.ROLES, ';').split(';').map(role => {
       const items = role.trim().split(':').map(item => item.trim());
-      return {[items[0]]: items[1]};
+      return { [items[0]]: items[1] };
     });
     const filterRoles = _envRoles.filter(role => {
       const key = Object.keys(role)[0];
@@ -416,7 +416,7 @@ class AuthServer {
    * @return {boolean}
    */
   static isAuthManager() {
-    return (process.env.IS_AUTH_MANAGER === undefined)? true : isTrue(process.env.IS_AUTH_MANAGER);
+    return (process.env.IS_AUTH_MANAGER === undefined) ? true : isTrue(process.env.IS_AUTH_MANAGER);
   }
 
   /**
@@ -440,7 +440,7 @@ class AuthServer {
     const envRoles = AuthServer.getRoles();
     const keys = Object.keys(envRoles);
     const result = keys.find(key => envRoles[key] === roleName);
-    return result? result : 'isGuest';
+    return result ? result : 'isGuest';
   }
 
   /**
@@ -459,10 +459,13 @@ class AuthServer {
    * @return {boolean}
    */
   static isTest() {
-    const config = readJsonFileSync(`${appRoot}/config/default.json`) || {};
+    // const config = readJsonFileSync(`${appRoot}/config/default.json`) || {};
+    // Get feathers-specs data
+    const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) || {};
+    const isTest = feathersSpecs.app.envAllowingSeedData.find(item => item === process.env.NODE_ENV);
     // Determine if environment allows test
-    let env = (config.tests || {}).environmentsAllowingSeedData || [];
-    return env.includes(process.env.NODE_ENV);
+    // let env = (config.tests || {}).environmentsAllowingSeedData || [];
+    return isTest;
   }
 
   /**
@@ -530,8 +533,8 @@ class AuthServer {
    * e.g. {users: [{id: 1234, email: 'my@test.com', ...}, {id: 1235, email: 'my2@test.com', ...}], ...}
    * @return {Object}
    */
-  static getFakeData(){
-    return  fakeData;
+  static getFakeData() {
+    return fakeData;
   }
 
   /**
@@ -582,10 +585,10 @@ class AuthServer {
     if (typeOf.isObject(items) && Object.keys(items).length) {
       idField = 'id' in items ? 'id' : '_id';
     }
-    if(!idField){
+    if (!idField) {
       throw new errors.GeneralError('Items argument is not an array or object');
     }
-    return idField ;
+    return idField;
   }
 
 }

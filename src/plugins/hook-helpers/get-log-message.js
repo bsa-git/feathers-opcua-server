@@ -1,5 +1,6 @@
 const errors = require('@feathersjs/errors');
-const {inspector, appRoot, readJsonFileSync, dbNullIdValue} = require('../lib');
+const {inspector, appRoot, readJsonFileSync} = require('../lib');
+const {dbNullIdValue} = require('../db-helpers');
 const AuthServer = require('../auth/auth-server.class');
 const HookHelper = require('./hook-helper.class');
 const debug = require('debug')('app:plugins.getLogMessage');

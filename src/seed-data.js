@@ -23,8 +23,8 @@ module.exports = async function (app) {
   // Determine if command line argument exists for seeding data
   const isSeedServices = ['--seed', '-s'].some(str => process.argv.slice(2).includes(str));
   if (!isSeedServices) return;
-  // Determine if 'env' === environmentsAllowingSeedData
-  const isDbChangesAllowed = feathersSpecs.app.environmentsAllowingSeedData.find(item => item === app.get('env'));
+  // Determine if 'env' === envAllowingSeedData
+  const isDbChangesAllowed = feathersSpecs.app.envAllowingSeedData.find(item => item === app.get('env'));
   if (!isDbChangesAllowed) return;
 
   if (!Object.keys(fakeData).length) {

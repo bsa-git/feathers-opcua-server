@@ -4,6 +4,10 @@ const debug = require('debug')('app:services.index');
 
 const isDebug = false;
 
+const teams = require('./teams/teams.service.js');
+
+const userTeams = require('./user-teams/user-teams.service.js');
+
 module.exports = function (app) {
   const dirTree = require('directory-tree');
   const treeList = dirTree(__dirname).children.filter(child => child.type === 'directory').map(child => child.name);

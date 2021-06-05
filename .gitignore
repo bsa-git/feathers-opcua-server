@@ -106,8 +106,8 @@ $RECYCLE.BIN/
 *.lnk
 
 # Others
-data/db/*
-!data/db/README.md
+data/mongodb/*
+!data/mongodb/README.md
 data/nedb/*
 !data/nedb/README.md
 data/db-log/*

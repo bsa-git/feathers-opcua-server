@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const { inspector, dbNullIdValue } = require('../../../plugins/lib');
+const { inspector, dbNullIdValue } = require('../../../plugins');
 const debug = require('debug')('app:hook.process-log');
 
 const isLog = false;

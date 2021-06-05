@@ -354,27 +354,6 @@ const cloneObject = function (obj) {
 };
 
 /**
- * Get dbNullIdValue
- * e.g. for mongodb -> '000000000000000000000000'
- * @return {*}
- */
-const dbNullIdValue = function () {
-  let result = null;
-  if (getEnvTypeDB() === 'mongodb') result = process.env.MONGODB_NULL_ID_VALUE;
-  if (getEnvTypeDB() === 'nedb') result = process.env.NEDB_NULL_ID_VALUE;
-  return result;
-};
-
-/**
- * @name getEnvTypeDB
- * Get type DB from env
- * @returns {String}
- */
-const getEnvTypeDB = function () {
-  return process.env.TYPE_DB;
-};
-
-/**
  * @method getRandomValue
  * @param {Number} v 
  * @returns {Number}
@@ -406,7 +385,5 @@ module.exports = {
   qlParams,
   stringify,
   cloneObject,
-  dbNullIdValue,
-  getEnvTypeDB,
   getRandomValue
 };
