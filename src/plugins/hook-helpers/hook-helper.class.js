@@ -3,7 +3,7 @@ const loMerge = require('lodash/merge');
 const { checkContext, getItems, replaceItems } = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
 // const {inspector, isObject} = require('../lib');
-const { inspector, isObject } = require('../lib');
+const { inspector, isObject, isTrue } = require('../lib');
 const chalk = require('chalk');
 const debug = require('debug')('app:plugin.hook-helper.class');
 
@@ -169,6 +169,14 @@ class HookHelper {
     return idField ? idField : new errors.GeneralError('Items argument is not an array or object');
   }
 
+  /**
+   * Is react client
+   * @returns {Boolean}
+   */
+  static isReactClient() { 
+    return isTrue(process.env.IS_REACT_CLIENT);
+  }
+
 
   /**
    * Get context id
@@ -235,9 +243,9 @@ class HookHelper {
   static mergeItems(records, source = {}) {
     let _records;
     if (Array.isArray(records)) {
-      _records = records.map(record => Object.assign({}, record, source));
+      _records = records.map(record => loMerge({}, record, source));
     } else {
-      _records = Object.assign({}, records, source);
+      _records = loMerge({}, records, source);
     }
     return _records;
   }
@@ -248,9 +256,9 @@ class HookHelper {
    */
   mergeRecords(source = {}) {
     if (Array.isArray(this.contextRecords)) {
-      this.contextRecords.forEach(record => Object.assign(record, source));
+      this.contextRecords.forEach(record => loMerge(record, source));
     } else {
-      Object.assign(this.contextRecords, source);
+      loMerge(this.contextRecords, source);
     }
   }
 
@@ -341,7 +349,6 @@ class HookHelper {
   async findAllItems(path = '', query = {}) {
     const service = this.app.service(path);
     if (service) {
-      // const newQuery = Object.assign(query, {$limit: null});
       const newQuery = loMerge(query, { $limit: null });
       let findResults = await service.find({ query: newQuery });
       findResults = findResults.data;
@@ -361,7 +368,6 @@ class HookHelper {
   async getCountItems(path = '', query = {}) {
     const service = this.app.service(path);
     if (service) {
-      // const newQuery = Object.assign(query, {$limit: 0});
       const newQuery = loMerge(query, { $limit: 0 });
       let findResults = await service.find({ query: newQuery });
       findResults = findResults.total;

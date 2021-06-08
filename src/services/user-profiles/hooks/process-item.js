@@ -1,11 +1,8 @@
 /* eslint-disable no-unused-vars */
 const { inspector, dbNullIdValue } = require('../../../plugins');
-const debug = require('debug')('app:hook.process-log');
-
 const isLog = false;
-const isDebug = false;
 
-module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
+module.exports = function (options = {}) {
   return async context => {
     const { data } = context;
 

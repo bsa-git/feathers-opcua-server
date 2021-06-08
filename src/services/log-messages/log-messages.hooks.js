@@ -1,22 +1,25 @@
 /* eslint-disable no-unused-vars */
 const { authenticate } = require('@feathersjs/authentication').hooks;
+const commonHooks = require('feathers-hooks-common');
+const { HookHelper } = require('../../plugins');
+const processItem = require('./hooks/process-item');
+const populateItems = require('./hooks/populate-items');
 
-const processLog = require('./hooks/process-log');
-const populateUsers = require('./hooks/populate-users');
+const { iff, isProvider } = commonHooks;
 
 module.exports = {
   before: {
-    all: [ authenticate('jwt') ],
+    all: [authenticate('jwt')],
     find: [],
     get: [],
-    create: [processLog()],
+    create: [processItem()],
     update: [],
     patch: [],
     remove: []
   },
 
   after: {
-    all: [populateUsers()],
+    all: [iff(!HookHelper.isReactClient() || isProvider('server'), populateItems())],
     find: [],
     get: [],
     create: [],

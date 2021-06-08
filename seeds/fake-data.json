@@ -66,6 +66,43 @@
       "description": "Impedit ducimus earum quaerat qui omnis atque distinctio."
     }
   ],
+  "teams": [
+    {
+      "_id": "270f24162c049c0f",
+      "name": "Ergonomic Fresh Mouse",
+      "alias": "isErgonomicFreshMouse",
+      "description": "Nulla nihil molestiae non saepe aperiam adipisci voluptate."
+    },
+    {
+      "_id": "270f24162c049c10",
+      "name": "Licensed Concrete Salad",
+      "alias": "isLicensedConcreteSalad",
+      "description": "Ut velit dolores sint."
+    },
+    {
+      "_id": "270f24162c049c11",
+      "name": "Gorgeous Wooden Pizza",
+      "alias": "isGorgeousWoodenPizza",
+      "description": "Velit exercitationem eum autem fugiat."
+    }
+  ],
+  "userTeams": [
+    {
+      "_id": "270f24162c049c12",
+      "teamId": "270f24162c049c0f",
+      "userId": "270f24162c049c0a"
+    },
+    {
+      "_id": "270f24162c049c13",
+      "teamId": "270f24162c049c10",
+      "userId": "270f24162c049c0b"
+    },
+    {
+      "_id": "270f24162c049c14",
+      "teamId": "270f24162c049c11",
+      "userId": "270f24162c049c09"
+    }
+  ],
   "userProfiles": [
     {
       "_id": "270f24162c049c15",

@@ -1,11 +1,8 @@
 /* eslint-disable no-unused-vars */
-const { inspector, dbNullIdValue, HookHelper } = require('../../../plugins');
-const debug = require('debug')('app:hook.process-log');
-
+const { dbNullIdValue, HookHelper } = require('../../../plugins');
 const isLog = false;
-const isDebug = false;
 
-module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
+module.exports = function (options = {}) {
   return async context => {
     let updateData = {};
     //--------------------
@@ -30,7 +27,6 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
     updateData.pr = data.pr;
     updateData.name = data.name;
     updateData.msg = data.msg;
-    // Set the user id
     updateData.ownerId = data.ownerId ? data.ownerId : user ? user[idField] : dbNullIdValue();
     updateData.userId = data.userId ? data.userId : dbNullIdValue();
     updateData.createdAt = context.data.createdAt;

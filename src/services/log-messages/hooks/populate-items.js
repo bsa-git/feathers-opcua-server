@@ -1,18 +1,15 @@
 /* eslint-disable no-unused-vars */
 const { inspector, dbNullIdValue } = require('../../../plugins');
-const debug = require('debug')('app:hook.populate-users');
-
 const isLog = false;
-const isDebug = false;
 
-module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
+module.exports = function (options = {}) {
   return async context => {
     let user = null;
     //-----------------------
     // Get `app`, `method`, `params` and `result` from the hook context
     const { app, method, result, params } = context;
     // Function that adds the user to a single message object
-    const addUsers = async message => {
+    const addItems = async message => {
       // Get the user based on their id, pass the `params` along so
       // that we get a safe version of the user data
       const owner = await app.service('users').get(message.ownerId, params);
@@ -31,10 +28,10 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
     // In a find method we need to process the entire page
     if (method === 'find') {
       // Map all data to include the `user` information
-      context.result.data = await Promise.all(result.data.map(addUsers));
+      context.result.data = await Promise.all(result.data.map(addItems));
     } else {
       // Otherwise just update the single result
-      context.result = await addUsers(result);
+      context.result = await addItems(result);
     }
 
     return context;

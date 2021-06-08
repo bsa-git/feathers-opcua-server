@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-vars */
 const { authenticate } = require('@feathersjs/authentication').hooks;
 
-const processRole = require('./hooks/process-role');
+const processItem = require('./hooks/process-item');
 
 module.exports = {
   before: {
     all: [authenticate('jwt')],
     find: [],
     get: [],
-    create: [processRole()],
+    create: [processItem()],
     update: [],
     patch: [],
     remove: []
