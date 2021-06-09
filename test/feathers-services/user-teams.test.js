@@ -1,10 +1,15 @@
 const assert = require('assert');
 const app = require('../../src/app');
+const {checkServicesRegistered, saveFakesToServices} = require('../../src/plugins');
 
-describe('\'user-teams\' service', () => {
-  it('registered the service', () => {
-    const service = app.service('user-teams');
+describe('<<=== User-Teams Service Test (user-teams.test.js) ===>>', () => {
+  it('#1: Registered the service', () => {
+    const errPath = checkServicesRegistered(app, 'user-teams');
+    assert.ok(errPath === '', `Service '${errPath}' not registered`);
+  });
 
-    assert.ok(service, 'Registered the service');
+  it('#2: Save fake data to \'user-teams\' service', async () => {
+    const errPath = await saveFakesToServices(app, 'userTeams');
+    assert.ok(errPath === '', `Not save fakes to services - '${errPath}'`);
   });
 });

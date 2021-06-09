@@ -1,9 +1,13 @@
 /* eslint-disable no-unused-vars */
 const loMerge = require('lodash/merge');
-const { checkContext, getItems, replaceItems } = require('feathers-hooks-common');
+const {
+  isProvider,
+  checkContext,
+  getItems,
+  replaceItems
+} = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
-// const {inspector, isObject} = require('../lib');
-const { inspector, isObject, isTrue } = require('../lib');
+const { inspector, appRoot, isObject, isTrue, readJsonFileSync } = require('../lib');
 const chalk = require('chalk');
 const debug = require('debug')('app:plugin.hook-helper.class');
 
@@ -170,13 +174,37 @@ class HookHelper {
   }
 
   /**
-   * Is react client
+   * Determine if environment allows test
+   * @return {boolean}
+   */
+  static isTest() {
+    // Get feathers-specs data
+    const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) || {};
+    return feathersSpecs.app.envTestModeName === process.env.NODE_ENV;
+  }
+
+  /**
+   * Is env react client
    * @returns {Boolean}
    */
-  static isReactClient() { 
+  static isEnvReactClient() {
     return isTrue(process.env.IS_REACT_CLIENT);
   }
 
+  /**
+   * Is populate items
+   * @param {Object} context
+   * @returns {Boolean} 
+   */
+  static isPopulateItems(context) {
+    if (HookHelper.isTest) return false;
+    const isEnvReactClient = isTrue(process.env.IS_REACT_CLIENT);
+    if (isDebug) debug('isPopulateItems.isProvider(\'external\'):', isProvider('external')(context));
+    if (isDebug) debug('isPopulateItems.isProvider(\'rest\'):', isProvider('rest')(context));
+    const result = isProvider('server')(context) || isProvider('rest')(context) || !isEnvReactClient;
+    if (isDebug) debug('isPopulateItems.result:', result);
+    return result;
+  }
 
   /**
    * Get context id

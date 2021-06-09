@@ -459,13 +459,9 @@ class AuthServer {
    * @return {boolean}
    */
   static isTest() {
-    // const config = readJsonFileSync(`${appRoot}/config/default.json`) || {};
     // Get feathers-specs data
     const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) || {};
-    const isTest = feathersSpecs.app.envAllowingSeedData.find(item => item === process.env.NODE_ENV);
-    // Determine if environment allows test
-    // let env = (config.tests || {}).environmentsAllowingSeedData || [];
-    return isTest;
+    return feathersSpecs.app.envTestModeName ===  process.env.NODE_ENV;
   }
 
   /**

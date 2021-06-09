@@ -3,8 +3,8 @@ const {
   inspector,
   readJsonFileSync,
   appRoot,
-  HookHelper,
-  getEnvTypeDB
+  getEnvTypeDB,
+  getIdField
 } = require('./plugins');
 
 // Get generated fake data
@@ -56,7 +56,7 @@ module.exports = async function (app) {
               finded = await service.find({ query: {} });
               finded = finded.data;
               if (finded.length) {
-                idField = HookHelper.getIdField(finded);
+                idField = getIdField(finded);
                 for (let index = 0; index < finded.length; index++) {
                   const item = finded[index];
                   deleted.push(await service.remove(item[idField]));

@@ -4,7 +4,7 @@ const { HookHelper } = require('../../plugins');
 const processItem = require('./hooks/process-item');
 const populateItems = require('./hooks/populate-items');
 
-const { iff, isProvider } = commonHooks;
+const { iff } = commonHooks;
 
 module.exports = {
   before: {
@@ -18,7 +18,7 @@ module.exports = {
   },
 
   after: {
-    all: [iff(!HookHelper.isReactClient() || isProvider('server'), populateItems())],
+    all: [iff(HookHelper.isPopulateItems, populateItems())],
     find: [],
     get: [],
     create: [],

@@ -127,7 +127,7 @@ const saveFakesToServices = async function (app, path = '') {
   for (let i = 0; isValid && i < paths.length; i++) {
     const path = paths[i];
     result = await _seedService(path);
-    if(!result){
+    if(result === false){
       errPath = path;
       isValid = false;
     }

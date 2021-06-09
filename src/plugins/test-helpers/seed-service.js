@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-const {readJsonFileSync, inspector, appRoot} = require('../lib');
+const { readJsonFileSync, inspector, appRoot } = require('../lib');
+const { getEnvTypeDB, getIdField } = require('../db-helpers');
 const chalk = require('chalk');
 
 const isDebug = false;
@@ -15,9 +16,11 @@ const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) 
 const services = feathersSpecs.services;
 
 module.exports = async function (app, aServiceName, aAddFakeData = true) {
-  
+  let created = [], deleted = [], finded = [];
+  let idField = '';
+  //------------------------
   // Determine if environment allows test to mutate existing DB data.
-  const isDbChangesAllowed = app.get('env') === feathersSpecs.app.envAllowingSeedData;
+  const isDbChangesAllowed = feathersSpecs.app.envAllowingSeedData.find(item => item === app.get('env'));
   if (!isDbChangesAllowed) return;
 
   if (!Object.keys(fakeData).length) {
@@ -32,27 +35,50 @@ module.exports = async function (app, aServiceName, aAddFakeData = true) {
 
   for (const serviceName in services) {
     if (services[serviceName] && (serviceName === aServiceName)) {
-      const {name, adapter, path} = services[serviceName];
+      const { name, adapter, path } = services[serviceName];
       const doSeed = adapter !== 'generic';
-      let result = [];
-
+      const result = false;
       if (doSeed) {
         if (fakeData[name] && fakeData[name].length) {
           try {
+            created = []; deleted = []; finded = [];
             const service = app.service(path);
-            const deleted = await service.remove(null);
-            if(aAddFakeData) result = await service.create(fakeData[name]);
-            if(isDebug) console.log(chalk.green(`Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${result.length}.`));
-            if (isLog) inspector(`Seeded '${name}' service for fakeData:`, result);
-            return aAddFakeData? result : deleted;
+            if (getEnvTypeDB() === 'mongodb') {
+              // Delete items from service
+              deleted = await service.remove(null);
+              // Add items to service
+              if (aAddFakeData) created = await service.create(fakeData[name]);
+            }
+            if (getEnvTypeDB() === 'nedb') {
+              // Delete items from service
+              finded = await service.find({ query: {} });
+              finded = finded.data;
+              if (finded.length) {
+                idField = getIdField(finded);
+                for (let index = 0; index < finded.length; index++) {
+                  const item = finded[index];
+                  deleted.push(await service.remove(item[idField]));
+                }
+              }
+              if (aAddFakeData) {
+                // Add items to service
+                for (let index = 0; index < fakeData[name].length; index++) {
+                  created.push(await service.create(fakeData[name][index]));
+                }
+              }
+            }
+            return aAddFakeData ? created : deleted;
           } catch (err) {
             console.log(chalk.red(`Error on seeding service ${name} on path ${path}`), chalk.red(err.message));
+            return result;
           }
         } else {
           console.log(chalk.red(`Not seeding service ${name} on path ${path}. No seed data.`));
+          return result;
         }
       } else {
         console.log(chalk.red(`Not seeding generic service ${name} on path ${path}.`));
+        return result;
       }
     }
   }

@@ -1,21 +1,24 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
+const commonHooks = require('feathers-hooks-common');
+const { HookHelper } = require('../../plugins');
+const processItem = require('./hooks/process-item');
+const populateItems = require('./hooks/populate-items');
 
-const processMessage = require('./hooks/process-message');
-const populateUser = require('./hooks/populate-user');
+const { iff } = commonHooks;
 
 module.exports = {
   before: {
     all: [ authenticate('jwt') ],
     find: [],
     get: [],
-    create: [processMessage()],
+    create: [processItem()],
     update: [],
     patch: [],
     remove: []
   },
 
   after: {
-    all: [populateUser()],
+    all: [iff(HookHelper.isPopulateItems, populateItems())],
     find: [],
     get: [],
     create: [],

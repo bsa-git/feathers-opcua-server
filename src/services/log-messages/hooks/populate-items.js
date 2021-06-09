@@ -4,16 +4,18 @@ const isLog = false;
 
 module.exports = function (options = {}) {
   return async context => {
-    let user = null;
+    let user = null, owner = null;
     //-----------------------
     // Get `app`, `method`, `params` and `result` from the hook context
     const { app, method, result, params } = context;
     // Function that adds the user to a single message object
     const addItems = async message => {
-      // Get the user based on their id, pass the `params` along so
-      // that we get a safe version of the user data
-      const owner = await app.service('users').get(message.ownerId, params);
-      if(message.userId !== dbNullIdValue()){
+      // Get owner
+      if(message.ownerId && message.ownerId !== dbNullIdValue()){
+        owner = await app.service('users').get(message.ownerId, params);
+      }
+      // Get user
+      if(message.userId && message.userId !== dbNullIdValue()){
         user = await app.service('users').get(message.userId, params);
       }
       
