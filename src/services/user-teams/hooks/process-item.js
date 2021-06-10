@@ -1,9 +1,5 @@
 /* eslint-disable no-unused-vars */
-const { HookHelper } = require('../../../plugins');
-const debug = require('debug')('app:hook.process-item');
-
-const isLog = false;
-const isDebug = false;
+const schema = require('../user-teams.validate').schema;
 
 module.exports = function (options = {}) {
   return async context => {
@@ -21,18 +17,15 @@ module.exports = function (options = {}) {
       throw new Error('A item must have a userId');
     }
 
-    // Get IdField
-    const idField = HookHelper.getIdField(data);
-    if (data[idField]) {
-      updateData[idField] = data[idField];
-    }
-
     // Update the original data (so that people can't submit additional stuff)
-    updateData.teamId = data.teamId;
-    updateData.userId = data.userId;
-    updateData.createdAt = context.data.createdAt;
-    updateData.updatedAt = context.data.updatedAt;
+    Object.keys(schema.properties).forEach(key => {
+      if(data[key] !== undefined){
+        updateData[key] = data[key];
+      }
+    });
 
+    updateData.createdAt = data.createdAt;
+    updateData.updatedAt = data.updatedAt;
 
     context.data = updateData;
 

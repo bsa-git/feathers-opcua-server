@@ -1,12 +1,15 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const commonHooks = require('feathers-hooks-common');
+const { validateCreate, validateUpdate, validatePatch } = require('./messages.validate');
 const { HookHelper } = require('../../plugins');
 const processItem = require('./hooks/process-item');
 const populateItems = require('./hooks/populate-items');
 
+const loConcat = require('lodash/concat');
+
 const { iff } = commonHooks;
 
-module.exports = {
+let moduleExports = {
   before: {
     all: [ authenticate('jwt') ],
     find: [],
@@ -37,3 +40,10 @@ module.exports = {
     remove: []
   }
 };
+
+// Add schema validate
+moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create);
+moduleExports.before.update = loConcat([validateUpdate()], moduleExports.before.update);
+moduleExports.before.patch = loConcat([validatePatch()], moduleExports.before.patch);
+
+module.exports = moduleExports;

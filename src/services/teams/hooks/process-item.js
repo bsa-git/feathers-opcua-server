@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
+const schema = require('../teams.validate').schema;
 const { HookHelper } = require('../../../plugins');
-const isLog = false;
 
 module.exports = function (options = {}) { 
   return async context => {
@@ -19,16 +19,16 @@ module.exports = function (options = {}) {
 
     // Get IdField
     const idField = HookHelper.getIdField(data);
-    if (data[idField]) {
-      updateData[idField] = data[idField];
-    }
 
     // Update the original data (so that people can't submit additional stuff)
-    updateData.name = data.name;
-    updateData.alias = data.alias;
-    updateData.description = data.description ? data.description : '';
-    updateData.createdAt = context.data.createdAt;
-    updateData.updatedAt = context.data.updatedAt;
+    Object.keys(schema.properties).forEach(key => {
+      if(data[key] !== undefined){
+        updateData[key] = data[key];
+      }
+    });
+
+    updateData.createdAt = data.createdAt;
+    updateData.updatedAt = data.updatedAt;
 
     context.data = updateData;
 

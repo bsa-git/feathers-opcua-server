@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-const { dbNullIdValue, HookHelper } = require('../../../plugins');
+const schema = require('../messages.validate').schema;
+const { HookHelper } = require('../../../plugins');
 
 module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
   return async context => {
@@ -7,29 +8,33 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
     //-------------------------
     const { data } = context;
 
-    // Get IdField
-    const idField = HookHelper.getIdField(data);
-    if (data[idField]) {
-      updateData[idField] = data[idField];
-    }
-
     // Throw an error if we didn't get a text
     if (!data.text) {
       throw new Error('A message must have a text');
     }
 
+    // Update the original data (so that people can't submit additional stuff)
+    Object.keys(schema.properties).forEach(key => {
+      if(data[key] !== undefined){
+        updateData[key] = data[key];
+      }
+    });
+
     // The logged in user
     const { user } = context.params;
+
+    // Get IdField
+    const idField = HookHelper.getIdField(user);
+
     // The actual message text
     // Make sure that messages are no longer than 400 characters
-    const text = context.data.text.substring(0, 400);
-
-    // Update the original data (so that people can't submit additional stuff)
-    updateData.text = text;
+    updateData.text = updateData.text.substring(0, 400);
     // Set the user id
-    updateData.userId = data.userId ? data.userId : user ? user[idField] : dbNullIdValue();
-    updateData.createdAt = context.data.createdAt;
-    updateData.updatedAt = context.data.updatedAt;
+    if(!updateData.userId){
+      updateData.userId = user[idField];
+    }
+    updateData.createdAt = data.createdAt;
+    updateData.updatedAt = data.updatedAt;
 
     context.data = updateData;
 

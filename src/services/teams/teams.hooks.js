@@ -1,11 +1,15 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
+const { validateCreate, validateUpdate, validatePatch } = require('./teams.validate');
+const processItem = require('./hooks/process-item');
 
-module.exports = {
+const loConcat = require('lodash/concat');
+
+let moduleExports = {
   before: {
     all: [ authenticate('jwt') ],
     find: [],
     get: [],
-    create: [],
+    create: [processItem()],
     update: [],
     patch: [],
     remove: []
@@ -31,3 +35,10 @@ module.exports = {
     remove: []
   }
 };
+
+// Add schema validate
+moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create);
+moduleExports.before.update = loConcat([validateUpdate()], moduleExports.before.update);
+moduleExports.before.patch = loConcat([validatePatch()], moduleExports.before.patch);
+
+module.exports = moduleExports;

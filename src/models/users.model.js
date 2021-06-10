@@ -9,6 +9,7 @@ module.exports = function (app) {
   });
 
   Model.ensureIndex({ fieldName: 'email', unique: true });
+  Model.ensureIndex({ fieldName: 'profileId', unique: true, sparse: true });
 
   return Model;
 };
