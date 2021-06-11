@@ -1,17 +1,18 @@
 const assert = require('assert');
-const app = require('../src/app');
-const debug = require('debug')('app:test.authentication');
+const app = require('../../src/app');
+const debug = require('debug')('app:authentication.test');
 
 const isDebug = false;
 
-describe('authentication', () => {
-  it('registered the authentication service', () => {
+describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
+  
+  it('#1 Registered the authentication service', () => {
     assert.ok(app.service('authentication'));
   });
   
-  describe('local strategy', () => {
+  describe('<<--- Local strategy --->>', () => {
     const userInfo = {
-      email: 'someone@example.com',
+      email: 'authenticationTest@example.com',
       password: 'supersecret'
     };
 
@@ -24,7 +25,7 @@ describe('authentication', () => {
       }
     });
 
-    it('authenticates user and creates accessToken', async () => {
+    it('#2 Authenticates user and creates accessToken', async () => {
       const { user, accessToken } = await app.service('authentication').create({
         strategy: 'local',
         ...userInfo

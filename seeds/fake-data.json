@@ -178,5 +178,39 @@
       "userId": "270f24162c049c09",
       "msg": "{\"message\":\"Ullam eum enim incidunt unde omnis laborum voluptatum explicabo.\"}"
     }
+  ],
+  "chatMessages": [
+    {
+      "_id": "270f24162c049c19",
+      "ownerId": "270f24162c049c09",
+      "userId": "0000000000000000",
+      "teamId": "0000000000000000",
+      "roleId": "270f24162c049c0e",
+      "msg": "Eaque dolores asperiores in delectus excepturi id vel."
+    },
+    {
+      "_id": "270f24162c049c1a",
+      "ownerId": "270f24162c049c09",
+      "userId": "0000000000000000",
+      "teamId": "270f24162c049c0f",
+      "roleId": "0000000000000000",
+      "msg": "Mollitia et id et esse."
+    },
+    {
+      "_id": "270f24162c049c1b",
+      "ownerId": "270f24162c049c09",
+      "userId": "270f24162c049c0a",
+      "teamId": "0000000000000000",
+      "roleId": "0000000000000000",
+      "msg": "Sit pariatur labore ullam in."
+    },
+    {
+      "_id": "270f24162c049c1c",
+      "ownerId": "270f24162c049c09",
+      "userId": "270f24162c049c0b",
+      "teamId": "0000000000000000",
+      "roleId": "0000000000000000",
+      "msg": "Qui sequi non sit ut delectus quam rem et sapiente."
+    }
   ]
 }

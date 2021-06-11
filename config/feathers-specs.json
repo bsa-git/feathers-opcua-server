@@ -73,8 +73,17 @@
       "adapter": "nedb",
       "path": "/log-messages",
       "isAuthEntity": false,
-      "requiresAuth": true,
-      "graphql": true
+      "requiresAuth": true
+    },
+    "chatMessages": {
+      "name": "chatMessages",
+      "nameSingular": "chatMessage",
+      "subFolder": "",
+      "fileName": "chat-messages",
+      "adapter": "nedb",
+      "path": "/chat-messages",
+      "isAuthEntity": false,
+      "requiresAuth": true
     }
   },
   "hooks": {
