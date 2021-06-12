@@ -100,7 +100,7 @@ const dbNullIdValue = function () {
  * @returns {String}
  */
 const getEnvTypeDB = function () {
-  return process.env.TYPE_DB;
+  return process.env.DEFAULT_DB_TYPE;
 };
 
 /**
