@@ -3,6 +3,7 @@ const errors = require('@feathersjs/errors');
 const loMerge = require('lodash/merge');
 const loOmit = require('lodash/omit');
 const loIsObject = require('lodash/isObject');
+const { getOpcuaConfigsForMe } = require('../opcua/opcua-helper');
 
 const {
   inspector,
@@ -96,12 +97,15 @@ const dbNullIdValue = function () {
 
 /**
  * @name getEnvTypeDB
- * Get type DB from env
+ * Get DB type from env and host config
  * @returns {String}
  */
 const getEnvTypeDB = function () {
-  return process.env.DEFAULT_DB_TYPE;
+  const myConfigs = getOpcuaConfigsForMe();
+  const myConfig = myConfigs.find(item => item.hostTypeDB);
+  return myConfig? myConfig.hostTypeDB : process.env.DEFAULT_TYPE_DB;
 };
+
 
 /**
    * Get id field

@@ -45,28 +45,21 @@ module.exports = async function (app) {
           try {
             created = []; deleted = []; finded = [];
             const service = app.service(path);
-            if (getEnvTypeDB() === 'mongodb') {
-              // Delete items from service
-              deleted = await service.remove(null);
-              // Add items to service
-              created = await service.create(fakeData[name]);
-            }
-            if (getEnvTypeDB() === 'nedb') {
-              // Delete items from service
-              finded = await service.find({ query: {} });
-              finded = finded.data;
-              if (finded.length) {
-                idField = getIdField(finded);
-                for (let index = 0; index < finded.length; index++) {
-                  const item = finded[index];
-                  deleted.push(await service.remove(item[idField]));
-                }
-              }
-              // Add items to service
-              for (let index = 0; index < fakeData[name].length; index++) {
-                created.push(await service.create(fakeData[name][index]));
+            // Delete items from service
+            finded = await service.find({ query: {} });
+            finded = finded.data;
+            if (finded.length) {
+              idField = getIdField(finded);
+              for (let index = 0; index < finded.length; index++) {
+                const item = finded[index];
+                deleted.push(await service.remove(item[idField]));
               }
             }
+            // Add items to service
+            for (let index = 0; index < fakeData[name].length; index++) {
+              created.push(await service.create(fakeData[name][index]));
+            }
+
             console.log(`Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${created.length}.`);
           } catch (err) {
             console.log(`Error on seeding service ${name} on path ${path}`, err.message);

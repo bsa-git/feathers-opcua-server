@@ -84,6 +84,16 @@
       "path": "/chat-messages",
       "isAuthEntity": false,
       "requiresAuth": true
+    },
+    "opcuaTags": {
+      "name": "opcuaTags",
+      "nameSingular": "opcuaTag",
+      "subFolder": "",
+      "fileName": "opcua-tags",
+      "adapter": "nedb",
+      "path": "/opcua-tags",
+      "isAuthEntity": false,
+      "requiresAuth": false
     }
   },
   "hooks": {

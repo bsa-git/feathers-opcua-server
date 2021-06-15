@@ -1,14 +1,15 @@
 /* eslint-disable no-unused-vars */
 const { readJsonFileSync, inspector, appRoot } = require('../lib');
-const { getEnvTypeDB, getIdField } = require('../db-helpers');
+const { getIdField } = require('../db-helpers');
+const fakeNormalize = require('../test-helpers/fake-normalize');
 const chalk = require('chalk');
 
 const isDebug = false;
 const isLog = false;
 
 // Get generated fake data
-let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
-
+// let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
+let fakeData = fakeNormalize();
 // Get feathers-specs data
 const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) || {};
 
@@ -43,28 +44,20 @@ module.exports = async function (app, aServiceName, aAddFakeData = true) {
           try {
             created = []; deleted = []; finded = [];
             const service = app.service(path);
-            if (getEnvTypeDB() === 'mongodb') {
-              // Delete items from service
-              deleted = await service.remove(null);
-              // Add items to service
-              if (aAddFakeData) created = await service.create(fakeData[name]);
-            }
-            if (getEnvTypeDB() === 'nedb') {
-              // Delete items from service
-              finded = await service.find({ query: {} });
-              finded = finded.data;
-              if (finded.length) {
-                idField = getIdField(finded);
-                for (let index = 0; index < finded.length; index++) {
-                  const item = finded[index];
-                  deleted.push(await service.remove(item[idField]));
-                }
+            // Delete items from service
+            finded = await service.find({ query: {} });
+            finded = finded.data;
+            if (finded.length) {
+              idField = getIdField(finded);
+              for (let index = 0; index < finded.length; index++) {
+                const item = finded[index];
+                deleted.push(await service.remove(item[idField]));
               }
-              if (aAddFakeData) {
-                // Add items to service
-                for (let index = 0; index < fakeData[name].length; index++) {
-                  created.push(await service.create(fakeData[name][index]));
-                }
+            }
+            if (aAddFakeData) {
+              // Add items to service
+              for (let index = 0; index < fakeData[name].length; index++) {
+                created.push(await service.create(fakeData[name][index]));
               }
             }
             return aAddFakeData ? created : deleted;

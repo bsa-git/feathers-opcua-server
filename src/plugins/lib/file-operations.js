@@ -691,6 +691,16 @@ const writeFileSync = function (path, data, isJson = false) {
 };
 
 /**
+ * @method writeFileSync
+ * @param {String|Array} path
+ * @param {String|Object|Buffer|TypeArray|DataView} data 
+ * @returns {String}
+ */
+const writeJsonFileSync = function (path, data) {
+  return writeFileSync(path, data, true);
+};
+
+/**
  * @method removeFileSync
  * @param {String|Array} path 
  * @returns {String}
@@ -734,5 +744,6 @@ module.exports = {
   readFileSync,
   readJsonFileSync,
   writeFileSync,
+  writeJsonFileSync,
   removeFileSync
 };
