@@ -187,20 +187,4 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     // unwatchFile(path);
     assert.ok(true, 'FileOperations: watchFile');
   });
-
-  // it('FileOperations: update AddressSpaceOptions.json', () => {
-
-  //   let path = 'src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json';
-  //   let options = readFileSync([appRoot, path]);
-  //   options = JSON.parse(options);
-  //   options.groups = options.groups.map(item => {
-  //     if(item.browseName){
-  //       item.description = item.displayName;
-  //       item.displayName = item.aliasName;
-  //     }
-  //     return item;
-  //   });
-  //   writeFileSync([appRoot, path], options, true);
-  //   assert.ok(true, 'update AddressSpaceOptions.json');
-  // });
 });

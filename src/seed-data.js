@@ -3,12 +3,14 @@ const {
   inspector,
   readJsonFileSync,
   appRoot,
-  getEnvTypeDB,
-  getIdField
-} = require('./plugins');
+} = require('./plugins/lib');
+
+const { getIdField } = require('./plugins/db-helpers');
+const fakeNormalize = require('./plugins/test-helpers/fake-normalize');
 
 // Get generated fake data
-let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
+// let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
+let fakeData = fakeNormalize();
 
 // Get feathers-specs data
 const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) || {};

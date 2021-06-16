@@ -1,0 +1,6 @@
+﻿Tag Name,Address,Data Type,Respect Data Type,Client Access,Scan Rate,Scaling,Raw Low,Raw High,Scaled Low,Scaled High,Scaled Data Type,Clamp Low,Clamp High,Eng Units,Description,Negate Value
+"D3213","11AW01/KAS:D3213.PNT\hs1101",Default,1,R/W,100,,,,,,,,,,"",
+"T0118","11AW01/KAS:T0118.PNT\hs1101",Default,1,RO,100,,,,,,,,,,"",
+"T0121","11AW01/KAS:T0121.PNT\hs1101",Default,1,R/W,100,,,,,,,,,,"",
+"T1105_1","11AW01/KAS:T1105_1.PNT\hs1101",Default,1,R/W,100,,,,,,,,,,"",
+"T1224","11AW01/KAS:T1224.PNT\hs1101",Default,1,R/W,100,,,,,,,,,,"",
