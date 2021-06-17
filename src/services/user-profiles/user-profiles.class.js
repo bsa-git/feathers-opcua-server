@@ -1,5 +1,13 @@
-const { Service } = require('feathers-nedb');
+const feathersMongoose = require('feathers-mongoose');
+const feathersNedb = require('feathers-nedb');
+const { getEnvTypeDB } = require('../../plugins');
 
-exports.UserProfiles = class UserProfiles extends Service {
-  
-};
+if (getEnvTypeDB() === 'nedb') {
+  exports.UserProfiles = class UserProfiles extends feathersNedb.Service {
+  };
+}
+
+if (getEnvTypeDB() === 'mongodb') {
+  exports.UserProfiles = class UserProfiles extends feathersMongoose.Service {
+  };
+}

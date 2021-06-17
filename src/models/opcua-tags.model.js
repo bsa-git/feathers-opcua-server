@@ -5,20 +5,19 @@ const { getEnvTypeDB } = require('../plugins');
 
 module.exports = function (app) {
 
-  // opcua-tags-model.js - A nedb model
+  // A nedb model
   if (getEnvTypeDB() === 'nedb') {
     const dbPath = app.get('nedb');
     const Model = new NeDB({
       filename: path.join(dbPath, 'opcua-tags.db'),
-      autoload: true
+      autoload: true,
+      timestampData: true
     });
-
-    Model.ensureIndex({ fieldName: 'browseName', unique: true });// displayName
-
+    Model.ensureIndex({ fieldName: 'browseName', unique: true });
     return Model;
   }
 
-  // opcua-tags-model.js - A mongoose model
+  // A mongoose model
   // 
   // See http://mongoosejs.com/docs/models.html
   // for more of what you can do here.

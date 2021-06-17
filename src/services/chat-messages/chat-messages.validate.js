@@ -44,8 +44,8 @@ let base = merge({},
         }
       },
       msg: {
+        type: 'string',
         faker: 'lorem.sentence',
-        type: 'string'
       }
     }
   }

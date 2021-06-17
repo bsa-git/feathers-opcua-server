@@ -33,9 +33,6 @@ module.exports = function (options = {}) {
     if(!updateData.userId){
       updateData.userId = dbNullIdValue();
     }
-    updateData.createdAt = data.createdAt;
-    updateData.updatedAt = data.updatedAt;
-
 
     context.data = updateData;
 

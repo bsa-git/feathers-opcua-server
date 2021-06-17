@@ -33,8 +33,6 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
     if(!updateData.userId){
       updateData.userId = user[idField];
     }
-    updateData.createdAt = data.createdAt;
-    updateData.updatedAt = data.updatedAt;
 
     context.data = updateData;
 

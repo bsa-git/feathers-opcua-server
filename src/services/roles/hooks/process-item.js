@@ -23,9 +23,6 @@ module.exports = function (options = {}) {
       }
     });
 
-    updateData.createdAt = data.createdAt;
-    updateData.updatedAt = data.updatedAt;
-
     context.data = updateData;
 
     return context;

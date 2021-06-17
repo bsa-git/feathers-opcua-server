@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const { readJsonFileSync, writeJsonFileSync, inspector, appRoot } = require('../lib');
 const { dbNullIdValue, getEnvTypeDB, getIdField } = require('../db-helpers');
 const Auth = require(`${appRoot}/src/plugins/auth/auth-server.class`);
@@ -10,6 +11,8 @@ if (result.error) {
 
 const isDebug = false;
 const isLog = false;
+
+const prefixMongodbIds = '60af3870';
 
 // Get json log data
 const jsonLogData = readJsonFileSync(`${appRoot}/src/api/app/app-log-msg.json`) || {};
@@ -28,7 +31,7 @@ const idsUpdate = (fakeData = []) => {
   for (let index = 0; index < fakeData.length; index++) {
     const element = fakeData[index];
     if (getEnvTypeDB() === 'mongodb') {
-      element[idField] = '60af3870' + element[idField];
+      element[idField] = prefixMongodbIds + element[idField];
       fakeDataUpdated.push(element);
     }
   }
@@ -73,7 +76,6 @@ let fakeDataOpcuaTags = fakeData['opcuaTags'];
 fakeDataOpcuaTags = idsUpdate(fakeDataOpcuaTags);
 
 const rolesUpdate = () => {
-
   const roles = Auth.getBaseRoles();
   const roleKeys = Object.keys(Auth.getBaseRoles());
   if (isLog) inspector('fake-service.rolesUpdate.roles:', roles);
@@ -102,13 +104,13 @@ const usersUpdate = () => {
     user.avatar = `/img/avatar/people_${index + 1}.png`;
     user.active = true;
     user.isVerified = true;
-    user.verifyToken = '';
-    user.verifyShortToken = '';
-    user.verifyExpires = nowDate.toJSON();
-    user.verifyChanges = {};
-    user.resetToken = '';
-    user.resetShortToken = '';
-    user.resetExpires = nowDate.toJSON();
+    // user.verifyToken = '';
+    // user.verifyShortToken = '';
+    // user.verifyExpires = nowDate.toJSON();
+    // user.verifyChanges = {};
+    // user.resetToken = '';
+    // user.resetShortToken = '';
+    // user.resetExpires = nowDate.toJSON();
     return user;
   }));
 
@@ -120,7 +122,9 @@ const userTeamsUpdate = () => {
   fakeDataTeams.forEach((team, index) => {
     fakeDataUserTeams[index]['teamId'] = team[idFieldTeam];
   });
-  fakeDataUserTeams[0]['userId'] = fakeDataUsers[1][idFieldUser];
+  fakeDataUsers.forEach((user, index) => {
+    fakeDataUserTeams[index]['userId'] = user[idFieldUser];
+  });
   if (isLog) inspector('fake-service.userTeamsUpdate.fakeDataUserTeams:', fakeDataUserTeams);
   if (isDebug) console.log(chalk.yellow('UserTeams Update: Ok'));
 };

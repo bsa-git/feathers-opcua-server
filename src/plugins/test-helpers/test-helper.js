@@ -1,6 +1,4 @@
 /* eslint-disable no-unused-vars */
-
-
 const debug = require('debug')('app:test-helper');
 const isDebug = false;
 let server;

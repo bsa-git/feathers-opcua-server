@@ -30,6 +30,7 @@ module.exports = function (options = {}) {
     if(!updateData.ownerId){
       updateData.ownerId = user[idField];
     }
+
     if(!updateData.userId){
       updateData.userId = dbNullIdValue();
     }
@@ -39,9 +40,6 @@ module.exports = function (options = {}) {
     if(!updateData.roleId){
       updateData.roleId = dbNullIdValue();
     }
-    updateData.createdAt = data.createdAt;
-    updateData.updatedAt = data.updatedAt;
-
 
     context.data = updateData;
 

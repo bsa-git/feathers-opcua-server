@@ -1,5 +1,10 @@
-// This is the database adapter service class
-const { Service } = require('feathers-nedb');
+/* eslint-disable no-unused-vars */
+const feathersMongoose = require('feathers-mongoose');
+const feathersNedb = require('feathers-nedb');
+const { getEnvTypeDB } = require('../../plugins');
+
+
+
 // We need this to create the MD5 hash
 const crypto = require('crypto');
 
@@ -15,20 +20,44 @@ const getGravatar = email => {
   return `${gravatarUrl}/${hash}?${query}`;
 };
 
-exports.Users = class Users extends Service {
-  create (data, params) {
-    let userData = {};
-
-    // Get avatar
-    const avatar = data.avatar || getGravatar(data.email);
-    data.avatar = avatar;
-    Object.keys(data).forEach(key => {
-      if(data[key]){
-        userData[key] = data[key];
-      }
-    });
-
-    // Call the original `create` method with existing `params` and new data
-    return super.create(userData, params);
-  }
+// Get user data
+const getUserData = (data) => {
+  let userData = {};
+  // Get avatar
+  const avatar = data.avatar || getGravatar(data.email);
+  data.avatar = avatar;
+  Object.keys(data).forEach(key => {
+    if(data[key] !== undefined){
+      userData[key] = data[key];
+    }
+  });
+  return userData;
 };
+
+// exports.Users = class Users extends feathersNedb.Service {
+//   create (data, params) {
+//     const userData = getUserData(data);
+//     // Call the original `create` method with existing `params` and new data
+//     return super.create(userData, params);
+//   }
+// };
+
+if (getEnvTypeDB() === 'nedb') {
+  exports.Users = class Users extends feathersNedb.Service {
+    create (data, params) {
+      const userData = getUserData(data);
+      // Call the original `create` method with existing `params` and new data
+      return super.create(userData, params);
+    }
+  };
+}
+
+if (getEnvTypeDB() === 'mongodb') {
+  exports.Users = class Users extends feathersMongoose.Service {
+    create (data, params) {
+      const userData = getUserData(data);
+      // Call the original `create` method with existing `params` and new data
+      return super.create(userData, params);
+    }
+  };
+}

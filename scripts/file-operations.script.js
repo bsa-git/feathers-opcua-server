@@ -12,29 +12,8 @@ const chalk = require('chalk');
 const papa = require('papaparse');
 
 const debug = require('debug')('app:file-operations.script');
-const isDebug = false;
-const isLog = false;
-
-// Matching fields for KEPServer
-const kepServerTags = {
-  column1: { kepSrvField: 'Tag Name', myField: 'TAG', default: undefined },
-  column2: { kepSrvField: 'Address', myField: ['Compnd', 'TAG'], default: undefined },
-  column3: { kepSrvField: 'Data Type', myField: '', default: 'Default' },
-  column4: { kepSrvField: 'Respect Data Type', myField: '', default: 1 },
-  column5: { kepSrvField: 'Client Access', myField: '', default: 'RO' },
-  column6: { kepSrvField: 'Scan Rate', myField: '', default: 100 },
-  column7: { kepSrvField: 'Scaling', myField: '', default: undefined },
-  column8: { kepSrvField: 'Raw Low', myField: '', default: undefined },
-  column9: { kepSrvField: 'Raw High', myField: '', default: undefined },
-  column10: { kepSrvField: 'Scaled Low', myField: 'Lsco1', default: undefined },
-  column11: { kepSrvField: 'Scaled High', myField: 'Hsco1', default: undefined },
-  column12: { kepSrvField: 'Scaled Data Type', myField: '', default: undefined },
-  column13: { kepSrvField: 'Clamp Low', myField: '', default: undefined },
-  column14: { kepSrvField: 'Clamp High', myField: '', default: undefined },
-  column15: { kepSrvField: 'Eng Units', myField: 'Eng', default: undefined },
-  column16: { kepSrvField: 'Description', myField: ['Descr1', 'Descr2'], default: undefined },
-  column17: { kepSrvField: 'Negate Value', myField: '', default: undefined },
-};
+const isDebug = true;
+const isLog = true;
 
 // Script Execution
 const scriptExecution = {
@@ -42,20 +21,36 @@ const scriptExecution = {
   converterForKEPServer: true
 };
 
-// Is run scripts
-const isRunScripts = () => {
-  let result = false;
-  Object.keys(scriptExecution).forEach(key => {
-    if (scriptExecution[key]) {
-      result = true;
-    }
-  });
-  return result;
+const kepServerConfig = {
+  fields: {
+    column1: { fromField: 'TAG', toField: 'Tag Name', default: undefined },
+    column2: { fromField: ['Compnd', 'TAG'], toField: 'Address', default: undefined },
+    column3: { fromField: '', toField: 'Data Type', default: 'Default' },
+    column4: { fromField: '', toField: 'Respect Data Type', default: 1 },
+    column5: { fromField: '', toField: 'Client Access', default: 'RO' },
+    column6: { fromField: '', toField: 'Scan Rate', default: 100 },
+    column7: { fromField: '', toField: 'Scaling', default: undefined },
+    column8: { fromField: '', toField: 'Raw Low', default: undefined },
+    column9: { fromField: '', toField: 'Raw High', default: undefined },
+    column10: { fromField: 'Lsco1', toField: 'Scaled Low', default: undefined },
+    column11: { fromField: 'Hsco1', toField: 'Scaled High', default: undefined },
+    column12: { fromField: '', toField: 'Scaled Data Type', default: undefined },
+    column13: { fromField: '', toField: 'Clamp Low', default: undefined },
+    column14: { fromField: '', toField: 'Clamp High', default: undefined },
+    column15: { fromField: 'Eng', toField: 'Eng Units', default: undefined },
+    column16: { fromField: ['Descr1', 'Descr2'], toField: 'Description', default: undefined },
+    column17: { fromField: '', toField: 'Negate Value', default: undefined },
+  },
+  filter: ['AI', 'AIs', 'AO'],
+  delimiterFrom: ';',
+  delimiterTo: ',',
+  path: 'scripts/tmp/KEPServer',
+  jsonFileName: 'm52_v210616_1.json',
+  csvFileNameFrom: 'm52_v210616_1.csv',
+  csvFileNameTo: 'm52-kepServer_v210616_1.csv',
 };
 
 describe('<<=== ScriptOperations: (file-operations.script) ===>>', () => {
-  
-  if (!isRunScripts()) return;
 
   if (scriptExecution.updateAddressSpaceOptions) {
     it('#1 FileOperations: update AddressSpaceOptions.json', () => {
@@ -77,68 +72,56 @@ describe('<<=== ScriptOperations: (file-operations.script) ===>>', () => {
   if (scriptExecution.converterForKEPServer) {
     it('#2 ScriptOperations: Converter for KEPServer', () => {
       try {
-        let path = 'scripts/tmp/KEPServer';
-        let fileName = 'm52_v210616_1.csv';
+        const config = kepServerConfig;
+        let path = config.path;
+        let fileName = config.csvFileNameFrom;
         // Read file
         let data = readFileSync([appRoot, path, fileName]);
-        data = papa.parse(data, { delimiter: ';', header: true });
+        data = papa.parse(data, { delimiter: config.delimiterFrom, header: true });
         if (isLog) inspector('Converter for KEPServer.jsonData[0]:', data.data[0]);
         if (isLog) inspector('Converter for KEPServer.meta:', data.meta);
         // Get data
         data = data.data;
-        // Write data json file
-        fileName = 'm52_v210616_1.json';
+        if (isDebug) debug('Amount of data before filtering:', data.length);
+        // Filter data 
+        data = data.filter(item => config.filter.includes(item.Type_tag));
+        if (isDebug) debug('Amount of data after filtering:', data.length);
+        // Write data to json file
+        fileName = config.jsonFileName;
         writeJsonFileSync([appRoot, path, fileName], data);
 
-        /**
-        column1: { kepSrvField: 'Tag Name', myField: 'TAG', default: undefined },
-        column2: { kepSrvField: 'Address', myField: ['Compnd', 'TAG'], default: undefined },
-        column3: { kepSrvField: 'Data Type', myField: '', default: 'Default' },
-        column4: { kepSrvField: 'Respect Data Type', myField: '', default: 1 },
-        column5: { kepSrvField: 'Client Access', myField: '', default: 'RO' },
-        column6: { kepSrvField: 'Scan Rate', myField: '', default: 100 },
-        column7: { kepSrvField: 'Scaling', myField: '', default: undefined },
-        column8: { kepSrvField: 'Raw Low', myField: '', default: undefined },
-        column9: { kepSrvField: 'Raw High', myField: '', default: undefined },
-        column10: { kepSrvField: 'Scaled Low', myField: 'Lsco1', default: undefined },
-        column11: { kepSrvField: 'Scaled High', myField: 'Hsco1', default: undefined },
-        column12: { kepSrvField: 'Scaled Data Type', myField: '', default: undefined },
-        column13: { kepSrvField: 'Clamp Low', myField: '', default: undefined },
-        column14: { kepSrvField: 'Clamp High', myField: '', default: undefined },
-        column15: { kepSrvField: 'Eng Units', myField: 'Eng', default: undefined },
-        column16: { kepSrvField: 'Description', myField: ['Descr1', 'Descr2'], default: undefined },
-        column17: { kepSrvField: 'Negate Value', myField: '', default: undefined }, 
-         */
+        // Convert data
+        const fields = config.fields;
         data = data.map(item => {
           let result = {};
-          result[kepServerTags.column1.kepSrvField] = item[kepServerTags.column1.myField];
-          result[kepServerTags.column2.kepSrvField] = `52AW00/${item[kepServerTags.column2.myField[0]]}:${item[kepServerTags.column2.myField[1]]}.PNT\\hist00`;
-          result[kepServerTags.column3.kepSrvField] = item[kepServerTags.column3.default];
-          result[kepServerTags.column4.kepSrvField] = item[kepServerTags.column4.default];
-          result[kepServerTags.column5.kepSrvField] = item[kepServerTags.column5.default];
-          result[kepServerTags.column6.kepSrvField] = item[kepServerTags.column6.default];
-          result[kepServerTags.column7.kepSrvField] = item[kepServerTags.column7.default];
-          result[kepServerTags.column8.kepSrvField] = item[kepServerTags.column8.default];
-          result[kepServerTags.column9.kepSrvField] = item[kepServerTags.column9.default];
-          result[kepServerTags.column10.kepSrvField] = item[kepServerTags.column10.myField];
-          result[kepServerTags.column11.kepSrvField] = item[kepServerTags.column11.myField];
-          result[kepServerTags.column12.kepSrvField] = item[kepServerTags.column12.default];
-          result[kepServerTags.column13.kepSrvField] = item[kepServerTags.column13.default];
-          result[kepServerTags.column14.kepSrvField] = item[kepServerTags.column14.default];
-          result[kepServerTags.column15.kepSrvField] = item[kepServerTags.column15.myField];
-          result[kepServerTags.column16.kepSrvField] = `${item[kepServerTags.column16.myField[0]]} ${item[kepServerTags.column16.myField[1]]}`;
-          result[kepServerTags.column17.kepSrvField] = item[kepServerTags.column17.default];
+          result[fields.column1.toField] = item[fields.column1.fromField];
+          result[fields.column2.toField] = `52AW00/${item[fields.column2.fromField[0]]}:${item[fields.column2.fromField[1]]}.PNT\\hist00`;
+          result[fields.column3.toField] = item[fields.column3.default];
+          result[fields.column4.toField] = item[fields.column4.default];
+          result[fields.column5.toField] = item[fields.column5.default];
+          result[fields.column6.toField] = item[fields.column6.default];
+          result[fields.column7.toField] = item[fields.column7.default];
+          result[fields.column8.toField] = item[fields.column8.default];
+          result[fields.column9.toField] = item[fields.column9.default];
+          result[fields.column10.toField] = item[fields.column10.fromField];
+          result[fields.column11.toField] = item[fields.column11.fromField];
+          result[fields.column12.toField] = item[fields.column12.default];
+          result[fields.column13.toField] = item[fields.column13.default];
+          result[fields.column14.toField] = item[fields.column14.default];
+          result[fields.column15.toField] = item[fields.column15.fromField];
+          result[fields.column16.toField] = `${item[fields.column16.fromField[0]]} ${item[fields.column16.fromField[1]]}`;
+          result[fields.column17.toField] = item[fields.column17.default];
           return result;
         });
 
-        // Write tags csv file
-        let csv = papa.unparse(data, { delimiter: ',' });
-        fileName = 'm52-kepServer_v210616_1.csv';
+        // Write data to csv file
+        let csv = papa.unparse(data, { delimiter: config.delimiterTo });
+        fileName = config.csvFileNameTo;
         writeFileSync([appRoot, path, fileName], csv);
-        assert.ok(true, 'ScriptOperations: Convert m52baza.csv to m52ImportTags.csv for KEPServer');
+        assert.ok(true, 'ScriptOperations: Converter for KEPServer');
       } catch (error) {
         inspector('Converter for KEPServer.error:', error);
-        assert.ok(false, 'ScriptOperations: Convert m52baza.csv to m52ImportTags.csv for KEPServer');
+        assert.ok(false, 'ScriptOperations: Converter for KEPServer');
       }
     });
   }
