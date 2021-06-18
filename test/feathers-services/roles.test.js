@@ -1,8 +1,17 @@
 const assert = require('assert');
 const app = require('../../src/app');
-const { inspector, checkServicesRegistered, saveFakesToServices } = require('../../src/plugins');
+const { 
+  inspector, 
+  appRoot, 
+  readJsonFileSync, 
+  checkServicesRegistered, 
+  saveFakesToServices 
+} = require('../../src/plugins');
 
 const isLog = false;
+
+// Get generated fake data
+const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
 describe('<<=== Roles Service Test (roles.test.js) ===>>', () => {
   it('#1: Registered the service', () => {
@@ -19,19 +28,19 @@ describe('<<=== Roles Service Test (roles.test.js) ===>>', () => {
   });
 
   it('#3: Error on unique `name`', async () => {
+    let fake;
     try {
+      fake = fakes['roles'][0];
       const service = app.service('roles');
       await service.create({
-        'name': 'Administrator',
-        'alias': 'isAdministrator',
-        'description': 'Sed sint ea doloribus id quibusdam numquam quaerat.'
+        'name': fake.name,
+        'alias': fake.alias,
+        'description': fake.description
       });
       assert.ok(false, 'Error on unique `name`');
     } catch (error) {
       if (isLog) inspector('Error on unique `name`.error', error.message);
-      assert.ok(error.message === 'name: Administrator already exists.', 'Error on unique `name`');
-      // assert.ok(error.code === 400, 'Error on unique `name`');
-      assert.ok(error.name === 'Conflict', 'Error on unique `name`');
+      assert.ok(error.message.includes(fake.name), 'Error on unique `name`');
     }
   });
 });

@@ -3,7 +3,7 @@ const assert = require('assert');
 const app = require('../../src/app');
 const { inspector, appRoot, readJsonFileSync, checkServicesRegistered, saveFakesToServices } = require('../../src/plugins');
 
-const isLog = true;
+const isLog = false;
 
 // Get generated fake data
 const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
@@ -18,7 +18,7 @@ describe('<<=== Users Service Test (users.test.js) ===>>', () => {
     const errPath = await saveFakesToServices(app, 'users');
     const service = app.service('users');
     const data = await service.find({});
-    if(isLog) inspector('Save fake data to \'users\' service.data[0]', data.data[0]);
+    if (isLog) inspector('Save fake data to \'users\' service.data[0]', data.data[0]);
     assert.ok(errPath === '' && data, `Not save fakes to services - '${errPath}'`);
   });
 
@@ -36,15 +36,16 @@ describe('<<=== Users Service Test (users.test.js) ===>>', () => {
 
   it('#4: Removes password for external requests', async () => {
     // Setting `provider` indicates an external request
-    const params = { provider: 'rest' };
-
-    const user = await app.service('users').create({
-      email: 'test2@example.com',
-      password: 'secret'
-    }, params);
+    let params = {
+      query: { email: 'test@example.com' },
+      provider: 'rest',
+      authenticated: true
+    };
+    const user = await app.service('users').find(params);
+    if(isLog) inspector('Removes password for external requests.user:', user.data);
 
     // Make sure password has been removed
-    assert.ok(!user.password);
+    assert.ok(!user.data.password);
   });
 
   it('#5: Error on incorrect email', async function () {
@@ -73,17 +74,4 @@ describe('<<=== Users Service Test (users.test.js) ===>>', () => {
       assert.ok(ex.message.includes(fake.email), 'Error on unique email');
     }
   });
-
-  // it('#7: Error on unique profileId', async function () {
-  //   let fake;
-  //   try {
-  //     fake = fakes['users'][0];
-  //     const users = app.service('users');
-  //     await users.create({ email: 'test@test.com', password: 'test', firstName: 'Lora', lastName: 'Lind', profileId: fake.profileId });
-  //     assert(false, 'Error on unique profileId - unexpectedly succeeded');
-  //   } catch (ex) {
-  //     if (isLog) inspector('Error on unique profileId for \'users\' service:', ex.message);
-  //     assert.ok(ex.message.includes('it violates the unique constraint'), 'Error on unique profileId');
-  //   }
-  // });
 });

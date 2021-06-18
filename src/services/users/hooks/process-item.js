@@ -7,10 +7,10 @@ module.exports = function (options = {}) {
     //--------------------
     const { data } = context;
 
-    // Throw an error if we didn't get a teamId
-    // if (!data.email) {
-    //   throw new Error('A item must have a email');
-    // }
+    // Throw an error if we didn't get a email
+    if (!data.email) {
+      throw new Error('A user must have a email');
+    }
 
     // Update the original data (so that people can't submit additional stuff)
     Object.keys(schema.properties).forEach(key => {
