@@ -2,7 +2,7 @@
 const NeDB = require('nedb');
 const path = require('path');
 const mongoose = require('mongoose');
-const { getEnvTypeDB } = require('../plugins');
+const { getEnvTypeDB, dbNullIdValue } = require('../plugins');
 
 module.exports = function (app) {
 
@@ -30,7 +30,7 @@ module.exports = function (app) {
     const mongooseClient = app.get('mongooseClient');
     const { Schema } = mongooseClient;
     const schema = new Schema({
-      email: { type: String, required: true },
+      email: { type: String, required: true, unique: true },
       password: { type: String },
       firstName: { type: String },
       lastName: { type: String },

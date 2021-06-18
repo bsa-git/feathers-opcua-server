@@ -61,18 +61,18 @@ describe('<<=== Users Service Test (users.test.js) ===>>', () => {
     }
   });
 
-  // it('#6: Error on unique email', async function () {
-  //   let fake;
-  //   try {
-  //     fake = fakes['users'][0];
-  //     const users = app.service('users');
-  //     await users.create({ email: fake.email, password: 'test', firstName: 'Lora', lastName: 'Lind' });
-  //     assert(false, 'Error on unique email - unexpectedly succeeded');
-  //   } catch (ex) {
-  //     if (isLog) inspector('Error on unique email for \'users\' service:', ex.message);
-  //     assert.ok(ex.message.includes('it violates the unique constraint'), 'Error on unique email');
-  //   }
-  // });
+  it('#6: Error on unique email', async function () {
+    let fake;
+    try {
+      fake = fakes['users'][0];
+      const users = app.service('users');
+      await users.create({ email: fake.email, password: 'test', firstName: 'Lora', lastName: 'Lind' });
+      assert(false, 'Error on unique email - unexpectedly succeeded');
+    } catch (ex) {
+      if (isLog) inspector('Error on unique email for \'users\' service:', ex.message);
+      assert.ok(ex.message.includes(fake.email), 'Error on unique email');
+    }
+  });
 
   // it('#7: Error on unique profileId', async function () {
   //   let fake;
