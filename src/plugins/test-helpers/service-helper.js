@@ -135,6 +135,41 @@ const saveFakesToServices = async function (app, path = '') {
   return errPath;
 };
 
+/**
+ * Remove data from services
+ * @param app {Object}
+ * @param path {String}
+ * @return {Promise.<string>}
+ */
+const removeDataFromServices = async function (app, path = '') {
+  let errPath = '';
+  let result = false;
+  let isValid = true;
+  let paths = getFakePaths();
+  if(path && paths.findIndex(p => p === path) === -1)
+    throw new errors.GeneralError(`The path '${path}' is not in the path list`);
+  if(path) paths = paths.filter(p => p === path);
+  // Run seed service
+  const _seedService = async function (path) {
+    let result = false;
+    const results = await seedService(app, path, false);
+    if (Array.isArray(results) && (results.length === fakeData[path].length)) {
+      result = true;
+    }
+    return result;
+  };
+
+  for (let i = 0; isValid && i < paths.length; i++) {
+    const path = paths[i];
+    result = await _seedService(path);
+    if(result === false){
+      errPath = path;
+      isValid = false;
+    }
+  }
+  return errPath;
+};
+
 module.exports = {
   getFakeData,
   serviceFields,
@@ -142,5 +177,6 @@ module.exports = {
   getFakePaths,
   getIdField,
   checkServicesRegistered,
-  saveFakesToServices
+  saveFakesToServices,
+  removeDataFromServices
 };

@@ -6,8 +6,9 @@ const { getEnvTypeDB } = require('./plugins');
 module.exports = function (app) {
 
   if (getEnvTypeDB() === 'mongodb') {
+    const strConn = app.get('mongodb');
     mongoose.connect(
-      app.get('mongodb'),
+      strConn,
       { 
         useCreateIndex: true, 
         useNewUrlParser: true,

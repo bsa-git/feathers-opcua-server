@@ -165,6 +165,7 @@
     "clientServiceUrl": "http://BSA-HOME:3030",
     "clientScript": "startSubscriptionMonitor",
     "subscription": "onChangedGroupHandler",
+    "hostTypeDB": "mongodb",
     "include": {
       "tests": [
         "mssql-tedious.test2.js",
