@@ -2,7 +2,7 @@
   "name": "feathers-opcua-server",
   "description": "A FeathersJS OPC-UA application",
   "version": "0.0.1",
-  "homepage": "https://feathersjs.com",
+  "homepage": "https://github.com/bsa-git/feathers-opcua-server",
   "main": "src",
   "keywords": [
     "feathers",
