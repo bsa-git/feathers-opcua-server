@@ -1,6 +1,14 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
-const {AuthServer, serviceHelper, readJsonFileSync, /*seedService,*/ inspector, appRoot, dbNullIdValue} = require('../../src/plugins/index');
+const {
+  AuthServer,
+  checkServicesRegistered, 
+  saveFakesToServices, 
+  fakeNormalize,
+  inspector, 
+  appRoot, 
+  dbNullIdValue
+} = require('../../src/plugins');
 const constraints = require(`${appRoot}/src/hooks/constraints`);
 const app = require(`${appRoot}/src/app`);
 const debug = require('debug')('app:constraints.unit.test');
@@ -11,7 +19,7 @@ const isTest = true;
 const isSeed = true;
 
 // Get generated fake data
-const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
+const fakes = fakeNormalize();
 const roleGuest = fakes['roles'].find(role => role.alias === 'isGuest');
 
 
@@ -64,12 +72,12 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
   describe('<--- Save fake data to services --->', function () {
     if (isSeed) {
       it('#1 Registered the all services', () => {
-        const errPath = serviceHelper.checkServicesRegistered(app);
+        const errPath = checkServicesRegistered(app);
         assert.ok(errPath === '', `Service '${errPath}' not registered`);
       });
 
       it('#2 Save fakes to services', async () => {
-        const errPath = await serviceHelper.saveFakesToServices(app);
+        const errPath = await saveFakesToServices(app);
         assert.ok(errPath === '', `Not save fakes to services - '${errPath}'`);
       });
     }
