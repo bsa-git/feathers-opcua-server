@@ -17,7 +17,7 @@ process.on('unhandledRejection', (reason, p) => {
 server.on('listening', async () => {
   logger.info('Feathers application started on http://%s:%d', app.get('host'), port);
   logger.info('Feathers application started on env="%s"', app.get('env'));
-
+  
   // Start seed data
   await seedData(app);
   // Start opcua bootstrap
