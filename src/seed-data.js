@@ -10,7 +10,7 @@ const fakeNormalize = require('./plugins/test-helpers/fake-normalize');
 
 // Get generated fake data
 // let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
-let fakeData = fakeNormalize();
+let fakeData = fakeNormalize(true);
 
 // Get feathers-specs data
 const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) || {};

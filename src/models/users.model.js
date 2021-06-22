@@ -35,7 +35,7 @@ module.exports = function (app) {
       firstName: { type: String },
       lastName: { type: String },
       roleId: { type: mongoose.ObjectId },
-      profileId: { type: mongoose.ObjectId },
+      profileId: { type: mongoose.ObjectId, unique: true, sparse: true  },
       active: { type: Boolean },
       isVerified: { type: Boolean },
       googleId:  { type: String },
@@ -45,6 +45,8 @@ module.exports = function (app) {
     }, {
       timestamps: true
     });
+
+    // schema.path('profileId').index({ sparse: true });
 
     //   // This is necessary to avoid model compilation errors in watch mode
     //   // see https://mongoosejs.com/docs/api/connection.html#connection_Connection-deleteModel

@@ -2,6 +2,7 @@
 // Application hooks that run for every service
 const normalize = require('./hooks/normalize');
 const log = require('./hooks/log');
+const constraints = require('./hooks/constraints');
 
 let moduleExports = {
   before: {
@@ -37,9 +38,11 @@ let moduleExports = {
 
 const loConcat = require('lodash/concat');
 // Add hooks
-moduleExports.before.all = loConcat([log(), normalize()]);
+moduleExports.before.all = loConcat([log(), normalize(), constraints()]);
+// moduleExports.before.all = loConcat([log(), normalize()]);
 // moduleExports.before.all = loConcat([log()]);
-moduleExports.after.all = loConcat([normalize(), log()]);
+moduleExports.after.all = loConcat([normalize(), constraints(), log()]);
+// moduleExports.after.all = loConcat([normalize(), log()]);
 // moduleExports.after.all = loConcat([log()]);
 moduleExports.error.all = loConcat([log()]);
 

@@ -13,6 +13,8 @@ const isDebug = false;
 const isLog = false;
 
 const prefixMongodbIds = '60af3870';
+const countMongodbId = 24;
+const countNedbId = 16;
 
 // Get json log data
 const jsonLogData = readJsonFileSync(`${appRoot}/src/api/app/app-log-msg.json`) || {};
@@ -30,8 +32,13 @@ const idsUpdate = (fakeData = []) => {
   const fakeDataUpdated = [], idField = getIdField(fakeData);
   for (let index = 0; index < fakeData.length; index++) {
     const element = fakeData[index];
-    if (getEnvTypeDB() === 'mongodb') {
+    if (getEnvTypeDB() === 'mongodb' && element[idField].length === countNedbId ) {
       element[idField] = prefixMongodbIds + element[idField];
+      fakeDataUpdated.push(element);
+    }
+    if (getEnvTypeDB() === 'nedb' && element[idField].length === countMongodbId ) {
+      const delta = countMongodbId - countNedbId -1;
+      element[idField] = element[idField].slice(delta);
       fakeDataUpdated.push(element);
     }
   }

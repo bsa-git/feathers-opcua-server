@@ -5,7 +5,6 @@ const app = require('./app');
 const seedData = require('./seed-data');
 const { 
   opcuaBootstrap, 
-  isTrue 
 } = require('./plugins');
 
 const port = app.get('port');

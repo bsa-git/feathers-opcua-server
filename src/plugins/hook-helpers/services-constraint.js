@@ -162,7 +162,7 @@ module.exports = async function servicesConstraint(context) {
 
       // Remove item for 'user-profiles' service
       servicePath = 'user-profiles';
-      removed = await hookHelper.removeItem(servicePath, {[idFieldUser]: profileId});
+      removed = await hookHelper.removeItem(servicePath, profileId);
       if (isDebug) debug(`after.users.remove: record have been removed for id = '${removed[idFieldUser]}' from the "${servicePath}" service`);
     };
     normalize = async (record) => {

@@ -37,6 +37,9 @@ module.exports = async function opcuaBootstrap(app) {
   let service = null, opcuaServer = null, opcuaClient = null;
   //--------------------------------------------------------
   
+  // Determine if command line argument exists for seeding data
+  const isSeedServices = ['--seed', '-s'].some(str => process.argv.slice(2).includes(str));
+  if (isSeedServices) return;
   // Check is opcua bootstrap enable
   const isOpcuaBootstrapEnable = isTrue(process.env.OPCUA_BOOTSTRAP_ENABLE);
   if (!isOpcuaBootstrapEnable) return;

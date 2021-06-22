@@ -74,6 +74,4 @@ describe('<<=== Users Service Test (users.test.js) ===>>', () => {
       assert.ok(true, 'Error on unique email');
     }
   });
-
-  
 });

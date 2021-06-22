@@ -413,11 +413,21 @@ class HookHelper {
    * @return {Promise.<*>}
    */
   async removeItems(path = '', query = {}) {
+    let findResults = [], deleteResults = [];
     const service = this.app.service(path);
     if (service) {
-      const removeResults = await service.remove(null, { query: query });
-      if (isLog) inspector(`removeItems(path='${path}', query=${JSON.stringify(query)}).removeResults:`, removeResults);
-      return removeResults;
+      // Delete items from service
+      findResults = await service.find({ query });
+      findResults = findResults.data;
+      if (findResults.length) {
+        const idField = HookHelper.getIdField(findResults);
+        for (let index = 0; index < findResults.length; index++) {
+          const item = findResults[index];
+          deleteResults.push(await service.remove(item[idField]));
+        }
+      }
+      if (isLog) inspector(`removeItems(path='${path}', query=${JSON.stringify(query)}).removeResults:`, deleteResults);
+      return deleteResults;
     } else {
       throw new errors.BadRequest(`There is no service for the path - '${path}'`);
     }
@@ -425,11 +435,12 @@ class HookHelper {
 
   /**
    * Remove item
-   * @param path
-   * @param id
-   * @return {Promise.<*>}
+   * @param {String} path
+   * @param {String} id
+   * @return {Promise}
    */
   async removeItem(path = '', id = null) {
+    // id = id.toString();
     const service = this.app.service(path);
     if (service) {
       const removeResult = await service.remove(id);
@@ -448,9 +459,19 @@ class HookHelper {
    * @return {Promise.<*>}
    */
   async patchItems(path = '', data = {}, query = {}) {
+    let findResults = [], patchResults = [];
+    //--------------------------------------
     const service = this.app.service(path);
     if (service) {
-      const patchResults = await service.patch(null, data, { query: query });
+      findResults = await service.find({ query });
+      findResults = findResults.data;
+      if (findResults.length) {
+        const idField = HookHelper.getIdField(findResults);
+        for (let index = 0; index < findResults.length; index++) {
+          const item = findResults[index];
+          patchResults.push(await service.patch(item[idField], data));
+        }
+      }
       if (isLog) inspector(`patchItems(path='${path}', data=${JSON.stringify(data)}, query=${JSON.stringify(query)}).patchResults:`, patchResults);
       return patchResults;
     } else {
