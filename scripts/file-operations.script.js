@@ -44,7 +44,7 @@ const kepServerConfig = {
   filter: ['AI', 'AIs', 'AO'],
   delimiterFrom: ';',
   delimiterTo: ',',
-  path: 'scripts/tmp/KEPServer',
+  path: 'scripts/api/KEPServer',
   jsonFileName: 'm52_v210616_1.json',
   csvFileNameFrom: 'm52_v210616_1.csv',
   csvFileNameTo: 'm52-kepServer_v210616_1.csv',

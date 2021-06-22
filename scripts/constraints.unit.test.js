@@ -8,7 +8,7 @@ const {
   inspector, 
   appRoot, 
   dbNullIdValue
-} = require('../../src/plugins');
+} = require('../src/plugins');
 const constraints = require(`${appRoot}/src/hooks/constraints`);
 const app = require(`${appRoot}/src/app`);
 const debug = require('debug')('app:constraints.unit.test');
