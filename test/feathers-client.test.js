@@ -42,7 +42,6 @@ describe('<<=== Feathers client ===>>', () => {
 
   before(function (done) {
     if (isDebug) debug('before Start!');
-    // debug('before Start!');
     server = app.listen(port);
     server.once('listening', () => {
       setTimeout(() => done(), 500);

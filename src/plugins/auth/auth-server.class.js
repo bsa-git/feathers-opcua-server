@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { checkContext, getItems } = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
@@ -354,7 +355,7 @@ class AuthServer {
   /**
    * Get list services
    * e.g. { users: ['create'], roles: ['find', 'create', 'update', 'patch', 'remove'] }
-   * @param envServices
+   * @param {String} envServices
    * @return {Object}
    */
   static listServices(envServices = '') {

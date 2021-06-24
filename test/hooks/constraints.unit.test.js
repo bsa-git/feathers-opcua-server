@@ -71,12 +71,12 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
 
   describe('<--- Save fake data to services --->', function () {
     if (isSeed) {
-      it('#1 Registered the all services', () => {
+      it('#1: Registered the all services', () => {
         const errPath = checkServicesRegistered(app);
         assert.ok(errPath === '', `Service '${errPath}' not registered`);
       });
 
-      it('#2 Save fakes to services', async () => {
+      it('#2: Save fakes to services', async () => {
         const errPath = await saveFakesToServices(app);
         assert.ok(errPath === '', `Not save fakes to services - '${errPath}'`);
       });
@@ -84,11 +84,11 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
   });
 
   describe('<--- Run constraints.unit.test --->', function () {
-    it('#3 Constraints hook exists', () => {
+    it('#3: Constraints hook exists', () => {
       assert(typeof constraints === 'function', 'Hook is not a function.');
     });
 
-    it('#4 Relationship error while deleting record from \'user-profiles\' service', async () => {
+    it('#4: Relationship error while deleting record from \'user-profiles\' service', async () => {
       try {
 
         const rec = fakes['users'][0];
@@ -114,7 +114,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       }
     });
 
-    it('#5 Error creating unique values for \'userTeams\' service', async () => {
+    it('#5: Error creating unique values for \'userTeams\' service', async () => {
       try {
         const rec = fakes['userTeams'][0];
         const service = app.service('user-teams');
@@ -136,7 +136,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       }
     });
 
-    it('#6 Relationship error while creating record for \'userTeams\' service', async () => {
+    it('#6: Relationship error while creating record for \'userTeams\' service', async () => {
       try {
 
         const rec = fakes['teams'][0];
@@ -163,7 +163,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       }
     });
 
-    it('#7 Relationship error while creating record for \'userTeams\' service', async () => {
+    it('#7: Relationship error while creating record for \'userTeams\' service', async () => {
       try {
 
         const rec = fakes['users'][0];
@@ -190,7 +190,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       }
     });
 
-    it('#8 Relationship error while patching record for \'users\' service', async () => {
+    it('#8: Relationship error while patching record for \'users\' service', async () => {
       try {
 
         const rec = fakes['users'][0];
@@ -217,7 +217,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       }
     });
 
-    it('#9 Error when removing a base record from \'roles\' service', async () => {
+    it('#9: Error when removing a base record from \'roles\' service', async () => {
 
       const recAdmin = fakes['roles'].find(function (role) {
         return (role.name === AuthServer.getRoles('isAdministrator'));
@@ -264,7 +264,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       }
     });
 
-    it('#10 Set contextBefore.alias while creating record for \'roles\' service', async () => {
+    it('#10: Set contextBefore.alias while creating record for \'roles\' service', async () => {
       const service = app.service('roles');
       contextBefore.path = 'roles';
       contextBefore.method = 'create';
@@ -278,7 +278,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       assert.ok(contextBefore.data.alias, 'Protection did not work to write the data to service');
     });
 
-    it('#11 Set contextBefore.alias while creating record for \'teams\' service', async () => {
+    it('#11: Set contextBefore.alias while creating record for \'teams\' service', async () => {
       const service = app.service('roles');
       contextBefore.path = 'teams';
       contextBefore.method = 'create';
@@ -292,7 +292,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       assert.ok(contextBefore.data.alias, 'Protection did not work to write the data to service');
     });
 
-    it('#12 Set contextBefore.roleId while creating record for \'users\' service', async () => {
+    it('#12: Set contextBefore.roleId while creating record for \'users\' service', async () => {
       const service = app.service('users');
       contextBefore.path = 'users';
       contextBefore.method = 'create';
@@ -308,7 +308,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       assert.ok(contextBefore.data.roleId, 'Protection did not work to write the data to service');
     });
 
-    it('#13 Set contextBefore.profileId while creating record for \'users\' service', async () => {
+    it('#13: Set contextBefore.profileId while creating record for \'users\' service', async () => {
       const service = app.service('users');
       contextBefore.path = 'users';
       contextBefore.method = 'create';
@@ -324,7 +324,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       assert.ok(contextBefore.data.profileId, 'Protection did not work to write the data to service');
     });
 
-    it('#14 Set contextAfter.roleAlias while creating record for \'users\' service', async () => {
+    it('#14: Set contextAfter.roleAlias while creating record for \'users\' service', async () => {
       const idField = 'id' in roleGuest ? 'id' : '_id';
       const service = app.service('users');
       contextAfter.path = 'users';
@@ -342,7 +342,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       assert.ok(contextAfter.result.roleAlias, 'Protection did not work to write the data to service');
     });
 
-    it('#15 Data integrity when removing a record from \'roles\' service', async () => {
+    it('#15: Data integrity when removing a record from \'roles\' service', async () => {
       const rec = fakes['roles'].find(function (role) {
         return (role.name !== AuthServer.getRoles('isAdministrator')) && (role.name !== AuthServer.getRoles('isGuest'));
       });
@@ -381,7 +381,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       assert.ok(findChatMessagesBefore.length > findChatMessagesAfter.length, 'Protection did not work to removing the data from service');
     });
 
-    it('#16 Data integrity when removing a record from \'teams\' service', async () => {
+    it('#16: Data integrity when removing a record from \'teams\' service', async () => {
       let teamId = null;
       let findUserTeamsBefore = null;
       let findChatMessagesBefore = null;
@@ -432,7 +432,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       }
     });
 
-    it('#17 Data integrity when removing a record from \'users\' service', async () => {
+    it('#17: Data integrity when removing a record from \'users\' service', async () => {
       const index = fakes['users'].length - 1;
       const rec = fakes['users'][index];
       const idFieldUser = 'id' in rec ? 'id' : '_id';

@@ -1,6 +1,15 @@
 /* eslint-disable no-unused-vars */
-const { readJsonFileSync, writeJsonFileSync, inspector, appRoot } = require('../lib');
-const { dbNullIdValue, getEnvTypeDB, getIdField } = require('../db-helpers');
+const {
+  readJsonFileSync,
+  writeJsonFileSync,
+  inspector,
+  appRoot
+} = require('../lib');
+const {
+  dbNullIdValue,
+  getEnvTypeDB,
+  getIdField
+} = require('../db-helpers');
 const Auth = require(`${appRoot}/src/plugins/auth/auth-server.class`);
 const chalk = require('chalk');
 
@@ -32,12 +41,13 @@ const idsUpdate = (fakeData = []) => {
   const fakeDataUpdated = [], idField = getIdField(fakeData);
   for (let index = 0; index < fakeData.length; index++) {
     const element = fakeData[index];
-    if (getEnvTypeDB() === 'mongodb' && element[idField].length === countNedbId ) {
+    const length = element[idField].length;
+    if (getEnvTypeDB() === 'mongodb' && length === countNedbId) {
       element[idField] = prefixMongodbIds + element[idField];
       fakeDataUpdated.push(element);
     }
-    if (getEnvTypeDB() === 'nedb' && element[idField].length === countMongodbId ) {
-      const delta = countMongodbId - countNedbId -1;
+    if (getEnvTypeDB() === 'nedb' && length === countMongodbId) {
+      const delta = countMongodbId - countNedbId;
       element[idField] = element[idField].slice(delta);
       fakeDataUpdated.push(element);
     }

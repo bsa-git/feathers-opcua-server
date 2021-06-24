@@ -3,6 +3,7 @@
 const normalize = require('./hooks/normalize');
 const log = require('./hooks/log');
 const constraints = require('./hooks/constraints');
+const auth = require('./hooks/auth');
 
 let moduleExports = {
   before: {
@@ -38,7 +39,7 @@ let moduleExports = {
 
 const loConcat = require('lodash/concat');
 // Add hooks
-moduleExports.before.all = loConcat([log(), normalize(), constraints()]);
+moduleExports.before.all = loConcat([log(), normalize(), auth.authCheck(), constraints()]);
 // moduleExports.before.all = loConcat([log(), normalize()]);
 // moduleExports.before.all = loConcat([log()]);
 moduleExports.after.all = loConcat([normalize(), constraints(), log()]);

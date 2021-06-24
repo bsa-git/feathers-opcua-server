@@ -214,10 +214,6 @@ class Channel {
     if(isLog)debug('getTeamsForUser:', teamsForUser? teamsForUser : 'Not teamsForUser');
     return  teamsForUser;
   }
-
-  // async publishEvents(){
-  //   const userTeams = this.app.service('user-teams');
-  // }
 }
 
 module.exports = Channel;
