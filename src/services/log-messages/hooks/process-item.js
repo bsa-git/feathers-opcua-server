@@ -19,6 +19,9 @@ module.exports = function (options = {}) {
       if(data[key] !== undefined){
         updateData[key] = data[key];
       }
+      if(schema.properties[key]['default'] !== undefined && !updateData[key]){
+        updateData[key] = schema.properties[key]['default'];
+      }
     });
 
     // The logged in user
@@ -29,9 +32,6 @@ module.exports = function (options = {}) {
 
     if(!updateData.ownerId){
       updateData.ownerId = user[idField];
-    }
-    if(!updateData.userId){
-      updateData.userId = dbNullIdValue();
     }
 
     context.data = updateData;

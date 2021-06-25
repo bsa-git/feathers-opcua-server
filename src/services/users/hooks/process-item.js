@@ -17,7 +17,12 @@ module.exports = function (options = {}) {
       if(data[key] !== undefined){
         updateData[key] = data[key];
       }
+      if(schema.properties[key]['setDefault'] !== undefined){
+        updateData[key] = schema.properties[key]['setDefault'];
+      }
     });
+
+
 
     context.data = updateData;
 

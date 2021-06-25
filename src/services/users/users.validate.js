@@ -2,6 +2,7 @@
 const { validateSchema } = require('feathers-hooks-common');
 const merge = require('lodash/merge');
 const ajv = require('ajv');
+const {isTrue} = require('../../plugins/lib');
 
 const ID = 'string';
 
@@ -61,7 +62,12 @@ let base = merge({},
         }
       },
       active: {
-        type: 'boolean'
+        type: 'boolean',
+        setDefault: isTrue(process.env.SET_USER_ACTIVE) 
+      },
+      isVerified: {
+        type: 'boolean',
+        setDefault: !isTrue(process.env.IS_AUTH_MANAGER) 
       },
       googleId: {
         type: 'string',

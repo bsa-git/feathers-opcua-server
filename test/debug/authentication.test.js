@@ -2,25 +2,18 @@
 const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port');
-const host = app.get('host');
-const { localStorage, loginLocal, makeServerClient } = require('../../src/plugins/auth');
+const { localStorage, loginLocal, feathersClient } = require('../../src/plugins/auth');
 const {
   inspector,
   removeDataFromServices,
   fakeNormalize,
-  startListenPort,
-  stopListenPort,
 } = require('../../src/plugins');
-
-// const {
-//   getServerService,
-//   getClientService,
-// } = require('../../src/plugins/opcua/opcua-helper');
 
 const debug = require('debug')('app:authentication.test');
 
 const isDebug = true;
 const isLog = true;
+const isTest = false;
 
 // Get generated fake data
 const fakes = fakeNormalize();
@@ -37,6 +30,7 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
 
   describe('<<--- Local strategy --->>', () => {
     let appSocketioClient, appRestClient, server;
+    //----------------------------------------------
     const userInfo = {
       email: 'authenticationTest@example.com',
       password: 'supersecret'
@@ -48,24 +42,8 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
       active: true
     };
 
-    // before((done) => {
-    //   try {
-    //     const _done = async () => {
-    //       localStorage.clear();
-    //       await removeDataFromServices(app, 'users');
-    //       const newUser = await app.service('users').create(userInfo);
-    //       appClient = makeServerClient({ transport: 'socketio', serverUrl: baseUrl });
-    //       if (isLog) inspector('newUser:', newUser);
-    //       done();
-    //     };
-    //     startListenPort(app, _done);
-    //   } catch (error) {
-    //     // Do nothing, it just means the user already exists and can be tested
-    //   }
-    // });
-
     before(function (done) {
-      this.timeout(30000);
+      this.timeout(10000);
       if (isDebug) debug('before Start!');
       server = app.listen(port);
       server.once('listening', () => {
@@ -74,19 +52,16 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
           await removeDataFromServices(app, 'users');
           const newUser = await app.service('users').create(userInfo);
           if (isLog) inspector('newUser:', newUser);
-          appSocketioClient = makeServerClient({ transport: 'socketio', serverUrl: baseUrl });
-          appRestClient = makeServerClient({ transport: 'rest', serverUrl: baseUrl });
+          appSocketioClient = feathersClient({ transport: 'socketio', serverUrl: baseUrl });
+          appRestClient = feathersClient({ transport: 'rest', serverUrl: baseUrl });
           done();
         }, 500);
       });
     });
 
-    // after(function (done) {
-    //   stopListenPort(done);
-    // });
-
     after(function (done) {
-      this.timeout(30000);
+      this.timeout(10000);
+      if (isDebug) debug('after EndTest !');
       server.close();
       setTimeout(() => done(), 500);
     });
@@ -100,11 +75,11 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
       assert.ok(user, 'Includes user in authentication data');
     });
 
-    it('#3: Create new user from client', async () => {
+    it('#3: Create new user from rest client', async () => {
       const service = appRestClient.service('users');
       try {
         // Login userInfo2
-        await loginLocal(appRestClient, userInfo2.email, userInfo2.password);  
+        await loginLocal(appRestClient, userInfo2.email, userInfo2.password);
       } catch (error) {
         const newUser2 = await service.create(userInfo2);
         if (isLog) inspector('Create user from client.newUser2:', newUser2);
@@ -112,17 +87,16 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
       assert.ok(service, 'Create user from client');
     });
 
-    it('#4 Authenticates from client new user and creates accessToken', async () => {
+    it('#4: Authenticates from rest client new user and creates accessToken', async () => {
       const { user, accessToken } = await loginLocal(appRestClient, userInfo2.email, userInfo2.password);
       assert.ok(accessToken, 'Created access token for user');
     });
 
-    // it('#5: Create user from client', async () => {
-    //   const service = appSocketioClient.service('users');
-    //   assert.ok(service, 'Create user from client');
-    //   const newUser = await service.create(userInfo2);
-    //   if (isLog) inspector('Create user from client.newUser:', newUser);
-    //   assert.ok(newUser, 'Create user from client');
-    // });
+    if (isTest) {
+      it('#5: Authenticates from socketio client new user and creates accessToken', async () => {
+        const { user, accessToken } = await loginLocal(appSocketioClient, userInfo2.email, userInfo2.password);
+        assert.ok(accessToken, 'Created access token for user');
+      });
+    }
   });
 });

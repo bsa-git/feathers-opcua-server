@@ -2,6 +2,8 @@
 const { validateSchema } = require('feathers-hooks-common');
 const merge = require('lodash/merge');
 const ajv = require('ajv');
+const { dbNullIdValue } = require('../../plugins');
+
 
 const ID = 'string';
 
@@ -29,19 +31,22 @@ let base = merge({},
         type: ID,
         faker: {
           fk: 'users:random'
-        }
+        },
+        default: dbNullIdValue()
       },
       teamId: {
         type: ID,
         faker: {
           fk: 'teams:random'
-        }
+        },
+        default: dbNullIdValue()
       },
       roleId: {
         type: ID,
         faker: {
           fk: 'roles:random'
-        }
+        },
+        default: dbNullIdValue()
       },
       msg: {
         type: 'string',
