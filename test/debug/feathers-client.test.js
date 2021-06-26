@@ -3,14 +3,12 @@ const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port') || 3030;
 const host = app.get('host') || 'localhost';
+const { inspector,  pause} = require('../../src/plugins/lib');
 const { localStorage, loginLocal, feathersClient, AuthServer } = require('../../src/plugins/auth');
 const {
-  inspector,
   saveFakesToServices,
   fakeNormalize,
-  startListenPort,
-  stopListenPort,
-} = require('../../src/plugins');
+} = require('../../src/plugins/test-helpers');
 
 const debug = require('debug')('app:feathers-client.test');
 
@@ -38,8 +36,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
     //----------------------------------------------
 
     before(function (done) {
-      this.timeout(10000);
-      if (isDebug) debug('before Start!');
+      // this.timeout(30000);
       server = app.listen(port);
       server.once('listening', () => {
         setTimeout(async () => {
@@ -47,16 +44,23 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
           await saveFakesToServices(app, 'users');
           appSocketioClient = feathersClient({ transport: 'socketio', serverUrl: baseUrl });
           appRestClient = feathersClient({ transport: 'rest', serverUrl: baseUrl });
+
+          if (isDebug) debug('before Start!');
+
           done();
         }, 500);
       });
     });
 
     after(function (done) {
-      if (isDebug) debug('after EndTest !');
-      this.timeout(10000);
+      // this.timeout(30000);
       server.close();
-      setTimeout(() => done(), 500);
+      setTimeout(() => {
+
+        if (isDebug) debug('after EndTest !');
+
+        done();
+      }, 500);
     });
 
     it('#2: Authenticates user and get accessToken', async () => {

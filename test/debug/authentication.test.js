@@ -43,8 +43,7 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
     };
 
     before(function (done) {
-      this.timeout(10000);
-      if (isDebug) debug('before Start!');
+      // this.timeout(10000);
       server = app.listen(port);
       server.once('listening', () => {
         setTimeout(async () => {
@@ -52,18 +51,27 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
           await removeDataFromServices(app, 'users');
           const newUser = await app.service('users').create(userInfo);
           if (isLog) inspector('newUser:', newUser);
+          const newUser2 = await app.service('users').create(userInfo2);
+          if (isLog) inspector('newUser2:', newUser2);
           appSocketioClient = feathersClient({ transport: 'socketio', serverUrl: baseUrl });
           appRestClient = feathersClient({ transport: 'rest', serverUrl: baseUrl });
+
+          if (isDebug) debug('before Start!');
+
           done();
         }, 500);
       });
     });
 
     after(function (done) {
-      this.timeout(10000);
-      if (isDebug) debug('after EndTest !');
+      // this.timeout(10000);
       server.close();
-      setTimeout(() => done(), 500);
+      setTimeout(() => { 
+        
+        if (isDebug) debug('after EndTest !');
+        
+        done(); 
+      }, 500);
     });
 
     it('#2: Authenticates from server user and creates accessToken', async () => {
@@ -73,18 +81,6 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
       });
       assert.ok(accessToken, 'Created access token for user');
       assert.ok(user, 'Includes user in authentication data');
-    });
-
-    it('#3: Create new user from rest client', async () => {
-      const service = appRestClient.service('users');
-      try {
-        // Login userInfo2
-        await loginLocal(appRestClient, userInfo2.email, userInfo2.password);
-      } catch (error) {
-        const newUser2 = await service.create(userInfo2);
-        if (isLog) inspector('Create user from client.newUser2:', newUser2);
-      }
-      assert.ok(service, 'Create user from client');
     });
 
     it('#4: Authenticates from rest client new user and creates accessToken', async () => {
