@@ -118,7 +118,7 @@ const usersUpdate = () => {
   Object.assign(fakeDataUsers, fakeDataUsers.map((user, index) => {
     const nowDate = new Date(0);
     user.loginAt = nowDate.toJSON();
-    user.avatar = `/img/avatar/people_${index + 1}.png`;
+    // user.avatar = `/img/avatar/people_${index + 1}.png`;
     user.active = true;
     user.isVerified = true;
     // user.verifyToken = '';

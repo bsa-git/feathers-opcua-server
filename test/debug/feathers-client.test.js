@@ -3,7 +3,7 @@ const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port') || 3030;
 const host = app.get('host') || 'localhost';
-const { inspector,  pause} = require('../../src/plugins/lib');
+const { inspector} = require('../../src/plugins/lib');
 const { localStorage, loginLocal, feathersClient, AuthServer } = require('../../src/plugins/auth');
 const {
   saveFakesToServices,
@@ -44,9 +44,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
           await saveFakesToServices(app, 'users');
           appSocketioClient = feathersClient({ transport: 'socketio', serverUrl: baseUrl });
           appRestClient = feathersClient({ transport: 'rest', serverUrl: baseUrl });
-
-          if (isDebug) debug('before Start!');
-
+          if (isDebug) debug('Done before StartTest!');
           done();
         }, 500);
       });
@@ -56,23 +54,28 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       // this.timeout(30000);
       server.close();
       setTimeout(() => {
-
-        if (isDebug) debug('after EndTest !');
-
+        if (isDebug) debug('Done after EndTest!');
         done();
       }, 500);
     });
 
     it('#2: Authenticates user and get accessToken', async () => {
+      // Login
       await loginLocal(appRestClient, fakeUser.email, fakeUser.password);
       const { accessToken } = await appRestClient.get('authentication');
-      assert.ok(accessToken, 'Created access token for user');
+      assert.ok(accessToken, 'Get access token for user');
       const payload = await AuthServer.verifyJWT(accessToken);
       if(isLog) inspector('Get userId from payload:', payload);
       assert.ok(payload.sub === fakeUser[idField], 'Get userId from payload');
+      // Logout
+      await appRestClient.logout();
+      let token = await appRestClient.authentication.getAccessToken();
+      if(isDebug) debug('token:', token);
+      assert.ok(!token, 'Get access token for user');
     });
 
     it('#3: Authenticates and get user from `users` service', async () => {
+      // Login
       const { accessToken } = await loginLocal(appRestClient, fakeUser.email, fakeUser.password);
       assert.ok(accessToken, 'Created access token for user');
       const service = appRestClient.service('users');
@@ -82,6 +85,39 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       const user = await service.get(payload.sub);
       if(isLog) inspector('Get user from `users` service.user:', user);
       assert.ok(user, 'Get user from `users` service');
+      // Logout
+      await appRestClient.logout();
+    });
+
+    it('#4: Error Authenticates user', async () => {
+      try {
+        await loginLocal(appRestClient, 'error@test.com', 'anypass');
+        assert.ok(false, 'Error Authenticates user');
+      } catch (error) {
+        console.error('Authentication error', error.message);
+        assert.ok(true, 'Error Authenticates user');
+      }
+    });
+
+    it('#5: Authentication client operations', async () => {
+      const auth = appRestClient.authentication;
+      // Login
+      await loginLocal(appRestClient, fakeUser.email, fakeUser.password);
+      let accessToken = await auth.getAccessToken();
+      assert.ok(accessToken, 'Created access token for user');
+      const feathersJwt = await auth.storage.getItem('feathers-jwt');
+      if(isLog) inspector('Get storage.feathersJwt:', feathersJwt);
+      assert.ok(accessToken === feathersJwt, 'Get access token from storage');
+      // reAuthenticate
+      await auth.reAuthenticate();
+      accessToken = await auth.getAccessToken();
+      assert.ok(accessToken, 'Created access token for user');
+      // removeAccessToken()
+      await auth.removeAccessToken();
+      accessToken = await auth.getAccessToken();
+      assert.ok(!accessToken, 'Remove access token from storage');
+      // Logout
+      await appRestClient.logout();
     });
   });
 });

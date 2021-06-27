@@ -13,7 +13,7 @@
       "googleId": "4943272568946688",
       "githubId": "5339869586915328",
       "loginAt": "1970-01-01T00:00:00.000Z",
-      "avatar": "/img/avatar/people_1.png"
+      "avatar": "https://cdn.fakercloud.com/avatars/mactopus_128.jpg"
     },
     {
       "_id": "60af3870270f24162c049c0a",
@@ -28,7 +28,7 @@
       "googleId": "352972223545344",
       "githubId": "3978578282676224",
       "loginAt": "1970-01-01T00:00:00.000Z",
-      "avatar": "/img/avatar/people_2.png"
+      "avatar": "https://cdn.fakercloud.com/avatars/mhesslow_128.jpg"
     },
     {
       "_id": "60af3870270f24162c049c0b",
@@ -43,7 +43,7 @@
       "googleId": "1346110658445312",
       "githubId": "8148342487908352",
       "loginAt": "1970-01-01T00:00:00.000Z",
-      "avatar": "/img/avatar/people_3.png"
+      "avatar": "https://cdn.fakercloud.com/avatars/guillemboti_128.jpg"
     }
   ],
   "roles": [
