@@ -11,19 +11,19 @@ module.exports = function (options = {}) {
     const addItems = async message => {
       // Get owner
       if(message.ownerId && message.ownerId !== dbNullIdValue()){
-        owner = await app.service('users').get(message.ownerId, params);
+        owner = await app.service('users').get(message.ownerId);
       }
       // Get user
       if(message.userId && message.userId !== dbNullIdValue()){
-        user = await app.service('users').get(message.userId, params);
+        user = await app.service('users').get(message.userId);
       }
       // Get team
       if(message.teamId && message.teamId !== dbNullIdValue()){
-        team = await app.service('teams').get(message.teamId, params);
+        team = await app.service('teams').get(message.teamId);
       }
       // Get role
       if(message.roleId && message.roleId !== dbNullIdValue()){
-        role = await app.service('roles').get(message.roleId, params);
+        role = await app.service('roles').get(message.roleId);
       }
       
       // Merge the message content to include the `owner`, `user`, `team`, `role` objects

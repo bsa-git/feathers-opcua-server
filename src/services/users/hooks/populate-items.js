@@ -8,8 +8,12 @@ module.exports = function (options = {}) {
     const { app, method, result, params } = context;
     // Function that adds the items to a single user object
     const addItems = async data => {
-      const role = await app.service('roles').get(data.roleId, params);
-      const userProfile = await app.service('user-profiles').get(data.profileId, params);
+      // const roleId = data.roleId.toString();
+      // const role = await app.service('roles').get(roleId, params);
+      const role = await app.service('roles').get(data.roleId);
+      // const profileId = data.profileId.toString();
+      // const userProfile = await app.service('user-profiles').get(profileId, params);
+      const userProfile = await app.service('user-profiles').get(data.profileId);
       // Merge the data content to include the `role` and `userProfile` objects
       return {
         ...data,

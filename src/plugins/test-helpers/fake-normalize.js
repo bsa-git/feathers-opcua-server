@@ -92,6 +92,9 @@ fakeDataChatMessages = idsUpdate(fakeDataChatMessages);
 let fakeDataOpcuaTags = fakeData['opcuaTags'];
 fakeDataOpcuaTags = idsUpdate(fakeDataOpcuaTags);
 
+let fakeDataMessages = fakeData['messages'];
+fakeDataMessages = idsUpdate(fakeDataMessages);
+
 const rolesUpdate = () => {
   const roles = Auth.getBaseRoles();
   const roleKeys = Object.keys(Auth.getBaseRoles());
@@ -179,6 +182,14 @@ const chatMessagesUpdate = () => {
   if (isDebug) console.log(chalk.yellow('ChatMessages Update: Ok'));
 };
 
+const messagesUpdate = () => {
+  fakeDataUsers.forEach((user, index) => {
+    fakeDataMessages[index]['userId'] = user[idFieldUser];
+  });
+  if (isLog) inspector('fake-service.messagesUpdate.fakeDataMessages:', fakeDataMessages);
+  if (isDebug) console.log(chalk.yellow('Messages Update: Ok'));
+};
+
 const fakeDataUpdate = (isWrite) => {
   Object.assign(fakeData, {
     users: fakeDataUsers,
@@ -188,7 +199,8 @@ const fakeDataUpdate = (isWrite) => {
     userProfiles: fakeDataUserProfiles,
     logMessages: fakeDataLogMessages,
     chatMessages: fakeDataChatMessages,
-    opcuaTags: fakeDataOpcuaTags
+    opcuaTags: fakeDataOpcuaTags,
+    messages: fakeDataMessages
   });
   if (isWrite) {
     writeJsonFileSync(`${appRoot}/seeds/fake-data.json`, fakeData);
@@ -214,6 +226,7 @@ module.exports = function fakeNormalize(isWrite = false) {
   userTeamsUpdate();
   logMessagesUpdate();
   chatMessagesUpdate();
+  messagesUpdate();
   // All fake data update
   fakeDataUpdate(isWrite);
   if (isDebug) console.log(chalk.yellow('Finish: Fake-Service!'));

@@ -8,8 +8,8 @@ module.exports = function (options = {}) {
     const { app, method, result, params } = context;
     // Function that adds the team and user to a single user-teams object
     const addItems = async data => {
-      const team = await app.service('teams').get(data.teamId, params);
-      const user = await app.service('users').get(data.userId, params);
+      const team = await app.service('teams').get(data.teamId);
+      const user = await app.service('users').get(data.userId);
       
       // Merge the data content to include the `team` and `user` objects
       return {

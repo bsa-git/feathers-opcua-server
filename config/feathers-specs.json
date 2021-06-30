@@ -1,8 +1,14 @@
 {
   "app": {
     "envTestModeName": "test",
-    "envAllowingSeedData": ["development", "test"],
-    "envAllowingOpcuaBootstrap": ["development", "production"],
+    "envAllowingSeedData": [
+      "development",
+      "test"
+    ],
+    "envAllowingOpcuaBootstrap": [
+      "development",
+      "production"
+    ],
     "seedData": true,
     "name": "feathers-opcua-server",
     "description": "Project feathers-opcua-server",
@@ -21,18 +27,15 @@
       "adapter": "nedb",
       "path": "/users",
       "isAuthEntity": true,
-      "requiresAuth": true
-    },
-    "roles": {
-      "name": "roles",
-      "nameSingular": "role",
-      "subFolder": "",
-      "fileName": "roles",
-      "adapter": "nedb",
-      "path": "/roles",
-      "isAuthEntity": false,
       "requiresAuth": true,
-      "graphql": true
+      "overriddenAuth": {
+        "create": "noauth",
+        "get": "auth",
+        "find": "auth",
+        "update": "auth",
+        "patch": "auth",
+        "remove": "auth"
+      }
     },
     "userProfiles": {
       "name": "userProfiles",
@@ -43,7 +46,32 @@
       "path": "/user-profiles",
       "isAuthEntity": false,
       "requiresAuth": true,
-      "graphql": true
+      "overriddenAuth": {
+        "create": "noauth",
+        "get": "auth",
+        "find": "auth",
+        "update": "auth",
+        "patch": "auth",
+        "remove": "auth"
+      }
+    },
+    "roles": {
+      "name": "roles",
+      "nameSingular": "role",
+      "subFolder": "",
+      "fileName": "roles",
+      "adapter": "nedb",
+      "path": "/roles",
+      "isAuthEntity": false,
+      "requiresAuth": true,
+      "overriddenAuth": {
+        "create": "auth",
+        "get": "auth",
+        "find": "auth",
+        "update": "auth",
+        "patch": "auth",
+        "remove": "auth"
+      }
     },
     "teams": {
       "name": "teams",
@@ -53,7 +81,15 @@
       "adapter": "nedb",
       "path": "/teams",
       "isAuthEntity": false,
-      "requiresAuth": true
+      "requiresAuth": true,
+      "overriddenAuth": {
+        "create": "auth",
+        "get": "auth",
+        "find": "auth",
+        "update": "auth",
+        "patch": "auth",
+        "remove": "auth"
+      }
     },
     "userTeams": {
       "name": "userTeams",
@@ -63,7 +99,15 @@
       "adapter": "nedb",
       "path": "/user-teams",
       "isAuthEntity": false,
-      "requiresAuth": true
+      "requiresAuth": true,
+      "overriddenAuth": {
+        "create": "auth",
+        "get": "auth",
+        "find": "auth",
+        "update": "auth",
+        "patch": "auth",
+        "remove": "auth"
+      }
     },
     "logMessages": {
       "name": "logMessages",
@@ -73,7 +117,15 @@
       "adapter": "nedb",
       "path": "/log-messages",
       "isAuthEntity": false,
-      "requiresAuth": true
+      "requiresAuth": true,
+      "overriddenAuth": {
+        "create": "noauth",
+        "get": "auth",
+        "find": "auth",
+        "update": "auth",
+        "patch": "auth",
+        "remove": "auth"
+      }
     },
     "chatMessages": {
       "name": "chatMessages",
@@ -83,7 +135,33 @@
       "adapter": "nedb",
       "path": "/chat-messages",
       "isAuthEntity": false,
-      "requiresAuth": true
+      "requiresAuth": true,
+      "overriddenAuth": {
+        "create": "auth",
+        "get": "auth",
+        "find": "auth",
+        "update": "auth",
+        "patch": "auth",
+        "remove": "auth"
+      }
+    },
+    "messages": {
+      "name": "messages",
+      "nameSingular": "message",
+      "subFolder": "",
+      "fileName": "messages",
+      "adapter": "nedb",
+      "path": "/messages",
+      "isAuthEntity": false,
+      "requiresAuth": true,
+      "overriddenAuth": {
+        "create": "auth",
+        "get": "auth",
+        "find": "auth",
+        "update": "auth",
+        "patch": "auth",
+        "remove": "auth"
+      }
     },
     "opcuaTags": {
       "name": "opcuaTags",
@@ -93,7 +171,15 @@
       "adapter": "nedb",
       "path": "/opcua-tags",
       "isAuthEntity": false,
-      "requiresAuth": false
+      "requiresAuth": false,
+      "overriddenAuth": {
+        "create": "noauth",
+        "get": "noauth",
+        "find": "noauth",
+        "update": "noauth",
+        "patch": "noauth",
+        "remove": "noauth"
+      }
     }
   },
   "hooks": {

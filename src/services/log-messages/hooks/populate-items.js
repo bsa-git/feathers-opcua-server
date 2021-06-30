@@ -12,11 +12,11 @@ module.exports = function (options = {}) {
     const addItems = async message => {
       // Get owner
       if(message.ownerId && message.ownerId !== dbNullIdValue()){
-        owner = await app.service('users').get(message.ownerId, params);
+        owner = await app.service('users').get(message.ownerId);
       }
       // Get user
       if(message.userId && message.userId !== dbNullIdValue()){
-        user = await app.service('users').get(message.userId, params);
+        user = await app.service('users').get(message.userId);
       }
       
       // Merge the message content to include the `owner` and `user` objects

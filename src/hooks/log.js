@@ -19,8 +19,9 @@ module.exports = function (isTest = false) {
     hh.showDebugInfo('', isLog);
     hh.showDebugError();
 
-    // hh.showDebugInfo('authentication.remove.after', true);
+    hh.showDebugInfo('authentication', true);
     // hh.showDebugInfo('messages', true);
+    // hh.showDebugInfo('users.find', true);
 
     // Is log msg enable
     const isLogMsgEnable = isTest ||

@@ -1,4 +1,4 @@
-/* eslint-disable require-atomic-updates */
+/* eslint-disable no-unused-vars */
 module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
   return async context => {
     // Get `app`, `method`, `params` and `result` from the hook context
@@ -7,7 +7,7 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
     const addItems = async message => {
       // Get the user based on their id, pass the `params` along so
       // that we get a safe version of the user data
-      const user = await app.service('users').get(message.userId, params);
+      const user = await app.service('users').get(message.userId);
 
       // Merge the message content to include the `user` object
       return {
