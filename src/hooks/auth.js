@@ -1,7 +1,6 @@
 const errors = require('@feathersjs/errors');
-const {inspector} = require('../plugins/lib');
-const {AuthServer} = require('../plugins/auth');
-// const { authenticate } = require('@feathersjs/authentication').hooks;
+const { inspector } = require('../plugins/lib');
+const { AuthServer, defineAbilitiesFor } = require('../plugins/auth');
 
 const debug = require('debug')('app:hooks.auth');
 
@@ -16,7 +15,7 @@ const isDebug = false;
 const authCheck = function (isTest = false) {
   return async context => {
     const authServer = new AuthServer(context);
-    if(isTest || (!AuthServer.isTest() && authServer.contextProvider)){
+    if (isTest || (!AuthServer.isTest() && authServer.contextProvider)) {
       if (isDebug) debug('authCheck: Start');
       const isAccess = await authServer.isAccess();
       if (!isAccess) {
@@ -35,11 +34,11 @@ const authCheck = function (isTest = false) {
 const loginCheck = function (isTest = false) {
   return async context => {
     const authServer = new AuthServer(context);
-    if(isTest || (!AuthServer.isTest() && authServer.contextProvider)){
+    if (isTest || (!AuthServer.isTest() && authServer.contextProvider)) {
       if (isDebug) debug('loginCheck: Start');
-      if(authServer.isMask('authentication.create.after')){
+      if (authServer.isMask('authentication.create.after')) {
         const isLogin = await authServer.isLogin();
-        if(!isLogin){
+        if (!isLogin) {
           throw new errors.Forbidden('Access to the login is denied because your account is not activated. Contact your administrator.');
         }
       }
@@ -56,9 +55,9 @@ const loginCheck = function (isTest = false) {
 const setLoginAt = function (isTest = false) {
   return async context => {
     const authServer = new AuthServer(context);
-    if(isTest || (!AuthServer.isTest() && authServer.contextProvider)){
+    if (isTest || (!AuthServer.isTest() && authServer.contextProvider)) {
       if (isDebug) debug('setLoginAt: Start');
-      if(authServer.isMask('authentication.create.after')){
+      if (authServer.isMask('authentication.create.after')) {
         await authServer.setLoginAt();
       }
     }
@@ -85,7 +84,26 @@ const payloadExtension = function (isTest = false) {
       // make sure params.payload exists
       context.params.payload = authServer.contextPayload || {};
       // merge in a `role` property
-      Object.assign(context.params.payload, {role: `${role.name ? role.name : ''}`});
+      Object.assign(context.params.payload, { role: `${role.name ? role.name : ''}` });
+    }
+    return context;
+  };
+};
+
+/**
+ * Ability extension hook
+ * @param isTest
+ * @return {Object}
+ */
+const abilityExtension = function (isTest = false) {
+  return context => {
+    const isAbilityExtension = isTest ? true : !AuthServer.isTest();
+    if (isAbilityExtension) {
+      const { user } = context.result;
+      if (!user) return context;
+      const ability = defineAbilitiesFor(user);
+      context.result.ability = ability;
+      context.result.rules = ability.rules;
     }
     return context;
   };
@@ -95,5 +113,6 @@ module.exports = {
   authCheck,
   loginCheck,
   setLoginAt,
-  payloadExtension
+  payloadExtension,
+  abilityExtension
 };

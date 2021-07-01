@@ -7,7 +7,7 @@ const { inspector, readJsonFileSync, stripSpecific, isTrue, appRoot } = require(
 const typeOf = require('../lib/type-of');
 const debug = require('debug')('app:plugins.auth-server.class');
 
-const isLog = true;
+const isLog = false;
 const isDebug = false;
 
 /**

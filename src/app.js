@@ -28,6 +28,9 @@ const authentication = require('./authentication');
 
 const mongoose = require('./mongoose');
 
+// Add access control with CASL to your feathers application
+const casl = require('feathers-casl');
+
 const app = express(feathers());
 
 // Load app configuration
@@ -56,6 +59,9 @@ app.configure(authentication);
 app.configure(services);
 // Set up event channels (see channels.js)
 app.configure(channels);
+
+// The casl() function can be configured, to provide app wide options to feathers-casl 
+app.configure(casl());
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound());

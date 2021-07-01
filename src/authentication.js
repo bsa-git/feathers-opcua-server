@@ -1,7 +1,7 @@
 const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
 const { LocalStrategy } = require('@feathersjs/authentication-local');
 const { expressOauth, OAuthStrategy } = require('@feathersjs/authentication-oauth');
-const debug = require('debug')('app:service.authentication');
+const debug = require('debug')('app:authentication');
 
 const isDebug = false;
 
