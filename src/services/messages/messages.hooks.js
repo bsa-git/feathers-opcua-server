@@ -1,15 +1,18 @@
+/* eslint-disable no-unused-vars */
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { authorize } = require('feathers-casl').hooks;
 const commonHooks = require('feathers-hooks-common');
 const { validateCreate, validateUpdate, validatePatch } = require('./messages.validate');
-const { HookHelper } = require('../../plugins');
+const { HookHelper } = require('../../plugins/hook-helpers');
+const { getEnvAdapterDB } = require('../../plugins/db-helpers');
 const processItem = require('./hooks/process-item');
 const populateItems = require('./hooks/populate-items');
-
 
 const loConcat = require('lodash/concat');
 
 const { iff } = commonHooks;
+
+const authorizeHook = authorize({ adapter: getEnvAdapterDB() });
 
 let moduleExports = {
   before: {
@@ -23,7 +26,7 @@ let moduleExports = {
   },
 
   after: {
-    all: [authorize({ adapter: 'feathers-mongoose' }), iff(HookHelper.isPopulateItems, populateItems())],
+    all: [authorizeHook, iff(HookHelper.isPopulateItems, populateItems())],
     find: [],
     get: [],
     create: [],
@@ -43,11 +46,10 @@ let moduleExports = {
   }
 };
 
-// Add schema validate
-moduleExports.before.find = loConcat(moduleExports.before.create, authorize({ adapter: 'feathers-mongoose' }));
-moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create, authorize({ adapter: 'feathers-mongoose' }));
-moduleExports.before.update = loConcat([validateUpdate()], moduleExports.before.update, authorize({ adapter: 'feathers-mongoose' }));
-moduleExports.before.patch = loConcat([validatePatch()], moduleExports.before.patch, authorize({ adapter: 'feathers-mongoose' }));
-moduleExports.before.remove = loConcat(moduleExports.before.create, authorize({ adapter: 'feathers-mongoose' }));
+moduleExports.before.find = loConcat(moduleExports.before.find, authorizeHook);
+moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create, authorizeHook);
+moduleExports.before.update = loConcat([validateUpdate()], moduleExports.before.update, authorizeHook);
+moduleExports.before.patch = loConcat([validatePatch()], moduleExports.before.patch, authorizeHook);
+moduleExports.before.remove = loConcat(moduleExports.before.remove, authorizeHook);
 
 module.exports = moduleExports;

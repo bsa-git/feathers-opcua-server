@@ -168,8 +168,7 @@
     "hostTypeDB": "mongodb",
     "include": {
       "tests": [
-        "mssql-tedious.test2.js",
-        "log-messages.test.js"
+        "mssql-tedious.test2.js"
       ]
     },
     "paths": {

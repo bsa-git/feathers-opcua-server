@@ -73,12 +73,12 @@ const getMssqlConfigFromEnv = (config, prefix) => {
     server = idParts[0];
     database = idParts[1];
   }
-  
+
   _config.server = server;
   _config.options.database = database;
   _config.authentication.options.userName = user;
   _config.authentication.options.password = pass;
-  if(isLog) inspector('getMssqlConfigFromEnv._config:', _config);
+  if (isLog) inspector('getMssqlConfigFromEnv._config:', _config);
   return _config;
 };
 
@@ -99,20 +99,42 @@ const dbNullIdValue = function () {
  * @name getEnvTypeDB
  * Get DB type from env and host config
  * @returns {String}
+ * e.g. 'nedb'|'mongodb'
  */
 const getEnvTypeDB = function () {
   const myConfigs = getOpcuaConfigsForMe();
   const myConfig = myConfigs.find(item => item.hostTypeDB);
-  return myConfig? myConfig.hostTypeDB : process.env.DEFAULT_TYPE_DB;
+  return myConfig ? myConfig.hostTypeDB : process.env.DEFAULT_TYPE_DB;
 };
 
+/**
+ * @name getEnvTypeDB
+ * Get DB adapter from env and host config
+ * @returns {String}
+ * e.g. 'feathers-nedb'|'feathers-mongoose'
+ */
+const getEnvAdapterDB = function () {
+  let envAdapterDB = 'feathers-nedb';
+  const envTypeDB = getEnvTypeDB();
+  switch (envTypeDB) {
+  case 'nedb':
+    envAdapterDB = 'feathers-nedb';
+    break;
+  case 'mongodb':
+    envAdapterDB = 'feathers-mongoose';
+    break;
+  default:
+    break;
+  }
+  return envAdapterDB;
+};
 
 /**
    * Get id field
    * @param {Array|Object} items
    * @return {string}
    */
-const getIdField = function(items) {
+const getIdField = function (items) {
   let idField = '';
   if (Array.isArray(items) && items.length) {
     idField = 'id' in items[0] ? 'id' : '_id';
@@ -130,5 +152,6 @@ module.exports = {
   getMssqlConfigFromEnv,
   dbNullIdValue,
   getEnvTypeDB,
+  getEnvAdapterDB,
   getIdField
 };

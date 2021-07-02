@@ -1,9 +1,13 @@
 /* eslint-disable no-unused-vars */
 const { authenticate } = require('@feathersjs/authentication').hooks;
+const { authorize } = require('feathers-casl').hooks;
+const { getEnvAdapterDB } = require('../../plugins/db-helpers');
+
+const authorizeHook = authorize({ adapter: getEnvAdapterDB() });
 
 module.exports = {
   before: {
-    all: [],
+    all: [authorizeHook],
     find: [],
     get: [],
     create: [],
@@ -13,7 +17,7 @@ module.exports = {
   },
 
   after: {
-    all: [],
+    all: [authorizeHook],
     find: [],
     get: [],
     create: [],

@@ -12,7 +12,7 @@ const defineRulesFor = (user) => {
   // also see https://casl.js.org/v5/en/guide/define-rules
   const { can, cannot, rules } = new AbilityBuilder();
 
-  if (user.role && user.role.alias === 'isAdministrator') {
+  if (user.role && user.roleAlias === 'isAdministrator') {
     // Administrator can do evil
     can('manage', 'all');
     cannot('create', 'messages');

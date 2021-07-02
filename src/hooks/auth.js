@@ -1,6 +1,6 @@
 const errors = require('@feathersjs/errors');
 const { inspector } = require('../plugins/lib');
-const { AuthServer, defineAbilitiesFor } = require('../plugins/auth');
+const { AuthServer } = require('../plugins/auth');
 
 const debug = require('debug')('app:hooks.auth');
 
@@ -95,24 +95,24 @@ const payloadExtension = function (isTest = false) {
  * @param isTest
  * @return {Object}
  */
-const abilityExtension = function (isTest = false) {
-  return context => {
-    const isAbilityExtension = isTest ? true : !AuthServer.isTest();
-    if (isAbilityExtension) {
-      const { user } = context.result;
-      if (!user) return context;
-      const ability = defineAbilitiesFor(user);
-      context.result.ability = ability;
-      context.result.rules = ability.rules;
-    }
-    return context;
-  };
-};
+// const abilityExtension = function (isTest = false) {
+//   return context => {
+//     const isAbilityExtension = isTest ? true : !AuthServer.isTest();
+//     if (isAbilityExtension) {
+//       const { user } = context.result;
+//       if (!user) return context;
+//       const ability = defineAbilitiesFor(user);
+//       context.result.ability = ability;
+//       context.result.rules = ability.rules;
+//     }
+//     return context;
+//   };
+// };
 
 module.exports = {
   authCheck,
   loginCheck,
   setLoginAt,
   payloadExtension,
-  abilityExtension
+  // abilityExtension
 };

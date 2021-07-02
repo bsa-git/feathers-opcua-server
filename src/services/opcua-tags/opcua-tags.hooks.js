@@ -1,7 +1,11 @@
+const { authorize } = require('feathers-casl').hooks;
 const { validateCreate, validateUpdate, validatePatch } = require('./opcua-tags.validate');
 const processItem = require('./hooks/process-item');
+const { getEnvAdapterDB } = require('../../plugins/db-helpers');
 
 const loConcat = require('lodash/concat');
+
+const authorizeHook = authorize({ adapter: getEnvAdapterDB() });
 
 let moduleExports = {
   before: {
@@ -15,7 +19,7 @@ let moduleExports = {
   },
 
   after: {
-    all: [],
+    all: [authorizeHook],
     find: [],
     get: [],
     create: [],
@@ -35,9 +39,10 @@ let moduleExports = {
   }
 };
 
-// Add schema validate
-moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create);
-moduleExports.before.update = loConcat([validateUpdate()], moduleExports.before.update);
-moduleExports.before.patch = loConcat([validatePatch()], moduleExports.before.patch);
+moduleExports.before.find = loConcat(moduleExports.before.find, authorizeHook);
+moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create, authorizeHook);
+moduleExports.before.update = loConcat([validateUpdate()], moduleExports.before.update, authorizeHook);
+moduleExports.before.patch = loConcat([validatePatch()], moduleExports.before.patch, authorizeHook);
+moduleExports.before.remove = loConcat(moduleExports.before.remove, authorizeHook);
 
 module.exports = moduleExports;

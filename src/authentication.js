@@ -1,6 +1,7 @@
 const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
 const { LocalStrategy } = require('@feathersjs/authentication-local');
 const { expressOauth, OAuthStrategy } = require('@feathersjs/authentication-oauth');
+const hooks = require('./services/authentication/authentication.hooks');
 const debug = require('debug')('app:authentication');
 
 const isDebug = false;
@@ -52,5 +53,9 @@ module.exports = app => {
   authentication.register('google', new GoogleStrategy());
 
   app.use('/authentication', authentication);
+  // Get our initialized service so that we can register hooks
+  const service = app.service('authentication');
+  service.hooks(hooks);
+  
   app.configure(expressOauth());
 };

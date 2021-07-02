@@ -4,6 +4,7 @@ const os = require('os');
 const Path = require('path');
 const join = Path.join;
 const moment = require('moment');
+const dirTree = require('directory-tree');
 const {
   appRoot,
   getDate,
@@ -120,6 +121,20 @@ const getPathToArray = function (path) {
     path = join(...path);
   }
   return path.split(Path.sep);
+};
+
+/**
+ * @method getDirectoryList
+ * @param {String|Array} path
+ * @returns {String[]} 
+ */
+const getDirectoryList = function (path) {
+  
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  const dirList = dirTree(path).children.filter(child => child.type === 'directory').map(child => child.name);
+  return dirList;
 };
 
 /**
@@ -722,6 +737,7 @@ module.exports = {
   getPathDirname,
   getPathParse,
   getPathToArray,
+  getDirectoryList,
   toPathWithSep,
   doesFileExist,
   doesDirExist,

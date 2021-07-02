@@ -17,6 +17,8 @@ describe('<<=== Messages Service Test (messages.test.js) ===>>', () => {
 
   it('#2: Server creates and processes message, adds user information', async () => {
     
+    await removeDataFromServices(app, 'messages');
+
     await removeDataFromServices(app, 'users');
     
     // Create a new user we can use for testing

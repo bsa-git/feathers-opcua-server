@@ -1,14 +1,18 @@
 /* eslint-disable no-unused-vars */
 const { authenticate } = require('@feathersjs/authentication').hooks;
+const { authorize } = require('feathers-casl').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 const { validateCreate, validateUpdate, validatePatch } = require('./users.validate');
 const commonHooks = require('feathers-hooks-common');
 const { HookHelper, AuthServer } = require('../../plugins');
+const { getEnvAdapterDB } = require('../../plugins/db-helpers');
 const processItem = require('./hooks/process-item');
 const populateItems = require('./hooks/populate-items');
 const accountsProfileData = require('./hooks/accounts-profile-data');
 
 const loConcat = require('lodash/concat');
+
+const authorizeHook = authorize({ adapter: getEnvAdapterDB() });
 
 const { iff } = commonHooks;
 const {preventChanges, discard, disallow, isProvider} = commonHooks;
@@ -47,6 +51,7 @@ let moduleExports = {
 
   after: {
     all: [
+      authorizeHook,
       iff(HookHelper.isPopulateItems, populateItems()), 
       // Make sure the password field is never sent to the client
       // Always must be the last hook
@@ -88,9 +93,11 @@ let moduleExports = {
 // )), [accountsProfileData(), validatePatch()], moduleExports.before.patch);
 
 
-moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create);
-moduleExports.before.update = loConcat([validateUpdate()], moduleExports.before.update);
-moduleExports.before.patch = loConcat([validatePatch()], moduleExports.before.patch);
+moduleExports.before.find = loConcat(moduleExports.before.find, authorizeHook);
+moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create, authorizeHook);
+moduleExports.before.update = loConcat([validateUpdate()], moduleExports.before.update, authorizeHook);
+moduleExports.before.patch = loConcat([validatePatch()], moduleExports.before.patch, authorizeHook);
+moduleExports.before.remove = loConcat(moduleExports.before.remove, authorizeHook);
 
 //---- AFTER ---
 // moduleExports.after.create = loConcat(moduleExports.after.create);
