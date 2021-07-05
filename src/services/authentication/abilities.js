@@ -1,5 +1,8 @@
 /* eslint-disable no-unused-vars */
 const { AbilityBuilder, createAliasResolver, makeAbilityFromRules } = require('feathers-casl');
+const { inspector } = require('../../plugins/lib');
+
+const isLog = false;
 
 // don't forget this, as `read` is used internally
 const resolveAction = createAliasResolver({
@@ -12,10 +15,12 @@ const defineRulesFor = (user) => {
   // also see https://casl.js.org/v5/en/guide/define-rules
   const { can, cannot, rules } = new AbilityBuilder();
 
-  if (user.role && user.roleAlias === 'isAdministrator') {
+  if(isLog) inspector('abilities.defineRulesFor.user:', user);
+
+  if (user.roleAlias === 'isAdministrator') {
     // Administrator can do evil
     can('manage', 'all');
-    cannot('create', 'messages');
+    // cannot('create', 'messages');
     return rules;
   }
 

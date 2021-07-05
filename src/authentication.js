@@ -53,9 +53,11 @@ module.exports = app => {
   authentication.register('google', new GoogleStrategy());
 
   app.use('/authentication', authentication);
+  
   // Get our initialized service so that we can register hooks
   const service = app.service('authentication');
   service.hooks(hooks);
   
+  // Configure express Oauth
   app.configure(expressOauth());
 };

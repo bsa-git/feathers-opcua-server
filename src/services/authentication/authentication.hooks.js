@@ -1,4 +1,7 @@
 const { defineAbilitiesFor } = require('./abilities');
+const { inspector } = require('../../plugins/lib');
+
+const isLog = false;
 
 module.exports = {
   before: {
@@ -15,9 +18,20 @@ module.exports = {
     find: [],
     get: [],
     create: [
-      context => {
+      async context => {
+        const { app } = context;
         const { user } = context.result;
+        if(isLog) inspector('authentication.hooks.user:', user);
         if (!user) return context;
+        // Set roleAlias for user
+        if(!user.roleAlias){
+          const service = app.service('roles');
+          const role =  await service.get(user.roleId);
+          if(isLog) inspector('authentication.hooks.role:', role);
+          user.roleAlias = role.alias;
+        }
+        if(isLog) inspector('authentication.hooks.user:', user);
+        // Set ability and rules properties
         const ability = defineAbilitiesFor(user);
         context.result.ability = ability;
         context.result.rules = ability.rules;

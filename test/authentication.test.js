@@ -35,7 +35,6 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
     //----------------------------------------------
 
     before(function (done) {
-      // this.timeout(10000);
       server = app.listen(port);
       server.once('listening', () => {
         setTimeout(async () => {
@@ -50,7 +49,6 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
     });
 
     after(function (done) {
-      // this.timeout(10000);
       server.close();
       setTimeout(() => { 
         if (isDebug) debug('Done after EndTest!');
