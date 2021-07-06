@@ -18,26 +18,35 @@ const defineRulesFor = (user) => {
   if(isLog) inspector('abilities.defineRulesFor.user:', user);
 
   if (user.roleAlias === 'isAdministrator') {
-    // Administrator can do evil
+    // Administrator can do all
     can('manage', 'all');
     // cannot('create', 'messages');
     return rules;
   }
 
-  // authentication.create; users.create; log-messages.create;
+  if (user.roleAlias === 'isGuest') {
+    // Guest can do all
+    can('manage', 'all');
+    // Cannot 'users' actions
+    cannot('update', 'users', ['roleId', 'profileId']);
+    cannot('delete', 'users');
+    // Cannot 'user-profiles' actions
+    cannot('update', 'user-profiles', {id: {$ne: user.profileId} });
+    cannot('delete', 'user-profiles');
 
-  can('read', 'users');
-  can('update', 'users', { id: user.id });
-  cannot('update', 'users', ['roleId'], { id: user.id });
-  cannot('delete', 'users', { id: user.id });
-
-  can('create', 'authentication');
-  can('delete', 'authentication');
-  can('create', 'user-profiles');
-  can('delete', 'log-messages');
-  can('delete', 'log-messages');
-  can('create', 'chat-messages');
-  can('create', 'opcua-tags');
+    // Cannot 'roles' actions
+    cannot('create', 'roles');
+    cannot('update', 'roles');
+    cannot('remove', 'roles');
+    // Cannot 'teams' actions
+    cannot('create', 'teams');
+    cannot('update', 'teams');
+    cannot('remove', 'teams');
+    // Cannot 'user-teams' actions
+    cannot('create', 'user-teams');
+    cannot('remove', 'user-teams');
+    return rules;
+  }
 
   return rules;
 };

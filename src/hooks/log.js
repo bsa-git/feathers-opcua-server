@@ -21,7 +21,7 @@ module.exports = function (isTest = false) {
 
     // hh.showDebugInfo('authentication', true);
     // hh.showDebugInfo('messages', true);
-    // hh.showDebugInfo('messages', true);
+    // hh.showDebugInfo('messages.create', true);
     // hh.showDebugInfo('users.find', true);
 
     // Is log msg enable

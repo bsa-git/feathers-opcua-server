@@ -3,9 +3,9 @@ const logger = require('./logger');
 const chalk = require('chalk');
 const app = require('./app');
 const seedData = require('./seed-data');
-const { 
-  opcuaBootstrap, 
-} = require('./plugins');
+const {
+  opcuaBootstrap,
+} = require('./plugins/opcua');
 
 const port = app.get('port');
 const server = app.listen(port);
@@ -17,9 +17,11 @@ process.on('unhandledRejection', (reason, p) => {
 server.on('listening', async () => {
   logger.info('Feathers application started on http://%s:%d', app.get('host'), port);
   logger.info('Feathers application started on env="%s"', app.get('env'));
-  
+
   // Start seed data
   await seedData(app);
   // Start opcua bootstrap
   await opcuaBootstrap(app);
+
+
 });

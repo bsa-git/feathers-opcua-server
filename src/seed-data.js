@@ -54,14 +54,18 @@ module.exports = async function (app) {
               idField = getIdField(finded);
               for (let index = 0; index < finded.length; index++) {
                 const item = finded[index];
-                deleted.push(await service.remove(item[idField]));
+                const deletedItem = await service.remove(item[idField]);
+                // if(name === 'messages') console.log('deletedItem:', deletedItem);
+                deleted.push(deletedItem);
               }
             }
             // Add items to service
             for (let index = 0; index < fakeData[name].length; index++) {
-              created.push(await service.create(fakeData[name][index]));
+              const item = fakeData[name][index];
+              const createdItem = await service.create(item);
+              // if(name === 'messages') console.log('createdItem:', createdItem);
+              created.push(createdItem);
             }
-
             console.log(`Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${created.length}.`);
           } catch (err) {
             console.log(`Error on seeding service ${name} on path ${path}`, err.message);
