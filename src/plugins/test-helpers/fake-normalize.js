@@ -92,6 +92,9 @@ fakeDataChatMessages = idsUpdate(fakeDataChatMessages);
 let fakeDataOpcuaTags = fakeData['opcuaTags'];
 fakeDataOpcuaTags = idsUpdate(fakeDataOpcuaTags);
 
+let fakeDataOpcuaValues = fakeData['opcuaValues'];
+fakeDataOpcuaValues = idsUpdate(fakeDataOpcuaValues);
+
 let fakeDataMessages = fakeData['messages'];
 fakeDataMessages = idsUpdate(fakeDataMessages);
 
@@ -182,6 +185,16 @@ const chatMessagesUpdate = () => {
   if (isDebug) console.log(chalk.yellow('ChatMessages Update: Ok'));
 };
 
+const opcuaValuesUpdate = () => {
+  fakeDataOpcuaTags.forEach((tag, index) => {
+    if(index > 0){
+      fakeDataOpcuaValues[index - 1]['tagId'] = tag[idFieldUser];
+    }
+  });
+  if (isLog) inspector('fake-service.opcuaValuesUpdate.fakeDataOpcuaValues:', fakeDataOpcuaValues);
+  if (isDebug) console.log(chalk.yellow('OpcuaValues Update: Ok'));
+};
+
 const messagesUpdate = () => {
   fakeDataUsers.forEach((user, index) => {
     fakeDataMessages[index]['userId'] = user[idFieldUser];
@@ -200,6 +213,7 @@ const fakeDataUpdate = (isWrite) => {
     logMessages: fakeDataLogMessages,
     chatMessages: fakeDataChatMessages,
     opcuaTags: fakeDataOpcuaTags,
+    opcuaValues: fakeDataOpcuaValues,
     messages: fakeDataMessages
   });
   if (isWrite) {
@@ -226,6 +240,7 @@ module.exports = function fakeNormalize(isWrite = false) {
   userTeamsUpdate();
   logMessagesUpdate();
   chatMessagesUpdate();
+  opcuaValuesUpdate();
   messagesUpdate();
   // All fake data update
   fakeDataUpdate(isWrite);

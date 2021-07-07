@@ -171,14 +171,32 @@
       "adapter": "nedb",
       "path": "/opcua-tags",
       "isAuthEntity": false,
-      "requiresAuth": false,
+      "requiresAuth": true,
       "overriddenAuth": {
-        "create": "noauth",
-        "get": "noauth",
-        "find": "noauth",
-        "update": "noauth",
-        "patch": "noauth",
-        "remove": "noauth"
+        "create": "auth",
+        "get": "auth",
+        "find": "auth",
+        "update": "auth",
+        "patch": "auth",
+        "remove": "auth"
+      }
+    },
+    "opcuaValues": {
+      "name": "opcuaValues",
+      "nameSingular": "opcuaValue",
+      "subFolder": "",
+      "fileName": "opcua-values",
+      "adapter": "nedb",
+      "path": "/opcua-values",
+      "isAuthEntity": false,
+      "requiresAuth": true,
+      "overriddenAuth": {
+        "create": "auth",
+        "get": "auth",
+        "find": "auth",
+        "update": "auth",
+        "patch": "auth",
+        "remove": "auth"
       }
     }
   },

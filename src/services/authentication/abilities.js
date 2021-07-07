@@ -23,31 +23,43 @@ const defineRulesFor = (user) => {
     // cannot('create', 'messages');
     return rules;
   }
+  
+  // Can 'users' actions
+  can('create', 'users');
+  can('read', 'users');
+  can('update', 'users', ['active', 'email', 'password', 'firstName', 'lastName', 'avatar'], {id: user.id});
 
-  if (user.roleAlias === 'isGuest') {
-    // Guest can do all
-    can('manage', 'all');
-    // Cannot 'users' actions
-    cannot('update', 'users', ['roleId', 'profileId']);
-    cannot('delete', 'users');
-    // Cannot 'user-profiles' actions
-    cannot('update', 'user-profiles', {id: {$ne: user.profileId} });
-    cannot('delete', 'user-profiles');
+  // Can 'user-profiles' actions
+  can('create', 'user-profiles');
+  can('update', 'user-profiles', {id: user.profileId });
 
-    // Cannot 'roles' actions
-    cannot('create', 'roles');
-    cannot('update', 'roles');
-    cannot('remove', 'roles');
-    // Cannot 'teams' actions
-    cannot('create', 'teams');
-    cannot('update', 'teams');
-    cannot('remove', 'teams');
-    // Cannot 'user-teams' actions
-    cannot('create', 'user-teams');
-    cannot('remove', 'user-teams');
-    return rules;
-  }
+  // Can 'roles' actions
+  can('read', 'roles');
 
+  // Can 'teams' actions
+  can('read', 'teams');
+
+  // Can 'user-teams' actions
+  can('read', 'user-teams');
+
+  // Can 'log-messages' actions
+  can('read', 'log-messages');
+
+  // Can 'chat-messages' actions
+  can('create', 'chat-messages');
+  can('read', 'chat-messages');
+  can('update', 'chat-messages', ['msg'], {ownerId: user.id });
+  can('remove', 'chat-messages', {ownerId: user.id });
+
+  // Can 'opcua-tags' actions
+  can('read', 'opcua-tags');
+
+  // Can 'messages' actions
+  can('create', 'messages');
+  can('read', 'messages');
+  can('update', 'messages', ['text'], {userId: user.id });
+  can('remove', 'messages', {userId: user.id });
+  
   return rules;
 };
 

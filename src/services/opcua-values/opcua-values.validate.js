@@ -1,3 +1,4 @@
+// Validation definitions for validateSchema hook for service `users`. (Can be re-generated.)
 const { validateSchema } = require('feathers-hooks-common');
 const merge = require('lodash/merge');
 const ajv = require('ajv');
@@ -6,13 +7,11 @@ const ID = 'string';
 
 let base = merge({},
   {
-    title: 'OpcuaTags',
-    description: 'OpcuaTags database.',
+    title: 'OpcuaValues',
+    description: 'OpcuaValues database.',
     fakeRecords: 3,
     required: [],
-    uniqueItemProperties: [
-      'browseName'
-    ],
+    uniqueItemProperties: [],
     properties: {
       id: {
         type: ID
@@ -20,62 +19,15 @@ let base = merge({},
       _id: {
         type: ID
       },
-      browseName: {
-        type: 'string'
-      },
-      displayName: {
-        type: 'string',
-      },
-      description: {
-        type: 'string'
-      },
-      type: {
-        type: 'string'
-      },
-      ownerName: {
-        type: 'string'
-      },
-      dataType: {
-        type: 'string'
-      },
-      hist: {
-        type: 'boolean'
-      },
-      group: {
-        type: 'boolean'
-      },
-      variableGetType: {
-        type: 'string'
-      },
-      getter: {
-        type: 'string'
-      },
-      getterParams: {
-        type: 'object',
-        properties: {
-          path: {type: 'string'},
-          fromFile: {type: 'string'},
-          interval: {type: 'number'},
-          dbEnv: {type: 'string'},
-          queryFunc: {type: 'string'},
-          queryParams: {
-            properties: {
-              scanerName: {type: 'string'}
-            }
-          }
+      tagId: {
+        type: ID,
+        faker: {
+          fk: 'opcuaValues:random'
         }
       },
-      valueParams: {
-        type: 'object',
-        properties: {
-          engineeringUnits: {type: 'string'},
-          engineeringUnitsRange: {
-            properties: {
-              low: {type: 'number'},
-              high: {type: 'number'}
-            }
-          }
-        }
+      value: {
+        faker: 'lorem.sentence',
+        type: 'string'
       }
     }
   }

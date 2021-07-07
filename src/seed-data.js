@@ -55,7 +55,6 @@ module.exports = async function (app) {
               for (let index = 0; index < finded.length; index++) {
                 const item = finded[index];
                 const deletedItem = await service.remove(item[idField]);
-                // if(name === 'messages') console.log('deletedItem:', deletedItem);
                 deleted.push(deletedItem);
               }
             }
@@ -63,7 +62,6 @@ module.exports = async function (app) {
             for (let index = 0; index < fakeData[name].length; index++) {
               const item = fakeData[name][index];
               const createdItem = await service.create(item);
-              // if(name === 'messages') console.log('createdItem:', createdItem);
               created.push(createdItem);
             }
             console.log(`Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${created.length}.`);

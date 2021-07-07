@@ -50,13 +50,15 @@ module.exports = async function (app, aServiceName, aAddFakeData = true) {
               idField = getIdField(finded);
               for (let index = 0; index < finded.length; index++) {
                 const item = finded[index];
-                deleted.push(await service.remove(item[idField]));
+                const deletedItem = await service.remove(item[idField]);
+                deleted.push(deletedItem);
               }
             }
             if (aAddFakeData) {
               // Add items to service
               for (let index = 0; index < fakeData[name].length; index++) {
-                created.push(await service.create(fakeData[name][index]));
+                const createdItem = await service.create(fakeData[name][index]);
+                created.push(createdItem);
               }
             }
             return aAddFakeData ? created : deleted;

@@ -47,28 +47,6 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
     stopListenPort(done);
   });
 
-  it('New user: created the service', async () => {
-    const service = app.service('users');
-    assert.ok(service, 'Users: registered the service');
-    // service create
-    const newUser = await service.create(userInfo);
-    if (isLog) inspector('Created User service:', newUser);
-    assert.ok(newUser, 'newUser: created the service');
-  });
-
-  it('authenticates user and creates accessToken', async () => {
-    const { user, accessToken } = await app.service('authentication').create({
-      strategy: 'local',
-      ...userInfo
-    });
-    opcuaUser = user;
-    opcuaAccessToken = accessToken;
-    if (isLog) inspector('Authenticates user:', opcuaUser);
-    if (isLog) inspector('Creates accessToken:', opcuaAccessToken);
-    assert.ok(accessToken, 'Created access token for user');
-    assert.ok(user, 'Includes user in authentication data');
-  });
-
   it('OPC-UA servers: registered the service', async () => {
     const service = await getServerService(app, id);
     assert.ok(service, 'OPC-UA servers: registered the service');
