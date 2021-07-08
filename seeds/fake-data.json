@@ -282,17 +282,39 @@
     {
       "_id": "60af3870270f24162c049c21",
       "tagId": "60af3870270f24162c049c1e",
-      "value": "{'01NH3_T4': 166.128945, '01NH3_P4': 6.123245}"
+      "tagName": "CH_M51::ValueFromFile",
+      "values": [
+        {
+          "key": "CH_M51::01AMIAK:01T4",
+          "value": 166.128945
+        },
+        {
+          "key": "CH_M51::01AMIAK:01P4_1",
+          "value": 6.123245
+        }
+      ]
     },
     {
       "_id": "60af3870270f24162c049c22",
       "tagId": "60af3870270f24162c049c1f",
-      "value": "166.128945"
+      "tagName": "CH_M51::01AMIAK:01T4",
+      "values": [
+        {
+          "key": "CH_M51::01AMIAK:01T4",
+          "value": 166.128945
+        }
+      ]
     },
     {
       "_id": "60af3870270f24162c049c23",
       "tagId": "60af3870270f24162c049c20",
-      "value": "6.12324521"
+      "tagName": "CH_M51::01AMIAK:01P4_1",
+      "values": [
+        {
+          "key": "CH_M51::01AMIAK:01P4_1",
+          "value": 6.123245
+        }
+      ]
     }
   ],
   "messages": [

@@ -20,14 +20,20 @@ let base = merge({},
         type: ID
       },
       tagId: {
-        type: ID,
-        faker: {
-          fk: 'opcuaValues:random'
-        }
+        type: ID
       },
-      value: {
-        faker: 'lorem.sentence',
+      tagName: {
         type: 'string'
+      },
+      values: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            key: {type: 'string'},
+            value: {type: ['string', 'number', 'integer', 'boolean']}
+          }
+        }
       }
     }
   }

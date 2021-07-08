@@ -45,7 +45,7 @@
     "srvServiceUrl": "http://10.60.0.220:3030",
     "clientServiceUrl": "http://10.60.0.220:3030",
     "clientScript": "startSubscriptionMonitor",
-    "subscription": "onChangedGroupHandler",
+    "subscription": "onChangedGroupHandlerForDB",
     "hostTypeDB": "mongodb",
     "security": {
       "mode": "SignAndEncrypt",

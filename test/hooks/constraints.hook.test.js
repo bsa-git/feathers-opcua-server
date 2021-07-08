@@ -473,5 +473,33 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       if (isLog) inspector('Data integrity for \'chat-messages\' service, when removing a record from \'users\' service.findChatMessagesAfter:', findChatMessagesAfter.data);
       assert.ok(findChatMessagesBefore.data.length > findChatMessagesAfter.data.length, 'Protection did not work to removing the data from service');
     });
+
+    it('#18: Data integrity when removing a record from \'opcua-tags\' service', async () => {
+      const index = fakes['opcuaTags'].length - 1;
+      const rec = fakes['opcuaTags'][index];
+      const idField = 'id' in rec ? 'id' : '_id';
+      const tagId = rec[idField];
+      // Get service
+      const opcuaValues = app.service('opcua-values');
+
+      // Get before services
+      const findOpcuaValuesBefore = await opcuaValues.find({query: {tagId: tagId}});
+      if (isLog) inspector('Data integrity for \'opcua-values\' service, when removing a record from \'opcua-tags\' service.findOpcuaValuesBefore:', findOpcuaValuesBefore.data);
+
+      // Run constraints hook
+      contextAfter.path = 'opcua-tags';
+      contextAfter.method = 'remove';
+      contextAfter.service = app.service('opcua-tags');
+      contextAfter.result = {
+        ...rec
+      };
+      await constraints(true)(contextAfter);
+
+      // Check constraints
+      const findOpcuaValuesAfter = await opcuaValues.find({query: {tagId: tagId}});
+      if (isLog) inspector('Data integrity for \'opcua-values\' service, when removing a record from \'opcua-tags\' service.findOpcuaValuesAfter:', findOpcuaValuesAfter.data);
+      assert.ok(findOpcuaValuesBefore.data.length > findOpcuaValuesAfter.data.length, 'Protection did not work to removing the data from service');
+    });
+
   });
 });

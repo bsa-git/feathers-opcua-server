@@ -547,6 +547,8 @@ module.exports = function opcuaClientMixins(service, path) {
     let subscriptionHandler = null;
     //------------------------------------
     const opcuaClient = await service.get(id);
+    itemToMonitor.app = service.app;
+    
 
     if (subscriptionHandlerName) {
       subscriptionHandler = getSubscriptionHandler(id, subscriptionHandlerName);
