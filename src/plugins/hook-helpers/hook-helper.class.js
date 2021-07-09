@@ -112,8 +112,8 @@ class HookHelper {
 
   /**
    * Show debug records
-   * @param mask // 'authentication.create.after'
-   * @param show
+   * @param {String} mask // 'authentication.create.after'
+   * @param {Boolean} show
    */
   showDebugRecords(mask = '', show = true) {
     if (this.contextError) return;
@@ -159,8 +159,8 @@ class HookHelper {
 
   /**
    * Get id field
-   * @param items {Array || Object}
-   * @return {string}
+   * @param {Array|Object} items
+   * @return {String}
    */
   static getIdField(items) {
     let idField = '';
@@ -175,7 +175,7 @@ class HookHelper {
 
   /**
    * Determine if environment allows test
-   * @return {boolean}
+   * @return {Boolean}
    */
   static isTest() {
     // Get feathers-specs data
@@ -266,7 +266,7 @@ class HookHelper {
    * Merge items
    * @param records {Array || Object}
    * @param source {Object}
-   * @return {Array || Object}
+   * @return {Array|Object}
    */
   static mergeItems(records, source = {}) {
     let _records;
@@ -280,7 +280,7 @@ class HookHelper {
 
   /**
    * Merge records
-   * @param source {Object}
+   * @param {Object} source
    */
   mergeRecords(source = {}) {
     if (Array.isArray(this.contextRecords)) {
@@ -292,8 +292,8 @@ class HookHelper {
 
   /**
    * Get pick records
-   * @param fn
-   * @return {Array||Object}
+   * @param {Function} fn
+   * @return {Array|Object}
    */
   getPickRecords(fn) {
     let _records;
@@ -307,8 +307,8 @@ class HookHelper {
 
   /**
    * For each records
-   * @param fn {Function}
-   * @return {Promise.<void>}
+   * @param {Function} fn 
+   * @return {Promise}
    */
   async forEachRecords(fn) {
     // const _fn = fn.bind(this);
@@ -335,9 +335,11 @@ class HookHelper {
 
   /**
    * Get item
-   * @param path
-   * @param id
-   * @return {Promise.<*>}
+   * @async
+   * 
+   * @param {String} path
+   * @param {String} id
+   * @return {Object}
    */
   async getItem(path = '', id = null) {
     const service = this.app.service(path);
@@ -352,9 +354,11 @@ class HookHelper {
 
   /**
    * Find items
-   * @param path
-   * @param query
-   * @return {Promise.<*>}
+   * @async
+   * 
+   * @param {String} path
+   * @param {Object} query
+   * @return {Object[]}
    */
   async findItems(path = '', query = {}) {
     const service = this.app.service(path);
@@ -370,9 +374,11 @@ class HookHelper {
 
   /**
    * Find all items
-   * @param path
-   * @param query
-   * @return {Promise.<*>}
+   * @async
+   * 
+   * @param {String} path
+   * @param {Object} query
+   * @return {Object[]}
    */
   async findAllItems(path = '', query = {}) {
     const service = this.app.service(path);
@@ -389,9 +395,11 @@ class HookHelper {
 
   /**
    * Get count items
-   * @param path
-   * @param query
-   * @return {Promise.<*>}
+   * @async
+   * 
+   * @param {String} path
+   * @param {Object} query
+   * @return {Number}
    */
   async getCountItems(path = '', query = {}) {
     const service = this.app.service(path);
@@ -408,24 +416,17 @@ class HookHelper {
 
   /**
    * Remove items
-   * @param path
-   * @param query
-   * @return {Promise.<*>}
+   * @async
+   * 
+   * @param {String} path
+   * @param {Object} query
+   * @return {Object[]}
    */
   async removeItems(path = '', query = {}) {
     let findResults = [], deleteResults = [];
     const service = this.app.service(path);
     if (service) {
-      // Delete items from service
-      findResults = await service.find({ query });
-      findResults = findResults.data;
-      if (findResults.length) {
-        const idField = HookHelper.getIdField(findResults);
-        for (let index = 0; index < findResults.length; index++) {
-          const item = findResults[index];
-          deleteResults.push(await service.remove(item[idField]));
-        }
-      }
+      deleteResults = await service.remove(null, { query });
       if (isLog) inspector(`removeItems(path='${path}', query=${JSON.stringify(query)}).removeResults:`, deleteResults);
       return deleteResults;
     } else {
@@ -435,9 +436,11 @@ class HookHelper {
 
   /**
    * Remove item
+   * @async
+   * 
    * @param {String} path
    * @param {String} id
-   * @return {Promise}
+   * @return {Object}
    */
   async removeItem(path = '', id = null) {
     // id = id.toString();
@@ -452,26 +455,42 @@ class HookHelper {
   }
 
   /**
-   * Patch items
-   * @param path
-   * @param data
-   * @param query
-   * @return {Promise.<*>}
+   * Patch item
+   * @async
+   * 
+   * @param {String} path
+   * @param {String} id
+   * @param {Object} data
+   * @return {Object}
    */
-  async patchItems(path = '', data = {}, query = {}) {
-    let findResults = [], patchResults = [];
+  async patchItem(path = '', id = '', data = {}) {
+    let patchResults = {};
     //--------------------------------------
     const service = this.app.service(path);
     if (service) {
-      findResults = await service.find({ query });
-      findResults = findResults.data;
-      if (findResults.length) {
-        const idField = HookHelper.getIdField(findResults);
-        for (let index = 0; index < findResults.length; index++) {
-          const item = findResults[index];
-          patchResults.push(await service.patch(item[idField], data));
-        }
-      }
+      patchResults = await service.patch(id, data);
+      if (isLog) inspector(`patchItems(path='${path}', data=${JSON.stringify(data)}, patchResults:`, patchResults);
+      return patchResults;
+    } else {
+      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
+    }
+  }
+
+  /**
+   * Patch items
+   * @async
+   * 
+   * @param {String} path
+   * @param {Object} data
+   * @param {Object} query
+   * @return {Object[]}
+   */
+  async patchItems(path = '', data = {}, query = {}) {
+    let patchResults = [];
+    //--------------------------------------
+    const service = this.app.service(path);
+    if (service) {
+      patchResults = await service.patch(null, data, {query});
       if (isLog) inspector(`patchItems(path='${path}', data=${JSON.stringify(data)}, query=${JSON.stringify(query)}).patchResults:`, patchResults);
       return patchResults;
     } else {
@@ -481,9 +500,11 @@ class HookHelper {
 
   /**
    * Create item
-   * @param path
-   * @param data
-   * @return {Promise.<*>}
+   * @async
+   * 
+   * @param {String} path
+   * @param {Object} data
+   * @return {Object}
    */
   async createItem(path = '', data = {}) {
     const service = this.app.service(path);
@@ -497,10 +518,31 @@ class HookHelper {
   }
 
   /**
+   * Create items
+   * @async
+   * 
+   * @param {String} path
+   * @param {Object[]} data
+   * @return {Object[]}
+   */
+  async createItems(path = '', data = []) {
+    const service = this.app.service(path);
+    if (service) {
+      const createResults = await service.create(data);
+      if (isLog) inspector(`createItem(path='${path}', data=${JSON.stringify(data)}).createResults:`, createResults);
+      return createResults;
+    } else {
+      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
+    }
+  }
+
+  /**
    * Relationship check
-   * @param path
-   * @param id
-   * @return {Promise.<void>}
+   * @async
+   * 
+   * @param {String} path
+   * @param {String} id
+   * @return {void|Error}
    */
   async validateRelationship(path = '', id = null) {
     const result = await this.getItem(path, id.toString());
@@ -512,13 +554,15 @@ class HookHelper {
 
   /**
    * Restrict service max rows
-   * @param servicePath
-   * @param maxRows
-   * @return {Promise.<void>}
+   * @async
+   * 
+   * @param {String} servicePath
+   * @param {Number} maxRows
+   * @return {Object[]}
    */
   async restrictMaxRows(servicePath = '', maxRows = -1) {
     let findResults = await this.findItems(servicePath, { $limit: 0 });
-    if (isDebug) debug(`after.log-messages.create: (${findResults}) records have been find from the "${servicePath}" service`);
+    if (isDebug) debug(`restrictMaxRows: (${findResults}) records have been find from the "${servicePath}" service`);
     if (findResults > maxRows) {
       if (!this.contextRecords) throw new errors.BadRequest('Value of "restrictMaxRows:contextRecords" must not be empty.');
       const idField = HookHelper.getIdField(this.contextRecords);
@@ -538,8 +582,10 @@ class HookHelper {
 
   /**
    * Uniqueness check
-   * @param query
-   * @return {Promise.<void>}
+   * @async
+   * 
+   * @param {Object} query
+   * @return {void|Error}
    */
   async validateUnique(servicePath = '', query = {}) {
     let results = await this.getCountItems(servicePath, query);

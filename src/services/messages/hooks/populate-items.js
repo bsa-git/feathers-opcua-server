@@ -7,13 +7,16 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
     const addItems = async message => {
       // Get the user based on their id, pass the `params` along so
       // that we get a safe version of the user data
-      const user = await app.service('users').get(message.userId);
+      if (message.userId) {
+        const user = await app.service('users').get(message.userId);
 
-      // Merge the message content to include the `user` object
-      return {
-        ...message,
-        user
-      };
+        // Merge the message content to include the `user` object
+        return {
+          ...message,
+          user
+        };
+      }
+      return message;
     };
 
     // In a find method we need to process the entire page

@@ -474,7 +474,46 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       assert.ok(findChatMessagesBefore.data.length > findChatMessagesAfter.data.length, 'Protection did not work to removing the data from service');
     });
 
-    it('#18: Data integrity when removing a record from \'opcua-tags\' service', async () => {
+    it('#18: Set contextBefore.tagName while creating record for \'opcua-values\' service', async () => {
+      // Get opcuaTag
+      const index = fakes['opcuaTags'].length - 1;
+      const opcuaTag = fakes['opcuaTags'][index];
+      const idField = 'id' in opcuaTag ? 'id' : '_id';
+      const tagId = opcuaTag[idField];
+
+      const service = app.service('opcua-values');
+      contextBefore.path = 'opcua-values';
+      contextBefore.method = 'create';
+      contextBefore.service = service;
+      contextBefore.data = {
+        tagId,
+        values: [
+          {
+            key: opcuaTag.browseName,
+            value: 'opcuaTagValue'
+          }
+        ]
+      };
+      await constraints(true)(contextBefore);
+      if (isDebug) debug('Set contextBefore.tagName while creating record for \'opcua-values\' service.contextBefore:', contextBefore.data);
+      assert.ok(contextBefore.data.tagName === opcuaTag.browseName, 'Protection did not work to write the data to service');
+      // Once again
+      contextBefore.data = {
+        tagId,
+        tagName: 'NotOpcuaTagBrowseName',
+        values: [
+          {
+            key: opcuaTag.browseName,
+            value: 'opcuaTagValue'
+          }
+        ]
+      };
+      await constraints(true)(contextBefore);
+      if (isDebug) debug('Set contextBefore.tagName while creating record for \'opcua-values\' service.contextBefore:', contextBefore.data);
+      assert.ok(contextBefore.data.tagName === opcuaTag.browseName, 'Protection did not work to write the data to service');
+    });
+
+    it('#19: Data integrity when removing a record from \'opcua-tags\' service', async () => {
       const index = fakes['opcuaTags'].length - 1;
       const rec = fakes['opcuaTags'][index];
       const idField = 'id' in rec ? 'id' : '_id';

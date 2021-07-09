@@ -48,7 +48,7 @@ async function onChangedGroupHandlerForDB(params, dataValue) {
     if(tags.length){
       const tag = tags[0];
       const idField = 'id' in tag ? 'id' : '_id';
-      const tagId = tag[idField];
+      const tagId = tag[idField].toString();
       service = app.service('opcua-values');
       await service.create({
         tagId,

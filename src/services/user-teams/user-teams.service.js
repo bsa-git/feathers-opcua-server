@@ -4,9 +4,13 @@ const createModel = require('../../models/user-teams.model');
 const hooks = require('./user-teams.hooks');
 
 module.exports = function (app) {
+  const Model = createModel(app);
+  const paginate = app.get('paginate');
+
   const options = {
-    Model: createModel(app),
-    paginate: app.get('paginate')
+    Model,
+    paginate,
+    multi: true 
   };
 
   // Initialize our service with any options it requires

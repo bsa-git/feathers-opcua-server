@@ -1,7 +1,8 @@
 
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { getCapitalizeStr, dbNullIdValue } = require('../lib');
+const { getCapitalizeStr } = require('../lib');
+const { dbNullIdValue } = require('../db-helpers');
 const AuthServer = require('../auth/auth-server.class');
 const HookHelper = require('./hook-helper.class');
 const debug = require('debug')('app:services-constraint');
@@ -129,7 +130,15 @@ module.exports = async function servicesConstraint(context) {
     validate = async (record) => {
       if (record.tagId && record.tagId !== dbNullIdValue()) await hookHelper.validateRelationship('opcua-tags', record.tagId);
     };
+    normalize = async (record) => {
+      const servicePath = 'opcua-tags';
+      const getResult = await hookHelper.getItem(servicePath, record.tagId);
+      if (getResult.browseName !== record.tagName) {
+        record.tagName = getResult.browseName;
+      }
+    };
     await hookHelper.forEachRecords(validate);
+    await hookHelper.forEachRecords(normalize);
     break;
   case 'users.create.after':
   case 'users.patch.after':

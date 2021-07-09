@@ -8,14 +8,17 @@ module.exports = function (options = {}) {
     const { app, method, result, params } = context;
     // Function that adds the items to a single user object
     const addItems = async data => {
-      const role = await app.service('roles').get(data.roleId);
-      const userProfile = await app.service('user-profiles').get(data.profileId);
-      // Merge the data content to include the `role` and `userProfile` objects
-      return {
-        ...data,
-        role,
-        userProfile
-      };
+      if (data.roleId && data.profileId) {
+        const role = await app.service('roles').get(data.roleId);
+        const userProfile = await app.service('user-profiles').get(data.profileId);
+        // Merge the data content to include the `role` and `userProfile` objects
+        return {
+          ...data,
+          role,
+          userProfile
+        };
+      }
+      return data;
     };
 
     // In a find method we need to process the entire page
