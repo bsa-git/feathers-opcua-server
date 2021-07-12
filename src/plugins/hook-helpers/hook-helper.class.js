@@ -334,6 +334,27 @@ class HookHelper {
   }
 
   /**
+   * Get count items
+   * @async
+   * 
+   * @param {String} path
+   * @param {Object} query
+   * @return {Number}
+   */
+  async getCountItems(path = '', query = {}) {
+    const service = this.app.service(path);
+    if (service) {
+      const newQuery = loMerge(query, { $limit: 0 });
+      let findResults = await service.find({ query: newQuery });
+      findResults = findResults.total;
+      if (isDebug) inspector(`getCountItems(path='${path}', query=${JSON.stringify(newQuery)}).findResults:`, findResults);
+      return findResults;
+    } else {
+      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
+    }
+  }
+
+  /**
    * Get item
    * @async
    * 
@@ -392,23 +413,22 @@ class HookHelper {
       throw new errors.BadRequest(`There is no service for the path - '${path}'`);
     }
   }
-
+  
   /**
-   * Get count items
+   * Remove item
    * @async
    * 
    * @param {String} path
-   * @param {Object} query
-   * @return {Number}
+   * @param {String} id
+   * @return {Object}
    */
-  async getCountItems(path = '', query = {}) {
+  async removeItem(path = '', id = null) {
+    // id = id.toString();
     const service = this.app.service(path);
     if (service) {
-      const newQuery = loMerge(query, { $limit: 0 });
-      let findResults = await service.find({ query: newQuery });
-      findResults = findResults.total;
-      if (isDebug) inspector(`getCountItems(path='${path}', query=${JSON.stringify(newQuery)}).findResults:`, findResults);
-      return findResults;
+      const removeResult = await service.remove(id);
+      if (isLog) inspector(`removeItem(path='${path}', id=${id}).removeResult:`, removeResult);
+      return removeResult;
     } else {
       throw new errors.BadRequest(`There is no service for the path - '${path}'`);
     }
@@ -429,26 +449,6 @@ class HookHelper {
       deleteResults = await service.remove(null, { query });
       if (isLog) inspector(`removeItems(path='${path}', query=${JSON.stringify(query)}).removeResults:`, deleteResults);
       return deleteResults;
-    } else {
-      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
-    }
-  }
-
-  /**
-   * Remove item
-   * @async
-   * 
-   * @param {String} path
-   * @param {String} id
-   * @return {Object}
-   */
-  async removeItem(path = '', id = null) {
-    // id = id.toString();
-    const service = this.app.service(path);
-    if (service) {
-      const removeResult = await service.remove(id);
-      if (isLog) inspector(`removeItem(path='${path}', id=${id}).removeResult:`, removeResult);
-      return removeResult;
     } else {
       throw new errors.BadRequest(`There is no service for the path - '${path}'`);
     }
@@ -510,7 +510,7 @@ class HookHelper {
     const service = this.app.service(path);
     if (service) {
       const createResults = await service.create(data);
-      if (isLog) inspector(`createItem(path='${path}', data=${JSON.stringify(data)}).createResults:`, createResults);
+      if (isLog) inspector(`createItem(path='${path}', createResults:`, createResults);
       return createResults;
     } else {
       throw new errors.BadRequest(`There is no service for the path - '${path}'`);
@@ -526,10 +526,15 @@ class HookHelper {
    * @return {Object[]}
    */
   async createItems(path = '', data = []) {
+    let createResults = [];
     const service = this.app.service(path);
     if (service) {
-      const createResults = await service.create(data);
-      if (isLog) inspector(`createItem(path='${path}', data=${JSON.stringify(data)}).createResults:`, createResults);
+      for (let index = 0; index < data.length; index++) {
+        const item = data[index];
+        const sreatedItem = await service.create(item);
+        createResults.push(sreatedItem);
+      }
+      if (isLog) inspector(`createItems(path='${path}', createResults.length:`, createResults.length);
       return createResults;
     } else {
       throw new errors.BadRequest(`There is no service for the path - '${path}'`);
@@ -558,10 +563,13 @@ class HookHelper {
    * 
    * @param {String} servicePath
    * @param {Number} maxRows
+   * @param {Object} query
    * @return {Object[]}
    */
-  async restrictMaxRows(servicePath = '', maxRows = -1) {
-    let findResults = await this.findItems(servicePath, { $limit: 0 });
+  async restrictMaxRows(servicePath = '', maxRows = -1, query = {}) {
+    // const newQuery = loMerge(query, { $limit: 0 });
+    let findResults = await this.getCountItems(servicePath, query);
+    debug('restrictMaxRows.getCountItems:', findResults);
     if (isDebug) debug(`restrictMaxRows: (${findResults}) records have been find from the "${servicePath}" service`);
     if (findResults > maxRows) {
       if (!this.contextRecords) throw new errors.BadRequest('Value of "restrictMaxRows:contextRecords" must not be empty.');
@@ -575,7 +583,8 @@ class HookHelper {
       findResults = findResults.map(item => item[idField]);
       if (isDebug) debug('findResults:', findResults.length, findResults);
       let removeResults = await this.removeItems(servicePath, { [idField]: { $in: findResults } });
-      if (isDebug) debug('removeResults:', removeResults.length, removeResults);
+      if (isDebug) debug('restrictMaxRows.removeResults:', removeResults.length, removeResults);
+      debug('restrictMaxRows.removeResults:', removeResults.length, removeResults);
       return removeResults;
     }
   }

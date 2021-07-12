@@ -1,7 +1,6 @@
-
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const { getCapitalizeStr } = require('../lib');
+const { inspector, getCapitalizeStr } = require('../lib');
 const { dbNullIdValue } = require('../db-helpers');
 const AuthServer = require('../auth/auth-server.class');
 const HookHelper = require('./hook-helper.class');
@@ -29,7 +28,7 @@ module.exports = async function servicesConstraint(context) {
   let maxOpcuaValuesRows = process.env.OPCUA_VALUES_MAXROWS;
   maxOpcuaValuesRows = Number.isInteger(maxOpcuaValuesRows) ? maxOpcuaValuesRows : Number.parseInt(maxOpcuaValuesRows);
 
-  let idField, validate, normalize;
+  let idField, validate, normalize, tagId;
 
   //----- SERVICES CONSTRAINT ---//
   switch (`${hookHelper.contextPath}.${hookHelper.contextMethod}.${hookHelper.contextType}`) {
@@ -239,15 +238,17 @@ module.exports = async function servicesConstraint(context) {
     await hookHelper.restrictMaxRows('log-messages', maxLogRows);
     break;
   case 'opcua-values.create.after':
-    await hookHelper.restrictMaxRows('opcua-values', maxOpcuaValuesRows);
+    // inspector('opcua-values.create.after.contextResult:', hookHelper.contextResult);
+    tagId = hookHelper.contextResult.tagId;
+    await hookHelper.restrictMaxRows('opcua-values', maxOpcuaValuesRows, { tagId });
     break;
   case 'opcua-tags.remove.after':
     validate = async (record) => {
       const idField = HookHelper.getIdField(record);
-      const tagId = record[idField].toString();
+      tagId = record[idField].toString();
       // Remove items for 'opcua-values' service
       let servicePath = 'opcua-values';
-      let removed = await hookHelper.removeItems(servicePath, { tagId: tagId });
+      let removed = await hookHelper.removeItems(servicePath, { tagId });
       if (isDebug) debug(`after.teams.remove: (${removed.length}) records have been removed from the "${servicePath}" service`);
     };
     await hookHelper.forEachRecords(validate);
