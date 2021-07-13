@@ -157,7 +157,7 @@ const getIdField = function (items) {
 const getCountItems = async function (app, path = '', query = {}) {
   const service = app.service(path);
   if (service) {
-    const newQuery = loMerge(query, { $limit: 0 });
+    const newQuery = loMerge({}, query, { $limit: 0 });
     let findResults = await service.find({ query: newQuery });
     findResults = findResults.total;
     if (isDebug) inspector(`getCountItems(path='${path}', query=${JSON.stringify(newQuery)}).findResults:`, findResults);
@@ -176,7 +176,7 @@ const getCountItems = async function (app, path = '', query = {}) {
    * @param {String} id
    * @return {Object}
    */
-const getItem = async function(app, path = '', id = null) {
+const getItem = async function (app, path = '', id = null) {
   const service = app.service(path);
   if (service) {
     const getResult = await service.get(id);
@@ -196,10 +196,10 @@ const getItem = async function(app, path = '', id = null) {
  * @param {Object} query
  * @return {Object[]}
  */
-const findItems = async function(app, path = '', query = {}) {
+const findItems = async function (app, path = '', query = {}) {
   const service = app.service(path);
   if (service) {
-    let findResults = await service.find({ query: query });
+    let findResults = await service.find({ query });
     findResults = (query['$limit'] === 0) ? findResults.total : findResults.data;
     if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
     return findResults;
@@ -217,13 +217,12 @@ const findItems = async function(app, path = '', query = {}) {
  * @param {Object} query
  * @return {Object[]}
  */
-const findAllItems = async function(app,  path = '', query = {}) {
+const findAllItems = async function (app, path = '', query = {}) {
   const service = app.service(path);
   if (service) {
-    const newQuery = loMerge(query, { $limit: null });
-    let findResults = await service.find({ query: newQuery });
-    findResults = findResults.data;
-    if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(newQuery)}).findResults:`, findResults);
+    const newParams = loMerge({}, { query }, { paginate: false });
+    let findResults = await service.find(newParams);
+    if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(newParams)}).findResults:`, findResults);
     return findResults;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
@@ -239,7 +238,7 @@ const findAllItems = async function(app,  path = '', query = {}) {
  * @param {String} id
  * @return {Object}
  */
-const removeItem = async function(app, path = '', id = null) {
+const removeItem = async function (app, path = '', id = null) {
   // id = id.toString();
   const service = app.service(path);
   if (service) {
@@ -260,7 +259,7 @@ const removeItem = async function(app, path = '', id = null) {
  * @param {Object} query
  * @return {Object[]}
  */
-const removeItems = async function(app, path = '', query = {}) {
+const removeItems = async function (app, path = '', query = {}) {
   let findResults = [], deleteResults = [];
   const service = app.service(path);
   if (service) {
@@ -282,12 +281,10 @@ const removeItems = async function(app, path = '', query = {}) {
  * @param {Object} data
  * @return {Object}
  */
-const patchItem = async function(app, path = '', id = '', data = {}) {
-  let patchResults = {};
-  //--------------------------------------
+const patchItem = async function (app, path = '', id = '', data = {}) {
   const service = app.service(path);
   if (service) {
-    patchResults = await service.patch(id, data);
+    const patchResults = await service.patch(id, data);
     if (isLog) inspector(`patchItems(path='${path}', data=${JSON.stringify(data)}, patchResults:`, patchResults);
     return patchResults;
   } else {
@@ -305,12 +302,10 @@ const patchItem = async function(app, path = '', id = '', data = {}) {
  * @param {Object} query
  * @return {Object[]}
  */
-const patchItems = async function(app, path = '', data = {}, query = {}) {
-  let patchResults = [];
-  //--------------------------------------
+const patchItems = async function (app, path = '', data = {}, query = {}) {
   const service = app.service(path);
   if (service) {
-    patchResults = await service.patch(null, data, {query});
+    const patchResults = await service.patch(null, data, { query });
     if (isLog) inspector(`patchItems(path='${path}', data=${JSON.stringify(data)}, query=${JSON.stringify(query)}).patchResults:`, patchResults);
     return patchResults;
   } else {
@@ -327,12 +322,12 @@ const patchItems = async function(app, path = '', data = {}, query = {}) {
  * @param {Object} data
  * @return {Object}
  */
-const createItem = async function(app, path = '', data = {}) {
+const createItem = async function (app, path = '', data = {}) {
   const service = app.service(path);
   if (service) {
-    const createResults = await service.create(data);
-    if (isLog) inspector(`createItem(path='${path}', createResults:`, createResults);
-    return createResults;
+    const createResult = await service.create(data);
+    if (isLog) inspector(`createItem(path='${path}', createResults:`, createResult);
+    return createResult;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
   }
@@ -347,14 +342,14 @@ const createItem = async function(app, path = '', data = {}) {
  * @param {Object[]} data
  * @return {Object[]}
  */
-const createItems = async function(app, path = '', data = []) {
+const createItems = async function (app, path = '', data = []) {
   let createResults = [];
   const service = app.service(path);
   if (service) {
     for (let index = 0; index < data.length; index++) {
       const item = data[index];
-      const sreatedItem = await service.create(item);
-      createResults.push(sreatedItem);
+      const createdItem = await service.create(item);
+      createResults.push(createdItem);
     }
     if (isLog) inspector(`createItems(path='${path}', createResults.length:`, createResults.length);
     return createResults;

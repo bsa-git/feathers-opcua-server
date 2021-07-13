@@ -238,7 +238,6 @@ module.exports = async function servicesConstraint(context) {
     await hookHelper.restrictMaxRows('log-messages', maxLogRows);
     break;
   case 'opcua-values.create.after':
-    // inspector('opcua-values.create.after.contextResult:', hookHelper.contextResult);
     tagId = hookHelper.contextResult.tagId;
     await hookHelper.restrictMaxRows('opcua-values', maxOpcuaValuesRows, { tagId });
     break;

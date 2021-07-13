@@ -543,23 +543,17 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
           value: tagvalue
         }
       ] };
-      // Get service
-      // const opcuaValues = app.service('opcua-values');
-      // findResults = await opcuaValues.find({ query: {$limit: 0} });
+      // Get count items
       serviceName = 'opcua-values';
       opcuaValuesCount = await getCountItems(app, serviceName, { tagId });
-      debug('opcuaValuesCount:', opcuaValuesCount);
-
-      // serviceResult =  await createItem(app, serviceName, valueData);
-
-      // inspector('serviceResult:', serviceResult);
-
-      for (let index = 0; index < maxOpcuaValuesRows + 33; index++) {
-        serviceResult =  await createItem(app, serviceName, valueData);
+      if(isDebug) debug('opcuaValuesCount:', opcuaValuesCount);
+      // Create items
+      for (let index = 0; index < maxOpcuaValuesRows + 20; index++) {
+        await createItem(app, serviceName, valueData);
       }
-
+      // Get count items
       opcuaValuesCount = await getCountItems(app, serviceName, { tagId });
-      debug('opcuaValuesCount:', opcuaValuesCount);
+      if(isDebug) debug('opcuaValuesCount:', opcuaValuesCount);
 
       // Run constraints hook
       contextAfter.path = serviceName;
@@ -568,30 +562,14 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       contextAfter.result = valueData;
       await constraints(true)(contextAfter);
 
-
-      /*
-      // Get before services
-      const findOpcuaValuesBefore = await opcuaValues.find({query: {tagId: tagId}});
-      if (isLog) inspector('Data integrity for \'opcua-values\' service, when removing a record from \'opcua-tags\' service.findOpcuaValuesBefore:', findOpcuaValuesBefore.data);
-
-      // Run constraints hook
-      contextAfter.path = 'opcua-tags';
-      contextAfter.method = 'remove';
-      contextAfter.service = app.service('opcua-tags');
-      contextAfter.result = {
-        ...rec
-      };
-      await constraints(true)(contextAfter);
-
-      // Check constraints
-      const findOpcuaValuesAfter = await opcuaValues.find({query: {tagId: tagId}});
-      if (isLog) inspector('Data integrity for \'opcua-values\' service, when removing a record from \'opcua-tags\' service.findOpcuaValuesAfter:', findOpcuaValuesAfter.data);
-      assert.ok(findOpcuaValuesBefore.data.length > findOpcuaValuesAfter.data.length, 'Protection did not work to removing the data from service');
-      */
-      assert.ok(true);
+      // Get count items
+      opcuaValuesCount = await getCountItems(app, serviceName, { tagId });
+      if(isDebug) debug('opcuaValuesCount:', opcuaValuesCount);
+      
+      assert.ok(opcuaValuesCount === maxOpcuaValuesRows, 'Restrict max rows when add a record to \'opcua-values\' service');
     });
 
-    /*
+    
     it('#20: Data integrity when removing a record from \'opcua-tags\' service', async () => {
       const index = fakes['opcuaTags'].length - 1;
       const rec = fakes['opcuaTags'][index];
@@ -618,6 +596,5 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       if (isLog) inspector('Data integrity for \'opcua-values\' service, when removing a record from \'opcua-tags\' service.findOpcuaValuesAfter:', findOpcuaValuesAfter.data);
       assert.ok(findOpcuaValuesBefore.data.length > findOpcuaValuesAfter.data.length, 'Protection did not work to removing the data from service');
     });
-    */
   });
 });

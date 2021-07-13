@@ -8,6 +8,18 @@ const {
 } = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
 const { inspector, appRoot, isObject, isTrue, readJsonFileSync } = require('../lib');
+const { 
+  getCountItems,
+  getItem,
+  findItems,
+  findAllItems,
+  removeItem,
+  removeItems,
+  patchItem,
+  patchItems,
+  createItem,
+  createItems
+} = require('../db-helpers');
 const chalk = require('chalk');
 const debug = require('debug')('app:plugin.hook-helper.class');
 
@@ -342,16 +354,7 @@ class HookHelper {
    * @return {Number}
    */
   async getCountItems(path = '', query = {}) {
-    const service = this.app.service(path);
-    if (service) {
-      const newQuery = loMerge(query, { $limit: 0 });
-      let findResults = await service.find({ query: newQuery });
-      findResults = findResults.total;
-      if (isDebug) inspector(`getCountItems(path='${path}', query=${JSON.stringify(newQuery)}).findResults:`, findResults);
-      return findResults;
-    } else {
-      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
-    }
+    return await getCountItems(this.app, path, query);
   }
 
   /**
@@ -363,14 +366,7 @@ class HookHelper {
    * @return {Object}
    */
   async getItem(path = '', id = null) {
-    const service = this.app.service(path);
-    if (service) {
-      const getResult = await service.get(id);
-      if (isLog) inspector(`getItem(path='${path}', id='${id}').getResult:`, getResult);
-      return getResult;
-    } else {
-      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
-    }
+    return await getItem(this.app, path, id);
   }
 
   /**
@@ -382,15 +378,7 @@ class HookHelper {
    * @return {Object[]}
    */
   async findItems(path = '', query = {}) {
-    const service = this.app.service(path);
-    if (service) {
-      let findResults = await service.find({ query: query });
-      findResults = (query['$limit'] === 0) ? findResults.total : findResults.data;
-      if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
-      return findResults;
-    } else {
-      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
-    }
+    return await findItems(this.app, path, query);
   }
 
   /**
@@ -402,18 +390,9 @@ class HookHelper {
    * @return {Object[]}
    */
   async findAllItems(path = '', query = {}) {
-    const service = this.app.service(path);
-    if (service) {
-      const newQuery = loMerge(query, { $limit: null });
-      let findResults = await service.find({ query: newQuery });
-      findResults = findResults.data;
-      if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(newQuery)}).findResults:`, findResults);
-      return findResults;
-    } else {
-      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
-    }
+    return await findAllItems(this.app, path, query);
   }
-  
+
   /**
    * Remove item
    * @async
@@ -423,15 +402,7 @@ class HookHelper {
    * @return {Object}
    */
   async removeItem(path = '', id = null) {
-    // id = id.toString();
-    const service = this.app.service(path);
-    if (service) {
-      const removeResult = await service.remove(id);
-      if (isLog) inspector(`removeItem(path='${path}', id=${id}).removeResult:`, removeResult);
-      return removeResult;
-    } else {
-      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
-    }
+    return await removeItem(this.app, path, id);
   }
 
   /**
@@ -443,17 +414,10 @@ class HookHelper {
    * @return {Object[]}
    */
   async removeItems(path = '', query = {}) {
-    let findResults = [], deleteResults = [];
-    const service = this.app.service(path);
-    if (service) {
-      deleteResults = await service.remove(null, { query });
-      if (isLog) inspector(`removeItems(path='${path}', query=${JSON.stringify(query)}).removeResults:`, deleteResults);
-      return deleteResults;
-    } else {
-      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
-    }
+    return await removeItems(this.app, path, query);
   }
 
+  
   /**
    * Patch item
    * @async
@@ -464,16 +428,7 @@ class HookHelper {
    * @return {Object}
    */
   async patchItem(path = '', id = '', data = {}) {
-    let patchResults = {};
-    //--------------------------------------
-    const service = this.app.service(path);
-    if (service) {
-      patchResults = await service.patch(id, data);
-      if (isLog) inspector(`patchItems(path='${path}', data=${JSON.stringify(data)}, patchResults:`, patchResults);
-      return patchResults;
-    } else {
-      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
-    }
+    return await patchItem(this.app, path, id, data);
   }
 
   /**
@@ -486,18 +441,10 @@ class HookHelper {
    * @return {Object[]}
    */
   async patchItems(path = '', data = {}, query = {}) {
-    let patchResults = [];
-    //--------------------------------------
-    const service = this.app.service(path);
-    if (service) {
-      patchResults = await service.patch(null, data, {query});
-      if (isLog) inspector(`patchItems(path='${path}', data=${JSON.stringify(data)}, query=${JSON.stringify(query)}).patchResults:`, patchResults);
-      return patchResults;
-    } else {
-      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
-    }
+    return await patchItems(this.app, path, data, query);
   }
 
+  
   /**
    * Create item
    * @async
@@ -507,14 +454,7 @@ class HookHelper {
    * @return {Object}
    */
   async createItem(path = '', data = {}) {
-    const service = this.app.service(path);
-    if (service) {
-      const createResults = await service.create(data);
-      if (isLog) inspector(`createItem(path='${path}', createResults:`, createResults);
-      return createResults;
-    } else {
-      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
-    }
+    return await createItem(this.app, path, data);
   }
 
   /**
@@ -526,19 +466,7 @@ class HookHelper {
    * @return {Object[]}
    */
   async createItems(path = '', data = []) {
-    let createResults = [];
-    const service = this.app.service(path);
-    if (service) {
-      for (let index = 0; index < data.length; index++) {
-        const item = data[index];
-        const sreatedItem = await service.create(item);
-        createResults.push(sreatedItem);
-      }
-      if (isLog) inspector(`createItems(path='${path}', createResults.length:`, createResults.length);
-      return createResults;
-    } else {
-      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
-    }
+    return await createItems(this.app, path, data);
   }
 
   /**
@@ -567,24 +495,21 @@ class HookHelper {
    * @return {Object[]}
    */
   async restrictMaxRows(servicePath = '', maxRows = -1, query = {}) {
-    // const newQuery = loMerge(query, { $limit: 0 });
     let findResults = await this.getCountItems(servicePath, query);
-    debug('restrictMaxRows.getCountItems:', findResults);
     if (isDebug) debug(`restrictMaxRows: (${findResults}) records have been find from the "${servicePath}" service`);
     if (findResults > maxRows) {
       if (!this.contextRecords) throw new errors.BadRequest('Value of "restrictMaxRows:contextRecords" must not be empty.');
       const idField = HookHelper.getIdField(this.contextRecords);
-      findResults = await this.findItems(servicePath, {
-        $limit: null,
+      const newQuery = loMerge({}, query, {
         $skip: maxRows,
         $sort: { createdAt: -1 },
         $select: [idField]
       });
+      findResults = await this.findAllItems(servicePath, newQuery);
       findResults = findResults.map(item => item[idField]);
-      if (isDebug) debug('findResults:', findResults.length, findResults);
+      if (isDebug) debug('restrictMaxRows.findResults.length:', findResults.length);
       let removeResults = await this.removeItems(servicePath, { [idField]: { $in: findResults } });
-      if (isDebug) debug('restrictMaxRows.removeResults:', removeResults.length, removeResults);
-      debug('restrictMaxRows.removeResults:', removeResults.length, removeResults);
+      if (isDebug) debug('restrictMaxRows.removeResults.length:', removeResults.length);
       return removeResults;
     }
   }
