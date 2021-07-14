@@ -1,35 +1,27 @@
 /* eslint-disable no-unused-vars */
-const { inspector } = require('../../../plugins');
-const isLog = false;
-
+const { HookHelper } = require('../../../plugins');
 module.exports = function (options = {}) {
   return async context => {
     // Get `app`, `method`, `params` and `result` from the hook context
     const { app, method, result, params } = context;
+    // Create HookHelper object
+    const hh = new HookHelper(context);
     // Function that adds the items to a single user object
     const addItems = async data => {
       if (data.roleId && data.profileId) {
-        const role = await app.service('roles').get(data.roleId);
-        const userProfile = await app.service('user-profiles').get(data.profileId);
-        // Merge the data content to include the `role` and `userProfile` objects
-        return {
-          ...data,
-          role,
-          userProfile
-        };
+        const role = await hh.getItem('roles', data.roleId);
+        if(role){
+          data.role = role;
+        }
+        const userProfile = await hh.getItem('user-profiles', data.profileId);
+        if(userProfile){
+          data.userProfile = userProfile;
+        }
       }
-      return data;
     };
-
-    // In a find method we need to process the entire page
-    if (method === 'find') {
-      // Map all data to include the `user` information
-      context.result.data = await Promise.all(result.data.map(addItems));
-    } else {
-      // Otherwise just update the single result
-      context.result = await addItems(result);
-    }
-
-    return context;
+    await hh.forEachRecords(addItems);
+    hh.showDebugInfo('users.create', false);
+    // Place the modified records back in the context.
+    return hh.replaceRecordsForContext(context);
   };
 };

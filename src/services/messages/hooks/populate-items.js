@@ -1,33 +1,20 @@
 /* eslint-disable no-unused-vars */
-module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
+const { HookHelper } = require('../../../plugins');
+module.exports = function (options = {}) {
   return async context => {
-    // Get `app`, `method`, `params` and `result` from the hook context
-    const { app, method, result, params } = context;
-    // Function that adds the user to a single message object
+    // Create HookHelper object
+    const hh = new HookHelper(context);
+    // Function that adds the items
     const addItems = async message => {
-      // Get the user based on their id, pass the `params` along so
-      // that we get a safe version of the user data
       if (message.userId) {
-        const user = await app.service('users').get(message.userId);
-
-        // Merge the message content to include the `user` object
-        return {
-          ...message,
-          user
-        };
-      }
-      return message;
-    };
-
-    // In a find method we need to process the entire page
-    if (method === 'find') {
-      // Map all data to include the `user` information
-      context.result.data = await Promise.all(result.data.map(addItems));
-    } else {
-      // Otherwise just update the single result
-      context.result = await addItems(result);
-    }
-
-    return context;
+        const user = await hh.getItem('users', message.userId);
+        if(user){
+          message.user = user;
+        }
+      }};
+    await hh.forEachRecords(addItems);
+    hh.showDebugInfo('messages.create', false);
+    // Place the modified records back in the context.
+    return hh.replaceRecordsForContext(context);
   };
 };

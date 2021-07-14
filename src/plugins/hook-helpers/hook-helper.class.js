@@ -8,7 +8,7 @@ const {
 } = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
 const { inspector, appRoot, isObject, isTrue, readJsonFileSync } = require('../lib');
-const { 
+const {
   getCountItems,
   getItem,
   findItems,
@@ -337,12 +337,18 @@ class HookHelper {
 
   /**
    * Replace records for context
-   * @return {HookHelper}
+   * @param {Object} context
+   * @return {HookHelper|Object}
    */
-  replaceRecordsForContext() {
+  replaceRecordsForContext(context = null) {
     // Place the modified records back in the context.
-    replaceItems(this.context, this.contextRecords);
-    return this;
+    if (context) {
+      replaceItems(context, this.contextRecords);
+      return context;
+    } else {
+      replaceItems(this.context, this.contextRecords);
+      return this;
+    }
   }
 
   /**
@@ -417,7 +423,7 @@ class HookHelper {
     return await removeItems(this.app, path, query);
   }
 
-  
+
   /**
    * Patch item
    * @async
@@ -444,7 +450,7 @@ class HookHelper {
     return await patchItems(this.app, path, data, query);
   }
 
-  
+
   /**
    * Create item
    * @async

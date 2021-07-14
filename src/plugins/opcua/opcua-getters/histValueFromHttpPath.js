@@ -9,7 +9,8 @@ const {
 
 const {
   formatUAVariable,
-  setValueFromSourceForGroup
+  setValueFromSourceForGroup,
+  convertAliasListToBrowseNameList
 } = require('../opcua-helper');
 
 const debug = require('debug')('app:opcua-getters/histValueFromHttpPath');
@@ -33,12 +34,14 @@ const histValueFromHttpPath = function (params = {}, addedValue) {
     dataType = formatUAVariable(addedValue).dataType[1];
     results = papa.parse(data, { delimiter: ';', header: true });
     dataItems = results.data[0];
+    
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
     if (isDebug) console.log(chalk.green('fileName:'), chalk.cyan(fileName));
     if(isLog) inspector('histValueFromHttpPath.dataItems:', dataItems);
 
     // Set value from source for group 
     if (params.addedVariableList) {
+      convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
       setValueFromSourceForGroup(params, dataItems);
     }
   };

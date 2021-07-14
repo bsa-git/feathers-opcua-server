@@ -3,6 +3,7 @@ const errors = require('@feathersjs/errors');
 
 const {
   inspector,
+  isTrue,
   appRoot,
   getParseUrl,
   getHostname,
@@ -26,6 +27,8 @@ const moment = require('moment');
 const chalk = require('chalk');
 
 const loToInteger = require('lodash/toInteger');
+const loToNumber = require('lodash/toNumber');
+const loToString = require('lodash/toString');
 const loIsObject = require('lodash/isObject');
 const loIsString = require('lodash/isString');
 const loIsEqual = require('lodash/isEqual');
@@ -514,7 +517,7 @@ const getMyHostInfo = async function () {
  */
 const isMyServiceHost = async function (serviceUrl, myPort) {
   if (!serviceUrl || !myPort) return false;
-  if(loIsString(myPort)){
+  if (loIsString(myPort)) {
     myPort = getInt(myPort);
   }
   const serviceHostname = getParseUrl(serviceUrl).hostname.toLowerCase();
@@ -759,19 +762,20 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}) => {
 
   // Get group variable list 
   let groupVariableList = params.addedVariableList;
-  if (isDebug) inspector('setValueFromSourceForGroup.groupVariableList.aliasNames:', groupVariableList.map(v => v.aliasName));
-  if (isDebug) inspector('setValueFromSourceForGroup.dataItems:', dataItems);
+  if (isLog) inspector('setValueFromSourceForGroup.groupVariableList.aliasNames:', groupVariableList.map(v => v.aliasName));
+  if (isLog) inspector('setValueFromSourceForGroup.dataItems:', dataItems);
+  // inspector('setValueFromSourceForGroup.groupVariableList:', groupVariableList);
 
   loForEach(dataItems, function (value, key) {
     groupVariable = groupVariableList.find(v => v.aliasName === key);
     // Set value from source
     if (groupVariable) {
-      if (isDebug) inspector('setValueFromSourceForGroup.groupVariable:', formatUAVariable(groupVariable));
+      if (isLog) inspector('setValueFromSourceForGroup.groupVariable:', formatUAVariable(groupVariable));
       browseName = formatUAVariable(groupVariable).browseName;
       // Run setValueFromSource for groupVariable
       const currentState = params.myOpcuaServer.getCurrentState();
       const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
-      if (isDebug) inspector('setValueFromSourceForGroup.variable:', variable);
+      if (isLog) inspector('setValueFromSourceForGroup.variable:', variable);
 
       if (loIsFunction(opcuaGetters[variable.getter])) {
         params.myOpcuaServer.setValueFromSource(variable, groupVariable, opcuaGetters[variable.getter], value);
@@ -783,6 +787,34 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}) => {
     }
   });
 };
+
+/**
+ * Convert alias list data to browseName list data
+ * @name convertAliasListToBrowseNameList
+ * @param {Object[]} variableList 
+ * @param {Object} dataItems 
+ * @returns {Object}
+ */
+const convertAliasListToBrowseNameList = (variableList = [], dataItems = {}) => {
+  let browseNameList = {}, dataType = '';
+  //------------------------
+  if (!Array.isArray(variableList)) throw new Error('Error: variable `variableList` must be an array.');
+  loForEach(dataItems, function (value, key) {
+    const variable = variableList.find(v => v.aliasName === key);
+    if(variable){
+      const formatVariable = formatUAVariable(variable);
+      const browseName = formatVariable.browseName;
+      dataType = formatVariable.dataType;
+      dataType = opcuaDataTypeToString(dataType);
+      dataType = dataType.toLowerCase();
+      value = convertAnyToValue(dataType, value);
+      browseNameList[browseName] = value;
+    }
+  });
+  inspector('convertAliasListToBrowseNameList.browseNameList:', browseNameList);
+  return browseNameList;
+};
+
 
 /**
  * @method convertTo
@@ -810,12 +842,15 @@ const convertTo = function (convertType, value) {
 
 /**
  * @method opcuaDataTypeToString
- * @param {String|Int} dataType 
- * e.g. dataType -> 'Double' | dataType -> 11
+ * @param {String|Int|Array} dataType 
+ * e.g. dataType -> 'Double' | dataType -> 11 | ['Double', 11]
  * @returns {String}
  * e.g. 'Double'
  */
 const opcuaDataTypeToString = function (dataType) {
+  if(Array.isArray(dataType)){
+    return dataType[0];
+  }
   const convertToInteger = loToInteger(dataType);
   const dataTypeList = loToPairs(DataType);
   if (convertToInteger > 0) {// dataType -> 'Integer'
@@ -862,6 +897,44 @@ const getInitValueForDataType = function (dataType) {
     break;
   }
   if (isDebug) debug('getInitValueForDataType.dataType:', dataType, result);
+  return result;
+};
+
+/**
+ * 
+ * @param {String} dataType 
+ * e.g. double|boolean
+ * @param {any} value 
+ * @returns {Boolean|Number|String|Date}
+ */
+const convertAnyToValue = function (dataType, value) {
+  let result = null;
+  switch (dataType) {
+  case 'boolean':
+    result = isTrue(value);
+    break;
+  case 'sbyte':
+  case 'byte':
+  case 'uint16':
+  case 'int32':
+  case 'uint32':
+  case 'int64':
+    result = loToInteger(value);
+    break;
+  case 'float':
+  case 'double':
+    result = loToNumber(value);
+    break;
+  case 'string':
+    result = loToString(value);
+    break;
+  case 'datetime':
+    result = moment().format(value);
+    break;
+  default:
+    break;
+  }
+  if (isDebug) debug('convertAnyToValue.dataType:', dataType, result);
   return result;
 };
 
@@ -1031,6 +1104,7 @@ module.exports = {
   isOpcuaClientInList,
   executeOpcuaClientScript,
   setValueFromSourceForGroup,
+  convertAliasListToBrowseNameList,
   convertTo,
   getInitValueForDataType,
   getTimestamp,
