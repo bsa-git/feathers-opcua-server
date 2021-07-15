@@ -379,6 +379,30 @@ const getOpcuaConfigOptions = function (id, browseName = '') {
 };
 
 /**
+ * @name getOpcuaTags
+ * @param {String} browseName 
+ * @returns {Array|Object}
+ */
+const getOpcuaTags = function (browseName = '') {
+  let mergedOpcuaOptions = {}, opcuaTags = [], opcuaTag = null;
+  //-----------------------------
+  // Get opcua enable configs for me
+  let opcuaOptions = getOpcuaConfigsForMe();
+  opcuaOptions = opcuaOptions.filter(item => !item.isDisable);
+  // Get all tags
+  loForEach(opcuaOptions, opt => {
+    mergedOpcuaOptions = mergeOpcuaConfigOptions(opt.id);
+    opcuaTags = loConcat(opcuaTags, mergedOpcuaOptions.objects, mergedOpcuaOptions.variables, mergedOpcuaOptions.groups);
+  });
+  opcuaTags = opcuaTags.filter(item => item.browseName);
+
+  if (browseName) {
+    opcuaTag = opcuaTags.find(tag => tag.browseName === browseName);
+  }
+  return opcuaTag? opcuaTag : opcuaTags;
+};
+
+/**
  * @method mergeOpcuaConfigOptions
  * @param {String} id 
  * @returns {Object}
@@ -767,7 +791,10 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}) => {
   // inspector('setValueFromSourceForGroup.groupVariableList:', groupVariableList);
 
   loForEach(dataItems, function (value, key) {
-    groupVariable = groupVariableList.find(v => v.aliasName === key);
+    groupVariable = groupVariableList.find(v => v.browseName === key);
+    if (!groupVariable) {
+      groupVariable = groupVariableList.find(v => v.aliasName === key);
+    }
     // Set value from source
     if (groupVariable) {
       if (isLog) inspector('setValueFromSourceForGroup.groupVariable:', formatUAVariable(groupVariable));
@@ -801,7 +828,7 @@ const convertAliasListToBrowseNameList = (variableList = [], dataItems = {}) => 
   if (!Array.isArray(variableList)) throw new Error('Error: variable `variableList` must be an array.');
   loForEach(dataItems, function (value, key) {
     const variable = variableList.find(v => v.aliasName === key);
-    if(variable){
+    if (variable) {
       const formatVariable = formatUAVariable(variable);
       const browseName = formatVariable.browseName;
       dataType = formatVariable.dataType;
@@ -811,7 +838,7 @@ const convertAliasListToBrowseNameList = (variableList = [], dataItems = {}) => 
       browseNameList[browseName] = value;
     }
   });
-  inspector('convertAliasListToBrowseNameList.browseNameList:', browseNameList);
+  if (isLog) inspector('convertAliasListToBrowseNameList.browseNameList:', browseNameList);
   return browseNameList;
 };
 
@@ -848,7 +875,7 @@ const convertTo = function (convertType, value) {
  * e.g. 'Double'
  */
 const opcuaDataTypeToString = function (dataType) {
-  if(Array.isArray(dataType)){
+  if (Array.isArray(dataType)) {
     return dataType[0];
   }
   const convertToInteger = loToInteger(dataType);
@@ -1089,6 +1116,7 @@ module.exports = {
   getOpcuaConfigsForMe,
   getOpcuaConfigOptions,
   mergeOpcuaConfigOptions,
+  getOpcuaTags,
   getParamsAddressSpace,
   getSubscriptionHandler,
   getOpcuaClientScript,
@@ -1105,6 +1133,7 @@ module.exports = {
   executeOpcuaClientScript,
   setValueFromSourceForGroup,
   convertAliasListToBrowseNameList,
+  convertAnyToValue,
   convertTo,
   getInitValueForDataType,
   getTimestamp,

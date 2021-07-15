@@ -12,6 +12,7 @@ const {
 const {
   formatUAVariable,
   setValueFromSourceForGroup,
+  convertAliasListToBrowseNameList
 } = require('../opcua-helper');
 
 const { TYPES } = require('tedious');
@@ -70,6 +71,7 @@ function histValuesFromDB(params = {}, addedValue) {
     if (isLog) inspector('histValuesFromDB.dataItems:', dataItems);
     // inspector('histValuesFromDB.setValuesFromSource.dataItems:', dataItems);
     dataType = formatUAVariable(addedValue).dataType[1];
+    dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
 
     // Set value from source for group 

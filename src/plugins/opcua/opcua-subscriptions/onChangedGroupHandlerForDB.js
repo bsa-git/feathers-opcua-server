@@ -4,8 +4,7 @@ const {
 } = require('../../lib');
 
 const {
-  findItems,
-  createItem
+  saveOpcuaValue
 } = require('../../db-helpers');
 
 const {
@@ -41,29 +40,14 @@ async function onChangedGroupHandlerForDB(params, dataValue) {
   engineeringUnits = engineeringUnits ? `(${engineeringUnits})` : '';
 
   if (addressSpaceOption.group) {
+    // Save data to DB
+    const savedValue = await saveOpcuaValue(params.app, browseName,  value);
+    if(isLog) inspector('onChangedGroupHandlerForDB.savedValue:', savedValue);
+    // inspector('onChangedGroupHandlerForDB.savedValue:', savedValue);
+
     value = JSON.parse(value);
     const valueKeys = Object.keys(value).length;
     console.log('<<===', chalk.magentaBright(`ID="${params.id}"; `), chalk.greenBright(`Name="${browseName}"; `), chalk.whiteBright(`Number of values=(${valueKeys});`), chalk.cyanBright(`Timestamp=${timestamp}`), '===>>');
-
-    // Save data to DB
-    const app = params.app;
-    let tags = await findItems(app, 'opcua-tags', { browseName });
-    // tags = tags.data;
-    if (tags.length) {
-      const tag = tags[0];
-      const idField = 'id' in tag ? 'id' : '_id';
-      const tagId = tag[idField].toString();
-      const data = {
-        tagId,
-        tagName: tag.browseName,
-        values: [{
-          key: tag.browseName,
-          value: JSON.stringify(value)
-        }]
-      };
-      await createItem(app, 'opcua-values', data);
-    }
-    // inspector('onChangedGroupHandlerForDB.opcuaValue:', opcuaValue);
   }
 }
 

@@ -19,7 +19,8 @@ const loForEach = require('lodash/forEach');
 
 const {
   formatUAVariable,
-  setValueFromSourceForGroup
+  setValueFromSourceForGroup,
+  convertAliasListToBrowseNameList
 } = require('../opcua-helper');
 
 const debug = require('debug')('app:opcua-getters/histValueFromFile');
@@ -52,6 +53,7 @@ const histValueFromFile = function (params = {}, addedValue) {
     dataType = formatUAVariable(addedValue).dataType[1];
     results = papa.parse(data, { delimiter: ';', header: true });
     dataItems = results.data[0];
+    dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
 
     if (isLog) inspector('histValueFromFile.dataItems:', dataItems);

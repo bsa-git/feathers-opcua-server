@@ -12,7 +12,8 @@ const {
 const loForEach = require('lodash/forEach');
 
 const {
-  setValueFromSourceForGroup
+  setValueFromSourceForGroup,
+  convertAliasListToBrowseNameList
 } = require('../opcua-helper');
 
 const debug = require('debug')('app:opcua-getters/valueFromFile');
@@ -38,6 +39,7 @@ const valueFromFile = function (params = {}, addedValue) {
     results.data[0][key] = getRandomValue(value);
   });
   dataItems = results.data[0];
+  dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
   if (isLog) inspector('valueFromFile.dataItems:', dataItems);
   // Set value from source for group 
   if (params.addedVariableList) {

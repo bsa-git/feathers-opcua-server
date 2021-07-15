@@ -13,7 +13,12 @@ const {
   getServerService,
   getClientService,
   executeOpcuaClientScript,
+  getOpcuaTags
 } = require('./opcua-helper');
+
+const {
+  saveOpcuaTags
+} = require('../db-helpers');
 
 const {
   MessageSecurityMode,
@@ -47,6 +52,14 @@ module.exports = async function opcuaBootstrap(app) {
   const isOpcuaBootstrapAllowed = feathersSpecs.app.envAllowingOpcuaBootstrap.find(item => item === app.get('env'));
   if (!isOpcuaBootstrapAllowed) return;
   
+  // Get opcua tags 
+  const opcuaTags = getOpcuaTags();
+  if (isLog) inspector('opcuaBootstrap.opcuaTags:', opcuaTags);
+  // Save opcua tags 
+  const saveResult = await saveOpcuaTags(app, opcuaTags);
+  if (isLog) inspector('opcuaBootstrap.saveResult:', saveResult);
+  inspector('opcuaBootstrap.saveResult:', saveResult);
+
   let opcuaOptions = getOpcuaConfig();
   opcuaOptions = opcuaOptions.filter(item => !item.isDisable);
   for (let index = 0; index < opcuaOptions.length; index++) {

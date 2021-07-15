@@ -34,14 +34,13 @@ const histValueFromHttpPath = function (params = {}, addedValue) {
     dataType = formatUAVariable(addedValue).dataType[1];
     results = papa.parse(data, { delimiter: ';', header: true });
     dataItems = results.data[0];
-    
+    dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
     if (isDebug) console.log(chalk.green('fileName:'), chalk.cyan(fileName));
     if(isLog) inspector('histValueFromHttpPath.dataItems:', dataItems);
 
     // Set value from source for group 
     if (params.addedVariableList) {
-      convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
       setValueFromSourceForGroup(params, dataItems);
     }
   };

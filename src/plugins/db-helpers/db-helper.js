@@ -1,13 +1,17 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
-const loMerge = require('lodash/merge');
-const loOmit = require('lodash/omit');
-const loIsObject = require('lodash/isObject');
-const { getOpcuaConfigsForMe } = require('../opcua/opcua-helper');
-
+const {
+  getOpcuaConfigsForMe,
+} = require('../opcua/opcua-helper');
 const {
   inspector,
 } = require('../lib');
+
+const loMerge = require('lodash/merge');
+const loOmit = require('lodash/omit');
+const loIsObject = require('lodash/isObject');
+const loIsString = require('lodash/isString');
+const loForEach = require('lodash/forEach');
 
 const debug = require('debug')('app:db-helper');
 const isLog = false;
@@ -117,14 +121,14 @@ const getEnvAdapterDB = function () {
   let envAdapterDB = 'feathers-nedb';
   const envTypeDB = getEnvTypeDB();
   switch (envTypeDB) {
-  case 'nedb':
-    envAdapterDB = 'feathers-nedb';
-    break;
-  case 'mongodb':
-    envAdapterDB = 'feathers-mongoose';
-    break;
-  default:
-    break;
+    case 'nedb':
+      envAdapterDB = 'feathers-nedb';
+      break;
+    case 'mongodb':
+      envAdapterDB = 'feathers-mongoose';
+      break;
+    default:
+      break;
   }
   return envAdapterDB;
 };
@@ -144,6 +148,74 @@ const getIdField = function (items) {
   }
   return idField ? idField : new Error('Items argument is not an array or object');
 };
+
+/**
+ * @name saveOpcuaValue
+ * @async
+ * 
+ * @param {Object} app
+ * @param {String} browseName 
+ * @param {String|Object} value 
+ * @returns {Object}
+ */
+const saveOpcuaValue = async function (app, browseName, value) {
+  let tags, opcuaValue, opcuaValues = [], savedValue = null;
+  //----------------------------------------------------------
+  if (loIsString(value)) {
+    opcuaValue = JSON.parse(value);
+  }
+  tags = await findItems(app, 'opcua-tags', { browseName });
+  if (tags.length) {
+    // throw new errors.GeneralError(`No tag found for browse name - '${browseName}'`);
+    const tag = tags[0];
+    const idField = 'id' in tag ? 'id' : '_id';
+    const tagId = tag[idField].toString();
+    loForEach(opcuaValue, (value, key) => { opcuaValues.push({ key, value }); });
+    const data = {
+      tagId,
+      tagName: tag.browseName,
+      values: opcuaValues
+    };
+    savedValue = await createItem(app, 'opcua-values', data);
+    if (isLog) inspector('db-helper.saveOpcuaValue.savedValue:', savedValue);
+  }
+  return savedValue;
+};
+
+/**
+ * @name saveOpcuaTags
+ * @async
+ * 
+ * @param {Object} app 
+ * @param {Object[]} tags 
+ * @returns {Object}
+ * e.g. { added: 123, updated: 32, deleted: 12}
+ */
+const saveOpcuaTags = async function (app, tags) {
+  let tagFromDB = null, added = 0, updated = 0, deleted = 0;
+  //------------------------------------------------------------
+  tags.forEach(tag => {
+    
+    tagFromDB = await findItems(app, 'opcua-tags', { browseName: tag.browseName });
+    if (tagFromDB.length) {
+      tagFromDB = tagFromDB[0];
+      const idField = 'id' in tagFromDB ? 'id' : '_id';
+      tagFromDB = loOmit(tagFromDB, [idField, 'createdAt', 'updatedAt']);
+      if (isLog) inspector('db-helper.saveOpcuaTags.tagFromDB:', tagFromDB);
+      inspector('db-helper.saveOpcuaTags.tagFromDB:', tagFromDB);
+      inspector('db-helper.saveOpcuaTags.tag:', tag);
+      tagFromDB = JSON.stringify(tagFromDB);
+      tag = JSON.stringify();
+      inspector('db-helper.saveOpcuaTags.is:', Object.is(tagFromDB, tag));
+    } else {
+      tagFromDB = await createItem(app, 'opcua-tags', tag);
+      if (tagFromDB) added = added + 1;
+    }
+  });
+  return { added, updated, deleted }
+};
+
+//================================================================================
 
 /**
  * Get count items
@@ -367,6 +439,8 @@ module.exports = {
   getEnvTypeDB,
   getEnvAdapterDB,
   getIdField,
+  saveOpcuaValue,
+  saveOpcuaTags,
   getCountItems,
   getItem,
   findItems,

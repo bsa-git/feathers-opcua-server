@@ -38,13 +38,7 @@ function onChangedGroupHandler(params, dataValue) {
     value = JSON.parse(value);
     const valueKeys = Object.keys(value).length;
     console.log('<<===', chalk.magentaBright(`ID="${params.id}"; `), chalk.greenBright(`Name="${browseName}"; `), chalk.whiteBright(`Number of values=(${valueKeys});`), chalk.cyanBright(`Timestamp=${timestamp}`), '===>>');
-    // console.log(chalk.white(`${JSON.stringify(value)}`));
   }
-
-  // if(addressSpaceOption.ownerGroup){
-  //   console.log(chalk.green(`${browseName} =`), chalk.cyan(`${value} ${engineeringUnits};`), chalk.green('aliasName ='), `"${addressSpaceOption.aliasName}"`);
-  // }
- 
 }
 
 module.exports = onChangedGroupHandler;
