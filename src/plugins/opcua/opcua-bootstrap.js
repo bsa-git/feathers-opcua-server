@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
+const logger = require('../../logger');
 const fs = require('fs');
 const {
   readJsonFileSync, 
@@ -52,13 +53,15 @@ module.exports = async function opcuaBootstrap(app) {
   const isOpcuaBootstrapAllowed = feathersSpecs.app.envAllowingOpcuaBootstrap.find(item => item === app.get('env'));
   if (!isOpcuaBootstrapAllowed) return;
   
+  // Remove all tags
+  // await  app.service('opcua-values').remove(null);
+  // await  app.service('opcua-tags').remove(null);
   // Get opcua tags 
   const opcuaTags = getOpcuaTags();
   if (isLog) inspector('opcuaBootstrap.opcuaTags:', opcuaTags);
   // Save opcua tags 
   const saveResult = await saveOpcuaTags(app, opcuaTags);
-  if (isLog) inspector('opcuaBootstrap.saveResult:', saveResult);
-  inspector('opcuaBootstrap.saveResult:', saveResult);
+  logger.info('opcuaBootstrap.saveOpcuaTags:', saveResult);
 
   let opcuaOptions = getOpcuaConfig();
   opcuaOptions = opcuaOptions.filter(item => !item.isDisable);

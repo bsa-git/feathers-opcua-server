@@ -232,7 +232,8 @@
       "variableGetType": "valueFromSource",
       "getter": "histValueFromPath",
       "getterParams": {
-        "path": "//192.168.3.5/www_m5/m5_data2"
+        "path": "//192.168.3.5/www_m5/m5_data2",
+        "interval": 15000
       }
     },
     {

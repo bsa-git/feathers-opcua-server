@@ -2,20 +2,19 @@
 const { HookHelper } = require('../../../plugins');
 module.exports = function (options = {}) {
   return async context => {
-    // Get `app`, `method`, `params` and `result` from the hook context
-    const { app, method, result, params } = context;
     // Create HookHelper object
     const hh = new HookHelper(context);
-    // Function that adds the items to a single user object
+    // Function that adds the items
     const addItems = async data => {
+      const fieldId = HookHelper.getIdField(data);
       if (data.roleId && data.profileId) {
-        const role = await hh.getItem('roles', data.roleId);
-        if(role){
-          data.role = role;
+        const roles = await hh.findItems('roles', { [fieldId]: data.roleId });
+        if(roles.length){
+          data.role = roles[0];
         }
-        const userProfile = await hh.getItem('user-profiles', data.profileId);
-        if(userProfile){
-          data.userProfile = userProfile;
+        const userProfiles = await hh.findItems('user-profiles', { [fieldId]: data.profileId });
+        if(userProfiles.length){
+          data.userProfile = userProfiles[0];
         }
       }
     };

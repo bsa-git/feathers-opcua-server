@@ -6,10 +6,11 @@ module.exports = function (options = {}) {
     const hh = new HookHelper(context);
     // Function that adds the items
     const addItems = async message => {
+      const fieldId = HookHelper.getIdField(message);
       if (message.userId) {
-        const user = await hh.getItem('users', message.userId);
-        if(user){
-          message.user = user;
+        const users = await hh.findItems('users', { [fieldId]: message.userId });
+        if(users.length){
+          message.user = users[0];
         }
       }};
     await hh.forEachRecords(addItems);

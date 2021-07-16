@@ -3,9 +3,11 @@ const { join } = require('path');
 const moment = require('moment');
 const chalk = require('chalk');
 const appRoot = join(__dirname, '../../../');
+const { isObject } = require('./type-of');
 
 const loRound = require('lodash/round');
 const loToPlainObject = require('lodash/toPlainObject');
+const loIsEqual = require('lodash/isEqual');
 
 const debug = require('debug')('app:util');
 
@@ -200,7 +202,7 @@ const getFloat = function (value) {
 
 /**
  * Get Regex
- * @param type
+ * @param {String} type
  * @return {String}
  */
 const getRegex = function (type) {
@@ -295,7 +297,7 @@ const inspectorToLog = function (desc, obj, logName = 'inspector.log', depth = 6
 
 /**
  * Query params
- * @param obj
+ * @param {Object} obj
  * @returns {string}
  */
 const qlParams = function (obj) {
@@ -308,12 +310,12 @@ const qlParams = function (obj) {
 
 /**
  * Stringify to represent an object as a string
- * @param obj
- * @param spacer
- * @param separator
- * @param leader
- * @param trailer
- * @returns {string}
+ * @param {Object} obj
+ * @param {String} spacer
+ * @param {String} separator
+ * @param {String} leader
+ * @param {String} trailer
+ * @returns {String}
  */
 const stringify = function (obj, spacer = ' ', separator = ', ', leader = '{', trailer = '}') {
   if (typeof obj !== 'object' || Array.isArray(obj)) {
@@ -363,6 +365,59 @@ const getRandomValue = function (v = 10) {
   return loRound(value, 3);
 };
 
+/**
+ * Is deep strict equal
+ * @param {Object} object1 
+ * @param {Object} object2 
+ * @returns {Boolean}
+ */
+const isDeepStrictEqual = function(object1, object2) {
+  
+  const keys1 = Object.keys(object1);
+  const keys2 = Object.keys(object2);
+
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+
+  for (const key of keys1) {
+    const val1 = object1[key];
+    const val2 = object2[key];
+    const areObjects = isObject(val1) && isObject(val2);
+    if (
+      areObjects && !isDeepStrictEqual(val1, val2) ||
+      !areObjects &&  !loIsEqual(val1, val2)
+    ) {
+      return false;
+    }
+  }
+  return true;
+};
+
+/**
+ * Is deep equal
+ * @param {Object} object1 
+ * @param {Object} object2 
+ * @returns {Boolean}
+ */
+const isDeepEqual = function(object1, object2) {
+  
+  const keys1 = Object.keys(object1);
+  
+  for (const key of keys1) {
+    const val1 = object1[key];
+    const val2 = object2[key];
+    const areObjects = isObject(val1) && isObject(val2);
+    if (
+      areObjects && !isDeepEqual(val1, val2) ||
+      !areObjects &&  !loIsEqual(val1, val2)
+    ) {
+      return false;
+    }
+  }
+  return true;
+};
+
 module.exports = {
   appRoot,
   delayTime,
@@ -385,5 +440,7 @@ module.exports = {
   qlParams,
   stringify,
   cloneObject,
-  getRandomValue
+  getRandomValue,
+  isDeepStrictEqual,
+  isDeepEqual
 };

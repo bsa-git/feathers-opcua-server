@@ -28,7 +28,7 @@ module.exports = async function servicesConstraint(context) {
   let maxOpcuaValuesRows = process.env.OPCUA_VALUES_MAXROWS;
   maxOpcuaValuesRows = Number.isInteger(maxOpcuaValuesRows) ? maxOpcuaValuesRows : Number.parseInt(maxOpcuaValuesRows);
 
-  let idField, validate, normalize, tagId;
+  let idField, validate, normalize, tagId, removedItems = [];
 
   //----- SERVICES CONSTRAINT ---//
   switch (`${hookHelper.contextPath}.${hookHelper.contextMethod}.${hookHelper.contextType}`) {

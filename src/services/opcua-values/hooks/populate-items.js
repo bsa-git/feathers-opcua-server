@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 const { HookHelper } = require('../../../plugins');
-
 module.exports = function (options = {}) {
   return async context => {
     // Create HookHelper object
@@ -8,9 +7,10 @@ module.exports = function (options = {}) {
     // Add items
     const addItems = async value => {
       if (value.tagId) {
-        const tag = await hh.getItem('opcua-tags', value.tagId);
-        if (tag) {
-          value.tag = tag;
+        const fieldId = HookHelper.getIdField(value);
+        const tags = await hh.findItems('opcua-tags', { [fieldId]: value.tagId });
+        if (tags.length) {
+          value.tag = tags[0];
         }
       }
     };

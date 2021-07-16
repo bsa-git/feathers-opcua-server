@@ -26,14 +26,17 @@ module.exports = function (app) {
     const mongooseClient = app.get('mongooseClient');
     const { Schema } = mongooseClient;
     const schema = new Schema({
+      isDisable: { type: Boolean },
       browseName: { type: String, required: true, unique: true },
       displayName: { type: String, required: true },
+      aliasName: { type: String },
       type: { type: String, required: true },
       description: { type: String },
       ownerName: { type: String },
       dataType: { type: String },
       hist: { type: Boolean },
       group: { type: Boolean },
+      ownerGroup: { type: String },
       variableGetType: { type: String },
       getter: { type: String },
       getterParams: {

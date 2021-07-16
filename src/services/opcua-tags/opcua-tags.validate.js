@@ -20,10 +20,16 @@ let base = merge({},
       _id: {
         type: ID
       },
+      isDisable: {
+        type: 'boolean'
+      },
       browseName: {
         type: 'string'
       },
       displayName: {
+        type: 'string',
+      },
+      aliasName: {
         type: 'string',
       },
       description: {
@@ -43,6 +49,9 @@ let base = merge({},
       },
       group: {
         type: 'boolean'
+      },
+      ownerGroup: {
+        type: 'string'
       },
       variableGetType: {
         type: 'string'
