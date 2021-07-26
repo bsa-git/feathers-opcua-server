@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
-const app = require('../src/app');
+const app = require('../../src/app');
 const port = app.get('port');
-const { inspector, } = require('../src/plugins/lib');
-const { localStorage, loginLocal, feathersClient, AuthServer } = require('../src/plugins/auth');
+const { inspector, } = require('../../src/plugins/lib');
+const { localStorage, loginLocal, feathersClient, AuthServer } = require('../../src/plugins/auth');
 const {
   saveFakesToServices,
   fakeNormalize,
-} = require('../src/plugins/test-helpers');
+} = require('../../src/plugins/test-helpers');
 
-const debug = require('debug')('app:authentication.test');
+const debug = require('debug')('app:authorization.test');
 
 const isDebug = false;
 const isLog = true;
@@ -24,11 +24,18 @@ const AdminFakeUser = fakeUsers[0];
 const guestFakeUser = fakeUsers[1];
 const fakeMessage = fakeMessages[0];
 
+const newUser = {
+  email: 'newUserAuthorization@test.com',
+  password: 'secret'
+};
+
+let newUserId = '';
+
 
 const baseUrl = process.env.BASE_URL;
 const baseUrl2 = 'http://localhost:3131';
 
-describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
+describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
 
   it('#1: Registered the authentication service', () => {
     assert.ok(app.service('authentication'));
@@ -71,7 +78,9 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
       }
     });
 
-    it('#3: Reading message test for authenticates user', async () => {
+    
+
+    it('#3: Reading message test for authenticates user (Administrator)', async () => {
       // Login
       await loginLocal(appRestClient, AdminFakeUser.email, AdminFakeUser.password);
       const service = appRestClient.service('messages');
@@ -81,7 +90,47 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
       assert.ok(msg, 'Reading message test for authenticates user');
     });
 
+    it('#4: Reading message test for authenticates user (Guest)', async () => {
+      // Login
+      await loginLocal(appRestClient, guestFakeUser.email, guestFakeUser.password);
+      const service = appRestClient.service('messages');
+      const msg = await service.get(fakeMessage[idField]);
+      // Logout
+      await appRestClient.logout();
+      assert.ok(msg, 'Reading message test for authenticates user');
+    });
 
+    it('#5: create user for not authenticates user', async () => {
+      const params = { provider: 'rest' };
+      const service = app.service('users');
+      const user = await service.create(newUser, params);
+      newUserId = user[idField].toString();
+      assert.ok(user, 'Create user for not authenticates user');
+    });
+
+    it('#6: Find new user for not authenticates user', async () => {
+      const params = { provider: 'rest' };
+      const service = app.service('users');
+      let user = await service.find({query:{email: newUser.email}}, params);
+      user = user.data[0];
+      assert.ok(user, 'Error reading new user for not authenticates user');
+    });
+
+    it('#7: Error removing new user for not authenticates user', async () => {
+      try {
+        const params = { provider: 'rest' };
+        const service = app.service('users');
+        await service.remove(newUserId, params);
+        // inspector('Error reading new user for not authenticates user user::', user);
+        assert.ok(false, 'Error removing new user for not authenticates user');
+      } catch (error) {
+        // inspector('Error reading message for not authenticates user.error:', error.message);
+        assert.ok(error.message === 'Not authenticated', 'Error reading new user for not authenticates user');
+      }
+    });
+
+
+    /*
     it('#4: Error creating message for authenticates user ???', async () => {
       try {
         // Login
@@ -98,6 +147,6 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
         assert.ok(true, 'Error creating message for authenticates user');
       }
     });
-
+    */
   });
 });

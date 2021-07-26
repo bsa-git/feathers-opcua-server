@@ -12,8 +12,8 @@ const localStorage = require('./local-storage');
 
 const debug = require('debug')('app:feathers-client');
 
-const isDebug = true;
-const isLog = true;
+const isDebug = false;
+const isLog = false;
 
 module.exports = function makeServerClient (options) {
   let { transport, timeout, serverUrl, ioOptions, storage, ifNoAuth } = options;

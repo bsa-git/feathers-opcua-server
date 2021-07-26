@@ -113,7 +113,7 @@ class AuthServer {
   /**
    * Is mask
    * @param mask // 'authentication.create.after'
-   * @return Boolean
+   * @return {Boolean}
    */
   isMask(mask = '') {
     const maskItems = mask.split('.');
@@ -130,7 +130,7 @@ class AuthServer {
 
   /**
    * Get auth user
-   * @return {null}
+   * @return {Object|null}
    */
   getAuthUser() {
     return this.isAuth() ? this.contextUser : null;
@@ -138,8 +138,8 @@ class AuthServer {
 
   /**
    * Get my role
-   * @param id
-   * @return {Promise.<*>}
+   * @param {String} id
+   * @return {Object}
    */
   async getRole(id) {
     const role = await this.app.service('roles').get(id);
@@ -149,7 +149,7 @@ class AuthServer {
 
   /**
    * Get role name
-   * @return {Promise.<*>}
+   * @return {String}
    */
   async getRoleName() {
     if (!this.roleName) {
@@ -162,14 +162,15 @@ class AuthServer {
 
   /**
    * Get roleId
-   * @param isRole
-   * @return {Promise.<string>}
+   * @param {String} alias
+   * e.g. isAdministrator
+   * @return {String}
    */
-  async getRoleId(isRole = '') {
+  async getRoleId(alias = '') {
     let roleId = '';
     const service = this.app.service('roles');
     if (service) {
-      const roleName = AuthServer.getRoles(isRole);
+      const roleName = AuthServer.getRoles(alias);
       let findResults = await service.find({ query: { name: roleName } });
       findResults = findResults.data;
       if (findResults.length) {
@@ -274,7 +275,7 @@ class AuthServer {
 
   /**
    * Set user loginAt
-   * @return {Promise.<*>}
+   * @return {Object}
    */
   async setLoginAt() {
     const moment = require('moment');
@@ -296,6 +297,10 @@ class AuthServer {
     }
   }
 
+  /**
+   * getHookContext
+   * @returns {Object}
+   */
   getHookContext() {
     let target = {};
     let { path, method, type, params, id, data, result, /*dispatch,*/ statusCode, grapql } = this.context;
@@ -323,8 +328,8 @@ class AuthServer {
    * verifyJWT
    * Pass a jwt token, get back a payload if it's valid.
    *
-   * @param token
-   * @return {Promise.<void>}
+   * @param {String} token
+   * @return {Object}
    */
   static async verifyJWT(token) {
     const decode = require('jwt-decode');
@@ -427,7 +432,7 @@ class AuthServer {
   }
 
   /**
-   * Get IsRole for roleName
+   * Get aliase for roleName
    * e.g. for Administrator => isAdministrator; NotEnvRole => isGuest
    * @param roleName
    * @return {String}

@@ -92,24 +92,23 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
     assert.ok(errPath === '', `Not save fakes to services - '${errPath}'`);
   });
 
-  it('#6: Customizing the Payload with Hook', () => {
+  it('#6: Customizing the Payload with Hook', async () => {
+
+    const fakeUser = fakes['users'][0];
     // Set context params
+    contextBefore.app = app;
     contextBefore.params.authenticated = true;
+    contextBefore.params.user = fakeUser;
     contextBefore.params.payload = {};
-    contextBefore.path = 'users';
+    contextBefore.path = 'roles';
     contextBefore.method = 'create';
 
-    const objRoles = AuthServer.getRoles();
-    const roleNames = Object.keys(objRoles);
-    roleNames.forEach(name => {
-      contextBefore.params.payload.role = objRoles[name];
-      authHook.payloadExtension(true)(contextBefore);
-      if (isLog) inspector('Customizing the Payload with Hook.contextBefore:', contextBefore);
-      if (isDebug) debug('Customizing the Payload with Hook.params.payload.role:', contextBefore.params.payload.role);
-      assert(contextBefore.params.payload.role === objRoles[name], 'Customizing the Payload');
-    });
+    await authHook.payloadExtension(true)(contextBefore);
+    if(isLog) inspector('Customizing the Payload with Hook.contextBefore:', contextBefore.params.payload);
+    assert(contextBefore.params.payload.role, 'Customizing the Payload');
   });
 
+  /*
   it('#7: Check access to public services', async () => {
     try {
       const objServices = AuthServer.listServices(process.env.PUBLIC_SERVICES);
@@ -249,6 +248,7 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
       assert.strictEqual(ex.name, 'Forbidden', 'unexpected error.name');
     }
   });
+  */
 
   it('#13: Check of set user loginAt field', async () => {
     try {
@@ -280,4 +280,5 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
       assert(false, 'The hook "authHook.loginCheck()" generated an error of the wrong type.');
     }
   });
+  
 });

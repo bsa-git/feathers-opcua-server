@@ -20,7 +20,6 @@ const defineRulesFor = (user) => {
   if (user.roleAlias === 'isAdministrator') {
     // Administrator can do all
     can('manage', 'all');
-    // cannot('create', 'messages');
     return rules;
   }
   

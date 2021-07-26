@@ -47,6 +47,7 @@ let moduleExports = {
 };
 
 moduleExports.before.find = loConcat(moduleExports.before.find, authorizeHook);
+moduleExports.before.get = loConcat(moduleExports.before.get, authorizeHook);
 moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create, authorizeHook);
 moduleExports.before.update = loConcat([validateUpdate()], moduleExports.before.update, authorizeHook);
 moduleExports.before.patch = loConcat([validatePatch()], moduleExports.before.patch, authorizeHook);

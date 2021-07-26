@@ -53,9 +53,6 @@ module.exports = async function opcuaBootstrap(app) {
   const isOpcuaBootstrapAllowed = feathersSpecs.app.envAllowingOpcuaBootstrap.find(item => item === app.get('env'));
   if (!isOpcuaBootstrapAllowed) return;
   
-  // Remove all tags
-  // await  app.service('opcua-values').remove(null);
-  // await  app.service('opcua-tags').remove(null);
   // Get opcua tags 
   const opcuaTags = getOpcuaTags();
   if (isLog) inspector('opcuaBootstrap.opcuaTags:', opcuaTags);

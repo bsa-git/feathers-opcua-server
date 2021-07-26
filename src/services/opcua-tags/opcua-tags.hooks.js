@@ -1,3 +1,4 @@
+const { authenticate } = require('@feathersjs/authentication').hooks;
 const { authorize } = require('feathers-casl').hooks;
 const { validateCreate, validateUpdate, validatePatch } = require('./opcua-tags.validate');
 const processItem = require('./hooks/process-item');
@@ -9,7 +10,7 @@ const authorizeHook = authorize({ adapter: getEnvAdapterDB() });
 
 let moduleExports = {
   before: {
-    all: [],
+    all: [authenticate('jwt')],
     find: [],
     get: [],
     create: [processItem()],
@@ -40,6 +41,7 @@ let moduleExports = {
 };
 
 moduleExports.before.find = loConcat(moduleExports.before.find, authorizeHook);
+moduleExports.before.get = loConcat(moduleExports.before.get, authorizeHook);
 moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create, authorizeHook);
 moduleExports.before.update = loConcat([validateUpdate()], moduleExports.before.update, authorizeHook);
 moduleExports.before.patch = loConcat([validatePatch()], moduleExports.before.patch, authorizeHook);

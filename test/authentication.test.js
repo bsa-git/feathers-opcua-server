@@ -56,7 +56,7 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
       }, 500);
     });
 
-    it('#2: Authenticates from server user and creates accessToken', async () => {
+    it('#2: Authenticates user and creates accessToken', async () => {
       const { user, accessToken } = await app.service('authentication').create({
         strategy: 'local',
         email: fakeUser.email, 
@@ -66,7 +66,7 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
       assert.ok(user, 'Includes user in authentication data');
     });
 
-    it('#4: Authenticates from rest client new user and creates accessToken', async () => {
+    it('#4: Authenticates from rest client user and creates accessToken', async () => {
       const { accessToken } = await loginLocal(appRestClient, fakeUser.email, fakeUser.password);
       assert.ok(accessToken, 'Created access token for user');
     });
