@@ -25,8 +25,12 @@ const guestFakeUser = fakeUsers[1];
 const fakeMessage = fakeMessages[0];
 
 const newUser = {
-  email: 'newUserAuthorization@test.com',
-  password: 'secret'
+  email: 'new-user@test.com',
+  password: 'new-user'
+};
+
+const newMessage = {
+  text: 'Новое сообщение!'
 };
 
 let newUserId = '';
@@ -66,6 +70,44 @@ describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
       }, 500);
     });
 
+    it('#4: Error create message for authenticates user (Guest)', async () => {
+      try {
+        // Login 
+        await loginLocal(appRestClient, guestFakeUser.email, guestFakeUser.password);
+        // Get message
+        let service = appRestClient.service('messages');
+        await service.create(newMessage);
+        assert.ok(false, 'Reading message test for authenticates user');
+      } catch (error) {
+        // inspector('Error create message for authenticates user (Guest).error:', error.message);
+        assert.ok(error.message === 'You are not allowed to create messages', 'Reading message test for authenticates user');
+        // Logout
+        await appRestClient.logout();
+      }
+    });
+
+    // it('#3: Reading message test for authenticates user (Administrator)', async () => {
+    //   // Login
+    //   await loginLocal(appRestClient, AdminFakeUser.email, AdminFakeUser.password);
+    //   const service = appRestClient.service('messages');
+    //   const msg = await service.create(newMessage);
+    //   // Logout
+    //   await appRestClient.logout();
+    //   assert.ok(msg, 'Reading message test for authenticates user');
+    // });
+
+    /*
+
+    it('#3: Reading message test for authenticates user (Administrator)', async () => {
+      // Login
+      await loginLocal(appRestClient, AdminFakeUser.email, AdminFakeUser.password);
+      const service = appRestClient.service('messages');
+      const msg = await service.get(fakeMessage[idField]);
+      // Logout
+      await appRestClient.logout();
+      assert.ok(msg, 'Reading message test for authenticates user');
+    });
+
     it('#2: Error reading message for not authenticates user', async () => {
       try {
         const params = { provider: 'rest' };
@@ -78,29 +120,7 @@ describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
       }
     });
 
-    
-
-    it('#3: Reading message test for authenticates user (Administrator)', async () => {
-      // Login
-      await loginLocal(appRestClient, AdminFakeUser.email, AdminFakeUser.password);
-      const service = appRestClient.service('messages');
-      const msg = await service.get(fakeMessage[idField]);
-      // Logout
-      await appRestClient.logout();
-      assert.ok(msg, 'Reading message test for authenticates user');
-    });
-
-    it('#4: Reading message test for authenticates user (Guest)', async () => {
-      // Login
-      await loginLocal(appRestClient, guestFakeUser.email, guestFakeUser.password);
-      const service = appRestClient.service('messages');
-      const msg = await service.get(fakeMessage[idField]);
-      // Logout
-      await appRestClient.logout();
-      assert.ok(msg, 'Reading message test for authenticates user');
-    });
-
-    it('#5: create user for not authenticates user', async () => {
+    it('#5: Create new user for not authenticates user', async () => {
       const params = { provider: 'rest' };
       const service = app.service('users');
       const user = await service.create(newUser, params);
@@ -111,12 +131,25 @@ describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
     it('#6: Find new user for not authenticates user', async () => {
       const params = { provider: 'rest' };
       const service = app.service('users');
-      let user = await service.find({query:{email: newUser.email}}, params);
+      let user = await service.find({ query: { email: newUser.email } }, params);
       user = user.data[0];
       assert.ok(user, 'Error reading new user for not authenticates user');
     });
 
-    it('#7: Error removing new user for not authenticates user', async () => {
+    it('#7: Error get new user for not authenticates user', async () => {
+      try {
+        const params = { provider: 'rest' };
+        const service = app.service('users');
+        await service.get(newUserId, params);
+        // inspector('Error reading new user for not authenticates user user::', user);
+        assert.ok(false, 'Error get new user for not authenticates user');
+      } catch (error) {
+        // inspector('Error reading message for not authenticates user.error:', error.message);
+        assert.ok(error.message === 'Not authenticated', 'Error get new user for not authenticates user');
+      }
+    });
+
+    it('#8: Error removing new user for not authenticates user', async () => {
       try {
         const params = { provider: 'rest' };
         const service = app.service('users');
@@ -129,22 +162,18 @@ describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
       }
     });
 
-
-    /*
-    it('#4: Error creating message for authenticates user ???', async () => {
+    it('#9: Error removing new user for authenticates user (Guest)', async () => {
       try {
         // Login
-        await loginLocal(appRestClient, AdminFakeUser.email, AdminFakeUser.password);
-        const service = appRestClient.service('messages');
-        const msg = await service.create({text: 'Test authorization'});
+        await loginLocal(appRestClient, guestFakeUser.email, guestFakeUser.password);
+        const service = app.service('users');
+        await service.remove(newUserId);
+        // inspector('Error reading new user for not authenticates user user::', user);
+        assert.ok(false, 'Error removing new user for not authenticates user');
+      } catch (error) {
         // Logout
         await appRestClient.logout();
-        // inspector('Error creating message for authenticates user.msg:', msg);
-        assert.ok(true, 'Error creating message for authenticates user');
-      } catch (error) {
-        inspector('Error creating message for authenticates user.error:', error);
-        // assert.ok(error.message === 'Not authenticated', 'Error reading message for not authenticates user');
-        assert.ok(true, 'Error creating message for authenticates user');
+        assert.ok(error.message === 'Not authenticated', 'Error reading new user for not authenticates user');
       }
     });
     */

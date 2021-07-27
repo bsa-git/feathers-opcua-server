@@ -7,6 +7,19 @@ const {
   opcuaBootstrap,
 } = require('./plugins/opcua');
 
+// const { localStorage, loginLocal, feathersClient, AuthServer } = require('./plugins/auth');
+// const { fakeNormalize } = require('./plugins/test-helpers');
+
+// Get generated fake data
+// const fakes = fakeNormalize();
+// const fakeUsers = fakes['users'];
+// const fakeMessages = fakes['messages'];
+// // const idField = AuthServer.getIdField(fakeUsers);
+// const AdminFakeUser = fakeUsers[0];
+// const guestFakeUser = fakeUsers[1];
+// const fakeMessage = fakeMessages[0];
+
+
 const port = app.get('port');
 const server = app.listen(port);
 process.on('unhandledRejection', (reason, p) => {
@@ -23,5 +36,13 @@ server.on('listening', async () => {
   // Start opcua bootstrap
   await opcuaBootstrap(app);
 
+  // localStorage.clear();
+  // let appRestClient = feathersClient({ transport: 'rest', serverUrl: process.env.BASE_URL });
+  // // Login
+  // await loginLocal(appRestClient, guestFakeUser.email, guestFakeUser.password);
+  // let service = appRestClient.service('messages');
+  // const msg = await service.create({text: 'Новое сообщение!'});
+  // // Logout
+  // await appRestClient.logout();
 
 });

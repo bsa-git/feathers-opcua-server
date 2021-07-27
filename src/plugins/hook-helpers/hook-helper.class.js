@@ -250,15 +250,32 @@ class HookHelper {
     if (params) {
       target.params = {};
 
-      let { user, authenticated, provider, query, connection } = params;
+      let { user, authenticated, authentication, provider, query, connection, rules, ability } = params;
 
       if (user) {
         target.params.user = user;
       }
+      
       if (authenticated) {
         target.params.authenticated = authenticated;
       }
-      target.params.provider = provider ? provider : '';
+
+      if (authentication) {
+        target.params.authentication = authentication;
+      }
+
+      if(provider){
+        target.params.provider = provider;  
+      }
+
+      if(ability){
+        target.params.ability = ability;
+      }
+
+      if(rules){
+        target.params.rules = rules;
+      }
+
       if (query && Object.keys(query).length > 0) {
         target.params.query = query;
       }

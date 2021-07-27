@@ -30,7 +30,7 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
     // Make sure that messages are no longer than 400 characters
     updateData.text = updateData.text.substring(0, 400);
     // Set the user id
-    if(!updateData.userId){
+    if(!updateData.userId && user){
       updateData.userId = user[idField];
     }
 

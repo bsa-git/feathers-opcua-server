@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const {getItems, replaceItems} = require('feathers-hooks-common');
-const {isTrue, HookHelper, getLogMessage} = require('../plugins');
+const {isTrue, HookHelper, inspector} = require('../plugins');
 const debug = require('debug')('app:hooks.log');
 
 const isDebug = false;
@@ -18,6 +18,11 @@ module.exports = function (isTest = false) {
     // Show debug info
     hh.showDebugInfo('', isLog);
     hh.showDebugError();
+
+    if(hh.isMask('messages.create.before')){
+      hh.showDebugInfo('messages.create.before', true);
+      // inspector('hh.showDebugInfo.context:', context.params.authentication);
+    }
 
     // hh.showDebugInfo('authentication', true);
     // hh.showDebugInfo('messages', true);

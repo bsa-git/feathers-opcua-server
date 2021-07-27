@@ -27,6 +27,7 @@ const defineRulesFor = (user) => {
   can('create', 'users');
   can('read', 'users');
   can('update', 'users', ['active', 'email', 'password', 'firstName', 'lastName', 'avatar'], {id: user.id});
+  // can('delete', 'users', {id: user.id});
 
   // Can 'user-profiles' actions
   can('create', 'user-profiles');
@@ -54,7 +55,7 @@ const defineRulesFor = (user) => {
   can('read', 'opcua-tags');
 
   // Can 'messages' actions
-  can('create', 'messages');
+  // can('create', 'messages');
   can('read', 'messages');
   can('update', 'messages', ['text'], {userId: user.id });
   can('remove', 'messages', {userId: user.id });

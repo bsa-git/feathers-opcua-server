@@ -15,13 +15,13 @@ const debug = require('debug')('app:feathers-client');
 const isDebug = false;
 const isLog = false;
 
-module.exports = function makeServerClient (options) {
+module.exports = function makeServerClient(options) {
   let { transport, timeout, serverUrl, ioOptions, storage, ifNoAuth } = options;
   transport = transport || 'socketio';
   timeout = timeout || 5000;
   serverUrl = serverUrl || 'http://localhost:3030';
   ioOptions = ioOptions || {};
-  storage = storage? storage : localStorage;
+  storage = storage ? storage : localStorage;
   let socket, restClient;
 
   const appClient = feathersClient();
@@ -44,6 +44,6 @@ module.exports = function makeServerClient (options) {
       storage
     }));
   }
-  if(isDebug) debug('makeFeathersClient: OK');
+  if (isDebug) debug('makeFeathersClient: OK');
   return appClient;
 };
