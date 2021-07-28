@@ -115,6 +115,16 @@ const getEnvTypeDB = function () {
 };
 
 /**
+ * @name isSaveOpcuaToDB
+ * @returns {Boolean}
+ */
+const isSaveOpcuaToDB = function () {
+  const myConfigs = getOpcuaConfigsForMe();
+  const myConfig = myConfigs.find(item => item.isDisableSaveToDB);
+  return !myConfig;
+};
+
+/**
  * @name getEnvTypeDB
  * Get DB adapter from env and host config
  * @returns {String}
@@ -164,6 +174,9 @@ const getIdField = function (items) {
 const saveOpcuaValue = async function (app, browseName, value) {
   let tags, opcuaValue, opcuaValues = [], savedValue = null;
   //----------------------------------------------------------
+  
+  if(!isSaveOpcuaToDB()) return savedValue;
+  
   if (loIsString(value)) {
     opcuaValue = JSON.parse(value);
   }
@@ -465,6 +478,7 @@ module.exports = {
   dbNullIdValue,
   getEnvTypeDB,
   getEnvAdapterDB,
+  isSaveOpcuaToDB,
   getIdField,
   saveOpcuaValue,
   saveOpcuaTags,

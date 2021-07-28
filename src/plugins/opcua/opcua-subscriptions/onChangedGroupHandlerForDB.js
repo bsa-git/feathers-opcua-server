@@ -42,7 +42,7 @@ async function onChangedGroupHandlerForDB(params, dataValue) {
   if (addressSpaceOption.group) {
     // Save data to DB
     const savedValue = await saveOpcuaValue(params.app, browseName,  value);
-    if(isLog) inspector('onChangedGroupHandlerForDB.savedValue:', savedValue);
+    if(isLog && savedValue) inspector('onChangedGroupHandlerForDB.savedValue:', savedValue);
     // inspector('onChangedGroupHandlerForDB.savedValue:', savedValue);
 
     value = JSON.parse(value);

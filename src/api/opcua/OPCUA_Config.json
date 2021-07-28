@@ -47,6 +47,7 @@
     "clientScript": "startSubscriptionMonitor",
     "subscription": "onChangedGroupHandlerForDB",
     "hostTypeDB": "mongodb",
+    "isDisableSaveToDB": false,
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",

@@ -3,8 +3,8 @@ const errors = require('@feathersjs/errors');
 const logger = require('../../logger');
 const fs = require('fs');
 const {
-  readJsonFileSync, 
-  inspector, 
+  readJsonFileSync,
+  inspector,
   appRoot,
   isTrue
 } = require('../lib');
@@ -18,7 +18,8 @@ const {
 } = require('./opcua-helper');
 
 const {
-  saveOpcuaTags
+  saveOpcuaTags,
+  isSaveOpcuaToDB
 } = require('../db-helpers');
 
 const {
@@ -42,7 +43,7 @@ const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) 
 module.exports = async function opcuaBootstrap(app) {
   let service = null, opcuaServer = null, opcuaClient = null;
   //--------------------------------------------------------
-  
+
   // Determine if command line argument exists for seeding data
   const isSeedServices = ['--seed', '-s'].some(str => process.argv.slice(2).includes(str));
   if (isSeedServices) return;
@@ -52,13 +53,15 @@ module.exports = async function opcuaBootstrap(app) {
   // Check is opcua bootstrap allowed
   const isOpcuaBootstrapAllowed = feathersSpecs.app.envAllowingOpcuaBootstrap.find(item => item === app.get('env'));
   if (!isOpcuaBootstrapAllowed) return;
-  
-  // Get opcua tags 
-  const opcuaTags = getOpcuaTags();
-  if (isLog) inspector('opcuaBootstrap.opcuaTags:', opcuaTags);
-  // Save opcua tags 
-  const saveResult = await saveOpcuaTags(app, opcuaTags);
-  logger.info('opcuaBootstrap.saveOpcuaTags:', saveResult);
+
+  if (isSaveOpcuaToDB()) {
+    // Get opcua tags 
+    const opcuaTags = getOpcuaTags();
+    if (isLog) inspector('opcuaBootstrap.opcuaTags:', opcuaTags);
+    // Save opcua tags 
+    const saveResult = await saveOpcuaTags(app, opcuaTags);
+    logger.info('opcuaBootstrap.saveOpcuaTags:', saveResult);
+  }
 
   let opcuaOptions = getOpcuaConfig();
   opcuaOptions = opcuaOptions.filter(item => !item.isDisable);
