@@ -21,16 +21,20 @@ module.exports = {
       async context => {
         const { app } = context;
         const { user } = context.result;
-        if(isLog) inspector('authentication.hooks.user:', user);
+        if (isLog) inspector('authentication.hooks.user:', user);
         if (!user) return context;
         // Set roleAlias for user
-        if(!user.roleAlias){
+        if (!user.roleAlias) {
           const service = app.service('roles');
-          const role =  await service.get(user.roleId);
-          if(isLog) inspector('authentication.hooks.role:', role);
+          const idField = 'id' in user ? 'id' : '_id';
+          let role = await service.find({ query: { [idField]: user.roleId } });
+          role = role.data;
+          if (!role.length) return context;
+          role = role[0];
+          if (isLog) inspector('authentication.hooks.role:', role);
           user.roleAlias = role.alias;
         }
-        if(isLog) inspector('authentication.hooks.user:', user);
+        if (isLog) inspector('authentication.hooks.user:', user);
         // Set ability and rules properties
         const ability = defineAbilitiesFor(user);
         context.result.ability = ability;

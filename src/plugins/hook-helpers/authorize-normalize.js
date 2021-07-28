@@ -14,12 +14,16 @@ module.exports = async context => {
   const { user, ability, rules } = context.params;
   if (isLog) inspector('authorize-normalize.user:', user);
   if (!user) return context;
-  if(ability && rules) return context;
-  
+  if (ability && rules) return context;
+
   // Set roleAlias for user
   if (!user.roleAlias) {
     const service = app.service('roles');
-    const role = await service.get(user.roleId);
+    const idField = 'id' in user ? 'id' : '_id';
+    let role = await service.find({ query: { [idField]: user.roleId } });
+    role = role.data;
+    if (!role.length) return context;
+    role = role[0];
     if (isLog) inspector('authorize-normalize.role:', role);
     user.roleAlias = role.alias;
   }

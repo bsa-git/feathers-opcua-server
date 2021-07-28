@@ -268,13 +268,13 @@ class HookHelper {
         target.params.provider = provider;  
       }
 
-      if(ability){
-        target.params.ability = ability;
-      }
+      // if(ability){
+      //   target.params.ability = ability;
+      // }
 
-      if(rules){
-        target.params.rules = rules;
-      }
+      // if(rules){
+      //   target.params.rules = rules;
+      // }
 
       if (query && Object.keys(query).length > 0) {
         target.params.query = query;
