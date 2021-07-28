@@ -71,20 +71,21 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
 
     if (opcuaServer !== null) opcuaServer = null;
     if (server !== null) server = null;
+
     debug('OPCUA - Test::after: Done');
   });
 
-  it('Server object created', async () => {
+  it('#1: Server object created', async () => {
     assert.ok(server, 'OPCUA server not created');
   });
-  it('Client object created', async () => {
+  it('#2: Client object created', async () => {
     assert.ok(client, 'OPCUA client not created');
   });
   describe('<<=== OPC-UA: Run (opcua-class.test) ===>>', function () {
 
     //===== SERVER CREATE/SERVER CONSTRUCT ADDRESS SPACE/CLIENT CREATE/CLIENT CONNECT/SESSION CREATE =======//
 
-    it('OPC-UA server start', async () => {
+    it('#3: OPC-UA server start', async () => {
       await server.opcuaServerCreate();
       server.constructAddressSpace();
       const endpoints = await server.opcuaServerStart();
@@ -94,25 +95,25 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
       assert.ok(true, 'OPC-UA server start');
     });
 
-    it('OPC-UA client create', async () => {
+    it('#4: OPC-UA client create', async () => {
       client.opcuaClientCreate();
       opcuaClient = client.opcuaClient;
       assert.ok(true, 'OPC-UA client create');
     });
 
-    it('OPC-UA client connect', async () => {
+    it('#5: OPC-UA client connect', async () => {
       await client.opcuaClientConnect(server.getCurrentState());
       assert.ok(true, 'OPC-UA client connect');
     });
 
-    it('OPC-UA client session create', async () => {
+    it('#6: OPC-UA client session create', async () => {
       await client.sessionCreate(userIdentityInfo);
       assert.ok(true, 'OPC-UA client session create');
     });
 
     //============== SESSION READ NAMESPACE ARRAY ====================//
 
-    it('OPC-UA client session read namespace array', async () => {
+    it('#7: OPC-UA client session read namespace array', async () => {
       const result = await client.sessionReadNamespaceArray();
       console.log(chalk.green('sessionReadNamespaceArray:'), chalk.cyan(`[ ${result} ]`));
       assert.ok(true, 'OPC-UA client session create');
@@ -120,7 +121,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
 
     //============== SESSION BROWSE ====================//
 
-    it('OPC-UA client session browse', async () => {
+    it('#8: OPC-UA client session browse', async () => {
       let browseResult = null, browseNames = '', nodeIds = '';
       const folder = 'RootFolder';// RootFolder|ObjectsFolder
       browseResult = await client.sessionBrowse({ nodeId: folder });
@@ -134,7 +135,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
       assert.ok(browseResult, 'OPC-UA client session browse');
     });
 
-    it('OPC-UA client session browse2', async () => {
+    it('#9: OPC-UA client session browse2', async () => {
       let browseResult = null, browseNames = '', nodeIds = '';
       const folder = 'ObjectsFolder';// RootFolder|ObjectsFolder
       browseResult = await client.sessionBrowse(folder);
@@ -148,7 +149,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
       assert.ok(browseResult, 'OPC-UA client session browse');
     });
 
-    it('OPC-UA client session translate browse path', async () => {
+    it('#10: OPC-UA client session translate browse path', async () => {
       let browsePath = null, browseResult = null;
       browsePath = makeBrowsePath(
         'RootFolder',
@@ -166,7 +167,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
 
     //============== SESSION READ VALUES ====================//
 
-    it('OPC-UA client session read', async () => {
+    it('#11: OPC-UA client session read', async () => {
       let readResult = null, value = null, nameNodeIds = [];
       readResult = await client.sessionRead('Device2.PressureVesselDevice', AttributeIds.BrowseName);// AttributeIds: BrowseName, Value
       value = readResult[0].value.value;
@@ -189,7 +190,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
       assert.ok(readResult, 'OPC-UA client session read');
     });
 
-    it('OPC-UA client session read variable value', async () => {
+    it('#12: OPC-UA client session read variable value', async () => {
       let value = null, readResult = null, nameNodeIds = [];
       // Read variable values
       nameNodeIds = ['Device1.Temperature', 'Device2.PressureVesselDevice'];
@@ -204,7 +205,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
       assert.ok(readResult, 'OPC-UA client session read');
     });
 
-    it('OPC-UA client session read all attributes', async () => {
+    it('#13: OPC-UA client session read all attributes', async () => {
       let readResult;
       // Read all attributes for temperature
       readResult = await client.sessionReadAllAttributes('Device1.Temperature');
@@ -222,7 +223,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
 
     //============== SESSION HISTORY VALUES ====================//
     
-    it('OPC-UA client session history value', async () => {
+    it('#14: OPC-UA client session history value', async () => {
       let readResult = null;
 
       if (client.getItemNodeId('Device2.PressureVesselDevice')) {
@@ -262,7 +263,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
 
     //============== SESSION WRITE VALUE ====================//
 
-    it('OPC-UA client session write single node value', async () => {
+    it('#15: OPC-UA client session write single node value', async () => {
       let statusCode = null, readResult = null;
       let variantValue = {
         dataType: DataType.String,
@@ -276,7 +277,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
       assert.ok(readResult[0].value.value === variantValue.value, 'OPC-UA client session write single node value');
     });
 
-    it('OPC-UA client session write node value', async () => {
+    it('#16: OPC-UA client session write node value', async () => {
       let statusCodes = [], readResult = null;
       const valuesToWrite = [
         {
@@ -301,7 +302,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
 
     //============== SESSION CALL METHOD ====================//
 
-    it('OPC-UA client session call method', async () => {
+    it('#17: OPC-UA client session call method', async () => {
       let callResults = [];
       let inputArguments = [[
         {
@@ -320,7 +321,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
       assert.ok(callResults, 'OPC-UA client session call method');
     });
 
-    it('OPC-UA client session get method argument definition', async () => {
+    it('#18: OPC-UA client session get method argument definition', async () => {
       let argumentsDefinition = [];
       argumentsDefinition = await client.sessionGetArgumentDefinition('Device1.SumMethod');
       argumentsDefinition.inputArguments.forEach(argument => {
@@ -337,12 +338,12 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
 
     //============== START SUBSCRIPTION ====================//
 
-    it('OPC-UA client subscription create', async () => {
+    it('#19: OPC-UA client subscription create', async () => {
       await client.subscriptionCreate();
       assert.ok(true, 'OPC-UA client subscription create');
     });
 
-    it('OPC-UA client subscription monitor', async () => {
+    it('#20: OPC-UA client subscription monitor', async () => {
       const nameNodeIds = ['Device1.Temperature'];
       client.getNodeIds(nameNodeIds).forEach(async nodeId => {
         // await client.subscriptionMonitor(cbSubscriptionMonitor, { nodeId });
@@ -352,14 +353,14 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
       assert.ok(true, 'OPC-UA client subscription monitor');
     });
 
-    it('OPC-UA client subscription get monitored items', async () => {
+    it('#21: OPC-UA client subscription get monitored items', async () => {
       const monitoredItems = await client.sessionGetMonitoredItems(client.subscription.subscriptionId);
       console.log(chalk.green('getMonitoredItems.clientHandles:'), chalk.cyan(monitoredItems.clientHandles));
       console.log(chalk.green('getMonitoredItems.serverHandles:'), chalk.cyan(monitoredItems.serverHandles));
       assert.ok(true, 'OPC-UA client subscription monitor');
     });
 
-    it('OPC-UA client subscription terminate', async () => {
+    it('#22: OPC-UA client subscription terminate', async () => {
       await pause(1000);
       await client.subscriptionTerminate();
       assert.ok(true, 'OPC-UA client subscription terminate');
@@ -367,17 +368,17 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
 
     //===== SESSION CLOSE/CLIENT DISCONNECT/SERVER SHUTDOWN =====//
 
-    it('OPC-UA client session close', async () => {
+    it('#22: OPC-UA client session close', async () => {
       await client.sessionClose();
       assert.ok(true, 'OPC-UA client session close');
     });
 
-    it('OPC-UA client disconnect', async () => {
+    it('#23: OPC-UA client disconnect', async () => {
       await client.opcuaClientDisconnect();
       assert.ok(true, 'OPC-UA client disconnect');
     });
 
-    it('OPC-UA server shutdown', async () => {
+    it('#24: OPC-UA server shutdown', async () => {
       await server.opcuaServerShutdown();
       assert.ok(true, 'OPC-UA server shutdown');
     });

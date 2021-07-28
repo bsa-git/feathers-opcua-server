@@ -4,7 +4,8 @@ require('../../src/app');
 const { 
   OpcuaServer, 
   OpcuaClient, 
-  appRoot, 
+  appRoot,
+  makeDirSync, 
   inspector, 
   // getOpcuaConfig 
 } = require('../../src/plugins');
@@ -44,6 +45,8 @@ describe('<<=== OPC-UA: Test (opcua-class.test2) ===>>', () => {
     server = new OpcuaServer(srvParams);
     // Create OPC-UA client
     client = new OpcuaClient(clientParams);
+    // Make dirs
+    makeDirSync([appRoot, 'test/data/tmp/test1']);
     debug('OPCUA - Test2::before: Done');
   });
 
@@ -53,6 +56,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test2) ===>>', () => {
 
     if (opcuaServer !== null) opcuaServer = null;
     if (server !== null) server = null;
+
     debug('OPCUA - Test2::after: Done');
   });
 
