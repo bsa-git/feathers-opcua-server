@@ -1,0 +1,4102 @@
+[
+  {
+    "HIRANGE": 40,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01F21_1.PNT"
+  },
+  {
+    "HIRANGE": 40,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01F21_2.PNT"
+  },
+  {
+    "HIRANGE": 16000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01F4.PNT"
+  },
+  {
+    "HIRANGE": 25,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01P21_1.PNT"
+  },
+  {
+    "HIRANGE": 25,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01P21_2.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01P4_1.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": -50,
+    "NAMEINCOL": "01AMIAK:01T21_1.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": -50,
+    "NAMEINCOL": "01AMIAK:01T21_2.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01T4.PNT"
+  },
+  {
+    "HIRANGE": 40,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AZVS:01P17.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01KOND:01LC5.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01KOND:01LCC5.MEAS"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01KOND:01LCC5.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01KOND:01LCC5.OUT"
+  },
+  {
+    "HIRANGE": 25,
+    "LORANGE": 0,
+    "NAMEINCOL": "01KOND:01P8_1.PNT"
+  },
+  {
+    "HIRANGE": 99.51399994,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01F2_1.PNT"
+  },
+  {
+    "HIRANGE": 99.51399994,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01F2_2.PNT"
+  },
+  {
+    "HIRANGE": 25,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01P2_1.PNT"
+  },
+  {
+    "HIRANGE": 25,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01P2_2.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PC3.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PCC3.MEAS"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PCC3.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PCC3.OUT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01T2_1.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01T2_2.PNT"
+  },
+  {
+    "HIRANGE": 12500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PGAZ:01F5.PNT"
+  },
+  {
+    "HIRANGE": 0.70999998,
+    "LORANGE": 0.64999998,
+    "NAMEINCOL": "01PGAZ:01F5_R.PNT"
+  },
+  {
+    "HIRANGE": 16,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PGAZ:01P5.PNT"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PGAZ:01PD5.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": -50,
+    "NAMEINCOL": "01PGAZ:01T16.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01LS12.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01PS10.PNT"
+  },
+  {
+    "HIRANGE": 55,
+    "LORANGE": 45,
+    "NAMEINCOL": "01SBS_OC:01S_IAC_1.PNT"
+  },
+  {
+    "HIRANGE": 55,
+    "LORANGE": 45,
+    "NAMEINCOL": "01SBS_OC:01S_IAC_2.PNT"
+  },
+  {
+    "HIRANGE": 80,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01F20_1.PNT"
+  },
+  {
+    "HIRANGE": 80,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01F20_2.PNT"
+  },
+  {
+    "HIRANGE": 7000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_1.PNT"
+  },
+  {
+    "HIRANGE": 7000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_2.PNT"
+  },
+  {
+    "HIRANGE": 7000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_3.PNT"
+  },
+  {
+    "HIRANGE": 7000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_4.PNT"
+  },
+  {
+    "HIRANGE": 20,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01P20_1.PNT"
+  },
+  {
+    "HIRANGE": 20,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01P20_2.PNT"
+  },
+  {
+    "HIRANGE": 60,
+    "LORANGE": 45,
+    "NAMEINCOL": "01SKLAD:01Q20.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": -50,
+    "NAMEINCOL": "01SKLAD:01T20.PNT"
+  },
+  {
+    "HIRANGE": 15,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA:01F1_1.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA:01LCC12.MEAS"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA:01LCC12.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA:01LCC12.OUT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA:01P5_1.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": -50,
+    "NAMEINCOL": "01VODA:01T1_1.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": -50,
+    "NAMEINCOL": "01VODA:01T1_2.PNT"
+  },
+  {
+    "HIRANGE": 255.91038513,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01F1.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01LC1_1.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01LC1_2.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01LC6.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01LCC1PID1.MEAS"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01LCC1PID1.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01LCC1PID1.OUT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01LCC1PID2.MEAS"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01LCC1PID2.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01LCC1PID2.OUT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01LCC6.MEAS"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01LCC6.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01LCC6.OUT"
+  },
+  {
+    "HIRANGE": 40,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01P1.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01P4.PNT"
+  },
+  {
+    "HIRANGE": 0.40000001,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01PC8.PNT"
+  },
+  {
+    "HIRANGE": 0.40000001,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01PCC8.MEAS"
+  },
+  {
+    "HIRANGE": 0.40000001,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01PCC8.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01PCC8.OUT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01T1.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01T5_3.PNT"
+  },
+  {
+    "HIRANGE": 1881.25097656,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VOZD:01F10.PNT"
+  },
+  {
+    "HIRANGE": 800,
+    "LORANGE": 700,
+    "NAMEINCOL": "01VOZD:01P10A.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": -50,
+    "NAMEINCOL": "01VOZD:01Q10A.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": -50,
+    "NAMEINCOL": "01VOZD:01T10.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": -50,
+    "NAMEINCOL": "01VOZD:01T100.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": -50,
+    "NAMEINCOL": "01VOZD:01T10A.PNT"
+  },
+  {
+    "HIRANGE": 8000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01NH3_FM.PNT"
+  },
+  {
+    "HIRANGE": 250,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01NH3_FQD.OUT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01NH3_FQDM.PNT"
+  },
+  {
+    "HIRANGE": 5500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01NH3_FQM.OUT"
+  },
+  {
+    "HIRANGE": 4000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01NH3_FQMM.PNT"
+  },
+  {
+    "HIRANGE": 300,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01NH3_KF.PNT"
+  },
+  {
+    "HIRANGE": 300,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01NH3_KFD.PNT"
+  },
+  {
+    "HIRANGE": 300,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01NH3_KFM.PNT"
+  },
+  {
+    "HIRANGE": 250,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PGAZ:01NG_FQD.OUT"
+  },
+  {
+    "HIRANGE": 8000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PGAZ:01NG_FQM.OUT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PGAZ:01NG_KF.PNT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PGAZ:01NG_KFD.PNT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PGAZ:01NG_KFM.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_F.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_FM.PNT"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_FQD.OUT"
+  },
+  {
+    "HIRANGE": 80000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_FQM.OUT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_MNG.PNT"
+  },
+  {
+    "HIRANGE": 6,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01UMV_FQD.OUT"
+  },
+  {
+    "HIRANGE": 180,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01UMV_FQM.OUT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01UMV_KF.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01UMV_KFD.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01UMV_KFM.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01JAM1_FQD.OUT"
+  },
+  {
+    "HIRANGE": 32000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01JAM1_FQM.OUT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01JAM1_KF.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01JAM1_KFD.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01JAM1_KFM.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01JAM2_FQD.OUT"
+  },
+  {
+    "HIRANGE": 32000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01JAM2_FQM.OUT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01JAM2_KF.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01JAM2_KFD.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01JAM2_KFM.PNT"
+  },
+  {
+    "HIRANGE": 40,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01JAM12_F.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01JAM12_FQD.PNT"
+  },
+  {
+    "HIRANGE": 32000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01JAM12_FQM.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01JAM12_KF.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01JAM12_KFD.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01JAM12_KFM.PNT"
+  },
+  {
+    "HIRANGE": 240,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA:01PHV_FQD.OUT"
+  },
+  {
+    "HIRANGE": 8000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA:01PHV_FQM.OUT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA:01PHV_KF.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA:01PHV_KFD.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA:01PHV_KFM.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VOZD:01VOZ_FQD.OUT"
+  },
+  {
+    "HIRANGE": 1600,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VOZD:01VOZ_FQM.OUT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VOZD:01VOZ_KF.PNT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VOZD:01VOZ_KFD.PNT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VOZD:01VOZ_KFM.PNT"
+  },
+  {
+    "HIRANGE": 80,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01F2_1G.PNT"
+  },
+  {
+    "HIRANGE": 80,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01F2_2G.PNT"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARF1_FQD.OUT"
+  },
+  {
+    "HIRANGE": 80000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARF1_FQM.OUT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARF1_KF.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARF1_KFD.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARF1_KFM.PNT"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARF2_FQD.OUT"
+  },
+  {
+    "HIRANGE": 80000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARF2_FQM.OUT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARF2_KF.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARF2_KFD.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARF2_KFM.PNT"
+  },
+  {
+    "HIRANGE": 2000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARG1_FQD.OUT"
+  },
+  {
+    "HIRANGE": 63000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARG1_FQM.OUT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARG1_KF.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARG1_KFD.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARG1_KFM.PNT"
+  },
+  {
+    "HIRANGE": 2000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARG2_FQD.OUT"
+  },
+  {
+    "HIRANGE": 63000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARG2_FQM.OUT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARG2_KF.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARG2_KFD.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PARG2_KFM.PNT"
+  },
+  {
+    "HIRANGE": 4000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PD2_1.PNT"
+  },
+  {
+    "HIRANGE": 4000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PD2_2.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01PARF_F.PNT"
+  },
+  {
+    "HIRANGE": 5000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01PARF_FQD.PNT"
+  },
+  {
+    "HIRANGE": 160000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01PARF_FQM.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01PARF_KF.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01PARF_KFD.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01PARF_KFM.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01PARG_F.PNT"
+  },
+  {
+    "HIRANGE": 4000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01PARG_FQD.PNT"
+  },
+  {
+    "HIRANGE": 125000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01PARG_FQM.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01PARG_KF.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01PARG_KFD.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SBS_OC:01PARG_KFM.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_1_FM.PNT"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_1_FQD.OUT"
+  },
+  {
+    "HIRANGE": 80000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_1_FQM.OUT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_1_MNG.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_2_FM.PNT"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_2_FQD.OUT"
+  },
+  {
+    "HIRANGE": 80000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_2_FQM.OUT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_2_MNG.PNT"
+  },
+  {
+    "HIRANGE": 0.1,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PGAZ:01F5_CO2.PNT"
+  },
+  {
+    "HIRANGE": 1,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PGAZ:01F5_N2.PNT"
+  },
+  {
+    "HIRANGE": 800,
+    "LORANGE": 700,
+    "NAMEINCOL": "01VOZD:01P10A_CAL.RO01"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01PD21_1.MEAS"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01PD21_2.MEAS"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01PD4.MEAS"
+  },
+  {
+    "HIRANGE": 4000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PD2_1.MEAS"
+  },
+  {
+    "HIRANGE": 4000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01PD2_2.MEAS"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PGAZ:01PD5.MEAS"
+  },
+  {
+    "HIRANGE": 1600,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01PD1.MEAS"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01PD21_1.PNT"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01PD21_2.PNT"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01PD4.PNT"
+  },
+  {
+    "HIRANGE": 1600,
+    "LORANGE": 0,
+    "NAMEINCOL": "01VODA_XOB:01PD1.PNT"
+  },
+  {
+    "HIRANGE": 1,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01F2_1H.PNT"
+  },
+  {
+    "HIRANGE": 1,
+    "LORANGE": 0,
+    "NAMEINCOL": "01PAR:01F2_2H.PNT"
+  },
+  {
+    "HIRANGE": 12500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21F103.PNT"
+  },
+  {
+    "HIRANGE": 25,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21F105.PNT"
+  },
+  {
+    "HIRANGE": 1072.34289551,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21F111_1.PNT"
+  },
+  {
+    "HIRANGE": 820.00097656,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21F111_2.PNT"
+  },
+  {
+    "HIRANGE": 6187.48779297,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21FC104.PNT"
+  },
+  {
+    "HIRANGE": 9.99330997,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21FC110.PNT"
+  },
+  {
+    "HIRANGE": 6175.02587891,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21FCC104.MEAS"
+  },
+  {
+    "HIRANGE": 6175.02587891,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21FCC104.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21FCC104.OUT"
+  },
+  {
+    "HIRANGE": 9.97723675,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21FCC110.MEAS"
+  },
+  {
+    "HIRANGE": 9.97723675,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21FCC110.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21FCC110.OUT"
+  },
+  {
+    "HIRANGE": 30,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21HNO3_FM.PNT"
+  },
+  {
+    "HIRANGE": 360,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21HNO3_FQD.OUT"
+  },
+  {
+    "HIRANGE": 12500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21HNO3_FQM.OUT"
+  },
+  {
+    "HIRANGE": 16,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21HNO3_MNG.PNT"
+  },
+  {
+    "HIRANGE": 1.39999998,
+    "LORANGE": 1.20000005,
+    "NAMEINCOL": "21ABSOR:21HNO3_R.PNT"
+  },
+  {
+    "HIRANGE": 250,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21KCP_FQD.OUT"
+  },
+  {
+    "HIRANGE": 8000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21KCP_FQM.OUT"
+  },
+  {
+    "HIRANGE": 4,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21KCP_KF.PNT"
+  },
+  {
+    "HIRANGE": 4,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21KCP_KFD.PNT"
+  },
+  {
+    "HIRANGE": 4,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21KCP_KFM.PNT"
+  },
+  {
+    "HIRANGE": 830,
+    "LORANGE": 430,
+    "NAMEINCOL": "21ABSOR:21LC105.PNT"
+  },
+  {
+    "HIRANGE": 830,
+    "LORANGE": 430,
+    "NAMEINCOL": "21ABSOR:21LCC105.MEAS"
+  },
+  {
+    "HIRANGE": 830,
+    "LORANGE": 430,
+    "NAMEINCOL": "21ABSOR:21LCC105.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21LCC105.OUT"
+  },
+  {
+    "HIRANGE": 25,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21OV1_FQD.OUT"
+  },
+  {
+    "HIRANGE": 600,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21OV1_FQM.OUT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21OV1_KF.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21OV1_KFD.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21OV1_KFM.PNT"
+  },
+  {
+    "HIRANGE": 16,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21OV2_FQD.OUT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21OV2_FQM.OUT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21OV2_KF.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21OV2_KFD.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21OV2_KFM.PNT"
+  },
+  {
+    "HIRANGE": 60,
+    "LORANGE": 50,
+    "NAMEINCOL": "21ABSOR:21Q105.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21T108_1.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21T108_2.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21T108_3.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21T108_4.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21T108_5.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "21ABSOR:21T108_6.PNT"
+  },
+  {
+    "HIRANGE": 1038.55493164,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21F113.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21HCV170PID1.MEAS"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21HCV170PID1.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21HCV170PID1.OUT"
+  },
+  {
+    "HIRANGE": 16,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21OV3_FQD.OUT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21OV3_FQM.OUT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21OV3_KF.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21OV3_KFD.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21OV3_KFM.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21P181.PNT"
+  },
+  {
+    "HIRANGE": 6000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21SCS171_1.PNT"
+  },
+  {
+    "HIRANGE": 6000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21SCS171_2.PNT"
+  },
+  {
+    "HIRANGE": 6000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21SCS171_3.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21T170_3.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21T170_4.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21T170_5.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21T170_6.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21T173_1.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "21GTT:21T173_2.PNT"
+  },
+  {
+    "HIRANGE": 62504.88671875,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21F102.PNT"
+  },
+  {
+    "HIRANGE": 7803.25878906,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21FC101.PNT"
+  },
+  {
+    "HIRANGE": 7803.25878906,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21FS101.PNT"
+  },
+  {
+    "HIRANGE": 62504.88671875,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21FS102.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21G101.PNT"
+  },
+  {
+    "HIRANGE": 8000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3N_F.PNT"
+  },
+  {
+    "HIRANGE": 6300,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3N_FM.PNT"
+  },
+  {
+    "HIRANGE": 240,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3N_FQD.OUT"
+  },
+  {
+    "HIRANGE": 180,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3N_FQDM.PNT"
+  },
+  {
+    "HIRANGE": 8000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3N_FQM.OUT"
+  },
+  {
+    "HIRANGE": 5000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3N_FQMM.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3N_KFD.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3N_KFM.PNT"
+  },
+  {
+    "HIRANGE": 6300,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3_FM.PNT"
+  },
+  {
+    "HIRANGE": 180,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3_FQD.OUT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3_FQDM.PNT"
+  },
+  {
+    "HIRANGE": 5500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3_FQM.OUT"
+  },
+  {
+    "HIRANGE": 4000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3_FQMM.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3_KF.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3_KFD.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21NH3_KFM.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21P101A.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21P101B.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21P127A.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21P127B.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21P128.PNT"
+  },
+  {
+    "HIRANGE": 12,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21QC101AIN1.PNT"
+  },
+  {
+    "HIRANGE": 12,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21QC101AIN2.PNT"
+  },
+  {
+    "HIRANGE": 7805.84472656,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21QC101PIDFA.MEAS"
+  },
+  {
+    "HIRANGE": 7805.84472656,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21QC101PIDFA.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21QC101PIDFA.OUT"
+  },
+  {
+    "HIRANGE": 12,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21QC101PIDQA.MEAS"
+  },
+  {
+    "HIRANGE": 12,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21QC101PIDQA.SPT"
+  },
+  {
+    "HIRANGE": 7805.84472656,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21QC101PIDQA.OUT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21T101A.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21T101B.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21T103.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21T127A.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21T127B.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21TS102PID_T.MEAS"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21TS102PID_T.SPT"
+  },
+  {
+    "HIRANGE": 12,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21TS102PID_T.OUT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21TS102_1.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21TS102_2.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21KONV:21TS102_3.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "21MASLO:21PS176.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21MASLO:21T170_1.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21MASLO:21T170_2.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21NH3:21HCV101PID1.MEAS"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21NH3:21HCV101PID1.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21NH3:21HCV101PID1.OUT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 700,
+    "NAMEINCOL": "21NH3:21LC108.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 700,
+    "NAMEINCOL": "21NH3:21LCC108.MEAS"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 700,
+    "NAMEINCOL": "21NH3:21LCC108.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21NH3:21LCC108.OUT"
+  },
+  {
+    "HIRANGE": 20,
+    "LORANGE": 0,
+    "NAMEINCOL": "21NH3:21PC110.PNT"
+  },
+  {
+    "HIRANGE": 20,
+    "LORANGE": 0,
+    "NAMEINCOL": "21NH3:21PCC110.MEAS"
+  },
+  {
+    "HIRANGE": 20,
+    "LORANGE": 0,
+    "NAMEINCOL": "21NH3:21PCC110.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21NH3:21PCC110.OUT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "21NH3:21TC112.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "21NH3:21TCC112PID1.MEAS"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "21NH3:21TCC112PID1.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21NH3:21TCC112PID1.OUT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "21NH3:21TS112.PNT"
+  },
+  {
+    "HIRANGE": 84.51572418,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21FC106.PNT"
+  },
+  {
+    "HIRANGE": 84.05595398,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21FCC106.MEAS"
+  },
+  {
+    "HIRANGE": 84.05595398,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21FCC106.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21FCC106.OUT"
+  },
+  {
+    "HIRANGE": 63,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21NH3SC_FM.PNT"
+  },
+  {
+    "HIRANGE": 2.5,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21NH3SC_FQD.OUT"
+  },
+  {
+    "HIRANGE": 1.79999995,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21NH3SC_FQDM.PNT"
+  },
+  {
+    "HIRANGE": 63,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21NH3SC_FQM.OUT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21NH3SC_FQMM.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21NH3SC_KF.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21NH3SC_KFD.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21NH3SC_KFM.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21T109_2.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21T109_4.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21T109_5.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21T109_7.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21T109_8.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21OXG:21T109_9.PNT"
+  },
+  {
+    "HIRANGE": 6,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21PS182_1.PNT"
+  },
+  {
+    "HIRANGE": 6,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21PS182_2.PNT"
+  },
+  {
+    "HIRANGE": 6,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21PS183_1.PNT"
+  },
+  {
+    "HIRANGE": 6,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21PS183_2.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS177_1.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS177_2.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS177_3.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS177_4.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS177_5.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS177_6.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS177_7.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS177_8.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS178_1.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS178_2.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS178_3.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS178_4.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS178_5.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS178_6.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS178_7.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS179_1.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS179_2.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21PODSH_AO:21TS179_3.PNT"
+  },
+  {
+    "HIRANGE": 20,
+    "LORANGE": 0,
+    "NAMEINCOL": "21RD:21EARD_FQD.OUT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21RD:21EARD_FQM.OUT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21RD:21EARD_KF.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21RD:21EARD_KFD.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21RD:21EARD_KFM.PNT"
+  },
+  {
+    "HIRANGE": 1500,
+    "LORANGE": -1500,
+    "NAMEINCOL": "21RD:21EA_RD.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "21RD:21GGRS_PID1.MEAS"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "21RD:21GGRS_PID1.SPT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21RD:21GGRS_PID1.OUT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21RD:21GGRS_PTC1.MEAS"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21RD:21GGRS_PTC1.SPT"
+  },
+  {
+    "HIRANGE": 1,
+    "LORANGE": 0,
+    "NAMEINCOL": "21RD:21GGRS_PTC1.OUTDEC"
+  },
+  {
+    "HIRANGE": 1,
+    "LORANGE": 0,
+    "NAMEINCOL": "21RD:21GGRS_PTC1.OUTINC"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "21RD:21IA_RD.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21RD:21P193.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21RD:21T192.PNT"
+  },
+  {
+    "HIRANGE": 12.52243996,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21F132.PNT"
+  },
+  {
+    "HIRANGE": 39.57907867,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21F133.PNT"
+  },
+  {
+    "HIRANGE": 315,
+    "LORANGE": -315,
+    "NAMEINCOL": "21REKUP:21LC130.PNT"
+  },
+  {
+    "HIRANGE": 315,
+    "LORANGE": -315,
+    "NAMEINCOL": "21REKUP:21LC131.PNT"
+  },
+  {
+    "HIRANGE": 315,
+    "LORANGE": -315,
+    "NAMEINCOL": "21REKUP:21LCC130.MEAS"
+  },
+  {
+    "HIRANGE": 315,
+    "LORANGE": -315,
+    "NAMEINCOL": "21REKUP:21LCC130.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21LCC130.OUT"
+  },
+  {
+    "HIRANGE": 315,
+    "LORANGE": -315,
+    "NAMEINCOL": "21REKUP:21LCC131PID1.MEAS"
+  },
+  {
+    "HIRANGE": 315,
+    "LORANGE": -315,
+    "NAMEINCOL": "21REKUP:21LCC131PID1.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21LCC131PID1.OUT"
+  },
+  {
+    "HIRANGE": 20,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21P135.PNT"
+  },
+  {
+    "HIRANGE": 20,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21P136.PNT"
+  },
+  {
+    "HIRANGE": 2.5,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21PD170.PNT"
+  },
+  {
+    "HIRANGE": 300,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21PVKUG_FQD.OUT"
+  },
+  {
+    "HIRANGE": 10000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21PVKUG_FQM.OUT"
+  },
+  {
+    "HIRANGE": 4,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21PVKUG_KF.PNT"
+  },
+  {
+    "HIRANGE": 4,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21PVKUG_KFD.PNT"
+  },
+  {
+    "HIRANGE": 4,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21PVKUG_KFM.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21PVKUN_FQD.OUT"
+  },
+  {
+    "HIRANGE": 30000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21PVKUN_FQM.OUT"
+  },
+  {
+    "HIRANGE": 8,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21PVKUN_KF.PNT"
+  },
+  {
+    "HIRANGE": 8,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21PVKUN_KFD.PNT"
+  },
+  {
+    "HIRANGE": 8,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21PVKUN_KFM.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21T101_4.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21T101_5.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21T101_6.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21T114_1.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21T114_2.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21T114_3.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21T114_4.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21T114_5.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21T114_6.PNT"
+  },
+  {
+    "HIRANGE": 600,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21T173_4.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21T174.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21REKUP:21T183.PNT"
+  },
+  {
+    "HIRANGE": 8000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21NH3TH_F.PNT"
+  },
+  {
+    "HIRANGE": 6300,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21NH3TH_FM.PNT"
+  },
+  {
+    "HIRANGE": 180,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21NH3TH_FQD.PNT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21NH3TH_FQDM.PNT"
+  },
+  {
+    "HIRANGE": 5500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21NH3TH_FQM.PNT"
+  },
+  {
+    "HIRANGE": 4000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21NH3TH_FQMM.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21NH3TH_KF.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21NH3TH_KFD.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21NH3TH_KFM.PNT"
+  },
+  {
+    "HIRANGE": 2000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21OV123_F.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21OV123_FQD.PNT"
+  },
+  {
+    "HIRANGE": 1250,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21OV123_FQM.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21OV123_KF.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21OV123_KFD.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21OV123_KFM.PNT"
+  },
+  {
+    "HIRANGE": 1600,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21OV12_F.PNT"
+  },
+  {
+    "HIRANGE": 32,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21OV12_FQD.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21OV12_FQM.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21OV12_KF.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21OV12_KFD.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21OV12_KFM.PNT"
+  },
+  {
+    "HIRANGE": 16,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21PS178.PNT"
+  },
+  {
+    "HIRANGE": 1.60000002,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21PS179.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21PS180.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21PV_F.PNT"
+  },
+  {
+    "HIRANGE": 1250,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21PV_FQD.PNT"
+  },
+  {
+    "HIRANGE": 40000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21PV_FQM.PNT"
+  },
+  {
+    "HIRANGE": 8,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21PV_KF.PNT"
+  },
+  {
+    "HIRANGE": 8,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21PV_KFD.PNT"
+  },
+  {
+    "HIRANGE": 8,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AO:21PV_KFM.PNT"
+  },
+  {
+    "HIRANGE": 315,
+    "LORANGE": -315,
+    "NAMEINCOL": "21SBS_AOK:21LS131.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AOK:21TS101.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21SBS_AOK:21TS174.PNT"
+  },
+  {
+    "HIRANGE": 15679.609375,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FC107.PNT"
+  },
+  {
+    "HIRANGE": 2012.78491211,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FCC_F171.PNT"
+  },
+  {
+    "HIRANGE": 2012.8848877,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FCC_PIDFC.MEAS"
+  },
+  {
+    "HIRANGE": 2012.8848877,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FCC_PIDFC.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FCC_PIDFC.OUT"
+  },
+  {
+    "HIRANGE": 6000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FCC_PIDSC.MEAS"
+  },
+  {
+    "HIRANGE": 6000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FCC_PIDSC.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FCC_PIDSC.OUT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FCC_PIDT1.MEAS"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FCC_PIDT1.SPT"
+  },
+  {
+    "HIRANGE": 2012.8848877,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FCC_PIDT1.OUT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FCC_PIDT2.MEAS"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FCC_PIDT2.SPT"
+  },
+  {
+    "HIRANGE": 6000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FCC_PIDT2.OUT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FCC_T174.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FCC_TS174.PNT"
+  },
+  {
+    "HIRANGE": 19649.46875,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FFC_PID1.MEAS"
+  },
+  {
+    "HIRANGE": 19649.46875,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FFC_PID1.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FFC_PID1.OUT"
+  },
+  {
+    "HIRANGE": 2012.8848877,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FFC_RAT1.MEAS"
+  },
+  {
+    "HIRANGE": 19649.46875,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FFC_RAT1.OUT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21G171.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21NG_FQD.OUT"
+  },
+  {
+    "HIRANGE": 1250,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21NG_FQM.OUT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21NG_KF.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21NG_KFD.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21NG_KFM.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21P187.PNT"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21PD171.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": -50,
+    "NAMEINCOL": "21UKST:21T116.PNT"
+  },
+  {
+    "HIRANGE": 546,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_1V.PNT"
+  },
+  {
+    "HIRANGE": 546,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_2V.PNT"
+  },
+  {
+    "HIRANGE": 546,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_3V.PNT"
+  },
+  {
+    "HIRANGE": 303.37097168,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_4V.PNT"
+  },
+  {
+    "HIRANGE": 1757,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_SUM.PNT"
+  },
+  {
+    "HIRANGE": 0,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FFC_CAL1.RO02"
+  },
+  {
+    "HIRANGE": 14909.4296875,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31F103.PNT"
+  },
+  {
+    "HIRANGE": 25,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31F105.PNT"
+  },
+  {
+    "HIRANGE": 1072.34289551,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31F111_1.PNT"
+  },
+  {
+    "HIRANGE": 820.00097656,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31F111_2.PNT"
+  },
+  {
+    "HIRANGE": 6175.02587891,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31FC104.PNT"
+  },
+  {
+    "HIRANGE": 9.97723675,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31FC110.PNT"
+  },
+  {
+    "HIRANGE": 6175.02587891,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31FCC104.MEAS"
+  },
+  {
+    "HIRANGE": 6175.02587891,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31FCC104.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31FCC104.OUT"
+  },
+  {
+    "HIRANGE": 9.97723675,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31FCC110.MEAS"
+  },
+  {
+    "HIRANGE": 9.97723675,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31FCC110.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31FCC110.OUT"
+  },
+  {
+    "HIRANGE": 30,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31HNO3_FM.PNT"
+  },
+  {
+    "HIRANGE": 360,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31HNO3_FQD.OUT"
+  },
+  {
+    "HIRANGE": 12500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31HNO3_FQM.OUT"
+  },
+  {
+    "HIRANGE": 16,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31HNO3_MNG.PNT"
+  },
+  {
+    "HIRANGE": 1.39999998,
+    "LORANGE": 1.20000005,
+    "NAMEINCOL": "31ABSOR:31HNO3_R.PNT"
+  },
+  {
+    "HIRANGE": 250,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31KCP_FQD.OUT"
+  },
+  {
+    "HIRANGE": 8000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31KCP_FQM.OUT"
+  },
+  {
+    "HIRANGE": 4,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31KCP_KF.PNT"
+  },
+  {
+    "HIRANGE": 4,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31KCP_KFD.PNT"
+  },
+  {
+    "HIRANGE": 4,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31KCP_KFM.PNT"
+  },
+  {
+    "HIRANGE": 830,
+    "LORANGE": 430,
+    "NAMEINCOL": "31ABSOR:31LC105.PNT"
+  },
+  {
+    "HIRANGE": 830,
+    "LORANGE": 430,
+    "NAMEINCOL": "31ABSOR:31LCC105.MEAS"
+  },
+  {
+    "HIRANGE": 830,
+    "LORANGE": 430,
+    "NAMEINCOL": "31ABSOR:31LCC105.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31LCC105.OUT"
+  },
+  {
+    "HIRANGE": 25,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31OV1_FQD.OUT"
+  },
+  {
+    "HIRANGE": 600,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31OV1_FQM.OUT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31OV1_KF.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31OV1_KFD.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31OV1_KFM.PNT"
+  },
+  {
+    "HIRANGE": 16,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31OV2_FQD.OUT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31OV2_FQM.OUT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31OV2_KF.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31OV2_KFD.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31OV2_KFM.PNT"
+  },
+  {
+    "HIRANGE": 60,
+    "LORANGE": 50,
+    "NAMEINCOL": "31ABSOR:31Q105.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31T108_1.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31T108_2.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31T108_3.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31T108_4.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31T108_5.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "31ABSOR:31T108_6.PNT"
+  },
+  {
+    "HIRANGE": 1038.55493164,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31F113.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31HCV170PID1.MEAS"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31HCV170PID1.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31HCV170PID1.OUT"
+  },
+  {
+    "HIRANGE": 16,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31OV3_FQD.OUT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31OV3_FQM.OUT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31OV3_KF.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31OV3_KFD.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31OV3_KFM.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31P181.PNT"
+  },
+  {
+    "HIRANGE": 6000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31SCS171_1.PNT"
+  },
+  {
+    "HIRANGE": 6000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31SCS171_2.PNT"
+  },
+  {
+    "HIRANGE": 6000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31SCS171_3.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31T170_3.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31T170_4.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31T170_5.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31T170_6.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31T173_1.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "31GTT:31T173_2.PNT"
+  },
+  {
+    "HIRANGE": 62466.88671875,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31F102.PNT"
+  },
+  {
+    "HIRANGE": 7805.84472656,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31FC101.PNT"
+  },
+  {
+    "HIRANGE": 7805.84472656,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31FS101.PNT"
+  },
+  {
+    "HIRANGE": 62466.88671875,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31FS102.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31G101.PNT"
+  },
+  {
+    "HIRANGE": 8000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3N_F.PNT"
+  },
+  {
+    "HIRANGE": 6300,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3N_FM.PNT"
+  },
+  {
+    "HIRANGE": 240,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3N_FQD.OUT"
+  },
+  {
+    "HIRANGE": 180,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3N_FQDM.PNT"
+  },
+  {
+    "HIRANGE": 8000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3N_FQM.OUT"
+  },
+  {
+    "HIRANGE": 5000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3N_FQMM.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3N_KFD.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3N_KFM.PNT"
+  },
+  {
+    "HIRANGE": 6300,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3_FM.PNT"
+  },
+  {
+    "HIRANGE": 180,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3_FQD.OUT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3_FQDM.PNT"
+  },
+  {
+    "HIRANGE": 5500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3_FQM.OUT"
+  },
+  {
+    "HIRANGE": 4000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3_FQMM.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3_KF.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3_KFD.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31NH3_KFM.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31P101A.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31P101B.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31P127A.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31P127B.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31P128.PNT"
+  },
+  {
+    "HIRANGE": 12,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31QC101AIN1.PNT"
+  },
+  {
+    "HIRANGE": 12,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31QC101AIN2.PNT"
+  },
+  {
+    "HIRANGE": 7805.84472656,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31QC101PIDFA.MEAS"
+  },
+  {
+    "HIRANGE": 7805.84472656,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31QC101PIDFA.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31QC101PIDFA.OUT"
+  },
+  {
+    "HIRANGE": 12,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31QC101PIDQA.MEAS"
+  },
+  {
+    "HIRANGE": 12,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31QC101PIDQA.SPT"
+  },
+  {
+    "HIRANGE": 7805.84472656,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31QC101PIDQA.OUT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31T101A.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31T101B.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31T103.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31T127A.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31T127B.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31TS102PID_T.MEAS"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31TS102PID_T.SPT"
+  },
+  {
+    "HIRANGE": 12,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31TS102PID_T.OUT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31TS102_1.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31TS102_2.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31KONV:31TS102_3.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "31MASLO:31PS176.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31MASLO:31T170_1.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31MASLO:31T170_2.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31NH3:31HCV101PID1.MEAS"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31NH3:31HCV101PID1.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31NH3:31HCV101PID1.OUT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 700,
+    "NAMEINCOL": "31NH3:31LC108.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 700,
+    "NAMEINCOL": "31NH3:31LCC108.MEAS"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 700,
+    "NAMEINCOL": "31NH3:31LCC108.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31NH3:31LCC108.OUT"
+  },
+  {
+    "HIRANGE": 20,
+    "LORANGE": 0,
+    "NAMEINCOL": "31NH3:31PC110.PNT"
+  },
+  {
+    "HIRANGE": 20,
+    "LORANGE": 0,
+    "NAMEINCOL": "31NH3:31PCC110.MEAS"
+  },
+  {
+    "HIRANGE": 20,
+    "LORANGE": 0,
+    "NAMEINCOL": "31NH3:31PCC110.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31NH3:31PCC110.OUT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "31NH3:31TC112.PNT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "31NH3:31TCC112PID1.MEAS"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "31NH3:31TCC112PID1.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31NH3:31TCC112PID1.OUT"
+  },
+  {
+    "HIRANGE": 200,
+    "LORANGE": 0,
+    "NAMEINCOL": "31NH3:31TS112.PNT"
+  },
+  {
+    "HIRANGE": 84.05595398,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31FC106.PNT"
+  },
+  {
+    "HIRANGE": 84.05595398,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31FCC106.MEAS"
+  },
+  {
+    "HIRANGE": 84.05595398,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31FCC106.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31FCC106.OUT"
+  },
+  {
+    "HIRANGE": 63,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31NH3SC_FM.PNT"
+  },
+  {
+    "HIRANGE": 2.5,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31NH3SC_FQD.OUT"
+  },
+  {
+    "HIRANGE": 1.79999995,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31NH3SC_FQDM.PNT"
+  },
+  {
+    "HIRANGE": 63,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31NH3SC_FQM.OUT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31NH3SC_FQMM.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31NH3SC_KF.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31NH3SC_KFD.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31NH3SC_KFM.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31T109_2.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31T109_4.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31T109_5.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31T109_7.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31T109_8.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31OXG:31T109_9.PNT"
+  },
+  {
+    "HIRANGE": 6,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31PS182_1.PNT"
+  },
+  {
+    "HIRANGE": 6,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31PS182_2.PNT"
+  },
+  {
+    "HIRANGE": 6,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31PS183_1.PNT"
+  },
+  {
+    "HIRANGE": 6,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31PS183_2.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS177_1.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS177_2.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS177_3.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS177_4.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS177_5.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS177_6.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS177_7.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS177_8.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS178_1.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS178_2.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS178_3.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS178_4.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS178_5.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS178_6.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS178_7.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS179_1.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS179_2.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31PODSH_AO:31TS179_3.PNT"
+  },
+  {
+    "HIRANGE": 20,
+    "LORANGE": 0,
+    "NAMEINCOL": "31RD:31EARD_FQD.OUT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31RD:31EARD_FQM.OUT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31RD:31EARD_KF.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31RD:31EARD_KFD.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31RD:31EARD_KFM.PNT"
+  },
+  {
+    "HIRANGE": 1500,
+    "LORANGE": -1500,
+    "NAMEINCOL": "31RD:31EA_RD.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "31RD:31GGRS_PID1.MEAS"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "31RD:31GGRS_PID1.SPT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31RD:31GGRS_PID1.OUT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31RD:31GGRS_PTC1.MEAS"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31RD:31GGRS_PTC1.SPT"
+  },
+  {
+    "HIRANGE": 1,
+    "LORANGE": 0,
+    "NAMEINCOL": "31RD:31GGRS_PTC1.OUTDEC"
+  },
+  {
+    "HIRANGE": 1,
+    "LORANGE": 0,
+    "NAMEINCOL": "31RD:31GGRS_PTC1.OUTINC"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": 0,
+    "NAMEINCOL": "31RD:31IA_RD.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31RD:31P193.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31RD:31T192.PNT"
+  },
+  {
+    "HIRANGE": 12.49203968,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31F132.PNT"
+  },
+  {
+    "HIRANGE": 39.56159973,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31F133.PNT"
+  },
+  {
+    "HIRANGE": 315,
+    "LORANGE": -315,
+    "NAMEINCOL": "31REKUP:31LC130.PNT"
+  },
+  {
+    "HIRANGE": 315,
+    "LORANGE": -315,
+    "NAMEINCOL": "31REKUP:31LC131.PNT"
+  },
+  {
+    "HIRANGE": 315,
+    "LORANGE": -315,
+    "NAMEINCOL": "31REKUP:31LCC130.MEAS"
+  },
+  {
+    "HIRANGE": 315,
+    "LORANGE": -315,
+    "NAMEINCOL": "31REKUP:31LCC130.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31LCC130.OUT"
+  },
+  {
+    "HIRANGE": 315,
+    "LORANGE": -315,
+    "NAMEINCOL": "31REKUP:31LCC131PID1.MEAS"
+  },
+  {
+    "HIRANGE": 315,
+    "LORANGE": -315,
+    "NAMEINCOL": "31REKUP:31LCC131PID1.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31LCC131PID1.OUT"
+  },
+  {
+    "HIRANGE": 20,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31P135.PNT"
+  },
+  {
+    "HIRANGE": 20,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31P136.PNT"
+  },
+  {
+    "HIRANGE": 2.5,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31PD170.PNT"
+  },
+  {
+    "HIRANGE": 300,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31PVKUG_FQD.OUT"
+  },
+  {
+    "HIRANGE": 10000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31PVKUG_FQM.OUT"
+  },
+  {
+    "HIRANGE": 4,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31PVKUG_KF.PNT"
+  },
+  {
+    "HIRANGE": 4,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31PVKUG_KFD.PNT"
+  },
+  {
+    "HIRANGE": 4,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31PVKUG_KFM.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31PVKUN_FQD.OUT"
+  },
+  {
+    "HIRANGE": 30000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31PVKUN_FQM.OUT"
+  },
+  {
+    "HIRANGE": 8,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31PVKUN_KF.PNT"
+  },
+  {
+    "HIRANGE": 8,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31PVKUN_KFD.PNT"
+  },
+  {
+    "HIRANGE": 8,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31PVKUN_KFM.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31T101_4.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31T101_5.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31T101_6.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31T114_1.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31T114_2.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31T114_3.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31T114_4.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31T114_5.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31T114_6.PNT"
+  },
+  {
+    "HIRANGE": 600,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31T173_4.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31T174.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31REKUP:31T183.PNT"
+  },
+  {
+    "HIRANGE": 8000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31NH3TH_F.PNT"
+  },
+  {
+    "HIRANGE": 6300,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31NH3TH_FM.PNT"
+  },
+  {
+    "HIRANGE": 180,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31NH3TH_FQD.PNT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31NH3TH_FQDM.PNT"
+  },
+  {
+    "HIRANGE": 5500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31NH3TH_FQM.PNT"
+  },
+  {
+    "HIRANGE": 4000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31NH3TH_FQMM.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31NH3TH_KF.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31NH3TH_KFD.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31NH3TH_KFM.PNT"
+  },
+  {
+    "HIRANGE": 2000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31OV123_F.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31OV123_FQD.PNT"
+  },
+  {
+    "HIRANGE": 1250,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31OV123_FQM.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31OV123_KF.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31OV123_KFD.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31OV123_KFM.PNT"
+  },
+  {
+    "HIRANGE": 1600,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31OV12_F.PNT"
+  },
+  {
+    "HIRANGE": 32,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31OV12_FQD.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31OV12_FQM.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31OV12_KF.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31OV12_KFD.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31OV12_KFM.PNT"
+  },
+  {
+    "HIRANGE": 16,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31PS178.PNT"
+  },
+  {
+    "HIRANGE": 1.60000002,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31PS179.PNT"
+  },
+  {
+    "HIRANGE": 3,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31PS180.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31PV_F.PNT"
+  },
+  {
+    "HIRANGE": 1250,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31PV_FQD.PNT"
+  },
+  {
+    "HIRANGE": 40000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31PV_FQM.PNT"
+  },
+  {
+    "HIRANGE": 8,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31PV_KF.PNT"
+  },
+  {
+    "HIRANGE": 8,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31PV_KFD.PNT"
+  },
+  {
+    "HIRANGE": 8,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AO:31PV_KFM.PNT"
+  },
+  {
+    "HIRANGE": 315,
+    "LORANGE": -315,
+    "NAMEINCOL": "31SBS_AOK:31LS131.PNT"
+  },
+  {
+    "HIRANGE": 400,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AOK:31TS101.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31SBS_AOK:31TS174.PNT"
+  },
+  {
+    "HIRANGE": 19649.46875,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FC107.PNT"
+  },
+  {
+    "HIRANGE": 2012.8848877,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FCC_F171.PNT"
+  },
+  {
+    "HIRANGE": 2012.8848877,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FCC_PIDFC.MEAS"
+  },
+  {
+    "HIRANGE": 2012.8848877,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FCC_PIDFC.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FCC_PIDFC.OUT"
+  },
+  {
+    "HIRANGE": 6000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FCC_PIDSC.MEAS"
+  },
+  {
+    "HIRANGE": 6000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FCC_PIDSC.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FCC_PIDSC.OUT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FCC_PIDT1.MEAS"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FCC_PIDT1.SPT"
+  },
+  {
+    "HIRANGE": 2012.8848877,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FCC_PIDT1.OUT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FCC_PIDT2.MEAS"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FCC_PIDT2.SPT"
+  },
+  {
+    "HIRANGE": 6000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FCC_PIDT2.OUT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FCC_T174.PNT"
+  },
+  {
+    "HIRANGE": 1100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FCC_TS174.PNT"
+  },
+  {
+    "HIRANGE": 19649.46875,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FFC_PID1.MEAS"
+  },
+  {
+    "HIRANGE": 19649.46875,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FFC_PID1.SPT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FFC_PID1.OUT"
+  },
+  {
+    "HIRANGE": 2012.8848877,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FFC_RAT1.MEAS"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FFC_RAT1.RATIO"
+  },
+  {
+    "HIRANGE": 19649.46875,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FFC_RAT1.OUT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31G171.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31NG_FQD.OUT"
+  },
+  {
+    "HIRANGE": 1250,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31NG_FQM.OUT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31NG_KF.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31NG_KFD.PNT"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31NG_KFM.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31P187.PNT"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31PD171.PNT"
+  },
+  {
+    "HIRANGE": 50,
+    "LORANGE": -50,
+    "NAMEINCOL": "31UKST:31T116.PNT"
+  },
+  {
+    "HIRANGE": 0,
+    "LORANGE": 0,
+    "NAMEINCOL": "31UKST:31FFC_CAL1.RO02"
+  },
+  {
+    "HIRANGE": 2.5,
+    "LORANGE": -2.5,
+    "NAMEINCOL": "31UKST:31PD_NG_VZ.PNT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "21UKST:21FFC_RAT1.RATIO"
+  },
+  {
+    "HIRANGE": 2.5,
+    "LORANGE": -2.5,
+    "NAMEINCOL": "21UKST:21PD_NG_VZ.PNT"
+  },
+  {
+    "HIRANGE": 954.55999756,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_SUM.PNT"
+  },
+  {
+    "HIRANGE": 238.63999939,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_4V.PNT"
+  },
+  {
+    "HIRANGE": 6200,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_4.PNT"
+  },
+  {
+    "HIRANGE": 238.63999939,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_3V.PNT"
+  },
+  {
+    "HIRANGE": 6200,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_3.PNT"
+  },
+  {
+    "HIRANGE": 238.63999939,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_2V.PNT"
+  },
+  {
+    "HIRANGE": 6200,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_2.PNT"
+  },
+  {
+    "HIRANGE": 238.63999939,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_1V.PNT"
+  },
+  {
+    "HIRANGE": 6200,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_1.PNT"
+  },
+  {
+    "HIRANGE": 2686.51000977,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:O2L26_2SUM.PNT"
+  },
+  {
+    "HIRANGE": 16,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01P22_2.PNT"
+  },
+  {
+    "HIRANGE": 16,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01P22_1.PNT"
+  },
+  {
+    "HIRANGE": 3000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_1_FVD.OUT"
+  },
+  {
+    "HIRANGE": 3000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_2_FVD.OUT"
+  },
+  {
+    "HIRANGE": 3000,
+    "LORANGE": -3000,
+    "NAMEINCOL": "01BALANCE:01AK_DELTA_D.PNT"
+  },
+  {
+    "HIRANGE": 93000,
+    "LORANGE": -93000,
+    "NAMEINCOL": "01BALANCE:01AK_DELTA_M.PNT"
+  },
+  {
+    "HIRANGE": 3000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01AK_REAL_D.PNT"
+  },
+  {
+    "HIRANGE": 93000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01AK_REAL_M.PNT"
+  },
+  {
+    "HIRANGE": 3000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01PLAN_D1.PNT"
+  },
+  {
+    "HIRANGE": 93000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01PLAN_M1.PNT"
+  },
+  {
+    "HIRANGE": 3000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01AK_ASM_D.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01HNO3_SUM2.RO01"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01HNO3_SUM2.RO02"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01HNO3_SUM2.RO03"
+  },
+  {
+    "HIRANGE": 2090,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01AK_XR_L26.PNT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01AM11_D.PNT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01AM21_D.PNT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01AM31_D.PNT"
+  },
+  {
+    "HIRANGE": 107,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01NG_FQD.PNT"
+  },
+  {
+    "HIRANGE": 1070,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01PAR_FQD.PNT"
+  },
+  {
+    "HIRANGE": 2.5999999,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01UMV_FQD.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:12OV_FQD.PNT"
+  },
+  {
+    "HIRANGE": 147,
+    "LORANGE": -147,
+    "NAMEINCOL": "01BALANCE:01AK_OTG_DAY.PNT"
+  },
+  {
+    "HIRANGE": 125,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01GAM_FQD.PNT"
+  },
+  {
+    "HIRANGE": 500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01JAM_FQD.PNT"
+  },
+  {
+    "HIRANGE": 150000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01EA_FQD.PNT"
+  },
+  {
+    "HIRANGE": 10000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01EA_NN_FQD.PNT"
+  },
+  {
+    "HIRANGE": 450,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01AK11_D.PNT"
+  },
+  {
+    "HIRANGE": 450,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01AK21_D.PNT"
+  },
+  {
+    "HIRANGE": 450,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01AK31_D.PNT"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_1_FMD.OUT"
+  },
+  {
+    "HIRANGE": 2500,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01HNO3_2_FMD.OUT"
+  },
+  {
+    "HIRANGE": 156000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01OV_FQD.PNT"
+  },
+  {
+    "HIRANGE": 2800,
+    "LORANGE": 450,
+    "NAMEINCOL": "01AMIAK:01LC9.PNT"
+  },
+  {
+    "HIRANGE": 2800,
+    "LORANGE": 450,
+    "NAMEINCOL": "01AMIAK:01LCC9.MEAS"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01LCC9.OUT"
+  },
+  {
+    "HIRANGE": 10,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01P9.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": -50,
+    "NAMEINCOL": "01AMIAK:01TC9.PNT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": -50,
+    "NAMEINCOL": "01AMIAK:01TCC9.MEAS"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01AMIAK:01TCC9.OUT"
+  },
+  {
+    "HIRANGE": 2800,
+    "LORANGE": 450,
+    "NAMEINCOL": "01AMIAK:01LCC9.SPT"
+  },
+  {
+    "HIRANGE": 150,
+    "LORANGE": -50,
+    "NAMEINCOL": "01AMIAK:01TCC9.SPT"
+  },
+  {
+    "HIRANGE": 2686.51000977,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_CALSUM.RO03"
+  },
+  {
+    "HIRANGE": 1000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01JAM_FQD.PNT"
+  },
+  {
+    "HIRANGE": 3.5999999,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01AM11_RSO.PNT"
+  },
+  {
+    "HIRANGE": 3.5999999,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01AM21_RSO.PNT"
+  },
+  {
+    "HIRANGE": 3.5999999,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01AM31_RSO.PNT"
+  },
+  {
+    "HIRANGE": 6200,
+    "LORANGE": 0,
+    "NAMEINCOL": "01SKLAD:01L26_1A.PNT"
+  },
+  {
+    "HIRANGE": 2000,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01KND_FQD.PNT"
+  },
+  {
+    "HIRANGE": 0.60000002,
+    "LORANGE": 0.44999999,
+    "NAMEINCOL": "01BALANCE:01OTG_Q_CAR.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01OTG_CAR_D.PNT"
+  },
+  {
+    "HIRANGE": 100,
+    "LORANGE": 0,
+    "NAMEINCOL": "01BALANCE:01OTG_MAGN_D.PNT"
+  }
+]
