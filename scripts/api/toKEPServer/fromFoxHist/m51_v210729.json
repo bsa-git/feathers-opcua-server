@@ -55,21 +55,6 @@
     "NAMEINCOL": "01KOND:01LC5.PNT"
   },
   {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01KOND:01LCC5.MEAS"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01KOND:01LCC5.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01KOND:01LCC5.OUT"
-  },
-  {
     "HIRANGE": 25,
     "LORANGE": 0,
     "NAMEINCOL": "01KOND:01P8_1.PNT"
@@ -98,21 +83,6 @@
     "HIRANGE": 10,
     "LORANGE": 0,
     "NAMEINCOL": "01PAR:01PC3.PNT"
-  },
-  {
-    "HIRANGE": 10,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PAR:01PCC3.MEAS"
-  },
-  {
-    "HIRANGE": 10,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PAR:01PCC3.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PAR:01PCC3.OUT"
   },
   {
     "HIRANGE": 400,
@@ -225,21 +195,6 @@
     "NAMEINCOL": "01VODA:01F1_1.PNT"
   },
   {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA:01LCC12.MEAS"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA:01LCC12.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA:01LCC12.OUT"
-  },
-  {
     "HIRANGE": 10,
     "LORANGE": 0,
     "NAMEINCOL": "01VODA:01P5_1.PNT"
@@ -275,51 +230,6 @@
     "NAMEINCOL": "01VODA_XOB:01LC6.PNT"
   },
   {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA_XOB:01LCC1PID1.MEAS"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA_XOB:01LCC1PID1.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA_XOB:01LCC1PID1.OUT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA_XOB:01LCC1PID2.MEAS"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA_XOB:01LCC1PID2.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA_XOB:01LCC1PID2.OUT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA_XOB:01LCC6.MEAS"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA_XOB:01LCC6.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA_XOB:01LCC6.OUT"
-  },
-  {
     "HIRANGE": 40,
     "LORANGE": 0,
     "NAMEINCOL": "01VODA_XOB:01P1.PNT"
@@ -333,21 +243,6 @@
     "HIRANGE": 0.40000001,
     "LORANGE": 0,
     "NAMEINCOL": "01VODA_XOB:01PC8.PNT"
-  },
-  {
-    "HIRANGE": 0.40000001,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA_XOB:01PCC8.MEAS"
-  },
-  {
-    "HIRANGE": 0.40000001,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA_XOB:01PCC8.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA_XOB:01PCC8.OUT"
   },
   {
     "HIRANGE": 100,
@@ -395,19 +290,9 @@
     "NAMEINCOL": "01AMIAK:01NH3_FM.PNT"
   },
   {
-    "HIRANGE": 250,
-    "LORANGE": 0,
-    "NAMEINCOL": "01AMIAK:01NH3_FQD.OUT"
-  },
-  {
     "HIRANGE": 125,
     "LORANGE": 0,
     "NAMEINCOL": "01AMIAK:01NH3_FQDM.PNT"
-  },
-  {
-    "HIRANGE": 5500,
-    "LORANGE": 0,
-    "NAMEINCOL": "01AMIAK:01NH3_FQM.OUT"
   },
   {
     "HIRANGE": 4000,
@@ -428,16 +313,6 @@
     "HIRANGE": 300,
     "LORANGE": 0,
     "NAMEINCOL": "01AMIAK:01NH3_KFM.PNT"
-  },
-  {
-    "HIRANGE": 250,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PGAZ:01NG_FQD.OUT"
-  },
-  {
-    "HIRANGE": 8000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PGAZ:01NG_FQM.OUT"
   },
   {
     "HIRANGE": 125,
@@ -465,29 +340,9 @@
     "NAMEINCOL": "01SKLAD:01HNO3_FM.PNT"
   },
   {
-    "HIRANGE": 2500,
-    "LORANGE": 0,
-    "NAMEINCOL": "01SKLAD:01HNO3_FQD.OUT"
-  },
-  {
-    "HIRANGE": 80000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01SKLAD:01HNO3_FQM.OUT"
-  },
-  {
     "HIRANGE": 125,
     "LORANGE": 0,
     "NAMEINCOL": "01SKLAD:01HNO3_MNG.PNT"
-  },
-  {
-    "HIRANGE": 6,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA_XOB:01UMV_FQD.OUT"
-  },
-  {
-    "HIRANGE": 180,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA_XOB:01UMV_FQM.OUT"
   },
   {
     "HIRANGE": 100,
@@ -507,16 +362,6 @@
   {
     "HIRANGE": 1000,
     "LORANGE": 0,
-    "NAMEINCOL": "01AMIAK:01JAM1_FQD.OUT"
-  },
-  {
-    "HIRANGE": 32000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01AMIAK:01JAM1_FQM.OUT"
-  },
-  {
-    "HIRANGE": 1000,
-    "LORANGE": 0,
     "NAMEINCOL": "01AMIAK:01JAM1_KF.PNT"
   },
   {
@@ -528,16 +373,6 @@
     "HIRANGE": 1000,
     "LORANGE": 0,
     "NAMEINCOL": "01AMIAK:01JAM1_KFM.PNT"
-  },
-  {
-    "HIRANGE": 1000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01AMIAK:01JAM2_FQD.OUT"
-  },
-  {
-    "HIRANGE": 32000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01AMIAK:01JAM2_FQM.OUT"
   },
   {
     "HIRANGE": 1000,
@@ -585,16 +420,6 @@
     "NAMEINCOL": "01SBS_OC:01JAM12_KFM.PNT"
   },
   {
-    "HIRANGE": 240,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA:01PHV_FQD.OUT"
-  },
-  {
-    "HIRANGE": 8000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA:01PHV_FQM.OUT"
-  },
-  {
     "HIRANGE": 200,
     "LORANGE": 0,
     "NAMEINCOL": "01VODA:01PHV_KF.PNT"
@@ -608,16 +433,6 @@
     "HIRANGE": 200,
     "LORANGE": 0,
     "NAMEINCOL": "01VODA:01PHV_KFM.PNT"
-  },
-  {
-    "HIRANGE": 50,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VOZD:01VOZ_FQD.OUT"
-  },
-  {
-    "HIRANGE": 1600,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VOZD:01VOZ_FQM.OUT"
   },
   {
     "HIRANGE": 125,
@@ -645,16 +460,6 @@
     "NAMEINCOL": "01PAR:01F2_2G.PNT"
   },
   {
-    "HIRANGE": 2500,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PAR:01PARF1_FQD.OUT"
-  },
-  {
-    "HIRANGE": 80000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PAR:01PARF1_FQM.OUT"
-  },
-  {
     "HIRANGE": 3,
     "LORANGE": 0,
     "NAMEINCOL": "01PAR:01PARF1_KF.PNT"
@@ -668,16 +473,6 @@
     "HIRANGE": 3,
     "LORANGE": 0,
     "NAMEINCOL": "01PAR:01PARF1_KFM.PNT"
-  },
-  {
-    "HIRANGE": 2500,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PAR:01PARF2_FQD.OUT"
-  },
-  {
-    "HIRANGE": 80000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PAR:01PARF2_FQM.OUT"
   },
   {
     "HIRANGE": 3,
@@ -695,16 +490,6 @@
     "NAMEINCOL": "01PAR:01PARF2_KFM.PNT"
   },
   {
-    "HIRANGE": 2000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PAR:01PARG1_FQD.OUT"
-  },
-  {
-    "HIRANGE": 63000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PAR:01PARG1_FQM.OUT"
-  },
-  {
     "HIRANGE": 3,
     "LORANGE": 0,
     "NAMEINCOL": "01PAR:01PARG1_KF.PNT"
@@ -718,16 +503,6 @@
     "HIRANGE": 3,
     "LORANGE": 0,
     "NAMEINCOL": "01PAR:01PARG1_KFM.PNT"
-  },
-  {
-    "HIRANGE": 2000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PAR:01PARG2_FQD.OUT"
-  },
-  {
-    "HIRANGE": 63000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PAR:01PARG2_FQM.OUT"
   },
   {
     "HIRANGE": 3,
@@ -820,16 +595,6 @@
     "NAMEINCOL": "01SKLAD:01HNO3_1_FM.PNT"
   },
   {
-    "HIRANGE": 2500,
-    "LORANGE": 0,
-    "NAMEINCOL": "01SKLAD:01HNO3_1_FQD.OUT"
-  },
-  {
-    "HIRANGE": 80000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01SKLAD:01HNO3_1_FQM.OUT"
-  },
-  {
     "HIRANGE": 125,
     "LORANGE": 0,
     "NAMEINCOL": "01SKLAD:01HNO3_1_MNG.PNT"
@@ -838,16 +603,6 @@
     "HIRANGE": 200,
     "LORANGE": 0,
     "NAMEINCOL": "01SKLAD:01HNO3_2_FM.PNT"
-  },
-  {
-    "HIRANGE": 2500,
-    "LORANGE": 0,
-    "NAMEINCOL": "01SKLAD:01HNO3_2_FQD.OUT"
-  },
-  {
-    "HIRANGE": 80000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01SKLAD:01HNO3_2_FQM.OUT"
   },
   {
     "HIRANGE": 125,
@@ -863,46 +618,6 @@
     "HIRANGE": 1,
     "LORANGE": 0,
     "NAMEINCOL": "01PGAZ:01F5_N2.PNT"
-  },
-  {
-    "HIRANGE": 800,
-    "LORANGE": 700,
-    "NAMEINCOL": "01VOZD:01P10A_CAL.RO01"
-  },
-  {
-    "HIRANGE": 2500,
-    "LORANGE": 0,
-    "NAMEINCOL": "01AMIAK:01PD21_1.MEAS"
-  },
-  {
-    "HIRANGE": 2500,
-    "LORANGE": 0,
-    "NAMEINCOL": "01AMIAK:01PD21_2.MEAS"
-  },
-  {
-    "HIRANGE": 2500,
-    "LORANGE": 0,
-    "NAMEINCOL": "01AMIAK:01PD4.MEAS"
-  },
-  {
-    "HIRANGE": 4000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PAR:01PD2_1.MEAS"
-  },
-  {
-    "HIRANGE": 4000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PAR:01PD2_2.MEAS"
-  },
-  {
-    "HIRANGE": 2500,
-    "LORANGE": 0,
-    "NAMEINCOL": "01PGAZ:01PD5.MEAS"
-  },
-  {
-    "HIRANGE": 1600,
-    "LORANGE": 0,
-    "NAMEINCOL": "01VODA_XOB:01PD1.MEAS"
   },
   {
     "HIRANGE": 2500,
@@ -965,49 +680,9 @@
     "NAMEINCOL": "21ABSOR:21FC110.PNT"
   },
   {
-    "HIRANGE": 6175.02587891,
-    "LORANGE": 0,
-    "NAMEINCOL": "21ABSOR:21FCC104.MEAS"
-  },
-  {
-    "HIRANGE": 6175.02587891,
-    "LORANGE": 0,
-    "NAMEINCOL": "21ABSOR:21FCC104.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21ABSOR:21FCC104.OUT"
-  },
-  {
-    "HIRANGE": 9.97723675,
-    "LORANGE": 0,
-    "NAMEINCOL": "21ABSOR:21FCC110.MEAS"
-  },
-  {
-    "HIRANGE": 9.97723675,
-    "LORANGE": 0,
-    "NAMEINCOL": "21ABSOR:21FCC110.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21ABSOR:21FCC110.OUT"
-  },
-  {
     "HIRANGE": 30,
     "LORANGE": 0,
     "NAMEINCOL": "21ABSOR:21HNO3_FM.PNT"
-  },
-  {
-    "HIRANGE": 360,
-    "LORANGE": 0,
-    "NAMEINCOL": "21ABSOR:21HNO3_FQD.OUT"
-  },
-  {
-    "HIRANGE": 12500,
-    "LORANGE": 0,
-    "NAMEINCOL": "21ABSOR:21HNO3_FQM.OUT"
   },
   {
     "HIRANGE": 16,
@@ -1018,16 +693,6 @@
     "HIRANGE": 1.39999998,
     "LORANGE": 1.20000005,
     "NAMEINCOL": "21ABSOR:21HNO3_R.PNT"
-  },
-  {
-    "HIRANGE": 250,
-    "LORANGE": 0,
-    "NAMEINCOL": "21ABSOR:21KCP_FQD.OUT"
-  },
-  {
-    "HIRANGE": 8000,
-    "LORANGE": 0,
-    "NAMEINCOL": "21ABSOR:21KCP_FQM.OUT"
   },
   {
     "HIRANGE": 4,
@@ -1050,31 +715,6 @@
     "NAMEINCOL": "21ABSOR:21LC105.PNT"
   },
   {
-    "HIRANGE": 830,
-    "LORANGE": 430,
-    "NAMEINCOL": "21ABSOR:21LCC105.MEAS"
-  },
-  {
-    "HIRANGE": 830,
-    "LORANGE": 430,
-    "NAMEINCOL": "21ABSOR:21LCC105.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21ABSOR:21LCC105.OUT"
-  },
-  {
-    "HIRANGE": 25,
-    "LORANGE": 0,
-    "NAMEINCOL": "21ABSOR:21OV1_FQD.OUT"
-  },
-  {
-    "HIRANGE": 600,
-    "LORANGE": 0,
-    "NAMEINCOL": "21ABSOR:21OV1_FQM.OUT"
-  },
-  {
     "HIRANGE": 500,
     "LORANGE": 0,
     "NAMEINCOL": "21ABSOR:21OV1_KF.PNT"
@@ -1088,16 +728,6 @@
     "HIRANGE": 500,
     "LORANGE": 0,
     "NAMEINCOL": "21ABSOR:21OV1_KFM.PNT"
-  },
-  {
-    "HIRANGE": 16,
-    "LORANGE": 0,
-    "NAMEINCOL": "21ABSOR:21OV2_FQD.OUT"
-  },
-  {
-    "HIRANGE": 400,
-    "LORANGE": 0,
-    "NAMEINCOL": "21ABSOR:21OV2_FQM.OUT"
   },
   {
     "HIRANGE": 500,
@@ -1153,31 +783,6 @@
     "HIRANGE": 1038.55493164,
     "LORANGE": 0,
     "NAMEINCOL": "21GTT:21F113.PNT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21GTT:21HCV170PID1.MEAS"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21GTT:21HCV170PID1.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21GTT:21HCV170PID1.OUT"
-  },
-  {
-    "HIRANGE": 16,
-    "LORANGE": 0,
-    "NAMEINCOL": "21GTT:21OV3_FQD.OUT"
-  },
-  {
-    "HIRANGE": 400,
-    "LORANGE": 0,
-    "NAMEINCOL": "21GTT:21OV3_FQM.OUT"
   },
   {
     "HIRANGE": 500,
@@ -1280,19 +885,9 @@
     "NAMEINCOL": "21KONV:21NH3N_FM.PNT"
   },
   {
-    "HIRANGE": 240,
-    "LORANGE": 0,
-    "NAMEINCOL": "21KONV:21NH3N_FQD.OUT"
-  },
-  {
     "HIRANGE": 180,
     "LORANGE": 0,
     "NAMEINCOL": "21KONV:21NH3N_FQDM.PNT"
-  },
-  {
-    "HIRANGE": 8000,
-    "LORANGE": 0,
-    "NAMEINCOL": "21KONV:21NH3N_FQM.OUT"
   },
   {
     "HIRANGE": 5000,
@@ -1315,19 +910,9 @@
     "NAMEINCOL": "21KONV:21NH3_FM.PNT"
   },
   {
-    "HIRANGE": 180,
-    "LORANGE": 0,
-    "NAMEINCOL": "21KONV:21NH3_FQD.OUT"
-  },
-  {
     "HIRANGE": 125,
     "LORANGE": 0,
     "NAMEINCOL": "21KONV:21NH3_FQDM.PNT"
-  },
-  {
-    "HIRANGE": 5500,
-    "LORANGE": 0,
-    "NAMEINCOL": "21KONV:21NH3_FQM.OUT"
   },
   {
     "HIRANGE": 4000,
@@ -1385,36 +970,6 @@
     "NAMEINCOL": "21KONV:21QC101AIN2.PNT"
   },
   {
-    "HIRANGE": 7805.84472656,
-    "LORANGE": 0,
-    "NAMEINCOL": "21KONV:21QC101PIDFA.MEAS"
-  },
-  {
-    "HIRANGE": 7805.84472656,
-    "LORANGE": 0,
-    "NAMEINCOL": "21KONV:21QC101PIDFA.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21KONV:21QC101PIDFA.OUT"
-  },
-  {
-    "HIRANGE": 12,
-    "LORANGE": 0,
-    "NAMEINCOL": "21KONV:21QC101PIDQA.MEAS"
-  },
-  {
-    "HIRANGE": 12,
-    "LORANGE": 0,
-    "NAMEINCOL": "21KONV:21QC101PIDQA.SPT"
-  },
-  {
-    "HIRANGE": 7805.84472656,
-    "LORANGE": 0,
-    "NAMEINCOL": "21KONV:21QC101PIDQA.OUT"
-  },
-  {
     "HIRANGE": 200,
     "LORANGE": 0,
     "NAMEINCOL": "21KONV:21T101A.PNT"
@@ -1438,21 +993,6 @@
     "HIRANGE": 200,
     "LORANGE": 0,
     "NAMEINCOL": "21KONV:21T127B.PNT"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21KONV:21TS102PID_T.MEAS"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21KONV:21TS102PID_T.SPT"
-  },
-  {
-    "HIRANGE": 12,
-    "LORANGE": 0,
-    "NAMEINCOL": "21KONV:21TS102PID_T.OUT"
   },
   {
     "HIRANGE": 1100,
@@ -1485,39 +1025,9 @@
     "NAMEINCOL": "21MASLO:21T170_2.PNT"
   },
   {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21NH3:21HCV101PID1.MEAS"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21NH3:21HCV101PID1.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21NH3:21HCV101PID1.OUT"
-  },
-  {
     "HIRANGE": 1100,
     "LORANGE": 700,
     "NAMEINCOL": "21NH3:21LC108.PNT"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 700,
-    "NAMEINCOL": "21NH3:21LCC108.MEAS"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 700,
-    "NAMEINCOL": "21NH3:21LCC108.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21NH3:21LCC108.OUT"
   },
   {
     "HIRANGE": 20,
@@ -1525,39 +1035,9 @@
     "NAMEINCOL": "21NH3:21PC110.PNT"
   },
   {
-    "HIRANGE": 20,
-    "LORANGE": 0,
-    "NAMEINCOL": "21NH3:21PCC110.MEAS"
-  },
-  {
-    "HIRANGE": 20,
-    "LORANGE": 0,
-    "NAMEINCOL": "21NH3:21PCC110.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21NH3:21PCC110.OUT"
-  },
-  {
     "HIRANGE": 200,
     "LORANGE": 0,
     "NAMEINCOL": "21NH3:21TC112.PNT"
-  },
-  {
-    "HIRANGE": 200,
-    "LORANGE": 0,
-    "NAMEINCOL": "21NH3:21TCC112PID1.MEAS"
-  },
-  {
-    "HIRANGE": 200,
-    "LORANGE": 0,
-    "NAMEINCOL": "21NH3:21TCC112PID1.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21NH3:21TCC112PID1.OUT"
   },
   {
     "HIRANGE": 200,
@@ -1570,39 +1050,14 @@
     "NAMEINCOL": "21OXG:21FC106.PNT"
   },
   {
-    "HIRANGE": 84.05595398,
-    "LORANGE": 0,
-    "NAMEINCOL": "21OXG:21FCC106.MEAS"
-  },
-  {
-    "HIRANGE": 84.05595398,
-    "LORANGE": 0,
-    "NAMEINCOL": "21OXG:21FCC106.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21OXG:21FCC106.OUT"
-  },
-  {
     "HIRANGE": 63,
     "LORANGE": 0,
     "NAMEINCOL": "21OXG:21NH3SC_FM.PNT"
   },
   {
-    "HIRANGE": 2.5,
-    "LORANGE": 0,
-    "NAMEINCOL": "21OXG:21NH3SC_FQD.OUT"
-  },
-  {
     "HIRANGE": 1.79999995,
     "LORANGE": 0,
     "NAMEINCOL": "21OXG:21NH3SC_FQDM.PNT"
-  },
-  {
-    "HIRANGE": 63,
-    "LORANGE": 0,
-    "NAMEINCOL": "21OXG:21NH3SC_FQM.OUT"
   },
   {
     "HIRANGE": 50,
@@ -1765,16 +1220,6 @@
     "NAMEINCOL": "21PODSH_AO:21TS179_3.PNT"
   },
   {
-    "HIRANGE": 20,
-    "LORANGE": 0,
-    "NAMEINCOL": "21RD:21EARD_FQD.OUT"
-  },
-  {
-    "HIRANGE": 500,
-    "LORANGE": 0,
-    "NAMEINCOL": "21RD:21EARD_FQM.OUT"
-  },
-  {
     "HIRANGE": 500,
     "LORANGE": 0,
     "NAMEINCOL": "21RD:21EARD_KF.PNT"
@@ -1793,41 +1238,6 @@
     "HIRANGE": 1500,
     "LORANGE": -1500,
     "NAMEINCOL": "21RD:21EA_RD.PNT"
-  },
-  {
-    "HIRANGE": 150,
-    "LORANGE": 0,
-    "NAMEINCOL": "21RD:21GGRS_PID1.MEAS"
-  },
-  {
-    "HIRANGE": 150,
-    "LORANGE": 0,
-    "NAMEINCOL": "21RD:21GGRS_PID1.SPT"
-  },
-  {
-    "HIRANGE": 1000,
-    "LORANGE": 0,
-    "NAMEINCOL": "21RD:21GGRS_PID1.OUT"
-  },
-  {
-    "HIRANGE": 1000,
-    "LORANGE": 0,
-    "NAMEINCOL": "21RD:21GGRS_PTC1.MEAS"
-  },
-  {
-    "HIRANGE": 1000,
-    "LORANGE": 0,
-    "NAMEINCOL": "21RD:21GGRS_PTC1.SPT"
-  },
-  {
-    "HIRANGE": 1,
-    "LORANGE": 0,
-    "NAMEINCOL": "21RD:21GGRS_PTC1.OUTDEC"
-  },
-  {
-    "HIRANGE": 1,
-    "LORANGE": 0,
-    "NAMEINCOL": "21RD:21GGRS_PTC1.OUTINC"
   },
   {
     "HIRANGE": 150,
@@ -1865,36 +1275,6 @@
     "NAMEINCOL": "21REKUP:21LC131.PNT"
   },
   {
-    "HIRANGE": 315,
-    "LORANGE": -315,
-    "NAMEINCOL": "21REKUP:21LCC130.MEAS"
-  },
-  {
-    "HIRANGE": 315,
-    "LORANGE": -315,
-    "NAMEINCOL": "21REKUP:21LCC130.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21REKUP:21LCC130.OUT"
-  },
-  {
-    "HIRANGE": 315,
-    "LORANGE": -315,
-    "NAMEINCOL": "21REKUP:21LCC131PID1.MEAS"
-  },
-  {
-    "HIRANGE": 315,
-    "LORANGE": -315,
-    "NAMEINCOL": "21REKUP:21LCC131PID1.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21REKUP:21LCC131PID1.OUT"
-  },
-  {
     "HIRANGE": 20,
     "LORANGE": 0,
     "NAMEINCOL": "21REKUP:21P135.PNT"
@@ -1910,16 +1290,6 @@
     "NAMEINCOL": "21REKUP:21PD170.PNT"
   },
   {
-    "HIRANGE": 300,
-    "LORANGE": 0,
-    "NAMEINCOL": "21REKUP:21PVKUG_FQD.OUT"
-  },
-  {
-    "HIRANGE": 10000,
-    "LORANGE": 0,
-    "NAMEINCOL": "21REKUP:21PVKUG_FQM.OUT"
-  },
-  {
     "HIRANGE": 4,
     "LORANGE": 0,
     "NAMEINCOL": "21REKUP:21PVKUG_KF.PNT"
@@ -1933,16 +1303,6 @@
     "HIRANGE": 4,
     "LORANGE": 0,
     "NAMEINCOL": "21REKUP:21PVKUG_KFM.PNT"
-  },
-  {
-    "HIRANGE": 1000,
-    "LORANGE": 0,
-    "NAMEINCOL": "21REKUP:21PVKUN_FQD.OUT"
-  },
-  {
-    "HIRANGE": 30000,
-    "LORANGE": 0,
-    "NAMEINCOL": "21REKUP:21PVKUN_FQM.OUT"
   },
   {
     "HIRANGE": 8,
@@ -2195,66 +1555,6 @@
     "NAMEINCOL": "21UKST:21FCC_F171.PNT"
   },
   {
-    "HIRANGE": 2012.8848877,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FCC_PIDFC.MEAS"
-  },
-  {
-    "HIRANGE": 2012.8848877,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FCC_PIDFC.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FCC_PIDFC.OUT"
-  },
-  {
-    "HIRANGE": 6000,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FCC_PIDSC.MEAS"
-  },
-  {
-    "HIRANGE": 6000,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FCC_PIDSC.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FCC_PIDSC.OUT"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FCC_PIDT1.MEAS"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FCC_PIDT1.SPT"
-  },
-  {
-    "HIRANGE": 2012.8848877,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FCC_PIDT1.OUT"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FCC_PIDT2.MEAS"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FCC_PIDT2.SPT"
-  },
-  {
-    "HIRANGE": 6000,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FCC_PIDT2.OUT"
-  },
-  {
     "HIRANGE": 1100,
     "LORANGE": 0,
     "NAMEINCOL": "21UKST:21FCC_T174.PNT"
@@ -2265,44 +1565,9 @@
     "NAMEINCOL": "21UKST:21FCC_TS174.PNT"
   },
   {
-    "HIRANGE": 19649.46875,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FFC_PID1.MEAS"
-  },
-  {
-    "HIRANGE": 19649.46875,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FFC_PID1.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FFC_PID1.OUT"
-  },
-  {
-    "HIRANGE": 2012.8848877,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FFC_RAT1.MEAS"
-  },
-  {
-    "HIRANGE": 19649.46875,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FFC_RAT1.OUT"
-  },
-  {
     "HIRANGE": 100,
     "LORANGE": 0,
     "NAMEINCOL": "21UKST:21G171.PNT"
-  },
-  {
-    "HIRANGE": 50,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21NG_FQD.OUT"
-  },
-  {
-    "HIRANGE": 1250,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21NG_FQM.OUT"
   },
   {
     "HIRANGE": 1000,
@@ -2360,11 +1625,6 @@
     "NAMEINCOL": "01SKLAD:01L26_SUM.PNT"
   },
   {
-    "HIRANGE": 0,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FFC_CAL1.RO02"
-  },
-  {
     "HIRANGE": 14909.4296875,
     "LORANGE": 0,
     "NAMEINCOL": "31ABSOR:31F103.PNT"
@@ -2395,49 +1655,9 @@
     "NAMEINCOL": "31ABSOR:31FC110.PNT"
   },
   {
-    "HIRANGE": 6175.02587891,
-    "LORANGE": 0,
-    "NAMEINCOL": "31ABSOR:31FCC104.MEAS"
-  },
-  {
-    "HIRANGE": 6175.02587891,
-    "LORANGE": 0,
-    "NAMEINCOL": "31ABSOR:31FCC104.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31ABSOR:31FCC104.OUT"
-  },
-  {
-    "HIRANGE": 9.97723675,
-    "LORANGE": 0,
-    "NAMEINCOL": "31ABSOR:31FCC110.MEAS"
-  },
-  {
-    "HIRANGE": 9.97723675,
-    "LORANGE": 0,
-    "NAMEINCOL": "31ABSOR:31FCC110.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31ABSOR:31FCC110.OUT"
-  },
-  {
     "HIRANGE": 30,
     "LORANGE": 0,
     "NAMEINCOL": "31ABSOR:31HNO3_FM.PNT"
-  },
-  {
-    "HIRANGE": 360,
-    "LORANGE": 0,
-    "NAMEINCOL": "31ABSOR:31HNO3_FQD.OUT"
-  },
-  {
-    "HIRANGE": 12500,
-    "LORANGE": 0,
-    "NAMEINCOL": "31ABSOR:31HNO3_FQM.OUT"
   },
   {
     "HIRANGE": 16,
@@ -2448,16 +1668,6 @@
     "HIRANGE": 1.39999998,
     "LORANGE": 1.20000005,
     "NAMEINCOL": "31ABSOR:31HNO3_R.PNT"
-  },
-  {
-    "HIRANGE": 250,
-    "LORANGE": 0,
-    "NAMEINCOL": "31ABSOR:31KCP_FQD.OUT"
-  },
-  {
-    "HIRANGE": 8000,
-    "LORANGE": 0,
-    "NAMEINCOL": "31ABSOR:31KCP_FQM.OUT"
   },
   {
     "HIRANGE": 4,
@@ -2480,31 +1690,6 @@
     "NAMEINCOL": "31ABSOR:31LC105.PNT"
   },
   {
-    "HIRANGE": 830,
-    "LORANGE": 430,
-    "NAMEINCOL": "31ABSOR:31LCC105.MEAS"
-  },
-  {
-    "HIRANGE": 830,
-    "LORANGE": 430,
-    "NAMEINCOL": "31ABSOR:31LCC105.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31ABSOR:31LCC105.OUT"
-  },
-  {
-    "HIRANGE": 25,
-    "LORANGE": 0,
-    "NAMEINCOL": "31ABSOR:31OV1_FQD.OUT"
-  },
-  {
-    "HIRANGE": 600,
-    "LORANGE": 0,
-    "NAMEINCOL": "31ABSOR:31OV1_FQM.OUT"
-  },
-  {
     "HIRANGE": 500,
     "LORANGE": 0,
     "NAMEINCOL": "31ABSOR:31OV1_KF.PNT"
@@ -2518,16 +1703,6 @@
     "HIRANGE": 500,
     "LORANGE": 0,
     "NAMEINCOL": "31ABSOR:31OV1_KFM.PNT"
-  },
-  {
-    "HIRANGE": 16,
-    "LORANGE": 0,
-    "NAMEINCOL": "31ABSOR:31OV2_FQD.OUT"
-  },
-  {
-    "HIRANGE": 400,
-    "LORANGE": 0,
-    "NAMEINCOL": "31ABSOR:31OV2_FQM.OUT"
   },
   {
     "HIRANGE": 500,
@@ -2583,31 +1758,6 @@
     "HIRANGE": 1038.55493164,
     "LORANGE": 0,
     "NAMEINCOL": "31GTT:31F113.PNT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31GTT:31HCV170PID1.MEAS"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31GTT:31HCV170PID1.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31GTT:31HCV170PID1.OUT"
-  },
-  {
-    "HIRANGE": 16,
-    "LORANGE": 0,
-    "NAMEINCOL": "31GTT:31OV3_FQD.OUT"
-  },
-  {
-    "HIRANGE": 400,
-    "LORANGE": 0,
-    "NAMEINCOL": "31GTT:31OV3_FQM.OUT"
   },
   {
     "HIRANGE": 500,
@@ -2710,19 +1860,9 @@
     "NAMEINCOL": "31KONV:31NH3N_FM.PNT"
   },
   {
-    "HIRANGE": 240,
-    "LORANGE": 0,
-    "NAMEINCOL": "31KONV:31NH3N_FQD.OUT"
-  },
-  {
     "HIRANGE": 180,
     "LORANGE": 0,
     "NAMEINCOL": "31KONV:31NH3N_FQDM.PNT"
-  },
-  {
-    "HIRANGE": 8000,
-    "LORANGE": 0,
-    "NAMEINCOL": "31KONV:31NH3N_FQM.OUT"
   },
   {
     "HIRANGE": 5000,
@@ -2745,19 +1885,9 @@
     "NAMEINCOL": "31KONV:31NH3_FM.PNT"
   },
   {
-    "HIRANGE": 180,
-    "LORANGE": 0,
-    "NAMEINCOL": "31KONV:31NH3_FQD.OUT"
-  },
-  {
     "HIRANGE": 125,
     "LORANGE": 0,
     "NAMEINCOL": "31KONV:31NH3_FQDM.PNT"
-  },
-  {
-    "HIRANGE": 5500,
-    "LORANGE": 0,
-    "NAMEINCOL": "31KONV:31NH3_FQM.OUT"
   },
   {
     "HIRANGE": 4000,
@@ -2815,36 +1945,6 @@
     "NAMEINCOL": "31KONV:31QC101AIN2.PNT"
   },
   {
-    "HIRANGE": 7805.84472656,
-    "LORANGE": 0,
-    "NAMEINCOL": "31KONV:31QC101PIDFA.MEAS"
-  },
-  {
-    "HIRANGE": 7805.84472656,
-    "LORANGE": 0,
-    "NAMEINCOL": "31KONV:31QC101PIDFA.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31KONV:31QC101PIDFA.OUT"
-  },
-  {
-    "HIRANGE": 12,
-    "LORANGE": 0,
-    "NAMEINCOL": "31KONV:31QC101PIDQA.MEAS"
-  },
-  {
-    "HIRANGE": 12,
-    "LORANGE": 0,
-    "NAMEINCOL": "31KONV:31QC101PIDQA.SPT"
-  },
-  {
-    "HIRANGE": 7805.84472656,
-    "LORANGE": 0,
-    "NAMEINCOL": "31KONV:31QC101PIDQA.OUT"
-  },
-  {
     "HIRANGE": 200,
     "LORANGE": 0,
     "NAMEINCOL": "31KONV:31T101A.PNT"
@@ -2868,21 +1968,6 @@
     "HIRANGE": 200,
     "LORANGE": 0,
     "NAMEINCOL": "31KONV:31T127B.PNT"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31KONV:31TS102PID_T.MEAS"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31KONV:31TS102PID_T.SPT"
-  },
-  {
-    "HIRANGE": 12,
-    "LORANGE": 0,
-    "NAMEINCOL": "31KONV:31TS102PID_T.OUT"
   },
   {
     "HIRANGE": 1100,
@@ -2915,39 +2000,9 @@
     "NAMEINCOL": "31MASLO:31T170_2.PNT"
   },
   {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31NH3:31HCV101PID1.MEAS"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31NH3:31HCV101PID1.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31NH3:31HCV101PID1.OUT"
-  },
-  {
     "HIRANGE": 1100,
     "LORANGE": 700,
     "NAMEINCOL": "31NH3:31LC108.PNT"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 700,
-    "NAMEINCOL": "31NH3:31LCC108.MEAS"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 700,
-    "NAMEINCOL": "31NH3:31LCC108.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31NH3:31LCC108.OUT"
   },
   {
     "HIRANGE": 20,
@@ -2955,39 +2010,9 @@
     "NAMEINCOL": "31NH3:31PC110.PNT"
   },
   {
-    "HIRANGE": 20,
-    "LORANGE": 0,
-    "NAMEINCOL": "31NH3:31PCC110.MEAS"
-  },
-  {
-    "HIRANGE": 20,
-    "LORANGE": 0,
-    "NAMEINCOL": "31NH3:31PCC110.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31NH3:31PCC110.OUT"
-  },
-  {
     "HIRANGE": 200,
     "LORANGE": 0,
     "NAMEINCOL": "31NH3:31TC112.PNT"
-  },
-  {
-    "HIRANGE": 200,
-    "LORANGE": 0,
-    "NAMEINCOL": "31NH3:31TCC112PID1.MEAS"
-  },
-  {
-    "HIRANGE": 200,
-    "LORANGE": 0,
-    "NAMEINCOL": "31NH3:31TCC112PID1.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31NH3:31TCC112PID1.OUT"
   },
   {
     "HIRANGE": 200,
@@ -3000,39 +2025,14 @@
     "NAMEINCOL": "31OXG:31FC106.PNT"
   },
   {
-    "HIRANGE": 84.05595398,
-    "LORANGE": 0,
-    "NAMEINCOL": "31OXG:31FCC106.MEAS"
-  },
-  {
-    "HIRANGE": 84.05595398,
-    "LORANGE": 0,
-    "NAMEINCOL": "31OXG:31FCC106.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31OXG:31FCC106.OUT"
-  },
-  {
     "HIRANGE": 63,
     "LORANGE": 0,
     "NAMEINCOL": "31OXG:31NH3SC_FM.PNT"
   },
   {
-    "HIRANGE": 2.5,
-    "LORANGE": 0,
-    "NAMEINCOL": "31OXG:31NH3SC_FQD.OUT"
-  },
-  {
     "HIRANGE": 1.79999995,
     "LORANGE": 0,
     "NAMEINCOL": "31OXG:31NH3SC_FQDM.PNT"
-  },
-  {
-    "HIRANGE": 63,
-    "LORANGE": 0,
-    "NAMEINCOL": "31OXG:31NH3SC_FQM.OUT"
   },
   {
     "HIRANGE": 50,
@@ -3195,16 +2195,6 @@
     "NAMEINCOL": "31PODSH_AO:31TS179_3.PNT"
   },
   {
-    "HIRANGE": 20,
-    "LORANGE": 0,
-    "NAMEINCOL": "31RD:31EARD_FQD.OUT"
-  },
-  {
-    "HIRANGE": 500,
-    "LORANGE": 0,
-    "NAMEINCOL": "31RD:31EARD_FQM.OUT"
-  },
-  {
     "HIRANGE": 500,
     "LORANGE": 0,
     "NAMEINCOL": "31RD:31EARD_KF.PNT"
@@ -3223,41 +2213,6 @@
     "HIRANGE": 1500,
     "LORANGE": -1500,
     "NAMEINCOL": "31RD:31EA_RD.PNT"
-  },
-  {
-    "HIRANGE": 150,
-    "LORANGE": 0,
-    "NAMEINCOL": "31RD:31GGRS_PID1.MEAS"
-  },
-  {
-    "HIRANGE": 150,
-    "LORANGE": 0,
-    "NAMEINCOL": "31RD:31GGRS_PID1.SPT"
-  },
-  {
-    "HIRANGE": 1000,
-    "LORANGE": 0,
-    "NAMEINCOL": "31RD:31GGRS_PID1.OUT"
-  },
-  {
-    "HIRANGE": 1000,
-    "LORANGE": 0,
-    "NAMEINCOL": "31RD:31GGRS_PTC1.MEAS"
-  },
-  {
-    "HIRANGE": 1000,
-    "LORANGE": 0,
-    "NAMEINCOL": "31RD:31GGRS_PTC1.SPT"
-  },
-  {
-    "HIRANGE": 1,
-    "LORANGE": 0,
-    "NAMEINCOL": "31RD:31GGRS_PTC1.OUTDEC"
-  },
-  {
-    "HIRANGE": 1,
-    "LORANGE": 0,
-    "NAMEINCOL": "31RD:31GGRS_PTC1.OUTINC"
   },
   {
     "HIRANGE": 150,
@@ -3295,36 +2250,6 @@
     "NAMEINCOL": "31REKUP:31LC131.PNT"
   },
   {
-    "HIRANGE": 315,
-    "LORANGE": -315,
-    "NAMEINCOL": "31REKUP:31LCC130.MEAS"
-  },
-  {
-    "HIRANGE": 315,
-    "LORANGE": -315,
-    "NAMEINCOL": "31REKUP:31LCC130.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31REKUP:31LCC130.OUT"
-  },
-  {
-    "HIRANGE": 315,
-    "LORANGE": -315,
-    "NAMEINCOL": "31REKUP:31LCC131PID1.MEAS"
-  },
-  {
-    "HIRANGE": 315,
-    "LORANGE": -315,
-    "NAMEINCOL": "31REKUP:31LCC131PID1.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31REKUP:31LCC131PID1.OUT"
-  },
-  {
     "HIRANGE": 20,
     "LORANGE": 0,
     "NAMEINCOL": "31REKUP:31P135.PNT"
@@ -3340,16 +2265,6 @@
     "NAMEINCOL": "31REKUP:31PD170.PNT"
   },
   {
-    "HIRANGE": 300,
-    "LORANGE": 0,
-    "NAMEINCOL": "31REKUP:31PVKUG_FQD.OUT"
-  },
-  {
-    "HIRANGE": 10000,
-    "LORANGE": 0,
-    "NAMEINCOL": "31REKUP:31PVKUG_FQM.OUT"
-  },
-  {
     "HIRANGE": 4,
     "LORANGE": 0,
     "NAMEINCOL": "31REKUP:31PVKUG_KF.PNT"
@@ -3363,16 +2278,6 @@
     "HIRANGE": 4,
     "LORANGE": 0,
     "NAMEINCOL": "31REKUP:31PVKUG_KFM.PNT"
-  },
-  {
-    "HIRANGE": 1000,
-    "LORANGE": 0,
-    "NAMEINCOL": "31REKUP:31PVKUN_FQD.OUT"
-  },
-  {
-    "HIRANGE": 30000,
-    "LORANGE": 0,
-    "NAMEINCOL": "31REKUP:31PVKUN_FQM.OUT"
   },
   {
     "HIRANGE": 8,
@@ -3625,66 +2530,6 @@
     "NAMEINCOL": "31UKST:31FCC_F171.PNT"
   },
   {
-    "HIRANGE": 2012.8848877,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FCC_PIDFC.MEAS"
-  },
-  {
-    "HIRANGE": 2012.8848877,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FCC_PIDFC.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FCC_PIDFC.OUT"
-  },
-  {
-    "HIRANGE": 6000,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FCC_PIDSC.MEAS"
-  },
-  {
-    "HIRANGE": 6000,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FCC_PIDSC.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FCC_PIDSC.OUT"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FCC_PIDT1.MEAS"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FCC_PIDT1.SPT"
-  },
-  {
-    "HIRANGE": 2012.8848877,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FCC_PIDT1.OUT"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FCC_PIDT2.MEAS"
-  },
-  {
-    "HIRANGE": 1100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FCC_PIDT2.SPT"
-  },
-  {
-    "HIRANGE": 6000,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FCC_PIDT2.OUT"
-  },
-  {
     "HIRANGE": 1100,
     "LORANGE": 0,
     "NAMEINCOL": "31UKST:31FCC_T174.PNT"
@@ -3695,49 +2540,9 @@
     "NAMEINCOL": "31UKST:31FCC_TS174.PNT"
   },
   {
-    "HIRANGE": 19649.46875,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FFC_PID1.MEAS"
-  },
-  {
-    "HIRANGE": 19649.46875,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FFC_PID1.SPT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FFC_PID1.OUT"
-  },
-  {
-    "HIRANGE": 2012.8848877,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FFC_RAT1.MEAS"
-  },
-  {
-    "HIRANGE": 10,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FFC_RAT1.RATIO"
-  },
-  {
-    "HIRANGE": 19649.46875,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FFC_RAT1.OUT"
-  },
-  {
     "HIRANGE": 100,
     "LORANGE": 0,
     "NAMEINCOL": "31UKST:31G171.PNT"
-  },
-  {
-    "HIRANGE": 50,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31NG_FQD.OUT"
-  },
-  {
-    "HIRANGE": 1250,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31NG_FQM.OUT"
   },
   {
     "HIRANGE": 1000,
@@ -3770,19 +2575,9 @@
     "NAMEINCOL": "31UKST:31T116.PNT"
   },
   {
-    "HIRANGE": 0,
-    "LORANGE": 0,
-    "NAMEINCOL": "31UKST:31FFC_CAL1.RO02"
-  },
-  {
     "HIRANGE": 2.5,
     "LORANGE": -2.5,
     "NAMEINCOL": "31UKST:31PD_NG_VZ.PNT"
-  },
-  {
-    "HIRANGE": 10,
-    "LORANGE": 0,
-    "NAMEINCOL": "21UKST:21FFC_RAT1.RATIO"
   },
   {
     "HIRANGE": 2.5,
@@ -3851,16 +2646,6 @@
   },
   {
     "HIRANGE": 3000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01SKLAD:01HNO3_1_FVD.OUT"
-  },
-  {
-    "HIRANGE": 3000,
-    "LORANGE": 0,
-    "NAMEINCOL": "01SKLAD:01HNO3_2_FVD.OUT"
-  },
-  {
-    "HIRANGE": 3000,
     "LORANGE": -3000,
     "NAMEINCOL": "01BALANCE:01AK_DELTA_D.PNT"
   },
@@ -3893,21 +2678,6 @@
     "HIRANGE": 3000,
     "LORANGE": 0,
     "NAMEINCOL": "01BALANCE:01AK_ASM_D.PNT"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01BALANCE:01HNO3_SUM2.RO01"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01BALANCE:01HNO3_SUM2.RO02"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01BALANCE:01HNO3_SUM2.RO03"
   },
   {
     "HIRANGE": 2090,
@@ -3990,16 +2760,6 @@
     "NAMEINCOL": "01BALANCE:01AK31_D.PNT"
   },
   {
-    "HIRANGE": 2500,
-    "LORANGE": 0,
-    "NAMEINCOL": "01SKLAD:01HNO3_1_FMD.OUT"
-  },
-  {
-    "HIRANGE": 2500,
-    "LORANGE": 0,
-    "NAMEINCOL": "01SKLAD:01HNO3_2_FMD.OUT"
-  },
-  {
     "HIRANGE": 156000,
     "LORANGE": 0,
     "NAMEINCOL": "01BALANCE:01OV_FQD.PNT"
@@ -4010,16 +2770,6 @@
     "NAMEINCOL": "01AMIAK:01LC9.PNT"
   },
   {
-    "HIRANGE": 2800,
-    "LORANGE": 450,
-    "NAMEINCOL": "01AMIAK:01LCC9.MEAS"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01AMIAK:01LCC9.OUT"
-  },
-  {
     "HIRANGE": 10,
     "LORANGE": 0,
     "NAMEINCOL": "01AMIAK:01P9.PNT"
@@ -4028,31 +2778,6 @@
     "HIRANGE": 150,
     "LORANGE": -50,
     "NAMEINCOL": "01AMIAK:01TC9.PNT"
-  },
-  {
-    "HIRANGE": 150,
-    "LORANGE": -50,
-    "NAMEINCOL": "01AMIAK:01TCC9.MEAS"
-  },
-  {
-    "HIRANGE": 100,
-    "LORANGE": 0,
-    "NAMEINCOL": "01AMIAK:01TCC9.OUT"
-  },
-  {
-    "HIRANGE": 2800,
-    "LORANGE": 450,
-    "NAMEINCOL": "01AMIAK:01LCC9.SPT"
-  },
-  {
-    "HIRANGE": 150,
-    "LORANGE": -50,
-    "NAMEINCOL": "01AMIAK:01TCC9.SPT"
-  },
-  {
-    "HIRANGE": 2686.51000977,
-    "LORANGE": 0,
-    "NAMEINCOL": "01SKLAD:01L26_CALSUM.RO03"
   },
   {
     "HIRANGE": 1000,
