@@ -76,11 +76,12 @@ class OpcuaClients {
 
     // Create OPC-UA client
     const client = new OpcuaClient(data.params);
+    const srvCurrentState = await getSrvCurrentState(this.app, id);
+    client.srvCurrentState = srvCurrentState;
     // Client create
     await client.opcuaClientCreate();
 
     // Client connect and sessionCreate
-    const srvCurrentState = await getSrvCurrentState(this.app, id);
     await client.opcuaClientConnect(srvCurrentState);
     await client.sessionCreate(data.userIdentityInfo);
 

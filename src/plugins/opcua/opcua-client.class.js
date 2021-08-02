@@ -110,7 +110,8 @@ class OpcuaClient {
     params = params ? loMerge(this.params, params) : this.params;
     this.opcuaClient = OPCUAClient.create(params);
     // Retrying connection
-    this.opcuaClient.on('backoff', (retry) => console.log(chalk.yellow('Retrying to connect to:'), this.srvCurrentState.endpointUrl, ' attempt: ', retry));
+    const endpointUrl = (this.srvCurrentState && this.srvCurrentState.endpointUrl)? this.srvCurrentState.endpointUrl : '';
+    this.opcuaClient.on('backoff', (retry) => console.log(chalk.yellow('Retrying to connect to:'), endpointUrl, ' attempt: ', retry));
     this.currentState.applicationUri = this.opcuaClient._applicationUri;
     this.currentState.isCreated = true;
     console.log(chalk.yellow('OPCUAClient created ...'), 'opcuaClient.id:', chalk.cyan(this.id));
@@ -129,7 +130,9 @@ class OpcuaClient {
   async opcuaClientConnect(params = {}) {
     this.opcuaClientNotCreated();
     await this.opcuaClient.connect(params.endpointUrl);
-    this.srvCurrentState = params;
+    if(!this.srvCurrentState){
+      this.srvCurrentState = params;
+    }
     this.currentState.isConnect = true;
     this.currentState.endpointUrl = params.endpointUrl;
     this.currentState.port = params.endpointUrl.split(':')[2];
