@@ -20,7 +20,7 @@ const papa = require('papaparse');
 
 const debug = require('debug')('app:file-operations.script');
 const isDebug = true;
-const isLog = true;
+const isLog = false;
 
 // Script Execution
 const scriptExecution = {
@@ -84,13 +84,13 @@ const inpKepServerConfig = {
     column17: { fromField: '', toField: 'Negate Value', default: undefined },
   },
   // filter: e.g. ['PNT', 'MEAS', 'SPT', 'OUT'],
-  filter: ['PNT'],
+  filter: ['PNT', 'MEAS', 'SPT', 'OUT'],
   inpFilter: ['NAMEINCOL', 'HIRANGE', 'LORANGE'],
   delimiterTo: ',',
   path: 'scripts/api/toKEPServer/fromFoxHist',
-  jsonFileName: 'm51_v210729.json',
-  inpFileNameFrom: '51hs00_v210729.inp',
-  csvFileNameTo: 'm51-kepServer_v210729.csv',
+  jsonFileName: 'm52_v210802.json',// m51_v210729.json, m52_v210802.json
+  inpFileNameFrom: 'm52-hist0_v210802.inp',// m51-hist0_v210729.inp, m52-hist0_v210802.inp
+  csvFileNameTo: 'm52-kepServer_v210802.csv',// m51-kepServer_v210729.csv, m52-kepServer_v210802.csv
 };
 
 describe('<<=== ScriptOperations: (file-operations.script) ===>>', () => {
@@ -165,8 +165,8 @@ describe('<<=== ScriptOperations: (file-operations.script) ===>>', () => {
         writeFileSync([appRoot, path, fileName], csv);
         assert.ok(true, 'ScriptOperations: Converter for KEPServer');
       } catch (error) {
-        inspector('Converter for KEPServer.error:', error);
-        assert.ok(false, 'ScriptOperations: Converter for KEPServer');
+        inspector('#2: ScriptOperations: Converter csv files for KEPServer:', error.message);
+        assert.ok(false, '#2: ScriptOperations: Converter csv files for KEPServer');
       }
     });
   }
@@ -189,7 +189,7 @@ describe('<<=== ScriptOperations: (file-operations.script) ===>>', () => {
       data = readFileSync([appRoot, path, fileName]);
       // Get 
       re = /#{1}\s{1}\d+/;
-      debug('re:', re);
+      // debug('re:', re);
       // Get array items
       points = data.split(re);
       // Delete points[0] item
