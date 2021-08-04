@@ -2,6 +2,12 @@
 const Channel = require('./plugins/auth/channel.class');
 const Auth = require('./plugins/auth/auth-server.class');
 const {dbNullIdValue} = require('./plugins/lib');
+const {
+  getChannelsWithReadAbility,
+  makeOptions
+} = require('feathers-casl').channels;
+const loConcat = require('lodash/concat');
+
 const debug = require('debug')('app:channels');
 
 const isLog = false;
@@ -12,6 +18,8 @@ module.exports = function (app) {
     // If no real-time functionality has been configured just return
     return;
   }
+
+  const caslOptions = makeOptions(app);
 
   /**
    * Join a channel given a user and connection
@@ -226,6 +234,7 @@ module.exports = function (app) {
     default:
       break;
     }
-    return publishResult;
+    const channelsWithReadAbility = getChannelsWithReadAbility(app, data, hook, caslOptions);
+    return loConcat(publishResult, channelsWithReadAbility);
   });
 };
