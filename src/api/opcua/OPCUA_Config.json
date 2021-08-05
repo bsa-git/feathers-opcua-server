@@ -81,7 +81,7 @@
     "isDisable": false,
     "id": "ua-cherkassy-azot-asutp_dev2",
     "name": "380-472-00203826-asutp_dev2",
-    "endpointUrl": "opc.tcp://127.0.0.1:49370",
+    "endpointUrl": "opc.tcp://localhost:49370",
     "srvServiceUrl": "",
     "clientServiceUrl": "http://10.60.0.220:3030",
     "clientScript": "startSubscriptionMonitor",
