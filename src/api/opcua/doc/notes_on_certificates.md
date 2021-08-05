@@ -1,3 +1,7 @@
+path to bat file -> c:\OpenSSL-Win64\opcuaSSL_Commands.bat
+----------------------------------------------------------
+----------------------------------------------------------
+
 generate a new private key and Certificate Signing Request
 ----------------------------------------------------------
     
