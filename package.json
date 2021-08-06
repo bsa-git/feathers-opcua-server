@@ -34,6 +34,7 @@
     "test:script": "npm run eslint:script && npm run mocha:script",
     "start:test-seed": "cross-env NODE_ENV=test node src/ --seed",
     "start-mongod": "mongod -f mongod.config.yml",
+    "start-mongod32": "mongod --storageEngine=mmapv1 -f mongod.config.yml",
     "coverage": "nyc npm run mocha",
     "mocha": "cross-env NODE_ENV=test DEBUG=app:* mocha test/ --recursive --exit --timeout 60000",
     "mocha:debug": "cross-env NODE_ENV=test DEBUG=app:* mocha test/debug/ --recursive --exit --timeout 60000",
