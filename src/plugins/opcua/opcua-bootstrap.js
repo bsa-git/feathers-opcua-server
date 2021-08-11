@@ -67,14 +67,15 @@ module.exports = async function opcuaBootstrap(app) {
   opcuaOptions = opcuaOptions.filter(item => !item.isDisable);
   for (let index = 0; index < opcuaOptions.length; index++) {
     const option = opcuaOptions[index];
+    const id = option.id;
     // Create service for OPC-UA server
-    service = await getServerService(app, option.id);
+    service = await getServerService(app, id);
     if (service) {
       // service create
       const srvData = {
         params: {
           port: option.endpointPort,
-          serverInfo: { applicationName: option.id },
+          serverInfo: { applicationName: id },
         }
       };
       if (isLog) inspector('opcuaBootstrap.srvData:', srvData);
@@ -83,12 +84,12 @@ module.exports = async function opcuaBootstrap(app) {
       // inspector('opcuaBootstrap.opcuaServer:', opcuaServer.server.getCurrentState());
     }
     // Create service for OPC-UA client
-    service = await getClientService(app, option.id);
+    service = await getClientService(app, id);
     if (service) {
       // service create
       const clientData = {
         params: {
-          applicationName: option.id,
+          applicationName: id,
         }
       };
 
@@ -97,7 +98,7 @@ module.exports = async function opcuaBootstrap(app) {
       opcuaClient = await service.create(clientData);
       if (isLog) inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
       // Execute client script
-      await executeOpcuaClientScript(service, option.id);
+      await executeOpcuaClientScript(service, id);
     }
   }
 };

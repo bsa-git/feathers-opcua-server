@@ -1157,6 +1157,7 @@ class OpcuaClient {
       // Run subscriptionHandler
       monitoredItem.on('changed', (dataValue) => {
         if (isLog) inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
+        inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
         const value = dataValue.value.value;
         if (value === null) return;
         itemToMonitor.id = this.id;

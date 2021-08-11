@@ -394,7 +394,7 @@ const getOpcuaTags = function (browseName = '') {
     mergedOpcuaOptions = mergeOpcuaConfigOptions(opt.id);
     opcuaTags = loConcat(opcuaTags, mergedOpcuaOptions.objects, mergedOpcuaOptions.variables, mergedOpcuaOptions.groups);
   });
-  opcuaTags = opcuaTags.filter(item => item.browseName);
+  opcuaTags = opcuaTags.filter(item => item && item.browseName);
 
   if (browseName) {
     opcuaTag = opcuaTags.find(tag => tag.browseName === browseName);
@@ -621,6 +621,7 @@ const getParamsAddressSpace = (id) => {
     methods: []
   };
   let opcuaConfigOptions = getOpcuaConfigOptions(id);
+  opcuaConfigOptions = opcuaConfigOptions.filter(item => item);
   opcuaConfigOptions = opcuaConfigOptions.filter(item => !item.isDisable);
   let objects = opcuaConfigOptions.filter(opt => opt.type ? (opt.type === 'object') : false);
   let methods = opcuaConfigOptions.filter(opt => (opt.type ? (opt.type === 'method') : false) && objects.find(o => o.browseName === opt.ownerName));

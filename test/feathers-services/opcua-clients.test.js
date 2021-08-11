@@ -19,7 +19,7 @@ const {
 } = require('../../src/plugins/lib');
 
 const {
-  startListenPort, 
+  startListenPort,
   stopListenPort,
 } = require('../../src/plugins/test-helpers');
 
@@ -71,7 +71,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     makeDirSync([appRoot, 'test/data/tmp/test1']);
   });
 
-  after( function (done) {
+  after(function (done) {
     stopListenPort(done);
   });
 
@@ -98,9 +98,15 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     const service = app.service('users');
     assert.ok(service, 'Users: registered the service');
     // service create
-    const newUser = await service.create(userInfo);
-    if (isLog) inspector('Created User service:', newUser);
-    opcuaUser = newUser;
+    let newUser = await service.find({ query: { email: userInfo.email } });
+    newUser = newUser.data;
+    if (newUser.length) {
+      opcuaUser = newUser[0];
+    } else {
+      newUser = await service.create(userInfo);
+      if (isLog) inspector('Created User service:', newUser);
+      opcuaUser = newUser;
+    }
     assert.ok(newUser, 'newUser: created the service');
   });
 
@@ -201,9 +207,9 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
   it('15# OPC-UA clients: disconnect the service', async () => {
     const service = await getClientService(app, id);
-    let data = {id, action: 'sessionClose'};
+    let data = { id, action: 'sessionClose' };
     let opcuaClient = await service.create(data);
-    data = {id, action: 'opcuaClientDisconnect'};
+    data = { id, action: 'opcuaClientDisconnect' };
     opcuaClient = await service.create(data);
     if (isLog) inspector('Session close the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
@@ -212,9 +218,9 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
   it('16# OPC-UA clients: connect the service', async () => {
     const srvCurrentState = await getSrvCurrentState(app, id);
     const service = await getClientService(app, id);
-    let data = {id, action: 'opcuaClientConnect', params: srvCurrentState};
+    let data = { id, action: 'opcuaClientConnect', params: srvCurrentState };
     let opcuaClient = await service.create(data);
-    data = {id, action: 'sessionCreate'};
+    data = { id, action: 'sessionCreate' };
     opcuaClient = await service.create(data);
     if (isLog) inspector('Connect the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: connect the service');
@@ -358,7 +364,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
       if (value.statusCode === StatusCodes.Good) {
         // let dataType = value.dataType.toString();
         const dataType = getOpcuaDataType(value.dataType)[0];
-        
+
         console.log(chalk.green('sessionReadAllAttributes.nodeId:'), chalk.cyan(value.nodeId.toString()));
         console.log(chalk.green('sessionReadAllAttributes.browseName:'), chalk.cyan(value.browseName.name));
         console.log(chalk.green('sessionReadAllAttributes.displayName:'), chalk.cyan(value.displayName.text));
@@ -375,7 +381,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     }
   });
 
-  
+
   //============== SESSION HISTORY VALUES ====================//
 
   it('24# OPC-UA clients: session history value', async () => {
@@ -733,13 +739,13 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
     console.log(chalk.greenBright('server.isInitialized:'), chalk.cyan(result));
     result = await service.isAuditing(id);
     console.log(chalk.greenBright('server.isAuditing:'), chalk.cyan(result));
-    let data = {id, action: 'getServerInfo'};
+    let data = { id, action: 'getServerInfo' };
     result = await service.create(data);
     inspector('server.getServerInfo:', result);
-    data = {id, action: 'getBuildInfo'};
+    data = { id, action: 'getBuildInfo' };
     result = await service.create(data);
     inspector('server.getBuildInfo:', result);
-    data = {id, action: 'getCurrentState'};
+    data = { id, action: 'getCurrentState' };
     result = await service.create(data);
     if (isLog) inspector('server.getCurrentState:', result);
 
