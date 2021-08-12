@@ -92,11 +92,16 @@
       "userName": "",
       "password": ""
     },
+    "NodeId": {
+      "NamespaceIndex": 2,
+      "IdentifierType": "isplayName",
+      "Identifier": "Channel1.Device1"
+    },
     "paths": {
       "base-options": [
-        
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json"
       ],
-      "options": "/src/api/opcua/ua-cherkassy-azot-asutp_dev2/AddressSpaceOptions.json",
+      "options": "",
       "getters": "",
       "methods": "",
       "subscriptions": "",

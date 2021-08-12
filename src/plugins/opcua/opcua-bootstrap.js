@@ -6,7 +6,8 @@ const {
   readJsonFileSync,
   inspector,
   appRoot,
-  isTrue
+  isTrue,
+  isObject
 } = require('../lib');
 
 const {
@@ -25,8 +26,11 @@ const {
 const {
   MessageSecurityMode,
   SecurityPolicy,
-  UserTokenType
+  UserTokenType,
+  AttributeIds
 } = require('node-opcua');
+
+const chalk = require('chalk');
 
 const debug = require('debug')('app:opcua-bootstrap');
 const isDebug = false;
@@ -96,9 +100,18 @@ module.exports = async function opcuaBootstrap(app) {
       if (isLog) inspector('opcuaBootstrap.clientData:', clientData);
       // Create client service
       opcuaClient = await service.create(clientData);
-      if (isLog) inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
       // Execute client script
       await executeOpcuaClientScript(service, id);
+      if (isLog) inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
+      // inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
+
+
+      // const nameNodeIds = { nodeId: 'ns=2;s=Channel1.Device1.Черкассы \'АЗОТ\' цех M5-2.02HNO3_F20_2', attributeId: AttributeIds.Value };
+      const nameNodeIds = 'CH_M52::02SKLAD:02F20_2';
+      const readResult = await service.sessionRead(id, nameNodeIds);
+      // inspector('opcuaBootstrap.readResult:', readResult);
+      const value = readResult[0].value.value;
+      console.log(chalk.green('02HNO3_F20_2.value:'), chalk.cyan(isObject(value) ? value.name : value));
     }
   }
 };

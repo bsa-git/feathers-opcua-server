@@ -614,7 +614,16 @@ const getClientService = async function (app = null, id) {
  * @returns {Object}
  */
 const getParamsAddressSpace = (id) => {
-  // const opcuaOption = getOpcuaConfig(id);
+  let NodeId = {
+    NamespaceIndex: 1, // e.g 1|2 ...
+    IdentifierType: 'browseName', // e.g. browseName|displayName
+    Identifier: '' // e.g. Channel1.Device1
+  };
+  const opcuaOption = getOpcuaConfig(id);
+  if(opcuaOption.NodeId){
+    Object.assign(NodeId, opcuaOption.NodeId);
+  }
+
   const paramsAddressSpace = {
     objects: [],
     variables: [],
@@ -626,24 +635,25 @@ const getParamsAddressSpace = (id) => {
   let objects = opcuaConfigOptions.filter(opt => opt.type ? (opt.type === 'object') : false);
   let methods = opcuaConfigOptions.filter(opt => (opt.type ? (opt.type === 'method') : false) && objects.find(o => o.browseName === opt.ownerName));
   let variables = opcuaConfigOptions.filter(opt => (opt.type ? opt.type.includes('variable') : false) && objects.find(o => o.browseName === opt.ownerName));
-  // group and ownerGroup variables
-  const groupVariables = variables.filter(v => v.group);
-  const ownerGroupVariables = variables.filter(v => v.ownerGroup && groupVariables.find(gVar => gVar.browseName === v.ownerGroup));
-  variables = loConcat(groupVariables, ownerGroupVariables);
 
   // Map of objects
   paramsAddressSpace.objects = objects.map(o => {
-    o.nodeId = `ns=1;s=${o.browseName}`;
+    const identifier = NodeId.Identifier? NodeId.Identifier + '.' : '';
+    o.nodeId = `ns=${NodeId.NamespaceIndex};s=${identifier}${o[NodeId.IdentifierType]}`;
     return o;
   });
   // Map of variables
   paramsAddressSpace.variables = variables.map(v => {
-    v.nodeId = `ns=1;s=${v.browseName}`;
+    const object = paramsAddressSpace.objects.find(o => o.browseName === v.ownerName);
+    const identifier = getValueFromNodeId(object.nodeId) + '.';
+    v.nodeId = `ns=${NodeId.NamespaceIndex};s=${identifier}${v[NodeId.IdentifierType]}`;
     return v;
   });
   // Map of methods
   paramsAddressSpace.methods = methods.map(m => {
-    m.nodeId = `ns=1;s=${m.browseName}`;
+    const object = paramsAddressSpace.objects.find(o => o.browseName === m.ownerName);
+    const identifier = getValueFromNodeId(object.nodeId) + '.';
+    m.nodeId = `ns=${NodeId.NamespaceIndex};s=${identifier}${m[NodeId.IdentifierType]}`;
     // Method inputArguments merge 
     if (m.inputArguments && m.inputArguments.length) {
       m.inputArguments = m.inputArguments.map(arg => {
