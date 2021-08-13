@@ -735,20 +735,20 @@ class OpcuaClient {
    *   "2015-06-10T09:00:00.000Z",
    *   "2015-06-10T09:01:00.000Z");
    * ```
-   * @param {ReadValueIdLike|ReadValueIdLike[]} nameNodeIds   the read value id
+   * @param {ReadValueIdLike|ReadValueIdLike[]} browseNames   the read value id
    * @param {String} start   the start time in UTC format
    * @param {String} end     the end time in UTC format
    * @return {Promise<HistoryReadResult[]>}
    */
-  async sessionReadHistoryValuesEx(nameNodeIds, start, end) {
+  async sessionReadHistoryValuesEx(browseNames, start, end) {
     let result = [], itemNodeIds = [], dataValues;
     this.sessionNotCreated();
     // Get nodeIds
-    itemNodeIds = this.getNodeIds(nameNodeIds);
+    itemNodeIds = this.getNodeIds(browseNames);
 
     if (itemNodeIds.length) {
       dataValues = await this.session.readHistoryValue(itemNodeIds, start, end);
-      dataValues = formatHistoryResults(this.id, dataValues, itemNodeIds, this.locale);
+      dataValues = formatHistoryResults(this.id, dataValues, browseNames, this.locale);
       result = dataValues;
     }
     if (isLog) inspector('plugins.opcua-client.class::sessionReadHistoryValue.result:', result);

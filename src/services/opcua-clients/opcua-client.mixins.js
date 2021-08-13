@@ -448,14 +448,14 @@ module.exports = function opcuaClientMixins(service, path) {
    * @async
    * 
    * @param {String} id 
-   * @param {ReadValueIdLike|ReadValueIdLike[]} nameNodeIds
+   * @param {ReadValueIdLike|ReadValueIdLike[]} browseNames
    * @param {String} start   the start time in UTC format
    * @param {String} end     the end time in UTC format
    * @returns {Promise<HistoryReadResult[]>}
    */
-  service.sessionReadHistoryValuesEx = async function (id, nameNodeIds, start, end) {
+  service.sessionReadHistoryValuesEx = async function (id, browseNames, start, end) {
     const opcuaClient = await service.get(id);
-    result = await opcuaClient.client.sessionReadHistoryValuesEx(nameNodeIds, start, end);
+    result = await opcuaClient.client.sessionReadHistoryValuesEx(browseNames, start, end);
     return result;
   };
 

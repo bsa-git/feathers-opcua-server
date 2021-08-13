@@ -5,6 +5,7 @@ const {
 
 const { 
   getValueFromNodeId,
+  getLastNameFromNodeId
 } = require('../opcua-helper');
 
 const chalk = require('chalk');
@@ -23,7 +24,8 @@ const isLog = false;
 function onChangedCommonHandler(params, dataValue) {
   if (isLog) inspector('subscriptions.onChangedCommonHandle.params:', params);
   if (isLog) inspector('subscriptions.onChangedCommonHandle.dataValue:', dataValue);
-  const browseName = getValueFromNodeId(params.nodeId);
+  const addressSpaceOption = params.addressSpaceOption;
+  const browseName = addressSpaceOption.browseName;
   const value = dataValue.value.value;
   console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(value));
 }

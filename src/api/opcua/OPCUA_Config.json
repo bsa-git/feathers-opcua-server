@@ -93,9 +93,10 @@
       "password": ""
     },
     "NodeId": {
-      "NamespaceIndex": 2,
-      "IdentifierType": "isplayName",
-      "Identifier": "Channel1.Device1"
+      "namespaceIndex": 2,
+      "identifierType": "displayName",
+      "identifierPrefix": "Channel1.Device1",
+      "addObjectItem": true
     },
     "paths": {
       "base-options": [

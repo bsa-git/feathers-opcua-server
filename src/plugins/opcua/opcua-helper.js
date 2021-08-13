@@ -39,6 +39,7 @@ const loConcat = require('lodash/concat');
 const loOmit = require('lodash/omit');
 const loAt = require('lodash/at');
 const loForEach = require('lodash/forEach');
+const { isString } = require('../lib/type-of');
 
 const debug = require('debug')('app:opcua-helper');
 const isLog = false;
@@ -52,6 +53,24 @@ const isDebug = false;
  */
 const nodeIdToString = function (nodeId = '') {
   return !loIsString(nodeId) ? nodeId.toString() : nodeId;
+};
+
+/**
+ * @method isNodeId
+ * @param {String|Object} nodeId 
+ * @returns {Boolean}
+ */
+const isNodeId = function (nodeId = '') {
+  let result = false;
+  //--------------------------
+  nodeId = nodeIdToString(nodeId);
+  let arrNodeId = nodeId.split(';');
+  if (arrNodeId.length === 2) {
+    const ns = arrNodeId[0].split('=')[0];
+    const nodeIdType = arrNodeId[1].split('=')[0];
+    result = (ns === 'ns') && (nodeIdType === getNodeIdType(nodeId))
+  }
+  return result;
 };
 
 /**
@@ -110,6 +129,62 @@ const getNameSpaceFromNodeId = function (nodeId = '') {
     ns = loToInteger(ns);
   }
   return ns;
+};
+
+/**
+ * @method getNodeIdForClient
+ * 
+ * @param {String} id 
+ * @returns {Object}
+ e.g {
+    namespaceIndex: 1,
+    identifierType: 'displayName',
+    identifierPrefix: 'Channel1.Device1',
+    addObjectItem: true
+  } 
+ */
+const getNodeIdForClient = function (id) {
+  let NodeId = {
+    namespaceIndex: 1, // e.g 1|2 ...
+    identifierType: 'browseName', // e.g. browseName|displayName
+    identifierPrefix: '', // e.g. Channel1.Device1
+    addObjectItem: false
+  };
+  const opcuaOption = getOpcuaConfig(id);
+  if (opcuaOption.NodeId) {
+    Object.assign(NodeId, opcuaOption.NodeId);
+  }
+  return NodeId;
+};
+
+
+/**
+ * @method getLastNameFromNodeId
+ * @param {String} id 
+ * @param {Object|String} nodeId 
+ * e.g. { nodeId: "ns=1;s=Device1.Temperature" }|"Device1.Temperature"
+ * @returns {String}
+ * e.g. CH_M52::02SKLAD:02F20_2" -> "CH_M52::02SKLAD:02F20_2"
+ * e.g. { nodeId: "ns=1;s=Channel1.Device1.Cherkassy 'AZOT' M5-2.02HNO3_F20_2" } -> "02HNO3_F20_2"
+ * e.g. { nodeId: "ns=1;s=Channel1.Device1.CH_M52.CH_M52::02SKLAD:02F20_2" } -> "CH_M52::02SKLAD:02F20_2"
+ */
+const getLastNameFromNodeId = function (id, nodeId) {
+  let lastName = '';
+  //------------------------------
+  if (isNodeId(nodeId)) {
+    const NodeId = getNodeIdForClient(id);
+    lastName = getValueFromNodeId(nodeId);
+    if (NodeId.identifierPrefix) {
+      lastName = strReplace(lastName, NodeId.identifierPrefix + '.', '');
+    }
+    if (NodeId.addObjectItem) {
+      const objectItem = lastName.split('.')[0];
+      lastName = strReplace(lastName, objectItem + '.', '');
+    }
+  } else {
+    lastName = getValueFromNodeId(nodeId);
+  }
+  return lastName;
 };
 
 /**
@@ -209,39 +284,41 @@ const formatConfigOption = function (configOption, locale) {
  * @param {String} id 
  * e.g. 'ua-cherkassy-azot_test1'
  * @param {Object[]} historyResults 
- * @param {String[]} nameNodeIds 
+ * @param {String[]} browseNames 
  * e.g. ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT'] ||
- * e.g. ['ns=1;s=CH_M51::01AMIAK:01F4.PNT', 'ns=1;s=CH_M51::01AMIAK:01F21_1.PNT']
  * @param {String} locale 
  * e.g. locale -> 'ru'|'en'
  * @param {Object[]}
  */
-const formatHistoryResults = function (id, historyResults, nameNodeIds, locale = '') {
-  let results = [], result, option, value, nameNodeId;
+const formatHistoryResults = function (id, historyResults, browseNames, locale = '') {
+  let results = [], result, option, value, browseName;
   const options = getOpcuaConfigOptions(id);
-  if (Array.isArray(nameNodeIds) && (nameNodeIds.length === historyResults.length)) {
+  if (Array.isArray(browseNames) && (browseNames.length === historyResults.length)) {
     historyResults.forEach((historyResult, index) => {
-      nameNodeId = nameNodeIds[index];
-      nameNodeId = getValueFromNodeId(nameNodeId);
-      option = options.find(opt => opt.browseName === nameNodeId);
-      option = formatConfigOption(option, locale ? locale : process.env.FALLBACK_LOCALE);
-      result = {};
-      result.browseName = nameNodeId;
-      result.displayName = option.displayName;
-      loMerge(result, option.aliasName ? { aliasName: option.aliasName } : {});
-      loMerge(result, option.type ? { type: option.type } : {});
-      loMerge(result, option.dataType ? { dataType: option.dataType } : {});
-      loMerge(result, option.valueParams ? { valueParams: option.valueParams } : {});
-      result.statusCode = historyResult.statusCode._name;
-      result.dataValues = [];
-      historyResult.historyData.dataValues.forEach(v => {
-        value = {};
-        value.statusCode = v.statusCode.name;
-        value.timestamp = getTimestamp(v.sourceTimestamp.toString());
-        value.value = v.value.value;
-        result.dataValues.push(loMerge({}, value));
-      });
-      results.push(loMerge({}, result));
+      browseName = browseNames[index];
+      option = options.find(opt => opt.browseName === browseName);
+      if (option) {
+        option = formatConfigOption(option, locale ? locale : process.env.FALLBACK_LOCALE);
+        result = {};
+        result.browseName = browseName;
+        result.displayName = option.displayName;
+        loMerge(result, option.aliasName ? { aliasName: option.aliasName } : {});
+        loMerge(result, option.type ? { type: option.type } : {});
+        loMerge(result, option.dataType ? { dataType: option.dataType } : {});
+        loMerge(result, option.valueParams ? { valueParams: option.valueParams } : {});
+        result.statusCode = historyResult.statusCode._name;
+        result.dataValues = [];
+        historyResult.historyData.dataValues.forEach(v => {
+          value = {};
+          value.statusCode = v.statusCode.name;
+          value.timestamp = getTimestamp(v.sourceTimestamp.toString());
+          value.value = v.value.value;
+          result.dataValues.push(loMerge({}, value));
+        });
+        results.push(loMerge({}, result));
+      } else {
+        results.push(historyResult)
+      }
     });
   } else {
     results = historyResults;
@@ -254,21 +331,21 @@ const formatHistoryResults = function (id, historyResults, nameNodeIds, locale =
  * @param {String} id 
  * e.g. 'ua-cherkassy-azot_test1'
  * @param {Object} dataValue 
- * @param {String} nameNodeId 
- * e.g. 'CH_M51::01AMIAK:01F4.PNT' | 'ns=1;s=CH_M51::01AMIAK:01F4.PNT'
+ * @param {String} browseName 
+ * e.g. 'CH_M51::01AMIAK:01F4.PNT'
  * @param {String} locale 
  * e.g. locale -> 'ru'|'en'
  * @param {Object}
  */
-const formatDataValue = function (id, dataValue, nameNodeId, locale = '') {
-  let result, option;
+const formatDataValue = function (id, dataValue, browseName, locale = '') {
+  let result, option, browseName;
   const options = getOpcuaConfigOptions(id);
-  nameNodeId = getValueFromNodeId(nameNodeId);
-  if (nameNodeId) {
-    option = options.find(opt => opt.browseName === nameNodeId);
+  // browseName = getBrowseNameFromNodeId(id, nodeId);
+  if (browseName) {
+    option = options.find(opt => opt.browseName === browseName);
     option = formatConfigOption(option, locale ? locale : process.env.FALLBACK_LOCALE);
     result = {};
-    result.browseName = nameNodeId;
+    result.browseName = browseName;
     result.displayName = option.displayName;
     loMerge(result, option.aliasName ? { aliasName: option.aliasName } : {});
     loMerge(result, option.type ? { type: option.type } : {});
@@ -399,7 +476,7 @@ const getOpcuaTags = function (browseName = '') {
   if (browseName) {
     opcuaTag = opcuaTags.find(tag => tag.browseName === browseName);
   }
-  return opcuaTag? opcuaTag : opcuaTags;
+  return opcuaTag ? opcuaTag : opcuaTags;
 };
 
 /**
@@ -614,15 +691,9 @@ const getClientService = async function (app = null, id) {
  * @returns {Object}
  */
 const getParamsAddressSpace = (id) => {
-  let NodeId = {
-    NamespaceIndex: 1, // e.g 1|2 ...
-    IdentifierType: 'browseName', // e.g. browseName|displayName
-    Identifier: '' // e.g. Channel1.Device1
-  };
-  const opcuaOption = getOpcuaConfig(id);
-  if(opcuaOption.NodeId){
-    Object.assign(NodeId, opcuaOption.NodeId);
-  }
+
+  // Get NodeId for client
+  const NodeId = getNodeIdForClient(id);
 
   const paramsAddressSpace = {
     objects: [],
@@ -638,22 +709,30 @@ const getParamsAddressSpace = (id) => {
 
   // Map of objects
   paramsAddressSpace.objects = objects.map(o => {
-    const identifier = NodeId.Identifier? NodeId.Identifier + '.' : '';
-    o.nodeId = `ns=${NodeId.NamespaceIndex};s=${identifier}${o[NodeId.IdentifierType]}`;
+    const identifier = NodeId.identifierPrefix ? NodeId.identifierPrefix + '.' : '';
+    o.nodeId = `ns=${NodeId.namespaceIndex};s=${identifier}${o[NodeId.identifierType]}`;
     return o;
   });
   // Map of variables
   paramsAddressSpace.variables = variables.map(v => {
-    const object = paramsAddressSpace.objects.find(o => o.browseName === v.ownerName);
-    const identifier = getValueFromNodeId(object.nodeId) + '.';
-    v.nodeId = `ns=${NodeId.NamespaceIndex};s=${identifier}${v[NodeId.IdentifierType]}`;
+    let identifier = '';
+    //--------------------
+    if (NodeId.addObjectItem) {
+      const object = paramsAddressSpace.objects.find(o => o.browseName === v.ownerName);
+      identifier = getValueFromNodeId(object.nodeId) + '.';
+    }
+    v.nodeId = `ns=${NodeId.namespaceIndex};s=${identifier}${v[NodeId.identifierType]}`;
     return v;
   });
   // Map of methods
   paramsAddressSpace.methods = methods.map(m => {
-    const object = paramsAddressSpace.objects.find(o => o.browseName === m.ownerName);
-    const identifier = getValueFromNodeId(object.nodeId) + '.';
-    m.nodeId = `ns=${NodeId.NamespaceIndex};s=${identifier}${m[NodeId.IdentifierType]}`;
+    let identifier = '';
+    //--------------------
+    if (NodeId.addObjectItem) {
+      const object = paramsAddressSpace.objects.find(o => o.browseName === v.ownerName);
+      identifier = getValueFromNodeId(object.nodeId) + '.';
+    }
+    m.nodeId = `ns=${NodeId.namespaceIndex};s=${identifier}${m[NodeId.identifierType]}`;
     // Method inputArguments merge 
     if (m.inputArguments && m.inputArguments.length) {
       m.inputArguments = m.inputArguments.map(arg => {
@@ -863,17 +942,17 @@ const convertAliasListToBrowseNameList = (variableList = [], dataItems = {}) => 
 const convertTo = function (convertType, value) {
   let result = null;
   switch (convertType) {
-  // (kg/h -> m3/h) for ammonia
-  case 'ammonia_kg/h_to_m3/h':
-    result = value * 1.4;
-    break;
+    // (kg/h -> m3/h) for ammonia
+    case 'ammonia_kg/h_to_m3/h':
+      result = value * 1.4;
+      break;
     // (m3/h -> kg/h) for ammonia
-  case 'ammonia_m3/h_to_kg/h':
-    result = value * 0.716;
-    break;
+    case 'ammonia_m3/h_to_kg/h':
+      result = value * 0.716;
+      break;
 
-  default:
-    break;
+    default:
+      break;
   }
   return result;
 };
@@ -910,29 +989,29 @@ const getInitValueForDataType = function (dataType) {
   dataType = opcuaDataTypeToString(dataType);
   dataType = dataType.toLowerCase();
   switch (dataType) {
-  case 'boolean':
-    result = false;
-    break;
-  case 'sbyte':
-  case 'byte':
-  case 'uint16':
-  case 'int32':
-  case 'uint32':
-  case 'int64':
-    result = 0;
-    break;
-  case 'float':
-  case 'double':
-    result = 0.0;
-    break;
-  case 'string':
-    result = '';
-    break;
-  case 'datetime':
-    result = moment().format();
-    break;
-  default:
-    break;
+    case 'boolean':
+      result = false;
+      break;
+    case 'sbyte':
+    case 'byte':
+    case 'uint16':
+    case 'int32':
+    case 'uint32':
+    case 'int64':
+      result = 0;
+      break;
+    case 'float':
+    case 'double':
+      result = 0.0;
+      break;
+    case 'string':
+      result = '';
+      break;
+    case 'datetime':
+      result = moment().format();
+      break;
+    default:
+      break;
   }
   if (isDebug) debug('getInitValueForDataType.dataType:', dataType, result);
   return result;
@@ -948,29 +1027,29 @@ const getInitValueForDataType = function (dataType) {
 const convertAnyToValue = function (dataType, value) {
   let result = null;
   switch (dataType) {
-  case 'boolean':
-    result = isTrue(value);
-    break;
-  case 'sbyte':
-  case 'byte':
-  case 'uint16':
-  case 'int32':
-  case 'uint32':
-  case 'int64':
-    result = loToInteger(value);
-    break;
-  case 'float':
-  case 'double':
-    result = loToNumber(value);
-    break;
-  case 'string':
-    result = loToString(value);
-    break;
-  case 'datetime':
-    result = moment().format(value);
-    break;
-  default:
-    break;
+    case 'boolean':
+      result = isTrue(value);
+      break;
+    case 'sbyte':
+    case 'byte':
+    case 'uint16':
+    case 'int32':
+    case 'uint32':
+    case 'int64':
+      result = loToInteger(value);
+      break;
+    case 'float':
+    case 'double':
+      result = loToNumber(value);
+      break;
+    case 'string':
+      result = loToString(value);
+      break;
+    case 'datetime':
+      result = moment().format(value);
+      break;
+    default:
+      break;
   }
   if (isDebug) debug('convertAnyToValue.dataType:', dataType, result);
   return result;
@@ -1084,18 +1163,18 @@ const canDbClientRun = function (dbClientName) {
 const getSecurityMode = function (num) {
   let result = '';
   switch (num) {
-  case 1:
-    result = 'None';
-    break;
-  case 2:
-    result = 'Sign';
-    break;
-  case 3:
-    result = 'SignAndEncrypt';
-    break;
-  default:
-    result = 'None';
-    break;
+    case 1:
+      result = 'None';
+      break;
+    case 2:
+      result = 'Sign';
+      break;
+    case 3:
+      result = 'SignAndEncrypt';
+      break;
+    default:
+      result = 'None';
+      break;
   }
   return result;
 };
@@ -1112,8 +1191,11 @@ const getSecurityPolicy = function (value) {
 
 module.exports = {
   nodeIdToString,
+  isNodeId,
   getNodeIdType,
   getValueFromNodeId,
+  getNodeIdForClient,
+  getLastNameFromNodeId,
   getNameSpaceFromNodeId,
   getOpcuaDataType,
   getEngineeringUnit,

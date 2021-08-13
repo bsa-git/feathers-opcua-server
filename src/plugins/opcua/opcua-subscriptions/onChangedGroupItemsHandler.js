@@ -24,8 +24,8 @@ const isLog = false;
 function onChangedGroupItemsHandler(params, dataValue) {
   if (isLog) inspector('subscriptions.onChangedCH_M5Handler.params:', params);
   if (isLog) inspector('subscriptions.onChangedCH_M5Handler.dataValue:', dataValue);
-  const browseName = getValueFromNodeId(params.nodeId);
   const addressSpaceOption = params.addressSpaceOption;
+  const browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
   let value = dataValue.value.value;
   if (isLog) inspector('subscriptions.onChangedCH_M5Handler.formatDataValue:', dataValue);
