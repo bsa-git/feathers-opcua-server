@@ -64,11 +64,7 @@
     "paths": {
       "base-options": [
         "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
-        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-A3_Options.json",
-        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-NG-UPG2_Options.json",
-        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-M7_Options.json",
-        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-M9_Options.json",
-        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-M2_Options.json"
+        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1"
       ],
       "options": "/src/api/opcua/ua-cherkassy-azot-asutp_dev1/AddressSpaceOptions.json",
       "getters": "",
@@ -99,8 +95,33 @@
       "addObjectItem": true
     },
     "paths": {
+      "base-options": [],
+      "options": "/src/api/opcua/ua-cherkassy-azot-asutp_dev2/AddressSpaceOptions.json",
+      "getters": "",
+      "methods": "",
+      "subscriptions": "",
+      "client-scripts": ""
+    }
+  },
+  {
+    "isDisable": true,
+    "id": "ua-cherkassy-azot-asutp_dev3",
+    "name": "380-472-00203826-asutp_dev3",
+    "endpointUrl": "opc.tcp://OGMT-MZTP.OSTCHEM.COM.UA:26570",
+    "srvServiceUrl": "",
+    "clientServiceUrl": "http://10.60.0.220:3030",
+    "clientScript": "startSubscriptionMonitor",
+    "subscription": "onChangedGroupHandler",
+    "security": {
+      "mode": "SignAndEncrypt",
+      "policy": "Basic256Sha256",
+      "userName": "",
+      "password": ""
+    },
+    "paths": {
       "base-options": [
-        "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json"
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
+        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1"
       ],
       "options": "",
       "getters": "",
@@ -150,11 +171,7 @@
     "paths": {
       "base-options": [
         "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
-        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-A3_Options.json",
-        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-NG-UPG2_Options.json",
-        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-M7_Options.json",
-        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-M9_Options.json",
-        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/CH-M2_Options.json"
+        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1"
       ],
       "options": "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/AddressSpaceOptions.json",
       "getters": "",

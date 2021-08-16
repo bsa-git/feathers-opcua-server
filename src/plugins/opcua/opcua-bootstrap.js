@@ -104,14 +104,6 @@ module.exports = async function opcuaBootstrap(app) {
       await executeOpcuaClientScript(service, id);
       if (isLog) inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
       // inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
-
-
-      // const nameNodeIds = { nodeId: 'ns=2;s=Channel1.Device1.Черкассы \'АЗОТ\' цех M5-2.02HNO3_F20_2', attributeId: AttributeIds.Value };
-      const nameNodeIds = 'CH_M52::02SKLAD:02F20_2';
-      const readResult = await service.sessionRead(id, nameNodeIds);
-      // inspector('opcuaBootstrap.readResult:', readResult);
-      const value = readResult[0].value.value;
-      console.log(chalk.green('02HNO3_F20_2.value:'), chalk.cyan(isObject(value) ? value.name : value));
     }
   }
 };

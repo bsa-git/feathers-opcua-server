@@ -2,28 +2,222 @@
   "objects": [
     {
       "isDisable": false,
+      "browseName": "CH_M51",
+      "displayName": "Черкассы 'АЗОТ' цех M5-1",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
       "browseName": "CH_M52",
       "displayName": "Черкассы 'АЗОТ' цех M5-2",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_A3",
+      "displayName": "Черкассы 'АЗОТ' цех A3",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_NG-UPG2",
+      "displayName": "Черкассы 'АЗОТ' узел ПГ №2",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_M7-313",
+      "displayName": "Черкассы 'АЗОТ' цех М7-313",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_M7-357",
+      "displayName": "Черкассы 'АЗОТ' цех М7-357",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_M7-657",
+      "displayName": "Черкассы 'АЗОТ' цех М7-657",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_M9",
+      "displayName": "Черкассы 'АЗОТ' цех М9",
+      "type": "object"
+    },
+    {
+      "isDisable": false,
+      "browseName": "CH_M2",
+      "displayName": "Черкассы 'АЗОТ' цех М2",
       "type": "object"
     }
   ],
   "variables": [
     {
-      "browseName": "CH_M52::02SKLAD:02F20_2",
-      "aliasName": "02HNO3_F20_2",
-      "displayName": "02HNO3_F20_2",
-      "ownerName": "CH_M52",
-      "type": "variable.analog",
-      "dataType": "Double",
+      "browseName": "CH_M51::ValueFromFile",
+      "displayName": "Значения из файла для CH_M51",
+      "ownerName": "CH_M51",
+      "type": "variable.simple",
+      "dataType": "String",
       "hist": true,
-      "valueParams": {
-        "engineeringUnitsRange": {
-          "low": 0,
-          "high": 100
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValueFromHttpPath",
+      "getterParams": {
+        "path": "http://192.168.3.5/www_m5/m5_data2/",
+        "interval": 60000
+      }
+    },
+    {
+      "browseName": "CH_M52::ValueFromFile",
+      "displayName": "Значения из файла для CH_M52",
+      "ownerName": "CH_M52",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValueFromHttpPath",
+      "getterParams": {
+        "path": "http://192.168.3.5/www_m5/m5_data/",
+        "interval": 60000
+      }
+    },
+    {
+      "browseName": "CH_A3::ValuesFromDB",
+      "displayName": "Значения из DB для CH_A3",
+      "ownerName": "CH_A3",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(A3)"
         },
-        "engineeringUnits": "cubic_metre_per_hour"
-      },
-      "description": "F кислоты в коллекторе-2"
+        "interval": 60000
+      }
+    },
+    {
+      "browseName": "CH_M2::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M2",
+      "ownerName": "CH_M2",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M2)"
+        },
+        "interval": 60000
+      }
+    },
+    {
+      "browseName": "CH_M7-313::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M7-313",
+      "ownerName": "CH_M7-313",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M7-313)"
+        },
+        "interval": 60000
+      }
+    },
+    {
+      "browseName": "CH_M7-357::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M7-357",
+      "ownerName": "CH_M7-357",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M7-357)"
+        },
+        "interval": 60000
+      }
+    },
+    {
+      "browseName": "CH_M7-657::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M7-657",
+      "ownerName": "CH_M7-657",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M7-657)"
+        },
+        "interval": 60000
+      }
+    },
+    {
+      "browseName": "CH_M9::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M9",
+      "ownerName": "CH_M9",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M9)"
+        },
+        "interval": 60000
+      }
+    },
+    {
+      "browseName": "CH_NG-UPG2::ValuesFromDB",
+      "displayName": "Значения из DB для CH_NG-UPG2",
+      "ownerName": "CH_NG-UPG2",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "opcUPG2"
+        },
+        "interval": 60000
+      }
     }
   ]
 }

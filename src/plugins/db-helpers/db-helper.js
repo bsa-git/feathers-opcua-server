@@ -211,7 +211,7 @@ const saveOpcuaValue = async function (app, browseName, value) {
  * e.g. { added: 123, updated: 32, deleted: 12}
  */
 const saveOpcuaTags = async function (app, tags) {
-  let tagFromDB = null, tagBrowseNames = [], added = 0, updated = 0, deleted = 0;
+  let tagFromDB = null, tagBrowseNames = [], added = 0, updated = 0, deleted = 0, total = 0;
   //------------------------------------------------------------
   for (let index = 0; index < tags.length; index++) {
     const tag = tags[index];
@@ -252,7 +252,10 @@ const saveOpcuaTags = async function (app, tags) {
   tagFromDB = await removeItems(app, 'opcua-tags', { browseName: { $nin: tagBrowseNames }});
   if(tagFromDB.length) deleted = deleted + tagFromDB.length;
 
-  return { added, updated, deleted };
+  // Get total rows
+  total = await getCountItems(app, 'opcua-tags');
+
+  return { added, updated, deleted, total };
 };
 
 //================================================================================
