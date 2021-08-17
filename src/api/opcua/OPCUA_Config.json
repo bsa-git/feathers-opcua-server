@@ -74,7 +74,7 @@
     }
   },
   {
-    "isDisable": false,
+    "isDisable": true,
     "id": "ua-cherkassy-azot-asutp_dev2",
     "name": "380-472-00203826-asutp_dev2",
     "endpointUrl": "opc.tcp://localhost:49370",
@@ -124,6 +124,43 @@
         "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1"
       ],
       "options": "",
+      "getters": "",
+      "methods": "",
+      "subscriptions": "",
+      "client-scripts": ""
+    }
+  },
+  {
+    "isDisable": true,
+    "id": "ua-cherkassy-azot-vmwin10.2_dev1",
+    "name": "380-472-00203826-vmwin10.2_dev1",
+    "endpointUrl": "opc.tcp://DESKTOP-R0J95L7:26570",
+    "endpointPort": 26570,
+    "srvServiceUrl": "http://DESKTOP-R0J95L7:3030",
+    "clientServiceUrl": "http://DESKTOP-R0J95L7:3030",
+    "clientScript": "startSubscriptionMonitor",
+    "subscription": "onChangedGroupHandler",
+    "hostTypeDB": "mongodb",
+    "isDisableSaveToDB": false,
+    "security": {
+      "mode": "SignAndEncrypt",
+      "policy": "Basic256Sha256",
+      "userName": "",
+      "password": ""
+    },
+    "include": {
+      "tests": [
+        "mssql-tedious.test.js",
+        "mssql-datasets.test.js",
+        "http-operations.test.js"
+      ]
+    },
+    "paths": {
+      "base-options": [
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
+        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1"
+      ],
+      "options": "/src/api/opcua/ua-cherkassy-azot-asutp_dev1/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
       "subscriptions": "",
