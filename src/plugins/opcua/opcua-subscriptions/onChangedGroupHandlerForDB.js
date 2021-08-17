@@ -4,7 +4,7 @@ const {
 } = require('../../lib');
 
 const {
-  saveOpcuaValue
+  saveOpcuaGroupValue
 } = require('../../db-helpers');
 
 const {
@@ -41,7 +41,7 @@ async function onChangedGroupHandlerForDB(params, dataValue) {
 
   if (addressSpaceOption.group) {
     // Save data to DB
-    const savedValue = await saveOpcuaValue(params.app, browseName,  value);
+    const savedValue = await saveOpcuaGroupValue(params.app, browseName,  value);
     if(isLog && savedValue) inspector('onChangedGroupHandlerForDB.savedValue:', savedValue);
     // inspector('onChangedGroupHandlerForDB.savedValue:', savedValue);
 

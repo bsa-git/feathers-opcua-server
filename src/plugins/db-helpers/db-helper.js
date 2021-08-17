@@ -6,7 +6,8 @@ const {
 const {
   inspector,
   isDeepEqual,
-  isDeepStrictEqual
+  isDeepStrictEqual,
+  getInt
 } = require('../lib');
 
 const loMerge = require('lodash/merge');
@@ -163,7 +164,7 @@ const getIdField = function (items) {
 };
 
 /**
- * @name saveOpcuaValue
+ * @name saveOpcuaGroupValue
  * @async
  * 
  * @param {Object} app
@@ -171,12 +172,12 @@ const getIdField = function (items) {
  * @param {String|Object} value 
  * @returns {Object}
  */
-const saveOpcuaValue = async function (app, browseName, value) {
-  let tags, opcuaValue, opcuaValues = [], savedValue = null;
+const saveOpcuaGroupValue = async function (app, browseName, value) {
+  let tags, opcuaValue, opcuaValues = [], groupItems = [], savedValue = null;
   //----------------------------------------------------------
-  
-  if(!isSaveOpcuaToDB()) return savedValue;
-  
+
+  if (!isSaveOpcuaToDB()) return savedValue;
+
   if (loIsString(value)) {
     opcuaValue = JSON.parse(value);
   }
@@ -186,10 +187,22 @@ const saveOpcuaValue = async function (app, browseName, value) {
 
     // Exit else tag is disable
     if (tag.isDisable) return savedValue;
-
+    // Get tagId 
     const idField = getIdField(tag);
     const tagId = tag[idField].toString();
-    loForEach(opcuaValue, (value, key) => { opcuaValues.push({ key, value }); });
+    // Get group items
+    groupItems = await findAllItems(app, 'opcua-tags', { ownerGroup: browseName });
+    // Normalize opcuaValue
+    loForEach(opcuaValue, (value, key) => {
+      const findedKey = groupItems.find(item => item.aliasName === key);
+      if (findedKey) {
+        key = findedKey.browseName;
+        if (value === null) {
+          value = getInt(value);
+        }
+        opcuaValues.push({ key, value });
+      }
+    });
     const data = {
       tagId,
       tagName: tag.browseName,
@@ -197,6 +210,7 @@ const saveOpcuaValue = async function (app, browseName, value) {
     };
     savedValue = await createItem(app, 'opcua-values', data);
     if (isLog) inspector('db-helper.saveOpcuaValue.savedValue:', savedValue);
+
   }
   return savedValue;
 };
@@ -208,7 +222,7 @@ const saveOpcuaValue = async function (app, browseName, value) {
  * @param {Object} app 
  * @param {Object[]} tags 
  * @returns {Object}
- * e.g. { added: 123, updated: 32, deleted: 12}
+ * e.g. { added: 123, updated: 32, deleted: 12, total: 125}
  */
 const saveOpcuaTags = async function (app, tags) {
   let tagFromDB = null, tagBrowseNames = [], added = 0, updated = 0, deleted = 0, total = 0;
@@ -239,8 +253,8 @@ const saveOpcuaTags = async function (app, tags) {
             deleted = deleted + 1;
             // Add tag
             tagFromDB = await createItem(app, 'opcua-tags', tag);
-            if (tagFromDB) added = added + 1;            
-          } 
+            if (tagFromDB) added = added + 1;
+          }
         }
       }
     } else {
@@ -249,8 +263,8 @@ const saveOpcuaTags = async function (app, tags) {
     }
   }
   // Delete all tags that are not in `tagBrowseNames` list
-  tagFromDB = await removeItems(app, 'opcua-tags', { browseName: { $nin: tagBrowseNames }});
-  if(tagFromDB.length) deleted = deleted + tagFromDB.length;
+  tagFromDB = await removeItems(app, 'opcua-tags', { browseName: { $nin: tagBrowseNames } });
+  if (tagFromDB.length) deleted = deleted + tagFromDB.length;
 
   // Get total rows
   total = await getCountItems(app, 'opcua-tags');
@@ -483,7 +497,7 @@ module.exports = {
   getEnvAdapterDB,
   isSaveOpcuaToDB,
   getIdField,
-  saveOpcuaValue,
+  saveOpcuaGroupValue,
   saveOpcuaTags,
   getCountItems,
   getItem,
