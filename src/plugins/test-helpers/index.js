@@ -4,8 +4,10 @@ const testHelper = require('./test-helper');
 const fakeNormalize = require('./fake-normalize');
 
 module.exports = Object.assign({},
-  { fakeNormalize },
-  seedService,
+  { 
+    fakeNormalize,
+    seedService,
+  },
   serviceHelper,
   testHelper,
 );
