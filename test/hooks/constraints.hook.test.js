@@ -13,7 +13,6 @@ const {
   dbNullIdValue,
   getCountItems,
   createItem
-
 } = require('../../src/plugins/db-helpers');
 const constraints = require(`${appRoot}/src/hooks/constraints`);
 const app = require(`${appRoot}/src/app`);
