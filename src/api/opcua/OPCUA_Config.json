@@ -47,7 +47,6 @@
     "clientScript": "startSubscriptionMonitor",
     "subscription": "onChangedGroupHandlerForDB",
     "hostTypeDB": "mongodb",
-    "isDisableSaveToDB": false,
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
@@ -141,7 +140,8 @@
     "clientScript": "startSubscriptionMonitor",
     "subscription": "onChangedGroupHandlerForDB",
     "hostTypeDB": "mongodb",
-    "isDisableSaveToDB": false,
+    "opcuaSaveModeToDB": "remote",
+    "opcuaRemoteDbUrl": "http://DESKTOP-R0J95L7:3131",
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",

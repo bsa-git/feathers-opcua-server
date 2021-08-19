@@ -13,23 +13,16 @@ let base = merge({},
     required: [],
     uniqueItemProperties: [],
     properties: {
-      id: {
-        type: ID
-      },
-      _id: {
-        type: ID
-      },
-      tagId: {
-        type: ID
-      },
-      tagName: {
-        type: 'string'
-      },
+      id: { type: ID  },
+      _id: { type: ID },
+      tagId: { type: ID },
+      tagName: { type: 'string' },
       values: {
         type: 'array',
         items: {
           type: 'object',
           properties: {
+            tagId: { type: ID },
             key: {type: 'string'},
             value: {type: ['string', 'number', 'integer', 'boolean']}
           }

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
+const logger = require('../../logger');
 const {
   getOpcuaConfigsForMe,
 } = require('../opcua/opcua-helper');
@@ -7,8 +8,15 @@ const {
   inspector,
   isDeepEqual,
   isDeepStrictEqual,
-  getInt
+  getInt,
+  urlExists
 } = require('../lib');
+const {
+  localStorage,
+  loginLocal,
+  feathersClient,
+  AuthServer
+} = require('../auth');
 
 const loMerge = require('lodash/merge');
 const loOmit = require('lodash/omit');
@@ -121,8 +129,30 @@ const getEnvTypeDB = function () {
  */
 const isSaveOpcuaToDB = function () {
   const myConfigs = getOpcuaConfigsForMe();
-  const myConfig = myConfigs.find(item => item.isDisableSaveToDB);
+  const myConfig = myConfigs.find(item => item.opcuaSaveModeToDB === 'no');
   return !myConfig;
+};
+
+/**
+ * @method getOpcuaSaveModeToDB
+ * @returns {String}
+ * e.g. (local|remote|no)
+ */
+const getOpcuaSaveModeToDB = function () {
+  const myConfigs = getOpcuaConfigsForMe();
+  const myConfig = myConfigs.find(item => item.opcuaSaveModeToDB);
+  return myConfig ? myConfig.opcuaSaveModeToDB : process.env.DEFAULT_OPCUA_SAVEMODE_TODB;
+};
+
+/**
+ * @method getOpcuaRemoteDbUrl
+ * @returns {String}
+ * e.g. http://localhost:3131
+ */
+const getOpcuaRemoteDbUrl = function () {
+  const myConfigs = getOpcuaConfigsForMe();
+  const myConfig = myConfigs.find(item => item.opcuaRemoteDbUrl);
+  return myConfig ? myConfig.opcuaRemoteDbUrl : process.env.DEFAULT_OPCUA_REMOTE_DB_URL;
 };
 
 /**
@@ -176,8 +206,6 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
   let tags, opcuaValue, opcuaValues = [], groupItems = [], savedValue = null;
   //----------------------------------------------------------
 
-  if (!isSaveOpcuaToDB()) return savedValue;
-
   if (loIsString(value)) {
     opcuaValue = JSON.parse(value);
   }
@@ -196,11 +224,12 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
     loForEach(opcuaValue, (value, key) => {
       const findedKey = groupItems.find(item => item.aliasName === key);
       if (findedKey) {
+        const tagId = findedKey[idField].toString();
         key = findedKey.browseName;
         if (value === null) {
           value = getInt(value);
         }
-        opcuaValues.push({ key, value });
+        opcuaValues.push({ tagId, key, value });
       }
     });
     const data = {
@@ -208,9 +237,21 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
       tagName: tag.browseName,
       values: opcuaValues
     };
-    savedValue = await createItem(app, 'opcua-values', data);
-    if (isLog) inspector('db-helper.saveOpcuaValue.savedValue:', savedValue);
 
+    const isRemote = getOpcuaSaveModeToDB() === 'remote';
+    if (isRemote) {
+      const remoteDbUrl = getOpcuaRemoteDbUrl();
+      try {
+        // await urlExists(remoteDbUrl);
+        const appRestClient = feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
+        savedValue = await createItem(appRestClient, 'opcua-values', data);
+      } catch (error) {
+        console.error('saveOpcuaGroupValue.Error:', error.message);
+      }
+    } else {
+      savedValue = await createItem(app, 'opcua-values', data);
+    }
+    if (isLog) inspector('db-helper.saveOpcuaValue.savedValue:', savedValue);
   }
   return savedValue;
 };
@@ -221,10 +262,11 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
  * 
  * @param {Object} app 
  * @param {Object[]} tags 
+ * @param {Boolean} isRemote 
  * @returns {Object}
  * e.g. { added: 123, updated: 32, deleted: 12, total: 125}
  */
-const saveOpcuaTags = async function (app, tags) {
+const saveOpcuaTags = async function (app, tags, isRemote = false) {
   let tagFromDB = null, tagBrowseNames = [], added = 0, updated = 0, deleted = 0, total = 0;
   //------------------------------------------------------------
   for (let index = 0; index < tags.length; index++) {
@@ -263,8 +305,10 @@ const saveOpcuaTags = async function (app, tags) {
     }
   }
   // Delete all tags that are not in `tagBrowseNames` list
-  tagFromDB = await removeItems(app, 'opcua-tags', { browseName: { $nin: tagBrowseNames } });
-  if (tagFromDB.length) deleted = deleted + tagFromDB.length;
+  if (!isRemote) {
+    tagFromDB = await removeItems(app, 'opcua-tags', { browseName: { $nin: tagBrowseNames } });
+    if (tagFromDB.length) deleted = deleted + tagFromDB.length;
+  }
 
   // Get total rows
   total = await getCountItems(app, 'opcua-tags');
@@ -496,6 +540,8 @@ module.exports = {
   getEnvTypeDB,
   getEnvAdapterDB,
   isSaveOpcuaToDB,
+  getOpcuaSaveModeToDB,
+  getOpcuaRemoteDbUrl,
   getIdField,
   saveOpcuaGroupValue,
   saveOpcuaTags,

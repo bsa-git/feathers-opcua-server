@@ -7,7 +7,7 @@ const {
   inspector,
   appRoot,
   isTrue,
-  isObject
+  urlExists
 } = require('../lib');
 
 const {
@@ -20,8 +20,14 @@ const {
 
 const {
   saveOpcuaTags,
-  isSaveOpcuaToDB
+  isSaveOpcuaToDB,
+  getOpcuaSaveModeToDB,
+  getOpcuaRemoteDbUrl,
 } = require('../db-helpers');
+
+const {
+  feathersClient
+} = require('../auth');
 
 const {
   MessageSecurityMode,
@@ -62,8 +68,20 @@ module.exports = async function opcuaBootstrap(app) {
     // Get opcua tags 
     const opcuaTags = getOpcuaTags();
     if (isLog) inspector('opcuaBootstrap.opcuaTags:', opcuaTags);
-    // Save opcua tags 
+    // Save opcua tags to local DB
     const saveResult = await saveOpcuaTags(app, opcuaTags);
+    const isRemote = getOpcuaSaveModeToDB() === 'remote';
+    if (isRemote) {
+      const remoteDbUrl = getOpcuaRemoteDbUrl();
+      console.log('opcuaBootstrap.saveOpcuaTags.remoteDbUrl:', remoteDbUrl);
+      try {
+        // await urlExists(remoteDbUrl);
+        const appRestClient = feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
+        await saveOpcuaTags(appRestClient, opcuaTags, isRemote);
+      } catch (error) {// remote DB url does not exist
+        console.log('opcuaBootstrap.saveOpcuaTags.Error:', error.message);    
+      }
+    }
     logger.info('opcuaBootstrap.saveOpcuaTags:', saveResult);
   }
 

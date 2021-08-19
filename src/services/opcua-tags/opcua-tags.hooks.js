@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { authorize } = require('feathers-casl').hooks;
 const { validateCreate, validateUpdate, validatePatch } = require('./opcua-tags.validate');
@@ -11,7 +12,7 @@ const authorizeHook = authorize({ adapter: getEnvAdapterDB() });
 
 let moduleExports = {
   before: {
-    all: [authenticate('jwt')],
+    all: [],
     find: [],
     get: [],
     create: [processItem()],
