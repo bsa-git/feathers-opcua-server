@@ -487,7 +487,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       assert.ok(findChatMessagesBefore.data.length > findChatMessagesAfter.data.length, 'Protection did not work to removing the data from service');
     });
 
-    it('#18: Set contextBefore.tagName while creating record for \'opcua-values\' service', async () => {
+    it('#18: Set contextBefore.tagId while creating record for \'opcua-values\' service', async () => {
       // Get opcuaTag
       const index = fakes['opcuaTags'].length - 1;
       const opcuaTag = fakes['opcuaTags'][index];
@@ -499,7 +499,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       contextBefore.method = 'create';
       contextBefore.service = service;
       contextBefore.data = {
-        tagId,
+        tagName: opcuaTag.browseName,
         values: [
           {
             key: opcuaTag.browseName,
@@ -508,22 +508,8 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
         ]
       };
       await constraints(true)(contextBefore);
-      if (isDebug) debug('Set contextBefore.tagName while creating record for \'opcua-values\' service.contextBefore:', contextBefore.data);
-      assert.ok(contextBefore.data.tagName === opcuaTag.browseName, 'Protection did not work to write the data to service');
-      // Once again
-      contextBefore.data = {
-        tagId,
-        tagName: 'NotOpcuaTagBrowseName',
-        values: [
-          {
-            key: opcuaTag.browseName,
-            value: 'opcuaTagValue'
-          }
-        ]
-      };
-      await constraints(true)(contextBefore);
-      if (isDebug) debug('Set contextBefore.tagName while creating record for \'opcua-values\' service.contextBefore:', contextBefore.data);
-      assert.ok(contextBefore.data.tagName === opcuaTag.browseName, 'Protection did not work to write the data to service');
+      if (isDebug) debug('Set contextBefore.tagId while creating record for \'opcua-values\' service.contextBefore:', contextBefore.data);
+      assert.ok(contextBefore.data.tagId === tagId, 'Protection did not work to write the data to service');
     });
 
     it('#19: Restrict max rows when add a record to \'opcua-values\' service', async () => {

@@ -61,7 +61,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
       assert.ok(true, 'HttpOperations: https.get');
     } catch (err) {
       debug('ERROR:', err.message);
-      assert.ok(true, 'HttpOperations: https.get');
+      assert.ok(false, 'HttpOperations: https.get');
     }
   });
 
@@ -83,7 +83,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
       assert.ok(true, 'HttpOperations: axios.get');
     } catch (err) {
       debug('ERROR:', err.message);
-      assert.ok(true, 'HttpOperations: axios.get');
+      assert.ok(false, 'HttpOperations: axios.get');
     }
   });
 
@@ -103,7 +103,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
       assert.ok(true, 'HttpOperations: fetch.get');
     } catch (err) {
       debug('ERROR:', err.message);
-      assert.ok(true, 'HttpOperations: fetch.get');
+      assert.ok(false, 'HttpOperations: fetch.get');
     }
   });
 
@@ -133,7 +133,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
       assert.ok(true, 'HttpOperations: get data from file');
     } catch (err) {
       debug('ERROR:', err.message);
-      assert.ok(true, 'HttpOperations: get data from file');
+      assert.ok(false, 'HttpOperations: get data from file');
     }
   });
 });

@@ -212,33 +212,27 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
   tags = await findItems(app, 'opcua-tags', { browseName });
   if (tags.length) {
     const tag = tags[0];
-
     // Exit else tag is disable
     if (tag.isDisable) return savedValue;
-    // Get tagId 
-    const idField = getIdField(tag);
-    const tagId = tag[idField].toString();
     // Get group items
     groupItems = await findAllItems(app, 'opcua-tags', { ownerGroup: browseName });
     // Normalize opcuaValue
     loForEach(opcuaValue, (value, key) => {
-      const findedKey = groupItems.find(item => item.aliasName === key);
+      const findedKey = groupItems.find(item => (item.browseName === key) || (item.aliasName === key));
       if (findedKey) {
-        const tagId = findedKey[idField].toString();
         key = findedKey.browseName;
         if (value === null) {
           value = getInt(value);
         }
-        opcuaValues.push({ tagId, key, value });
+        opcuaValues.push({ key, value });
       }
     });
     const data = {
-      tagId,
       tagName: tag.browseName,
       values: opcuaValues
     };
 
-    const isRemote = getOpcuaSaveModeToDB() === 'remote';
+    const isRemote = (getOpcuaSaveModeToDB() === 'remote');
     if (isRemote) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
       try {

@@ -69,20 +69,20 @@ module.exports = async function opcuaBootstrap(app) {
     const opcuaTags = getOpcuaTags();
     if (isLog) inspector('opcuaBootstrap.opcuaTags:', opcuaTags);
     // Save opcua tags to local DB
-    const saveResult = await saveOpcuaTags(app, opcuaTags);
+    let saveResult = await saveOpcuaTags(app, opcuaTags);
+    logger.info('opcuaBootstrap.saveOpcuaTags.localDB:', saveResult);
     const isRemote = getOpcuaSaveModeToDB() === 'remote';
     if (isRemote) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
-      console.log('opcuaBootstrap.saveOpcuaTags.remoteDbUrl:', remoteDbUrl);
       try {
         // await urlExists(remoteDbUrl);
         const appRestClient = feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
-        await saveOpcuaTags(appRestClient, opcuaTags, isRemote);
+        saveResult =  await saveOpcuaTags(appRestClient, opcuaTags, isRemote);
+        logger.info('opcuaBootstrap.saveOpcuaTags.remoteDB:', saveResult);
       } catch (error) {// remote DB url does not exist
         console.log('opcuaBootstrap.saveOpcuaTags.Error:', error.message);    
       }
     }
-    logger.info('opcuaBootstrap.saveOpcuaTags:', saveResult);
   }
 
   let opcuaOptions = getOpcuaConfig();

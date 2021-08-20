@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const { inspector, getCapitalizeStr } = require('../lib');
-const { dbNullIdValue } = require('../db-helpers');
+const { dbNullIdValue, getOpcuaSaveModeToDB } = require('../db-helpers');
 const AuthServer = require('../auth/auth-server.class');
 const HookHelper = require('./hook-helper.class');
 const debug = require('debug')('app:services-constraint');
@@ -126,18 +126,21 @@ module.exports = async function servicesConstraint(context) {
     await hookHelper.forEachRecords(validate);
     break;
   case 'opcua-values.create.before':
+    normalize = async (record) => {
+      const servicePath = 'opcua-tags';
+      const tags = await hookHelper.findItems(servicePath, { browseName: record.tagName });
+      if(tags.length){
+        const tag = tags[0];
+        const idField = HookHelper.getIdField(tag);
+        const tagId = tag[idField].toString();
+        record.tagId = tagId;
+      }
+    };
     validate = async (record) => {
       if (record.tagId && record.tagId !== dbNullIdValue()) await hookHelper.validateRelationship('opcua-tags', record.tagId);
     };
-    normalize = async (record) => {
-      const servicePath = 'opcua-tags';
-      const getResult = await hookHelper.getItem(servicePath, record.tagId);
-      if (getResult.browseName !== record.tagName) {
-        record.tagName = getResult.browseName;
-      }
-    };
-    await hookHelper.forEachRecords(validate);
     await hookHelper.forEachRecords(normalize);
+    await hookHelper.forEachRecords(validate);
     break;
   case 'users.create.after':
   case 'users.patch.after':

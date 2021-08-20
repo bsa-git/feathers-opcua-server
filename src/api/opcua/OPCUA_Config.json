@@ -37,7 +37,7 @@
     }
   },
   {
-    "isDisable": true,
+    "isDisable": false,
     "id": "ua-cherkassy-azot-asutp_dev1",
     "name": "380-472-00203826-asutp_dev1",
     "endpointUrl": "opc.tcp://M5-0095488.OSTCHEM.COM.UA:26570",
@@ -47,6 +47,8 @@
     "clientScript": "startSubscriptionMonitor",
     "subscription": "onChangedGroupHandlerForDB",
     "hostTypeDB": "mongodb",
+    "opcuaSaveModeToDB": "remote",
+    "opcuaRemoteDbUrl": "http://localhost:3131",
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
@@ -147,6 +149,11 @@
       "policy": "Basic256Sha256",
       "userName": "",
       "password": ""
+    },
+    "include": {
+      "tests": [
+        "http-operations.test.js"
+      ]
     },
     "paths": {
       "base-options": [
