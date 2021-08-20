@@ -60,7 +60,8 @@ const defineRulesFor = (user) => {
   // can('remove', 'opcua-tags');
 
   // Can 'opcua-values' actions
-  can('manage', 'opcua-values');
+  can('read', 'opcua-values');
+  // can('manage', 'opcua-values');
   // can('create', 'opcua-values');
   // can('read', 'opcua-values');
   // can('update', 'opcua-values');

@@ -12,7 +12,7 @@ const authorizeHook = authorize({ adapter: getEnvAdapterDB() });
 
 let moduleExports = {
   before: {
-    all: [],
+    all: [authenticate('jwt')],
     find: [],
     get: [],
     create: [processItem()],
