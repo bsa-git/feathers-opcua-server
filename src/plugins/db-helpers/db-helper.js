@@ -25,6 +25,8 @@ const loIsString = require('lodash/isString');
 const loForEach = require('lodash/forEach');
 const loIsEqual = require('lodash/isEqual');
 
+const chalk = require('chalk');
+
 const debug = require('debug')('app:db-helper');
 const isLog = false;
 const isDebug = false;
@@ -240,7 +242,11 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
         const appRestClient = feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
         savedValue = await createItem(appRestClient, 'opcua-values', data);
       } catch (error) {
-        console.error('saveOpcuaGroupValue.Error:', error.message);
+        if(error.code === 'ENOTFOUND'){
+          console.log(chalk.red('error:'), 'db-helper.saveOpcuaGroupValue.remoteDB:', chalk.cyan(`Remote DB url "${error.hostname}" does not exist!`));
+        } else {
+          console.log(chalk.red('error:'), 'db-helper.saveOpcuaGroupValue.remoteDB:', chalk.cyan(`${error.message}!`));
+        }
       }
     } else {
       savedValue = await createItem(app, 'opcua-values', data);

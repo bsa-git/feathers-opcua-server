@@ -60,7 +60,9 @@ const urlExists = function (target) {
         reject(new Error(`Url ${target} not found.`));
       }
     });
-    req.on('error', reject);
+    req.on('error', (err) => {
+      reject(new Error(`Unknown error "${err.message}".`));
+    });
     req.end();
   });
 };

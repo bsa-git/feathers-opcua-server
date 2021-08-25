@@ -79,8 +79,12 @@ module.exports = async function opcuaBootstrap(app) {
         const appRestClient = feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
         saveResult =  await saveOpcuaTags(appRestClient, opcuaTags, isRemote);
         logger.info('opcuaBootstrap.saveOpcuaTags.remoteDB:', saveResult);
-      } catch (error) {// remote DB url does not exist
-        console.log('opcuaBootstrap.saveOpcuaTags.Error:', error.message);    
+      } catch (error) {
+        if(error.code === 'ENOTFOUND'){
+          console.log(chalk.red('error:'), 'opcuaBootstrap.saveOpcuaTags.remoteDB:', chalk.cyan(`Remote DB url "${error.hostname}" does not exist!`));
+        } else {
+          console.log(chalk.red('error:'), 'opcuaBootstrap.saveOpcuaTags.remoteDB:', chalk.cyan(`${error.message}`));
+        }
       }
     }
   }
