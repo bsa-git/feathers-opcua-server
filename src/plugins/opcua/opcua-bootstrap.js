@@ -7,7 +7,7 @@ const {
   inspector,
   appRoot,
   isTrue,
-  urlExists
+  urlExists,
 } = require('../lib');
 
 const {
@@ -75,13 +75,15 @@ module.exports = async function opcuaBootstrap(app) {
     if (isRemote) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
       try {
-        // await urlExists(remoteDbUrl);
+        await urlExists(remoteDbUrl);
         const appRestClient = feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
         saveResult =  await saveOpcuaTags(appRestClient, opcuaTags, isRemote);
         logger.info('opcuaBootstrap.saveOpcuaTags.remoteDB:', saveResult);
       } catch (error) {
-        if(error.code === 'ENOTFOUND'){
-          console.log(chalk.red('error:'), 'opcuaBootstrap.saveOpcuaTags.remoteDB:', chalk.cyan(`Remote DB url "${error.hostname}" does not exist!`));
+        if (isLog) inspector('opcuaBootstrap.saveOpcuaTags.error:', error);
+        // inspector('opcuaBootstrap.saveOpcuaTags.error:', error);
+        if(error.code === 'ECONNREFUSED'){
+          console.log(chalk.red('error:'), 'opcuaBootstrap.saveOpcuaTags.remoteDB:', chalk.cyan(`Remote url "${remoteDbUrl}" does not found!`));
         } else {
           console.log(chalk.red('error:'), 'opcuaBootstrap.saveOpcuaTags.remoteDB:', chalk.cyan(`${error.message}`));
         }

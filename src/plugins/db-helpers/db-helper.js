@@ -238,12 +238,12 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
     if (isRemote) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
       try {
-        // await urlExists(remoteDbUrl);
+        await urlExists(remoteDbUrl);
         const appRestClient = feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
         savedValue = await createItem(appRestClient, 'opcua-values', data);
       } catch (error) {
-        if(error.code === 'ENOTFOUND'){
-          console.log(chalk.red('error:'), 'db-helper.saveOpcuaGroupValue.remoteDB:', chalk.cyan(`Remote DB url "${error.hostname}" does not exist!`));
+        if(error.code === 'ECONNREFUSED'){
+          console.log(chalk.red('error:'), 'db-helper.saveOpcuaGroupValue.remoteDB:', chalk.cyan(`Remote DB url "${remoteDbUrl}" does not exist!`));
         } else {
           console.log(chalk.red('error:'), 'db-helper.saveOpcuaGroupValue.remoteDB:', chalk.cyan(`${error.message}!`));
         }

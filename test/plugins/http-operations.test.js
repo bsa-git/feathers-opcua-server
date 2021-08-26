@@ -136,26 +136,4 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
       assert.ok(false, 'HttpOperations: get data from file');
     }
   });
-
-  it('HttpOperations: axios.get', async () => {
-    const url = 'https://feathers-plus-admin.herokuapp.com';
-    try {
-      await urlExists(url);
-      const getData = async url => {
-        try {
-          const response = await axios.get(url);
-          const data = response.data;
-          // console.log(data);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      await getData(url);
-      assert.ok(true, 'HttpOperations: axios.get');
-    } catch (err) {
-      debug('ERROR:', err.message);
-      assert.ok(false, 'HttpOperations: axios.get');
-    }
-  });
 });
