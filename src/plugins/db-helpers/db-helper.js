@@ -234,6 +234,8 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
       values: opcuaValues
     };
 
+    if(isLog) inspector('db-helper.saveOpcuaGroupValue.data:', data);
+
     const isRemote = (getOpcuaSaveModeToDB() === 'remote');
     if (isRemote) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
