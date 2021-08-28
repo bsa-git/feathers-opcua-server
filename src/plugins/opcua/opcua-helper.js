@@ -465,7 +465,7 @@ const getOpcuaTags = function (browseName = '') {
   //-----------------------------
   // Get opcua enable configs for me
   let opcuaOptions = getOpcuaConfigsForMe();
-  opcuaOptions = opcuaOptions.filter(item => !item.isDisable);
+  opcuaOptions = opcuaOptions.filter(item => item.isEnable || item.isEnable === undefined);
   // Get all tags
   loForEach(opcuaOptions, opt => {
     mergedOpcuaOptions = mergeOpcuaConfigOptions(opt.id);
@@ -702,7 +702,7 @@ const getParamsAddressSpace = (id) => {
   };
   let opcuaConfigOptions = getOpcuaConfigOptions(id);
   opcuaConfigOptions = opcuaConfigOptions.filter(item => item);
-  opcuaConfigOptions = opcuaConfigOptions.filter(item => !item.isDisable);
+  opcuaConfigOptions = opcuaConfigOptions.filter(item => item.isEnable || item.isEnable === undefined);
   let objects = opcuaConfigOptions.filter(opt => opt.type ? (opt.type === 'object') : false);
   let methods = opcuaConfigOptions.filter(opt => (opt.type ? (opt.type === 'method') : false) && objects.find(o => o.browseName === opt.ownerName));
   let variables = opcuaConfigOptions.filter(opt => (opt.type ? opt.type.includes('variable') : false) && objects.find(o => o.browseName === opt.ownerName));

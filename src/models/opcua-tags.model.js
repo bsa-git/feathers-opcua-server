@@ -26,7 +26,7 @@ module.exports = function (app) {
     const mongooseClient = app.get('mongooseClient');
     const { Schema } = mongooseClient;
     const schema = new Schema({
-      isDisable: { type: Boolean },
+      isEnable: { type: Boolean },
       browseName: { type: String, required: true, unique: true },
       displayName: { type: String, required: true },
       aliasName: { type: String },

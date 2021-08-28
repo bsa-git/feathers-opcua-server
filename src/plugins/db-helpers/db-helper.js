@@ -215,7 +215,7 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
   if (tags.length) {
     const tag = tags[0];
     // Exit else tag is disable
-    if (tag.isDisable) return savedValue;
+    if (tag.isEnable === false) return savedValue;
     // Get group items
     groupItems = await findAllItems(app, 'opcua-tags', { ownerGroup: browseName });
     // Normalize opcuaValue

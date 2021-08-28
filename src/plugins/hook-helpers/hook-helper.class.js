@@ -369,6 +369,69 @@ class HookHelper {
   }
 
   /**
+   * Relationship check
+   * @async
+   * 
+   * @param {String} path
+   * @param {String} id
+   * @return {void|Error}
+   */
+  async validateRelationship(path = '', id = null) {
+    const result = await this.getItem(path, id.toString());
+    if (isLog) inspector(`validateRelationship(path='${path}', id='${id}').result:`, result);
+    if (!result) {
+      throw new errors.BadRequest(`There is no entry in the service('${path}') for id: '${id}'`);
+    }
+  }
+
+  /**
+   * Restrict service max rows
+   * @async
+   * 
+   * @param {String} servicePath
+   * @param {Number} maxRows
+   * @param {Object} query
+   * @return {Object[]}
+   */
+  async restrictMaxRows(servicePath = '', maxRows = -1, query = {}) {
+    let findResults = await this.getCountItems(servicePath, query);
+    if (isDebug) debug(`restrictMaxRows: (${findResults}) records have been find from the "${servicePath}" service`);
+    if (findResults > maxRows) {
+      if (!this.contextRecords) throw new errors.BadRequest('Value of "restrictMaxRows:contextRecords" must not be empty.');
+      const idField = HookHelper.getIdField(this.contextRecords);
+      const newQuery = loMerge({}, query, {
+        $skip: maxRows,
+        $sort: { createdAt: -1 },
+        $select: [idField]
+      });
+      findResults = await this.findAllItems(servicePath, newQuery);
+      findResults = findResults.map(item => item[idField]);
+      if (isDebug) debug('restrictMaxRows.findResults.length:', findResults.length);
+      let removeResults = await this.removeItems(servicePath, { [idField]: { $in: findResults } });
+      if (isDebug) debug('restrictMaxRows.removeResults.length:', removeResults.length);
+      return removeResults;
+    }
+  }
+
+  /**
+   * Uniqueness check
+   * @async
+   * 
+   * @param {Object} query
+   * @return {void|Error}
+   */
+  async validateUnique(servicePath = '', query = {}) {
+    let results = await this.getCountItems(servicePath, query);
+    if (isDebug) debug(`validateUnique(servicePath='${servicePath}', query=${JSON.stringify(query)}).results:`, results);
+    // debug(`validateUnique(servicePath='${servicePath}', query=${JSON.stringify(query)}).results:`, results);
+    if (results) {
+      throw new errors.BadRequest('Values must be unique');
+    }
+  }
+
+  //===================================================================================================
+
+  /**
    * Get count items
    * @async
    * 
@@ -491,68 +554,6 @@ class HookHelper {
   async createItems(path = '', data = []) {
     return await createItems(this.app, path, data);
   }
-
-  /**
-   * Relationship check
-   * @async
-   * 
-   * @param {String} path
-   * @param {String} id
-   * @return {void|Error}
-   */
-  async validateRelationship(path = '', id = null) {
-    const result = await this.getItem(path, id.toString());
-    if (isLog) inspector(`validateRelationship(path='${path}', id='${id}').result:`, result);
-    if (!result) {
-      throw new errors.BadRequest(`There is no entry in the service('${path}') for id: '${id}'`);
-    }
-  }
-
-  /**
-   * Restrict service max rows
-   * @async
-   * 
-   * @param {String} servicePath
-   * @param {Number} maxRows
-   * @param {Object} query
-   * @return {Object[]}
-   */
-  async restrictMaxRows(servicePath = '', maxRows = -1, query = {}) {
-    let findResults = await this.getCountItems(servicePath, query);
-    if (isDebug) debug(`restrictMaxRows: (${findResults}) records have been find from the "${servicePath}" service`);
-    if (findResults > maxRows) {
-      if (!this.contextRecords) throw new errors.BadRequest('Value of "restrictMaxRows:contextRecords" must not be empty.');
-      const idField = HookHelper.getIdField(this.contextRecords);
-      const newQuery = loMerge({}, query, {
-        $skip: maxRows,
-        $sort: { createdAt: -1 },
-        $select: [idField]
-      });
-      findResults = await this.findAllItems(servicePath, newQuery);
-      findResults = findResults.map(item => item[idField]);
-      if (isDebug) debug('restrictMaxRows.findResults.length:', findResults.length);
-      let removeResults = await this.removeItems(servicePath, { [idField]: { $in: findResults } });
-      if (isDebug) debug('restrictMaxRows.removeResults.length:', removeResults.length);
-      return removeResults;
-    }
-  }
-
-  /**
-   * Uniqueness check
-   * @async
-   * 
-   * @param {Object} query
-   * @return {void|Error}
-   */
-  async validateUnique(servicePath = '', query = {}) {
-    let results = await this.getCountItems(servicePath, query);
-    if (isDebug) debug(`validateUnique(servicePath='${servicePath}', query=${JSON.stringify(query)}).results:`, results);
-    // debug(`validateUnique(servicePath='${servicePath}', query=${JSON.stringify(query)}).results:`, results);
-    if (results) {
-      throw new errors.BadRequest('Values must be unique');
-    }
-  }
-
 }
 
 module.exports = HookHelper;

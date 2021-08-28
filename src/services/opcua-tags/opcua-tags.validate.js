@@ -20,7 +20,7 @@ let base = merge({},
       _id: {
         type: ID
       },
-      isDisable: {
+      isEnable: {
         type: 'boolean'
       },
       browseName: {

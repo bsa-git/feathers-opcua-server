@@ -372,22 +372,22 @@ class OpcuaServer {
     if (isLog) inspector('constructAddressSpace.params:', params);
     // inspector('constructAddressSpace.params:', params);
     if (Array.isArray(params.objects) && params.objects.length) {
-      params.objects = params.objects.filter(item => !item.isDisable);
+      params.objects = params.objects.filter(item => item.isEnable || item.isEnable === undefined);
     } else {
       params.objects = [];
     }
     if (Array.isArray(params.variables) && params.variables.length) {
-      params.variables = params.variables.filter(item => !item.isDisable);
+      params.variables = params.variables.filter(item => item.isEnable || item.isEnable === undefined);
     } else {
       params.variables = [];
     }
     if (Array.isArray(params.groups) && params.groups.length) {
-      params.groups = params.groups.filter(item => !item.isDisable);
+      params.groups = params.groups.filter(item => item.isEnable || item.isEnable === undefined);
     } else {
       params.groups = [];
     }
     if (Array.isArray(params.methods) && params.methods.length) {
-      params.methods = params.methods.filter(item => !item.isDisable);
+      params.methods = params.methods.filter(item => item.isEnable || item.isEnable === undefined);
     } else {
       params.methods = [];
     }

@@ -92,7 +92,7 @@ module.exports = async function opcuaBootstrap(app) {
   }
 
   let opcuaOptions = getOpcuaConfig();
-  opcuaOptions = opcuaOptions.filter(item => !item.isDisable);
+  opcuaOptions = opcuaOptions.filter(item => item.isEnable || item.isEnable === undefined);
   for (let index = 0; index < opcuaOptions.length; index++) {
     const option = opcuaOptions[index];
     const id = option.id;
