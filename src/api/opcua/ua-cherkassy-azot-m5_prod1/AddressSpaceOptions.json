@@ -3,12 +3,50 @@
     {
       "browseName": "CH_M51",
       "displayName": "Черкассы 'АЗОТ' цех M5-1",
-      "type": "object"
+      "type": "object",
+      "tabs": {
+        "tab1": [
+          { "name": "ОЦ", "items": ["01"] },
+          { "name": "Агрегат 1/1", "items": ["11"] },
+          { "name": "Агрегат 2/1", "items": ["21"] },
+          { "name": "Агрегат 3/1", "items": ["31"] }
+        ],
+        "tab2": [
+          { "name": "Аммиак", "items": ["AMIAK"] },
+          { "name": "Природный газ", "items": ["PGAZ"] },
+          { "name": "Пар16", "items": ["PAR"] },
+          { "name": "HNO3 Склад", "items": ["SKLAD"] },
+          { "name": "Вода", "items": ["VODA", "VODA_XOB"] },
+          { "name": "Компрессия", "items": ["PS180", "SBS_OC", "GTT", "UKST", "RD"] },
+          { "name": "Конверсия", "items": ["KONV", "ABSOR", "OXG"] }
+        ]
+      }
     },
     {
       "browseName": "CH_M52",
       "displayName": "Черкассы 'АЗОТ' цех M5-2",
-      "type": "object"
+      "type": "object",
+      "tabs": {
+        "tab1": [
+          { "name": "ОЦ", "items": ["02"] },
+          { "name": "Агрегат 1/2", "items": ["12"] },
+          { "name": "Агрегат 2/2", "items": ["22"] },
+          { "name": "Агрегат 3/2", "items": ["32"] },
+          { "name": "Агрегат 4/2", "items": ["42"] },
+          { "name": "Агрегат 5/2", "items": ["52"] },
+          { "name": "Агрегат 6/2", "items": ["62"] },
+          { "name": "Агрегат 7/2", "items": ["72"] }
+        ],
+        "tab2": [
+          { "name": "Аммиак", "items": ["AMIAK"] },
+          { "name": "Природный газ", "items": ["PGAZ"] },
+          { "name": "Пар16", "items": ["PAR"] },
+          { "name": "HNO3 Склад", "items": ["SKLAD"] },
+          { "name": "Вода", "items": ["VODA", "VODA_XOB"] },
+          { "name": "Компрессия", "items": ["PS180", "SBS_OC", "GTT", "UKST", "RD"] },
+          { "name": "Конверсия", "items": ["KONV", "ABSOR", "OXG"] }
+        ]
+      }
     }
   ],
   "variables": [

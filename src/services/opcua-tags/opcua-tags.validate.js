@@ -62,14 +62,14 @@ let base = merge({},
       getterParams: {
         type: 'object',
         properties: {
-          path: {type: 'string'},
-          fromFile: {type: 'string'},
-          interval: {type: 'number'},
-          dbEnv: {type: 'string'},
-          queryFunc: {type: 'string'},
+          path: { type: 'string' },
+          fromFile: { type: 'string' },
+          interval: { type: 'number' },
+          dbEnv: { type: 'string' },
+          queryFunc: { type: 'string' },
           queryParams: {
             properties: {
-              scanerName: {type: 'string'}
+              scanerName: { type: 'string' }
             }
           }
         }
@@ -77,11 +77,36 @@ let base = merge({},
       valueParams: {
         type: 'object',
         properties: {
-          engineeringUnits: {type: 'string'},
+          engineeringUnits: { type: 'string' },
           engineeringUnitsRange: {
             properties: {
-              low: {type: 'number'},
-              high: {type: 'number'}
+              low: { type: 'number' },
+              high: { type: 'number' }
+            }
+          }
+        }
+      },
+      tabs: {
+        type: 'object',
+        properties: {
+          tab1: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                name: { type: 'string' },
+                items: { type: 'array', items: { type: 'string' } }
+              }
+            }
+          },
+          tab2: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                name: { type: 'string' },
+                items: { type: 'array', items: { type: 'string' } }
+              }
             }
           }
         }
