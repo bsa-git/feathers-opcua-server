@@ -218,7 +218,24 @@
       "_id": "60af3870270f24162c049c1d",
       "browseName": "CH_M51",
       "displayName": "Cherkassy 'AZOT' M5-1",
-      "type": "object"
+      "type": "object",
+      "tabs": {
+        "tab1": [
+          { "name": "Common plant", "items": ["01"] },
+          { "name": "Aggregate 1/1", "items": ["11"] },
+          { "name": "Aggregate 2/1", "items": ["21"] },
+          { "name": "Aggregate 3/1", "items": ["31"] }
+        ],
+        "tab2": [
+          { "name": "Ammonia", "items": ["AMIAK"] },
+          { "name": "Natural gas", "items": ["PGAZ"] },
+          { "name": "Steam16", "items": ["PAR"] },
+          { "name": "HNO3 Store", "items": ["SKLAD"] },
+          { "name": "Water", "items": ["VODA", "VODA_XOB"] },
+          { "name": "Compression", "items": ["PS180", "SBS_OC", "GTT", "UKST", "RD"] },
+          { "name": "Conversion", "items": ["KONV", "ABSOR", "OXG"] }
+        ]
+      }
     },
     {
       "_id": "60af3870270f24162c049c1e",
