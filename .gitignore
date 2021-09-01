@@ -116,5 +116,6 @@ data/app-log/*
 !data/app-log/README.md
 test/data/nedb/*
 !test/data/nedb/README.md
+test/data/tmp/*
 .env
 
