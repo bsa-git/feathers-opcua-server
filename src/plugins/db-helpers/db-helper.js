@@ -330,10 +330,17 @@ const saveOpcuaTags = async function (app, tags, isRemote = false) {
  * @return {Number}
  */
 const getCountItems = async function (app, path = '', query = {}) {
+  let newQuery, findResults;
+  //--------------------
   const service = app.service(path);
   if (service) {
-    const newQuery = loMerge({}, query, { $limit: 0 });
-    let findResults = await service.find({ query: newQuery });
+    if (query.query) {
+      newQuery = loMerge({}, query, { query: { $limit: 0 } });
+    } else {
+      newQuery = loMerge({}, query, { $limit: 0 });
+      newQuery = { query: newQuery };
+    }
+    findResults = await service.find(newQuery);
     findResults = findResults.total;
     if (isDebug) inspector(`getCountItems(path='${path}', query=${JSON.stringify(newQuery)}).findResults:`, findResults);
     return findResults;
@@ -372,10 +379,17 @@ const getItem = async function (app, path = '', id = null) {
  * @return {Object[]}
  */
 const findItems = async function (app, path = '', query = {}) {
+  let findResults;
+  //----------------------------
   const service = app.service(path);
   if (service) {
-    let findResults = await service.find({ query });
-    findResults = (query['$limit'] === 0) ? findResults.total : findResults.data;
+    if (query.query) {
+      findResults = await service.find(query);
+      findResults = (query.query['$limit'] === 0) ? findResults.total : findResults.data;
+    } else {
+      findResults = await service.find({ query });
+      findResults = (query['$limit'] === 0) ? findResults.total : findResults.data;
+    }
     if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
     return findResults;
   } else {
@@ -393,10 +407,16 @@ const findItems = async function (app, path = '', query = {}) {
  * @return {Object[]}
  */
 const findAllItems = async function (app, path = '', query = {}) {
+  let newParams, findResults;
+  //--------------------
   const service = app.service(path);
   if (service) {
-    const newParams = loMerge({}, { query }, { paginate: false });
-    let findResults = await service.find(newParams);
+    if (query.query) {
+      newParams = loMerge({}, query, { paginate: false });
+    } else {
+      newParams = loMerge({}, { query }, { paginate: false });
+    }
+    findResults = await service.find(newParams);
     if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(newParams)}).findResults:`, findResults);
     return findResults;
   } else {
@@ -435,10 +455,14 @@ const removeItem = async function (app, path = '', id = null) {
  * @return {Object[]}
  */
 const removeItems = async function (app, path = '', query = {}) {
-  let findResults = [], deleteResults = [];
+  let deleteResults = [];
   const service = app.service(path);
   if (service) {
-    deleteResults = await service.remove(null, { query });
+    if (query.query) {
+      deleteResults = await service.remove(null, query);
+    } else {
+      deleteResults = await service.remove(null, { query });
+    }
     if (isLog) inspector(`removeItems(path='${path}', query=${JSON.stringify(query)}).removeResults:`, deleteResults);
     return deleteResults;
   } else {
@@ -478,9 +502,15 @@ const patchItem = async function (app, path = '', id = '', data = {}) {
  * @return {Object[]}
  */
 const patchItems = async function (app, path = '', data = {}, query = {}) {
+  let patchResults;
+  //-------------------------------
   const service = app.service(path);
   if (service) {
-    const patchResults = await service.patch(null, data, { query });
+    if (query.query) {
+      patchResults = await service.patch(null, data, query);
+    } else {
+      patchResults = await service.patch(null, data, { query });
+    }
     if (isLog) inspector(`patchItems(path='${path}', data=${JSON.stringify(data)}, query=${JSON.stringify(query)}).patchResults:`, patchResults);
     return patchResults;
   } else {
