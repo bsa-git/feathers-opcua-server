@@ -68,6 +68,7 @@ module.exports = async function opcuaBootstrap(app) {
     // Get opcua tags 
     const opcuaTags = getOpcuaTags();
     if (isLog) inspector('opcuaBootstrap.opcuaTags:', opcuaTags);
+    // inspector('opcuaBootstrap.opcuaTags:', opcuaTags);
     // Save opcua tags to local DB
     let saveResult = await saveOpcuaTags(app, opcuaTags);
     logger.info('opcuaBootstrap.saveOpcuaTags.localDB:', saveResult);

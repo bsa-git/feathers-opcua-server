@@ -2,6 +2,7 @@
   {
     "id": "ua-cherkassy-azot_test1",
     "name": "380-472-00203826_test1",
+    "description": "Opcua test for id=`ua-cherkassy-azot_test1`",
     "endpointUrl": "",
     "endpointPort": 26560,
     "srvServiceUrl": "http://localhost:3030",
@@ -16,6 +17,7 @@
   {
     "id": "ua-cherkassy-azot_test2",
     "name": "380-472-00203826_test2",
+    "description": "Opcua test for id=`ua-cherkassy-azot_test2`",
     "endpointUrl": "",
     "endpointPort": 26570,
     "srvServiceUrl": "http://localhost:3030",
@@ -40,6 +42,7 @@
     "isEnable": true,
     "id": "ua-cherkassy-azot-asutp_dev1",
     "name": "380-472-00203826-asutp_dev1",
+    "description": "Opcua server and client for `azot-m5`, `azot-ogmtmztp` tags from `opc.tcp://M5-0095488.OSTCHEM.COM.UA:26570`",
     "endpointUrl": "opc.tcp://M5-0095488.OSTCHEM.COM.UA:26570",
     "endpointPort": 26570,
     "srvServiceUrl": "http://10.60.0.220:3030",
@@ -78,6 +81,7 @@
     "isEnable": false,
     "id": "ua-cherkassy-azot-asutp_dev2",
     "name": "380-472-00203826-asutp_dev2",
+    "description": "Opcua client for `azot-m5`, `azot-ogmtmztp` tags from `opc.tcp://localhost:49370` (KEPServer)",
     "endpointUrl": "opc.tcp://localhost:49370",
     "srvServiceUrl": "",
     "clientServiceUrl": "http://10.60.0.220:3030",
@@ -108,6 +112,7 @@
     "isEnable": false,
     "id": "ua-cherkassy-azot-asutp_dev3",
     "name": "380-472-00203826-asutp_dev3",
+    "description": "Opcua client for `azot-m5`, `azot-ogmtmztp` tags from `opc.tcp://OGMT-MZTP.OSTCHEM.COM.UA:26570`",
     "endpointUrl": "opc.tcp://OGMT-MZTP.OSTCHEM.COM.UA:26570",
     "srvServiceUrl": "",
     "clientServiceUrl": "http://10.60.0.220:3030",
@@ -135,6 +140,7 @@
     "isEnable": true,
     "id": "ua-cherkassy-azot-vmwin10.2_dev1",
     "name": "380-472-00203826-vmwin10.2_dev1",
+    "description": "Opcua client for `azot-m5`, `azot-ogmtmztp` tags from `opc.tcp://OGMT-MZTP.OSTCHEM.COM.UA:26570`",
     "endpointUrl": "opc.tcp://OGMT-MZTP.OSTCHEM.COM.UA:26570",
     "endpointPort": 26570,
     "srvServiceUrl": "",
@@ -170,6 +176,7 @@
   {
     "id": "ua-cherkassy-azot-m5_prod1",
     "name": "380-472-00203826-m5_prod1",
+    "description": "Opcua server and client for `azot-m5` tags from `http://192.168.3.5:3030`",
     "endpointUrl": "",
     "endpointPort": 26570,
     "srvServiceUrl": "http://192.168.3.5:3030",
@@ -193,6 +200,7 @@
   {
     "id": "ua-cherkassy-azot-ogmtmztp_prod1",
     "name": "380-472-00203826-ogmtmztp_prod1",
+    "description": "Opcua server and client for `azot-m5`, `azot-ogmtmztp` tags from `opc.tcp://OGMT-MZTP.OSTCHEM.COM.UA:26570`",
     "endpointUrl": "opc.tcp://OGMT-MZTP.OSTCHEM.COM.UA:26570",
     "endpointPort": 26570,
     "srvServiceUrl": "http://10.60.0.49:3030",
@@ -220,6 +228,7 @@
   {
     "id": "ua-cherkassy-bsahome_dev1",
     "name": "380-472-bsahome_dev1",
+    "description": "Opcua server and client for `azot-m5` tags from `opc.tcp://BSA-HOME:26570`",
     "endpointUrl": "",
     "endpointPort": 26570,
     "srvServiceUrl": "http://BSA-HOME:3030",

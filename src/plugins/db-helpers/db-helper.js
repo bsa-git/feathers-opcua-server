@@ -130,9 +130,17 @@ const getEnvTypeDB = function () {
  * @returns {Boolean}
  */
 const isSaveOpcuaToDB = function () {
+  let isSave = false;
+  //--------------------
   const myConfigs = getOpcuaConfigsForMe();
-  const myConfig = myConfigs.find(item => item.opcuaSaveModeToDB === 'no');
-  return !myConfig;
+  const myConfig = myConfigs.find(item => item.opcuaSaveModeToDB);
+  // const myConfig = myConfigs.find(item => item.opcuaSaveModeToDB === 'no');
+  if (myConfig) {
+    isSave = myConfig.opcuaSaveModeToDB !== 'no';
+  } else {
+    isSave = process.env.DEFAULT_OPCUA_SAVEMODE_TODB !== 'no';
+  }
+  return isSave;
 };
 
 /**
@@ -234,7 +242,7 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
       values: opcuaValues
     };
 
-    if(isLog) inspector('db-helper.saveOpcuaGroupValue.data:', data);
+    if (isLog) inspector('db-helper.saveOpcuaGroupValue.data:', data);
 
     const isRemote = (getOpcuaSaveModeToDB() === 'remote');
     if (isRemote) {
@@ -244,7 +252,7 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
         const appRestClient = feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
         savedValue = await createItem(appRestClient, 'opcua-values', data);
       } catch (error) {
-        if(error.code === 'ECONNREFUSED'){
+        if (error.code === 'ECONNREFUSED') {
           console.log(chalk.red('error:'), 'db-helper.saveOpcuaGroupValue.remoteDB:', chalk.cyan(`Remote DB url "${remoteDbUrl}" does not exist!`));
         } else {
           console.log(chalk.red('error:'), 'db-helper.saveOpcuaGroupValue.remoteDB:', chalk.cyan(`${error.message}!`));
