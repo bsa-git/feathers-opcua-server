@@ -101,7 +101,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура газ. NH3"
+      "description": "Температура газ. NH3 (T4)"
     },
     {
       "browseName": "CH_M51::01AMIAK:01P4_1",
@@ -121,7 +121,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление газ. NH3"
+      "description": "Давление газ. NH3 (P4-1)"
     },
     {
       "browseName": "CH_M51::01AMIAK:01F4",
@@ -141,7 +141,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход газ. NH3"
+      "description": "Расход газ. NH3 (F4)"
     },
     {
       "browseName": "CH_M51::01PGAZ:01T16",
@@ -161,7 +161,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура ПГ в цех"
+      "description": "Температура ПГ в цех (T16)"
     },
     {
       "browseName": "CH_M51::01PGAZ:01P5",
@@ -181,7 +181,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление ПГ в цех"
+      "description": "Давление ПГ в цех (P5)"
     },
     {
       "browseName": "CH_M51::01PGAZ:01F5",
@@ -201,7 +201,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход ПГ в цех"
+      "description": "Расход ПГ в цех (F5)"
     },
     {
       "browseName": "CH_M51::01AMIAK:01T21_1",
@@ -221,7 +221,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура ЖА-1"
+      "description": "Температура ЖА-1 (T21_1)"
     },
     {
       "browseName": "CH_M51::01AMIAK:01P21_1",
@@ -241,7 +241,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление ЖА-1"
+      "description": "Давление ЖА-1 (P21_1)"
     },
     {
       "browseName": "CH_M51::01AMIAK:01F21_1",
@@ -261,7 +261,7 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "Расход ЖА-1"
+      "description": "Расход ЖА-1 (F21_1)"
     },
     {
       "browseName": "CH_M51::01PAR:01T2_1",
@@ -281,7 +281,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура ПАР16-1"
+      "description": "Температура ПАР16-1 (T2_1)"
     },
     {
       "browseName": "CH_M51::01PAR:01P2_1",
@@ -301,7 +301,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление ПАР16-1"
+      "description": "Давление ПАР16-1 (P2_1)"
     },
     {
       "browseName": "CH_M51::01PAR:01F2_1",
@@ -321,7 +321,7 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "Расход ПАР16-1"
+      "description": "Расход ПАР16-1 (F2_1)"
     },
     {
       "browseName": "CH_M51::01PAR:01T2_2",
@@ -341,7 +341,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура ПАР16-2"
+      "description": "Температура ПАР16-2 (T2_2)"
     },
     {
       "browseName": "CH_M51::01PAR:01P2_2",
@@ -361,7 +361,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление ПАР16-2"
+      "description": "Давление ПАР16-2 (P2_2)"
     },
     {
       "browseName": "CH_M51::01PAR:01F2_2",
@@ -381,7 +381,7 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "Расход ПАР16-2"
+      "description": "Расход ПАР16-2 (F2_2)"
     },
     {
       "browseName": "CH_M51::01SKLAD:01L26_SUM",
@@ -401,7 +401,7 @@
         },
         "engineeringUnits": "cubic_metre"
       },
-      "description": "Склад 1(отделение)"
+      "description": "Склад 1(отделение) (L26)"
     },
     {
       "browseName": "CH_M51::01VODA_XOB:01T1",
@@ -421,7 +421,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура ХОВ"
+      "description": "Температура ХОВ (T1)"
     },
     {
       "browseName": "CH_M51::01VODA_XOB:01P4",
@@ -441,7 +441,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление ХОВ"
+      "description": "Давление ХОВ (P4)"
     },
     {
       "browseName": "CH_M51::01VODA_XOB:01F1",
@@ -461,7 +461,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход ХОВ"
+      "description": "Расход ХОВ (F1)"
     },
     {
       "browseName": "CH_M51::01VODA:01T1_1",
@@ -481,7 +481,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура ОВ в цех (маш. зал)"
+      "description": "Температура ОВ (T1_1)"
     },
     {
       "browseName": "CH_M51::01VODA:01T1_2",
@@ -501,7 +501,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура ОВ"
+      "description": "Температура ОВ (T1_2)"
     },
     {
       "browseName": "CH_M51::01VODA:01P5_1",
@@ -521,7 +521,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление ОВ"
+      "description": "Давление ОВ (P5_1)"
     },
     {
       "browseName": "CH_M51::01SBS_OC:01PS10",
@@ -541,7 +541,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление Воздуха КИП"
+      "description": "Давление Воздуха КИП (PS10)"
     },
     {
       "AGR21": "-------------------------------------------------------------------------------"
@@ -564,7 +564,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха из компрессора (PS-180)"
+      "description": "Давление воздуха из компрессора (PS180)"
     },
     {
       "browseName": "CH_M51::21GTT:21P181",
@@ -584,7 +584,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха за нагнетателем (P-181)"
+      "description": "Давление воздуха за нагнетателем (P181)"
     },
     {
       "browseName": "CH_M51::21KONV:21P127A",
@@ -604,7 +604,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха в смеситель (P-127A)"
+      "description": "Давление воздуха в смеситель (P127A)"
     },
     {
       "browseName": "CH_M51::21UKST:21FCC_TS174",
@@ -624,7 +624,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура газа перед турбиной (TS-174)"
+      "description": "Температура газа перед турбиной (TS174)"
     },
     {
       "browseName": "CH_M51::21KONV:21TS102PID_T.MEAS",
@@ -644,7 +644,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура под сетками в КА (TS-102)"
+      "description": "Температура под сетками в КА (TS102)"
     },
     {
       "browseName": "CH_M51::21KONV:21F102",
@@ -664,7 +664,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход воздуха в смеситель (F-102)"
+      "description": "Расход воздуха в смеситель (F102)"
     },
     {
       "browseName": "CH_M51::21ABSOR:21F103",
@@ -684,7 +684,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход добавочного воздуха (F-103)"
+      "description": "Расход добавочного воздуха (F103)"
     },
     {
       "browseName": "CH_M51::21KONV:21FC101",
@@ -704,7 +704,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в смеситель (F-101)"
+      "description": "Расход NH3 в смеситель (F101)"
     },
     {
       "browseName": "CH_M51::21OXG:21FC106",
@@ -724,7 +724,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в РСО (F-106)"
+      "description": "Расход NH3 в РСО (F106)"
     },
     {
       "browseName": "CH_M51::21ABSOR:21F105",
@@ -744,7 +744,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход HNO3 с агрегата (F-105)"
+      "description": "Расход HNO3 с агрегата (F105)"
     },
     {
       "browseName": "CH_M51::21UKST:21FCC_F171",
@@ -764,7 +764,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход ПГ в УКСТ (FC-171)"
+      "description": "Расход ПГ в УКСТ (F171)"
     },
     {
       "browseName": "CH_M51::21RD:21EA_RD",
@@ -784,7 +784,7 @@
         },
         "engineeringUnits": "kilowatt"
       },
-      "description": "Мощность РД (EA-RD)"
+      "description": "Мощность РД (EA_RD)"
     },
     {
       "AGR31": "-------------------------------------------------------------------------------"
@@ -807,7 +807,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха из компрессора (PS-180)"
+      "description": "Давление воздуха из компрессора (PS180)"
     },
     {
       "browseName": "CH_M51::31GTT:31P181",
@@ -827,7 +827,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха за нагнетателем (P-181)"
+      "description": "Давление воздуха за нагнетателем (P181)"
     },
     {
       "browseName": "CH_M51::31KONV:31P127A",
@@ -847,7 +847,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха в смеситель (P-127A)"
+      "description": "Давление воздуха в смеситель (P127A)"
     },
     {
       "browseName": "CH_M51::31UKST:31FCC_TS174",
@@ -867,7 +867,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура газа перед турбиной (TS-174)"
+      "description": "Температура газа перед турбиной (TS174)"
     },
     {
       "browseName": "CH_M51::31KONV:31TS102PID_T.MEAS",
@@ -887,7 +887,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура под сетками в КА (TS-102)"
+      "description": "Температура под сетками в КА (TS102)"
     },
     {
       "browseName": "CH_M51::31KONV:31F102",
@@ -907,7 +907,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход воздуха в смеситель (F-102)"
+      "description": "Расход воздуха в смеситель (F102)"
     },
     {
       "browseName": "CH_M51::31ABSOR:31F103",
@@ -927,7 +927,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход добавочного воздуха (F-103)"
+      "description": "Расход добавочного воздуха (F103)"
     },
     {
       "browseName": "CH_M51::31KONV:31FC101",
@@ -947,7 +947,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в смеситель (F-101)"
+      "description": "Расход NH3 в смеситель (F101)"
     },
     {
       "browseName": "CH_M51::31OXG:31FC106",
@@ -967,7 +967,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в РСО (F-106)"
+      "description": "Расход NH3 в РСО (F106)"
     },
     {
       "browseName": "CH_M51::31ABSOR:31F105",
@@ -987,7 +987,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход HNO3 с агрегата (F-105)"
+      "description": "Расход HNO3 с агрегата (F105)"
     },
     {
       "browseName": "CH_M51::31UKST:31FCC_F171",
@@ -1007,7 +1007,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход ПГ в УКСТ (FC-171)"
+      "description": "Расход ПГ в УКСТ (F171)"
     },
     {
       "browseName": "CH_M51::31RD:31EA_RD",
@@ -1027,7 +1027,7 @@
         },
         "engineeringUnits": "kilowatt"
       },
-      "description": "Мощность РД (EA-RD)"
+      "description": "Мощность РД (EA_RD)"
     },
     {
       "02GE": "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
@@ -1050,7 +1050,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура газ. NH3"
+      "description": "Температура газ. NH3 (T4)"
     },
     {
       "browseName": "CH_M52::02AMIAK:02P4_1",
@@ -1070,7 +1070,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление газ. NH3"
+      "description": "Давление газ. NH3 (P4_1)"
     },
     {
       "browseName": "CH_M52::02AMIAK:02F4",
@@ -1090,7 +1090,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход газ. NH3"
+      "description": "Расход газ. NH3 (F4)"
     },
     {
       "browseName": "CH_M52::02PGAZ:02T16",
@@ -1110,7 +1110,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура ПГ в цех"
+      "description": "Температура ПГ в цех (T16)"
     },
     {
       "browseName": "CH_M52::02PGAZ:02P5",
@@ -1130,7 +1130,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление ПГ в цех"
+      "description": "Давление ПГ в цех (P5)"
     },
     {
       "browseName": "CH_M52::02PGAZ:02F5",
@@ -1150,7 +1150,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход ПГ в цех"
+      "description": "Расход ПГ в цех (F5)"
     },
     {
       "browseName": "CH_M52::02AMIAK:02T21_1",
@@ -1170,7 +1170,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура ЖА-1"
+      "description": "Температура ЖА-1 (T21_1)"
     },
     {
       "browseName": "CH_M52::02AMIAK:02P21_1",
@@ -1190,7 +1190,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление ЖА-1"
+      "description": "Давление ЖА-1 (P21_1)"
     },
     {
       "browseName": "CH_M52::02AMIAK:02F21_1",
@@ -1210,7 +1210,7 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "Расход ЖА-1"
+      "description": "Расход ЖА-1 (F21_1)"
     },
     {
       "browseName": "CH_M52::02AMIAK:02T21_2",
@@ -1230,7 +1230,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура ЖА-2"
+      "description": "Температура ЖА-2 (T21_2)"
     },
     {
       "browseName": "CH_M52::02AMIAK:02P21_2",
@@ -1250,7 +1250,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление ЖА-2"
+      "description": "Давление ЖА-2 (P21_2)" 
     },
     {
       "browseName": "CH_M52::02AMIAK:02F21_2",
@@ -1270,7 +1270,7 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "Расход ЖА-2"
+      "description": "Расход ЖА-2 (F21_2)"
     },
     {
       "browseName": "CH_M52::02PAR:02T2_1",
@@ -1290,7 +1290,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура ПАР16-1"
+      "description": "Температура ПАР16-1 (T2_1)"
     },
     {
       "browseName": "CH_M52::02PAR:02P2_1",
@@ -1310,7 +1310,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление ПАР16-1"
+      "description": "Давление ПАР16-1 (P2_1)"
     },
     {
       "browseName": "CH_M52::02PAR:02F2_1",
@@ -1330,7 +1330,7 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "Расход ПАР16-1"
+      "description": "Расход ПАР16-1 (F2_1)"
     },
     {
       "browseName": "CH_M52::02PAR:02T2_2",
@@ -1350,7 +1350,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура ПАР16-2"
+      "description": "Температура ПАР16-2 (T2_2)"
     },
     {
       "browseName": "CH_M52::02PAR:02P2_2",
@@ -1370,7 +1370,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление ПАР16-2"
+      "description": "Давление ПАР16-2 (P2_2)"
     },
     {
       "browseName": "CH_M52::02PAR:02F2_2",
@@ -1390,7 +1390,7 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "Расход ПАР16-2"
+      "description": "Расход ПАР16-2 (F2_2)"
     },
     {
       "browseName": "CH_M52::02SKLAD:01L26_SUM",
@@ -1410,7 +1410,7 @@
         },
         "engineeringUnits": "cubic_metre"
       },
-      "description": "Кислота на складе 1-отделения"
+      "description": "Склад 1(отделение) (L26)"
     },
     {
       "browseName": "CH_M52::02SKLAD:02L26_SUM",
@@ -1430,7 +1430,7 @@
         },
         "engineeringUnits": "cubic_metre"
       },
-      "description": "Кислота на складе 2-отделения"
+      "description": "Склад 2(отделение) (L26)"
     },
     {
       "browseName": "CH_M52::02SKLAD:02L26_CALSUM",
@@ -1450,7 +1450,7 @@
         },
         "engineeringUnits": "cubic_metre"
       },
-      "description": "Кислота на складе 1+2-отделения"
+      "description": "Склад 1+2(отделения) (L26_SUM)"
     },
     {
       "browseName": "CH_M52::02SKLAD:02Q20",
@@ -1470,7 +1470,7 @@
         },
         "engineeringUnits": "kilogram_per_cubic_metre"
       },
-      "description": "Q кислоты в хранилище"
+      "description": "Q кислоты в хранилище (Q20)"
     },
     {
       "browseName": "CH_M52::02SKLAD:02T20",
@@ -1490,7 +1490,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура кислоты в хранилище"
+      "description": "Температура кислоты в хранилище (T20)"
     },
     {
       "browseName": "CH_M52::02SKLAD:02P20_1",
@@ -1510,7 +1510,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление кислоты в коллекторе-1"
+      "description": "Давление кислоты в коллекторе-1 (P20_1)"
     },
     {
       "browseName": "CH_M52::02SKLAD:02P20_2",
@@ -1530,7 +1530,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление кислоты в коллекторе-2"
+      "description": "Давление кислоты в коллекторе-2 (P20_2)"
     },
     {
       "browseName": "CH_M52::02SKLAD:02P22_1",
@@ -1550,7 +1550,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление кислоты в М9 коллекторе-1"
+      "description": "Давление кислоты в М9 коллекторе-1 (P22_1)"
     },
     {
       "browseName": "CH_M52::02SKLAD:02P22_2",
@@ -1570,7 +1570,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление кислоты в М9 коллекторе-2"
+      "description": "Давление кислоты в М9 коллекторе-2 (P22_2)"
     },
     {
       "browseName": "CH_M52::02SKLAD:02F20_1",
@@ -1590,7 +1590,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход кислоты в коллекторе-1"
+      "description": "Расход кислоты в коллекторе-1 (F20_1)"
     },
     {
       "browseName": "CH_M52::02SKLAD:02F20_2",
@@ -1610,7 +1610,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход кислоты в коллекторе-2"
+      "description": "Расход кислоты в коллекторе-2 (F20_2)"
     },
     {
       "browseName": "CH_M52::02VODA_XOB:02T1",
@@ -1630,7 +1630,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура ХОВ"
+      "description": "Температура ХОВ (T1)"
     },
     {
       "browseName": "CH_M52::02VODA_XOB:02P4",
@@ -1650,7 +1650,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление ХОВ"
+      "description": "Давление ХОВ (P4)"
     },
     {
       "browseName": "CH_M52::02VODA_XOB:02F1",
@@ -1670,7 +1670,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход ХОВ"
+      "description": "Расход ХОВ (F1)"
     },
     {
       "browseName": "CH_M52::02VODA:02T1_1",
@@ -1690,7 +1690,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура ОВ в цех (маш. зал)"
+      "description": "Температура ОВ (T1_1)"
     },
     {
       "browseName": "CH_M52::02VODA:02T1_2",
@@ -1710,7 +1710,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура ОВ в цех (абсорбц. колона)"
+      "description": "Температура ОВ (T1_2)"
     },
     {
       "browseName": "CH_M52::02VODA:02P5_1",
@@ -1730,7 +1730,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление ОВ в цех"
+      "description": "Давление ОВ (P5_1) в цех"
     },
     {
       "browseName": "CH_M52::02SBS_OC:02PS10",
@@ -1750,7 +1750,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление Воздух КИП в цех"
+      "description": "Давление Воздуха КИП (PS10)"
     },
     {
       "12AGR": "-------------------------------------------------------------------------------"
@@ -1773,7 +1773,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха из компрессора (PS-180)"
+      "description": "Давление воздуха из компрессора (PS180)"
     },
     {
       "browseName": "CH_M52::12GTT:12P181",
@@ -1793,7 +1793,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха за нагнетателем (P-181)"
+      "description": "Давление воздуха за нагнетателем (P181)"
     },
     {
       "browseName": "CH_M52::12KONV:12P127A",
@@ -1813,7 +1813,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха в смеситель (P-127A)"
+      "description": "Давление воздуха в смеситель (P127A)"
     },
     {
       "browseName": "CH_M52::12UKST:12FCC_TS174",
@@ -1833,7 +1833,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура газа перед турбиной (TS-174)"
+      "description": "Температура газа перед турбиной (TS174)"
     },
     {
       "browseName": "CH_M52::12KONV:12TS102PID_T.MEAS",
@@ -1853,7 +1853,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура под сетками в КА (TS-102)"
+      "description": "Температура под сетками в КА (TS102)"
     },
     {
       "browseName": "CH_M52::12KONV:12F102",
@@ -1873,7 +1873,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход воздуха в смеситель (F-102)"
+      "description": "Расход воздуха в смеситель (F102)"
     },
     {
       "browseName": "CH_M52::12ABSOR:12F103",
@@ -1893,7 +1893,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход добавочного воздуха (F-103)"
+      "description": "Расход добавочного воздуха (F103)"
     },
     {
       "browseName": "CH_M52::12KONV:12FC101",
@@ -1913,7 +1913,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в смеситель (F-101)"
+      "description": "Расход NH3 в смеситель (F101)"
     },
     {
       "browseName": "CH_M52::12OXG:12FC106",
@@ -1933,7 +1933,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в РСО (F-106)"
+      "description": "Расход NH3 в РСО (F106)"
     },
     {
       "browseName": "CH_M52::12ABSOR:12F105",
@@ -1953,7 +1953,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход HNO3 с агрегата (F-105)"
+      "description": "Расход HNO3 с агрегата (F105)"
     },
     {
       "browseName": "CH_M52::12UKST:12FCC_F171",
@@ -1973,7 +1973,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход ПГ в УКСТ (FC-171)"
+      "description": "Расход ПГ в УКСТ (F171)"
     },
     {
       "browseName": "CH_M52::12RD:12EA_RD",
@@ -1993,7 +1993,7 @@
         },
         "engineeringUnits": "kilowatt"
       },
-      "description": "Мощность РД (EA-RD)"
+      "description": "Мощность РД (EA_RD)"
     },
     {
       "22AGR": "-------------------------------------------------------------------------------"
@@ -2016,7 +2016,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха из компрессора (PS-180)"
+      "description": "Давление воздуха из компрессора (PS180)"
     },
     {
       "browseName": "CH_M52::22GTT:22P181",
@@ -2036,7 +2036,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха за нагнетателем (P-181)"
+      "description": "Давление воздуха за нагнетателем (P181)"
     },
     {
       "browseName": "CH_M52::22KONV:22P127A",
@@ -2056,7 +2056,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха в смеситель (P-127A)"
+      "description": "Давление воздуха в смеситель (P127A)"
     },
     {
       "browseName": "CH_M52::22UKST:22FCC_TS174",
@@ -2076,7 +2076,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура газа перед турбиной (TS-174)"
+      "description": "Температура газа перед турбиной (TS174)"
     },
     {
       "browseName": "CH_M52::22KONV:22TS102PID_T.MEAS",
@@ -2096,7 +2096,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура под сетками в КА (TS-102)"
+      "description": "Температура под сетками в КА (TS102)"
     },
     {
       "browseName": "CH_M52::22KONV:22F102",
@@ -2116,7 +2116,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход воздуха в смеситель (F-102)"
+      "description": "Расход воздуха в смеситель (F102)"
     },
     {
       "browseName": "CH_M52::22ABSOR:22F103",
@@ -2136,7 +2136,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход добавочного воздуха (F-103)"
+      "description": "Расход добавочного воздуха (F103)"
     },
     {
       "browseName": "CH_M52::22KONV:22FC101",
@@ -2156,7 +2156,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в смеситель (F-101)"
+      "description": "Расход NH3 в смеситель (F101)"
     },
     {
       "browseName": "CH_M52::22OXG:22FC106",
@@ -2176,7 +2176,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в РСО (F-106)"
+      "description": "Расход NH3 в РСО (F106)"
     },
     {
       "browseName": "CH_M52::22ABSOR:22F105",
@@ -2196,7 +2196,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход HNO3 с агрегата (F-105)"
+      "description": "Расход HNO3 с агрегата (F105)"
     },
     {
       "browseName": "CH_M52::22UKST:22FCC_F171",
@@ -2216,7 +2216,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход ПГ в УКСТ (FC-171)"
+      "description": "Расход ПГ в УКСТ (F171)"
     },
     {
       "browseName": "CH_M52::22RD:22EA_RD",
@@ -2236,7 +2236,7 @@
         },
         "engineeringUnits": "kilowatt"
       },
-      "description": "Мощность РД (EA-RD)"
+      "description": "Мощность РД (EA_RD)"
     },
     {
       "32AGR": "-------------------------------------------------------------------------------"
@@ -2259,7 +2259,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха из компрессора (PS-180)"
+      "description": "Давление воздуха из компрессора (PS180)"
     },
     {
       "browseName": "CH_M52::32GTT:32P181",
@@ -2279,7 +2279,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха за нагнетателем (P-181)"
+      "description": "Давление воздуха за нагнетателем (P181)"
     },
     {
       "browseName": "CH_M52::32KONV:32P127A",
@@ -2299,7 +2299,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха в смеситель (P-127A)"
+      "description": "Давление воздуха в смеситель (P127A)"
     },
     {
       "browseName": "CH_M52::32UKST:32FCC_TS174",
@@ -2319,7 +2319,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура газа перед турбиной (TS-174)"
+      "description": "Температура газа перед турбиной (TS174)"
     },
     {
       "browseName": "CH_M52::32KONV:32TS102PID_T.MEAS",
@@ -2339,7 +2339,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура под сетками в КА (TS-102)"
+      "description": "Температура под сетками в КА (TS102)"
     },
     {
       "browseName": "CH_M52::32KONV:32F102",
@@ -2359,7 +2359,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход воздуха в смеситель (F-102)"
+      "description": "Расход воздуха в смеситель (F102)"
     },
     {
       "browseName": "CH_M52::32ABSOR:32F103",
@@ -2379,7 +2379,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход добавочного воздуха (F-103)"
+      "description": "Расход добавочного воздуха (F103)"
     },
     {
       "browseName": "CH_M52::32KONV:32FC101",
@@ -2399,7 +2399,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в смеситель (F-101)"
+      "description": "Расход NH3 в смеситель (F101)"
     },
     {
       "browseName": "CH_M52::32OXG:32FC106",
@@ -2419,7 +2419,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в РСО (F-106)"
+      "description": "Расход NH3 в РСО (F106)"
     },
     {
       "browseName": "CH_M52::32ABSOR:32F105",
@@ -2439,7 +2439,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход HNO3 с агрегата (F-105)"
+      "description": "Расход HNO3 с агрегата (F105)"
     },
     {
       "browseName": "CH_M52::32UKST:32FCC_F171",
@@ -2459,7 +2459,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход ПГ в УКСТ (FC-171)"
+      "description": "Расход ПГ в УКСТ (F171)"
     },
     {
       "browseName": "CH_M52::32RD:32EA_RD",
@@ -2479,7 +2479,7 @@
         },
         "engineeringUnits": "kilowatt"
       },
-      "description": "Мощность РД (EA-RD)"
+      "description": "Мощность РД (EA_RD)"
     },
     {
       "42AGR": "-------------------------------------------------------------------------------"
@@ -2502,7 +2502,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха из компрессора (PS-180)"
+      "description": "Давление воздуха из компрессора (PS180)"
     },
     {
       "browseName": "CH_M52::42GTT:42P181",
@@ -2522,7 +2522,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха за нагнетателем (P-181)"
+      "description": "Давление воздуха за нагнетателем (P181)"
     },
     {
       "browseName": "CH_M52::42KONV:42P127A",
@@ -2542,7 +2542,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха в смеситель (P-127A)"
+      "description": "Давление воздуха в смеситель (P127A)"
     },
     {
       "browseName": "CH_M52::42UKST:42FCC_TS174",
@@ -2562,7 +2562,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура газа перед турбиной (TS-174)"
+      "description": "Температура газа перед турбиной (TS174)"
     },
     {
       "browseName": "CH_M52::42KONV:42TS102PID_T.MEAS",
@@ -2582,7 +2582,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура под сетками в КА (TS-102)"
+      "description": "Температура под сетками в КА (TS102)"
     },
     {
       "browseName": "CH_M52::42KONV:42F102",
@@ -2602,7 +2602,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход воздуха в смеситель (F-102)"
+      "description": "Расход воздуха в смеситель (F102)"
     },
     {
       "browseName": "CH_M52::42ABSOR:42F103",
@@ -2622,7 +2622,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход добавочного воздуха (F-103)"
+      "description": "Расход добавочного воздуха (F103)"
     },
     {
       "browseName": "CH_M52::42KONV:42FC101",
@@ -2642,7 +2642,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в смеситель (F-101)"
+      "description": "Расход NH3 в смеситель (F101)"
     },
     {
       "browseName": "CH_M52::42OXG:42FC106",
@@ -2662,7 +2662,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в РСО (F-106)"
+      "description": "Расход NH3 в РСО (F106)"
     },
     {
       "browseName": "CH_M52::42ABSOR:42F105",
@@ -2682,7 +2682,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход HNO3 с агрегата (F-105)"
+      "description": "Расход HNO3 с агрегата (F105)"
     },
     {
       "browseName": "CH_M52::42UKST:42FCC_F171",
@@ -2702,7 +2702,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход ПГ в УКСТ (FC-171)"
+      "description": "Расход ПГ в УКСТ (F171)"
     },
     {
       "browseName": "CH_M52::42RD:42EA_RD",
@@ -2722,7 +2722,7 @@
         },
         "engineeringUnits": "kilowatt"
       },
-      "description": "Мощность РД (EA-RD)"
+      "description": "Мощность РД (EA_RD)"
     },
     {
       "52AGR": "-------------------------------------------------------------------------------"
@@ -2745,7 +2745,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха из компрессора (PS-180)"
+      "description": "Давление воздуха из компрессора (PS180)"
     },
     {
       "browseName": "CH_M52::52GTT:52P181",
@@ -2765,7 +2765,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха за нагнетателем (P-181)"
+      "description": "Давление воздуха за нагнетателем (P181)"
     },
     {
       "browseName": "CH_M52::52KONV:52P127A",
@@ -2785,7 +2785,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха в смеситель (P-127A)"
+      "description": "Давление воздуха в смеситель (P127A)"
     },
     {
       "browseName": "CH_M52::52UKST:52FCC_TS174",
@@ -2805,7 +2805,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура газа перед турбиной (TS-174)"
+      "description": "Температура газа перед турбиной (TS174)"
     },
     {
       "browseName": "CH_M52::52KONV:52TS102PID_T.MEAS",
@@ -2825,7 +2825,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура под сетками в КА (TS-102)"
+      "description": "Температура под сетками в КА (TS102)"
     },
     {
       "browseName": "CH_M52::52KONV:52F102",
@@ -2845,7 +2845,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход воздуха в смеситель (F-102)"
+      "description": "Расход воздуха в смеситель (F102)"
     },
     {
       "browseName": "CH_M52::52ABSOR:52F103",
@@ -2865,7 +2865,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход добавочного воздуха (F-103)"
+      "description": "Расход добавочного воздуха (F103)"
     },
     {
       "browseName": "CH_M52::52KONV:52FC101",
@@ -2885,7 +2885,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в смеситель (F-101)"
+      "description": "Расход NH3 в смеситель (F101)"
     },
     {
       "browseName": "CH_M52::52OXG:52FC106",
@@ -2905,7 +2905,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в РСО (F-106)"
+      "description": "Расход NH3 в РСО (F106)"
     },
     {
       "browseName": "CH_M52::52ABSOR:52F105",
@@ -2925,7 +2925,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход HNO3 с агрегата (F-105)"
+      "description": "Расход HNO3 с агрегата (F105)"
     },
     {
       "browseName": "CH_M52::52UKST:52FCC_F171",
@@ -2945,7 +2945,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход ПГ в УКСТ (FC-171)"
+      "description": "Расход ПГ в УКСТ (F171)"
     },
     {
       "browseName": "CH_M52::52RD:52EA_RD",
@@ -2965,7 +2965,7 @@
         },
         "engineeringUnits": "kilowatt"
       },
-      "description": "Мощность РД (EA-RD)"
+      "description": "Мощность РД (EA_RD)"
     },
     {
       "62AGR": "-------------------------------------------------------------------------------"
@@ -2988,7 +2988,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха из компрессора (PS-180)"
+      "description": "Давление воздуха из компрессора (PS180)"
     },
     {
       "browseName": "CH_M52::62GTT:62P181",
@@ -3008,7 +3008,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха за нагнетателем (P-181)"
+      "description": "Давление воздуха за нагнетателем (P181)"
     },
     {
       "browseName": "CH_M52::62KONV:62P127A",
@@ -3028,7 +3028,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха в смеситель (P-127A)"
+      "description": "Давление воздуха в смеситель (P127A)"
     },
     {
       "browseName": "CH_M52::62UKST:62FCC_TS174",
@@ -3048,7 +3048,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура газа перед турбиной (TS-174)"
+      "description": "Температура газа перед турбиной (TS174)"
     },
     {
       "browseName": "CH_M52::62KONV:62TS102PID_T.MEAS",
@@ -3068,7 +3068,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура под сетками в КА (TS-102)"
+      "description": "Температура под сетками в КА (TS102)"
     },
     {
       "browseName": "CH_M52::62KONV:62F102",
@@ -3088,7 +3088,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход воздуха в смеситель (F-102)"
+      "description": "Расход воздуха в смеситель (F102)"
     },
     {
       "browseName": "CH_M52::62ABSOR:62F103",
@@ -3108,7 +3108,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход добавочного воздуха (F-103)"
+      "description": "Расход добавочного воздуха (F103)"
     },
     {
       "browseName": "CH_M52::62KONV:62FC101",
@@ -3128,7 +3128,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в смеситель (F-101)"
+      "description": "Расход NH3 в смеситель (F101)"
     },
     {
       "browseName": "CH_M52::62OXG:62FC106",
@@ -3148,7 +3148,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в РСО (F-106)"
+      "description": "Расход NH3 в РСО (F106)"
     },
     {
       "browseName": "CH_M52::62ABSOR:62F105",
@@ -3168,7 +3168,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход HNO3 с агрегата (F-105)"
+      "description": "Расход HNO3 с агрегата (F105)"
     },
     {
       "browseName": "CH_M52::62UKST:62FCC_F171",
@@ -3188,7 +3188,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход ПГ в УКСТ (FC-171)"
+      "description": "Расход ПГ в УКСТ (F171)"
     },
     {
       "browseName": "CH_M52::62RD:62EA_RD",
@@ -3208,7 +3208,7 @@
         },
         "engineeringUnits": "kilowatt"
       },
-      "description": "Мощность РД (EA-RD)"
+      "description": "Мощность РД (EA_RD)"
     },
     {
       "72AGR": "-------------------------------------------------------------------------------"
@@ -3231,7 +3231,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха из компрессора (PS-180)"
+      "description": "Давление воздуха из компрессора (PS180)"
     },
     {
       "browseName": "CH_M52::72GTT:72P181",
@@ -3251,7 +3251,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха за нагнетателем (P-181)"
+      "description": "Давление воздуха за нагнетателем (P181)"
     },
     {
       "browseName": "CH_M52::72KONV:72P127A",
@@ -3271,7 +3271,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление воздуха в смеситель (P-127A)"
+      "description": "Давление воздуха в смеситель (P127A)"
     },
     {
       "browseName": "CH_M52::72UKST:72FCC_TS174",
@@ -3291,7 +3291,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура газа перед турбиной (TS-174)"
+      "description": "Температура газа перед турбиной (TS174)"
     },
     {
       "browseName": "CH_M52::72KONV:72TS102PID_T.MEAS",
@@ -3311,7 +3311,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "Температура под сетками в КА (TS-102)"
+      "description": "Температура под сетками в КА (TS102)"
     },
     {
       "browseName": "CH_M52::72KONV:72F102",
@@ -3331,7 +3331,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход воздуха в смеситель (F-102)"
+      "description": "Расход воздуха в смеситель (F102)"
     },
     {
       "browseName": "CH_M52::72ABSOR:72F103",
@@ -3351,7 +3351,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход добавочного воздуха (F-103)"
+      "description": "Расход добавочного воздуха (F103)"
     },
     {
       "browseName": "CH_M52::72KONV:72FC101",
@@ -3371,7 +3371,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в смеситель (F-101)"
+      "description": "Расход NH3 в смеситель (F101)"
     },
     {
       "browseName": "CH_M52::72OXG:72FC106",
@@ -3391,7 +3391,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход NH3 в РСО (F-106)"
+      "description": "Расход NH3 в РСО (F106)"
     },
     {
       "browseName": "CH_M52::72ABSOR:72F105",
@@ -3411,7 +3411,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход HNO3 с агрегата (F-105)"
+      "description": "Расход HNO3 с агрегата (F105)"
     },
     {
       "browseName": "CH_M52::72UKST:72FCC_F171",
@@ -3431,7 +3431,7 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход ПГ в УКСТ (FC-171)"
+      "description": "Расход ПГ в УКСТ (F171)"
     },
     {
       "browseName": "CH_M52::72RD:72EA_RD",
@@ -3451,7 +3451,7 @@
         },
         "engineeringUnits": "kilowatt"
       },
-      "description": "Мощность РД (EA-RD)"
+      "description": "Мощность РД (EA_RD)"
     }
   ],
   "methods": []
