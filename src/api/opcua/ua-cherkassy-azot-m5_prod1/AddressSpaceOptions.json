@@ -121,7 +121,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "Давление газ. NH3 (P4-1)"
+      "description": "Давление газ. NH3 (P4_1)"
     },
     {
       "browseName": "CH_M51::01AMIAK:01F4",

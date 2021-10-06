@@ -35,7 +35,7 @@ async function onChangedGroupHandlerForDB(params, dataValue) {
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
   let value = dataValue.value.value;
   if (isLog) inspector('subscriptions.onChangedCH_M5Handler.formatDataValue:', dataValue);
-  value = (addressSpaceOption.dataType === 'Double') ? loRound(value, 3) : value;
+  // value = (addressSpaceOption.dataType === 'Double') ? loRound(value, 3) : value;
   let engineeringUnits = (dataValue.valueParams && dataValue.valueParams.engineeringUnits) ? dataValue.valueParams.engineeringUnits : '';
   const timestamp = dataValue.serverTimestamp;
   engineeringUnits = engineeringUnits ? `(${engineeringUnits})` : '';
