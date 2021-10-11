@@ -16,7 +16,7 @@
           { "name": "Пар16", "items": ["PAR"] },
           { "name": "HNO3 Склад", "items": ["SKLAD"] },
           { "name": "Вода", "items": ["VODA", "VODA_XOB"] },
-          { "name": "Компрессия", "items": ["PS180", "SBS_OC", "GTT", "UKST", "RD"] },
+          { "name": "Компрессия", "items": ["PS180", "GTT", "UKST", "RD"] },
           { "name": "Конверсия", "items": ["KONV", "ABSOR", "OXG"] }
         ]
       }
@@ -42,7 +42,7 @@
           { "name": "Пар16", "items": ["PAR"] },
           { "name": "HNO3 Склад", "items": ["SKLAD"] },
           { "name": "Вода", "items": ["VODA", "VODA_XOB"] },
-          { "name": "Компрессия", "items": ["PS180", "SBS_OC", "GTT", "UKST", "RD"] },
+          { "name": "Компрессия", "items": ["PS180", "GTT", "UKST", "RD"] },
           { "name": "Конверсия", "items": ["KONV", "ABSOR", "OXG"] }
         ]
       }
