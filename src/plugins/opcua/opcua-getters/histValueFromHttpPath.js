@@ -47,7 +47,9 @@ const histValueFromHttpPath = function (params = {}, addedValue) {
   // Write file
   setInterval(async function () {
     const file = await httpGetNewFileFromDir(params.path);
-    setValueFromSource(file.name, file.data);
+    if(file){
+      setValueFromSource(file.name, file.data);
+    }
   }, params.interval);
 };
 

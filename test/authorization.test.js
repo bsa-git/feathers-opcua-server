@@ -54,7 +54,7 @@ describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
           await saveFakesToServices(app, 'roles');
           await saveFakesToServices(app, 'users');
           localStorage.clear();
-          appRestClient = feathersClient({ transport: 'rest', serverUrl: baseUrl });
+          appRestClient = await feathersClient({ transport: 'rest', serverUrl: baseUrl });
           if (isDebug) debug('Done before StartTest!');
           done();
         }, 500);

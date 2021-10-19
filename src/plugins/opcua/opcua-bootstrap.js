@@ -75,19 +75,11 @@ module.exports = async function opcuaBootstrap(app) {
     const isRemote = getOpcuaSaveModeToDB() === 'remote';
     if (isRemote) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
-      try {
-        await urlExists(remoteDbUrl);
-        const appRestClient = feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
-        saveResult =  await saveOpcuaTags(appRestClient, opcuaTags, isRemote);
+      const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
+      if (appRestClient) {
+        // Save opcua tags to remote DB
+        saveResult = await saveOpcuaTags(appRestClient, opcuaTags, isRemote);
         logger.info('opcuaBootstrap.saveOpcuaTags.remoteDB:', saveResult);
-      } catch (error) {
-        if (isLog) inspector('opcuaBootstrap.saveOpcuaTags.error:', error);
-        // inspector('opcuaBootstrap.saveOpcuaTags.error:', error);
-        if(error.code === 'ECONNREFUSED'){
-          console.log(chalk.red('error:'), 'opcuaBootstrap.saveOpcuaTags.remoteDB:', chalk.cyan(`Remote url "${remoteDbUrl}" does not found!`));
-        } else {
-          console.log(chalk.red('error:'), 'opcuaBootstrap.saveOpcuaTags.remoteDB:', chalk.cyan(`${error.message}`));
-        }
       }
     }
   }

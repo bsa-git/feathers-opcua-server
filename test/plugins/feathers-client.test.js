@@ -42,8 +42,8 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
         setTimeout(async () => {
           localStorage.clear();
           await saveFakesToServices(app, 'users');
-          appSocketioClient = feathersClient({ transport: 'socketio', serverUrl: baseUrl });
-          appRestClient = feathersClient({ transport: 'rest', serverUrl: baseUrl });
+          appSocketioClient = await feathersClient({ transport: 'socketio', serverUrl: baseUrl });
+          appRestClient = await feathersClient({ transport: 'rest', serverUrl: baseUrl });
           if (isDebug) debug('Done before StartTest!');
           done();
         }, 500);
