@@ -2,7 +2,7 @@
   "objects": [
     {
       "browseName": "CH_M51",
-      "displayName": "Черкассы 'АЗОТ' цех M5-1",
+      "displayName": "Черкассы 'АЗОТ' цех M5/1",
       "type": "object",
       "tabs": {
         "tab1": [
@@ -23,7 +23,7 @@
     },
     {
       "browseName": "CH_M52",
-      "displayName": "Черкассы 'АЗОТ' цех M5-2",
+      "displayName": "Черкассы 'АЗОТ' цех M5/2",
       "type": "object",
       "tabs": {
         "tab1": [
