@@ -3,7 +3,47 @@
     {
       "browseName": "CH_A3",
       "displayName": "Черкассы 'АЗОТ' цех A3",
-      "type": "object"
+      "type": "object",
+      "tabs": {
+        "tab1": [
+          {
+            "name": "ПГ в цех",
+            "items": ["NG"]
+          },
+          {
+            "name": "Продувки",
+            "items": ["PG_M7"]
+          },
+          {
+            "name": "Газ. среды",
+            "items": ["PG_MON", "TG_PGS2"]
+          },
+          {
+            "name": "Воздух КИП",
+            "items": ["VZ_KIP"]
+          },
+          {
+            "name": "Жидкий аммиак",
+            "items": ["JAM_M7"]
+          },
+          {
+            "name": "Пар",
+            "items": ["PAR15", "PAR30_M2", "PARS_A3"]
+          },
+          {
+            "name": "Азот",
+            "items": ["AZOT_A3"]
+          },
+          {
+            "name": "CO2",
+            "items": ["CO2"]
+          },
+          {
+            "name": "Вода",
+            "items": ["XOB_A3", "AMB_M7"]
+          }
+        ]
+      }
     }
   ],
   "variables": [

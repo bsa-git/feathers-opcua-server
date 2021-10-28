@@ -3,17 +3,73 @@
     {
       "browseName": "CH_M7-313",
       "displayName": "Черкассы 'АЗОТ' цех М7-313",
-      "type": "object"
+      "type": "object",
+      "tabs": {
+        "tab1": [
+          {
+            "name": "Жидкий аммиак",
+            "items": ["JAM"]
+          },
+          {
+            "name": "Г/о амм.",
+            "items": ["GAM"]
+          },
+          {
+            "name": "Газ. среды",
+            "items": ["TPG", "OTBG"]
+          },
+          {
+            "name": "Вода",
+            "items": ["AMV", "OBV", "UMV"]
+          }
+        ]
+      }
     },
     {
       "browseName": "CH_M7-357",
       "displayName": "Черкассы 'АЗОТ' цех М7-357",
-      "type": "object"
+      "type": "object",
+      "tabs": {
+        "tab1": [
+          {
+            "name": "Жидкий аммиак",
+            "items": ["JAM"]
+          },
+          {
+            "name": "Г/о амм.",
+            "items": ["GAM"]
+          },
+          {
+            "name": "Пар",
+            "items": ["PAR"]
+          }
+        ]
+      }
     },
     {
       "browseName": "CH_M7-657",
       "displayName": "Черкассы 'АЗОТ' цех М7-657",
-      "type": "object"
+      "type": "object",
+      "tabs": {
+        "tab1": [
+          {
+            "name": "Жидкий аммиак",
+            "items": ["JAM"]
+          },
+          {
+            "name": "Г/о амм.",
+            "items": ["GAM"]
+          },
+          {
+            "name": "Азот",
+            "items": ["AZOT"]
+          },
+          {
+            "name": "Пар",
+            "items": ["PAR"]
+          }
+        ]
+      }
     }
   ],
   "variables": [
@@ -476,6 +532,7 @@
       },
       "description": "F Умягченной воды"
     },
+    {"": "================================================================================================================================================="},
     {
       "browseName": "CH_M7-357::JAM:F-2b",
       "aliasName": "Tag 0009",
@@ -739,7 +796,7 @@
     {
       "browseName": "CH_M7-357::JAM:F-33",
       "aliasName": "Tag 0001",
-      "displayName": "ЖА в М-5-1(FIR-33)",
+      "displayName": "ЖА в М-5/1(FIR-33)",
       "ownerName": "CH_M7-357",
       "ownerGroup": "CH_M7-357::ValuesFromDB",
       "type": "variable.analog",
@@ -754,12 +811,12 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "F ЖА в М-5-1"
+      "description": "F ЖА в М-5/1"
     },
     {
       "browseName": "CH_M7-357::JAM:P-33",
       "aliasName": "Tag 0002",
-      "displayName": "ЖА в М-5-1(PIR-33)",
+      "displayName": "ЖА в М-5/1(PIR-33)",
       "ownerName": "CH_M7-357",
       "ownerGroup": "CH_M7-357::ValuesFromDB",
       "type": "variable.analog",
@@ -774,12 +831,13 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "P ЖА в М-5-1"
+      "description": "P ЖА в М-5/1"
     },
+    {"": "================================================================================================================================================="},
     {
       "browseName": "CH_M7-657::JAM:F-49",
       "aliasName": "Tag 0001",
-      "displayName": "ЖА в М-5-2 нитка А(FIR-49)",
+      "displayName": "ЖА в М-5/2 нитка А(FIR-49)",
       "ownerName": "CH_M7-657",
       "ownerGroup": "CH_M7-657::ValuesFromDB",
       "type": "variable.analog",
@@ -794,12 +852,12 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "F ЖА в М-5-2 нитка А"
+      "description": "F ЖА в М-5/2 нитка А"
     },
     {
       "browseName": "CH_M7-657::JAM:F-50",
       "aliasName": "Tag 0002",
-      "displayName": "ЖА в М-5-2 нитка B(FIR-50)",
+      "displayName": "ЖА в М-5/2 нитка B(FIR-50)",
       "ownerName": "CH_M7-657",
       "ownerGroup": "CH_M7-657::ValuesFromDB",
       "type": "variable.analog",
@@ -814,12 +872,12 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "F ЖА в М-5-2 нитка B"
+      "description": "F ЖА в М-5/2 нитка B"
     },
     {
       "browseName": "CH_M7-657::JAM:P-10",
       "aliasName": "Tag 0009",
-      "displayName": "ЖА в М-5-2 нитка А(PIR-10)",
+      "displayName": "ЖА в М-5/2 нитка А(PIR-10)",
       "ownerName": "CH_M7-657",
       "ownerGroup": "CH_M7-657::ValuesFromDB",
       "type": "variable.analog",
@@ -834,12 +892,12 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "P ЖА в М-5-2 нитка А"
+      "description": "P ЖА в М-5/2 нитка А"
     },
     {
       "browseName": "CH_M7-657::JAM:P-11",
       "aliasName": "Tag 0004",
-      "displayName": "ЖА в М-5-2 нитка B(PIR-11)",
+      "displayName": "ЖА в М-5/2 нитка B(PIR-11)",
       "ownerName": "CH_M7-657",
       "ownerGroup": "CH_M7-657::ValuesFromDB",
       "type": "variable.analog",
@@ -854,12 +912,12 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "P ЖА в М-5-2 нитка B"
+      "description": "P ЖА в М-5/2 нитка B"
     },
     {
       "browseName": "CH_M7-657::JAM:T-21",
       "aliasName": "Tag 0006",
-      "displayName": "ЖА в М-5-2 нитка А(TIR-21)",
+      "displayName": "ЖА в М-5/2 нитка А(TIR-21)",
       "ownerName": "CH_M7-657",
       "ownerGroup": "CH_M7-657::ValuesFromDB",
       "type": "variable.analog",
@@ -874,12 +932,12 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "T ЖА в М-5-2 нитка А"
+      "description": "T ЖА в М-5/2 нитка А"
     },
     {
       "browseName": "CH_M7-657::JAM:T-22",
       "aliasName": "Tag 0012",
-      "displayName": "ЖА в М-5-2 нитка B(TIR-22)",
+      "displayName": "ЖА в М-5/2 нитка B(TIR-22)",
       "ownerName": "CH_M7-657",
       "ownerGroup": "CH_M7-657::ValuesFromDB",
       "type": "variable.analog",
@@ -894,12 +952,12 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "T ЖА в М-5-2 нитка B"
+      "description": "T ЖА в М-5/2 нитка B"
     },
     {
       "browseName": "CH_M7-657::JAM:F-90",
       "aliasName": "Tag 0017",
-      "displayName": "ЖА в М-5-1(FIR-90)",
+      "displayName": "ЖА в М-5/1(FIR-90)",
       "ownerName": "CH_M7-657",
       "ownerGroup": "CH_M7-657::ValuesFromDB",
       "type": "variable.analog",
@@ -914,12 +972,12 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "F ЖА в М-5-1"
+      "description": "F ЖА в М-5/1"
     },
     {
       "browseName": "CH_M7-657::JAM:P-90",
       "aliasName": "Tag 0018",
-      "displayName": "ЖА в М-5-1(PIR-90)",
+      "displayName": "ЖА в М-5/1(PIR-90)",
       "ownerName": "CH_M7-657",
       "ownerGroup": "CH_M7-657::ValuesFromDB",
       "type": "variable.analog",
@@ -934,7 +992,7 @@
         },
         "engineeringUnits": "kilogram_force_per_square_centimetre"
       },
-      "description": "P ЖА в М-5-1"
+      "description": "P ЖА в М-5/1"
     },
     {
       "browseName": "CH_M7-657::JAM:F-12",

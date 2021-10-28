@@ -3,7 +3,19 @@
     {
       "browseName": "CH_NG-UPG2",
       "displayName": "Черкассы 'АЗОТ' узел ПГ №2",
-      "type": "object"
+      "type": "object",
+      "tabs": {
+        "tab1": [
+          {
+            "name": "Природный газ",
+            "items": ["NG"]
+          },
+          {
+            "name": "Окр.среда",
+            "items": ["AIR"]
+          }
+        ]
+      }
     }
   ],
   "variables": [

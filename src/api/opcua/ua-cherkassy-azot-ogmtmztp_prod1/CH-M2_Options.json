@@ -3,7 +3,39 @@
     {
       "browseName": "CH_M2",
       "displayName": "Черкассы 'АЗОТ' цех М-2",
-      "type": "object"
+      "type": "object",
+      "tabs": {
+        "tab1": [
+          {
+            "name": "Пар-30",
+            "items": ["PAR30"]
+          },
+          {
+            "name": "Пар-16",
+            "items": ["PAR16"]
+          },
+          {
+            "name": "CO2",
+            "items": ["CO2"]
+          },
+          {
+            "name": "Азот",
+            "items": ["AZOT"]
+          },
+          {
+            "name": "Вода",
+            "items": ["PITV", "KOND"]
+          },
+          {
+            "name": "ЖА в цех",
+            "items": ["JAM"]
+          },
+          {
+            "name": "Карб. на КАС",
+            "items": ["KAC"]
+          }
+        ]
+      }
     }
   ],
   "variables": [
@@ -29,7 +61,7 @@
   ],
   "groups": [
     {
-      "browseName": "CH_M2::PAR:F-2004",
+      "browseName": "CH_M2::PAR30:F-2004",
       "aliasName": "Tag 0001",
       "displayName": "Пар-30(FIR-2004)",
       "ownerName": "CH_M2",
@@ -49,7 +81,7 @@
       "description": "F Пар-30"
     },
     {
-      "browseName": "CH_M2::PAR:PD-2004",
+      "browseName": "CH_M2::PAR30:PD-2004",
       "aliasName": "Tag 0031",
       "displayName": "Пар-30(PdIR-2004)",
       "ownerName": "CH_M2",
@@ -69,7 +101,7 @@
       "description": "PD Пар-30"
     },
     {
-      "browseName": "CH_M2::PAR:P-2105",
+      "browseName": "CH_M2::PAR30:P-2105",
       "aliasName": "Tag 0002",
       "displayName": "Пар-30(PIR-2105)",
       "ownerName": "CH_M2",
@@ -89,7 +121,7 @@
       "description": "P Пар-30"
     },
     {
-      "browseName": "CH_M2::PAR:T-2324",
+      "browseName": "CH_M2::PAR30:T-2324",
       "aliasName": "Tag 0003",
       "displayName": "Пар-30(TIR-2324)",
       "ownerName": "CH_M2",
@@ -109,7 +141,7 @@
       "description": "T Пар-30"
     },
     {
-      "browseName": "CH_M2::PAR:F-2045",
+      "browseName": "CH_M2::PAR16:F-2045",
       "aliasName": "Tag 0004",
       "displayName": "Пар-16(FIR-2045)",
       "ownerName": "CH_M2",
@@ -129,7 +161,7 @@
       "description": "F Пар-16"
     },
     {
-      "browseName": "CH_M2::PAR:PD-2045",
+      "browseName": "CH_M2::PAR16:PD-2045",
       "aliasName": "Tag 0032",
       "displayName": "Пар-16(PdIR-2045)",
       "ownerName": "CH_M2",
@@ -149,7 +181,7 @@
       "description": "PD Пар-16"
     },
     {
-      "browseName": "CH_M2::PAR:P-2147",
+      "browseName": "CH_M2::PAR16:P-2147",
       "aliasName": "Tag 0005",
       "displayName": "Пар-16(PIR-2147)",
       "ownerName": "CH_M2",
@@ -169,7 +201,7 @@
       "description": "P Пар-16"
     },
     {
-      "browseName": "CH_M2::PAR:T-2318",
+      "browseName": "CH_M2::PAR16:T-2318",
       "aliasName": "Tag 0006",
       "displayName": "Пар-16(TIR-2318)",
       "ownerName": "CH_M2",
@@ -186,7 +218,7 @@
         },
         "engineeringUnits": "degree_celsius"
       },
-      "description": "P Пар-16"
+      "description": "Т Пар-16"
     },
     {
       "browseName": "CH_M2::CO2:F-1001",
