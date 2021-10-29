@@ -248,7 +248,7 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
     if (isRemote) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
       const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
-      if(appRestClient){
+      if (appRestClient) {
         savedValue = await createItem(appRestClient, 'opcua-values', data);
       }
     } else {
@@ -270,11 +270,16 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
  * e.g. { added: 123, updated: 32, deleted: 12, total: 125}
  */
 const saveOpcuaTags = async function (app, tags, isRemote = false) {
-  let tagFromDB = null, tagBrowseNames = [], added = 0, updated = 0, deleted = 0, total = 0;
+  let tagFromDB = null, tagBrowseNames = [], objTagBrowseNames = [];
+  let  addedBrowseNames = [], updatedBrowseNames = [], deletedBrowseNames = [];
+  let  added = 0, updated = 0, deleted = 0, total = 0;
   //------------------------------------------------------------
   for (let index = 0; index < tags.length; index++) {
     const tag = tags[index];
     tagBrowseNames.push(tag.browseName);
+    if (tag.type === 'object') {
+      objTagBrowseNames.push(tag.browseName);
+    }
     tagFromDB = await findItems(app, 'opcua-tags', { browseName: tag.browseName });
     if (tagFromDB.length) {
       tagFromDB = tagFromDB[0];
@@ -285,7 +290,10 @@ const saveOpcuaTags = async function (app, tags, isRemote = false) {
       // Update db tag
       if (!equalTags) {
         tagFromDB = await patchItem(app, 'opcua-tags', tagId, tag);
-        if (tagFromDB) updated = updated + 1;
+        if (tagFromDB) {
+          updatedBrowseNames.push(tag.browseName);
+          updated = updated + 1;
+        }
 
         // Check equal tags again
         equalTags = isDeepStrictEqual(tag, tagFromDB);
@@ -295,28 +303,167 @@ const saveOpcuaTags = async function (app, tags, isRemote = false) {
           // inspector('db-helper.saveOpcuaTags.tag:', tag);
           tagFromDB = await removeItem(app, 'opcua-tags', tagId);
           if (tagFromDB) {
+            deletedBrowseNames.push(tagFromDB.browseName);
             deleted = deleted + 1;
             // Add tag
             tagFromDB = await createItem(app, 'opcua-tags', tag);
-            if (tagFromDB) added = added + 1;
+            if (tagFromDB) {
+              addedBrowseNames.push(tagFromDB.browseName);
+              added = added + 1;
+            }
+
           }
         }
       }
     } else {
       tagFromDB = await createItem(app, 'opcua-tags', tag);
-      if (tagFromDB) added = added + 1;
+      if (tagFromDB) {
+        addedBrowseNames.push(tagFromDB.browseName);
+        added = added + 1;
+      }
     }
   }
-  // Delete all tags that are not in `tagBrowseNames` list
-  if (!isRemote) {
+
+  // Delete all tags from local or remote DB
+  if (isRemote) {// Delete all tags that are in `objTagBrowseNames` list and are not in `tagBrowseNames` list
+    // tagFromDB = await removeItems(app, 'opcua-tags', {
+    //   ownerName: { $in: objTagBrowseNames },
+    //   browseName: { $nin: tagBrowseNames }
+    // });
+    // if (tagFromDB.length) {
+    //   tagFromDB.forEach(tag => {
+    //     deletedBrowseNames.push(tag.browseName);
+    //   });
+    //   deleted = deleted + tagFromDB.length;
+    // }
+  } else {// Delete all tags that are not in `tagBrowseNames` list
     tagFromDB = await removeItems(app, 'opcua-tags', { browseName: { $nin: tagBrowseNames } });
-    if (tagFromDB.length) deleted = deleted + tagFromDB.length;
+    if (tagFromDB.length) {
+      tagFromDB.forEach(tag => {
+        deletedBrowseNames.push(tag.browseName);
+      });
+      deleted = deleted + tagFromDB.length;
+    }
   }
 
   // Get total rows
   total = await getCountItems(app, 'opcua-tags');
 
+  if (added) {
+    if (isLog) inspector('db-helper.saveOpcuaTags.addedTags:', addedBrowseNames);
+    inspector('db-helper.saveOpcuaTags.addedTags:', addedBrowseNames);
+  }
+  if (updated) {
+    if (isLog) inspector('db-helper.saveOpcuaTags.updatedTags:', updatedBrowseNames);
+    inspector('db-helper.saveOpcuaTags.updatedTags:', updatedBrowseNames);
+  }
+  if (deleted) {
+    if (isLog) inspector('db-helper.saveOpcuaTags.deletedTags:', deletedBrowseNames);
+    inspector('db-helper.saveOpcuaTags.deletedTags:', deletedBrowseNames);
+  }
+
   return { added, updated, deleted, total };
+};
+
+/**
+ * @name integrityCheckTags
+ * @async
+ * 
+ * @param {Object} app 
+ * @returns {Boolean}
+ */
+const integrityCheckTags = async function (app) {
+  let tagsFromDB, _tagsFromDB, deleted = 0, deletedBrowseNames = [];
+  //-------------------------------------------
+  // Get 'object' tags
+  tagsFromDB = await findItems(app, 'opcua-tags', { type: 'object' });
+  // Remove 'object' tags that have no child tags
+  if (tagsFromDB.length) {
+    const idField = getIdField(tagsFromDB[0]);
+    for (let index = 0; index < tagsFromDB.length; index++) {
+      const tag = tagsFromDB[index];
+      const tagId = tag[idField];
+      _tagsFromDB = await findItems(app, 'opcua-tags', { ownerName: tag.browseName });
+      if (!_tagsFromDB.length) {
+        const tagFromDB = await removeItem(app, 'opcua-tags', tagId);
+        if (tagFromDB) {
+          deletedBrowseNames.push(tagFromDB.browseName);
+          deleted++;
+          logger.error('db-helper.Remove \'object\' tags that have no child tags:', deleted);
+          if(isLog) inspector('db-helper.integrityCheckTags.Remove \'object\' tags that have no child tags:', deletedBrowseNames);
+        }
+      }
+    }
+
+  }
+  // Get all 'variables' tags
+  deleted = 0;
+  deletedBrowseNames = [];
+  tagsFromDB = await findItems(app, 'opcua-tags', { type: { $ne: 'object' } });
+  // Remove 'variables' tags that have no owner tags
+  if (tagsFromDB.length) {
+    const idField = getIdField(tagsFromDB[0]);
+    for (let index = 0; index < tagsFromDB.length; index++) {
+      const tag = tagsFromDB[index];
+      const tagId = tag[idField];
+      _tagsFromDB = await findItems(app, 'opcua-tags', { type: 'object', browseName: tag.ownerName });
+      if (!_tagsFromDB.length) {
+        const tagFromDB = await removeItem(app, 'opcua-tags', tagId);
+        if (tagFromDB) {
+          deletedBrowseNames.push(tagFromDB.browseName);
+          deleted++;
+          logger.error('db-helper.Remove \'variables\' tags that have no owner tags:', deleted);
+          if(isLog) inspector('db-helper.integrityCheckTags.Remove \'variables\' tags that have no owner tags:', deletedBrowseNames);
+        }  
+      }
+    }
+  }
+
+  // Get all 'ownerGroup' tags
+  deleted = 0;
+  deletedBrowseNames = [];
+  tagsFromDB = await findItems(app, 'opcua-tags', { group: true });
+  // Remove 'ownerGroup' tags that have no 'childGroup' tags
+  if (tagsFromDB.length) {
+    const idField = getIdField(tagsFromDB[0]);
+    for (let index = 0; index < tagsFromDB.length; index++) {
+      const tag = tagsFromDB[index];
+      const tagId = tag[idField];
+      _tagsFromDB = await findItems(app, 'opcua-tags', { ownerGroup: tag.browseName });
+      if (!_tagsFromDB.length) {
+        const tagFromDB = await removeItem(app, 'opcua-tags', tagId);
+        if (tagFromDB) {
+          deletedBrowseNames.push(tagFromDB.browseName);
+          deleted++;
+          logger.error('db-helper.Remove \'ownerGroup\' tags that have no \'childGroup\' tags:', deleted);
+          if(isLog) inspector('db-helper.integrityCheckTags.Remove \'ownerGroup\' tags that have no \'childGroup\' tags:', deletedBrowseNames);
+        }  
+      }
+    }
+  }
+
+  // Get all childGroup' tags
+  deleted = 0;
+  deletedBrowseNames = [];
+  tagsFromDB = await findItems(app, 'opcua-tags', { type: { $ne: 'object' }, group: { $ne: true } });
+  // Remove 'childGroup' tags that have no 'ownerGroup' tags
+  if (tagsFromDB.length) {
+    const idField = getIdField(tagsFromDB[0]);
+    for (let index = 0; index < tagsFromDB.length; index++) {
+      const tag = tagsFromDB[index];
+      const tagId = tag[idField];
+      _tagsFromDB = await findItems(app, 'opcua-tags', { group: true, browseName: tag.ownerGroup });
+      if (!_tagsFromDB.length) {
+        const tagFromDB = await removeItem(app, 'opcua-tags', tagId);
+        if (tagFromDB) {
+          deletedBrowseNames.push(tagFromDB.browseName);
+          deleted++;
+          logger.error('db-helper.Remove \'childGroup\' tags that have no \'ownerGroup\' tags:', deleted);
+          if(isLog) inspector('db-helper.integrityCheckTags.Remove \'childGroup\' tags that have no \'ownerGroup\' tags:', deletedBrowseNames);
+        }  
+      }
+    }
+  }
 };
 
 //================================================================================
@@ -578,6 +725,7 @@ module.exports = {
   getIdField,
   saveOpcuaGroupValue,
   saveOpcuaTags,
+  integrityCheckTags,
   getCountItems,
   getItem,
   findItems,

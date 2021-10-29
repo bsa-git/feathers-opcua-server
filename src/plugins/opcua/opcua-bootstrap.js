@@ -20,6 +20,7 @@ const {
 
 const {
   saveOpcuaTags,
+  integrityCheckTags,
   isSaveOpcuaToDB,
   getOpcuaSaveModeToDB,
   getOpcuaRemoteDbUrl,
@@ -72,6 +73,8 @@ module.exports = async function opcuaBootstrap(app) {
     // Save opcua tags to local DB
     let saveResult = await saveOpcuaTags(app, opcuaTags);
     logger.info('opcuaBootstrap.saveOpcuaTags.localDB:', saveResult);
+    // Integrity check tags
+    // await integrityCheckTags(app);
     const isRemote = getOpcuaSaveModeToDB() === 'remote';
     if (isRemote) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
@@ -80,6 +83,8 @@ module.exports = async function opcuaBootstrap(app) {
         // Save opcua tags to remote DB
         saveResult = await saveOpcuaTags(appRestClient, opcuaTags, isRemote);
         logger.info('opcuaBootstrap.saveOpcuaTags.remoteDB:', saveResult);
+        // Integrity check tags
+        // await integrityCheckTags(appRestClient);
       }
     }
   }
