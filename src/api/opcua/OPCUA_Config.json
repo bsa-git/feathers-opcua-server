@@ -234,8 +234,10 @@
     "srvServiceUrl": "http://BSA-HOME:3030",
     "clientServiceUrl": "http://BSA-HOME:3030",
     "clientScript": "startSubscriptionMonitor",
-    "subscription": "onChangedGroupHandler",
+    "subscription": "onChangedGroupHandlerForDB",
     "hostTypeDB": "mongodb",
+    "opcuaSaveModeToDB": "remote",
+    "opcuaRemoteDbUrl": "http://localhost:3131",
     "include": {
       "tests": [
         "mssql-tedious.test2.js"
