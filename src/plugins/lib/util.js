@@ -8,6 +8,7 @@ const { isObject } = require('./type-of');
 const loRound = require('lodash/round');
 const loToPlainObject = require('lodash/toPlainObject');
 const loIsEqual = require('lodash/isEqual');
+const loOmit = require('lodash/omit');
 
 const debug = require('debug')('app:util');
 
@@ -369,10 +370,15 @@ const getRandomValue = function (v = 10) {
  * Is deep strict equal
  * @param {Object} object1 
  * @param {Object} object2 
+ * @param {Array} omit
  * @returns {Boolean}
  */
-const isDeepStrictEqual = function(object1, object2) {
-  
+const isDeepStrictEqual = function(object1, object2, omit = []) {
+  let result = true;
+  //---------------------
+  object1 = loOmit(object1, omit);
+  object2 = loOmit(object2, omit);
+
   const keys1 = Object.keys(object1);
   const keys2 = Object.keys(object2);
 
@@ -385,23 +391,34 @@ const isDeepStrictEqual = function(object1, object2) {
     const val2 = object2[key];
     const areObjects = isObject(val1) && isObject(val2);
     if (
-      areObjects && !isDeepStrictEqual(val1, val2) ||
+      areObjects && !isDeepStrictEqual(val1, val2, omit) ||
       !areObjects &&  !loIsEqual(val1, val2)
     ) {
-      return false;
+      result = false;
+      break;
     }
   }
-  return true;
+  return result;
 };
 
 /**
  * Is deep equal
  * @param {Object} object1 
  * @param {Object} object2 
+ * @param {Array} omit
  * @returns {Boolean}
  */
-const isDeepEqual = function(object1, object2) {
-  
+const isDeepEqual = function(object1, object2, omit = []) {
+  let result = true;
+  //---------------------
+  object1 = loOmit(object1, omit);
+  object2 = loOmit(object2, omit);
+
+  // if(remote){
+  //   inspector('isDeepEqual.object1:', object1);
+  //   inspector('isDeepEqual.object2:', object2);
+  // }
+
   const keys1 = Object.keys(object1);
   
   for (const key of keys1) {
@@ -409,13 +426,14 @@ const isDeepEqual = function(object1, object2) {
     const val2 = object2[key];
     const areObjects = isObject(val1) && isObject(val2);
     if (
-      areObjects && !isDeepEqual(val1, val2) ||
+      areObjects && !isDeepEqual(val1, val2, omit, remote) ||
       !areObjects &&  !loIsEqual(val1, val2)
     ) {
-      return false;
+      result = false;
+      break;
     }
   }
-  return true;
+  return result;
 };
 
 module.exports = {

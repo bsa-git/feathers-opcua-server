@@ -271,8 +271,8 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
  */
 const saveOpcuaTags = async function (app, tags, isRemote = false) {
   let tagFromDB = null, tagBrowseNames = [], objTagBrowseNames = [];
-  let  addedBrowseNames = [], updatedBrowseNames = [], deletedBrowseNames = [];
-  let  added = 0, updated = 0, deleted = 0, total = 0;
+  let addedBrowseNames = [], updatedBrowseNames = [], deletedBrowseNames = [];
+  let added = 0, updated = 0, deleted = 0, total = 0;
   //------------------------------------------------------------
   for (let index = 0; index < tags.length; index++) {
     const tag = tags[index];
@@ -285,8 +285,17 @@ const saveOpcuaTags = async function (app, tags, isRemote = false) {
       tagFromDB = tagFromDB[0];
       const idField = getIdField(tagFromDB);
       const tagId = tagFromDB[idField];
-      tagFromDB = loOmit(tagFromDB, [idField, 'createdAt', 'updatedAt', '__v']);
-      let equalTags = isDeepEqual(tag, tagFromDB);
+      // tagFromDB = loOmit(tagFromDB, [idField, 'createdAt', 'updatedAt', '__v']);
+      const omit = [idField, 'createdAt', 'updatedAt', '__v'];
+      // if(isRemote && tag.browseName === 'CH_M51'){
+      //   inspector('saveOpcuaTags.tag:', tag);
+      //   inspector('saveOpcuaTags.tagFromDB:', tagFromDB);
+      // }
+      let equalTags = isDeepEqual(tag, tagFromDB, omit, isRemote);
+      // if(isRemote && tag.browseName === 'CH_M51'){
+      //   inspector('saveOpcuaTags.tag:', tag);
+      //   inspector('saveOpcuaTags.tagFromDB:', tagFromDB);
+      // }
       // Update db tag
       if (!equalTags) {
         tagFromDB = await patchItem(app, 'opcua-tags', tagId, tag);
@@ -296,7 +305,7 @@ const saveOpcuaTags = async function (app, tags, isRemote = false) {
         }
 
         // Check equal tags again
-        equalTags = isDeepStrictEqual(tag, tagFromDB);
+        equalTags = isDeepStrictEqual(tag, tagFromDB, omit);
         // Else equalTags = false, then delete tag
         if (!equalTags) {
           // inspector('db-helper.saveOpcuaTags.tagFromDB:', tagFromDB);
@@ -390,7 +399,7 @@ const integrityCheckTags = async function (app) {
           deletedBrowseNames.push(tagFromDB.browseName);
           deleted++;
           logger.error('db-helper.Remove \'object\' tags that have no child tags:', deleted);
-          if(isLog) inspector('db-helper.integrityCheckTags.Remove \'object\' tags that have no child tags:', deletedBrowseNames);
+          if (isLog) inspector('db-helper.integrityCheckTags.Remove \'object\' tags that have no child tags:', deletedBrowseNames);
         }
       }
     }
@@ -413,8 +422,8 @@ const integrityCheckTags = async function (app) {
           deletedBrowseNames.push(tagFromDB.browseName);
           deleted++;
           logger.error('db-helper.Remove \'variables\' tags that have no owner tags:', deleted);
-          if(isLog) inspector('db-helper.integrityCheckTags.Remove \'variables\' tags that have no owner tags:', deletedBrowseNames);
-        }  
+          if (isLog) inspector('db-helper.integrityCheckTags.Remove \'variables\' tags that have no owner tags:', deletedBrowseNames);
+        }
       }
     }
   }
@@ -436,8 +445,8 @@ const integrityCheckTags = async function (app) {
           deletedBrowseNames.push(tagFromDB.browseName);
           deleted++;
           logger.error('db-helper.Remove \'ownerGroup\' tags that have no \'childGroup\' tags:', deleted);
-          if(isLog) inspector('db-helper.integrityCheckTags.Remove \'ownerGroup\' tags that have no \'childGroup\' tags:', deletedBrowseNames);
-        }  
+          if (isLog) inspector('db-helper.integrityCheckTags.Remove \'ownerGroup\' tags that have no \'childGroup\' tags:', deletedBrowseNames);
+        }
       }
     }
   }
@@ -459,8 +468,8 @@ const integrityCheckTags = async function (app) {
           deletedBrowseNames.push(tagFromDB.browseName);
           deleted++;
           logger.error('db-helper.Remove \'childGroup\' tags that have no \'ownerGroup\' tags:', deleted);
-          if(isLog) inspector('db-helper.integrityCheckTags.Remove \'childGroup\' tags that have no \'ownerGroup\' tags:', deletedBrowseNames);
-        }  
+          if (isLog) inspector('db-helper.integrityCheckTags.Remove \'childGroup\' tags that have no \'ownerGroup\' tags:', deletedBrowseNames);
+        }
       }
     }
   }
