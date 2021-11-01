@@ -414,11 +414,6 @@ const isDeepEqual = function(object1, object2, omit = []) {
   object1 = loOmit(object1, omit);
   object2 = loOmit(object2, omit);
 
-  // if(remote){
-  //   inspector('isDeepEqual.object1:', object1);
-  //   inspector('isDeepEqual.object2:', object2);
-  // }
-
   const keys1 = Object.keys(object1);
   
   for (const key of keys1) {
@@ -426,7 +421,7 @@ const isDeepEqual = function(object1, object2, omit = []) {
     const val2 = object2[key];
     const areObjects = isObject(val1) && isObject(val2);
     if (
-      areObjects && !isDeepEqual(val1, val2, omit, remote) ||
+      areObjects && !isDeepEqual(val1, val2, omit) ||
       !areObjects &&  !loIsEqual(val1, val2)
     ) {
       result = false;

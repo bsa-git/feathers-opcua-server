@@ -270,6 +270,7 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
  * e.g. { added: 123, updated: 32, deleted: 12, total: 125}
  */
 const saveOpcuaTags = async function (app, tags, isRemote = false) {
+  let idField, tagId, query = {};
   let tagFromDB = null, tagBrowseNames = [], objTagBrowseNames = [];
   let addedBrowseNames = [], updatedBrowseNames = [], deletedBrowseNames = [];
   let added = 0, updated = 0, deleted = 0, total = 0;
@@ -283,19 +284,10 @@ const saveOpcuaTags = async function (app, tags, isRemote = false) {
     tagFromDB = await findItems(app, 'opcua-tags', { browseName: tag.browseName });
     if (tagFromDB.length) {
       tagFromDB = tagFromDB[0];
-      const idField = getIdField(tagFromDB);
-      const tagId = tagFromDB[idField];
-      // tagFromDB = loOmit(tagFromDB, [idField, 'createdAt', 'updatedAt', '__v']);
+      idField = getIdField(tagFromDB);
+      tagId = tagFromDB[idField];
       const omit = [idField, 'createdAt', 'updatedAt', '__v'];
-      // if(isRemote && tag.browseName === 'CH_M51'){
-      //   inspector('saveOpcuaTags.tag:', tag);
-      //   inspector('saveOpcuaTags.tagFromDB:', tagFromDB);
-      // }
       let equalTags = isDeepEqual(tag, tagFromDB, omit, isRemote);
-      // if(isRemote && tag.browseName === 'CH_M51'){
-      //   inspector('saveOpcuaTags.tag:', tag);
-      //   inspector('saveOpcuaTags.tagFromDB:', tagFromDB);
-      // }
       // Update db tag
       if (!equalTags) {
         tagFromDB = await patchItem(app, 'opcua-tags', tagId, tag);
@@ -303,13 +295,10 @@ const saveOpcuaTags = async function (app, tags, isRemote = false) {
           updatedBrowseNames.push(tag.browseName);
           updated = updated + 1;
         }
-
         // Check equal tags again
         equalTags = isDeepStrictEqual(tag, tagFromDB, omit);
         // Else equalTags = false, then delete tag
         if (!equalTags) {
-          // inspector('db-helper.saveOpcuaTags.tagFromDB:', tagFromDB);
-          // inspector('db-helper.saveOpcuaTags.tag:', tag);
           tagFromDB = await removeItem(app, 'opcua-tags', tagId);
           if (tagFromDB) {
             deletedBrowseNames.push(tagFromDB.browseName);
@@ -333,25 +322,31 @@ const saveOpcuaTags = async function (app, tags, isRemote = false) {
     }
   }
 
-  // Delete all tags from local or remote DB
-  if (isRemote) {// Delete all tags that are in `objTagBrowseNames` list and are not in `tagBrowseNames` list
-    // tagFromDB = await removeItems(app, 'opcua-tags', {
-    //   ownerName: { $in: objTagBrowseNames },
-    //   browseName: { $nin: tagBrowseNames }
-    // });
-    // if (tagFromDB.length) {
-    //   tagFromDB.forEach(tag => {
-    //     deletedBrowseNames.push(tag.browseName);
-    //   });
-    //   deleted = deleted + tagFromDB.length;
-    // }
-  } else {// Delete all tags that are not in `tagBrowseNames` list
-    tagFromDB = await removeItems(app, 'opcua-tags', { browseName: { $nin: tagBrowseNames } });
-    if (tagFromDB.length) {
-      tagFromDB.forEach(tag => {
+  // --- Delete all tags from local or remote DB ---
+  if (isRemote) {
+    // Find all tags that are not in `tagBrowseNames` list 
+    // and are in `objTagBrowseNames` list
+    // e.g. query = { ownerName: { $in: objTagBrowseNames } }
+    query = { ownerName: { $in: objTagBrowseNames } };
+  } else {
+    // Find all tags that are not in `tagBrowseNames` list
+    // e.g. query = { browseName: { $nin: tagBrowseNames } }
+    query = { browseName: { $nin: tagBrowseNames } };
+  }
+  tagFromDB = await findAllItems(app, 'opcua-tags', query);
+  if (tagFromDB.length) {
+    idField = getIdField(tagFromDB[0]);
+    if (isRemote) {
+      tagFromDB = tagFromDB.filter(tag => !tagBrowseNames.includes(tag.browseName));
+    } 
+    for (let index = 0; index < tagFromDB.length; index++) {
+      const tag = tagFromDB[index];
+      tagId = tag[idField];
+      tagFromDB = await removeItem(app, 'opcua-tags', tagId);
+      if (tagFromDB) {
+        deleted++;
         deletedBrowseNames.push(tag.browseName);
-      });
-      deleted = deleted + tagFromDB.length;
+      }
     }
   }
 
@@ -575,6 +570,7 @@ const findAllItems = async function (app, path = '', query = {}) {
     }
     findResults = await service.find(newParams);
     if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(newParams)}).findResults:`, findResults);
+    inspector(`findItems(path='${path}', query=${JSON.stringify(newParams)}).findResults:`, findResults);
     return findResults;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
