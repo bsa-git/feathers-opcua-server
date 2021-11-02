@@ -19,9 +19,11 @@ const {
 } = require('../auth');
 
 const loMerge = require('lodash/merge');
+const loConcat = require('lodash/concat');
 const loOmit = require('lodash/omit');
 const loIsObject = require('lodash/isObject');
 const loIsString = require('lodash/isString');
+const loIsInteger = require('lodash/isInteger');
 const loForEach = require('lodash/forEach');
 const loIsEqual = require('lodash/isEqual');
 
@@ -338,7 +340,7 @@ const saveOpcuaTags = async function (app, tags, isRemote = false) {
     idField = getIdField(tagFromDB[0]);
     if (isRemote) {
       tagFromDB = tagFromDB.filter(tag => !tagBrowseNames.includes(tag.browseName));
-    } 
+    }
     for (let index = 0; index < tagFromDB.length; index++) {
       const tag = tagFromDB[index];
       tagId = tag[idField];
@@ -355,15 +357,12 @@ const saveOpcuaTags = async function (app, tags, isRemote = false) {
 
   if (added) {
     if (isLog) inspector('db-helper.saveOpcuaTags.addedTags:', addedBrowseNames);
-    inspector('db-helper.saveOpcuaTags.addedTags:', addedBrowseNames);
   }
   if (updated) {
     if (isLog) inspector('db-helper.saveOpcuaTags.updatedTags:', updatedBrowseNames);
-    inspector('db-helper.saveOpcuaTags.updatedTags:', updatedBrowseNames);
   }
   if (deleted) {
     if (isLog) inspector('db-helper.saveOpcuaTags.deletedTags:', deletedBrowseNames);
-    inspector('db-helper.saveOpcuaTags.deletedTags:', deletedBrowseNames);
   }
 
   return { added, updated, deleted, total };
@@ -531,15 +530,17 @@ const getItem = async function (app, path = '', id = null) {
  * @return {Object[]}
  */
 const findItems = async function (app, path = '', query = {}) {
-  let findResults;
+  let newParams, findResults;
   //----------------------------
   const service = app.service(path);
   if (service) {
     if (query.query) {
-      findResults = await service.find(query);
+      newParams = loMerge({}, query);
+      findResults = await service.find(newParams);
       findResults = (query.query['$limit'] === 0) ? findResults.total : findResults.data;
     } else {
-      findResults = await service.find({ query });
+      newParams = loMerge({}, { query });
+      findResults = await service.find(newParams);
       findResults = (query['$limit'] === 0) ? findResults.total : findResults.data;
     }
     if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
@@ -559,7 +560,7 @@ const findItems = async function (app, path = '', query = {}) {
  * @return {Object[]}
  */
 const findAllItems = async function (app, path = '', query = {}) {
-  let newParams, findResults;
+  let newParams, findResults, findData = [];
   //--------------------
   const service = app.service(path);
   if (service) {
@@ -570,8 +571,19 @@ const findAllItems = async function (app, path = '', query = {}) {
     }
     findResults = await service.find(newParams);
     if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(newParams)}).findResults:`, findResults);
-    inspector(`findItems(path='${path}', query=${JSON.stringify(newParams)}).findResults:`, findResults);
-    return findResults;
+    if (!Array.isArray(findResults) && findResults.data.length) {
+      const total = findResults.total;
+      const limit = findResults.limit;
+      const cyclesNumber = Math.trunc(total / limit);
+      findData = loConcat(findData, findResults.data);
+      for (let index = 1; index <= cyclesNumber; index++) {
+        const skip = index * limit;
+        newParams = loMerge({}, newParams, { query: { $skip: skip } });
+        findResults = await service.find(newParams);
+        findData = loConcat(findData, findResults.data);
+      }
+    }
+    return Array.isArray(findResults) ? findResults : findData;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
   }
