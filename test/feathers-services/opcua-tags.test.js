@@ -4,11 +4,8 @@ const app = require('../../src/app');
 const port = app.get('port') || 3030;
 const {
   inspector,
-  appRoot,
-  readJsonFileSync,
   checkServicesRegistered,
   saveFakesToServices,
-  removeDataFromServices,
   fakeNormalize,
 } = require('../../src/plugins');
 
@@ -18,8 +15,8 @@ const {
 
 const {
   createItems,
+  findItem,
   findItems,
-  findAllItems,
   removeItems
 } = require('../../src/plugins/db-helpers');
 
@@ -34,11 +31,6 @@ const {
 
 // Get generated fake data
 const fakes = fakeNormalize();
-const fakeUsers = fakes['users'];
-const fakeUser = fakeUsers[0];
-const idField = AuthServer.getIdField(fakeUser);
-
-const baseUrl = process.env.BASE_URL;
 
 const debug = require('debug')('app:opcua-tags.test');
 
@@ -90,74 +82,16 @@ describe('<<=== Opcua-Tags Service Test (opcua-tags.test.js) ===>>', () => {
 
     // Add tags
     const createdItems = await createItems(app, 'opcua-tags', opcuaTags);
-    // Find all tags
-    const findedItems = await findAllItems(app, 'opcua-tags');
-    if (isLog) inspector('Find tags from \'opcua-tags\' service', findedItems);
 
+    // Find one tag
+    const findedItem = await findItem(app, 'opcua-tags');
+    if (isLog) inspector('Find one tag from \'opcua-tags\' service', findedItem);
+    assert.ok(findedItem.browseName === opcuaTags[0].browseName, 'Error for test: `Save tags and find tag`');
+    // inspector('Find one tag from \'opcua-tags\' service', findedItem);
+
+    // Find all tags
+    const findedItems = await findItems(app, 'opcua-tags');
+    if (isLog) inspector('Find tags from \'opcua-tags\' service', findedItems);
     assert.ok(findedItems.length === opcuaTags.length, 'Error for test: `Save tags and find tags`');
   });
-
-  describe('<<--- Opcua tags operations for appRestClient --->>', () => {
-    let appRestClient, server;
-    //----------------------------------------------
-
-    before(function (done) {
-      // this.timeout(30000);
-      server = app.listen(port);
-      server.once('listening', () => {
-        setTimeout(async () => {
-          localStorage.clear();
-          await saveFakesToServices(app, 'users');
-          appRestClient = await feathersClient({ transport: 'rest', serverUrl: baseUrl });
-          if (isDebug) debug('Done before StartTest!');
-          done();
-        }, 500);
-      });
-    });
-
-    after(function (done) {
-      // this.timeout(30000);
-      server.close();
-      setTimeout(() => {
-        if (isDebug) debug('Done after EndTest!');
-        done();
-      }, 500);
-    });
-
-    it('#5: Registered the authentication service', () => {
-      assert.ok(app.service('authentication'));
-    });
-
-    it('#6: Authenticates and find tags from `opcua-tags` service', async () => {
-      // Login
-      const { accessToken } = await loginLocal(appRestClient, fakeUser.email, fakeUser.password);
-      assert.ok(accessToken, 'Created access token for user');
-
-      // Get opcua tags 
-      const opcuaTags = getOpcuaTags();
-      if (isLog) inspector('Save tags to \'opcua-tags\' service', opcuaTags);
-
-      if (opcuaTags.length) {
-        // Remove data from 'opcua-tags' services 
-        let removedItems = await removeItems(appRestClient, 'opcua-tags');
-        assert.ok(removedItems.length, 'Not remove data from services \'opcua-tags\'');
-
-        // Add tags
-        const createdItems = await createItems(appRestClient, 'opcua-tags', opcuaTags);
-        // Find all tags
-        const findedItems = await findAllItems(appRestClient, 'opcua-tags');
-        if (isLog) inspector('Find tags from \'opcua-tags\' service', findedItems);
-        assert.ok(findedItems.length === opcuaTags.length, 'Error for test: `Save tags and find tags`');
-
-        // Remove data from 'opcua-tags' services 
-        removedItems = await removeItems(appRestClient, 'opcua-tags');
-        assert.ok(removedItems.length, 'Not remove data from services \'opcua-tags\'');
-      }
-
-      // Logout
-      await appRestClient.logout();
-    });
-
-  });
-
 });

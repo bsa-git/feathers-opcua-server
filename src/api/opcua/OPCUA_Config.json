@@ -30,7 +30,7 @@
     },
     "paths": {
       "base-options": [
-        "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json"
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1"
       ],
       "options": "/src/api/opcua/ua-cherkassy-azot_test2/AddressSpaceOptions.json",
       "getters": "",
@@ -67,7 +67,7 @@
     },
     "paths": {
       "base-options": [
-        "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1",
         "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1"
       ],
       "options": "/src/api/opcua/ua-cherkassy-azot-asutp_dev1/AddressSpaceOptions.json",
@@ -126,7 +126,7 @@
     },
     "paths": {
       "base-options": [
-        "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1",
         "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1"
       ],
       "options": "",
@@ -163,7 +163,7 @@
     },
     "paths": {
       "base-options": [
-        "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1",
         "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1"
       ],
       "options": "/src/api/opcua/ua-cherkassy-azot-vmwin10.2_dev1/AddressSpaceOptions.json",
@@ -190,6 +190,9 @@
       "password": "OPCUA_ADMIN_PASS"
     },
     "paths": {
+      "base-options": [
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1"
+      ],
       "options": "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
@@ -215,7 +218,7 @@
     },
     "paths": {
       "base-options": [
-        "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json",
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1",
         "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1"
       ],
       "options": "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1/AddressSpaceOptions.json",
@@ -245,7 +248,7 @@
     },
     "paths": {
       "base-options": [
-        "/src/api/opcua/ua-cherkassy-azot-m5_prod1/AddressSpaceOptions.json"
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1"
       ],
       "options": "/src/api/opcua/ua-cherkassy-bsahome_dev1/AddressSpaceOptions.json",
       "getters": "",

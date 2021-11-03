@@ -1,0 +1,990 @@
+{
+  "objects": [
+    {
+      "browseName": "CH_M51",
+      "displayName": "Черкассы 'АЗОТ' цех M5/1",
+      "type": "object",
+      "tabs": {
+        "tab1": [
+          { "name": "ОЦ", "items": ["01"] },
+          { "name": "Агрегат 2/1", "items": ["21"] },
+          { "name": "Агрегат 3/1", "items": ["31"] }
+        ],
+        "tab2": [
+          { "name": "Аммиак", "items": ["AMIAK"] },
+          { "name": "Природный газ", "items": ["PGAZ"] },
+          { "name": "Пар16", "items": ["PAR"] },
+          { "name": "HNO3 Склад", "items": ["SKLAD"] },
+          { "name": "Вода", "items": ["VODA", "VODA_XOB"] },
+          { "name": "Компрессия", "items": ["PS180", "GTT", "UKST", "RD"] },
+          { "name": "Конверсия", "items": ["KONV", "ABSOR", "OXG"] }
+        ]
+      }
+    }
+  ],
+  "variables": [
+    {
+      "browseName": "CH_M51::ValueFromFile",
+      "displayName": "Значения из файла для CH_M51",
+      "ownerName": "CH_M51",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "histValueFromPath",
+      "getterParams": {
+        "path": "//192.168.3.5/www_m5/m5_data2"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "browseName": "CH_M51::01AMIAK:01T4",
+      "aliasName": "01NH3_T4",
+      "displayName": "01NH3_T4",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 200
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "Температура газ. NH3 (T4)"
+    },
+    {
+      "browseName": "CH_M51::01AMIAK:01P4_1",
+      "aliasName": "01NH3_P4",
+      "displayName": "01NH3_P4",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "Давление газ. NH3 (P4_1)"
+    },
+    {
+      "browseName": "CH_M51::01AMIAK:01F4",
+      "aliasName": "01NH3_F4",
+      "displayName": "01NH3_F4",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 1600
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Расход газ. NH3 (F4)"
+    },
+    {
+      "browseName": "CH_M51::01PGAZ:01T16",
+      "aliasName": "01PGAZ_T16",
+      "displayName": "01PGAZ_T16",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -50,
+          "high": 50
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "Температура ПГ в цех (T16)"
+    },
+    {
+      "browseName": "CH_M51::01PGAZ:01P5",
+      "aliasName": "01PGAZ_P5",
+      "displayName": "01PGAZ_P5",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 16
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "Давление ПГ в цех (P5)"
+    },
+    {
+      "browseName": "CH_M51::01PGAZ:01F5",
+      "aliasName": "01PGAZ_F5",
+      "displayName": "01PGAZ_F5",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 3200
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Расход ПГ в цех (F5)"
+    },
+    {
+      "browseName": "CH_M51::01AMIAK:01T21_1",
+      "aliasName": "01JAM_T21_1",
+      "displayName": "01JAM_T21_1",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -50,
+          "high": 50
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "Температура ЖА-1 (T21_1)"
+    },
+    {
+      "browseName": "CH_M51::01AMIAK:01P21_1",
+      "aliasName": "01JAM_P21_1",
+      "displayName": "01JAM_P21_1",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 25
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "Давление ЖА-1 (P21_1)"
+    },
+    {
+      "browseName": "CH_M51::01AMIAK:01F21_1",
+      "aliasName": "01JAM_F21_1",
+      "displayName": "01JAM_F21_1",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 16
+        },
+        "engineeringUnits": "tonne_per_hour"
+      },
+      "description": "Расход ЖА-1 (F21_1)"
+    },
+    {
+      "browseName": "CH_M51::01PAR:01T2_1",
+      "aliasName": "01PAR_T2_1",
+      "displayName": "01PAR_T2_1",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 400
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "Температура ПАР16-1 (T2_1)"
+    },
+    {
+      "browseName": "CH_M51::01PAR:01P2_1",
+      "aliasName": "01PAR_P2_1",
+      "displayName": "01PAR_P2_1",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 25
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "Давление ПАР16-1 (P2_1)"
+    },
+    {
+      "browseName": "CH_M51::01PAR:01F2_1",
+      "aliasName": "01PAR_F2_1",
+      "displayName": "01PAR_F2_1",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 20
+        },
+        "engineeringUnits": "tonne_per_hour"
+      },
+      "description": "Расход ПАР16-1 (F2_1)"
+    },
+    {
+      "browseName": "CH_M51::01PAR:01T2_2",
+      "aliasName": "01PAR_T2_2",
+      "displayName": "01PAR_T2_2",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 400
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "Температура ПАР16-2 (T2_2)"
+    },
+    {
+      "browseName": "CH_M51::01PAR:01P2_2",
+      "aliasName": "01PAR_P2_2",
+      "displayName": "01PAR_P2_2",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 25
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "Давление ПАР16-2 (P2_2)"
+    },
+    {
+      "browseName": "CH_M51::01PAR:01F2_2",
+      "aliasName": "01PAR_F2_2",
+      "displayName": "01PAR_F2_2",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 20
+        },
+        "engineeringUnits": "tonne_per_hour"
+      },
+      "description": "Расход ПАР16-2 (F2_2)"
+    },
+    {
+      "browseName": "CH_M51::01SKLAD:01L26_SUM",
+      "aliasName": "01SKLAD_01L26",
+      "displayName": "01SKLAD_01L26",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 1000
+        },
+        "engineeringUnits": "cubic_metre"
+      },
+      "description": "Склад 1(отделение) (L26)"
+    },
+    {
+      "browseName": "CH_M51::01VODA_XOB:01T1",
+      "aliasName": "01XOB_T1",
+      "displayName": "01XOB_T1",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 100
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "Температура ХОВ (T1)"
+    },
+    {
+      "browseName": "CH_M51::01VODA_XOB:01P4",
+      "aliasName": "01XOB_P4",
+      "displayName": "01XOB_P4",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "Давление ХОВ (P4)"
+    },
+    {
+      "browseName": "CH_M51::01VODA_XOB:01F1",
+      "aliasName": "01XOB_F1",
+      "displayName": "01XOB_F1",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 100
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Расход ХОВ (F1)"
+    },
+    {
+      "browseName": "CH_M51::01VODA:01T1_1",
+      "aliasName": "01OB_T1_1",
+      "displayName": "01OB_T1_1",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -50,
+          "high": 50
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "Температура ОВ (T1_1)"
+    },
+    {
+      "browseName": "CH_M51::01VODA:01T1_2",
+      "aliasName": "01OB_T1_2",
+      "displayName": "01OB_T1_2",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -50,
+          "high": 50
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "Температура ОВ (T1_2)"
+    },
+    {
+      "browseName": "CH_M51::01VODA:01P5_1",
+      "aliasName": "01OB_P5_1",
+      "displayName": "01OB_P5_1",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "Давление ОВ (P5_1)"
+    },
+    {
+      "browseName": "CH_M51::01SBS_OC:01PS10",
+      "aliasName": "01PS10",
+      "displayName": "01PS10",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "Давление Воздуха КИП (PS10)"
+    },
+    {
+      "AGR21": "-------------------------------------------------------------------------------"
+    },
+    {
+      "browseName": "CH_M51::21SBS_AO:21PS180",
+      "aliasName": "21VZ_PS180",
+      "displayName": "21VZ_PS180",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 3
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "Давление воздуха из компрессора (PS180)"
+    },
+    {
+      "browseName": "CH_M51::21GTT:21P181",
+      "aliasName": "21VZ_P181",
+      "displayName": "21VZ_P181",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "Давление воздуха за нагнетателем (P181)"
+    },
+    {
+      "browseName": "CH_M51::21KONV:21P127A",
+      "aliasName": "21VZ_P127A",
+      "displayName": "21VZ_P127A",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "Давление воздуха в смеситель (P127A)"
+    },
+    {
+      "browseName": "CH_M51::21UKST:21FCC_TS174",
+      "aliasName": "21VZ_TS174",
+      "displayName": "21VZ_TS174",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 1100
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "Температура газа перед турбиной (TS174)"
+    },
+    {
+      "browseName": "CH_M51::21KONV:21TS102PID_T.MEAS",
+      "aliasName": "21TS102",
+      "displayName": "21TS102",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 1100
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "Температура под сетками в КА (TS102)"
+    },
+    {
+      "browseName": "CH_M51::21KONV:21F102",
+      "aliasName": "21VZ_F102",
+      "displayName": "21VZ_F102",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 60000
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Расход воздуха в смеситель (F102)"
+    },
+    {
+      "browseName": "CH_M51::21ABSOR:21F103",
+      "aliasName": "21VZ_F103",
+      "displayName": "21VZ_F103",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 20000
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Расход добавочного воздуха (F103)"
+    },
+    {
+      "browseName": "CH_M51::21KONV:21FC101",
+      "aliasName": "21NH3_F101",
+      "displayName": "21NH3_F101",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 8000
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Расход NH3 в смеситель (F101)"
+    },
+    {
+      "browseName": "CH_M51::21OXG:21FC106",
+      "aliasName": "21NH3_F106",
+      "displayName": "21NH3_F106",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 160
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Расход NH3 в РСО (F106)"
+    },
+    {
+      "browseName": "CH_M51::21ABSOR:21F105",
+      "aliasName": "21HNO3_F105",
+      "displayName": "21HNO3_F105",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 30
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Расход HNO3 с агрегата (F105)"
+    },
+    {
+      "browseName": "CH_M51::21UKST:21FCC_F171",
+      "aliasName": "21NG_F171",
+      "displayName": "21NG_F171",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 2000
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Расход ПГ в УКСТ (F171)"
+    },
+    {
+      "browseName": "CH_M51::21RD:21EA_RD",
+      "aliasName": "21EA_RD",
+      "displayName": "21EA_RD",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -1500,
+          "high": 1500
+        },
+        "engineeringUnits": "kilowatt"
+      },
+      "description": "Мощность РД (EA_RD)"
+    },
+    {
+      "AGR31": "-------------------------------------------------------------------------------"
+    },
+    {
+      "browseName": "CH_M51::31SBS_AO:31PS180",
+      "aliasName": "31VZ_PS180",
+      "displayName": "31VZ_PS180",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 3
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "Давление воздуха из компрессора (PS180)"
+    },
+    {
+      "browseName": "CH_M51::31GTT:31P181",
+      "aliasName": "31VZ_P181",
+      "displayName": "31VZ_P181",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "Давление воздуха за нагнетателем (P181)"
+    },
+    {
+      "browseName": "CH_M51::31KONV:31P127A",
+      "aliasName": "31VZ_P127A",
+      "displayName": "31VZ_P127A",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "Давление воздуха в смеситель (P127A)"
+    },
+    {
+      "browseName": "CH_M51::31UKST:31FCC_TS174",
+      "aliasName": "31VZ_TS174",
+      "displayName": "31VZ_TS174",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 1100
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "Температура газа перед турбиной (TS174)"
+    },
+    {
+      "browseName": "CH_M51::31KONV:31TS102PID_T.MEAS",
+      "aliasName": "31TS102",
+      "displayName": "31TS102",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 1100
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "Температура под сетками в КА (TS102)"
+    },
+    {
+      "browseName": "CH_M51::31KONV:31F102",
+      "aliasName": "31VZ_F102",
+      "displayName": "31VZ_F102",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 60000
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Расход воздуха в смеситель (F102)"
+    },
+    {
+      "browseName": "CH_M51::31ABSOR:31F103",
+      "aliasName": "31VZ_F103",
+      "displayName": "31VZ_F103",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 20000
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Расход добавочного воздуха (F103)"
+    },
+    {
+      "browseName": "CH_M51::31KONV:31FC101",
+      "aliasName": "31NH3_F101",
+      "displayName": "31NH3_F101",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 8000
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Расход NH3 в смеситель (F101)"
+    },
+    {
+      "browseName": "CH_M51::31OXG:31FC106",
+      "aliasName": "31NH3_F106",
+      "displayName": "31NH3_F106",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 160
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Расход NH3 в РСО (F106)"
+    },
+    {
+      "browseName": "CH_M51::31ABSOR:31F105",
+      "aliasName": "31HNO3_F105",
+      "displayName": "31HNO3_F105",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 30
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Расход HNO3 с агрегата (F105)"
+    },
+    {
+      "browseName": "CH_M51::31UKST:31FCC_F171",
+      "aliasName": "31NG_F171",
+      "displayName": "31NG_F171",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 2000
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Расход ПГ в УКСТ (F171)"
+    },
+    {
+      "browseName": "CH_M51::31RD:31EA_RD",
+      "aliasName": "31EA_RD",
+      "displayName": "31EA_RD",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -1500,
+          "high": 1500
+        },
+        "engineeringUnits": "kilowatt"
+      },
+      "description": "Мощность РД (EA_RD)"
+    }
+  ],
+  "methods": []
+}
