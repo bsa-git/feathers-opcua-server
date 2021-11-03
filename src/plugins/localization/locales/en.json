@@ -3342,7 +3342,7 @@
     },
     "thousand_normal_cubic_metre_per_hour": {
       "symbol": "MQH??",
-      "shortName": "thousand n.m³/h",
+      "shortName": "ths n.m³/h",
       "longName": "thousand normal cubic metre per hour"
     },
     "millilitre_per_second": {
