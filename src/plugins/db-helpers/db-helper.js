@@ -221,13 +221,18 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
   if (loIsString(value)) {
     opcuaValue = JSON.parse(value);
   }
+
+  if (loIsObject(value)) {
+    opcuaValue = value;
+  }
+
   tags = await findItems(app, 'opcua-tags', { browseName });
   if (tags.length) {
     const tag = tags[0];
     // Exit else tag is disable
     if (tag.isEnable === false) return savedValue;
     // Get group items
-    groupItems = await findAllItems(app, 'opcua-tags', { ownerGroup: browseName });
+    groupItems = await findItems(app, 'opcua-tags', { ownerGroup: browseName });
     // Normalize opcuaValue
     loForEach(opcuaValue, (value, key) => {
       const findedKey = groupItems.find(item => (item.browseName === key) || (item.aliasName === key));
@@ -335,7 +340,7 @@ const saveOpcuaTags = async function (app, tags, isRemote = false) {
     // e.g. query = { browseName: { $nin: tagBrowseNames } }
     query = { browseName: { $nin: tagBrowseNames } };
   }
-  tagsFromDB = await findAllItems(app, 'opcua-tags', query);
+  tagsFromDB = await findItems(app, 'opcua-tags', query);
   if (tagsFromDB.length) {
     idField = getIdField(tagsFromDB[0]);
     if (isRemote) {
@@ -541,8 +546,8 @@ const findItem = async function (app, path = '', query = {}) {
     }
     findResults = await service.find(newParams);
     if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
-    inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
-    return findResults.data.length? findResults.data[0] : null;
+    // inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
+    return findResults.data.length ? findResults.data[0] : null;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
   }
@@ -621,6 +626,54 @@ const findAllItems = async function (app, path = '', query = {}) {
       }
     }
     return Array.isArray(findResults) ? findResults : findData;
+  } else {
+    throw new errors.BadRequest(`There is no service for the path - '${path}'`);
+  }
+};
+
+/**
+ * Process found items
+ * @async
+ * 
+ * @param {Object} app
+ * @param {String} path
+ * @param {Object} query
+ * @param {Function} cb
+ * @return {Object[]}
+ */
+const processFoundItems = async function (app, path = '', query = {}, cb = null) {
+  let newParams, findResults, findData = [], processedData = [];
+  //----------------------------
+  const service = app.service(path);
+  if (service) {
+    if (query.query) {
+      newParams = loMerge({}, query);
+    } else {
+      newParams = loMerge({}, { query });
+    }
+    findResults = await service.find(newParams);
+    if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
+    if (findResults.data.length) {
+      const total = findResults.total;
+      const limit = findResults.limit;
+      const cyclesNumber = Math.trunc(total / limit);
+      if (cb) {
+        processedData.push(await cb(findResults.data, app));
+      } else {
+        findData = loConcat(findData, findResults.data);
+      }
+      for (let index = 1; index <= cyclesNumber; index++) {
+        const skip = index * limit;
+        newParams = loMerge({}, newParams, { query: { $skip: skip } });
+        findResults = await service.find(newParams);
+        if (cb) {
+          processedData.push(await cb(findResults.data, app));
+        } else {
+          findData = loConcat(findData, findResults.data);
+        }
+      }
+    }
+    return cb ? processedData : findData;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
   }
@@ -785,6 +838,7 @@ module.exports = {
   findItem,
   findItems,
   findAllItems,
+  processFoundItems,
   removeItem,
   removeItems,
   patchItem,

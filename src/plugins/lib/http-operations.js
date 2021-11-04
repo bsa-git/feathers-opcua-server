@@ -1,6 +1,4 @@
 /* eslint-disable no-unused-vars */
-const http = require('http');
-const https = require('https');
 const url = require('url');
 const axios = require('axios');
 const cheerio = require('cheerio');
@@ -47,8 +45,6 @@ const urlExists = async function (target) {
     }
     throw error;
   }
-
-
 };
 
 
