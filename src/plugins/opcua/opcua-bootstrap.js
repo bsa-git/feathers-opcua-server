@@ -20,7 +20,7 @@ const {
 
 const {
   saveOpcuaTags,
-  integrityCheckTags,
+  integrityCheckOpcua,
   isSaveOpcuaToDB,
   getOpcuaSaveModeToDB,
   getOpcuaRemoteDbUrl,
@@ -53,6 +53,7 @@ const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) 
  */
 module.exports = async function opcuaBootstrap(app) {
   let service = null, opcuaServer = null, opcuaClient = null;
+  let integrityResult;
   //--------------------------------------------------------
 
   // Determine if command line argument exists for seeding data
@@ -73,8 +74,13 @@ module.exports = async function opcuaBootstrap(app) {
     // Save opcua tags to local DB
     let saveResult = await saveOpcuaTags(app, opcuaTags);
     logger.info('opcuaBootstrap.saveOpcuaTags.localDB:', saveResult);
-    // Integrity check tags
-    // await integrityCheckTags(app);
+    // Integrity check opcua data
+    integrityResult = await integrityCheckOpcua(app);
+    if (integrityResult) {
+      logger.info('Result integrity check opcua.localDB: OK');
+    } else {
+      logger.error('Result integrity check opcua.localDB: ERR');
+    }
     const isRemote = getOpcuaSaveModeToDB() === 'remote';
     if (isRemote) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
@@ -83,8 +89,13 @@ module.exports = async function opcuaBootstrap(app) {
         // Save opcua tags to remote DB
         saveResult = await saveOpcuaTags(appRestClient, opcuaTags, isRemote);
         logger.info('opcuaBootstrap.saveOpcuaTags.remoteDB:', saveResult);
-        // Integrity check tags
-        // await integrityCheckTags(appRestClient);
+        // Integrity check opcua data
+        integrityResult = await integrityCheckOpcua(appRestClient);
+        if (integrityResult) {
+          logger.info('Result integrity check opcua.remoteDB: OK');
+        } else {
+          logger.error('Result integrity check opcua.remoteDB: ERR');
+        }
       }
     }
   }

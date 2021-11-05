@@ -157,10 +157,6 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
         const findedItems = await findItems(appRestClient, 'opcua-tags');
         if (isLog) inspector('Find tags from \'opcua-tags\' service', findedItems);
         assert.ok(findedItems.length === opcuaTags.length, 'Error for test: `Save tags and find tags`');
-
-        // Remove data from 'opcua-tags' services 
-        removedItems = await removeItems(appRestClient, 'opcua-tags');
-        assert.ok(removedItems.length, 'Not remove data from services \'opcua-tags\'');
       }
 
       // Logout

@@ -374,14 +374,14 @@ const saveOpcuaTags = async function (app, tags, isRemote = false) {
 };
 
 /**
- * @name integrityCheckTags
+ * @name integrityCheckOpcua
  * @async
  * 
  * @param {Object} app 
  * @returns {Boolean}
  */
-const integrityCheckTags = async function (app) {
-  let tagsFromDB, _tagsFromDB, deleted = 0, deletedBrowseNames = [];
+const integrityCheckOpcua = async function (app) {
+  let tagsFromDB, _tagsFromDB, deleted = 0, deletedBrowseNames = [], result = true;
   //-------------------------------------------
   // Get 'object' tags
   tagsFromDB = await findItems(app, 'opcua-tags', { type: 'object' });
@@ -397,16 +397,18 @@ const integrityCheckTags = async function (app) {
         if (tagFromDB) {
           deletedBrowseNames.push(tagFromDB.browseName);
           deleted++;
-          logger.error('db-helper.Remove \'object\' tags that have no child tags:', deleted);
-          if (isLog) inspector('db-helper.integrityCheckTags.Remove \'object\' tags that have no child tags:', deletedBrowseNames);
         }
       }
     }
-
+    if (deleted) {
+      logger.error(`db-helper.integrityCheckOpcua.Remove 'object' tags that have no child tags: ${deleted}`);
+      if (isLog) inspector('db-helper.integrityCheckOpcua.Remove \'object\' tags that have no child tags:', deletedBrowseNames);
+      deleted = 0;
+      deletedBrowseNames = [];
+      result = false;
+    }
   }
   // Get all 'variables' tags
-  deleted = 0;
-  deletedBrowseNames = [];
   tagsFromDB = await findItems(app, 'opcua-tags', { type: { $ne: 'object' } });
   // Remove 'variables' tags that have no owner tags
   if (tagsFromDB.length) {
@@ -420,16 +422,19 @@ const integrityCheckTags = async function (app) {
         if (tagFromDB) {
           deletedBrowseNames.push(tagFromDB.browseName);
           deleted++;
-          logger.error('db-helper.Remove \'variables\' tags that have no owner tags:', deleted);
-          if (isLog) inspector('db-helper.integrityCheckTags.Remove \'variables\' tags that have no owner tags:', deletedBrowseNames);
         }
       }
+    }
+    if (deleted) {
+      logger.error(`db-helper.integrityCheckOpcua.Remove 'variables' tags that have no owner tags: ${deleted}`);
+      if (isLog) inspector('db-helper.integrityCheckOpcua.Remove \'variables\' tags that have no owner tags:', deletedBrowseNames);
+      deleted = 0;
+      deletedBrowseNames = [];
+      result = false;
     }
   }
 
   // Get all 'ownerGroup' tags
-  deleted = 0;
-  deletedBrowseNames = [];
   tagsFromDB = await findItems(app, 'opcua-tags', { group: true });
   // Remove 'ownerGroup' tags that have no 'childGroup' tags
   if (tagsFromDB.length) {
@@ -443,16 +448,19 @@ const integrityCheckTags = async function (app) {
         if (tagFromDB) {
           deletedBrowseNames.push(tagFromDB.browseName);
           deleted++;
-          logger.error('db-helper.Remove \'ownerGroup\' tags that have no \'childGroup\' tags:', deleted);
-          if (isLog) inspector('db-helper.integrityCheckTags.Remove \'ownerGroup\' tags that have no \'childGroup\' tags:', deletedBrowseNames);
         }
       }
     }
+    if (deleted) {
+      logger.error(`db-helper.integrityCheckOpcua.Remove 'ownerGroup' tags that have no 'childGroup' tags: ${deleted}`);
+      if (isLog) inspector('db-helper.integrityCheckOpcua.Remove \'ownerGroup\' tags that have no \'childGroup\' tags:', deletedBrowseNames);
+      deleted = 0;
+      deletedBrowseNames = [];
+      result = false;
+    }
   }
 
-  // Get all childGroup' tags
-  deleted = 0;
-  deletedBrowseNames = [];
+  // Get all 'childGroup' tags
   tagsFromDB = await findItems(app, 'opcua-tags', { type: { $ne: 'object' }, group: { $ne: true } });
   // Remove 'childGroup' tags that have no 'ownerGroup' tags
   if (tagsFromDB.length) {
@@ -466,12 +474,42 @@ const integrityCheckTags = async function (app) {
         if (tagFromDB) {
           deletedBrowseNames.push(tagFromDB.browseName);
           deleted++;
-          logger.error('db-helper.Remove \'childGroup\' tags that have no \'ownerGroup\' tags:', deleted);
-          if (isLog) inspector('db-helper.integrityCheckTags.Remove \'childGroup\' tags that have no \'ownerGroup\' tags:', deletedBrowseNames);
         }
       }
     }
+    if (deleted) {
+      logger.error(`db-helper.integrityCheckOpcua.Remove 'childGroup' tags that have no 'ownerGroup' tags: ${deleted}`);
+      if (isLog) inspector('db-helper.integrityCheckOpcua.Remove \'childGroup\' tags that have no \'ownerGroup\' tags:', deletedBrowseNames);
+      deleted = 0;
+      deletedBrowseNames = [];
+      result = false;
+    }
   }
+
+  // Remove opcua values that have no 'owner' tags
+  const cb = async function (data, app) {
+    const idField = getIdField(data[0]);
+    for (let index = 0; index < data.length; index++) {
+      const value = data[index];
+      const valueId = value[idField];
+      const tagName = value['tagName'];
+      const tag = await findItem(app, 'opcua-tags', { browseName: tagName });
+      if (!tag) {
+        const removedItem = await removeItem(app, 'opcua-values', valueId);
+        deleted++;
+        deletedBrowseNames.push(removedItem.tagName);
+      }
+    }
+  };
+  await handleFoundItems(app, 'opcua-values', {}, cb);
+  if (deleted) {
+    logger.error(`db-helper.integrityCheckOpcua.Remove 'OpcuaValues' that have no 'owner' tags: ${deleted}`);
+    if (isLog) inspector('db-helper.integrityCheckOpcua.Remove \'childGroup\' tags that have no \'ownerGroup\' tags:', deletedBrowseNames);
+    deleted = 0;
+    deletedBrowseNames = [];
+    result = false;
+  }
+  return result;
 };
 
 //================================================================================
@@ -641,8 +679,8 @@ const findAllItems = async function (app, path = '', query = {}) {
  * @param {Function} cb
  * @return {Object[]}
  */
-const processFoundItems = async function (app, path = '', query = {}, cb = null) {
-  let newParams, findResults, findData = [], processedData = [];
+const handleFoundItems = async function (app, path = '', query = {}, cb = null) {
+  let newParams, findResults, findData = [], handledData = [], handledResult;
   //----------------------------
   const service = app.service(path);
   if (service) {
@@ -658,7 +696,8 @@ const processFoundItems = async function (app, path = '', query = {}, cb = null)
       const limit = findResults.limit;
       const cyclesNumber = Math.trunc(total / limit);
       if (cb) {
-        processedData.push(await cb(findResults.data, app));
+        handledResult = await cb(findResults.data, app);
+        if (handledResult !== undefined) handledData.push(handledResult);
       } else {
         findData = loConcat(findData, findResults.data);
       }
@@ -667,13 +706,14 @@ const processFoundItems = async function (app, path = '', query = {}, cb = null)
         newParams = loMerge({}, newParams, { query: { $skip: skip } });
         findResults = await service.find(newParams);
         if (cb) {
-          processedData.push(await cb(findResults.data, app));
+          handledResult = await cb(findResults.data, app);
+          if (handledResult !== undefined) handledData.push(handledResult);
         } else {
           findData = loConcat(findData, findResults.data);
         }
       }
     }
-    return cb ? processedData : findData;
+    return cb ? handledData : findData;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
   }
@@ -832,13 +872,14 @@ module.exports = {
   getIdField,
   saveOpcuaGroupValue,
   saveOpcuaTags,
-  integrityCheckTags,
+  integrityCheckOpcua,
+  //-------------------
   getCountItems,
   getItem,
   findItem,
   findItems,
   findAllItems,
-  processFoundItems,
+  handleFoundItems,
   removeItem,
   removeItems,
   patchItem,
