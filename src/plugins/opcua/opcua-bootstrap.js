@@ -67,12 +67,9 @@ module.exports = async function opcuaBootstrap(app) {
   if (!isOpcuaBootstrapAllowed) return;
 
   if (isSaveOpcuaToDB()) {
-    // Get opcua tags 
-    const opcuaTags = getOpcuaTags();
-    if (isLog) inspector('opcuaBootstrap.opcuaTags:', opcuaTags);
-    // inspector('opcuaBootstrap.opcuaTags:', opcuaTags.filter(tag => tag.type === 'object'));
+
     // Save opcua tags to local DB
-    let saveResult = await saveOpcuaTags(app, opcuaTags);
+    let saveResult = await saveOpcuaTags(app);
     logger.info('opcuaBootstrap.saveOpcuaTags.localDB:', saveResult);
     // Integrity check opcua data
     integrityResult = await integrityCheckOpcua(app);
@@ -87,7 +84,7 @@ module.exports = async function opcuaBootstrap(app) {
       const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
       if (appRestClient) {
         // Save opcua tags to remote DB
-        saveResult = await saveOpcuaTags(appRestClient, opcuaTags, isRemote);
+        saveResult = await saveOpcuaTags(appRestClient, isRemote);
         logger.info('opcuaBootstrap.saveOpcuaTags.remoteDB:', saveResult);
         // Integrity check opcua data
         integrityResult = await integrityCheckOpcua(appRestClient);

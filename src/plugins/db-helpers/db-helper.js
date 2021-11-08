@@ -2,6 +2,7 @@
 const errors = require('@feathersjs/errors');
 const logger = require('../../logger');
 const {
+  getOpcuaTags,
   getOpcuaConfigsForMe,
 } = require('../opcua/opcua-helper');
 const {
@@ -271,19 +272,21 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
  * @async
  * 
  * @param {Object} app 
- * @param {Object[]} tags 
  * @param {Boolean} isRemote 
  * @returns {Object}
  * e.g. { added: 123, updated: 32, deleted: 12, total: 125}
  */
-const saveOpcuaTags = async function (app, tags, isRemote = false) {
+const saveOpcuaTags = async function (app, isRemote = false) {
   let idField, tagId, query = {};
   let tagFromDB = null, tagsFromDB = [], tagBrowseNames = [], objTagBrowseNames = [];
   let addedBrowseNames = [], updatedBrowseNames = [], deletedBrowseNames = [];
   let added = 0, updated = 0, deleted = 0, total = 0;
   //------------------------------------------------------------
-  for (let index = 0; index < tags.length; index++) {
-    const tag = tags[index];
+  // Get opcua tags 
+  const opcuaTags = getOpcuaTags();
+  if (isLog) inspector('db-helper.saveOpcuaTags.opcuaTags:', opcuaTags);
+  for (let index = 0; index < opcuaTags.length; index++) {
+    const tag = opcuaTags[index];
     tagBrowseNames.push(tag.browseName);
     if (tag.type === 'object') {
       objTagBrowseNames.push(tag.browseName);
@@ -378,13 +381,30 @@ const saveOpcuaTags = async function (app, tags, isRemote = false) {
  * @async
  * 
  * @param {Object} app 
+ * @param {Boolean} isRemote 
  * @returns {Boolean}
  */
-const integrityCheckOpcua = async function (app) {
-  let tagsFromDB, _tagsFromDB, deleted = 0, deletedBrowseNames = [], result = true;
-  //-------------------------------------------
+const integrityCheckOpcua = async function (app, isRemote = false) {
+  let idField, tagId, tagFromDB, tagsFromDB, _tagsFromDB, valuesFromDB, query, result = true;
+  let deleted = 0, deletedBrowseNames = [], objTagBrowseNames = [], tagBrowseNames = [];
+  //---------------------------------------------------------------
+  // Get opcua tags 
+  const opcuaTags = getOpcuaTags();
+  if (isLog) inspector('db-helper.integrityCheckOpcua.opcuaTags:', opcuaTags);
+
+  objTagBrowseNames = opcuaTags.filter(tag => tag.type === 'object').map(tag => tag.browseName);
+  tagBrowseNames = opcuaTags.map(tag => tag.browseName);
+
+  /** 
+  
+  */
+
   // Get 'object' tags
-  tagsFromDB = await findItems(app, 'opcua-tags', { type: 'object' });
+  if (isRemote) {
+    tagsFromDB = await findItems(app, 'opcua-tags', { type: 'object', browseName: { $in: objTagBrowseNames } });
+  } else {
+    tagsFromDB = await findItems(app, 'opcua-tags', { type: 'object' });
+  }
   // Remove 'object' tags that have no child tags
   if (tagsFromDB.length) {
     const idField = getIdField(tagsFromDB[0]);
@@ -409,7 +429,11 @@ const integrityCheckOpcua = async function (app) {
     }
   }
   // Get all 'variables' tags
-  tagsFromDB = await findItems(app, 'opcua-tags', { type: { $ne: 'object' } });
+  if (isRemote) {
+    tagsFromDB = await findItems(app, 'opcua-tags', { type: { $ne: 'object' }, ownerName: { $in: objTagBrowseNames } });
+  } else {
+    tagsFromDB = await findItems(app, 'opcua-tags', { type: { $ne: 'object' } });
+  }
   // Remove 'variables' tags that have no owner tags
   if (tagsFromDB.length) {
     const idField = getIdField(tagsFromDB[0]);
@@ -435,7 +459,12 @@ const integrityCheckOpcua = async function (app) {
   }
 
   // Get all 'ownerGroup' tags
-  tagsFromDB = await findItems(app, 'opcua-tags', { group: true });
+  if (isRemote) {
+    tagsFromDB = await findItems(app, 'opcua-tags', { group: true, ownerName: { $in: objTagBrowseNames } });
+  } else {
+    tagsFromDB = await findItems(app, 'opcua-tags', { group: true });
+  }
+
   // Remove 'ownerGroup' tags that have no 'childGroup' tags
   if (tagsFromDB.length) {
     const idField = getIdField(tagsFromDB[0]);
@@ -461,7 +490,11 @@ const integrityCheckOpcua = async function (app) {
   }
 
   // Get all 'childGroup' tags
-  tagsFromDB = await findItems(app, 'opcua-tags', { type: { $ne: 'object' }, group: { $ne: true } });
+  if (isRemote) {
+    tagsFromDB = await findItems(app, 'opcua-tags', { type: { $ne: 'object' }, group: { $ne: true }, ownerName: { $in: objTagBrowseNames } });
+  } else {
+    tagsFromDB = await findItems(app, 'opcua-tags', { type: { $ne: 'object' }, group: { $ne: true } });
+  }
   // Remove 'childGroup' tags that have no 'ownerGroup' tags
   if (tagsFromDB.length) {
     const idField = getIdField(tagsFromDB[0]);
@@ -485,7 +518,7 @@ const integrityCheckOpcua = async function (app) {
       result = false;
     }
   }
-
+  /** 
   // Remove opcua values that have no 'owner' tags
   const cb = async function (data, app) {
     const idField = getIdField(data[0]);
@@ -509,6 +542,48 @@ const integrityCheckOpcua = async function (app) {
     deletedBrowseNames = [];
     result = false;
   }
+  */
+  /** 
+  if (!isRemote) {
+    const removedItems = await removeItems(app, 'opcua-values');
+    if (removedItems.length) {
+      deleted = removedItems.length;
+      deletedBrowseNames = removedItems.map(item => item.browseName);
+      logger.error(`db-helper.integrityCheckOpcua.Remove all opcua values if !isRemote: ${deleted}`);
+      if (isLog) inspector('db-helper.integrityCheckOpcua.Remove all opcua values if !isRemote:', deletedBrowseNames);
+      deleted = 0;
+      deletedBrowseNames = [];
+      result = false;
+    }
+  }
+  */
+
+  // Remove opcua values that have no 'ownerGroup' tags
+  // tagsFromDB = await findItems(app, 'opcua-tags', { type: { $ne: 'object' } });
+  if (isRemote) {
+    tagsFromDB = await findItems(app, 'opcua-tags', { group: true, ownerName: { $in: objTagBrowseNames } });
+  } else {
+    tagsFromDB = await findItems(app, 'opcua-tags', { group: true });
+  }
+
+  tagsFromDB = tagsFromDB.map(tag => tag.browseName);
+  valuesFromDB = await findItems(app, 'opcua-values', { tagName: { $nin: tagsFromDB } });
+  for (let index = 0; index < valuesFromDB.length; index++) {
+    let value = valuesFromDB[index];
+    const idField = getIdField(value);
+    const valueId = value[idField];
+    const removedItem = await removeItem(app, 'opcua-values', valueId);
+    deleted++;
+    deletedBrowseNames.push(removedItem.tagName);
+  }
+  if (deleted) {
+    logger.error(`db-helper.integrityCheckOpcua.Remove opcua values that have no 'ownerGroup' tags: ${deleted}`);
+    if (isLog) inspector('db-helper.integrityCheckOpcua.Remove opcua values that have no \'ownerGroup\' tags:', deletedBrowseNames);
+    deleted = 0;
+    deletedBrowseNames = [];
+    result = false;
+  }
+
   return result;
 };
 
