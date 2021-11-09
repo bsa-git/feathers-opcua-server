@@ -748,10 +748,12 @@ class OpcuaClient {
 
     if (itemNodeIds.length) {
       dataValues = await this.session.readHistoryValue(itemNodeIds, start, end);
+      // inspector('plugins.opcua-client.class::sessionReadHistoryValuesEx.result:', dataValues);
       dataValues = formatHistoryResults(this.id, dataValues, browseNames, this.locale);
       result = dataValues;
     }
-    if (isLog) inspector('plugins.opcua-client.class::sessionReadHistoryValue.result:', result);
+    if (isLog) inspector('plugins.opcua-client.class::sessionReadHistoryValuesEx.result:', result);
+    // inspector('plugins.opcua-client.class::sessionReadHistoryValuesEx.result:', result);
     return result;
   }
 

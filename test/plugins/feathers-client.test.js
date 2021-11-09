@@ -3,13 +3,18 @@ const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port') || 3030;
 const host = app.get('host') || 'localhost';
-const { inspector } = require('../../src/plugins/lib');
 
-const { 
-  localStorage, 
-  loginLocal, 
-  feathersClient, 
-  AuthServer 
+const {
+  inspector,
+  pause,
+  getTime
+} = require('../../src/plugins/lib');
+
+const {
+  localStorage,
+  loginLocal,
+  feathersClient,
+  AuthServer
 } = require('../../src/plugins/auth');
 
 const {
@@ -27,11 +32,32 @@ const {
   getOpcuaTags
 } = require('../../src/plugins/opcua');
 
+const chalk = require('chalk');
+const moment = require('moment');
+const loRound = require('lodash/round');
+const loForEach = require('lodash/forEach');
+
 const debug = require('debug')('app:feathers-client.test');
 
 const isDebug = false;
 const isLog = false;
 const isTest = false;
+
+// OPCUA Options
+const srvData = {
+  params: {
+    port: 26560, // default - 26543, 26540 (opcua.test), 26550 (opcua.test2), 26560 (opcua-clients.test), 26570 (opcua-servers.test),
+    serverInfo: { applicationName: 'ua-cherkassy-azot_test2' },
+  }
+};
+
+const clientData = {
+  params: {
+    applicationName: 'ua-cherkassy-azot_test2',
+  }
+};
+
+const id = srvData.params.serverInfo.applicationName;
 
 // Get generated fake data
 const fakes = fakeNormalize();
@@ -137,6 +163,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       await appRestClient.logout();
     });
 
+    //===== OPERATIONS WITH "OPCUA-TAGS" =======//
     it('#6: Authenticates and operations with `opcua-tags` service', async () => {
       // Login
       const { accessToken } = await loginLocal(appRestClient, fakeUser.email, fakeUser.password);
@@ -162,5 +189,128 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       // Logout
       await appRestClient.logout();
     });
+
+    //===== REGISTERED SERVICES "OPCUA-CLIENTS"/"OPCUA-SERVERS" =======//
+    it('#7 OPC-UA clients: registered the service', async () => {
+      const service = appRestClient.service('opcua-clients');
+      assert.ok(service, 'OPC-UA clients: registered the service');
+    });
+
+    it('#8 OPC-UA servers: registered the service', async () => {
+      const service = appRestClient.service('opcua-servers');
+      assert.ok(service, 'OPC-UA servers: registered the service');
+    });
+
+    //===== SERVER/CLIENT CREATE =======//
+    it('#9 OPC-UA servers: created the service', async () => {
+      const service = appRestClient.service('opcua-servers');
+      // service create
+      const opcuaServer = await service.create(srvData);
+      if (isLog) inspector('created the service.opcuaServer:', opcuaServer.server.currentState);
+      assert.ok(opcuaServer, 'OPC-UA servers: created the service');
+    });
+
+    it('#10 OPC-UA clients: created the service', async () => {
+      const service = appRestClient.service('opcua-clients');
+      // service create
+      let opcuaClient = await service.create(clientData);
+      if (isLog) inspector('created the service.opcuaClient:', opcuaClient);
+      assert.ok(opcuaClient, 'OPC-UA clients: created the service');
+      // Get client service
+      opcuaClient = await service.get(id);
+      assert.ok(opcuaClient, 'OPC-UA servers: get the service');
+      // Find client services
+      const opcuaClients = await service.find();
+      assert.ok(opcuaClients.length, 'OPC-UA clients: find services');
+      // Get client currentState
+      let data = { id, action: 'getCurrentState' };
+      const currentState = await service.create(data);
+      // inspector('clientCurrentState:', currentState);
+      assert.ok(currentState, 'OPC-UA clients: get service currentState');
+      // Get clientInfo
+      data = { id, action: 'getClientInfo' };
+      const clientInfo = await service.create(data);
+      // inspector('clientInfo:', clientInfo);
+      assert.ok(clientInfo, 'OPC-UA clients: get clientInfo');
+    });
+
+    //============== SESSION HISTORY VALUES ====================//
+    it('#11 OPC-UA clients: session history value', async () => {
+      let readResult, data, dataItems, histOpcuaValues = [], values = [], accumulator;
+      //------------------------------------
+      const service = appRestClient.service('opcua-clients');
+
+      // getSrvCurrentState
+
+      data = { id, action: 'getItemNodeId', nameNodeId: 'CH_M51::ValueFromFile' };
+      readResult = await service.create(data);
+      if (isLog) inspector('getItemNodeId.readResult:', readResult);
+
+      if (readResult) {
+        // Get start time
+        const start = moment();
+        debug('SessionHistoryValue_ForCH_M51.StartTime:', getTime(start, false));
+        // Pause
+        await pause(1000);
+        // Get end time
+        const end = moment();
+        debug('SessionHistoryValue_ForCH_M51.EndTime:', getTime(end, false));
+
+        // service.sessionReadHistoryValues
+        data = { id, action: 'sessionReadHistoryValues', nameNodeIds: 'CH_M51::ValueFromFile', start, end };
+        readResult = await service.create(data);
+
+        if (isLog) inspector('SessionHistoryValue_ForCH_M51.readResult:', readResult);
+        // inspector('SessionHistoryValue_ForCH_M51.readResult:', readResult);
+        if (readResult.length && readResult[0].statusCode.value === 0) {
+          if (readResult[0].historyData.dataValues.length) {
+            let dataValues = readResult[0].historyData.dataValues;
+            dataValues.forEach(dataValue => {
+              if (dataValue.statusCode.value === 0) {
+                dataItems = JSON.parse(dataValue.value.value);
+                accumulator = '';
+                values = [];
+                loForEach(dataItems, function (value, key) {
+                  accumulator = accumulator + `${key}=${value}, `;
+                  values.push({ key, value });
+                });
+                histOpcuaValues.push({ name: data.nameNodeIds, timestamp: dataValue.sourceTimestamp, values });
+                // console.log(chalk.green('SessionHistoryValue_ForCH_M51.ValueFromFile:'), chalk.cyan(`${accumulator} Timestamp=${dataValue.sourceTimestamp}`));
+                assert.ok(true, 'OPC-UA clients: session history value from file');
+              } else {
+                assert.ok(false, 'OPC-UA clients: session history value from file');
+              }
+            });
+          } else {
+            assert.ok(false, 'OPC-UA clients: session history value from file');
+          }
+        } else {
+          assert.ok(false, 'OPC-UA clients: session history value from file');
+        }
+      } else {
+        assert.ok(false, 'OPC-UA clients: session history value from file');
+      }
+      if (isLog) inspector('SessionHistoryValue_ForCH_M51.histOpcuaValues:', histOpcuaValues);
+      inspector('SessionHistoryValue_ForCH_M51.histOpcuaValues:', histOpcuaValues);
+      assert.ok(histOpcuaValues.length, 'OPC-UA clients: session history value from file');
+    });
+
+    //===== CLIENT/SERVER REMOVE =======//
+    it('#12 OPC-UA clients: remove service', async () => {
+      const service = appRestClient.service('opcua-clients');
+      const opcuaClient = await service.remove(id);
+      if (isLog) inspector('Remove client service:', opcuaClient);
+      // inspector('Remove client service:', opcuaClient);
+      assert.ok(opcuaClient, 'OPC-UA clients: remove service');
+    });
+
+    it('#13 OPC-UA servers:  remove service', async () => {
+      const service = appRestClient.service('opcua-servers');
+      const opcuaServer = await service.remove(id);
+      if (isLog) inspector('Remove server service:', opcuaServer);
+      // inspector('Remove server service:', opcuaServer);
+      assert.ok(opcuaServer, 'OPC-UA servers:  remove service');
+    });
+
   });
 });
