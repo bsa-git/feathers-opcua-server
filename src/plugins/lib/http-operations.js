@@ -2,6 +2,7 @@
 const url = require('url');
 const axios = require('axios');
 const cheerio = require('cheerio');
+const logger = require('../../logger');
 
 const {
   inspector,
@@ -20,20 +21,25 @@ const isDebug = false;
 
 /**
  * @method urlExists
+ * @async
+ * 
  * @param {String} target 
- * @returns {Promise}
+ * @returns {Boolean|Error}
  */
 const urlExists = async function (target) {
   let uri;
   try {
     uri = url.parse(target);
   } catch (error) {
+    logger.error(`Invalid url ${target}`)
     throw new Error(`Invalid url ${target}`);
   }
 
   try {
     await axios.get(uri);
+    return true;
   } catch (error) {
+    logger.error(`This URL "${target}" does not exist`);
     if (isDebug) console.log('http-operations.checkExistUrl.error.code:', error.code);
     if (isLog) inspector('http-operations.checkExistUrl.error.config:', error.config);
     if (isLog) inspector('http-operations.checkExistUrl.error.headers:', error.headers);
@@ -46,6 +52,22 @@ const urlExists = async function (target) {
     throw error;
   }
 };
+
+/**
+ * @method isUrlExists
+ * @async
+ * 
+ * @param {String} url 
+ * @returns {Boolean}
+ */
+const isUrlExists = async function (url) {
+  try {
+    await urlExists(url);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
 
 
 /**
@@ -92,5 +114,6 @@ const httpGetNewFileFromDir = async function (url) {
 
 module.exports = {
   urlExists,
+  isUrlExists,
   httpGetNewFileFromDir
 };
