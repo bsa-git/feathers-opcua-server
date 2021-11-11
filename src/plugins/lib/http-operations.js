@@ -31,7 +31,7 @@ const urlExists = async function (target) {
   try {
     uri = url.parse(target);
   } catch (error) {
-    logger.error(`Invalid url ${target}`)
+    logger.error(`Invalid url ${target}`);
     throw new Error(`Invalid url ${target}`);
   }
 
@@ -67,7 +67,7 @@ const isUrlExists = async function (url) {
   } catch (error) {
     return false;
   }
-}
+};
 
 
 /**
