@@ -137,9 +137,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
               assert.ok(false, 'OPC-UA clients: session history value from file');
             }
           });
-        } else {
-          assert.ok(false, 'OPC-UA clients: session history value from file');
-        }
+        } 
       } else {
         assert.ok(false, 'OPC-UA clients: session history value from file');
       }
@@ -166,7 +164,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       debug('OPC-UA clients: session history values for "CH_M51" group.EndTime:', getTime(end, false));
       readResults = await service.sessionReadHistoryValuesEx(id, variables, start, end);
       if (isLog) inspector('OPC-UA clients: session history values for "CH_M51" group.readResults:', readResults);
-      inspector('OPC-UA clients: session history values for "CH_M51" group.readResults:', readResults);
+      // inspector('OPC-UA clients: session history values for "CH_M51" group.readResults:', readResults);
       if (readResults.length) {
         readResults.forEach(readResult => {
           if (readResult.statusCode === 'Good') {

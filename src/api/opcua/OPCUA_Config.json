@@ -50,7 +50,7 @@
     "clientScript": "startSubscriptionMonitor",
     "subscription": "onChangedGroupHandlerForDB",
     "hostTypeDB": "mongodb",
-    "opcuaSaveModeToDB": "remote",
+    "opcuaSaveModeToDB": "remoteUpdate",
     "opcuaRemoteDbUrl": "http://localhost:3131",
     "security": {
       "mode": "SignAndEncrypt",
@@ -148,7 +148,7 @@
     "clientScript": "startSubscriptionMonitor",
     "subscription": "onChangedGroupHandlerForDB",
     "hostTypeDB": "mongodb",
-    "opcuaSaveModeToDB": "remote",
+    "opcuaSaveModeToDB": "remoteUpdate",
     "opcuaRemoteDbUrl": "http://DESKTOP-R0J95L7:3131",
     "security": {
       "mode": "SignAndEncrypt",
@@ -239,7 +239,7 @@
     "clientScript": "startSubscriptionMonitor",
     "subscription": "onChangedGroupHandlerForDB",
     "hostTypeDB": "mongodb",
-    "opcuaSaveModeToDB": "remote",
+    "opcuaSaveModeToDB": "remoteUpdate",
     "opcuaRemoteDbUrl": "http://localhost:3131",
     "include": {
       "tests": [

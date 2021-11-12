@@ -14,15 +14,15 @@ const {
   getOpcuaConfig,
   getServerService,
   getClientService,
-  executeOpcuaClientScript,
-  getOpcuaTags
+  executeOpcuaClientScript
 } = require('./opcua-helper');
 
 const {
   saveOpcuaTags,
+  removeOpcuaValues,
   integrityCheckOpcua,
   isSaveOpcuaToDB,
-  getOpcuaSaveModeToDB,
+  isRemoteOpcuaToDB,
   getOpcuaRemoteDbUrl,
 } = require('../db-helpers');
 
@@ -30,14 +30,6 @@ const {
   feathersClient
 } = require('../auth');
 
-const {
-  MessageSecurityMode,
-  SecurityPolicy,
-  UserTokenType,
-  AttributeIds
-} = require('node-opcua');
-
-const chalk = require('chalk');
 
 const debug = require('debug')('app:opcua-bootstrap');
 const isDebug = false;
@@ -78,7 +70,9 @@ module.exports = async function opcuaBootstrap(app) {
     } else {
       logger.error('Result integrity check opcua.localDB: ERR');
     }
-    const isRemote = getOpcuaSaveModeToDB() === 'remote';
+    let removeResult = await removeOpcuaValues(app);
+    logger.info('opcuaBootstrap.removeOpcuaValues.localDB:', removeResult);
+    const isRemote = isRemoteOpcuaToDB();
     if (isRemote) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
       const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
@@ -93,6 +87,8 @@ module.exports = async function opcuaBootstrap(app) {
         } else {
           logger.error('Result integrity check opcua.remoteDB: ERR');
         }
+        removeResult = await removeOpcuaValues(appRestClient, isRemote);
+        logger.info('opcuaBootstrap.removeOpcuaValues.remoteDB:', removeResult);
       }
     }
   }

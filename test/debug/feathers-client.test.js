@@ -281,8 +281,6 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
                 assert.ok(false, 'OPC-UA clients: session history value from file');
               }
             });
-          } else {
-            assert.ok(false, 'OPC-UA clients: session history value from file');
           }
         } else {
           assert.ok(false, 'OPC-UA clients: session history value from file');

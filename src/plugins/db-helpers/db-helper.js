@@ -133,23 +133,31 @@ const getEnvTypeDB = function () {
  * @returns {Boolean}
  */
 const isSaveOpcuaToDB = function () {
-  let isSave = false;
-  //--------------------
-  const myConfigs = getOpcuaConfigsForMe();
-  const myConfig = myConfigs.find(item => item.opcuaSaveModeToDB);
-  // const myConfig = myConfigs.find(item => item.opcuaSaveModeToDB === 'no');
-  if (myConfig) {
-    isSave = myConfig.opcuaSaveModeToDB !== 'no';
-  } else {
-    isSave = process.env.DEFAULT_OPCUA_SAVEMODE_TODB !== 'no';
-  }
-  return isSave;
+  return getOpcuaSaveModeToDB() !== 'no';
+};
+
+/**
+ * @name isRemoteOpcuaToDB
+ * @returns {Boolean}
+ */
+const isRemoteOpcuaToDB = function () {
+  const saveMode = getOpcuaSaveModeToDB();
+  return (saveMode === 'remoteAdd') || (saveMode === 'remoteUpdate');
+};
+
+/**
+ * @name isUpdateOpcuaToDB
+ * @returns {Boolean}
+ */
+const isUpdateOpcuaToDB = function () {
+  const saveMode = getOpcuaSaveModeToDB();
+  return (saveMode === 'localUpdate') || (saveMode === 'remoteUpdate');
 };
 
 /**
  * @method getOpcuaSaveModeToDB
  * @returns {String}
- * e.g. (local|remote|no)
+ * e.g. (localAdd|localUpdate|remoteAdd|remoteUpdate|no)
  */
 const getOpcuaSaveModeToDB = function () {
   const myConfigs = getOpcuaConfigsForMe();
@@ -207,7 +215,7 @@ const getIdField = function (items) {
 };
 
 /**
- * @name saveOpcuaGroupValue
+ * @method saveOpcuaGroupValue
  * @async
  * 
  * @param {Object} app
@@ -216,8 +224,11 @@ const getIdField = function (items) {
  * @returns {Object}
  */
 const saveOpcuaGroupValue = async function (app, browseName, value) {
-  let tags, opcuaValue, opcuaValues = [], groupItems = [], savedValue = null;
+  let tags, opcuaValue, opcuaValues = [], groupItems = [];
+  let savedValue = null, findedItem, idField, itemId;
   //----------------------------------------------------------
+
+  if (!isSaveOpcuaToDB()) return;
 
   if (loIsString(value)) {
     opcuaValue = JSON.parse(value);
@@ -252,15 +263,36 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
 
     if (isLog) inspector('db-helper.saveOpcuaGroupValue.data:', data);
 
-    const isRemote = (getOpcuaSaveModeToDB() === 'remote');
-    if (isRemote) {
+    if (isRemoteOpcuaToDB()) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
       const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
       if (appRestClient) {
-        savedValue = await createItem(appRestClient, 'opcua-values', data);
+        if (isUpdateOpcuaToDB()) {
+          findedItem = await findItem(appRestClient, 'opcua-values', { tagName: tag.browseName, $sort: { updatedAt: -1 }, });
+          if (!findedItem) {
+            savedValue = await createItem(appRestClient, 'opcua-values', data);
+          } else {
+            idField = getIdField(findedItem);
+            itemId = findedItem[idField];
+            savedValue = await patchItem(appRestClient, 'opcua-values', itemId, data);
+          }
+        } else {
+          savedValue = await createItem(appRestClient, 'opcua-values', data);
+        }
       }
     } else {
-      savedValue = await createItem(app, 'opcua-values', data);
+      if (isUpdateOpcuaToDB()) {
+        findedItem = await findItem(app, 'opcua-values', { tagName: tag.browseName, $sort: { updatedAt: -1 }, });
+        if (!findedItem) {
+          savedValue = await createItem(app, 'opcua-values', data);
+        } else {
+          idField = getIdField(findedItem);
+          itemId = findedItem[idField];
+          savedValue = await patchItem(app, 'opcua-values', itemId, data);
+        }
+      } else {
+        savedValue = await createItem(app, 'opcua-values', data);
+      }
     }
     if (isLog) inspector('db-helper.saveOpcuaValue.savedValue:', savedValue);
   }
@@ -268,7 +300,40 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
 };
 
 /**
- * @name saveOpcuaTags
+ * @method removeOpcuaValues
+ * @async
+ * 
+ * @param {Object} app 
+ * @param {Boolean} isRemote 
+ * @returns {Number}
+ */
+const removeOpcuaValues = async function (app, isRemote = false) {
+  let count = 0, removedItems;
+  //-------------------------
+  if (isRemote) {
+    // Get opcua tags 
+    const opcuaTags = getOpcuaTags();
+    if (isLog) inspector('db-helper.removeOpcuaValues.opcuaTags:', opcuaTags);
+    for (let index = 0; index < opcuaTags.length; index++) {
+      const tag = opcuaTags[index];
+      if (tag.type !== 'object') {
+        removedItems = await removeItems(app, 'opcua-values', { tagName: tag.browseName });
+        if (removedItems.length) {
+          count = count + removedItems.length;
+        }
+      }
+    }
+  } else {
+    removedItems = await removeItems(app, 'opcua-values');
+    if (removedItems.length) {
+      count = count + removedItems.length;
+    }
+  }
+  return count;
+};
+
+/**
+ * @method saveOpcuaTags
  * @async
  * 
  * @param {Object} app 
@@ -942,10 +1007,13 @@ module.exports = {
   getEnvTypeDB,
   getEnvAdapterDB,
   isSaveOpcuaToDB,
+  isRemoteOpcuaToDB,
+  isUpdateOpcuaToDB,
   getOpcuaSaveModeToDB,
   getOpcuaRemoteDbUrl,
   getIdField,
   saveOpcuaGroupValue,
+  removeOpcuaValues,
   saveOpcuaTags,
   integrityCheckOpcua,
   //-------------------
