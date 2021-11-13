@@ -4,7 +4,7 @@
       "browseName": "CH_M7-313",
       "displayName": "Черкассы 'АЗОТ' цех М7-313",
       "type": "object",
-      "tabs": {
+      "view": {
         "tab1": [
           {
             "name": "Жидкий аммиак",
@@ -29,7 +29,7 @@
       "browseName": "CH_M7-357",
       "displayName": "Черкассы 'АЗОТ' цех М7-357",
       "type": "object",
-      "tabs": {
+      "view": {
         "tab1": [
           {
             "name": "Жидкий аммиак",
@@ -50,7 +50,7 @@
       "browseName": "CH_M7-657",
       "displayName": "Черкассы 'АЗОТ' цех М7-657",
       "type": "object",
-      "tabs": {
+      "view": {
         "tab1": [
           {
             "name": "Жидкий аммиак",

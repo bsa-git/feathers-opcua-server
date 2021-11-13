@@ -86,7 +86,7 @@ let base = merge({},
           }
         }
       },
-      tabs: {
+      view: {
         type: 'object',
         properties: {
           tab1: {
@@ -109,6 +109,18 @@ let base = merge({},
               }
             }
           }
+        }
+      },
+      histParams: {
+        type: 'object',
+        properties: {
+          id: { type: 'string' },
+          url: {
+            type: 'string',
+            format: 'uri',
+            faker: 'internet.url'
+          },
+          savingValuesMode: { type: 'string' }// add|update
         }
       }
     }

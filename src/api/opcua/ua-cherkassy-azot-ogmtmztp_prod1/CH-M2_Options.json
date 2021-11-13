@@ -4,7 +4,7 @@
       "browseName": "CH_M2",
       "displayName": "Черкассы 'АЗОТ' цех М-2",
       "type": "object",
-      "tabs": {
+      "view": {
         "tab1": [
           {
             "name": "Пар-30",

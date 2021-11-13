@@ -219,7 +219,7 @@
       "browseName": "CH_M51",
       "displayName": "Cherkassy 'AZOT' M5-1",
       "type": "object",
-      "tabs": {
+      "view": {
         "tab1": [
           {
             "name": "Common plant",

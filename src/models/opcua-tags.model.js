@@ -64,11 +64,16 @@ module.exports = function (app) {
           }
         }
       },
-      tabs: {
+      view: {
         type: {
           tab1: [{ name: String, items: [String] }],
           tab2: [{ name: String, items: [String] }]
         }
+      },
+      histParams: {
+        id: { type: String },
+        url: { type: String },
+        savingValuesMode: { type: String }// add|update
       }
     }, {
       timestamps: true

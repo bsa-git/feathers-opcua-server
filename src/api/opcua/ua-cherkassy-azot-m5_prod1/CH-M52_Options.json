@@ -4,7 +4,7 @@
       "browseName": "CH_M52",
       "displayName": "Черкассы 'АЗОТ' цех M5/2",
       "type": "object",
-      "tabs": {
+      "view": {
         "tab1": [
           { "name": "ОЦ", "items": ["02"] },
           { "name": "Агрегат 1/2", "items": ["12"] },

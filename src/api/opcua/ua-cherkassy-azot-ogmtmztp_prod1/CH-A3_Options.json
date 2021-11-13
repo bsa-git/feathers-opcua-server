@@ -4,7 +4,7 @@
       "browseName": "CH_A3",
       "displayName": "Черкассы 'АЗОТ' цех A3",
       "type": "object",
-      "tabs": {
+      "view": {
         "tab1": [
           {
             "name": "ПГ в цех",
