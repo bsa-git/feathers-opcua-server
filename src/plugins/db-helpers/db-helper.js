@@ -4,6 +4,7 @@ const logger = require('../../logger');
 const {
   getOpcuaTags,
   getOpcuaConfigsForMe,
+  getOpcuaSaveModeToDB,
 } = require('../opcua/opcua-helper');
 const {
   inspector,
@@ -152,17 +153,6 @@ const isRemoteOpcuaToDB = function () {
 const isUpdateOpcuaToDB = function () {
   const saveMode = getOpcuaSaveModeToDB();
   return (saveMode === 'localUpdate') || (saveMode === 'remoteUpdate');
-};
-
-/**
- * @method getOpcuaSaveModeToDB
- * @returns {String}
- * e.g. (localAdd|localUpdate|remoteAdd|remoteUpdate|no)
- */
-const getOpcuaSaveModeToDB = function () {
-  const myConfigs = getOpcuaConfigsForMe();
-  const myConfig = myConfigs.find(item => item.opcuaSaveModeToDB);
-  return myConfig ? myConfig.opcuaSaveModeToDB : process.env.DEFAULT_OPCUA_SAVEMODE_TODB;
 };
 
 /**

@@ -219,6 +219,11 @@
       "browseName": "CH_M51",
       "displayName": "Cherkassy 'AZOT' M5-1",
       "type": "object",
+      "histParams": {
+        "opcuaId": "ua-cherkassy-azot_test2",
+        "opcuaUrl": "http://localhost:3030",
+        "savingValuesMode": "update"
+      },
       "view": {
         "tab1": [
           {

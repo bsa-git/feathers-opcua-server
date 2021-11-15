@@ -456,6 +456,30 @@ const getOpcuaConfigOptions = function (id, browseName = '') {
 };
 
 /**
+ * @method getOpcuaSaveModeToDB
+ * @returns {String}
+ * e.g. (localAdd|localUpdate|remoteAdd|remoteUpdate|no)
+ */
+const getOpcuaSaveModeToDB = function () {
+  const myConfigs = getOpcuaConfigsForMe();
+  const myConfig = myConfigs.find(item => item.opcuaSaveModeToDB);
+  return myConfig ? myConfig.opcuaSaveModeToDB : process.env.DEFAULT_OPCUA_SAVEMODE_TODB;
+};
+
+/**
+ * @method getSavingValuesMode
+ * @returns {String}
+ * e.g. (add|update|no)
+ */
+const getSavingValuesMode = function () {
+  const saveMode = getOpcuaSaveModeToDB();
+  const isSaveOpcuaToDB = saveMode !== 'no';
+  const isUpdateOpcuaToDB = (saveMode === 'localUpdate') || (saveMode === 'remoteUpdate');
+  const savingValuesMode = isSaveOpcuaToDB ? isUpdateOpcuaToDB ? 'update' : 'add' : 'no';
+  return savingValuesMode;
+};
+
+/**
  * @name getOpcuaTags
  * @param {String} browseName 
  * @returns {Array|Object}
@@ -469,7 +493,16 @@ const getOpcuaTags = function (browseName = '') {
   // Get all tags
   loForEach(opcuaOptions, opt => {
     mergedOpcuaOptions = mergeOpcuaConfigOptions(opt.id);
-    opcuaTags = loConcat(opcuaTags, mergedOpcuaOptions.objects, mergedOpcuaOptions.variables, mergedOpcuaOptions.groups);
+    const mergedOpcuaOptionsObjects = mergedOpcuaOptions.objects.map(obj => {
+      if (!obj.histParams) {
+        obj.histParams = {};
+      }
+      obj.histParams.opcuaId = opt.id;
+      obj.histParams.opcuaUrl = opt.clientServiceUrl;
+      obj.histParams.savingValuesMode = getSavingValuesMode();
+      return obj;
+    })
+    opcuaTags = loConcat(opcuaTags, mergedOpcuaOptionsObjects, mergedOpcuaOptions.variables, mergedOpcuaOptions.groups);
   });
   opcuaTags = opcuaTags.filter(item => item && item.browseName);
 
@@ -942,17 +975,17 @@ const convertAliasListToBrowseNameList = (variableList = [], dataItems = {}) => 
 const convertTo = function (convertType, value) {
   let result = null;
   switch (convertType) {
-  // (kg/h -> m3/h) for ammonia
-  case 'ammonia_kg/h_to_m3/h':
-    result = value * 1.4;
-    break;
+    // (kg/h -> m3/h) for ammonia
+    case 'ammonia_kg/h_to_m3/h':
+      result = value * 1.4;
+      break;
     // (m3/h -> kg/h) for ammonia
-  case 'ammonia_m3/h_to_kg/h':
-    result = value * 0.716;
-    break;
+    case 'ammonia_m3/h_to_kg/h':
+      result = value * 0.716;
+      break;
 
-  default:
-    break;
+    default:
+      break;
   }
   return result;
 };
@@ -989,29 +1022,29 @@ const getInitValueForDataType = function (dataType) {
   dataType = opcuaDataTypeToString(dataType);
   dataType = dataType.toLowerCase();
   switch (dataType) {
-  case 'boolean':
-    result = false;
-    break;
-  case 'sbyte':
-  case 'byte':
-  case 'uint16':
-  case 'int32':
-  case 'uint32':
-  case 'int64':
-    result = 0;
-    break;
-  case 'float':
-  case 'double':
-    result = 0.0;
-    break;
-  case 'string':
-    result = '';
-    break;
-  case 'datetime':
-    result = moment().format();
-    break;
-  default:
-    break;
+    case 'boolean':
+      result = false;
+      break;
+    case 'sbyte':
+    case 'byte':
+    case 'uint16':
+    case 'int32':
+    case 'uint32':
+    case 'int64':
+      result = 0;
+      break;
+    case 'float':
+    case 'double':
+      result = 0.0;
+      break;
+    case 'string':
+      result = '';
+      break;
+    case 'datetime':
+      result = moment().format();
+      break;
+    default:
+      break;
   }
   if (isDebug) debug('getInitValueForDataType.dataType:', dataType, result);
   return result;
@@ -1027,29 +1060,29 @@ const getInitValueForDataType = function (dataType) {
 const convertAnyToValue = function (dataType, value) {
   let result = null;
   switch (dataType) {
-  case 'boolean':
-    result = isTrue(value);
-    break;
-  case 'sbyte':
-  case 'byte':
-  case 'uint16':
-  case 'int32':
-  case 'uint32':
-  case 'int64':
-    result = loToInteger(value);
-    break;
-  case 'float':
-  case 'double':
-    result = loToNumber(value);
-    break;
-  case 'string':
-    result = loToString(value);
-    break;
-  case 'datetime':
-    result = moment().format(value);
-    break;
-  default:
-    break;
+    case 'boolean':
+      result = isTrue(value);
+      break;
+    case 'sbyte':
+    case 'byte':
+    case 'uint16':
+    case 'int32':
+    case 'uint32':
+    case 'int64':
+      result = loToInteger(value);
+      break;
+    case 'float':
+    case 'double':
+      result = loToNumber(value);
+      break;
+    case 'string':
+      result = loToString(value);
+      break;
+    case 'datetime':
+      result = moment().format(value);
+      break;
+    default:
+      break;
   }
   if (isDebug) debug('convertAnyToValue.dataType:', dataType, result);
   return result;
@@ -1163,18 +1196,18 @@ const canDbClientRun = function (dbClientName) {
 const getSecurityMode = function (num) {
   let result = '';
   switch (num) {
-  case 1:
-    result = 'None';
-    break;
-  case 2:
-    result = 'Sign';
-    break;
-  case 3:
-    result = 'SignAndEncrypt';
-    break;
-  default:
-    result = 'None';
-    break;
+    case 1:
+      result = 'None';
+      break;
+    case 2:
+      result = 'Sign';
+      break;
+    case 3:
+      result = 'SignAndEncrypt';
+      break;
+    default:
+      result = 'None';
+      break;
   }
   return result;
 };
@@ -1208,6 +1241,8 @@ module.exports = {
   getOpcuaConfigForMe,
   getOpcuaConfigsForMe,
   getOpcuaConfigOptions,
+  getOpcuaSaveModeToDB,
+  getSavingValuesMode,
   mergeOpcuaConfigOptions,
   getOpcuaTags,
   getParamsAddressSpace,
