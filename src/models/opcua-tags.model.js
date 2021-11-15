@@ -71,8 +71,8 @@ module.exports = function (app) {
         }
       },
       histParams: {
-        id: { type: String },
-        url: { type: String },
+        opcuaId: { type: String },
+        opcuaUrl: { type: String },
         savingValuesMode: { type: String }// add|update
       }
     }, {
