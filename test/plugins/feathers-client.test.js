@@ -290,7 +290,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       }
       if (isLog) inspector('SessionHistoryValue_ForCH_M51.histOpcuaValues:', histOpcuaValues);
       inspector('SessionHistoryValue_ForCH_M51.histOpcuaValues:', histOpcuaValues);
-      assert.ok(histOpcuaValues.length, 'OPC-UA clients: session history value from file');
+      assert.ok(readResult.length, 'OPC-UA clients: session history value from file');
     });
 
     //===== CLIENT/SERVER REMOVE =======//
