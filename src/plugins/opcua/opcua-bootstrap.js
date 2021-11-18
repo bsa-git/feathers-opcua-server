@@ -23,6 +23,7 @@ const {
   integrityCheckOpcua,
   isSaveOpcuaToDB,
   isRemoteOpcuaToDB,
+  isUpdateOpcuaToDB,
   getOpcuaRemoteDbUrl,
 } = require('../db-helpers');
 
@@ -45,7 +46,7 @@ const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) 
  */
 module.exports = async function opcuaBootstrap(app) {
   let service = null, opcuaServer = null, opcuaClient = null;
-  let integrityResult;
+  let integrityResult, removeResult;
   //--------------------------------------------------------
 
   // Determine if command line argument exists for seeding data
@@ -70,8 +71,12 @@ module.exports = async function opcuaBootstrap(app) {
     } else {
       logger.error('Result integrity check opcua.localDB: ERR');
     }
-    let removeResult = await removeOpcuaValues(app);
-    logger.info('opcuaBootstrap.removeOpcuaValues.localDB:', removeResult);
+    if (isUpdateOpcuaToDB()) {
+      removeResult = await removeOpcuaValues(app);
+      if(removeResult)
+        logger.info(`opcuaBootstrap.removeOpcuaValues.localDB: ${removeResult}`);
+    }
+
     const isRemote = isRemoteOpcuaToDB();
     if (isRemote) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
@@ -87,8 +92,10 @@ module.exports = async function opcuaBootstrap(app) {
         } else {
           logger.error('Result integrity check opcua.remoteDB: ERR');
         }
-        removeResult = await removeOpcuaValues(appRestClient, isRemote);
-        logger.info('opcuaBootstrap.removeOpcuaValues.remoteDB:', removeResult);
+        if (isUpdateOpcuaToDB()) {
+          removeResult = await removeOpcuaValues(appRestClient, isRemote);
+          if(removeResult) logger.info(`opcuaBootstrap.removeOpcuaValues.localDB: ${removeResult}`);
+        }
       }
     }
   }
