@@ -252,7 +252,7 @@ describe('<<=== ScriptOperations: (file-operations.script) ===>>', () => {
       points = points.map(item => {
         let result = {};
         result[fields.column1.toField] = item[fields.column1.fromField].split('.')[0].split(':')[1];
-        result[fields.column2.toField] = `${config.prefix}/${item[fields.column2.fromField]}\\${config.postfix}`;
+        result[fields.column2.toField] = `${config.prefix}\\${item[fields.column2.fromField]}\\${config.postfix}`;
         result[fields.column3.toField] = item[fields.column3.default];
         result[fields.column4.toField] = item[fields.column4.default];
         result[fields.column5.toField] = item[fields.column5.default];
