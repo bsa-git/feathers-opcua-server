@@ -16,7 +16,7 @@
           { "name": "Пар16", "items": ["PAR"] },
           { "name": "HNO3 Склад", "items": ["SKLAD"] },
           { "name": "Вода", "items": ["VODA", "VODA_XOB"] },
-          { "name": "Компрессия", "items": ["PS180", "GTT", "UKST", "RD"] },
+          { "name": "Компрессия", "items": ["GTT", "UKST", "RD"] },
           { "name": "Конверсия", "items": ["KONV", "ABSOR", "OXG"] }
         ]
       }
@@ -503,7 +503,7 @@
       "AGR21": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M51::21SBS_AO:21PS180",
+      "browseName": "CH_M51::21GTT:21PS180",
       "aliasName": "21VZ_PS180",
       "displayName": "21VZ_PS180",
       "ownerName": "CH_M51",
@@ -746,7 +746,7 @@
       "AGR31": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M51::31SBS_AO:31PS180",
+      "browseName": "CH_M51::31GTT:31PS180",
       "aliasName": "31VZ_PS180",
       "displayName": "31VZ_PS180",
       "ownerName": "CH_M51",
