@@ -47,12 +47,12 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
     stopListenPort(done);
   });
 
-  it('OPC-UA servers: registered the service', async () => {
+  it('#1: OPC-UA servers: registered the service', async () => {
     const service = await getServerService(app, id);
     assert.ok(service, 'OPC-UA servers: registered the service');
   });
 
-  it('OPC-UA servers: created the service', async () => {
+  it('#2: OPC-UA servers: created the service', async () => {
     const service = await getServerService(app, id);
     // service create
     const params = { user: opcuaUser, provider: 'rest', authenticated: true };
@@ -61,7 +61,7 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
     assert.ok(opcuaServer, 'OPC-UA servers: created the service');
   });
 
-  it('OPC-UA servers: Error in creating an existing service', async () => {
+  it('#3: OPC-UA servers: Error in creating an existing service', async () => {
     const service = await getServerService(app, id);
     try {
       // service create
@@ -72,21 +72,21 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
     }
   });
 
-  it('OPC-UA servers: get the service', async () => {
+  it('#4: OPC-UA servers: get the service', async () => {
     const service = await getServerService(app, id);
     const opcuaServer = await service.get(id);
     if (isLog) inspector('get the service.currentState:', opcuaServer.server.getCurrentState());
     assert.ok(opcuaServer, 'OPC-UA servers: get the service');
   });
 
-  it('OPC-UA servers: find services', async () => {
+  it('#5: OPC-UA servers: find services', async () => {
     const service = await getServerService(app, id);
     const opcuaServers = await service.find();
     if (isLog) inspector('find services.ids:', opcuaServers.map(srv => srv.id));
     assert.ok(opcuaServers.length, 'OPC-UA servers: find services');
   });
 
-  it('OPC-UA servers: remove the service', async () => {
+  it('#6: OPC-UA servers: remove the service', async () => {
     try {
       // service remove
       const service = await getServerService(app, id);
@@ -100,7 +100,7 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
     }
   });
 
-  it('OPC-UA servers: created the service', async () => {
+  it('#7: OPC-UA servers: created the service', async () => {
     let opcuaServer;
     // service create
     const service = await getServerService(app, id);
@@ -114,7 +114,7 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
     assert.ok(opcuaServer, 'OPC-UA servers: created the service');
   });
 
-  it('OPC-UA servers: update the service', async () => {
+  it('#8: OPC-UA servers: update the service', async () => {
     const service = await getServerService(app, id);
     // get opcuaServer port
     let opcuaServer = await service.get(id);
@@ -125,7 +125,7 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
     assert.ok(opcuaServer, 'OPC-UA servers: update the service');
   });
 
-  it('OPC-UA servers: patch the service', async () => {
+  it('#9: OPC-UA servers: patch the service', async () => {
     const service = await getServerService(app, id);
     // get opcuaServer port
     let opcuaServer = await service.get(id);
@@ -136,7 +136,7 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
     assert.ok(opcuaServer, 'OPC-UA servers: patch the service');
   });
 
-  it('OPC-UA servers: shutdown the service', async () => {
+  it('#10: OPC-UA servers: shutdown the service', async () => {
     const service = await getServerService(app, id);
     let opcuaServer = await service.get(id);
     opcuaServer = await service.opcuaServerShutdown(id, 1500);
@@ -144,7 +144,7 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
     assert.ok(opcuaServer, 'OPC-UA servers: shutdown the service');
   });
 
-  it('OPC-UA servers: create/constructAddressSpace/start the service', async () => {
+  it('#11: OPC-UA servers: create/constructAddressSpace/start the service', async () => {
     const service = await getServerService(app, id);
     let port = await service.getCurrentState(id).port + 1;
     let opcuaServer = await service.get(id);
@@ -156,7 +156,7 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
     assert.ok(opcuaServer, 'OPC-UA servers: create/constructAddressSpace/start the service');
   });
 
-  it('OPC-UA servers: properties of service', async () => {
+  it('#12: OPC-UA servers: properties of service', async () => {
     const service = await getServerService(app, id);
 
     let result = await service.getBytesWritten(id);
@@ -195,7 +195,7 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
 
   //===== SESSION CLOSE/CLIENT DISCONNECT/SERVER SHUTDOWN =====//
 
-  it('OPC-UA servers: shutdown the service', async () => {
+  it('#13: OPC-UA servers: shutdown the service', async () => {
     const service = await getServerService(app, id);
     let opcuaServer = await service.get(id);
     opcuaServer = await service.opcuaServerShutdown(id, 1500);

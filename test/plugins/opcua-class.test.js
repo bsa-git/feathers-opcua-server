@@ -238,6 +238,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
         debug('SessionHistoryValue.EndTime:', getTime(end, false));
 
         readResult = await client.sessionReadHistoryValues('Device2.PressureVesselDevice', start, end);
+        inspector('SessionHistoryValue.readResult:', readResult);
         if (readResult.length && readResult[0].statusCode.name === 'Good') {
           if (readResult[0].historyData.dataValues.length) {
             let dataValues = readResult[0].historyData.dataValues;

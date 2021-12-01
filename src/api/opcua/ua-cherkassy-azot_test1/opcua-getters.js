@@ -94,6 +94,7 @@ function histValueFromSource(params = {}, addedValue) {
     if (isDebug) debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime());
     // debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime()); 
     addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
+    if(isLog) inspector('histValueFromSource.addedValue:', formatUAVariable(addedValue));
     t = t + 1;
   }, interval);
 }
@@ -111,9 +112,7 @@ function histValueFromFile(params = {}, addedValue) {
   readOnlyNewFile([appRoot, path], (filePath, data) => {
     // Show filePath, data
     if (isDebug) console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
-    // console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
     if (isDebug) console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
-    // console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
     // Set value from source
     dataType = formatUAVariable(addedValue).dataType[1];
     addedValue.setValueFromSource({ dataType, value: data });

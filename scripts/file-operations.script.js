@@ -87,6 +87,8 @@ const inpKepServerConfig = {
   filter: ['PNT', 'MEAS', 'SPT', 'OUT'],
   inpFilter: ['NAMEINCOL', 'HIRANGE', 'LORANGE'],
   delimiterTo: ',',
+  prefix: '52AW01',//51AW01
+  postfix: 'hist01',//51hs01
   path: 'scripts/api/toKEPServer/fromFoxHist',
   jsonFileName: 'm52_v210802.json',// m51_v210729.json, m52_v210802.json
   inpFileNameFrom: 'm52-hist0_v210802.inp',// m51-hist0_v210729.inp, m52-hist0_v210802.inp
@@ -250,7 +252,7 @@ describe('<<=== ScriptOperations: (file-operations.script) ===>>', () => {
       points = points.map(item => {
         let result = {};
         result[fields.column1.toField] = item[fields.column1.fromField].split('.')[0].split(':')[1];
-        result[fields.column2.toField] = `52AW00/${item[fields.column2.fromField]}\\hist00`;
+        result[fields.column2.toField] = `${config.prefix}\\${item[fields.column2.fromField]}\\${config.postfix}`;
         result[fields.column3.toField] = item[fields.column3.default];
         result[fields.column4.toField] = item[fields.column4.default];
         result[fields.column5.toField] = item[fields.column5.default];

@@ -110,7 +110,7 @@ class OpcuaServers {
   async remove(id, params) {
     let opcuaServer;
     opcuaServer = await this.get(id);
-    await opcuaServer.server.opcuaServerShutdown();
+    await opcuaServer.server.opcuaServerShutdown(1000);
     opcuaServer = Object.assign({}, {
       id: opcuaServer.id,
       server: { currentState: opcuaServer.server.getCurrentState() },

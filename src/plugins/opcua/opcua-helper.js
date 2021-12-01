@@ -240,17 +240,27 @@ const getEngineeringUnit = function (type, locale) {
  */
 const formatUAVariable = function (uaVariable = null) {
   let uaVar = {};
-  uaVar.nodeClass = uaVariable.nodeClass;
-  uaVar.nodeId = nodeIdToString(uaVariable.nodeId);
-  uaVar.browseName = uaVariable.browseName.name;
-  uaVar.dataType = getOpcuaDataType(uaVariable.dataType);
-  uaVar.accessLevel = uaVariable.accessLevel;
-  uaVar.userAccessLevel = uaVariable.userAccessLevel;
-  uaVar.minimumSamplingInterval = uaVariable.minimumSamplingInterval;
-  uaVar.historizing = uaVariable.historizing;
-  uaVar.value = uaVariable._dataValue.value.value;
-  uaVar.statusCode = uaVariable._dataValue.statusCode.name;
-  loMerge(uaVar, uaVariable.aliasName ? { aliasName: uaVariable.aliasName } : {});
+  if (uaVariable) {
+    uaVar.nodeClass = uaVariable.nodeClass;
+    uaVar.nodeId = nodeIdToString(uaVariable.nodeId);
+    uaVar.browseName = uaVariable.browseName.name;
+    uaVar.dataType = getOpcuaDataType(uaVariable.dataType);
+    uaVar.accessLevel = uaVariable.accessLevel;
+    uaVar.userAccessLevel = uaVariable.userAccessLevel;
+    uaVar.minimumSamplingInterval = uaVariable.minimumSamplingInterval;
+    uaVar.historizing = uaVariable.historizing;
+    if (uaVariable['$dataValue'] && uaVariable['$dataValue'].value) {
+      uaVar.value = uaVariable['$dataValue'].value.value;
+    } else {
+      uaVar.value = null;
+    }
+    if (uaVariable['$dataValue'] && uaVariable['$dataValue'].statusCode) {
+      uaVar.statusCode = uaVariable['$dataValue'].statusCode.name;
+    } else {
+      uaVar.statusCode = 'Undefined';
+    }
+    loMerge(uaVar, uaVariable.aliasName ? { aliasName: uaVariable.aliasName } : {});
+  }
   return uaVar;
 };
 

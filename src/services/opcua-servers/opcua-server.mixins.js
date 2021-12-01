@@ -96,7 +96,7 @@ module.exports = function opcuaServerMixins(service, path) {
    * @param {Number} timeout 
    * @returns {Object}
    */
-  service.opcuaServerShutdown = async function (id, timeout) {
+  service.opcuaServerShutdown = async function (id, timeout = 1000) {
     const opcuaServer = await service.get(id);
     await opcuaServer.server.opcuaServerShutdown(timeout);
     result = Object.assign({}, opcuaServer, getServerForProvider(opcuaServer.server));
