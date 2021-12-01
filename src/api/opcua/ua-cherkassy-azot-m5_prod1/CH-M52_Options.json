@@ -20,8 +20,9 @@
           { "name": "Природный газ", "items": ["PGAZ"] },
           { "name": "Пар16", "items": ["PAR"] },
           { "name": "HNO3 Склад", "items": ["SKLAD"] },
+          { "name": "HNO3 M9", "items": ["M9"] },
           { "name": "Вода", "items": ["VODA", "VODA_XOB"] },
-          { "name": "Компрессия", "items": ["PS180", "GTT", "UKST", "RD"] },
+          { "name": "Компрессия", "items": ["GTT", "UKST", "RD"] },
           { "name": "Конверсия", "items": ["KONV", "ABSOR", "OXG"] }
         ]
       }
@@ -505,7 +506,7 @@
       "description": "Температура кислоты в хранилище (T20)"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02P20_1",
+      "browseName": "CH_M52::02M9:02P20_1",
       "aliasName": "02HNO3_P20_1",
       "displayName": "02HNO3_P20_1",
       "ownerName": "CH_M52",
@@ -525,7 +526,7 @@
       "description": "Давление кислоты в коллекторе-1 (P20_1)"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02P20_2",
+      "browseName": "CH_M52::02M9:02P20_2",
       "aliasName": "02HNO3_P20_2",
       "displayName": "02HNO3_P20_2",
       "ownerName": "CH_M52",
@@ -545,7 +546,7 @@
       "description": "Давление кислоты в коллекторе-2 (P20_2)"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02P22_1",
+      "browseName": "CH_M52::02M9:02P22_1",
       "aliasName": "02HNO3_P22_1",
       "displayName": "02HNO3_P22_1",
       "ownerName": "CH_M52",
@@ -565,7 +566,7 @@
       "description": "Давление кислоты в М9 коллекторе-1 (P22_1)"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02P22_2",
+      "browseName": "CH_M52::02M9:02P22_2",
       "aliasName": "02HNO3_P22_2",
       "displayName": "02HNO3_P22_2",
       "ownerName": "CH_M52",
@@ -585,7 +586,7 @@
       "description": "Давление кислоты в М9 коллекторе-2 (P22_2)"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02F20_1",
+      "browseName": "CH_M52::02M9:02F20_1",
       "aliasName": "02HNO3_F20_1",
       "displayName": "02HNO3_F20_1",
       "ownerName": "CH_M52",
@@ -602,11 +603,11 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход кислоты в коллекторе-1 (F20_1)"
+      "description": "Расход HNO3 выдача в М9-1 (м3/ч)"
     },
     {
-      "browseName": "CH_M52::02SKLAD:02F20_2",
-      "aliasName": "02HNO3_F20_2",
+      "browseName": "CH_M52::02M9:02F20_2",
+      "aliasName": "02HNO3_F20_2_FV",
       "displayName": "02HNO3_F20_2",
       "ownerName": "CH_M52",
       "ownerGroup": "CH_M52::ValueFromFile",
@@ -622,7 +623,27 @@
         },
         "engineeringUnits": "cubic_metre_per_hour"
       },
-      "description": "Расход кислоты в коллекторе-2 (F20_2)"
+      "description": "Расход HNO3 выдача в М9-2 (м3/ч)"
+    },
+    {
+      "browseName": "CH_M52::02M9:02FM20_2",
+      "aliasName": "02HNO3_F20_2",
+      "displayName": "02HNO3_FM20_2",
+      "ownerName": "CH_M52",
+      "ownerGroup": "CH_M52::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "getter": "plugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 100
+        },
+        "engineeringUnits": "tonne_per_hour"
+      },
+      "description": "Расход HNO3 выдача в М9-2 (т/ч)"
     },
     {
       "browseName": "CH_M52::02VODA_XOB:02T1",
@@ -768,7 +789,7 @@
       "12AGR": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M52::12SBS_AO:12PS180",
+      "browseName": "CH_M52::12GTT:12PS180",
       "aliasName": "12VZ_PS180",
       "displayName": "12VZ_PS180",
       "ownerName": "CH_M52",
@@ -1011,7 +1032,7 @@
       "22AGR": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M52::22SBS_AO:22PS180",
+      "browseName": "CH_M52::22GTT:22PS180",
       "aliasName": "22VZ_PS180",
       "displayName": "22VZ_PS180",
       "ownerName": "CH_M52",
@@ -1254,7 +1275,7 @@
       "32AGR": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M52::32SBS_AO:32PS180",
+      "browseName": "CH_M52::32GTT:32PS180",
       "aliasName": "32VZ_PS180",
       "displayName": "32VZ_PS180",
       "ownerName": "CH_M52",
@@ -1497,7 +1518,7 @@
       "42AGR": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M52::42SBS_AO:42PS180",
+      "browseName": "CH_M52::42GTT:42PS180",
       "aliasName": "42VZ_PS180",
       "displayName": "42VZ_PS180",
       "ownerName": "CH_M52",
@@ -1740,7 +1761,7 @@
       "52AGR": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M52::52SBS_AO:52PS180",
+      "browseName": "CH_M52::52GTT:52PS180",
       "aliasName": "52VZ_PS180",
       "displayName": "52VZ_PS180",
       "ownerName": "CH_M52",
@@ -1983,7 +2004,7 @@
       "62AGR": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M52::62SBS_AO:62PS180",
+      "browseName": "CH_M52::62GTT:62PS180",
       "aliasName": "62VZ_PS180",
       "displayName": "62VZ_PS180",
       "ownerName": "CH_M52",
@@ -2226,7 +2247,7 @@
       "72AGR": "-------------------------------------------------------------------------------"
     },
     {
-      "browseName": "CH_M52::72SBS_AO:72PS180",
+      "browseName": "CH_M52::72GTT:72PS180",
       "aliasName": "72VZ_PS180",
       "displayName": "72VZ_PS180",
       "ownerName": "CH_M52",
