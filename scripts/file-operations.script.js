@@ -39,8 +39,8 @@ const csvKepServerConfig = {
     column2: { fromField: ['Compnd', 'TAG'], toField: 'Address', default: undefined },
     column3: { fromField: '', toField: 'Data Type', default: 'Default' },
     column4: { fromField: '', toField: 'Respect Data Type', default: 1 },
-    column5: { fromField: '', toField: 'Client Access', default: 'RO' },
-    column6: { fromField: '', toField: 'Scan Rate', default: 100 },
+    column5: { fromField: '', toField: 'Client Access', default: 'R' },
+    column6: { fromField: '', toField: 'Scan Rate', default: 1000 },
     column7: { fromField: '', toField: 'Scaling', default: undefined },
     column8: { fromField: '', toField: 'Raw Low', default: undefined },
     column9: { fromField: '', toField: 'Raw High', default: undefined },
@@ -67,10 +67,10 @@ const inpKepServerConfig = {
   fields: {
     column1: { fromField: 'NAMEINCOL', toField: 'Tag Name', default: undefined },
     column2: { fromField: ['NAMEINCOL'], toField: 'Address', default: undefined },
-    column3: { fromField: '', toField: 'Data Type', default: 'Default' },
+    column3: { fromField: '', toField: 'Data Type', default: 'Float' },
     column4: { fromField: '', toField: 'Respect Data Type', default: 1 },
-    column5: { fromField: '', toField: 'Client Access', default: 'RO' },
-    column6: { fromField: '', toField: 'Scan Rate', default: 100 },
+    column5: { fromField: '', toField: 'Client Access', default: 'R' },
+    column6: { fromField: '', toField: 'Scan Rate', default: 1000 },
     column7: { fromField: '', toField: 'Scaling', default: undefined },
     column8: { fromField: '', toField: 'Raw Low', default: undefined },
     column9: { fromField: '', toField: 'Raw High', default: undefined },
@@ -80,7 +80,7 @@ const inpKepServerConfig = {
     column13: { fromField: '', toField: 'Clamp Low', default: undefined },
     column14: { fromField: '', toField: 'Clamp High', default: undefined },
     column15: { fromField: '', toField: 'Eng Units', default: undefined },
-    column16: { fromField: '', toField: 'Description', default: undefined },
+    column16: { fromField: 'NAMEINCOL', toField: 'Description', default: undefined },
     column17: { fromField: '', toField: 'Negate Value', default: undefined },
   },
   // filter: e.g. ['PNT', 'MEAS', 'SPT', 'OUT'],
@@ -251,12 +251,13 @@ describe('<<=== ScriptOperations: (file-operations.script) ===>>', () => {
       const fields = config.fields;
       points = points.map(item => {
         let result = {};
-        result[fields.column1.toField] = item[fields.column1.fromField].split('.')[0].split(':')[1];
+        const tagName = item[fields.column1.fromField].split('.')[0].split(':')[1];
+        result[fields.column1.toField] = tagName;
         result[fields.column2.toField] = `${config.prefix}\\${item[fields.column2.fromField]}\\${config.postfix}`;
-        result[fields.column3.toField] = item[fields.column3.default];
-        result[fields.column4.toField] = item[fields.column4.default];
-        result[fields.column5.toField] = item[fields.column5.default];
-        result[fields.column6.toField] = item[fields.column6.default];
+        result[fields.column3.toField] = fields.column3.default;
+        result[fields.column4.toField] = fields.column4.default;
+        result[fields.column5.toField] = fields.column5.default;
+        result[fields.column6.toField] = fields.column6.default;
         result[fields.column7.toField] = item[fields.column7.default];
         result[fields.column8.toField] = item[fields.column8.default];
         result[fields.column9.toField] = item[fields.column9.default];
@@ -266,7 +267,7 @@ describe('<<=== ScriptOperations: (file-operations.script) ===>>', () => {
         result[fields.column13.toField] = item[fields.column13.default];
         result[fields.column14.toField] = item[fields.column14.default];
         result[fields.column15.toField] = item[fields.column15.fromField];
-        result[fields.column16.toField] = item[fields.column16.fromField];
+        result[fields.column16.toField] = tagName;
         result[fields.column17.toField] = item[fields.column17.default];
         return result;
       });
