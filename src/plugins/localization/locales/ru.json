@@ -74,6 +74,16 @@
       "symbol": "KPA",
       "shortName": "кПа",
       "longName": "килопаскаль"
+    },
+    "gram_per_cubic_metre": {
+      "symbol": "A93",
+      "shortName": "g/m³",
+      "longName": "gram per cubic metre"
+    },
+    "milligram_per_cubic_metre": {
+      "symbol": "GP",
+      "shortName": "mg/m³",
+      "longName": "milligram per cubic metre"
     }
   }
 }

@@ -69,6 +69,7 @@
     "directory-tree": "^2.2.5",
     "dotenv": "^8.2.0",
     "dotenv-webpack": "^1.8.0",
+    "exceljs": "^4.3.0",
     "feathers-casl": "^0.5.0",
     "feathers-hooks-common": "^5.0.4",
     "feathers-mongoose": "^8.3.3",
@@ -86,7 +87,8 @@
     "serve-favicon": "^2.5.0",
     "socket.io-client": "^3.0.3",
     "tedious": "^11.0.5",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "xlsx": "^0.17.5"
   },
   "devDependencies": {
     "axios": "^0.21.4",
