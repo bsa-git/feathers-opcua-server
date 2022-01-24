@@ -108,14 +108,16 @@ $RECYCLE.BIN/
 # Others
 data/mongodb/*
 !data/mongodb/README.md
-data/nedb/*
-!data/nedb/README.md
+data/nedb/dev/*
+!data/nedb/dev/README.md
+data/nedb/prod/*
+!data/nedb/prod/README.md
+data/nedb/test/*
+!data/nedb/test/README.md
 data/db-log/*
 !data/db-log/README.md
 data/app-log/*
 !data/app-log/README.md
-test/data/nedb/*
-!test/data/nedb/README.md
 test/data/tmp/*
 !test/data/tmp/README.md
 .env

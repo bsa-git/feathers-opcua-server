@@ -48,6 +48,7 @@ const histValueFromFile = function (params = {}, addedValue) {
   readOnlyNewFile(path, (filePath, data) => {
     // Show filePath, data
     if (isDebug) console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
+    console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
     if (isDebug) console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
     // Set value from source
     dataType = formatUAVariable(addedValue).dataType[1];

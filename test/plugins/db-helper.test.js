@@ -16,6 +16,7 @@ const {
   dbNullIdValue,
   getIdField,
   integrityCheckOpcua,
+  getCountItems,
   createItem,
   createItems,
   findItem,
@@ -47,22 +48,25 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
     // Get opcua tags 
     const opcuaTags = getOpcuaTags();
-    if (isLog) inspector('Save tags to \'opcua-tags\' service', opcuaTags);
+    if (isLog) inspector('getOpcuaTags.opcuaTags.length', opcuaTags.length);
 
     if (!opcuaTags.length) return;
 
     // Remove data from 'opcua-tags' services 
-    const removedItems = await removeItems(app, 'opcua-tags');
-    assert.ok(removedItems.length, 'Not remove data from services \'opcua-tags\'');
+    const countItems = await getCountItems(app, 'opcua-tags');
+    if (countItems) {
+      const removedItems = await removeItems(app, 'opcua-tags');
+      if (isLog) inspector('removeItems.removedItems.length', removedItems.length);
+      assert.ok(removedItems.length, 'Not remove data from services \'opcua-tags\'');
+    }
 
     // Add tags
     await createItems(app, 'opcua-tags', opcuaTags);
 
     // Find one tag
     const findedItem = await findItem(app, 'opcua-tags');
-    if (isLog) inspector('Find one tag from \'opcua-tags\' service', findedItem);
-    assert.ok(findedItem.browseName === opcuaTags[0].browseName, 'Error for test: `Save tags and find tag`');
-    // inspector('Find one tag from \'opcua-tags\' service', findedItem);
+    if (isLog) inspector('findItem.findedItem', findedItem);
+    assert.ok(opcuaTags.find(tag => tag.browseName === findedItem.browseName), 'Error for test: `Save tags and find tag`');
 
     // Find all tags
     const findedItems = await findItems(app, 'opcua-tags');

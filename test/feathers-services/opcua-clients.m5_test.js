@@ -17,7 +17,8 @@ const {
   pause,
   getTime,
   getGroupsFromArray,
-  makeDirSync
+  makeDirSync,
+  removeFilesFromDirSync
 } = require('../../src/plugins/lib');
 
 const {
@@ -68,6 +69,9 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   after(function (done) {
     stopListenPort(done);
+
+    removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m51']);
+    removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52']);
   });
 
   it('#1. OPC-UA clients: registered the service', async () => {

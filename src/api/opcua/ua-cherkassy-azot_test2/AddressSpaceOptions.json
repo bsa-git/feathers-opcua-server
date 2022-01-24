@@ -1,4 +1,36 @@
 {
+  "objects": [
+    {
+      "isEnable": true,
+      "browseName": "CH_M51",
+      "displayName": "Черкассы 'АЗОТ' цех M5/1",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_M52",
+      "displayName": "Черкассы 'АЗОТ' цех M5/2",
+      "type": "object"
+    },
+    {
+      "isEnable": false,
+      "browseName": "CH_M51_ACM",
+      "displayName": "Черкассы 'АЗОТ' цех M5/1 ACM",
+      "type": "object"
+    },
+    {
+      "isEnable": false,
+      "browseName": "CH_M52_ACM",
+      "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM",
+      "type": "object"
+    },
+    {
+      "isEnable": false,
+      "browseName": "CH_M52_ACM2",
+      "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM2",
+      "type": "object"
+    }
+  ],
   "variables": [
     {
       "browseName": "CH_M51::ValueFromFile",

@@ -43,10 +43,8 @@
     "eslint:debug": "eslint --fix src/. test/debug/.  --config .eslintrc.json",
     "eslint:script": "eslint --fix src/. scripts/.  --config .eslintrc.json",
     "update-dependencies": "ncu -u",
-    "nedb-delete": "shx rm -rf test/data/nedb/*.db",
-    "nedb-find-users": "nedb ./data/nedb/users.db",
-    "nedb-find-messages": "nedb ./data/nedb/messages.db",
-    "nedb-find-logs": "nedb ./data/nedb/log-messages.db"
+    "nedb-delete": "shx rm -rf data/nedb/test/*.db",
+    "nedb-find-users": "nedb ./data/nedb/dev/users.db"
   },
   "dependencies": {
     "@feathersjs/authentication": "^4.5.3",

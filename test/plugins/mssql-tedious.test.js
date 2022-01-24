@@ -76,7 +76,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     stopListenPort(done);
   });
 
-  it('Delete rows from table', async () => {
+  it('#1: Delete rows from table', async () => {
     const db = new MssqlTedious(config);
     await db.connect();
     await db.query([], 'DELETE FROM dbo.tblMessages');
@@ -88,7 +88,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
   });
 
   
-  it('Insert "CH_M51" rows to table', async () => {
+  it('#2: Insert "CH_M51" rows to table', async () => {
     let sql = '', rows;
     //---------------------------------------------
     const db = new MssqlTedious(config);
@@ -119,7 +119,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     assert.deepStrictEqual(JSON.parse(rows[0]['text']), jsonText, 'Insert rows to table');
   });
 
-  it('Insert "CH_M52" rows to table', async () => {
+  it('#3: Insert "CH_M52" rows to table', async () => {
     let sql = '', rows;
     //---------------------------------------------
     const db = new MssqlTedious(config);
@@ -148,7 +148,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     assert.deepStrictEqual(JSON.parse(rows[0]['Text']), jsonText, 'Insert rows to table');
   });
 
-  it('Update "CH_M51" value from table', async () => {
+  it('#4: Update "CH_M51" value from table', async () => {
     let sql = '', rows;
     //---------------------------------------------
     const db = new MssqlTedious(config);
@@ -178,7 +178,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
   });
 
   
-  it('Execute Stored Procedure "dbo.MessagesSummary"', async () => {
+  it('#5: Execute Stored Procedure "dbo.MessagesSummary"', async () => {
     let sql = '';
     //---------------------------------------------
     const db = new MssqlTedious(config);
@@ -200,7 +200,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     assert.ok(rows[0].text, 'Execute Stored Procedure "dbo.MessagesSummary"');
   });
   
-  it('Select values for "webM51" from SnapShot table', async () => {
+  it('#6: Select values for "webM51" from SnapShot table', async () => {
     let sql = '', rows;
     //---------------------------------------------
     const db = new MssqlTedious(config);
@@ -225,7 +225,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     assert.ok(rows.length, 'Select values for "webM51" from SnapShot table');
   });
 
-  it('Select values for "opcUPG2" from SnapShot table', async () => {
+  it('#7: Select values for "opcUPG2" from SnapShot table', async () => {
     let sql = '', rows;
     //---------------------------------------------
     const db = new MssqlTedious(config);

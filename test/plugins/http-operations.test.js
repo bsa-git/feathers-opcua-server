@@ -42,7 +42,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
   });
 
 
-  it('HttpOperations: https.get', async () => {
+  it('#1: HttpOperations: https.get', async () => {
     const https = require('https');
     const url = 'https://jsonplaceholder.typicode.com/posts/1';
     try {
@@ -65,7 +65,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     }
   });
 
-  it('HttpOperations: axios.get', async () => {
+  it('#2: HttpOperations: axios.get', async () => {
     const url = 'https://jsonplaceholder.typicode.com/posts/2';
     try {
       await urlExists(url);
@@ -87,7 +87,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     }
   });
 
-  it('HttpOperations: fetch.get', async () => {
+  it('#3: HttpOperations: fetch.get', async () => {
     const fetch = require('node-fetch');
     const url = 'https://jsonplaceholder.typicode.com/users';
     try {
@@ -107,7 +107,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     }
   });
 
-  it('HttpOperations: get data from file', async () => {
+  it('#4: HttpOperations: get data from file', async () => {
     let url = 'http://192.168.3.5/www_m5/m5_data2/';
     let dataItems = null;
     try {
@@ -122,7 +122,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
             dataItems[key] = getFloat(value);
           });
           if (isLog) inspector(`HttpOperations: get data from file (${file.name}):`, dataItems);
-          inspector(`HttpOperations: get data from file (${file.name}):`, dataItems);
+          // inspector(`HttpOperations: get data from file (${file.name}):`, dataItems);
           return dataItems;
         } catch (error) {
           console.log(error);

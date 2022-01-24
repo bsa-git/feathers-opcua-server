@@ -7,7 +7,8 @@ const {
   inspector,
   startListenPort, 
   stopListenPort,
-  makeDirSync 
+  makeDirSync,
+  removeFilesFromDirSync
 } = require('../../src/plugins');
 const { getServerService } = require('../../src/plugins/opcua');
 
@@ -45,6 +46,8 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
 
   after(function (done) {
     stopListenPort(done);
+
+    removeFilesFromDirSync([appRoot, 'test/data/tmp/test1']);
   });
 
   it('#1: OPC-UA servers: registered the service', async () => {

@@ -10,6 +10,7 @@ const {
   appRoot,
   inspector,
   makeDirSync, 
+  removeFilesFromDirSync,
   getTime, 
   OpcuaServer, 
   OpcuaClient, 
@@ -62,7 +63,6 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
     client = new OpcuaClient(clientParams);
     // Make dirs
     makeDirSync([appRoot, 'test/data/tmp/test1']);
-    debug('OPCUA - Test::before: Done');
   });
 
   after(async () => {
@@ -72,7 +72,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
     if (opcuaServer !== null) opcuaServer = null;
     if (server !== null) server = null;
 
-    debug('OPCUA - Test::after: Done');
+    removeFilesFromDirSync([appRoot, 'test/data/tmp/test1']);
   });
 
   it('#1: Server object created', async () => {

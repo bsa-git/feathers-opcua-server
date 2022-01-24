@@ -15,7 +15,8 @@ const {
   isObject,
   pause,
   getTime,
-  makeDirSync
+  makeDirSync,
+  removeFilesFromDirSync
 } = require('../../src/plugins/lib');
 
 const {
@@ -73,6 +74,8 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
   after(function (done) {
     stopListenPort(done);
+
+    removeFilesFromDirSync([appRoot, 'test/data/tmp/test1']);
   });
 
   it('1# OPC-UA clients: registered the service', async () => {

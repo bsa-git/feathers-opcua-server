@@ -19,7 +19,7 @@
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M52_ACM",
       "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM",
       "type": "object"
