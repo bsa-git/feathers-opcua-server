@@ -21,20 +21,20 @@ const isDebug = false;
 const isLog = false;
 
 /**
- * @method onChangedCH_M5Handler
+ * @method onChangedGroupHandlerForDB
  * @param {Object} params 
  * @param {Object} dataValue
  * @returns {void}
  */
 async function onChangedGroupHandlerForDB(params, dataValue) {
-  if (isLog) inspector('subscriptions.onChangedCH_M5Handler.params:', params);
-  // inspector('subscriptions.onChangedCH_M5Handler.params:', params);
-  if (isLog) inspector('subscriptions.onChangedCH_M5Handler.dataValue:', dataValue);
+  if (isLog) inspector('subscriptions.onChangedGroupHandlerForDB.params:', params);
+  // inspector('subscriptions.onChangedGroupHandlerForDB.params:', params);
+  if (isLog) inspector('subscriptions.onChangedGroupHandlerForDB.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
   const browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
   let value = dataValue.value.value;
-  if (isLog) inspector('subscriptions.onChangedCH_M5Handler.formatDataValue:', dataValue);
+  if (isLog) inspector('subscriptions.onChangedGroupHandlerForDB.formatDataValue:', dataValue);
   // value = (addressSpaceOption.dataType === 'Double') ? loRound(value, 3) : value;
   let engineeringUnits = (dataValue.valueParams && dataValue.valueParams.engineeringUnits) ? dataValue.valueParams.engineeringUnits : '';
   const timestamp = dataValue.serverTimestamp;

@@ -49,7 +49,7 @@
     "clientServiceUrl": "http://10.60.0.220:3030",
     "clientScript": "startSubscriptionMonitor",
     "subscription": "onChangedGroupHandlerForDB",
-    "hostTypeDB": "nedb",
+    "hostTypeDB": "mongodb",
     "opcuaSaveModeToDB": "remoteUpdate",
     "opcuaRemoteDbUrl": "http://localhost:3131",
     "security": {

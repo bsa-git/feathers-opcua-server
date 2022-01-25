@@ -16,7 +16,7 @@ const loEndsWith = require('lodash/endsWith');
 const loStartsWith = require('lodash/startsWith');
 const loIsString = require('lodash/isString');
 
-const debug = require('debug')('app:opcua-operations');
+const debug = require('debug')('app:file-operations');
 const isDebug = false;
 const isLog = false;
 //===========================================================

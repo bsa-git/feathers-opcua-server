@@ -3,7 +3,7 @@ const loRound = require('lodash/round');
 const loForEach = require('lodash/forEach');
 const loIsFinite = require('lodash/isFinite');
 
-const debug = require('debug')('app:util');
+const debug = require('debug')('app:array-operations');
 
 
 //---------------- SORT -------------//

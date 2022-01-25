@@ -919,27 +919,31 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}) => {
 
   // Get group variable list 
   let groupVariableList = params.addedVariableList;
-  if (isLog) inspector('setValueFromSourceForGroup.groupVariableList.aliasNames:', groupVariableList.map(v => v.aliasName));
+  if (isLog) inspector('setValueFromSourceForGroup.groupVariableList.browseName:', groupVariableList.map(v => v.browseName.name));
+  // inspector('setValueFromSourceForGroup.groupVariableList.browseName:', groupVariableList.map(v => v.browseName.name));
   if (isLog) inspector('setValueFromSourceForGroup.dataItems:', dataItems);
-  // inspector('setValueFromSourceForGroup.groupVariableList:', groupVariableList);
-
+  // inspector('setValueFromSourceForGroup.dataItems:', dataItems);
+  
   loForEach(dataItems, function (value, key) {
-    groupVariable = groupVariableList.find(v => v.browseName === key);
+    groupVariable = groupVariableList.find(v => v.browseName.name === key);
     if (!groupVariable) {
       groupVariable = groupVariableList.find(v => v.aliasName === key);
     }
     // Set value from source
     if (groupVariable) {
       if (isLog) inspector('setValueFromSourceForGroup.groupVariable:', formatUAVariable(groupVariable));
+      // inspector('setValueFromSourceForGroup.groupVariable:', formatUAVariable(groupVariable));
       browseName = formatUAVariable(groupVariable).browseName;
       // Run setValueFromSource for groupVariable
       const currentState = params.myOpcuaServer.getCurrentState();
       const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
       if (isLog) inspector('setValueFromSourceForGroup.variable:', variable);
+      // inspector('setValueFromSourceForGroup.variable:', variable);
 
       if (loIsFunction(opcuaGetters[variable.getter])) {
         params.myOpcuaServer.setValueFromSource(variable, groupVariable, opcuaGetters[variable.getter], value);
         if (isDebug) debug('setValueFromSourceForGroup.browseName:', `"${browseName}" =`, value);
+        // debug('setValueFromSourceForGroup.browseName:', `"${browseName}" =`, value);
       } else {
         console.log(chalk.red(`Error: is absent getter - "${variable.getter}" for browseName: "${browseName}"`));
         throw new Error(`Error: is absent getter - "${variable.getter}" for browseName: "${browseName}"`);

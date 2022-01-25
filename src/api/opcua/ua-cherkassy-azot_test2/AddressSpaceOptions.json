@@ -19,7 +19,7 @@
       "type": "object"
     },
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_M52_ACM",
       "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM",
       "type": "object"
@@ -61,6 +61,23 @@
       "getterParams": {
         "path": "test/data/tmp/ch-m52",
         "fromFile": "data-CH_M52.csv",
+        "interval": 500
+      }
+    },
+    {
+      "browseName": "CH_M52_ACM::ValueFromFile",
+      "displayName": "Значения из файла для CH_M52_ACM",
+      "ownerName": "CH_M52_ACM",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "acmDayValueFromFile",
+      "getterParams": {
+        "path": "test/data/tmp/ch-m52_acm",
+        "fromFile": "DayReport-CH_M52_ACM.xls",
+        "toFile": "YearReport-CH_M52_ACM.xlsx",
         "interval": 500
       }
     }

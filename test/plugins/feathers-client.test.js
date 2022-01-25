@@ -23,14 +23,11 @@ const {
 } = require('../../src/plugins/test-helpers');
 
 const {
+  getCountItems,
   createItems,
   findItems,
   removeItems
 } = require('../../src/plugins/db-helpers');
-
-const {
-  getOpcuaTags
-} = require('../../src/plugins/opcua');
 
 const chalk = require('chalk');
 const moment = require('moment');
@@ -170,16 +167,19 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       assert.ok(accessToken, 'Created access token for user');
 
       // Get opcua tags 
-      const opcuaTags = getOpcuaTags();
-      if (isLog) inspector('Save tags to \'opcua-tags\' service', opcuaTags);
+      const opcuaTags = fakes['opcuaTags'];
+      if (isLog) inspector('fakes.opcua-tags:', opcuaTags);
 
       if (opcuaTags.length) {
         // Remove data from 'opcua-tags' services 
-        let removedItems = await removeItems(appRestClient, 'opcua-tags');
-        assert.ok(removedItems.length, 'Not remove data from services \'opcua-tags\'');
+        const countItems = await getCountItems(app, 'opcua-tags');
+        if (countItems) {
+          let removedItems = await removeItems(appRestClient, 'opcua-tags');
+          assert.ok(removedItems.length, 'Not remove data from services \'opcua-tags\'');
+        }
 
         // Add tags
-        const createdItems = await createItems(appRestClient, 'opcua-tags', opcuaTags);
+        await createItems(appRestClient, 'opcua-tags', opcuaTags);
         // Find all tags
         const findedItems = await findItems(appRestClient, 'opcua-tags');
         if (isLog) inspector('Find tags from \'opcua-tags\' service', findedItems);

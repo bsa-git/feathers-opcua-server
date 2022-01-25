@@ -9,10 +9,6 @@ const {
 } = require('../../src/plugins');
 
 const {
-  getOpcuaTags
-} = require('../../src/plugins/opcua');
-
-const {
   dbNullIdValue,
   getIdField,
   integrityCheckOpcua,
@@ -47,8 +43,8 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
   it('#2: Save tags and find tags', async () => {
 
     // Get opcua tags 
-    const opcuaTags = getOpcuaTags();
-    if (isLog) inspector('getOpcuaTags.opcuaTags.length', opcuaTags.length);
+    const opcuaTags = fakes['opcuaTags'];
+    if (isLog) inspector('fakes.opcuaTags.length', opcuaTags.length);
 
     if (!opcuaTags.length) return;
 

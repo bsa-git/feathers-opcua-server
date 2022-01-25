@@ -26,6 +26,7 @@ function onChangedCH_M5Handler(params, dataValue) {
   const browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
   if (isLog) inspector('subscriptions.onChangedCH_M5Handler.formatDataValue:', dataValue);
+  // inspector('subscriptions.onChangedCH_M5Handler.formatDataValue:', dataValue);
   const value = loRound(dataValue.value.value, 3);
   const engineeringUnits = dataValue.valueParams.engineeringUnits;
   const timestamp = dataValue.serverTimestamp;
