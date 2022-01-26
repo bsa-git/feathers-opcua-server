@@ -1,5 +1,9 @@
 /* eslint no-console: 0 */
 
+function getTypeOf (value) {
+  return typeof value;
+}
+
 function isArray (array) {
   return Array.isArray(array);
 }
@@ -41,6 +45,7 @@ function isSymbol (val) {
 }
 
 module.exports = {
+  getTypeOf,
   isArray,
   isBoolean,
   isFunction,

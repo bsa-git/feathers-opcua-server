@@ -4,6 +4,7 @@ const lib = require('./lib');
 const hookHelpers = require('./hook-helpers');
 const testHelpers = require('./test-helpers');
 const dbHelpers = require('./db-helpers');
+const excelHelpers = require('./excel-helpers');
 
 module.exports = Object.assign({},
   auth,
@@ -11,5 +12,6 @@ module.exports = Object.assign({},
   lib,
   hookHelpers,
   testHelpers,
-  dbHelpers
+  dbHelpers,
+  excelHelpers
 );

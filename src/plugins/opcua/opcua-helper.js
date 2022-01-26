@@ -1073,6 +1073,7 @@ const getInitValueForDataType = function (dataType) {
  */
 const convertAnyToValue = function (dataType, value) {
   let result = null;
+  dataType = dataType.toLowerCase();
   switch (dataType) {
   case 'boolean':
     result = isTrue(value);

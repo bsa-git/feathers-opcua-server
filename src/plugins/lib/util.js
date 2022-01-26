@@ -60,6 +60,16 @@ const waitTimeout = function (fn, cb = null, delay = 0) {
 };
 
 /**
+ * @method isValidDateTime
+ * e.g. dt='2013-02-08 09:30:26'|dt='2013-02-08T09:30:26'|dt='20130208T080910,123'|dt='20130208T080910.123'|dt='20130208T080910,123'|dt='20130208T08'
+ * @param {Number|String} dt 
+ * @returns {Boolean}
+ */
+const isValidDateTime = function (dt = '') {
+  return moment(dt).isValid();
+};
+
+/**
  * @method dtToObject
  * e.g. { year: 2020, month: 9, date: 22, hours: 13, minutes: 31, seconds: 10, milliseconds: 555 }
  * @param {Number|String} dt 
@@ -192,11 +202,15 @@ const getInt = function (value) {
 /**
  * @method getFloat
  * @param {any} value 
+ * @param {Number} precision 
  * @returns {Number}
  */
-const getFloat = function (value) {
+const getFloat = function (value, precision = 0) {
   if (Number.isNaN(Number.parseFloat(value))) {
     return 0;
+  }
+  if(precision){
+    return loRound(parseFloat(value), precision);
   }
   return parseFloat(value);
 };
@@ -436,6 +450,7 @@ module.exports = {
   delayTime,
   pause,
   waitTimeout,
+  isValidDateTime,
   dtToObject,
   getDate,
   getTime,
