@@ -32,7 +32,7 @@
     "test:all": "npm run eslint && npm run mocha ",
     "test:debug": "npm run eslint:debug && npm run mocha:debug",
     "test:script": "npm run eslint:script && npm run mocha:script",
-    "start:test-seed": "cross-env NODE_ENV=test node src/ --seed",
+    "start-seed": "cross-env NODE_ENV=test node src/ --seed",
     "start-mongod": "mongod -f mongod.config.yml",
     "start-mongod32": "mongod --storageEngine=mmapv1 -f mongod.config.yml",
     "coverage": "nyc npm run mocha",

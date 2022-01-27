@@ -1,13 +1,16 @@
 /* eslint-disable no-unused-vars */
 const loRound = require('lodash/round');
+const loOmit = require('lodash/omit');
+const loStartsWith = require('lodash/startsWith');
 const loForEach = require('lodash/forEach');
 const Path = require('path');
 const join = Path.join;
 const {
   inspector,
+  getValueType,
 } = require('../lib');
 
-const xlsx = require('xlsx');
+const XLSX  = require('xlsx');
 
 const debug = require('debug')('app:xlsx-helper');
 const isDebug = false;
@@ -28,46 +31,55 @@ const xlsxGetCellsFromFile = function (path, sheetName = '') {
   if (Array.isArray(path)) {
     path = join(...path);
   }
-  const file = xlsx.readFile(path);
-  const sheets = file.SheetNames;
+  const workbook = XLSX.readFile(path);
+  const sheets = workbook.SheetNames;
   // Get 
   sheets.forEach(function (sheet) {
     worksheet = null;
     // Get worksheet
     if (sheetName && sheetName === sheet) {
-      worksheet = file.Sheets[sheet];
+      worksheet = workbook.Sheets[sheet];
     }
 
     if (!sheetName) {
-      worksheet = file.Sheets[sheet];
+      worksheet = workbook.Sheets[sheet];
     }
     // Get eachCell for worksheet
     if (worksheet) {
       for (let z in worksheet) {
+        
+        const columns = worksheet['!cols'];
         /* all keys that do not begin with "!" correspond to cell addresses */
         if (z[0] === '!') continue;
-
+        
         myCell = {};
         myItem = worksheet[z];
         const isValidDateTime = (typeOf[myItem.t] === 'number') && myItem.w.includes(':');
 
-        myCell.worksheet = sheet;
-        myCell.cell = z;
+        myCell.worksheetName = sheet;
+        myCell.address = z;
         myCell.value = myItem.v;
-        myCell.typeof = isValidDateTime? 'datetime' : typeOf[myItem.t];
-        if(myCell.typeof === 'datetime'){
+        myCell.valueType = isValidDateTime? 'DateTime' : getValueType(myCell.value);
+        if(myCell.valueType === 'DateTime'){
           myCell.value = myItem.w;
-        }// loRound
-        if(myCell.typeof === 'number'){
+        }
+        if(myCell.valueType === 'Number'){
           myCell.value = loRound(myItem.v, 3);
         }
-        myCell.valueToSting = myItem.w;
-        // myCell.isValidDateTime = (myCell.typeof === 'number') && myCell.valueToSting.includes(':');
         if(myItem.f){
           myCell.formula = myItem.f;
         }
+        if(myItem.w){
+          myCell.formatValue = myItem.w;
+        }
+        myCell.xlsx  = XLSX;
+        myCell.workbook = workbook;
+        myCell.worksheet = worksheet;
+        myCell.cell = myItem;
         cells.push(myCell);
-        if(isDebug) inspector('myCell:', myCell);
+        if (isDebug && loStartsWith(myCell.address, 'A')) {
+          inspector('myCell:', loOmit(myCell, ['xlsx', 'workbook', 'worksheet', 'cell']));
+        }
       }
     }
   });

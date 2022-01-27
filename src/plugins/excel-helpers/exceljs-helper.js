@@ -1,13 +1,17 @@
 /* eslint-disable no-unused-vars */
 const loRound = require('lodash/round');
+const loOmit = require('lodash/omit');
+const loStartsWith = require('lodash/startsWith');
 const loForEach = require('lodash/forEach');
 const Path = require('path');
 const join = Path.join;
 const {
   inspector,
   isObject,
-  getTypeOf,
-  getDateTime
+  getValueType,
+  getDateTime,
+  isValidDateTime,
+  dtToObject
 } = require('../lib');
 
 const ExcelJS = require('exceljs');
@@ -16,6 +20,10 @@ const debug = require('debug')('app:exceljs-helper');
 const isDebug = false;
 
 const numberToLetter = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'];
+const valueTypes = ['Null', 'Merge', 'Number', 'String', 'Date', 'Hyperlink', 'Formula', 'SharedString', 'RichText', 'Boolean', 'Error'];
+
+
+
 
 //---------------- READ FILE -------------//
 
@@ -54,38 +62,44 @@ const exeljsGetCellsFromFile = async function (path, sheetName = '') {
       for (let index = 1; index <= worksheet.actualColumnCount; index++) {
         const indexCol = worksheet.getColumn(index);
         // iterate over all current cells in this column
-        indexCol.eachCell(function (cell, rowNumber) {
-          if (cell.value) {
-            myCell = {};
-            myCell.worksheet = worksheet.name;
-            myCell.cell = `${numberToLetter[index]}${rowNumber}`;
-            myCell.value = isObject(cell.value)? cell.value.result  : cell.value;
-            myCell.typeOf = getTypeOf(myCell.value);
-            if(myCell.typeOf === 'number'){
-              myCell.value = loRound(myCell.value, 3);
-            }
-            if(myCell.typeOf === 'object'){
-              myCell.value = getDateTime(cell.value.result, false);
-              myCell.typeOf = 'datetime';
-            }
-            if(myCell.typeOf === 'undefined'){
-              myCell.value = 0;
-              myCell.typeOf = 'number';
-            }
-            if(isObject(cell.value) && cell.value.formula){
-              myCell.formula = cell.value.formula;
-            }
-            if(isObject(cell.value) && cell.value.sharedFormula){
-              myCell.sharedFormula = cell.value.sharedFormula;
-            }
-            if(isObject(cell.value) && cell.value.ref){
-              myCell.ref = cell.value.ref;
-            }
-            if(isObject(cell.value) && cell.value.shareType){
-              myCell.shareType = cell.value.shareType;
-            }
-            cells.push(myCell);
-            if(isDebug) inspector('myCell:', myCell);
+        indexCol.eachCell({ includeEmpty: true }, function (cell, rowNumber) {
+          // if (cell.value) {
+          myCell = {};
+          myCell.worksheetName = worksheet.name;
+          myCell.address = cell.address;
+          myCell.oAddress = { col: numberToLetter[index], row: rowNumber };
+          myCell.value = isObject(cell.value) && cell.value.result ? cell.value.result : cell.value;
+          myCell.valueType = getValueType(myCell.value);
+          myCell.cellType = valueTypes[cell.type]; 
+          if (myCell.valueType === 'Number') {
+            myCell.value = loRound(myCell.value, 3);
+          }
+          if (myCell.cellType === 'Date') {
+            myCell.value = getDateTime(myCell.value).split('.')[0];
+            myCell.valueType = 'DateTime';
+          }
+          if (myCell.cellType === 'Formula' && myCell.valueType === 'Object') {
+            myCell.value = getDateTime(myCell.value).split('.')[0];
+            myCell.valueType = 'DateTime';
+          }
+          if (isObject(cell.value) && cell.value.formula) {
+            myCell.formula = cell.value.formula;
+          }
+          if (isObject(cell.value) && cell.value.sharedFormula) {
+            myCell.sharedFormula = cell.value.sharedFormula;
+          }
+          if (isObject(cell.value) && cell.value.ref) {
+            myCell.ref = cell.value.ref;
+          }
+          if (isObject(cell.value) && cell.value.shareType) {
+            myCell.shareType = cell.value.shareType;
+          }
+          myCell.cell = cell;
+          myCell.column = indexCol;
+          myCell.row = worksheet.getRow(rowNumber);
+          cells.push(myCell);
+          if (isDebug && loStartsWith(myCell.address, 'A')) {
+            inspector('myCell:', loOmit(myCell, ['cell', 'column', 'row']));
           }
         });
       }

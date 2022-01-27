@@ -4,6 +4,37 @@ function getTypeOf (value) {
   return typeof value;
 }
 
+function getValueType (val) {
+  if(isArray(val)){
+    return 'Array';
+  }
+  if(isBoolean(val)){
+    return 'Boolean';
+  }
+  if(isFunction(val)){
+    return 'Function';
+  }
+  if(isNull(val)){
+    return 'Null';
+  }
+  if(isUndefined(val)){
+    return 'Undefined';
+  }
+  if(isObject(val)){
+    return 'Object';
+  }
+  if(isString(val)){
+    return 'String';
+  }
+  if(isNumber(val)){
+    return 'Number';
+  }
+  if(isSymbol(val)){
+    return 'Symbol';
+  }
+  return 'Error';
+}
+
 function isArray (array) {
   return Array.isArray(array);
 }
@@ -46,6 +77,7 @@ function isSymbol (val) {
 
 module.exports = {
   getTypeOf,
+  getValueType,
   isArray,
   isBoolean,
   isFunction,
