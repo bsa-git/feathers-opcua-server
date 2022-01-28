@@ -20,7 +20,7 @@ const chalk = require('chalk');
 
 const debug = require('debug')('app:excel-helpers.test');
 const isDebug_1 = false;
-const isDebug_2 = true;
+const isDebug_2 = false;
 
 const xlsFile = '/src/api/opcua/ua-cherkassy-azot_test2/DayReport-CH_M52_ACM.xls';
 const xlsxFile = '/src/api/opcua/ua-cherkassy-azot_test2/YearReport-CH_M52_ACM.xlsx';
@@ -53,8 +53,8 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     assert.ok(cells.length, 'Get cells from xlsx file');
     for (let index = 0; index < cells.length; index++) {
       const cell = cells[index];
-      const col = cell.oAddress.col;
-      const row = cell.oAddress.row;
+      const col = cell.address2.col;
+      const row = cell.address2.row;
       if (isDebug_2 && col === 'B' && (row >= 6 && row <= 29)) {  
         inspector('xlsx.cell:', loOmit(cell, ['cell', 'column', 'row']));// 22.02.2022  6:00:06
       }

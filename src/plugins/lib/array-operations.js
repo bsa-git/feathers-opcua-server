@@ -116,6 +116,27 @@ const convertArray2Object = function (array, keyName, valueName) {
   return rows;
 };
 
+/**
+ * @method splitStr2StrNum
+ * @param {String} str 
+ * e.g. -> AB12345
+ * @returns {Array}
+ * e.g. -> ['AB', 12345]
+ */
+const splitStr2StrNum = function (str) {
+  let result = [], _str = '', _num = '' ;
+  for (let value of str) {
+    if(Number.isNaN(Number.parseInt(value))) {
+      _str = _str + value; 
+    } else {
+      _num = _num + value;
+    }
+  }
+  result.push(_str);
+  result.push(Number.parseInt(_num));
+  return result;
+};
+
 
 module.exports = {
   sortByStringField,
@@ -123,5 +144,6 @@ module.exports = {
   sortByString,
   sortByNumber,
   getGroupsFromArray,
-  convertArray2Object
+  convertArray2Object,
+  splitStr2StrNum
 };

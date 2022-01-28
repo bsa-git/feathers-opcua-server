@@ -67,7 +67,7 @@ const exeljsGetCellsFromFile = async function (path, sheetName = '') {
           myCell = {};
           myCell.worksheetName = worksheet.name;
           myCell.address = cell.address;
-          myCell.oAddress = { col: numberToLetter[index], row: rowNumber };
+          myCell.address2 = { col: numberToLetter[index], row: rowNumber };
           myCell.value = isObject(cell.value) && cell.value.result ? cell.value.result : cell.value;
           myCell.valueType = getValueType(myCell.value);
           myCell.cellType = valueTypes[cell.type]; 

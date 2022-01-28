@@ -8,6 +8,7 @@ const join = Path.join;
 const {
   inspector,
   getValueType,
+  splitStr2StrNum
 } = require('../lib');
 
 const XLSX  = require('xlsx');
@@ -55,9 +56,12 @@ const xlsxGetCellsFromFile = function (path, sheetName = '') {
         myCell = {};
         myItem = worksheet[z];
         const isValidDateTime = (typeOf[myItem.t] === 'number') && myItem.w.includes(':');
+        let address2 = splitStr2StrNum(z);
+        address2 = { col: address2[0], row: address2[1] };
 
         myCell.worksheetName = sheet;
         myCell.address = z;
+        myCell.address2 = address2;
         myCell.value = myItem.v;
         myCell.valueType = isValidDateTime? 'DateTime' : getValueType(myCell.value);
         if(myCell.valueType === 'DateTime'){
