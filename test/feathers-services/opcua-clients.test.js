@@ -6,15 +6,16 @@ const {
   getServerService,
   getClientService,
   getSrvCurrentState,
-  getOpcuaDataType
+  getOpcuaDataType,
+  formatDataValue,
 } = require('../../src/plugins/opcua/opcua-helper');
 
 const {
   appRoot,
-  inspector,
   isObject,
-  pause,
+  inspector,
   getTime,
+  pause,
   makeDirSync,
   removeFilesFromDirSync
 } = require('../../src/plugins/lib');
@@ -276,7 +277,8 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
   //============== SESSION READ VALUES ====================//
 
   it('20# OPC-UA clients: session read', async () => {
-    let nameNodeIds, attributeIds, readResult = null, value = null;
+    let nameNodeIds, attributeIds, readResult = null, value = null, formatValue = null;
+    //---------------------------------------------------------------
     const service = await getClientService(app, id);
     // service.sessionRead
     nameNodeIds = 'Device2.PressureVesselDevice';
@@ -292,6 +294,27 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
     value = readResult[0].value.value;
     console.log(chalk.green('pressureVesselDevice.value:'), chalk.cyan(isObject(value) ? value.name : loRound(value, 3)));
+
+    // service.sessionRead
+    nameNodeIds = { nodeId: 'ns=1;s=Device1.Variable3', attributeId: AttributeIds.Value };
+    readResult = await service.sessionRead(id, nameNodeIds);
+    value = readResult[0].value.value;
+    console.log(chalk.green('Device1.Variable3:'), chalk.cyan(`[${value}]`));
+
+    // service.sessionRead
+    nameNodeIds = { nodeId: 'ns=1;s=Device1.Variable4', attributeId: AttributeIds.Value };
+    readResult = await service.sessionRead(id, nameNodeIds);
+    formatValue = formatDataValue(id, readResult[0], 'Device1.Variable4', 'ru');
+    value = formatValue.value.value;
+    // inspector('Device1.Variable4:', formatValue);
+    const engineeringUnits = formatValue.valueParams.engineeringUnits;
+    const timestamp = formatValue.serverTimestamp;
+    console.log(chalk.green('Device1.Variable4:'), chalk.cyan(`[${value}] (${engineeringUnits}) Timestamp=${timestamp}`));
+    for (let index = 0; index < value.length; index++) {
+      const element = loRound(value[index], 3);
+      console.log(chalk.green(`Device1.Variable4[${index}]:`), chalk.cyan(`${element} (${engineeringUnits})`));
+    }
+
 
     // service.sessionRead
     nameNodeIds = ['Device1.Temperature', 'Device2.PressureVesselDevice'];

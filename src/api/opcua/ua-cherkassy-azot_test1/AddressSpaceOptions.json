@@ -44,7 +44,7 @@
       "browseName": "Device1.Variable3",
       "displayName": "Variable3",
       "ownerName": "Device1",
-      "type": "variable.simple",
+      "type": "variable.array",
       "dataType": "Double",
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
@@ -66,6 +66,36 @@
         "accessLevel": "CurrentRead | CurrentWrite",
         "userAccessLevel": "CurrentRead | CurrentWrite",
         "valueRank": 1
+      }
+    },
+    {
+      "browseName": "Device1.Variable4",
+      "displayName": "Variable4",
+      "ownerName": "Device1",
+      "type": "variable.array",
+      "dataType": "Double",
+      "variableGetType": "valueFromSource",
+      "valueFromSourceParams": {
+        "dataType": "Double",
+        "arrayType": "Array"
+      },
+      "getter": "valueFromSource2",
+      "getterParams": {
+        "value": [
+          10.12359,
+          20.125675,
+          30.12345
+        ]
+      },
+      "valueParams": {
+        "arrayDimensions": [
+          3
+        ],
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 40
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
       }
     },
     {

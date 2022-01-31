@@ -70,7 +70,7 @@ const exeljsGetCellsFromFile = async function (path, sheetName = '') {
           myCell.address2 = { col: numberToLetter[index], row: rowNumber };
           myCell.value = isObject(cell.value) && cell.value.result ? cell.value.result : cell.value;
           myCell.valueType = getValueType(myCell.value);
-          myCell.cellType = valueTypes[cell.type]; 
+          myCell.cellType = valueTypes[cell.type];
           if (myCell.valueType === 'Number') {
             myCell.value = loRound(myCell.value, 3);
           }
@@ -108,6 +108,21 @@ const exeljsGetCellsFromFile = async function (path, sheetName = '') {
   return cells;
 };
 
+/**
+ * @method exeljsWriteToFile
+ * @param {String|Array} path
+ * @param {Object} workbook
+ * @returns {String}
+ */
+const exeljsWriteToFile = async function (path, workbook) {
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  await workbook.xlsx.writeFile(path);
+  return path;
+};
+
 module.exports = {
   exeljsGetCellsFromFile,
+  exeljsWriteToFile
 };

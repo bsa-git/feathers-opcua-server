@@ -350,7 +350,6 @@ const formatHistoryResults = function (id, historyResults, browseNames, locale =
 const formatDataValue = function (id, dataValue, browseName, locale = '') {
   let result, option;
   const options = getOpcuaConfigOptions(id);
-  // browseName = getBrowseNameFromNodeId(id, nodeId);
   if (browseName) {
     option = options.find(opt => opt.browseName === browseName);
     option = formatConfigOption(option, locale ? locale : process.env.FALLBACK_LOCALE);
@@ -360,8 +359,11 @@ const formatDataValue = function (id, dataValue, browseName, locale = '') {
     loMerge(result, option.aliasName ? { aliasName: option.aliasName } : {});
     loMerge(result, option.type ? { type: option.type } : {});
     loMerge(result, option.valueParams ? { valueParams: option.valueParams } : {});
-    loMerge(result, dataValue.sourceTimestamp ? { sourceTimestamp: dataValue.sourceTimestamp } : {});
-    loMerge(result, dataValue.serverTimestamp ? { serverTimestamp: dataValue.serverTimestamp } : {});
+    loMerge(result, dataValue.sourceTimestamp ? { sourceTimestamp: getTimestamp(dataValue.sourceTimestamp) } : {});
+    loMerge(result, dataValue.serverTimestamp ? { serverTimestamp: getTimestamp(dataValue.serverTimestamp) } : {});
+    
+    // getTimestamp(formatValue.serverTimestamp);
+    
     result.statusCode = dataValue.statusCode._name;
     result.value = {};
     loMerge(result.value, dataValue.value.dataType ? { dataType: getOpcuaDataType(dataValue.value.dataType)[0] } : {});

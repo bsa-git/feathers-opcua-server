@@ -90,6 +90,22 @@ const xlsxGetCellsFromFile = function (path, sheetName = '') {
   return cells;
 };
 
+/**
+ * @method xlsxWriteToFile
+ * @param {String|Array} path
+ * @param {Object} workbook
+ * @returns {String}
+ */
+const xlsxWriteToFile = function (path, workbook) {
+  //--------------------------
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  XLSX.writeFile(workbook, path);
+  return path;
+};
+
 module.exports = {
   xlsxGetCellsFromFile,
+  xlsxWriteToFile
 };
