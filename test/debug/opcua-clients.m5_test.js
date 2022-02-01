@@ -9,6 +9,7 @@ const {
 const {
   getServerService,
   getClientService,
+  getTimestamp
 } = require('../../src/plugins/opcua/opcua-helper');
 
 const {
@@ -65,6 +66,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     // Make dirs
     makeDirSync([appRoot, 'test/data/tmp/ch-m51']);
     makeDirSync([appRoot, 'test/data/tmp/ch-m52']);
+    makeDirSync([appRoot, 'test/data/tmp/ch-m52_acm']);
   });
 
   after(function (done) {
@@ -72,6 +74,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m51']);
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52']);
+    removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52_acm']);
   });
 
   it('#1. OPC-UA clients: registered the service', async () => {
@@ -102,9 +105,9 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
   });
 
   //============== SESSION HISTORY VALUES ====================//
-  
+  /*
   it('#5. OPC-UA clients: session history values for "CH_M51"', async () => {
-    let dataItems, readResult = null, accumulator = '';
+    let dataItems, readResult = null, accumulator = '', timestamp = '';
     const service = await getClientService(app, id);
 
     // service.getItemNodeId
@@ -123,19 +126,20 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
       // service.sessionReadHistoryValues
       readResult = await service.sessionReadHistoryValues(id, 'CH_M51::ValueFromFile', start, end);
-
       if (isLog) inspector('SessionHistoryValue_ForCH_M51.readResult:', readResult);
+      // inspector('SessionHistoryValue_ForCH_M51.readResult:', readResult);
       if (readResult.length && readResult[0].statusCode.name === 'Good') {
         if (readResult[0].historyData.dataValues.length) {
           let dataValues = readResult[0].historyData.dataValues;
           dataValues.forEach(dataValue => {
+            timestamp = getTimestamp(dataValue.sourceTimestamp);
             if (dataValue.statusCode.name === 'Good') {
               dataItems = JSON.parse(dataValue.value.value);
               accumulator = '';
               loForEach(dataItems, function (value, key) {
                 accumulator = accumulator + `${key}=${value}; `;
               });
-              console.log(chalk.green('SessionHistoryValue_ForCH_M51.ValueFromFile:'), chalk.cyan(`${accumulator} Timestamp=${dataValue.sourceTimestamp}`));
+              console.log(chalk.green('SessionHistoryValue_ForCH_M51.ValueFromFile:'), chalk.cyan(`${accumulator} Timestamp=${timestamp}`));
               assert.ok(true, 'OPC-UA clients: session history value from file');
             } else {
               assert.ok(false, 'OPC-UA clients: session history value from file');
@@ -171,12 +175,12 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       // inspector('OPC-UA clients: session history values for "CH_M51" group.readResults:', readResults);
       if (readResults.length) {
         readResults.forEach(readResult => {
-          if (readResult.statusCode === 'Good') {
-            if (readResult.dataValues.length) {
-              readResult.dataValues.forEach(dataValue => {
-                if (dataValue.statusCode === 'Good') {
-                  dataItem = dataValue.value;
-                  console.log(chalk.green(`historyValue.${readResult.browseName}:`), chalk.cyan(`${dataItem} (${readResult.valueParams.engineeringUnits}); Timestamp=${dataValue.timestamp}`));
+          if (readResult.statusCode.name === 'Good') {
+            if (readResult.historyData.dataValues.length) {
+              readResult.historyData.dataValues.forEach(dataValue => {
+                if (dataValue.statusCode.name === 'Good') {
+                  dataItem = dataValue.value.value;
+                  console.log(chalk.green(`historyValue.${readResult.browseName}:`), chalk.cyan(`${dataItem} (${readResult.valueParams.engineeringUnits}); Timestamp=${dataValue.sourceTimestamp}`));
                   assert.ok(true, 'OPC-UA clients: session history values for "CH_M51" group');
                 } else {
                   assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
@@ -207,7 +211,6 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
   });
 
   it('#8. OPC-UA clients: subscription monitor', async () => {
-
     const service = await getClientService(app, id);
     const srvCurrentState = await service.getSrvCurrentState(id);
     // Start subscriptionMonitor
@@ -236,7 +239,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(true, 'OPC-UA clients: subscription terminate');
   });
 
-
+  */
   //===== SESSION CLOSE/CLIENT DISCONNECT/SERVER SHUTDOWN =====//
 
   it('#10. OPC-UA clients: session close the service', async () => {

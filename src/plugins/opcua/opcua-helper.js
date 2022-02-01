@@ -45,6 +45,35 @@ const debug = require('debug')('app:opcua-helper');
 const isLog = false;
 const isDebug = false;
 
+const opcuaDataType = [
+  'Null',
+  'Boolean',
+  'SByte',
+  'Byte',
+  'Int16',
+  'UInt16',
+  'Int32',
+  'UInt32',
+  'Int64',
+  'UInt64',
+  'Float',
+  'Double',
+  'String',
+  'DateTime',
+  'Guid',
+  'ByteString',
+  'XmlElement',
+  'NodeId',
+  'ExpandedNodeId',
+  'StatusCode',
+  'QualifiedName',
+  'LocalizedText',
+  'ExtensionObject',
+  'DataValue',
+  'Variant',
+  'DiagnosticInfo'
+];
+
 /**
  * @method nodeIdToString
  * 
@@ -303,12 +332,17 @@ const formatConfigOption = function (configOption, locale) {
 const formatHistoryResults = function (id, historyResults, browseNames, locale = '') {
   let results = [], result, option, value, browseName;
   const options = getOpcuaConfigOptions(id);
+  if (!Array.isArray(browseNames)) {
+    browseNames = [browseNames];
+  }
   if (Array.isArray(browseNames) && (browseNames.length === historyResults.length)) {
     historyResults.forEach((historyResult, index) => {
       browseName = browseNames[index];
+      browseName = isNodeId(browseName) ? getValueFromNodeId(browseName) : browseName;
       option = options.find(opt => opt.browseName === browseName);
       if (option) {
-        option = formatConfigOption(option, locale ? locale : process.env.FALLBACK_LOCALE);
+        locale = locale ? locale : process.env.FALLBACK_LOCALE;
+        option = formatConfigOption(option, locale);
         result = {};
         result.browseName = browseName;
         result.displayName = option.displayName;
@@ -316,14 +350,16 @@ const formatHistoryResults = function (id, historyResults, browseNames, locale =
         loMerge(result, option.type ? { type: option.type } : {});
         loMerge(result, option.dataType ? { dataType: option.dataType } : {});
         loMerge(result, option.valueParams ? { valueParams: option.valueParams } : {});
-        result.statusCode = historyResult.statusCode._name;
-        result.dataValues = [];
+        result.statusCode = {
+          code: historyResult.statusCode._code,
+          description: historyResult.statusCode._description,
+          name: historyResult.statusCode._name
+        };
+        result.historyData = {};
+        result.historyData.dataValues = [];
         historyResult.historyData.dataValues.forEach(v => {
-          value = {};
-          value.statusCode = v.statusCode.name;
-          value.timestamp = getTimestamp(v.sourceTimestamp.toString());
-          value.value = v.value.value;
-          result.dataValues.push(loMerge({}, value));
+          value = formatDataValue(id, v, browseName, locale);
+          result.historyData.dataValues.push(loMerge({}, value));
         });
         results.push(loMerge({}, result));
       } else {
@@ -349,6 +385,8 @@ const formatHistoryResults = function (id, historyResults, browseNames, locale =
  */
 const formatDataValue = function (id, dataValue, browseName, locale = '') {
   let result, option;
+  //---------------------
+  // inspector('opcua-helper.formatDataValue.dataValue:', dataValue);
   const options = getOpcuaConfigOptions(id);
   if (browseName) {
     option = options.find(opt => opt.browseName === browseName);
@@ -361,10 +399,12 @@ const formatDataValue = function (id, dataValue, browseName, locale = '') {
     loMerge(result, option.valueParams ? { valueParams: option.valueParams } : {});
     loMerge(result, dataValue.sourceTimestamp ? { sourceTimestamp: getTimestamp(dataValue.sourceTimestamp) } : {});
     loMerge(result, dataValue.serverTimestamp ? { serverTimestamp: getTimestamp(dataValue.serverTimestamp) } : {});
-    
-    // getTimestamp(formatValue.serverTimestamp);
-    
-    result.statusCode = dataValue.statusCode._name;
+    result.statusCode = {
+      code: dataValue.statusCode.code,
+      description: dataValue.statusCode._description,
+      name: dataValue.statusCode._name
+    };
+
     result.value = {};
     loMerge(result.value, dataValue.value.dataType ? { dataType: getOpcuaDataType(dataValue.value.dataType)[0] } : {});
     loMerge(result.value, dataValue.value.arrayType ? { arrayType: dataValue.value.arrayType } : {});
@@ -925,7 +965,7 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}) => {
   // inspector('setValueFromSourceForGroup.groupVariableList.browseName:', groupVariableList.map(v => v.browseName.name));
   if (isLog) inspector('setValueFromSourceForGroup.dataItems:', dataItems);
   // inspector('setValueFromSourceForGroup.dataItems:', dataItems);
-  
+
   loForEach(dataItems, function (value, key) {
     groupVariable = groupVariableList.find(v => v.browseName.name === key);
     if (!groupVariable) {
@@ -1108,14 +1148,20 @@ const convertAnyToValue = function (dataType, value) {
 /**
  * @method getTimestamp
  * @param {String|Object} timestamp 
+ * e.g. Mon Feb 08 2021 11:47:22 GMT+0200 (GMT+02:00) | 2022-01-12T12:10:12
  * @returns {String}
+ * e.g. 2022-01-12T12:10:12.123
  */
 const getTimestamp = function (timestamp) {
   // Mon Feb 08 2021 11:47:22 GMT+0200 (GMT+02:00)
   let dt = loIsObject(timestamp) ? timestamp.toString() : timestamp;
   const dtList = dt.split(' ');
-  dt = moment(`${dtList[1]} ${dtList[2]} ${dtList[3]} ${dtList[4]}`, 'MMM DD YYYY HH:mm:ss');
-  dt = dt.format();
+  if (dtList.length >= 5) {
+    dt = moment(`${dtList[1]} ${dtList[2]} ${dtList[3]} ${dtList[4]}`, 'MMM DD YYYY HH:mm:ss');
+    dt = dt.format();
+  } else {
+    dt = moment(dt).format();
+  }
   return dt;
 };
 

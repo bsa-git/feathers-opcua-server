@@ -17,7 +17,7 @@ const {
 
 const {
   xlsxGetCellsFromFile,
-  xlsxWriteFile,
+  xlsxWriteToFile,
   exeljsGetCellsFromFile
 } = require('../../excel-helpers');
 
@@ -32,7 +32,7 @@ const {
 } = require('../opcua-helper');
 
 const debug = require('debug')('app:opcua-getters/histValueFromFile');
-const isDebug = false;
+const isDebug = true;
 const isLog = false;
 
 
@@ -91,7 +91,7 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     const workbook = cells[0].workbook;
     // XLSX.writeFile(workbook, 'out.xls');
 
-    xlsxWriteFile([appRoot, params.path, fileName], workbook);
+    // xlsxWriteToFile([appRoot, params.path, fileName], workbook);
   }
   // }, params.interval);
 };

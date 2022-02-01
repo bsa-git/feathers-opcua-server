@@ -11,7 +11,7 @@ const {
   getSubscriptionHandler,
   formatHistoryResults,
   getSecurityMode,
-  getSecurityPolicy
+  getSecurityPolicy,
 } = require('./opcua-helper');
 const {
   OPCUAClient,
@@ -742,6 +742,7 @@ class OpcuaClient {
    */
   async sessionReadHistoryValuesEx(browseNames, start, end) {
     let result = [], itemNodeIds = [], dataValues;
+    //---------------------------------------------
     this.sessionNotCreated();
     // Get nodeIds
     itemNodeIds = this.getNodeIds(browseNames);
@@ -749,7 +750,7 @@ class OpcuaClient {
     if (itemNodeIds.length) {
       dataValues = await this.session.readHistoryValue(itemNodeIds, start, end);
       // inspector('plugins.opcua-client.class::sessionReadHistoryValuesEx.result:', dataValues);
-      dataValues = formatHistoryResults(this.id, dataValues, browseNames, this.locale);
+      dataValues = formatHistoryResults(this.id, dataValues, itemNodeIds, this.locale);
       result = dataValues;
     }
     if (isLog) inspector('plugins.opcua-client.class::sessionReadHistoryValuesEx.result:', result);
