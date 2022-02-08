@@ -24,11 +24,12 @@ const {
 const chalk = require('chalk');
 
 const debug = require('debug')('app:excel-helpers.test');
-const isDebug_1 = false;
+const isDebug_1 = true;
 const isDebug_2 = false;
 
-const xlsFile = '/src/api/opcua/ua-cherkassy-azot_test2/DayReport-CH_M52_ACM.xls';
-const xlsxFile = '/src/api/opcua/ua-cherkassy-azot_test2/YearReport-CH_M52_ACM.xlsx';
+const xlsFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_M52_ACM.xls';
+const xlsFile2 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/example_1.xls';
+const xlsxFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/YearReport-CH_M52_ACM.xlsx';
 // const xlsxFile = '/src/api/opcua/ua-cherkassy-azot_test2/DayReport-CH_M52_ACM.xlsx';
 
 describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
@@ -48,30 +49,31 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     assert.ok(cells.length, 'Get cells from xls file');
     for (let index = 0; index < cells.length; index++) {
       const cell = cells[index];
-      if (isDebug_1 && loStartsWith(cell.address, 'A')) {
+      if (isDebug_1 && loStartsWith(cell.address, 'C')) {
         inspector('xls.cell:', loOmit(cell, ['xlsx', 'workbook', 'worksheet', 'cell']));
       }      
     }
   });
-
+  
   it('#2: Write data to xls file', async () => {
     // Read xls file
-    const cells = xlsxGetCellsFromFile([appRoot, xlsFile], 'Report1');
+    const cells = xlsxGetCellsFromFile([appRoot, xlsFile2], 'students');
     assert.ok(cells.length, 'Get cells from xls file');
     for (let index = 0; index < cells.length; index++) {
       const cell = cells[index];
-      if (isDebug_1 && loStartsWith(cell.address, 'A')) {
+      if (loStartsWith(cell.address, 'A')) {
         inspector('xls.cell:', loOmit(cell, ['xlsx', 'workbook', 'worksheet', 'cell']));
       }      
     }
     // Write new data to xls file
-    const fileName = getFileName('DayHist01_14F120-', 'xls', true);
+    //const fileName = getFileName('DayHist01_14F120-', 'xls', true);// example_1.xls
+    const fileName = getFileName('example1-', 'xls', true);
     // const XLSX = cells[0].xlsx;
     const workbook = cells[0].workbook;
     
     xlsxWriteToFile([appRoot, 'test/data/tmp/ch-m52_acm', fileName], workbook);
   });
-
+  
   it('#3: Get cells from xlsx file', async () => {
     const cells = await exeljsGetCellsFromFile([appRoot, xlsxFile], 'Данi_СНВВ');
     // const cells = await exeljsGetCellsFromFile([appRoot, xlsxFile], 'Report1');

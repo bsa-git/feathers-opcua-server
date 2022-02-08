@@ -44,7 +44,7 @@
       "getter": "histValueFromFile",
       "getterParams": {
         "path": "test/data/tmp/ch-m51",
-        "fromFile": "data-CH_M51.csv",
+        "fromFile": "test-data/data-CH_M51.csv",
         "interval": 500
       }
     },
@@ -60,7 +60,7 @@
       "getter": "histValueFromFile",
       "getterParams": {
         "path": "test/data/tmp/ch-m52",
-        "fromFile": "data-CH_M52.csv",
+        "fromFile": "test-data/data-CH_M52.csv",
         "interval": 500
       }
     },
@@ -76,8 +76,8 @@
       "getter": "acmDayValueFromFile",
       "getterParams": {
         "path": "test/data/tmp/ch-m52_acm",
-        "fromFile": "DayReport-CH_M52_ACM.xls",
-        "toFile": "YearReport-CH_M52_ACM.xlsx",
+        "fromFile": "test-data/DayReport-CH_M52_ACM.xls",
+        "toFile": "test-data/YearReport-CH_M52_ACM.xlsx",
         "interval": 500
       }
     }
