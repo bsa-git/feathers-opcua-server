@@ -23,28 +23,46 @@ const numberToLetter = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K
 const valueTypes = ['Null', 'Merge', 'Number', 'String', 'Date', 'Hyperlink', 'Formula', 'SharedString', 'RichText', 'Boolean', 'Error'];
 
 
-
-
-//---------------- READ FILE -------------//
-
 /**
- * @method exeljsGetCellsFromFile
+ * @method exeljsReadFile
  * @param {String|Array} path
- * @param {String} sheetName
- * @returns {Array}
+ * @returns {Object}
  */
-const exeljsGetCellsFromFile = async function (path, sheetName = '') {
-  let myWorksheet = null, myCell = {}, cells = [];
-  //--------------------------
+const exeljsReadFile = async function (path) {
   if (Array.isArray(path)) {
     path = join(...path);
   }
   // Create workbook
   const workbook = new ExcelJS.Workbook();
-
   // Read file
   await workbook.xlsx.readFile(path);
+  return workbook;
+};
 
+/**
+ * @method exeljsWriteToFile
+ * @param {Object} workbook
+ * @param {String|Array} path
+ * @returns {String}
+ */
+const exeljsWriteFile = async function (workbook, path) {
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  await workbook.xlsx.writeFile(path);
+  return path;
+};
+
+/**
+ * @method exeljsGetCells
+ * @param {Object} workbook
+ * @param {String} sheetName
+ * @returns {Object[]}
+ */
+const exeljsGetCells = function (workbook, sheetName = '') {
+  let myWorksheet = null, myCell = {}, cells = [];
+  //----------------------------------------------
+    
   // Get 
   workbook.eachSheet(function (worksheet, sheetId) {
     myWorksheet = null;
@@ -108,21 +126,9 @@ const exeljsGetCellsFromFile = async function (path, sheetName = '') {
   return cells;
 };
 
-/**
- * @method exeljsWriteToFile
- * @param {String|Array} path
- * @param {Object} workbook
- * @returns {String}
- */
-const exeljsWriteToFile = async function (path, workbook) {
-  if (Array.isArray(path)) {
-    path = join(...path);
-  }
-  await workbook.xlsx.writeFile(path);
-  return path;
-};
 
 module.exports = {
-  exeljsGetCellsFromFile,
-  exeljsWriteToFile
+  exeljsReadFile,
+  exeljsWriteFile,
+  exeljsGetCells,
 };

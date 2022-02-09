@@ -8,7 +8,8 @@ const join = Path.join;
 const {
   inspector,
   getValueType,
-  splitStr2StrNum
+  splitStr2StrNum,
+  readJsonFileSync
 } = require('../lib');
 
 const XLSX = require('xlsx');
@@ -18,22 +19,81 @@ const isDebug = false;
 
 const typeOf = { n: 'number', s: 'string', b: 'boolean' };
 
-//---------------- READ FILE -------------//
-
 /**
- * Get cells from file
- * @method xlsxGetCellsFromFile
+ * Read file
+ * @method xlsxReadFile
  * @param {String|Array} path
- * @param {String} sheetName
- * @returns {Array}
+ * @returns {Object}
  */
-const xlsxGetCellsFromFile = function (path, sheetName = '') {
-  let worksheet = null, myCell = {}, myItem = {}, cells = [];
+const xlsxReadFile = function (path) {
   //--------------------------
   if (Array.isArray(path)) {
     path = join(...path);
   }
   const workbook = XLSX.readFile(path);
+  return workbook;
+};
+
+/**
+ * Read json file
+ * @method xlsxReadJsonFile
+ * @param {String|Array} path
+ * @param {String} sheetName
+ * @returns {Object}
+ */
+const xlsxReadJsonFile = function (path, sheetName) {
+  //--------------------------
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  const jsonData = readJsonFileSync(path);
+  const workbook = xlsxCreateBook();
+  const worksheet = xlsxJsonToSheet(jsonData, { skipHeader: true });
+  xlsxBookAppendSheet(workbook, worksheet, sheetName);
+  return workbook;
+};
+
+/**
+ * Read json data
+ * @method xlsxReadJsonData
+ * @param {Object[]} jsonData
+ * @param {String} sheetName
+ * @returns {Object}
+ */
+const xlsxReadJsonData = function (jsonData, sheetName) {
+  //--------------------------
+  const workbook = xlsxCreateBook();
+  const worksheet = xlsxJsonToSheet(jsonData, { skipHeader: true });
+  xlsxBookAppendSheet(workbook, worksheet, sheetName);
+  return workbook;
+};
+
+/**
+ * Write file
+ * @method xlsxWriteToFile
+ * @param {Object} workbook
+ * @param {String|Array} path
+ * @returns {String}
+ */
+const xlsxWriteFile = function (workbook, path) {
+  //--------------------------
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  XLSX.writeFile(workbook, path);
+  return path;
+};
+
+/**
+ * Get cells from workbook
+ * @method xlsxGetCellsFromFile
+ * @param {Object} workbook
+ * @param {String} sheetName
+ * @returns {Object[]}
+ */
+const xlsxGetCells = function (workbook, sheetName = '') {
+  let worksheet = null, myCell = {}, myItem = {}, cells = [];
+  //--------------------------
   const sheets = workbook.SheetNames;
   // Get 
   sheets.forEach(function (sheet) {
@@ -92,29 +152,13 @@ const xlsxGetCellsFromFile = function (path, sheetName = '') {
 };
 
 /**
- * Write to file
- * @method xlsxWriteToFile
- * @param {String|Array} path
- * @param {Object} workbook
- * @returns {String}
- */
-const xlsxWriteToFile = function (path, workbook) {
-  //--------------------------
-  if (Array.isArray(path)) {
-    path = join(...path);
-  }
-  XLSX.writeFile(workbook, path);
-  return path;
-};
-
-/**
  * The book_new utility function creates an empty workbook with no worksheets
  * @method xlsxCreateBook
  * @returns {Object}
  */
- const xlsxCreateBook = function () {
+const xlsxCreateBook = function () {
   const workbook = XLSX.utils.book_new();
-  return workbook
+  return workbook;
 };
 
 /**
@@ -125,9 +169,9 @@ const xlsxWriteToFile = function (path, workbook) {
  * @param {Object} sheetName
  * @returns {Object}
  */
- const xlsxBookAppendSheet = function (workbook, worksheet, sheetName = '') {
-  XLSX.utils.book_append_sheet(workbook, worksheet, sheetName)
-  return workbook
+const xlsxBookAppendSheet = function (workbook, worksheet, sheetName = '') {
+  XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+  return workbook;
 };
 
 
@@ -143,9 +187,9 @@ const xlsxSheetToJson = function (worksheet, params = {}) {
   let jsonData = [];
   //------------------------------
   jsonData = XLSX.utils.sheet_to_json(worksheet, params);
-  if(isDebug) inspector('xlsxSheetToJson.params:', params);
-  if(isDebug) inspector('xlsxSheetToJson.jsonData:', jsonData);
-  return jsonData
+  if (isDebug) inspector('xlsxSheetToJson.params:', params);
+  if (isDebug) inspector('xlsxSheetToJson.jsonData:', jsonData);
+  return jsonData;
 };
 
 /**
@@ -160,13 +204,13 @@ const xlsxSheetToJson = function (worksheet, params = {}) {
  *      1 2  OR 3 4
  *      3 4
  */
- const xlsxJsonToSheet = function (data, params = {}) {
+const xlsxJsonToSheet = function (data, params = {}) {
   let worksheet = null;
   //------------------------------
   worksheet = XLSX.utils.json_to_sheet(data, params);
-  if(isDebug) inspector('xlsxJsonToSheet.params:', params);
-  if(isDebug) inspector('xlsxJsonToSheet.data:', data);
-  return worksheet
+  if (isDebug) inspector('xlsxJsonToSheet.params:', params);
+  if (isDebug) inspector('xlsxJsonToSheet.data:', data);
+  return worksheet;
 };
 
 /**
@@ -179,11 +223,11 @@ const xlsxSheetToJson = function (worksheet, params = {}) {
  * e.g. {} | {header:["A","B"], skipHeader: false | true, origin: "A2" | { r: 1, c: 4} | origin: -1}
  * @returns {Object}
  */
- const xlsxSheetAddJson = function (worksheet, data, params = {}) {
+const xlsxSheetAddJson = function (worksheet, data, params = {}) {
   XLSX.utils.sheet_add_json(worksheet, data, params);
-  if(isDebug) inspector('xlsxSheetAddJson.params:', params);
-  if(isDebug) inspector('xlsxSheetAddJson.data:', data);
-  return worksheet
+  if (isDebug) inspector('xlsxSheetAddJson.params:', params);
+  if (isDebug) inspector('xlsxSheetAddJson.data:', data);
+  return worksheet;
 };
 
 
@@ -193,17 +237,20 @@ const xlsxSheetToJson = function (worksheet, params = {}) {
  * @param {Object} worksheet
  * @returns {String}
  */
- const xlsxGetWorksheetRef = function (worksheet) {
+const xlsxGetWorksheetRef = function (worksheet) {
   const ref = worksheet['!ref'];
-  if(isDebug) inspector('xlsxGetWorksheetRef.ref:', ref);
-  return ref
+  if (isDebug) inspector('xlsxGetWorksheetRef.ref:', ref);
+  return ref;
 };
 
 
 
 module.exports = {
-  xlsxGetCellsFromFile,
-  xlsxWriteToFile,
+  xlsxReadFile,
+  xlsxReadJsonFile,
+  xlsxReadJsonData,
+  xlsxWriteFile,
+  xlsxGetCells,
   xlsxCreateBook,
   xlsxBookAppendSheet,
   xlsxSheetToJson,
