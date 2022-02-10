@@ -27,20 +27,21 @@ class XlsxHelperClass {
   constructor(params = {}) {
     // Read excel file
     if (params.excelPath) {
-      this.workbook = xlsxReadFile(params.excelPath);
-      this.worksheet = this.workbook.Sheets[params.sheetName];
+      this.readFile(params.excelPath, params.sheetName);
     }
 
     // Read json file
     if (params.jsonPath) {
-      this.workbook = xlsxReadJsonFile(params.jsonPath, params.sheetName);
-      this.worksheet = this.workbook.Sheets[params.sheetName];
+      this.readJsonFile(params.jsonPath, params.sheetName);
     }
 
     // Read json data
     if (params.jsonData) {
-      this.workbook = xlsxReadJsonData(params.jsonData, params.sheetName);
-      this.worksheet = this.workbook.Sheets[params.sheetName];
+      this.readJsonData(params.jsonData, params.sheetName);
+    }
+
+    if(!this.workbook){
+      this.workbook = xlsxCreateBook();
     }
   }
 

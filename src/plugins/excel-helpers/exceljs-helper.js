@@ -54,6 +54,50 @@ const exeljsWriteFile = async function (workbook, path) {
 };
 
 /**
+ * Create a Workbook
+ * @method exeljsCreateBook
+ * @returns {Object}
+ */
+ const exeljsCreateBook = function () {
+  const workbook = new ExcelJS.Workbook();
+  return workbook;
+};
+
+/**
+ * Append a Worksheet to a Workbook
+ * @method exeljsBookAppendSheet
+ * @param {Object} workbook
+ * @param {Object} sheetName
+ * @param {Object} params
+ * @returns {Object}
+ */
+ const exeljsBookAppendSheet = function (workbook, sheetName = '', params = {}) {
+  return workbook.addWorksheet(sheetName, params);
+};
+
+/**
+ * // Remove the worksheet using worksheet id
+ * @method exeljsBookRemoveSheet
+ * @param {Object} workbook
+ * @param {Number} id
+ */
+ const exeljsBookRemoveSheet = function (workbook, id) {
+  workbook.removeWorksheet(id)
+};
+
+/**
+ * // Remove the worksheet using worksheet id
+ * @method exeljsBookRemoveSheet
+ * @param {Object} workbook
+ * @param {String|Number} identifier
+ * e.g. workbook.getWorksheet('My Sheet') | workbook.getWorksheet(id)
+ * @returns {Object}
+ */
+ const exeljsGetSheet = function (workbook, identifier) {
+  return workbook.getWorksheet(identifier)
+};
+
+/**
  * @method exeljsGetCells
  * @param {Object} workbook
  * @param {String} sheetName
@@ -78,9 +122,9 @@ const exeljsGetCells = function (workbook, sheetName = '') {
     if (myWorksheet) {
       if (isDebug) console.log(`name=${worksheet.name}; id=${sheetId}; state=${worksheet.state}; rowCount=${worksheet.rowCount}; actualColumnCount=${worksheet.actualColumnCount};`);
       for (let index = 1; index <= worksheet.actualColumnCount; index++) {
-        const indexCol = worksheet.getColumn(index);
+        const column = worksheet.getColumn(index);
         // iterate over all current cells in this column
-        indexCol.eachCell({ includeEmpty: true }, function (cell, rowNumber) {
+        column.eachCell({ includeEmpty: true }, function (cell, rowNumber) {
           // if (cell.value) {
           myCell = {};
           myCell.worksheetName = worksheet.name;
@@ -113,7 +157,7 @@ const exeljsGetCells = function (workbook, sheetName = '') {
             myCell.shareType = cell.value.shareType;
           }
           myCell.cell = cell;
-          myCell.column = indexCol;
+          myCell.column = column;
           myCell.row = worksheet.getRow(rowNumber);
           cells.push(myCell);
           if (isDebug && loStartsWith(myCell.address, 'A')) {
@@ -130,5 +174,9 @@ const exeljsGetCells = function (workbook, sheetName = '') {
 module.exports = {
   exeljsReadFile,
   exeljsWriteFile,
+  exeljsCreateBook,
+  exeljsBookAppendSheet,
+  exeljsBookRemoveSheet,
+  exeljsGetSheet,
   exeljsGetCells,
 };
