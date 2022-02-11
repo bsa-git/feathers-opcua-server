@@ -10,8 +10,7 @@ const {
   isObject,
   getValueType,
   getDateTime,
-  isValidDateTime,
-  dtToObject
+  readJsonFileSync,
 } = require('../lib');
 
 const ExcelJS = require('exceljs');
@@ -40,6 +39,54 @@ const exeljsReadFile = async function (path) {
 };
 
 /**
+ * @method exeljsReadJsonFile
+ * @param {String|Array} path
+ * @returns {Object}
+ */
+ const exeljsReadJsonFile = async function (path) {
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  // Create workbook
+  const workbook = new ExcelJS.Workbook();
+  // Read file
+  const jsonData = readJsonFileSync(path);
+  // Load from buffer
+  await workbook.xlsx.load(jsonData);
+  return workbook;
+};
+
+/**
+ * @method exeljsReadJsonData
+ * @param {Object[]} jsonData
+ * @returns {Object}
+ */
+ const exeljsReadJsonData = async function (jsonData) {
+  // Create workbook
+  const workbook = new ExcelJS.Workbook();
+  // Load from buffer
+  await workbook.xlsx.load(jsonData);
+  return workbook;
+};
+
+/**
+ * @method exeljsReadCsvFile
+ * @param {String|Array} path
+ * @param {Object} options
+ * @returns {Object}
+ */
+ const exeljsReadCsvFile = async function (path, options) {
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  // Create workbook
+  const workbook = new ExcelJS.Workbook();
+  // Read file
+  await workbook.csv.readFile(path, options);
+  return workbook;
+};
+
+/**
  * @method exeljsWriteToFile
  * @param {Object} workbook
  * @param {String|Array} path
@@ -50,6 +97,21 @@ const exeljsWriteFile = async function (workbook, path) {
     path = join(...path);
   }
   await workbook.xlsx.writeFile(path);
+  return path;
+};
+
+/**
+ * @method exeljsWriteCsvFile
+ * @param {Object} workbook
+ * @param {String|Array} path
+ * @param {Object} options
+ * @returns {String}
+ */
+ const exeljsWriteCsvFile = async function (workbook, path, options) {
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  await workbook.csv.writeFile(path, options);
   return path;
 };
 
@@ -173,7 +235,11 @@ const exeljsGetCells = function (workbook, sheetName = '') {
 
 module.exports = {
   exeljsReadFile,
+  exeljsReadJsonFile,
+  exeljsReadCsvFile,
+  exeljsReadJsonData,
   exeljsWriteFile,
+  exeljsWriteCsvFile,
   exeljsCreateBook,
   exeljsBookAppendSheet,
   exeljsBookRemoveSheet,

@@ -5,7 +5,11 @@ const {
 
 const {
   exeljsReadFile,
+  exeljsReadJsonFile,
+  exeljsReadCsvFile,
+  exeljsReadJsonData,
   exeljsWriteFile,
+  exeljsWriteCsvFile,
   exeljsCreateBook,
   exeljsBookAppendSheet,
   exeljsBookRemoveSheet,
@@ -22,137 +26,265 @@ const isDebug = false;
 class ExceljsHelperClass {
 
   // Constructor
-  constructor(params = {}) {
+  async constructor(params = {}) {
     // Read excel file
     if (params.excelPath) {
-      this.readFile(params.excelPath);
+      await this.readFile(params.excelPath);
     }
 
     // Read json file
-    // if (params.jsonPath) {
-    //   this.workbook = xlsxReadJsonFile(params.jsonPath, params.sheetName);
-    //   this.worksheet = this.workbook.Sheets[params.sheetName];
-    // }
+    if (params.jsonPath) {
+      await readJsonFile(params.jsonPath, params.sheetName);
+    }
 
     // Read json data
-    // if (params.jsonData) {
-    //   this.workbook = xlsxReadJsonData(params.jsonData, params.sheetName);
-    //   this.worksheet = this.workbook.Sheets[params.sheetName];
-    // }
+    if (params.jsonData) {
+      await readJsonData(params.jsonData, params.sheetName);
+    }
 
     if (!this.workbook) {
       this.workbook = exeljsCreateBook();
     }
   }
 
-  readFile(path, sheetName = '') {
-    this.workbook = exeljsReadFile(path);
-    if (sheetName) {
-      this.worksheet = this.workbook.getWorksheet(sheetName);
-    } else {
-      this.worksheet = null;
-    }
-    return this.workbook;
+  //------------------- FILE --------------------//
+
+  // Read from a file
+  // e.g. const workbook = new Excel.Workbook();
+  // e.g. await workbook.xlsx.readFile(filename);
+  async readFile(path, sheetName = '') {
+    this.workbook = await exeljsReadFile(path);
+    this.worksheet = this.getSheet(sheetName);
+    return this;
   }
 
-  // readJsonFile(path, sheetName) {
-  //   this.workbook = xlsxReadJsonFile(path);
-  //   this.worksheet = this.workbook.Sheets[sheetName];
-  //   return this.workbook;
-  // }
-
-  // readJsonData(jsonData, sheetName) {
-  //   this.workbook = xlsxReadJsonData(jsonData, sheetName);
-  //   this.worksheet = this.workbook.Sheets[sheetName];
-  //   return this.workbook;
-  // }
-
-  writeFile(path) {
-    return exeljsWriteFile(this.workbook, path);
+  // Read from json file
+  // e.g. const workbook = new Excel.Workbook();
+  // e.g. await workbook.xlsx.load(data);
+  async readJsonFile(path, sheetName = '') {
+    this.workbook = await exeljsReadJsonFile(path);
+    this.worksheet = this.getSheet(sheetName);
+    return this;
   }
 
+  // Read from csv file
+  // e.g. const workbook = new Excel.Workbook();
+  // e.g. const workbook = new Excel.Workbook();
+  // e.g. const worksheet = await workbook.csv.readFile(filename);
+  // Read from a file with European Dates
+  // e.g. const options = { dateFormats: ['DD/MM/YYYY'] };
+  //      const worksheet = await workbook.csv.readFile(filename, options);
+  async readCsvFile(path, options, sheetName = '') {
+    this.workbook = await exeljsReadCsvFile(path, options);
+    this.worksheet = this.getSheet(sheetName);
+    return this;
+  }
+
+  // Read from json data
+  // e.g. const workbook = new Excel.Workbook();
+  // e.g. await workbook.xlsx.load(data);
+  async readJsonData(jsonData, sheetName = '') {
+    this.workbook = await exeljsReadJsonData(jsonData, sheetName);
+    this.worksheet = this.getSheet(sheetName);
+    return this;
+  }
+
+  // Write to a file
+  // e.g. const workbook = createAndFillWorkbook();
+  // e.g. await workbook.xlsx.writeFile(filename);
+  async writeCsvFile(path) {
+    await exeljsWriteFile(this.workbook, path);
+    return this;
+  }
+
+  // Write to csv file
+  // e.g. const workbook = createAndFillWorkbook();
+  // e.g. await workbook.csv.writeFile(filename);
+  // Write to a file with European Date-Times
+  // e.g. const workbook = new Excel.Workbook();
+  //      const options = { dateFormat: 'DD/MM/YYYY HH:mm:ss', dateUTC: true, // use utc when rendering dates};
+  //      await workbook.csv.writeFile(filename, options);
+  async writeCsvFile(path, options) {
+    await exeljsWriteCsvFile(this.workbook, path, options);
+    return this;
+  }
+
+  //------------------- SHEET --------------------//
+
+  // Add a Worksheet
+  // e.g. const sheet = workbook.addWorksheet('My Sheet');
+  // Create a sheet with red tab colour
+  // e.g. const sheet = workbook.addWorksheet('My Sheet', {properties:{tabColor:{argb:'FFC0000'}}});
+  // Create a sheet where the grid lines are hidden
+  // e.g. const sheet = workbook.addWorksheet('My Sheet', {views: [{showGridLines: false}]});
+  // Create a sheet with the first row and column frozen
+  // e.g. const sheet = workbook.addWorksheet('My Sheet', {views:[{state: 'frozen', xSplit: 1, ySplit:1}]});
+  // Create worksheets with headers and footers
+  // e.g. const sheet = workbook.addWorksheet('My Sheet', { headerFooter:{firstHeader: "Hello Exceljs", firstFooter: "Hello World"}});
+  // Create new sheet with pageSetup settings for A4 - landscape
+  // e.g. const worksheet =  workbook.addWorksheet('My Sheet', { pageSetup:{paperSize: 9, orientation:'landscape'}});
   addSheet(sheetName, options) {
     return exeljsBookAppendSheet(this.workbook, sheetName, options);
   }
 
+  // Use the worksheet id to remove the sheet from workbook.
+  // e.g. workbook.removeWorksheet(sheet.id)
   removeSheet(shIdentifier) {
     const worksheet = this.getSheet(shIdentifier)
     exeljsBookRemoveSheet(this.workbook, worksheet.id);
+    return this;
   }
 
+  // Fetch sheet by name
+  // e.g. const worksheet = workbook.getWorksheet('My Sheet');
+  // Fetch sheet by id
+  // INFO: Be careful when using it!
+  // It tries to access to `worksheet.id` field. Sometimes (really very often) workbook has worksheets with id not starting from 1.
+  // For instance It happens when any worksheet has been deleted.
+  // It's much more safety when you assume that ids are random. And stop to use this function.
+  // If you need to access all worksheets in a loop please look to the next example.
+  // e.g. const worksheet = workbook.getWorksheet(1);
+  // It's important to know that workbook.getWorksheet(1) != Workbook.worksheets[0] and workbook.getWorksheet(1) != Workbook.worksheets[1], 
+  // becouse workbook.worksheets[0].id may have any value.
   getSheet(shIdentifier) {
     return shIdentifier ? exeljsGetSheet(this.workbook, shIdentifier) : this.worksheet;
   }
 
+  // Iterate over all sheets
+  // Note: workbook.worksheets.forEach will still work but this is better
+  // e.g. workbook.eachSheet(function(worksheet, sheetId) { // ... });
+  workbookEachSheet(callback) {
+    this.workbook.eachSheet(callback);
+  }
+
+  // Select worksheet
+  // e.g. this.worksheet = this.getSheet(shIdentifier);
+  selectSheet(shIdentifier) {
+    this.worksheet = this.getSheet(shIdentifier);
+    return this.worksheet
+  }
+
+  // Get worksheet name
   getSheetName(id) {
     return this.getSheet(id).name;
   }
 
+  // Get worksheet Id
   getSheetId(sheetName) {
     return this.getSheet(sheetName).id;
   }
 
+  // Get worksheet state
   getSheetState(shIdentifier) {
     return this.getSheet(shIdentifier).state;
   }
 
+  // Get worksheet properties
+  // Worksheets support a property bucket to allow control over some features of the worksheet
   getSheetProperties(shIdentifier) {
     return this.getSheet(shIdentifier).properties;
   }
 
+  // Get worksheet metrics
   getSheetMetrics(shIdentifier) {
     const worksheet = this.getSheet(shIdentifier);
     return {
       rowCount: worksheet.rowCount,
-      actualRowCount: worksheet.actualRowCount,
       columnCount: worksheet.columnCount,
+      actualRowCount: worksheet.actualRowCount,
       actualColumnCount: worksheet.actualColumnCount
     };
   }
 
+  // Get worksheet page setup
+  // All properties that can affect the printing of a sheet are held in a pageSetup object on the sheet.
   getSheetPageSetup(shIdentifier) {
     return this.getSheet(shIdentifier).pageSetup;
   }
 
+  // Get worksheet HeaderFooter
+  // Here's how to add headers and footers. The added content is mainly text, such as time, introduction, file information, etc., 
+  // and you can set the style of the text. In addition, you can set different texts for the first page and even page.
   getSheetHeaderFooter(shIdentifier) {
     return this.getSheet(shIdentifier).headerFooter;
   }
 
+  // Get worksheet views
+  // Worksheets now support a list of views, that control how Excel presents the sheet:
+  // - frozen - where a number of rows and columns to the top and left are frozen in place. Only the bottom right section will scroll
+  // - split - where the view is split into 4 sections, each semi-independently scrollable.
   getSheetViews(shIdentifier) {
     return this.getSheet(shIdentifier).views;
   }
 
+  // Get worksheet auto filter
+  // It is possible to apply an auto filter to your worksheet.
   getSheetAutoFilter(shIdentifier) {
     return this.getSheet(shIdentifier).autoFilter;
   }
 
-  getColumns(shIdentifier) {
-    return this.getSheet(shIdentifier).columns;
+  // Conditional formatting allows a sheet to show specific styles, icons, etc depending on cell values or any arbitrary formula
+  // Add a checkerboard pattern to A1:E7 based on row + col being even or odd
+  // e.g. worksheet.addConditionalFormatting({
+  //ref: 'A1:E7',
+  //rules: [
+  //  {
+  //    type: 'expression',
+  //    formulae: ['MOD(ROW()+COLUMN(),2)=0'],
+  //    style: {fill: {type: 'pattern', pattern: 'solid', bgColor: {argb: 'FF00FF00'}}},
+  //  }
+  //]
+  //})
+  addSheetConditionalFormatting(options, shIdentifier){
+    this.getSheet(shIdentifier).addConditionalFormatting(options);
+    return this;
   }
 
+  // Worksheets can be protected from modification by adding a password
+  // e.g. await worksheet.protect('the-password', options);
+  async sheetProtect(password, options, shIdentifier) {
+    await this.getSheet(shIdentifier).protect(password, options);
+    return this;
+  }
+
+  // Worksheet protection can also be removed
+  // e.g. worksheet.unprotect();
+  sheetUnprotect(shIdentifier) {
+    this.getSheet(shIdentifier).unprotect();
+    return this;
+  }
+
+
+  //------------------- COLUMS --------------------//
+
+  // Add column headers and define column keys and widths
+  // Note: these column structures are a workbook-building convenience only,
+  // apart from the column width, they will not be fully persisted.
+  // e.g. worksheet.columns = [{ header: 'Id', key: 'id', width: 10 }, { header: 'Name', key: 'name', width: 32 }, { header: 'D.O.B.', key: 'DOB', width: 10, outlineLevel: 1 }];
+  addColumns(colValues, shIdentifier) {
+    this.getSheet(shIdentifier).columns = colValues;
+    return this;
+  }
+
+  // Access an individual columns by key, letter and 1-based column number
+  // e.g. const idCol = worksheet.getColumn('id');
+  // e.g. const nameCol = worksheet.getColumn('B');
+  // e.g. const dobCol = worksheet.getColumn(3);
   getColumn(colIdentifier, shIdentifier) {
     return this.getSheet(shIdentifier).getColumn(colIdentifier);
   }
 
-  // Iterate over all current cells in this column
-  // e.g. callback(cell, rowNumber) { console.log('Cell ' + rowNumber + ' = ' + JSON.stringify(cell.value)); }
-  // e.g. options -> { includeEmpty: true }
-  columnEachCell(column, callback, options) {
-    if (options) {
-      column.eachCell(options, callback);
-    } else {
-      column.eachCell(callback);
-    }
-  }
-
-  // cut one or more columns (columns to the right are shifted left)
+  // Cut one or more columns (columns to the right are shifted left)
   // If column properties have been defined, they will be cut or moved accordingly
   // Known Issue: If a splice causes any merged cells to move, the results may be unpredictable 
   // e.g. worksheet.spliceColumns(3,2);
   // e.g. worksheet.spliceColumns(3, 1, newCol3Values, newCol4Values);
-  sheetSpliceColumns(args = [], shIdentifier) {
-    return this.getSheet(shIdentifier).spliceColumns(...args);
+  spliceColumns(args = [], shIdentifier) {
+    this.getSheet(shIdentifier).spliceColumns(...args);
+    return this;
   }
+
+  //------------------- ROWS --------------------//
 
   // Get multiple row objects. If it doesn't already exist, new empty ones will be returned
   // e.g. const rows = worksheet.getRows(5, 2); // start, length (>0, else undefined is returned)
@@ -176,18 +308,8 @@ class ExceljsHelperClass {
   // Iterate over all rows that have values in a worksheet
   // e.g. callback(row, rowNumber) { console.log('Row ' + rowNumber + ' = ' + JSON.stringify(row.values)); }
   sheetEachRow(callback, shIdentifier) {
-    return this.getSheet(shIdentifier).eachRow(callback);
-  }
-
-  // Iterate over all non-null cells in a row
-  // e.g. callback(cell, colNumber) { console.log('Cell ' + colNumber + ' = ' + cell.value); }
-  // e.g. options -> { includeEmpty: true }
-  rowEachCell(row, callback, options) {
-    if (options) {
-      row.eachCell(options, callback);
-    } else {
-      row.eachCell(callback);
-    }
+    this.getSheet(shIdentifier).eachRow(callback);
+    return this;
   }
 
   // Get row metrics
@@ -206,6 +328,7 @@ class ExceljsHelperClass {
   // e.g. const rowValues = []; rowValues[1] = 4; rowValues[5] = 'Kyle'; rowValues[9] = new Date(); worksheet.addRow(rowValues);
   addRow(rowValues, shIdentifier) {
     this.getSheet(shIdentifier).addRow(rowValues);
+    return this;
   }
 
   // Add a row with inherited style
@@ -275,6 +398,8 @@ class ExceljsHelperClass {
     return this.getSheet(shIdentifier).insertRows(pos, rowValues, style);
   }
 
+  //------------------- CELLS --------------------//
+
   // Get cell
   // e.g. const cell = worksheet.getCell('C3');
   // Query a cell's type
@@ -307,6 +432,7 @@ class ExceljsHelperClass {
     } else {
       this.getSheet(shIdentifier).mergeCells(addressRange);
     }
+    return this;
   }
 
   // Unmerging the cells breaks the style links
@@ -314,30 +440,171 @@ class ExceljsHelperClass {
   // e.g. expect(worksheet.getCell('B5').style).not.toBe(worksheet.getCell('A4').style);
   // e.g. expect(worksheet.getCell('B5').style.font).not.toBe(myFonts.arial);
   unMergeCells(address, shIdentifier) {
-    return this.getSheet(shIdentifier).unMergeCells(address);
+    this.getSheet(shIdentifier).unMergeCells(address);
+    return this;
   }
 
+  // Iterate over all current cells in this column
+  // e.g. callback(cell, rowNumber) { console.log('Cell ' + rowNumber + ' = ' + JSON.stringify(cell.value)); }
+  // e.g. options -> { includeEmpty: true }
+  columnEachCell(column, callback, options) {
+    if (options) {
+      column.eachCell(options, callback);
+    } else {
+      column.eachCell(callback);
+    }
+    return this;
+  }
+
+  // Iterate over all non-null cells in a row
+  // e.g. callback(cell, colNumber) { console.log('Cell ' + colNumber + ' = ' + cell.value); }
+  // e.g. options -> { includeEmpty: true }
+  rowEachCell(row, callback, options) {
+    if (options) {
+      row.eachCell(options, callback);
+    } else {
+      row.eachCell(callback);
+    }
+    return this;
+  }
+
+  // Get cells from all worksheets or from one worksheet
+  // [{ worksheetName: 'Report1', address: 'A5', address2: { col: 'A', row: 5 }, value: 1234, 
+  // valueType: 'Number', cellType: 'Number', formula: 'C5 + B5', cell: Object, column: Object ... } ... {}]
   getCells(sheetName = '') {
     return exeljsGetCells(this.workbook, sheetName);
   }
 
-  // sheetToJson(options = { header: 'A' }) {
-  //   return xlsxSheetToJson(this.worksheet, options);
-  // }
+  //------------------- TABLE --------------------//
 
-  // jsonToSheet(jsonData, sheetName, options = { skipHeader: true }) {
-  //   const worksheet = xlsxJsonToSheet(jsonData, options);
-  //   xlsxBookAppendSheet(this.workbook, worksheet, sheetName);
-  //   this.worksheet = worksheet;
-  //   return this.worksheet;
-  // }
+  // Tables allow for in-sheet manipulation of tabular data.
+  // To add a table to a worksheet, define a table model and call addTable:
+  // Add a table to a sheet
+  // e.g. 
+  // ws.addTable({
+  // name: 'MyTable',
+  // ref: 'A1',
+  // headerRow: true,
+  // totalsRow: true,
+  // style: {
+  //  theme: 'TableStyleDark3',
+  //  showRowStripes: true,
+  // },
+  //columns: [
+  //  {name: 'Date', totalsRowLabel: 'Totals:', filterButton: true},
+  //  {name: 'Amount', totalsRowFunction: 'sum', filterButton: false},
+  //],
+  //rows: [
+  //  [new Date('2019-07-20'), 70.10],
+  //  [new Date('2019-07-21'), 70.60],
+  //  [new Date('2019-07-22'), 70.10],
+  //],
+  //});
+  addTable(model , shIdentifier) {
+    this.getSheet(shIdentifier).addTable(model);
+    return this;
+  }
 
-  // sheetAddJson(jsonData, options = {}) {
-  //   this.worksheet = xlsxSheetAddJson(this.worksheet, jsonData, options);
-  //   return this.worksheet;
-  // }
+  // Get table
+  // e.g. const table = ws.getTable('MyTable');
+  // Tables support a set of manipulation functions that allow data to be added or removed and some properties to be changed. 
+  // Since many of these operations may have on-sheet effects, the changes must be committed once complete.
+  // All index values in the table are zero based, so the first row number and first column number is 0.
+  getTable(tableName , shIdentifier) {
+    return this.getSheet(shIdentifier).getTable(tableName);
+  }
+
+  // Commit the table changes into the sheet
+  tableCommit(table){
+    table.commit();
+    return this;
+  }
+
+  // Append new row to bottom of table
+  // e.g. table.addRow([new Date('2019-08-10'), 10, 'End']);
+  addTableRow(table, rowValues){
+    table.addRow(rowValues);
+    return this;
+  }
+
+  // Insert new rows at index 5
+  // e.g. table.addRow([new Date('2019-08-05'), 5, 'Mid'], 5);
+  insertTableRow(table, rowValues, pos){
+    table.addRow(rowValues, pos);
+    return this;
+  }
+
+  // Remove first two rows
+  // e.g. table.removeRows(0, 2);
+  removeTableRows(table, startPos, endPos){
+    table.removeRows(startPos, endPos);
+    return this;
+  }
+
+  // Insert new column (with data) at index 1
+  // e.g. table.addColumn({name: 'Letter', totalsRowFunction: 'custom', totalsRowFormula: 'ROW()', totalsRowResult: 6, filterButton: true}, ['a', 'b', 'c', 'd'],  2);
+  insertTableColumn(table, colOption, colValues, pos){
+    table.addColumn(colOption, colValues, pos)
+    return this;
+  }
+
+  // Remove second column
+  // e.g. table.removeColumns(1, 1);
+  removeTableColumns(table, startPos, endPos){
+    table.removeColumns(startPos, endPos)
+    return this;
+  }
+
+  // Get Column Wrapper for second column
+  // e.g. const column = table.getColumn(1);
+  getTableColumn(table, pos){
+    return table.getColumn(pos)
+  }
+
+  //------------------- IMAGES --------------------//
+
+  // Adding images to a worksheet is a two-step process. First, the image is added to the workbook via the addImage() function which will also return an imageId value. 
+  // Then, using the imageId, the image can be added to the worksheet either as a tiled background or covering a cell range.
+  // Note: As of this version, adjusting or transforming the image is not supported and images are not supported in streaming mode.
+
+  // Add image to workbook by filename
+  // e.g. const imageId1 = workbook.addImage({ filename: 'path/to/image.jpg',  extension: 'jpeg',});
+  // Add image to workbook by buffer
+  // e.g. const imageId2 = workbook.addImage({ buffer: fs.readFileSync('path/to.image.png'), extension: 'png',});
+  // Add image to workbook by base64
+  // e.g. const myBase64Image = "data:image/png;base64,iVBORw0KG...";
+  //      const imageId2 = workbook.addImage({ base64: myBase64Image, extension: 'png',});
+  workbookAddImage(options){
+    return this.workbook.addImage(options);
+  }
+
+  // Add image background to worksheet
+  // e.g. worksheet.addBackgroundImage(imageId1);
+  worksheetAddBackgroundImage(imageId, shIdentifier){
+    this.getSheet(shIdentifier).addBackgroundImage(imageId);
+    return this;
+  }
+
+  // Add image over a range
+  // Using the image id from Workbook.addImage, an image can be embedded within the worksheet to cover a range. 
+  // The coordinates calculated from the range will cover from the top-left of the first cell to the bottom right of the second.
+  // Insert an image over B2:D6
+  // e.g. worksheet.addImage(imageId2, 'B2:D6'); 
+  // Using a structure instead of a range string, it is possible to partially cover cells
+  // Note that the coordinate system used for this is zero based, so the top-left of A1 will be { col: 0, row: 0 }. 
+  // Fractions of cells can be specified by using floating point numbers, e.g. the midpoint of A1 is { col: 0.5, row: 0.5 }
+  // Insert an image over part of B2:D6
+  // e.g. worksheet.addImage(imageId2, { tl: { col: 1.5, row: 1.5 }, br: { col: 3.5, row: 5.5 }});
+  // The cell range can also have the property 'editAs' which will control how the image is anchored to the cell(s) It can have one of the following values
+  // e.g. ws.addImage(imageId, { tl: { col: 0.1125, row: 0.4 }, br: { col: 2.101046875, row: 3.4 }, editAs: 'oneCell'});
+  // You can add an image to a cell and then define its width and height in pixels at 96dpi
+  // e.g. worksheet.addImage(imageId2, { tl: { col: 0, row: 0 }, ext: { width: 500, height: 200 }});
+  // You can add an image with hyperlinks to a cell, and defines the hyperlinks in image range.
+  // e.g. worksheet.addImage(imageId2, { tl: { col: 0, row: 0 }, ext: { width: 500, height: 200 }, hyperlinks: { hyperlink: 'http://www.somewhere.com', tooltip: 'http://www.somewhere.com' }});
+  worksheetAddImage(imageId, addressRange, shIdentifier){
+    this.getSheet(shIdentifier).addImage(imageId, addressRange);
+    return this;
+  }
 }
-
-
 
 module.exports = ExceljsHelperClass;
