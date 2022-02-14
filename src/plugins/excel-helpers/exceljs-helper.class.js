@@ -26,20 +26,27 @@ const isDebug = false;
 class ExceljsHelperClass {
 
   // Constructor
-  async constructor(params = {}) {
+  constructor(params = {}) {
+    this.params = Object.assign({}, params);
+    this.workbook = null;
+    this.worksheet = null;
+  }
+
+  async init() {
     // Read excel file
-    if (params.excelPath) {
-      await this.readFile(params.excelPath);
+    if (this.params.excelPath) {
+      await this.readFile(this.params.excelPath, this.params.sheetName);
     }
 
-    // Read json file
-    if (params.jsonPath) {
-      await readJsonFile(params.jsonPath, params.sheetName);
+    // Read csv file
+    if (this.params.csvPath) {
+      const csvOptions = this.params.csvOptions? this.params.csvOptions : {};
+      await this.readCsvFile(this.params.csvPath, csvOptions);
     }
 
     // Read json data
-    if (params.jsonData) {
-      await readJsonData(params.jsonData, params.sheetName);
+    if (this.params.jsonData) {
+      await this.readJsonData(this.params.jsonData, this.params.sheetName);
     }
 
     if (!this.workbook) {
@@ -49,7 +56,7 @@ class ExceljsHelperClass {
 
   //------------------- FILE --------------------//
 
-  // Read from a file
+  // Read from "xlsx" file
   // e.g. const workbook = new Excel.Workbook();
   // e.g. await workbook.xlsx.readFile(filename);
   async readFile(path, sheetName = '') {
@@ -58,7 +65,7 @@ class ExceljsHelperClass {
     return this;
   }
 
-  // Read from json file
+  // Read from "json" file
   // e.g. const workbook = new Excel.Workbook();
   // e.g. await workbook.xlsx.load(data);
   async readJsonFile(path, sheetName = '') {
@@ -67,20 +74,7 @@ class ExceljsHelperClass {
     return this;
   }
 
-  // Read from csv file
-  // e.g. const workbook = new Excel.Workbook();
-  // e.g. const workbook = new Excel.Workbook();
-  // e.g. const worksheet = await workbook.csv.readFile(filename);
-  // Read from a file with European Dates
-  // e.g. const options = { dateFormats: ['DD/MM/YYYY'] };
-  //      const worksheet = await workbook.csv.readFile(filename, options);
-  async readCsvFile(path, options, sheetName = '') {
-    this.workbook = await exeljsReadCsvFile(path, options);
-    this.worksheet = this.getSheet(sheetName);
-    return this;
-  }
-
-  // Read from json data
+  // Read from "json" data
   // e.g. const workbook = new Excel.Workbook();
   // e.g. await workbook.xlsx.load(data);
   async readJsonData(jsonData, sheetName = '') {
@@ -89,15 +83,27 @@ class ExceljsHelperClass {
     return this;
   }
 
-  // Write to a file
-  // e.g. const workbook = createAndFillWorkbook();
-  // e.g. await workbook.xlsx.writeFile(filename);
-  async writeCsvFile(path) {
-    await exeljsWriteFile(this.workbook, path);
+  // Read from "csv" file
+  // e.g. const workbook = new Excel.Workbook();
+  // e.g. const workbook = new Excel.Workbook();
+  // e.g. const worksheet = await workbook.csv.readFile(filename);
+  // Read from a file with European Dates
+  // e.g. const options = { dateFormats: ['DD/MM/YYYY'] };
+  //      const worksheet = await workbook.csv.readFile(filename, options);
+  async readCsvFile(path, options = {}) {
+    this.workbook = await exeljsReadCsvFile(path, options);
+    this.worksheet = this.getSheet();
     return this;
   }
 
-  // Write to csv file
+  // Write to "xlsx" file
+  // e.g. const workbook = createAndFillWorkbook();
+  // e.g. await workbook.xlsx.writeFile(filename);
+  async writeFile(path) {
+    return await exeljsWriteFile(this.workbook, path);
+  }
+
+  // Write to "csv" file
   // e.g. const workbook = createAndFillWorkbook();
   // e.g. await workbook.csv.writeFile(filename);
   // Write to a file with European Date-Times
@@ -105,8 +111,7 @@ class ExceljsHelperClass {
   //      const options = { dateFormat: 'DD/MM/YYYY HH:mm:ss', dateUTC: true, // use utc when rendering dates};
   //      await workbook.csv.writeFile(filename, options);
   async writeCsvFile(path, options) {
-    await exeljsWriteCsvFile(this.workbook, path, options);
-    return this;
+    return await exeljsWriteCsvFile(this.workbook, path, options);
   }
 
   //------------------- SHEET --------------------//
@@ -130,9 +135,14 @@ class ExceljsHelperClass {
   // Use the worksheet id to remove the sheet from workbook.
   // e.g. workbook.removeWorksheet(sheet.id)
   removeSheet(shIdentifier) {
-    const worksheet = this.getSheet(shIdentifier)
+    const worksheet = this.getSheet(shIdentifier);
     exeljsBookRemoveSheet(this.workbook, worksheet.id);
     return this;
+  }
+
+  // Access by `worksheets` array
+  getSheets() {
+    return this.workbook.worksheets;
   }
 
   // Fetch sheet by name
@@ -147,7 +157,11 @@ class ExceljsHelperClass {
   // It's important to know that workbook.getWorksheet(1) != Workbook.worksheets[0] and workbook.getWorksheet(1) != Workbook.worksheets[1], 
   // becouse workbook.worksheets[0].id may have any value.
   getSheet(shIdentifier) {
-    return shIdentifier ? exeljsGetSheet(this.workbook, shIdentifier) : this.worksheet;
+    let sheet = shIdentifier ? exeljsGetSheet(this.workbook, shIdentifier) : this.worksheet;
+    if(!sheet){
+      sheet = this.getSheets()[0];
+    }
+    return sheet;
   }
 
   // Iterate over all sheets
@@ -161,7 +175,7 @@ class ExceljsHelperClass {
   // e.g. this.worksheet = this.getSheet(shIdentifier);
   selectSheet(shIdentifier) {
     this.worksheet = this.getSheet(shIdentifier);
-    return this.worksheet
+    return this.worksheet;
   }
 
   // Get worksheet name
@@ -544,21 +558,21 @@ class ExceljsHelperClass {
   // Insert new column (with data) at index 1
   // e.g. table.addColumn({name: 'Letter', totalsRowFunction: 'custom', totalsRowFormula: 'ROW()', totalsRowResult: 6, filterButton: true}, ['a', 'b', 'c', 'd'],  2);
   insertTableColumn(table, colOption, colValues, pos){
-    table.addColumn(colOption, colValues, pos)
+    table.addColumn(colOption, colValues, pos);
     return this;
   }
 
   // Remove second column
   // e.g. table.removeColumns(1, 1);
   removeTableColumns(table, startPos, endPos){
-    table.removeColumns(startPos, endPos)
+    table.removeColumns(startPos, endPos);
     return this;
   }
 
   // Get Column Wrapper for second column
   // e.g. const column = table.getColumn(1);
   getTableColumn(table, pos){
-    return table.getColumn(pos)
+    return table.getColumn(pos);
   }
 
   //------------------- IMAGES --------------------//

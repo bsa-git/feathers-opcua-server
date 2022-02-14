@@ -4,6 +4,7 @@ const {
 } = require('../lib');
 
 const {
+  xlsxCreateBook,
   xlsxReadFile,
   xlsxReadJsonFile,
   xlsxReadJsonData,
@@ -25,6 +26,8 @@ class XlsxHelperClass {
 
   // Constructor
   constructor(params = {}) {
+    this.workbook = null;
+    this.worksheet = null;
     // Read excel file
     if (params.excelPath) {
       this.readFile(params.excelPath, params.sheetName);
@@ -47,48 +50,59 @@ class XlsxHelperClass {
 
   readFile(path, sheetName = '') {
     this.workbook = xlsxReadFile(path);
-    if (sheetName) {
-      this.worksheet = this.workbook.Sheets[sheetName];
-    } else {
-      this.worksheet = null;
-    }
-    return this.workbook;
+    this.worksheet = this.getSheet(sheetName);
+    return this;
   }
 
   readJsonFile(path, sheetName) {
-    this.workbook = xlsxReadJsonFile(path);
-    this.worksheet = this.workbook.Sheets[sheetName];
-    return this.workbook;
+    this.workbook = xlsxReadJsonFile(path, sheetName);
+    this.worksheet = this.getSheet(sheetName);
+    return this;
   }
 
   readJsonData(jsonData, sheetName) {
     this.workbook = xlsxReadJsonData(jsonData, sheetName);
-    this.worksheet = this.workbook.Sheets[sheetName];
-    return this.workbook;
+    this.worksheet = this.getSheet(sheetName);
+    return this;
   }
 
   writeFile(path) {
     return xlsxWriteFile(this.workbook, path);
   }
 
+  getSheets() {
+    return this.workbook.Sheets;
+  }
+
+  getSheet(sheetName = '') {
+    return sheetName? this.workbook.Sheets[sheetName] : this.worksheet;
+  }
+
+  selectSheet(sheetName) {
+    this.worksheet = this.getSheet(sheetName);
+    return this;
+  }
+
   getCells(sheetName = '') {
     return xlsxGetCells(this.workbook, sheetName);
   }
 
-  sheetToJson(options = { header: 'A' }) {
-    return xlsxSheetToJson(this.worksheet, options);
+  sheetToJson(options = { header: 'A' }, sheetName = '') {
+    const worksheet = this.getSheet(sheetName);
+    return xlsxSheetToJson(worksheet, options);
   }
 
   jsonToSheet(jsonData, sheetName, options = { skipHeader: true }) {
     const worksheet = xlsxJsonToSheet(jsonData, options);
     xlsxBookAppendSheet(this.workbook, worksheet, sheetName);
     this.worksheet = worksheet;
-    return this.worksheet;
+    return this;
   }
 
-  sheetAddJson(jsonData, options = {}) {
-    this.worksheet = xlsxSheetAddJson(this.worksheet, jsonData, options);
-    return this.worksheet;
+  sheetAddJson(jsonData, options = {}, sheetName = '') {
+    const worksheet = this.getSheet(sheetName);
+    xlsxSheetAddJson(worksheet, jsonData, options);
+    return this;
   }
 }
 

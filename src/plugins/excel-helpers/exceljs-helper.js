@@ -43,7 +43,7 @@ const exeljsReadFile = async function (path) {
  * @param {String|Array} path
  * @returns {Object}
  */
- const exeljsReadJsonFile = async function (path) {
+const exeljsReadJsonFile = async function (path) {
   if (Array.isArray(path)) {
     path = join(...path);
   }
@@ -61,7 +61,7 @@ const exeljsReadFile = async function (path) {
  * @param {Object[]} jsonData
  * @returns {Object}
  */
- const exeljsReadJsonData = async function (jsonData) {
+const exeljsReadJsonData = async function (jsonData) {
   // Create workbook
   const workbook = new ExcelJS.Workbook();
   // Load from buffer
@@ -75,7 +75,7 @@ const exeljsReadFile = async function (path) {
  * @param {Object} options
  * @returns {Object}
  */
- const exeljsReadCsvFile = async function (path, options) {
+const exeljsReadCsvFile = async function (path, options) {
   if (Array.isArray(path)) {
     path = join(...path);
   }
@@ -107,7 +107,7 @@ const exeljsWriteFile = async function (workbook, path) {
  * @param {Object} options
  * @returns {String}
  */
- const exeljsWriteCsvFile = async function (workbook, path, options) {
+const exeljsWriteCsvFile = async function (workbook, path, options) {
   if (Array.isArray(path)) {
     path = join(...path);
   }
@@ -120,7 +120,7 @@ const exeljsWriteFile = async function (workbook, path) {
  * @method exeljsCreateBook
  * @returns {Object}
  */
- const exeljsCreateBook = function () {
+const exeljsCreateBook = function () {
   const workbook = new ExcelJS.Workbook();
   return workbook;
 };
@@ -133,7 +133,7 @@ const exeljsWriteFile = async function (workbook, path) {
  * @param {Object} params
  * @returns {Object}
  */
- const exeljsBookAppendSheet = function (workbook, sheetName = '', params = {}) {
+const exeljsBookAppendSheet = function (workbook, sheetName = '', params = {}) {
   return workbook.addWorksheet(sheetName, params);
 };
 
@@ -143,8 +143,8 @@ const exeljsWriteFile = async function (workbook, path) {
  * @param {Object} workbook
  * @param {Number} id
  */
- const exeljsBookRemoveSheet = function (workbook, id) {
-  workbook.removeWorksheet(id)
+const exeljsBookRemoveSheet = function (workbook, id) {
+  workbook.removeWorksheet(id);
 };
 
 /**
@@ -155,8 +155,9 @@ const exeljsWriteFile = async function (workbook, path) {
  * e.g. workbook.getWorksheet('My Sheet') | workbook.getWorksheet(id)
  * @returns {Object}
  */
- const exeljsGetSheet = function (workbook, identifier) {
-  return workbook.getWorksheet(identifier)
+const exeljsGetSheet = function (workbook, identifier) {
+  const sheet = workbook.getWorksheet(identifier);
+  return sheet;
 };
 
 /**
