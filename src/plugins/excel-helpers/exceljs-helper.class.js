@@ -15,6 +15,10 @@ const {
   exeljsBookRemoveSheet,
   exeljsGetSheet,
   exeljsGetCells,
+  exeljsGetRowCells,
+  exeljsGetRowValues,
+  exeljsGetColumnCells,
+  exeljsGetColumnValues
 } = require('./exceljs-helper');
 
 // const XLSX = require('xlsx');
@@ -40,7 +44,7 @@ class ExceljsHelperClass {
 
     // Read csv file
     if (this.params.csvPath) {
-      const csvOptions = this.params.csvOptions? this.params.csvOptions : {};
+      const csvOptions = this.params.csvOptions ? this.params.csvOptions : {};
       await this.readCsvFile(this.params.csvPath, csvOptions);
     }
 
@@ -54,7 +58,7 @@ class ExceljsHelperClass {
     }
   }
 
-  //------------------- FILE --------------------//
+  //================= FILE =================//
 
   // Read from "xlsx" file
   // e.g. const workbook = new Excel.Workbook();
@@ -114,7 +118,7 @@ class ExceljsHelperClass {
     return await exeljsWriteCsvFile(this.workbook, path, options);
   }
 
-  //------------------- SHEET --------------------//
+  //================= SHEET =================//
 
   // Add a Worksheet
   // e.g. const sheet = workbook.addWorksheet('My Sheet');
@@ -158,7 +162,7 @@ class ExceljsHelperClass {
   // becouse workbook.worksheets[0].id may have any value.
   getSheet(shIdentifier) {
     let sheet = shIdentifier ? exeljsGetSheet(this.workbook, shIdentifier) : this.worksheet;
-    if(!sheet){
+    if (!sheet) {
       sheet = this.getSheets()[0];
     }
     return sheet;
@@ -249,7 +253,7 @@ class ExceljsHelperClass {
   //  }
   //]
   //})
-  addSheetConditionalFormatting(options, shIdentifier){
+  addSheetConditionalFormatting(options, shIdentifier) {
     this.getSheet(shIdentifier).addConditionalFormatting(options);
     return this;
   }
@@ -269,7 +273,7 @@ class ExceljsHelperClass {
   }
 
 
-  //------------------- COLUMS --------------------//
+  //================= COLUMS =================//
 
   // Add column headers and define column keys and widths
   // Note: these column structures are a workbook-building convenience only,
@@ -277,6 +281,15 @@ class ExceljsHelperClass {
   // e.g. worksheet.columns = [{ header: 'Id', key: 'id', width: 10 }, { header: 'Name', key: 'name', width: 32 }, { header: 'D.O.B.', key: 'DOB', width: 10, outlineLevel: 1 }];
   addColumns(colValues, shIdentifier) {
     this.getSheet(shIdentifier).columns = colValues;
+    return this;
+  }
+
+  // Add a column of new values
+  // e.g. worksheet.getColumn(6).values = [1,2,3,4,5];
+  // Add a sparse column of values
+  // e.g. worksheet.getColumn(7).values = [,,2,3,,5,,7,,,,11];
+  addColumnValues(colValues, colIdentifier, shIdentifier) {
+    this.getSheet(shIdentifier).getColumn(colIdentifier).values = colValues;
     return this;
   }
 
@@ -298,7 +311,7 @@ class ExceljsHelperClass {
     return this;
   }
 
-  //------------------- ROWS --------------------//
+  //================== ROWS =================//
 
   // Get multiple row objects. If it doesn't already exist, new empty ones will be returned
   // e.g. const rows = worksheet.getRows(5, 2); // start, length (>0, else undefined is returned)
@@ -332,6 +345,18 @@ class ExceljsHelperClass {
       cellCount: row.cellCount,
       actualCellCount: row.actualCellCount
     };
+  }
+
+  // Insert a page break below the row
+  addPageBreak(row) {
+    row.addPageBreak();
+    return this;
+  }
+
+  // Commit a completed row to stream
+  rowCommit(row) {
+    row.commit();
+    return this;
   }
 
   // Add a couple of Rows by key-value, after the last current row, using the column keys
@@ -412,7 +437,7 @@ class ExceljsHelperClass {
     return this.getSheet(shIdentifier).insertRows(pos, rowValues, style);
   }
 
-  //------------------- CELLS --------------------//
+  //================= CELLS =================//
 
   // Get cell
   // e.g. const cell = worksheet.getCell('C3');
@@ -441,7 +466,7 @@ class ExceljsHelperClass {
   // Merge by start row, start column, end row, end column (equivalent to K10:M12)
   // e.g. worksheet.mergeCells(10,11,12,13);
   mergeCells(addressRange, shIdentifier) {
-    if(Array.isArray(addressRange)) {
+    if (Array.isArray(addressRange)) {
       this.getSheet(shIdentifier).mergeCells(...addressRange);
     } else {
       this.getSheet(shIdentifier).mergeCells(addressRange);
@@ -485,11 +510,80 @@ class ExceljsHelperClass {
   // Get cells from all worksheets or from one worksheet
   // [{ worksheetName: 'Report1', address: 'A5', address2: { col: 'A', row: 5 }, value: 1234, 
   // valueType: 'Number', cellType: 'Number', formula: 'C5 + B5', cell: Object, column: Object ... } ... {}]
-  getCells(sheetName = '') {
-    return exeljsGetCells(this.workbook, sheetName);
+  // e.g. options -> { includeEmpty: true } | {}
+  getCells(sheetName = '', options) {
+    return exeljsGetCells(this.workbook, sheetName, options);
   }
 
-  //------------------- TABLE --------------------//
+  /**
+   * Get row cells from all worksheets or from one worksheet
+   * e.g. options -> { includeEmpty: true } | { header:'A' } | { header:1 } | {}
+   *  e.g. for {header: 'A'}
+   * [{ A: '1', B: '2', C: '3', D: '4', E: '5', F: '6', G: '7' },
+   *  { A: '2', B: '3', C: '4', D: '5', E: '6', F: '7', G: '8' }]
+   * e.g. for {header: 1}
+   * [['1', '2', '3', '4', '5', '6', '7'],
+   *  ['2', '3', '4', '5', '6', '7', '8' ]]
+   * e.g. for {} key1...keyN is column keys
+   * [{ key1: 1, key2: 2, key3: 3, key4: 4, key5: 5, key6: 6, key7: 7 },
+   *  { key1: 2, key2: 3, key3: 4, key4: 5, key5: 6, key6: 7, key7: 8 } ]
+  */
+  getRowCells(sheetName = '', options) {
+    return exeljsGetRowCells(this.workbook, sheetName, options);
+  }
+
+  /**
+   * Get row cell values from all worksheets or from one worksheet
+   * e.g. options -> { includeEmpty: true } | { header:'A' } | { header:1 } | {}
+   *  e.g. for {header: 'A'}
+   * [{ A: '1', B: '2', C: '3', D: '4', E: '5', F: '6', G: '7' },
+   *  { A: '2', B: '3', C: '4', D: '5', E: '6', F: '7', G: '8' }]
+   * e.g. for {header: 1}
+   * [['1', '2', '3', '4', '5', '6', '7'],
+   *  ['2', '3', '4', '5', '6', '7', '8' ]]
+   * e.g. for {} key1...keyN is column keys
+   * [{ key1: 1, key2: 2, key3: 3, key4: 4, key5: 5, key6: 6, key7: 7 },
+   *  { key1: 2, key2: 3, key3: 4, key4: 5, key5: 6, key6: 7, key7: 8 } ]
+  */
+  getRowValues(sheetName = '', options) {
+    return exeljsGetRowValues(this.workbook, sheetName, options);
+  }
+
+  /**
+   * Get row cells from all worksheets or from one worksheet
+   * e.g. options -> { includeEmpty: true } | { header:'A' } | { header:1 } | {}
+   *  e.g. for {header: 'A'}
+   * [{ rowIndex1: '11', rowIndex2: '22', rowIndex3: '33', rowIndex4: '44', rowIndex5: '55', rowIndex6: '66', rowIndex7: '77' },
+ *  { rowIndex1: '22', rowIndex2: '33', rowIndex3: '44', rowIndex4: '55', rowIndex5: '66', rowIndex6: '77', rowIndex7: '88' }]
+ * e.g. for {header: 1}
+ * [['11', '22', '33', '44', '55', '66', '77'],
+ *  ['22', '33', '44', '55', '66', '77', '88' ]]
+ * e.g. for {} key1...keyN is column keys
+ * [{ rowIndex1: 11, rowIndex2: 22, rowIndex3: 33, rowIndex4: 44, rowIndex5: 55, rowIndex6: 66, rowIndex7: 77 },
+ * { rowIndex1: 22, rowIndex2: 33, rowIndex3: 44, rowIndex4: 55, rowIndex5: 66, rowIndex6: 77, rowIndex7: 88 } ]
+  */
+  getColumnCells(sheetName = '', options) {
+    return exeljsGetColumnCells(this.workbook, sheetName, options);
+  }
+
+  /**
+   * Get row cell values from all worksheets or from one worksheet
+   * e.g. options -> { includeEmpty: true } | { header:'A' } | { header:1 } | {}
+   *  e.g. for {header: 'A'}
+   * [{ rowIndex1: '11', rowIndex2: '22', rowIndex3: '33', rowIndex4: '44', rowIndex5: '55', rowIndex6: '66', rowIndex7: '77' },
+ *  { rowIndex1: '22', rowIndex2: '33', rowIndex3: '44', rowIndex4: '55', rowIndex5: '66', rowIndex6: '77', rowIndex7: '88' }]
+ * e.g. for {header: 1}
+ * [['11', '22', '33', '44', '55', '66', '77'],
+ *  ['22', '33', '44', '55', '66', '77', '88' ]]
+ * e.g. for {} key1...keyN is column keys
+ * [{ rowIndex1: 11, rowIndex2: 22, rowIndex3: 33, rowIndex4: 44, rowIndex5: 55, rowIndex6: 66, rowIndex7: 77 },
+ * { rowIndex1: 22, rowIndex2: 33, rowIndex3: 44, rowIndex4: 55, rowIndex5: 66, rowIndex6: 77, rowIndex7: 88 } ]
+  */
+  getColumnValues(sheetName = '', options) {
+    return exeljsGetColumnValues(this.workbook, sheetName, options);
+  }
+
+  //================= TABLE =================//
 
   // Tables allow for in-sheet manipulation of tabular data.
   // To add a table to a worksheet, define a table model and call addTable:
@@ -514,7 +608,7 @@ class ExceljsHelperClass {
   //  [new Date('2019-07-22'), 70.10],
   //],
   //});
-  addTable(model , shIdentifier) {
+  addTable(model, shIdentifier) {
     this.getSheet(shIdentifier).addTable(model);
     return this;
   }
@@ -524,58 +618,58 @@ class ExceljsHelperClass {
   // Tables support a set of manipulation functions that allow data to be added or removed and some properties to be changed. 
   // Since many of these operations may have on-sheet effects, the changes must be committed once complete.
   // All index values in the table are zero based, so the first row number and first column number is 0.
-  getTable(tableName , shIdentifier) {
+  getTable(tableName, shIdentifier) {
     return this.getSheet(shIdentifier).getTable(tableName);
   }
 
   // Commit the table changes into the sheet
-  tableCommit(table){
+  tableCommit(table) {
     table.commit();
     return this;
   }
 
   // Append new row to bottom of table
   // e.g. table.addRow([new Date('2019-08-10'), 10, 'End']);
-  addTableRow(table, rowValues){
+  addTableRow(table, rowValues) {
     table.addRow(rowValues);
     return this;
   }
 
   // Insert new rows at index 5
   // e.g. table.addRow([new Date('2019-08-05'), 5, 'Mid'], 5);
-  insertTableRow(table, rowValues, pos){
+  insertTableRow(table, rowValues, pos) {
     table.addRow(rowValues, pos);
     return this;
   }
 
   // Remove first two rows
   // e.g. table.removeRows(0, 2);
-  removeTableRows(table, startPos, endPos){
+  removeTableRows(table, startPos, endPos) {
     table.removeRows(startPos, endPos);
     return this;
   }
 
   // Insert new column (with data) at index 1
   // e.g. table.addColumn({name: 'Letter', totalsRowFunction: 'custom', totalsRowFormula: 'ROW()', totalsRowResult: 6, filterButton: true}, ['a', 'b', 'c', 'd'],  2);
-  insertTableColumn(table, colOption, colValues, pos){
+  insertTableColumn(table, colOption, colValues, pos) {
     table.addColumn(colOption, colValues, pos);
     return this;
   }
 
   // Remove second column
   // e.g. table.removeColumns(1, 1);
-  removeTableColumns(table, startPos, endPos){
+  removeTableColumns(table, startPos, endPos) {
     table.removeColumns(startPos, endPos);
     return this;
   }
 
   // Get Column Wrapper for second column
   // e.g. const column = table.getColumn(1);
-  getTableColumn(table, pos){
+  getTableColumn(table, pos) {
     return table.getColumn(pos);
   }
 
-  //------------------- IMAGES --------------------//
+  //================= IMAGE =================//
 
   // Adding images to a worksheet is a two-step process. First, the image is added to the workbook via the addImage() function which will also return an imageId value. 
   // Then, using the imageId, the image can be added to the worksheet either as a tiled background or covering a cell range.
@@ -588,13 +682,13 @@ class ExceljsHelperClass {
   // Add image to workbook by base64
   // e.g. const myBase64Image = "data:image/png;base64,iVBORw0KG...";
   //      const imageId2 = workbook.addImage({ base64: myBase64Image, extension: 'png',});
-  workbookAddImage(options){
+  workbookAddImage(options) {
     return this.workbook.addImage(options);
   }
 
   // Add image background to worksheet
   // e.g. worksheet.addBackgroundImage(imageId1);
-  worksheetAddBackgroundImage(imageId, shIdentifier){
+  worksheetAddBackgroundImage(imageId, shIdentifier) {
     this.getSheet(shIdentifier).addBackgroundImage(imageId);
     return this;
   }
@@ -615,7 +709,7 @@ class ExceljsHelperClass {
   // e.g. worksheet.addImage(imageId2, { tl: { col: 0, row: 0 }, ext: { width: 500, height: 200 }});
   // You can add an image with hyperlinks to a cell, and defines the hyperlinks in image range.
   // e.g. worksheet.addImage(imageId2, { tl: { col: 0, row: 0 }, ext: { width: 500, height: 200 }, hyperlinks: { hyperlink: 'http://www.somewhere.com', tooltip: 'http://www.somewhere.com' }});
-  worksheetAddImage(imageId, addressRange, shIdentifier){
+  worksheetAddImage(imageId, addressRange, shIdentifier) {
     this.getSheet(shIdentifier).addImage(imageId, addressRange);
     return this;
   }

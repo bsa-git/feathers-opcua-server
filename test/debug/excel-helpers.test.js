@@ -2,6 +2,7 @@
 const loOmit = require('lodash/omit');
 const loRandom = require('lodash/random');
 const loStartsWith = require('lodash/startsWith');
+const loForEach = require('lodash/forEach');
 const assert = require('assert');
 const app = require('../../src/app');
 
@@ -59,7 +60,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
   });
 
   it('#1: Get cells from xls file', async () => {
-    
+
     const xlsx = new XlsxHelperClass({
       excelPath: [appRoot, xlsFile],
       sheetName: 'Report1'
@@ -103,7 +104,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
       jsonData,
       sheetName: 'Report1'
     });
-    
+
     // Write new data to xls file
     const fileName = getFileName('DayHist01_14F120-', 'xls', true);
     resultPath = xlsx.writeFile([appRoot, 'test/data/tmp/ch-m52_acm', fileName]);
@@ -160,8 +161,8 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     }
   });
 
-  it('#5: Write data to xlsx file', async () => {
-    let resultPath = '', jsonData, jsonData2;
+  it('#5: Get row cells from xlsx file', async () => {
+    let cell;
     //-------------------------
     // Create exceljs object
     let exceljs = new ExceljsHelperClass({
@@ -171,38 +172,140 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
     await exceljs.init();
     const sheetName = exceljs.getSheet().name;
-    const callback = function (row, rowNumber) { 
-      // console.log('Row ' + rowNumber + ' = ' + JSON.stringify(row.values)); 
-      inspector('#5: Write data to xlsx file.rowNumber:', rowNumber);
-      inspector('#5: Write data to xlsx file.rowValues:', row.values);
-    };
-    exceljs.sheetEachRow(callback);
-
-    /*
-    // Sheet to json
-    jsonData = xlsx.sheetToJson();
-    // Map  jsonData   
-    jsonData = jsonData.map(row => {
-      if (row['J']) {
-        row['B'] = loRandom(300, 2000);
-        row['D'] = loRandom(30000, 300000);
+    const items = exceljs.getRowCells(sheetName, { header: 1 });
+    assert.ok(items.length, 'Get row cells from xlsx data');
+    if (isDebug) inspector('#5: Get row cells from xlsx file.rowCells:', items);
+    // inspector('#5: Get row cells from xlsx file.rowCells:', items);
+    for (let index = 0; index < items.length; index++) {
+      const item = items[index];
+      if (Array.isArray(item)) {
+        for (let index2 = 0; index2 < item.length; index2++) {
+          if (!item[index2]) continue;
+          cell = item[index2];
+          const col = cell.address2.col;
+          const row = cell.address2.row;
+          if (isDebug && (row >= 1 && row <= 2)) {
+            inspector('xlsx.cell:', cell);
+          }
+        }
+      } else {
+        loForEach(item, function (cell, key) {
+          const col = cell.address2.col;
+          const row = cell.address2.row;
+          if (isDebug && (row >= 1 && row <= 5)) {
+            inspector('xlsx.cell:', cell);
+          }
+        });
       }
-      return row;
-    });
+    }
+  });
 
-    if (isDebug_1) console.log('worksheet.Report1.jsonData:', jsonData);
-
-    // Create xlsx object
-    xlsx = new XlsxHelperClass({
-      jsonData,
+  it('#6: Get row values from xlsx file', async () => {
+    let cellValue;
+    //-------------------------
+    // Create exceljs object
+    let exceljs = new ExceljsHelperClass({
+      excelPath: [appRoot, xlsxFile],
       sheetName: 'Report1'
     });
-    
-    // Write new data to xls file
-    const fileName = getFileName('DayHist01_14F120-', 'xls', true);
-    resultPath = xlsx.writeFile([appRoot, 'test/data/tmp/ch-m52_acm', fileName]);
-    jsonData2 = xlsx.readFile(resultPath, 'Report1').sheetToJson();
-    assert.ok(jsonData.length === jsonData2.length, 'Write data to xls file');
-    */
+
+    await exceljs.init();
+    const sheetName = exceljs.getSheet().name;
+    const items = exceljs.getRowValues(sheetName, { header: '' });
+    assert.ok(items.length, 'Get row cells from xlsx data');
+    if (isDebug) inspector('#6: Get row values from xlsx file.rowCells:', items);
+    // inspector('#6: Get row values from xlsx file.rowCells:', items);
+    for (let rowIndex = 0; rowIndex < items.length; rowIndex++) {
+      const item = items[rowIndex];
+      if (Array.isArray(item)) {
+        for (let colIndex = 0; colIndex < item.length; colIndex++) {
+          if (!item[colIndex]) continue;
+          cellValue = item[colIndex];
+          if (isDebug && (rowIndex >= 1 && rowIndex <= 2)) {
+            inspector('xlsx.cell.value:', cellValue);
+          }
+        }
+      } else {
+        loForEach(item, function (value, key) {
+          if (isDebug && (rowIndex >= 1 && rowIndex <= 5)) {
+            inspector('xlsx.cell.value:', { [key]: value });
+          }
+        });
+      }
+    }
+  });
+
+  it('#7: Get column cells from xlsx file', async () => {
+    let cell;
+    //-------------------------
+    // Create exceljs object
+    let exceljs = new ExceljsHelperClass({
+      excelPath: [appRoot, xlsxFile],
+      sheetName: 'Report1'
+    });
+
+    await exceljs.init();
+    const sheetName = exceljs.getSheet().name;
+    const items = exceljs.getColumnCells(sheetName, { header: 'A' });
+    assert.ok(items.length, 'Get row cells from xlsx data');
+    if (isDebug) inspector('#7: Get column cells from xlsx file.columnCells:', items);
+    // inspector('#7: Get column cells from xlsx file.columnCells:', items);
+    for (let index = 0; index < items.length; index++) {
+      const item = items[index];
+      if (Array.isArray(item)) {
+        for (let index2 = 0; index2 < item.length; index2++) {
+          if (!item[index2]) continue;
+          cell = item[index2];
+          const col = cell.address3.col;
+          const row = cell.address3.row;
+          if (isDebug && (col >= 1 && col <= 2)) {
+            inspector('xlsx.cell:', cell);
+          }
+        }
+      } else {
+        loForEach(item, function (cell, key) {
+          const col = cell.address2.col;
+          const row = cell.address2.row;
+          if (isDebug && (col >= 1 && col <= 5)) {
+            inspector('xlsx.cell:', cell);
+          }
+        });
+      }
+    }
+  });
+
+  it('#8: Get column values from xlsx file', async () => {
+    let cellValue;
+    //-------------------------
+    // Create exceljs object
+    let exceljs = new ExceljsHelperClass({
+      excelPath: [appRoot, xlsxFile],
+      sheetName: 'Report1'
+    });
+
+    await exceljs.init();
+    const sheetName = exceljs.getSheet().name;
+    const items = exceljs.getColumnValues(sheetName, { header: 1 });
+    assert.ok(items.length, 'Get row cells from xlsx data');
+    if (isDebug) inspector('#8: Get column values from xlsx file.columnValues:', items);
+    inspector('#8: Get column values from xlsx file.columnValues:', items);
+    for (let colIndex = 0; colIndex < items.length; colIndex++) {
+      const item = items[colIndex];
+      if (Array.isArray(item)) {
+        for (let rowIndex = 0; rowIndex < item.length; rowIndex++) {
+          if (!item[rowIndex]) continue;
+          cellValue = item[rowIndex];
+          if (isDebug && (colIndex >= 1 && colIndex <= 2)) {
+            inspector('xlsx.cell.value:', cellValue);
+          }
+        }
+      } else {
+        loForEach(item, function (value, key) {
+          if (isDebug && (colIndex >= 1 && colIndex <= 5)) {
+            inspector('xlsx.cell.value:', { [key]: value });
+          }
+        });
+      }
+    }
   });
 });
