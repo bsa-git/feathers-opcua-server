@@ -2,9 +2,12 @@
 const loRound = require('lodash/round');
 const loForEach = require('lodash/forEach');
 const loIsFinite = require('lodash/isFinite');
+const loFindIndex = require('lodash/findIndex');
 
 const debug = require('debug')('app:array-operations');
 
+
+const excelLetters = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'];
 
 //---------------- SORT -------------//
 
@@ -137,6 +140,28 @@ const splitStr2StrNum = function (str) {
   return result;
 };
 
+/**
+ * @method getLetter4Index
+ * @param {Number} index 
+ * e.g. -> AB12345
+ * @returns {String}
+ * e.g. -> index = 1 -> 'A'....
+ */
+const getLetter4Index = function (index) {
+  return excelLetters[index];
+};
+
+/**
+ * @method getIndex4Letter
+ * @param {String} letter 
+ * e.g. -> AB
+ * @returns {String}
+ * e.g. -> letter = 'AB' -> 28 ....
+ */
+const getIndex4Letter = function (letter) {
+  return loFindIndex(excelLetters, item => item === letter);
+};
+
 
 module.exports = {
   sortByStringField,
@@ -145,5 +170,7 @@ module.exports = {
   sortByNumber,
   getGroupsFromArray,
   convertArray2Object,
-  splitStr2StrNum
+  splitStr2StrNum,
+  getLetter4Index,
+  getIndex4Letter
 };

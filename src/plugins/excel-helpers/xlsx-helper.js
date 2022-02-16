@@ -9,7 +9,8 @@ const {
   inspector,
   getValueType,
   splitStr2StrNum,
-  readJsonFileSync
+  readJsonFileSync,
+  getIndex4Letter
 } = require('../lib');
 
 const XLSX = require('xlsx');
@@ -119,10 +120,12 @@ const xlsxGetCells = function (workbook, sheetName = '') {
         const isValidDateTime = (typeOf[myItem.t] === 'number') && myItem.w.includes(':');
         let address2 = splitStr2StrNum(z);
         address2 = { col: address2[0], row: address2[1] };
+        const address3 = { col: getIndex4Letter(address2.col), row: address2.row };
 
         myCell.worksheetName = sheet;
         myCell.address = z;
         myCell.address2 = address2;
+        myCell.address3 = address3;
         myCell.value = myItem.v;
         myCell.valueType = isValidDateTime ? 'DateTime' : getValueType(myCell.value);
         if (myCell.valueType === 'DateTime') {

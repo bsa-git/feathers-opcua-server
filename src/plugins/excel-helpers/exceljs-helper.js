@@ -13,6 +13,7 @@ const {
   getValueType,
   getDateTime,
   readJsonFileSync,
+  getLetter4Index
 } = require('../lib');
 
 const ExcelJS = require('exceljs');
@@ -20,7 +21,6 @@ const ExcelJS = require('exceljs');
 const debug = require('debug')('app:exceljs-helper');
 const isDebug = false;
 
-const numberToLetter = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'];
 const valueTypes = ['Null', 'Merge', 'Number', 'String', 'Date', 'Hyperlink', 'Formula', 'SharedString', 'RichText', 'Boolean', 'Error'];
 
 
@@ -120,10 +120,61 @@ const exeljsWriteCsvFile = async function (workbook, path, options) {
 /**
  * Create a Workbook
  * @method exeljsCreateBook
+ * @param {Object} options
+ * e.g. {
+    creator: 'Me',
+    lastModifiedBy: 'Her',
+    created: new Date(1985, 8, 30),
+    modified: new Date(),
+    lastPrinted: new Date(2016, 9, 27),
+    date1904: true,
+    fullCalcOnLoad: true
+    }
  * @returns {Object}
  */
-const exeljsCreateBook = function () {
+const exeljsCreateBook = function (options) {
   const workbook = new ExcelJS.Workbook();
+  if (options) {
+    exeljsSetBookProperties(workbook, options);
+  }
+  return workbook;
+};
+
+/**
+ * Create a Workbook
+ * @method exeljsCreateBook
+ * @param {Object} workbook
+ * @param {Object} options
+ * e.g. {
+    creator: 'Me',
+    lastModifiedBy: 'Her',
+    created: new Date(1985, 8, 30),
+    modified: new Date(),
+    lastPrinted: new Date(2016, 9, 27),
+    date1904: true,
+    fullCalcOnLoad: true
+   }
+ * @returns {Object}
+ */
+const exeljsSetBookProperties = function (workbook, options) {
+  if (options.creator) {
+    workbook.creator = options.creator;
+  }
+  if (options.lastModifiedBy) {
+    workbook.lastModifiedBy = options.lastModifiedBy;
+  }
+  if (options.modified) {
+    workbook.modified = options.modified;
+  }
+  if (options.lastPrinted) {
+    workbook.lastPrinted = options.lastPrinted;
+  }
+  if (options.date1904 !== undefined) {
+    workbook.properties.date1904 = options.date1904;
+  }
+  if (options.fullCalcOnLoad !== undefined) {
+    workbook.calcProperties.fullCalcOnLoad = options.fullCalcOnLoad;
+  }
   return workbook;
 };
 
@@ -195,7 +246,7 @@ const exeljsGetCells = function (workbook, sheetName = '', options = {}) {
           myCell = {};
           myCell.worksheetName = worksheet.name;
           myCell.address = cell.address;
-          myCell.address2 = { col: numberToLetter[index], row: rowNumber };
+          myCell.address2 = { col: getLetter4Index(index), row: rowNumber };
           myCell.address3 = { col: index, row: rowNumber };
           myCell.value = isObject(cell.value) && cell.value.result ? cell.value.result : cell.value;
           myCell.valueType = getValueType(myCell.value);
@@ -264,27 +315,29 @@ const exeljsGetRowCells = function (workbook, sheetName = '', options = {}) {
   const cells = exeljsGetCells(workbook, sheetName, options);
   for (let index = 0; index < cells.length; index++) {
     let cell = cells[index];
-    if(cell.value === null) continue;
+    if (cell.value === null) continue;
     const rowIndex = cell.address2.row;
     const colCharIndex = cell.address2.col;
     const colIndex = cell.address3.col;
-    const colKey = cell.column.key? cell.column.key : colCharIndex;
+    // const colKey = cell.column.key ? cell.column.key : colCharIndex;
+    const colKey = cell.column.key ? cell.column.key : colIndex;
     cell = loOmit(cell, ['cell', 'column', 'row']);
-    if(!rowCells[rowIndex]){
-      rowCells[rowIndex] = (options.header && options.header === 1)? [] : {};
+    if (!rowCells[rowIndex]) {
+      rowCells[rowIndex] = (options.header && options.header === 1) ? [] : {};
     }
-    if(!options.header){
+    if (!options.header) {
       rowCells[rowIndex][colKey] = cell;
     }
-    if(options.header && options.header === 'A'){
+    if (options.header && options.header === 'A') {
       rowCells[rowIndex][colCharIndex] = cell;
     }
-    if(options.header && options.header === 1){
+    if (options.header && options.header === 1) {
       rowCells[rowIndex][colIndex] = cell;
     }
-    
+
   }
-  return loCompact(rowCells);
+  // return loCompact(rowCells);
+  return rowCells;
 };
 
 /**
@@ -310,7 +363,7 @@ const exeljsGetRowValues = function (workbook, sheetName = '', options = {}) {
     const item = items[index];
     if (Array.isArray(item)) {
       for (let index2 = 0; index2 < item.length; index2++) {
-        if(!item[index2]) continue;
+        if (!item[index2]) continue;
         const cell = item[index2];
         item[index2] = cell.value;
       }
@@ -320,7 +373,7 @@ const exeljsGetRowValues = function (workbook, sheetName = '', options = {}) {
       });
     }
   }
-  return items;  
+  return items;
 };
 
 /**
@@ -346,25 +399,26 @@ const exeljsGetColumnCells = function (workbook, sheetName = '', options = {}) {
   const cells = exeljsGetCells(workbook, sheetName, options);
   for (let index = 0; index < cells.length; index++) {
     let cell = cells[index];
-    if(cell.value === null) continue;
+    if (cell.value === null) continue;
     const rowIndex = cell.address2.row;
     const colIndex = cell.address3.col;
     cell = loOmit(cell, ['cell', 'column', 'row']);
-    if(!columnCells[colIndex]){
-      columnCells[colIndex] = (options.header && options.header === 1)? [] : {};
+    if (!columnCells[colIndex]) {
+      columnCells[colIndex] = (options.header && options.header === 1) ? [] : {};
     }
-    if(!options.header){
+    if (!options.header) {
       columnCells[colIndex][rowIndex] = cell;
     }
-    if(options.header && options.header === 'A'){
+    if (options.header && options.header === 'A') {
       columnCells[colIndex][rowIndex] = cell;
     }
-    if(options.header && options.header === 1){
+    if (options.header && options.header === 1) {
       columnCells[colIndex][rowIndex] = cell;
     }
-    
+
   }
-  return loCompact(columnCells);
+  // return loCompact(columnCells);
+  return columnCells;
 };
 
 /**
@@ -390,7 +444,7 @@ const exeljsGetColumnValues = function (workbook, sheetName = '', options = {}) 
     const item = items[index];
     if (Array.isArray(item)) {
       for (let index2 = 0; index2 < item.length; index2++) {
-        if(!item[index2]) continue;
+        if (!item[index2]) continue;
         const cell = item[index2];
         item[index2] = cell.value;
       }
@@ -400,7 +454,7 @@ const exeljsGetColumnValues = function (workbook, sheetName = '', options = {}) 
       });
     }
   }
-  return items;  
+  return items;
 };
 
 
@@ -412,6 +466,7 @@ module.exports = {
   exeljsWriteFile,
   exeljsWriteCsvFile,
   exeljsCreateBook,
+  exeljsSetBookProperties,
   exeljsBookAppendSheet,
   exeljsBookRemoveSheet,
   exeljsGetSheet,

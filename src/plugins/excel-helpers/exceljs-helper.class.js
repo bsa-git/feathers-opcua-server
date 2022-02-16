@@ -11,6 +11,7 @@ const {
   exeljsWriteFile,
   exeljsWriteCsvFile,
   exeljsCreateBook,
+  exeljsSetBookProperties,
   exeljsBookAppendSheet,
   exeljsBookRemoveSheet,
   exeljsGetSheet,
@@ -40,21 +41,25 @@ class ExceljsHelperClass {
     // Read excel file
     if (this.params.excelPath) {
       await this.readFile(this.params.excelPath, this.params.sheetName);
+      if(this.params.bookOptions){
+        this.setBookProperties(this.params.bookOptions);
+      }
     }
 
     // Read csv file
     if (this.params.csvPath) {
       const csvOptions = this.params.csvOptions ? this.params.csvOptions : {};
       await this.readCsvFile(this.params.csvPath, csvOptions);
-    }
-
-    // Read json data
-    if (this.params.jsonData) {
-      await this.readJsonData(this.params.jsonData, this.params.sheetName);
+      if(this.params.bookOptions){
+        this.setBookProperties(this.params.bookOptions);
+      }
     }
 
     if (!this.workbook) {
-      this.workbook = exeljsCreateBook();
+      this.createBook(this.params.bookOptions);
+      if (this.params.sheetName) {
+        this.addSheet(this.params.sheetName, this.params.sheetOptions);
+      }
     }
   }
 
@@ -89,10 +94,9 @@ class ExceljsHelperClass {
 
   // Read from "csv" file
   // e.g. const workbook = new Excel.Workbook();
-  // e.g. const workbook = new Excel.Workbook();
   // e.g. const worksheet = await workbook.csv.readFile(filename);
   // Read from a file with European Dates
-  // e.g. const options = { dateFormats: ['DD/MM/YYYY'] };
+  // e.g. const options = { dateFormats: ['DD/MM/YYYY'], sheetName: 'mySheet' };
   //      const worksheet = await workbook.csv.readFile(filename, options);
   async readCsvFile(path, options = {}) {
     this.workbook = await exeljsReadCsvFile(path, options);
@@ -117,6 +121,35 @@ class ExceljsHelperClass {
   async writeCsvFile(path, options) {
     return await exeljsWriteCsvFile(this.workbook, path, options);
   }
+
+  //================= WORKBOOK =================//
+
+  // Create a Workbook
+  // e.g. const workbook = new ExcelJS.Workbook();
+  // Set Workbook Properties
+  // e.g. workbook.creator = 'Me';
+  //      workbook.lastModifiedBy = 'Her';
+  //      workbook.created = new Date(1985, 8, 30);
+  //      workbook.modified = new Date();
+  //      workbook.lastPrinted = new Date(2016, 9, 27);
+  createBook(options) {
+    this.workbook = exeljsCreateBook(options);
+    if(options){
+      this.setBookProperties(options);
+    }
+  }
+
+  // Set book properties
+  // Set Workbook Properties
+  // e.g. workbook.creator = 'Me';
+  //      workbook.lastModifiedBy = 'Her';
+  //      workbook.created = new Date(1985, 8, 30);
+  //      workbook.modified = new Date();
+  //      workbook.lastPrinted = new Date(2016, 9, 27);
+  setBookProperties(options) {
+    exeljsSetBookProperties(this.workbook, options);
+  }
+
 
   //================= SHEET =================//
 
