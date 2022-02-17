@@ -7,7 +7,7 @@ const loFindIndex = require('lodash/findIndex');
 const debug = require('debug')('app:array-operations');
 
 
-const excelLetters = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'];
+const excelColumns = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'];
 
 //---------------- SORT -------------//
 
@@ -127,10 +127,10 @@ const convertArray2Object = function (array, keyName, valueName) {
  * e.g. -> ['AB', 12345]
  */
 const splitStr2StrNum = function (str) {
-  let result = [], _str = '', _num = '' ;
+  let result = [], _str = '', _num = '';
   for (let value of str) {
-    if(Number.isNaN(Number.parseInt(value))) {
-      _str = _str + value; 
+    if (Number.isNaN(Number.parseInt(value))) {
+      _str = _str + value;
     } else {
       _num = _num + value;
     }
@@ -148,18 +148,41 @@ const splitStr2StrNum = function (str) {
  * e.g. -> index = 1 -> 'A'....
  */
 const getLetter4Index = function (index) {
-  return excelLetters[index];
+  return excelColumns[index];
 };
 
 /**
  * @method getIndex4Letter
  * @param {String} letter 
- * e.g. -> AB
+ * e.g. -> 'AB'
  * @returns {String}
  * e.g. -> letter = 'AB' -> 28 ....
  */
 const getIndex4Letter = function (letter) {
-  return loFindIndex(excelLetters, item => item === letter);
+  return loFindIndex(excelColumns, item => item === letter);
+};
+
+/**
+ * @method getIndex4Range
+ * @param {String} range 
+ * e.g. -> 'B11:C34'
+ * @returns {Object}
+ * e.g. -> range = 'B11:C34' -> { start: { col: 2, row: 11 }, end: { col: 3, row: 34 } }
+ */
+const getIndex4Range = function (range) {
+  let ranges, start, end;
+  //------------------
+  // 'B11:C34'->['B11', 'C34']
+  ranges = range.split(':');
+  // 'B11'->['B', 11]
+  start = splitStr2StrNum(ranges[0]);
+  // 'B'-> 2
+  start = { col: getIndex4Letter(start[0]), row: start[1] };
+  // 'C34'->['C', 34]
+  end = splitStr2StrNum(ranges[1]);
+  // 'C'-> 3
+  end = { col: getIndex4Letter(end[0]), row: end[1] };
+  return { start, end };
 };
 
 
@@ -172,5 +195,6 @@ module.exports = {
   convertArray2Object,
   splitStr2StrNum,
   getLetter4Index,
-  getIndex4Letter
+  getIndex4Letter,
+  getIndex4Range
 };

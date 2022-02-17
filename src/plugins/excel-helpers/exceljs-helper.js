@@ -13,7 +13,8 @@ const {
   getValueType,
   getDateTime,
   readJsonFileSync,
-  getLetter4Index
+  getLetter4Index,
+  getIndex4Range
 } = require('../lib');
 
 const ExcelJS = require('exceljs');
@@ -218,7 +219,7 @@ const exeljsGetSheet = function (workbook, identifier) {
  * @param {Object} workbook
  * @param {String} sheetName
  * @param {Object} options
- * e.g. { includeEmpty: true }
+ * e.g. { includeEmpty: true } | { range: 'B11:C34' }
  * @returns {Object[]}
  */
 const exeljsGetCells = function (workbook, sheetName = '', options = {}) {
@@ -237,12 +238,12 @@ const exeljsGetCells = function (workbook, sheetName = '', options = {}) {
     }
     // Get eachCell for worksheet
     if (myWorksheet) {
-      if (isDebug) console.log(`name=${worksheet.name}; id=${sheetId}; state=${worksheet.state}; rowCount=${worksheet.rowCount}; actualColumnCount=${worksheet.actualColumnCount};`);
-      // console.log(`name=${worksheet.name}; id=${sheetId}; state=${worksheet.state}; rowCount=${worksheet.rowCount}; actualColumnCount=${worksheet.actualColumnCount};`);
-      for (let index = 1; index <= worksheet.actualColumnCount; index++) {
+      if (isDebug) console.log(`name=${worksheet.name}; id=${sheetId}; state=${worksheet.state}; rowCount=${worksheet.rowCount}; columnCount=${worksheet.columnCount}; actualColumnCount=${worksheet.actualColumnCount};`);
+      // console.log(`name=${worksheet.name}; id=${sheetId}; state=${worksheet.state}; rowCount=${worksheet.rowCount}; columnCount=${worksheet.columnCount}; actualColumnCount=${worksheet.actualColumnCount};`);
+      for (let index = 1; index <= worksheet.actualColumnCount + 1; index++) {
         const column = worksheet.getColumn(index);
         // iterate over all current cells in this column
-        column.eachCell(options, function (cell, rowNumber) {
+        column.eachCell({ includeEmpty: !!options.includeEmpty }, function (cell, rowNumber) {
           myCell = {};
           myCell.worksheetName = worksheet.name;
           myCell.address = cell.address;
@@ -289,6 +290,16 @@ const exeljsGetCells = function (workbook, sheetName = '', options = {}) {
       }
     }
   });
+  if (options.range) {
+    const range = getIndex4Range(options.range);
+    const startCol = range.start.col;
+    const startRow = range.start.row;
+    const endCol = range.end.col;
+    const endRow = range.end.row;
+    cells = cells.filter(cell => (cell.address3.col >= startCol && cell.address3.col <= endCol) && (cell.address3.row >= startRow && cell.address3.row <= endRow));
+  }
+  if (isDebug) inspector(`exeljsGetCells.${sheetName}.cells.length:`, cells.length);
+  // inspector(`exeljsGetCells.${sheetName}.cells.length:`, cells.length);
   return cells;
 };
 
@@ -297,7 +308,7 @@ const exeljsGetCells = function (workbook, sheetName = '', options = {}) {
  * @param {Object} workbook
  * @param {String} sheetName
  * @param {Object} options
- * e.g. { includeEmpty: true } | { header:'A' } | { header:1 } | {}
+ * e.g. { includeEmpty: true } | { header:'A' } | { header:1 } | { range: 'B11:C34' } | {}
  * @returns {Object[]|Array[]}
  * e.g. for {header: 'A'}
  * [{ A: '1', B: '2', C: '3', D: '4', E: '5', F: '6', G: '7' },
@@ -315,13 +326,13 @@ const exeljsGetRowCells = function (workbook, sheetName = '', options = {}) {
   const cells = exeljsGetCells(workbook, sheetName, options);
   for (let index = 0; index < cells.length; index++) {
     let cell = cells[index];
-    if (cell.value === null) continue;
+    // if (cell.value === null) continue;
     const rowIndex = cell.address2.row;
     const colCharIndex = cell.address2.col;
     const colIndex = cell.address3.col;
-    // const colKey = cell.column.key ? cell.column.key : colCharIndex;
-    const colKey = cell.column.key ? cell.column.key : colIndex;
-    cell = loOmit(cell, ['cell', 'column', 'row']);
+    const colKey = cell.column.key ? cell.column.key : colCharIndex;
+    // const colKey = cell.column.key ? cell.column.key : colIndex;
+    // cell = loOmit(cell, ['cell', 'column', 'row']);
     if (!rowCells[rowIndex]) {
       rowCells[rowIndex] = (options.header && options.header === 1) ? [] : {};
     }
@@ -336,7 +347,6 @@ const exeljsGetRowCells = function (workbook, sheetName = '', options = {}) {
     }
 
   }
-  // return loCompact(rowCells);
   return rowCells;
 };
 
@@ -359,13 +369,14 @@ const exeljsGetRowCells = function (workbook, sheetName = '', options = {}) {
  */
 const exeljsGetRowValues = function (workbook, sheetName = '', options = {}) {
   const items = exeljsGetRowCells(workbook, sheetName, options);
-  for (let index = 0; index < items.length; index++) {
-    const item = items[index];
+  for (let rowIndex = 0; rowIndex <= items.length; rowIndex++) {
+    const item = items[rowIndex];
+    if (!item) continue;
     if (Array.isArray(item)) {
-      for (let index2 = 0; index2 < item.length; index2++) {
-        if (!item[index2]) continue;
-        const cell = item[index2];
-        item[index2] = cell.value;
+      for (let colIndex = 0; colIndex <= item.length; colIndex++) {
+        if (!item[colIndex]) continue;
+        const cell = item[colIndex];
+        item[colIndex] = cell.value;
       }
     } else {
       loForEach(item, function (cell, key) {
@@ -399,10 +410,10 @@ const exeljsGetColumnCells = function (workbook, sheetName = '', options = {}) {
   const cells = exeljsGetCells(workbook, sheetName, options);
   for (let index = 0; index < cells.length; index++) {
     let cell = cells[index];
-    if (cell.value === null) continue;
+    // if (cell.value === null) continue;
     const rowIndex = cell.address2.row;
     const colIndex = cell.address3.col;
-    cell = loOmit(cell, ['cell', 'column', 'row']);
+    // cell = loOmit(cell, ['cell', 'column', 'row']);
     if (!columnCells[colIndex]) {
       columnCells[colIndex] = (options.header && options.header === 1) ? [] : {};
     }
@@ -440,13 +451,14 @@ const exeljsGetColumnCells = function (workbook, sheetName = '', options = {}) {
  */
 const exeljsGetColumnValues = function (workbook, sheetName = '', options = {}) {
   const items = exeljsGetColumnCells(workbook, sheetName, options);
-  for (let index = 0; index < items.length; index++) {
-    const item = items[index];
+  for (let colIndex = 0; colIndex <= items.length; colIndex++) {
+    const item = items[colIndex];
+    if (!item) continue;
     if (Array.isArray(item)) {
-      for (let index2 = 0; index2 < item.length; index2++) {
-        if (!item[index2]) continue;
-        const cell = item[index2];
-        item[index2] = cell.value;
+      for (let rowIndex = 0; rowIndex <= item.length; rowIndex++) {
+        if (!item[rowIndex]) continue;
+        const cell = item[rowIndex];
+        item[rowIndex] = cell.value;
       }
     } else {
       loForEach(item, function (cell, key) {
