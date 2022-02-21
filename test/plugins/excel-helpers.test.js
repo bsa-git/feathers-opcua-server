@@ -58,7 +58,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
   after(function (done) {
     stopListenPort(done);
-    // removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52_acm']);
+    removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52_acm']);
   });
 
   it('#1: Get cells from xls file', async () => {

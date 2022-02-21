@@ -129,7 +129,7 @@ const getPathToArray = function (path) {
  * @returns {String[]} 
  */
 const getDirectoryList = function (path) {
-  
+
   if (Array.isArray(path)) {
     path = join(...path);
   }
@@ -603,7 +603,7 @@ const readOnlyNewFile = function (path, cb) {
       if (isAccess) {
         const data = readFileSync(filePath);
         if (isDebug) debug('readOnlyNewFile.filePath:', filePath, '; data:', data);
-        cb(filePath, data);
+        cb(filePath, data, eventType);
       }
     }
   });
@@ -617,6 +617,8 @@ const readOnlyNewFile = function (path, cb) {
  * @returns {String}
  */
 const readOnlyModifiedFile = function (path, cb) {
+  let currentTime = '', currentFilename = '';
+  //----------------------------------------
   if (Array.isArray(path)) {
     path = join(...path);
   }
@@ -629,9 +631,14 @@ const readOnlyModifiedFile = function (path, cb) {
       if (isDebug) debug('readOnlyModifiedFile.filePath:', filePath, '; isAccess:', isAccess);
 
       if (isAccess) {
-        const data = readFileSync(filePath);
-        if (isDebug) debug('readOnlyModifiedFile.filePath:', filePath, '; data:', data);
-        cb(filePath, data);
+        const getCurrentTime = getTime('', false).split('.')[0];
+        if (filename !== currentFilename || getCurrentTime > currentTime) {
+          currentFilename = filename;
+          currentTime = getCurrentTime;
+          const data = readFileSync(filePath);
+          if (isDebug) debug('readOnlyModifiedFile.filePath:', filePath, '; data:', data);
+          cb(filePath, data, eventType);
+        }
       }
     }
   });
