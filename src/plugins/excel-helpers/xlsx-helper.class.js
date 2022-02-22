@@ -43,7 +43,7 @@ class XlsxHelperClass {
       this.readJsonData(params.jsonData, params.sheetName);
     }
 
-    if(!this.workbook){
+    if (!this.workbook) {
       this.workbook = xlsxCreateBook();
     }
   }
@@ -75,7 +75,7 @@ class XlsxHelperClass {
   }
 
   getSheet(sheetName = '') {
-    return sheetName? this.workbook.Sheets[sheetName] : this.worksheet;
+    return sheetName ? this.workbook.Sheets[sheetName] : this.worksheet;
   }
 
   selectSheet(sheetName) {
@@ -83,14 +83,11 @@ class XlsxHelperClass {
     return this;
   }
 
-  getCells(sheetName = '') {
-    return xlsxGetCells(this.workbook, sheetName);
-  }
-
+  
   // Converts a worksheet object to an array of JSON objects.
   // XLSX.utils.sheet_to_json generates different types of JS objects. The function takes an options argument
   // e.g. XLSX.utils.sheet_to_json(ws); -> [{ S: 1, h: 2, e: 3, e_1: 4, t: 5, J: 6, S_1: 7 }, { S: 2, h: 3, e: 4, e_1: 5, t: 6, J: 7, S_1: 8 }]
-  // e.g. XLSX.utils.sheet_to_json(ws, {header:"A"}); -> 
+  // e.g. XLSX.utils.sheet_to_json(ws, {header:'A', range: 'B11:C34'}); -> 
   //  [{ A: 'S', B: 'h', C: 'e', D: 'e', E: 't', F: 'J', G: 'S' },
   //  { A: '1', B: '2', C: '3', D: '4', E: '5', F: '6', G: '7' },
   //  { A: '2', B: '3', C: '4', D: '5', E: '6', F: '7', G: '8' }]
@@ -112,8 +109,8 @@ class XlsxHelperClass {
   // [[ 'S', 'h', 'e', 'e', 't', 'J', 'S' ],
   //  [ 1, 2, 3, 4, 5, 6, 7 ],                   // <-- A2 uses the raw value
   //  [ 2, 3, 4, 5, 6, 7, 8 ]] 
-  sheetToJson(options = {}, sheetName = '') {
-    const defaultOpts = {header: 'A'};
+  sheetToJson(sheetName = '', options = {}) {
+    const defaultOpts = { header: 'A' };
     const opts = Object.assign(defaultOpts, options);
     const worksheet = this.getSheet(sheetName);
     return xlsxSheetToJson(worksheet, opts);
@@ -136,7 +133,7 @@ class XlsxHelperClass {
   // { A: 2,  B: 3,  C: 4,  D: 5,  E: 6,  F: 7,  G: 8  }], 
   // {header:["A","B","C","D","E","F","G"], skipHeader:true});
   jsonToSheet(jsonData, sheetName, options = {}) {
-    const defaultOpts = {skipHeader: true};
+    const defaultOpts = { skipHeader: true };
     const opts = Object.assign(defaultOpts, options);
     const worksheet = xlsxJsonToSheet(jsonData, opts);
     xlsxBookAppendSheet(this.workbook, worksheet, sheetName);
@@ -151,12 +148,18 @@ class XlsxHelperClass {
   // e.g XLSX.utils.sheet_add_json(ws, [{ A: 5, B: 6, C: 7 }, { A: 6, B: 7, C: 8 }, { A: 7, B: 8, C: 9 }], {skipHeader: true, origin: { r: 1, c: 4 }, header: [ "A", "B", "C" ]});
   // Append row
   // e.g. XLSX.utils.sheet_add_json(ws, [{ A: 4, B: 5, C: 6, D: 7, E: 8, F: 9, G: 0 }], {header: ["A", "B", "C", "D", "E", "F", "G"], skipHeader: true, origin: -1});
-  sheetAddJson(jsonData, options = {}, sheetName = '') {
-    const defaultOpts = {skipHeader: true, origin: -1};
+  sheetAddJson(jsonData, sheetName = '', options = {}) {
+    const defaultOpts = { skipHeader: true, origin: -1 };
     const opts = Object.assign(defaultOpts, options);
     const worksheet = this.getSheet(sheetName);
     xlsxSheetAddJson(worksheet, jsonData, opts);
     return this;
+  }
+
+  // Get cells from workbook
+  // e.g. options -> { range: 'B11:C34' } | {}
+  getCells(sheetName = '', options = {}) {
+    return xlsxGetCells(this.workbook, sheetName, options);
   }
 }
 

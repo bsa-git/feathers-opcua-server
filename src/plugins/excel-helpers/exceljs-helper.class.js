@@ -543,14 +543,14 @@ class ExceljsHelperClass {
   // Get cells from all worksheets or from one worksheet
   // [{ worksheetName: 'Report1', address: 'A5', address2: { col: 'A', row: 5 }, value: 1234, 
   // valueType: 'Number', cellType: 'Number', formula: 'C5 + B5', cell: Object, column: Object ... } ... {}]
-  // e.g. options -> { includeEmpty: true } | {}
+  // e.g. options -> { includeEmpty: true } | { range: 'B11:C34' } | {}
   getCells(sheetName = '', options) {
     return exeljsGetCells(this.workbook, sheetName, options);
   }
 
   /**
    * Get row cells from all worksheets or from one worksheet
-   * e.g. options -> { includeEmpty: true } | { header:'A' } | { header:1 } | {}
+   * e.g. options -> { includeEmpty: true } | { header:'A' } | { header:1 } | { range: 'B11:C34' } | {}
    *  e.g. for {header: 'A'}
    * [{ A: '1', B: '2', C: '3', D: '4', E: '5', F: '6', G: '7' },
    *  { A: '2', B: '3', C: '4', D: '5', E: '6', F: '7', G: '8' }]
@@ -567,7 +567,7 @@ class ExceljsHelperClass {
 
   /**
    * Get row cell values from all worksheets or from one worksheet
-   * e.g. options -> { includeEmpty: true } | { header:'A' } | { header:1 } | {}
+   * e.g. options -> { includeEmpty: true } | { header:'A' } | { header:1 } | { range: 'B11:C34' } | {}
    *  e.g. for {header: 'A'}
    * [{ A: '1', B: '2', C: '3', D: '4', E: '5', F: '6', G: '7' },
    *  { A: '2', B: '3', C: '4', D: '5', E: '6', F: '7', G: '8' }]
@@ -584,7 +584,7 @@ class ExceljsHelperClass {
 
   /**
    * Get row cells from all worksheets or from one worksheet
-   * e.g. options -> { includeEmpty: true } | { header:'A' } | { header:1 } | {}
+   * e.g. options -> { includeEmpty: true } | { header:'A' } | { header:1 } | { range: 'B11:C34' } | {}
    *  e.g. for {header: 'A'}
    * [{ rowIndex1: '11', rowIndex2: '22', rowIndex3: '33', rowIndex4: '44', rowIndex5: '55', rowIndex6: '66', rowIndex7: '77' },
  *  { rowIndex1: '22', rowIndex2: '33', rowIndex3: '44', rowIndex4: '55', rowIndex5: '66', rowIndex6: '77', rowIndex7: '88' }]
@@ -601,7 +601,7 @@ class ExceljsHelperClass {
 
   /**
    * Get row cell values from all worksheets or from one worksheet
-   * e.g. options -> { includeEmpty: true } | { header:'A' } | { header:1 } | {}
+   * e.g. options -> { includeEmpty: true } | { header:'A' } | { header:1 } | { range: 'B11:C34' } | {}
    *  e.g. for {header: 'A'}
    * [{ rowIndex1: '11', rowIndex2: '22', rowIndex3: '33', rowIndex4: '44', rowIndex5: '55', rowIndex6: '66', rowIndex7: '77' },
  *  { rowIndex1: '22', rowIndex2: '33', rowIndex3: '44', rowIndex4: '55', rowIndex5: '66', rowIndex6: '77', rowIndex7: '88' }]

@@ -10,7 +10,10 @@ const {
   getValueType,
   splitStr2StrNum,
   readJsonFileSync,
-  getIndex4Letter
+  getIndex4Letter,
+  getIndex4Range,
+  getInt,
+  getLetter4Index
 } = require('../lib');
 
 const XLSX = require('xlsx');
@@ -86,15 +89,135 @@ const xlsxWriteFile = function (workbook, path) {
 };
 
 /**
+ * The book_new utility function creates an empty workbook with no worksheets
+ * @method xlsxCreateBook
+ * @returns {Object}
+ */
+const xlsxCreateBook = function () {
+  const workbook = XLSX.utils.book_new();
+  return workbook;
+};
+
+/**
+ * Append a Worksheet to a Workbook
+ * @method xlsxBookAppendSheet
+ * @param {Object} workbook
+ * @param {Object} worksheet
+ * @param {Object} sheetName
+ * @returns {Object}
+ */
+const xlsxBookAppendSheet = function (workbook, worksheet, sheetName = '') {
+  XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+  return workbook;
+};
+
+
+/**
+ * Converts a worksheet object to an array of JSON objects
+ * @method xlsxSheetToJson
+ * @param {Object} worksheet
+ * @param {Object} options
+ * e.g. {} | {header:'A', range: 'B6:F8' } | {header:1} | {header:["1","2","3","4"]}
+ * @returns {Array}
+ * e.g. [ { B: 1983, C: 120, D: 82583, E: 567, F: 1 },
+          { B: 1223, C: 34, D: 96740, E: 234, F: 2 },
+          { B: 1884, C: 56, D: 123359, E: 678, F: 3 }]
+ */
+const xlsxSheetToJson = function (worksheet, options = {}) {
+  let jsonData, convertRow;
+  //------------------------------
+  jsonData = XLSX.utils.sheet_to_json(worksheet, options);
+  if (isDebug && options) inspector('xlsxSheetToJson.params:', options);
+  if (isDebug && jsonData) inspector('xlsxSheetToJson.jsonData:', jsonData);
+  if (options.header === 'A' && options.range) {
+    // e.g. range -> { start: { col: 2, row: 6 }, end: { col: 6, row: 8 } }
+    const range = getIndex4Range(options.range);
+    const startCol = range.start.col;
+    const startRow = range.start.row;
+    const endCol = range.end.col;
+    const endRow = range.end.row;
+    if(true && range) console.log('xlsxSheetToJson.range:', range);
+    // Convert letter to index:
+    // e.g. [{ B: 1983, C: 120 }..{B: 1884, C: 56}] -> [{ '2': 1983, '3': 120 }..{'2': 1884, '3': 56}]
+    jsonData = jsonData.map(row => {
+      convertRow = {};
+      loForEach(row, (value, key) => {
+        key = getIndex4Letter(key);
+        convertRow[key] = value;
+      });
+      return convertRow;
+    });
+    // Filter data by row index
+    // e.g. [{Index1}, {Index2}, {Index3}, {Index4}] -> [{Index2}, {Index3}]
+    jsonData = jsonData.filter((row, index) => {
+      const _index = index + 1;
+      return (_index >= startRow && _index <= endRow);
+    });
+    // Convert index to letter:
+    // e.g. [{ '2': 1983, '3': 120 }..{'2': 1884, '3': 56}] -> [{ B: 1983, C: 120 }..{B: 1884, C: 56}]
+    jsonData = jsonData.map(row => {
+      convertRow = {};
+      loForEach(row, (value, key) => {
+        key = getInt(key);
+        if(key >= startCol && key <= endCol){
+          key = getLetter4Index(key);
+          convertRow[key] = value;
+        }
+      });
+      return convertRow;
+    });
+  }
+  return jsonData;
+};
+
+/**
+ * Converts an array of JS objects to a worksheet
+ * @method xlsxSheetToJson
+ * @param {Object[]} data
+ * e.g. [{A: 1, B: 2}, {A: 3, B: 4}]
+ * @param {Object} options
+ * e.g. {} | {header:["A","B"], skipHeader: false | true}
+ * @returns {Object}
+ * e.g. A B     1 2
+ *      1 2  OR 3 4
+ *      3 4
+ */
+const xlsxJsonToSheet = function (data, options = {}) {
+  let worksheet = null;
+  //------------------------------
+  worksheet = XLSX.utils.json_to_sheet(data, options);
+  if (isDebug) inspector('xlsxJsonToSheet.params:', options);
+  if (isDebug) inspector('xlsxJsonToSheet.data:', data);
+  return worksheet;
+};
+
+/**
+ * Adds an array of JS objects to an existing worksheet
+ * @method xlsxSheetAddJson
+ * @param {Object} worksheet
+ * @param {Object[]} data
+ * e.g. [{A: 1, B: 2}, {A: 3, B: 4}]
+ * @param {Object} options
+ * e.g. {} | {header:["A","B"], skipHeader: false | true, origin: "A2" | { r: 1, c: 4} | origin: -1}
+ * @returns {Object}
+ */
+const xlsxSheetAddJson = function (worksheet, data, options = {}) {
+  XLSX.utils.sheet_add_json(worksheet, data, options);
+  if (isDebug) inspector('xlsxSheetAddJson.params:', options);
+  if (isDebug) inspector('xlsxSheetAddJson.data:', data);
+  return worksheet;
+};
+
+/**
  * Get cells from workbook
  * @method xlsxGetCellsFromFile
  * @param {Object} workbook
  * @param {String} sheetName
  * @returns {Object[]}
  */
-const xlsxGetCells = function (workbook, sheetName = '') {
+const xlsxGetCells = function (workbook, sheetName = '', options = {}) {
   let worksheet = null, myCell = {}, myItem = {}, cells = [];
-  //--------------------------
+  //---------------------------------------------------------
   const sheets = workbook.SheetNames;
   // Get 
   sheets.forEach(function (sheet) {
@@ -151,86 +274,15 @@ const xlsxGetCells = function (workbook, sheetName = '') {
       }
     }
   });
+  if (options.range) {
+    const range = getIndex4Range(options.range);
+    const startCol = range.start.col;
+    const startRow = range.start.row;
+    const endCol = range.end.col;
+    const endRow = range.end.row;
+    cells = cells.filter(cell => (cell.address3.col >= startCol && cell.address3.col <= endCol) && (cell.address3.row >= startRow && cell.address3.row <= endRow));
+  }
   return cells;
-};
-
-/**
- * The book_new utility function creates an empty workbook with no worksheets
- * @method xlsxCreateBook
- * @returns {Object}
- */
-const xlsxCreateBook = function () {
-  const workbook = XLSX.utils.book_new();
-  return workbook;
-};
-
-/**
- * Append a Worksheet to a Workbook
- * @method xlsxBookAppendSheet
- * @param {Object} workbook
- * @param {Object} worksheet
- * @param {Object} sheetName
- * @returns {Object}
- */
-const xlsxBookAppendSheet = function (workbook, worksheet, sheetName = '') {
-  XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-  return workbook;
-};
-
-
-/**
- * converts a worksheet object to an array of JSON objects
- * @method xlsxSheetToJson
- * @param {Object} worksheet
- * @param {Object} params
- * e.g. {} | {header:"A"} | {header:1} | {header:["1","2","3","4"]}
- * @returns {Array}
- */
-const xlsxSheetToJson = function (worksheet, params = {}) {
-  let jsonData = [];
-  //------------------------------
-  jsonData = XLSX.utils.sheet_to_json(worksheet, params);
-  if (isDebug) inspector('xlsxSheetToJson.params:', params);
-  if (isDebug) inspector('xlsxSheetToJson.jsonData:', jsonData);
-  return jsonData;
-};
-
-/**
- * Converts an array of JS objects to a worksheet
- * @method xlsxSheetToJson
- * @param {Object[]} data
- * e.g. [{A: 1, B: 2}, {A: 3, B: 4}]
- * @param {Object} params
- * e.g. {} | {header:["A","B"], skipHeader: false | true}
- * @returns {Object}
- * e.g. A B     1 2
- *      1 2  OR 3 4
- *      3 4
- */
-const xlsxJsonToSheet = function (data, params = {}) {
-  let worksheet = null;
-  //------------------------------
-  worksheet = XLSX.utils.json_to_sheet(data, params);
-  if (isDebug) inspector('xlsxJsonToSheet.params:', params);
-  if (isDebug) inspector('xlsxJsonToSheet.data:', data);
-  return worksheet;
-};
-
-/**
- * Adds an array of JS objects to an existing worksheet
- * @method xlsxSheetAddJson
- * @param {Object} worksheet
- * @param {Object[]} data
- * e.g. [{A: 1, B: 2}, {A: 3, B: 4}]
- * @param {Object} params
- * e.g. {} | {header:["A","B"], skipHeader: false | true, origin: "A2" | { r: 1, c: 4} | origin: -1}
- * @returns {Object}
- */
-const xlsxSheetAddJson = function (worksheet, data, params = {}) {
-  XLSX.utils.sheet_add_json(worksheet, data, params);
-  if (isDebug) inspector('xlsxSheetAddJson.params:', params);
-  if (isDebug) inspector('xlsxSheetAddJson.data:', data);
-  return worksheet;
 };
 
 

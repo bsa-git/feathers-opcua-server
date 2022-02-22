@@ -603,7 +603,7 @@ const readOnlyNewFile = function (path, cb) {
       if (isAccess) {
         const data = readFileSync(filePath);
         if (isDebug) debug('readOnlyNewFile.filePath:', filePath, '; data:', data);
-        cb(filePath, data, eventType);
+        cb(filePath, data);
       }
     }
   });
@@ -637,7 +637,7 @@ const readOnlyModifiedFile = function (path, cb) {
           currentTime = getCurrentTime;
           const data = readFileSync(filePath);
           if (isDebug) debug('readOnlyModifiedFile.filePath:', filePath, '; data:', data);
-          cb(filePath, data, eventType);
+          cb(filePath, data);
         }
       }
     }

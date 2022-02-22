@@ -219,7 +219,7 @@ const exeljsGetSheet = function (workbook, identifier) {
  * @param {Object} workbook
  * @param {String} sheetName
  * @param {Object} options
- * e.g. { includeEmpty: true } | { range: 'B11:C34' }
+ * e.g. { includeEmpty: true } | { range: 'B11:C34' } | {}
  * @returns {Object[]}
  */
 const exeljsGetCells = function (workbook, sheetName = '', options = {}) {
@@ -355,7 +355,7 @@ const exeljsGetRowCells = function (workbook, sheetName = '', options = {}) {
  * @param {Object} workbook
  * @param {String} sheetName
  * @param {Object} options
- * e.g. { includeEmpty: true } | { header:'A' } | { header:1 } | {}
+ * e.g. { includeEmpty: true } | { header:'A' } | { header:1 } | { range: 'B11:C34' } |{}
  * @returns {Object[]|Array[]}
  * e.g. for {header: 'A'}
  * [{ A: '1', B: '2', C: '3', D: '4', E: '5', F: '6', G: '7' },
@@ -392,7 +392,7 @@ const exeljsGetRowValues = function (workbook, sheetName = '', options = {}) {
  * @param {Object} workbook
  * @param {String} sheetName
  * @param {Object} options
- * e.g. { includeEmpty: true } | { header:'A' } | { header:1 } | {}
+ * e.g. { includeEmpty: true } | { header:'A' } | { header:1 } | { range: 'B11:C34' } | {}
  * @returns {Object[]|Array[]}
  * e.g. for {header: 'A'}
  * [{ rowIndex1: '11', rowIndex2: '22', rowIndex3: '33', rowIndex4: '44', rowIndex5: '55', rowIndex6: '66', rowIndex7: '77' },
@@ -437,7 +437,7 @@ const exeljsGetColumnCells = function (workbook, sheetName = '', options = {}) {
  * @param {Object} workbook
  * @param {String} sheetName
  * @param {Object} options
- * e.g. { includeEmpty: true } | { header:'A' } | { header:1 } | {}
+ * e.g. { includeEmpty: true } | { header:'A' } | { header:1 } | { range: 'B11:C34' } | {}
  * @returns {Object[]|Array[]}
  * e.g. for {header: 'A'}
  * [{ rowIndex1: '11', rowIndex2: '22', rowIndex3: '33', rowIndex4: '44', rowIndex5: '55', rowIndex6: '66', rowIndex7: '77' },
