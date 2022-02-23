@@ -124,49 +124,11 @@ const xlsxBookAppendSheet = function (workbook, worksheet, sheetName = '') {
           { B: 1884, C: 56, D: 123359, E: 678, F: 3 }]
  */
 const xlsxSheetToJson = function (worksheet, options = {}) {
-  let jsonData, convertRow;
+  let jsonData, convertRow, result = false;
   //------------------------------
   jsonData = XLSX.utils.sheet_to_json(worksheet, options);
   if (isDebug && options) inspector('xlsxSheetToJson.params:', options);
-  if (isDebug && jsonData) inspector('xlsxSheetToJson.jsonData:', jsonData);
-  if (options.header === 'A' && options.range) {
-    // e.g. range -> { start: { col: 2, row: 6 }, end: { col: 6, row: 8 } }
-    const range = getIndex4Range(options.range);
-    const startCol = range.start.col;
-    const startRow = range.start.row;
-    const endCol = range.end.col;
-    const endRow = range.end.row;
-    if(true && range) console.log('xlsxSheetToJson.range:', range);
-    // Convert letter to index:
-    // e.g. [{ B: 1983, C: 120 }..{B: 1884, C: 56}] -> [{ '2': 1983, '3': 120 }..{'2': 1884, '3': 56}]
-    jsonData = jsonData.map(row => {
-      convertRow = {};
-      loForEach(row, (value, key) => {
-        key = getIndex4Letter(key);
-        convertRow[key] = value;
-      });
-      return convertRow;
-    });
-    // Filter data by row index
-    // e.g. [{Index1}, {Index2}, {Index3}, {Index4}] -> [{Index2}, {Index3}]
-    jsonData = jsonData.filter((row, index) => {
-      const _index = index + 1;
-      return (_index >= startRow && _index <= endRow);
-    });
-    // Convert index to letter:
-    // e.g. [{ '2': 1983, '3': 120 }..{'2': 1884, '3': 56}] -> [{ B: 1983, C: 120 }..{B: 1884, C: 56}]
-    jsonData = jsonData.map(row => {
-      convertRow = {};
-      loForEach(row, (value, key) => {
-        key = getInt(key);
-        if(key >= startCol && key <= endCol){
-          key = getLetter4Index(key);
-          convertRow[key] = value;
-        }
-      });
-      return convertRow;
-    });
-  }
+  if (isDebug && jsonData.length) inspector('xlsxSheetToJson.sheet_to_json.jsonData:', jsonData);
   return jsonData;
 };
 
@@ -233,8 +195,6 @@ const xlsxGetCells = function (workbook, sheetName = '', options = {}) {
     // Get eachCell for worksheet
     if (worksheet) {
       for (let z in worksheet) {
-
-        const columns = worksheet['!cols'];
         /* all keys that do not begin with "!" correspond to cell addresses */
         if (z[0] === '!') continue;
 

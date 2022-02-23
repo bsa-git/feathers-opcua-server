@@ -10,6 +10,7 @@ const {
   getMyIp,
   strReplace,
   getInt,
+  convertObject2Array
 } = require('../lib');
 
 const {
@@ -998,25 +999,37 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}) => {
  * Convert alias list data to browseName list data
  * @name convertAliasListToBrowseNameList
  * @param {Object[]} variableList 
- * @param {Object} dataItems 
+ * @param {Object|Object[]} dataItems 
  * @returns {Object}
  */
-const convertAliasListToBrowseNameList = (variableList = [], dataItems = {}) => {
-  let browseNameList = {}, dataType = '';
+const convertAliasListToBrowseNameList = (variableList = [], dataItems) => {
+  let browseNameList = {}, aliasValueList = {}, dataType = '';
   //------------------------
   if (!Array.isArray(variableList)) throw new Error('Error: variable `variableList` must be an array.');
-  loForEach(dataItems, function (value, key) {
-    const variable = variableList.find(v => v.aliasName === key);
-    if (variable) {
-      const formatVariable = formatUAVariable(variable);
-      const browseName = formatVariable.browseName;
-      dataType = formatVariable.dataType;
-      dataType = opcuaDataTypeToString(dataType);
-      dataType = dataType.toLowerCase();
-      value = convertAnyToValue(dataType, value);
-      browseNameList[browseName] = value;
-    }
-  });
+  if (Array.isArray(dataItems)) {
+    aliasValueList = convertObject2Array(dataItems);
+    loForEach(aliasValueList, function (values, key) {
+      const variable = variableList.find(v => v.aliasName === key);
+      if (variable) {
+        const formatVariable = formatUAVariable(variable);
+        const browseName = formatVariable.browseName;
+        browseNameList[browseName] = values;
+      }
+    });
+  } else {
+    loForEach(dataItems, function (value, key) {
+      const variable = variableList.find(v => v.aliasName === key);
+      if (variable) {
+        const formatVariable = formatUAVariable(variable);
+        const browseName = formatVariable.browseName;
+        dataType = formatVariable.dataType;
+        dataType = opcuaDataTypeToString(dataType);
+        dataType = dataType.toLowerCase();
+        value = convertAnyToValue(dataType, value);
+        browseNameList[browseName] = value;
+      }
+    });
+  }
   if (isLog) inspector('convertAliasListToBrowseNameList.browseNameList:', browseNameList);
   return browseNameList;
 };

@@ -62,21 +62,23 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
   });
 
   it('#1: Get cells from xls file', async () => {
-
+    let cells;
+    //---------------------------------
     const xlsx = new XlsxHelperClass({
       excelPath: [appRoot, xlsFile],
       sheetName: 'Report1'
     });
 
-    const cells = xlsx.getCells('Report1');
+    cells = xlsx.getCells('Report1', { range: 'A11:J11' });
     assert.ok(cells.length, 'Get cells from xls file');
 
     for (let index = 0; index < cells.length; index++) {
       const cell = cells[index];
-      if (isDebug && loStartsWith(cell.address, 'C')) {
-        inspector('xls.cell:', loOmit(cell, ['xlsx', 'workbook', 'worksheet', 'cell']));
-      }
+      if (isDebug && cell) inspector('#1: Get cells from xls file.cell:', loOmit(cell, ['xlsx', 'workbook', 'worksheet', 'cell']));
     }
+
+    cells = xlsx.sheetToJson('Report1', { range: 'A11:J13' });
+    if (isDebug && cells.length) inspector('#1: Get cells from xls file.cells:', cells);
   });
 
   it('#2: Write data to xls file', async () => {

@@ -14,6 +14,7 @@ const {
   xlsxSheetAddJson,
   xlsxSheetToJson,
   xlsxBookAppendSheet,
+  xlsxGetWorksheetRef
 } = require('./xlsx-helper');
 
 // const XLSX = require('xlsx');
@@ -81,6 +82,15 @@ class XlsxHelperClass {
   selectSheet(sheetName) {
     this.worksheet = this.getSheet(sheetName);
     return this;
+  }
+
+  // A-1 based range representing the sheet range. 
+  // Functions that work with sheets should use this parameter to determine the range. 
+  // Cells that are assigned outside of the range are not processed. 
+  // In particular, when writing a sheet by hand, cells outside of the range are not included
+  getSheetRef(sheetName) {
+    const worksheet = this.getSheet(sheetName);
+    return xlsxGetWorksheetRef(worksheet);
   }
 
   

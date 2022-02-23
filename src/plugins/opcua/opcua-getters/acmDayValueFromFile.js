@@ -57,6 +57,7 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
   // Create path
   // debug('histValueFromFile.params.path:', params.path); // test/data/tmp/ch-m52_acm
   const path = createPath(params.path);
+  const excelMappingFrom = params.excelMappingFrom;
 
   // Watch read only new file
   readOnlyModifiedFile(path, (filePath, data) => {
@@ -68,11 +69,6 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     dataType = formatUAVariable(addedValue).dataType[1];
     // console.log('acmDayValueFromFile.dataType:', dataType);
 
-    // results = papa.parse(data, { delimiter: ';', header: true });
-    // dataItems = results.data[0];
-    // dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
-    // addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
-
     // Create xlsx object
     let xlsx = new XlsxHelperClass({
       excelPath: filePath,
@@ -80,25 +76,14 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     });
 
     // Sheet to json
-    dataItems = xlsx.sheetToJson('Report1', { range: 'A6:B13' }); // B6:E29
-    // dataItems2 = xlsx.sheetToJson('Report1', { range: 'J6:J29' });
-    // dataItems = dataItems.map((item, index) => {
-    //   item['J'] = dataItems2[index]['J'];
-    //   return item;
-    // });
-    // loForEach(dataItems, (item, index) => {
+    dataItems = xlsx.sheetToJson('Report1', { range: 'B6:F29', header: excelMappingFrom.header});
+    if (isDebug && dataItems.length) inspector(`histValueFromFile.dataItems(${dataItems.length}):`, dataItems);
 
-    // });
-    // dataItems = Object.assign(dataItems, dataItems2);
-    if (true && dataItems) inspector(`histValueFromFile.dataItems(${dataItems.length}):`, dataItems);
-
-    // dataItems = xlsx.getCells('Report1', { range: 'B6:B7' });
-
-    // loForEach(dataItems, (item) => {
-    //   if (isDebug && item) inspector('histValueFromFile.dataItems:',  loOmit(item, ['xlsx', 'workbook', 'worksheet', 'cell']));
-    // });
-
-
+    // results = papa.parse(data, { delimiter: ';', header: true });
+    // dataItems = results.data[0];
+    dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
+    addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
+    if (true && dataItems) inspector('histValueFromFile.dataItems:', dataItems);
 
     // Set value from source for group 
     // if (params.addedVariableList) {

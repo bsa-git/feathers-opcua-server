@@ -115,7 +115,7 @@ const getGroupsFromArray = function (array = [], minCount = 10) {
 /**
  * @method convertArray2Object
  * @param {Object[]} array 
- * e.g. [{TagName: '12N2O', Value: 12.234}, ...{{TagName: '12HNO3', Value: 15.112345}}]
+ * e.g. [{TagName: '12N2O', Value: 12.234},..,{TagName: '12HNO3', Value: 15.112345}]
  * @param {String} keyName 
  * e.g. keyName -> 'TagName'
  * @param {String} valueName
@@ -129,6 +129,26 @@ const convertArray2Object = function (array, keyName, valueName) {
   loForEach(array, row => {
     const value = row[valueName];
     rows[row[keyName]] = loIsFinite(value) ? loRound(row[valueName], 3) : value;
+  });
+  return rows;
+};
+
+/**
+ * @method convertObject2Array
+ * @param {Object[]} array 
+ * e.g. [{'12N2O': 12.234, '12HNO3': 15.112},..,{'12N2O': 13.134, '12HNO3': 14.512}]
+ * @returns {Object}
+ * e.g. {'12N2O': [12.234, 13.134], '12HNO3': [15.112, 14.512]}
+ * 
+ */
+const convertObject2Array = function (array) {
+  let rows = {} ;
+  loForEach(array, row => {
+    loForEach(row, function (value, key) {
+      if(!rows[key]) rows[key] = [];
+      value = loIsFinite(value) ? loRound(value, 3) : value;
+      rows[key].push(value);
+    });
   });
   return rows;
 };
@@ -327,6 +347,7 @@ module.exports = {
   sortByNumber,
   getGroupsFromArray,
   convertArray2Object,
+  convertObject2Array,
   splitStr2StrNum,
   getLetter4Index,
   getIndex4Letter,
