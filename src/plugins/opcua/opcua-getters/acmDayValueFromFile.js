@@ -86,9 +86,9 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     if (true && dataItems) inspector('histValueFromFile.dataItems:', dataItems);
 
     // Set value from source for group 
-    // if (params.addedVariableList) {
-    //   setValueFromSourceForGroup(params, dataItems);
-    // }
+    if (params.addedVariableList) {
+      setValueFromSourceForGroup(params, dataItems);
+    }
 
     // Remove file 
     // removeFileSync(filePath);
