@@ -16,6 +16,7 @@ const debug = require('debug')('app:util');
  * Delay time
  * @param sec
  * @return {Promise}
+ * e.g. await delayTime(2);
  */
 const delayTime = function (sec = 1) {
   return new Promise(function (resolve) {
@@ -27,9 +28,22 @@ const delayTime = function (sec = 1) {
 };
 
 /**
+ * Delay
+ * @param {Number} ms 
+ * @returns {Promise}
+ * e.g. delay(1000).then(() => alert("Hello!"))
+ */
+function delay(ms) {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+/**
 * Pause
 * @param ms
 * @return {Promise}
+* e.g. await pause(1000);
 */
 const pause = function (ms) {
   return new Promise(function (resolve) {
@@ -449,6 +463,7 @@ module.exports = {
   appRoot,
   delayTime,
   pause,
+  delay,
   waitTimeout,
   isValidDateTime,
   dtToObject,

@@ -5,7 +5,12 @@ const papa = require('papaparse');
 const {
   appRoot,
   inspector,
+  isBoolean,
   readOnlyNewFile,
+  readOnlyModifiedFile,
+  getTime,
+  pause,
+  delay,
   readFileSync,
   writeFileSync,
   removeFileSync,
@@ -16,23 +21,24 @@ const {
 } = require('../../lib');
 
 const {
-  xlsxGetCellsFromFile,
-  xlsxWriteToFile,
-  exeljsGetCellsFromFile
+  XlsxHelperClass,
+  ExceljsHelperClass,
 } = require('../../excel-helpers');
 
 const loForEach = require('lodash/forEach');
 const loOmit = require('lodash/omit');
 const loStartsWith = require('lodash/startsWith');
+const loRandom = require('lodash/random');
 
 const {
   formatUAVariable,
   setValueFromSourceForGroup,
   convertAliasListToBrowseNameList
 } = require('../opcua-helper');
+const { index } = require('cheerio/lib/api/traversing');
 
 const debug = require('debug')('app:opcua-getters/histValueFromFile');
-const isDebug = true;
+const isDebug = false;
 const isLog = false;
 
 
@@ -45,55 +51,83 @@ const isLog = false;
  * @returns {void}
  */
 const acmDayValueFromFile = function (params = {}, addedValue) {
-  let dataItems, dataType, results;
+  let dataItems, dataItems2, dataType, results;
   let id = params.myOpcuaServer.id;
   //------------------------------------
   // Create path
-  // debug('histValueFromFile.params.path:', params.path);
+  // debug('histValueFromFile.params.path:', params.path); // test/data/tmp/ch-m52_acm
   const path = createPath(params.path);
+  const excelMappingFrom = params.excelMappingFrom;
 
   // Watch read only new file
-  // readOnlyNewFile(path, (filePath, data) => {
-  //   // Show filePath, data
-  //   if (isDebug) console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
-  //   console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
-  //   if (isDebug) console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
-  //   // Set value from source
-  //   dataType = formatUAVariable(addedValue).dataType[1];
-  //   results = papa.parse(data, { delimiter: ';', header: true });
-  //   dataItems = results.data[0];
-  //   dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
-  //   addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
+  readOnlyModifiedFile(path, (filePath, data) => {
 
-  //   if (isLog) inspector('histValueFromFile.dataItems:', dataItems);
 
-  //   // Remove file 
-  //   removeFileSync(filePath);
+    // Show filePath, data
+    if (true && filePath) console.log(chalk.green(`acmDayValueFromFile.readOnlyModifiedFile(${getTime('', false)}).filePath:`), chalk.cyan(getPathBasename(filePath)));
+    // Set value from source
+    dataType = formatUAVariable(addedValue).dataType[1];
+    // console.log('acmDayValueFromFile.dataType:', dataType);
 
-  //   // Set value from source for group 
-  //   if (params.addedVariableList) {
-  //     setValueFromSourceForGroup(params, dataItems);
-  //   }
-  // });
+    // Create xlsx object
+    let xlsx = new XlsxHelperClass({
+      excelPath: filePath,
+      sheetName: 'Report1'
+    });
+
+    // Sheet to json
+    dataItems = xlsx.sheetToJson('Report1', { range: 'B6:F29', header: excelMappingFrom.header});
+    if (isDebug && dataItems.length) inspector(`histValueFromFile.dataItems(${dataItems.length}):`, dataItems);
+
+    // results = papa.parse(data, { delimiter: ';', header: true });
+    // dataItems = results.data[0];
+    dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
+    addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
+    if (true && dataItems) inspector('histValueFromFile.dataItems:', dataItems);
+
+    // Set value from source for group 
+    if (params.addedVariableList) {
+      setValueFromSourceForGroup(params, dataItems);
+    }
+
+    // Remove file 
+    // removeFileSync(filePath);
+  });
+
 
   // Write file
-  // setInterval(function () {
-  const cells = xlsxGetCellsFromFile([appRoot, '/src/api/opcua', id, params.fromFile], 'Report1');
-  if (cells.length) {
-    for (let index = 0; index < cells.length; index++) {
-      const cell = cells[index];
-      if (isDebug && loStartsWith(cell.address, 'A')) {
-        inspector('xls.cell:', loOmit(cell, ['xlsx', 'workbook', 'worksheet', 'cell']));
-      }
-    }
-    const fileName = getFileName('DayHist01_14F120-', 'xls', true);
-    // const XLSX = cells[0].xlsx;
-    const workbook = cells[0].workbook;
-    // XLSX.writeFile(workbook, 'out.xls');
+  setInterval(function () {
+    let jsonData;
+    //------------------------
+    // Create xlsx object
+    let xlsx = new XlsxHelperClass({
+      excelPath: [appRoot, '/src/api/opcua', id, params.fromFile],
+      sheetName: 'Report1'
+    });
 
-    // xlsxWriteToFile([appRoot, params.path, fileName], workbook);
-  }
-  // }, params.interval);
+    // Sheet to json
+    jsonData = xlsx.sheetToJson();
+    // Map  jsonData   
+    jsonData = jsonData.map(row => {
+      if (row['J'] && isBoolean(row['J'])) {
+        row['B'] = loRandom(300, 2000);
+        row['D'] = loRandom(30000, 300000);
+      }
+      return row;
+    });
+
+    // Create xlsx object
+    xlsx = new XlsxHelperClass({
+      jsonData,
+      sheetName: 'Report1'
+    });
+
+    // Write new data to xls file
+    const fileName = getFileName('DayHist01_14F120-', 'xls', true);
+    const resultPath = xlsx.writeFile([appRoot, path, fileName]);
+    // const jsonData2 = xlsx.readFile(resultPath, 'Report1').sheetToJson();
+    // if (isLog && jsonData2.length) inspector('acmDayValueFromFile.jsonData2:', jsonData2);
+  }, params.interval);
 };
 
 

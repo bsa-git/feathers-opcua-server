@@ -74,7 +74,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m51']);
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52']);
-    removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52_acm']);
+    // removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52_acm']);
   });
 
   it('#1. OPC-UA clients: registered the service', async () => {
@@ -105,7 +105,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
   });
 
   //============== SESSION HISTORY VALUES ====================//
-  /*
+  
   it('#5. OPC-UA clients: session history values for "CH_M51"', async () => {
     let dataItems, readResult = null, accumulator = '', timestamp = '';
     const service = await getClientService(app, id);
@@ -239,7 +239,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(true, 'OPC-UA clients: subscription terminate');
   });
 
-  */
+  
   //===== SESSION CLOSE/CLIENT DISCONNECT/SERVER SHUTDOWN =====//
 
   it('#10. OPC-UA clients: session close the service', async () => {

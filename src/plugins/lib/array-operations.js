@@ -2,9 +2,21 @@
 const loRound = require('lodash/round');
 const loForEach = require('lodash/forEach');
 const loIsFinite = require('lodash/isFinite');
+const loFindIndex = require('lodash/findIndex');
+const loCompact = require('lodash/compact');
+
+const {
+  inspector,
+} = require('./util');
 
 const debug = require('debug')('app:array-operations');
+const isDebug = false;
 
+const excelColumns = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+  'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ',
+  'BA', 'BB', 'BC', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BK', 'BL', 'BM', 'BN', 'BO', 'BP', 'BQ', 'BR', 'BS', 'BT', 'BU', 'BV', 'BW', 'BX', 'BY', 'BZ',
+  'CA', 'CB', 'CC', 'CD', 'CE', 'CF', 'CG', 'CH', 'CI', 'CJ', 'CK', 'CL', 'CM', 'CN', 'CO', 'CP', 'CQ', 'CR', 'CS', 'CT', 'CU', 'CV', 'CW', 'CX', 'CY', 'CZ',
+];
 
 //---------------- SORT -------------//
 
@@ -103,15 +115,40 @@ const getGroupsFromArray = function (array = [], minCount = 10) {
 /**
  * @method convertArray2Object
  * @param {Object[]} array 
+ * e.g. [{TagName: '12N2O', Value: 12.234},..,{TagName: '12HNO3', Value: 15.112345}]
  * @param {String} keyName 
- * @param {String} valueName 
+ * e.g. keyName -> 'TagName'
+ * @param {String} valueName
+ * e.g. valueName -> 'Value' 
  * @returns {Object}
+ * e.g. {'12N2O': 12.234, '12HNO3': 15.112}
+ * 
  */
 const convertArray2Object = function (array, keyName, valueName) {
   let rows = {};
   loForEach(array, row => {
     const value = row[valueName];
     rows[row[keyName]] = loIsFinite(value) ? loRound(row[valueName], 3) : value;
+  });
+  return rows;
+};
+
+/**
+ * @method convertObject2Array
+ * @param {Object[]} array 
+ * e.g. [{'12N2O': 12.234, '12HNO3': 15.112},..,{'12N2O': 13.134, '12HNO3': 14.512}]
+ * @returns {Object}
+ * e.g. {'12N2O': [12.234, 13.134], '12HNO3': [15.112, 14.512]}
+ * 
+ */
+const convertObject2Array = function (array) {
+  let rows = {} ;
+  loForEach(array, row => {
+    loForEach(row, function (value, key) {
+      if(!rows[key]) rows[key] = [];
+      value = loIsFinite(value) ? loRound(value, 3) : value;
+      rows[key].push(value);
+    });
   });
   return rows;
 };
@@ -124,10 +161,10 @@ const convertArray2Object = function (array, keyName, valueName) {
  * e.g. -> ['AB', 12345]
  */
 const splitStr2StrNum = function (str) {
-  let result = [], _str = '', _num = '' ;
+  let result = [], _str = '', _num = '';
   for (let value of str) {
-    if(Number.isNaN(Number.parseInt(value))) {
-      _str = _str + value; 
+    if (Number.isNaN(Number.parseInt(value))) {
+      _str = _str + value;
     } else {
       _num = _num + value;
     }
@@ -135,6 +172,171 @@ const splitStr2StrNum = function (str) {
   result.push(_str);
   result.push(Number.parseInt(_num));
   return result;
+};
+
+/**
+ * @method getLetter4Index
+ * @param {Number} index 
+ * e.g. -> AB12345
+ * @returns {String}
+ * e.g. -> index = 1 -> 'A'....
+ */
+const getLetter4Index = function (index) {
+  return excelColumns[index];
+};
+
+/**
+ * @method getIndex4Letter
+ * @param {String} letter 
+ * e.g. -> 'AB'
+ * @returns {String}
+ * e.g. -> letter = 'AB' -> 28 ....
+ */
+const getIndex4Letter = function (letter) {
+  return loFindIndex(excelColumns, item => item === letter);
+};
+
+/**
+ * @method getIndex4Range
+ * @param {String} range 
+ * e.g. -> 'B11:C34'
+ * @returns {Object}
+ * e.g. -> range = 'B11:C34' -> { start: { col: 2, row: 11 }, end: { col: 3, row: 34 } }
+ * e.g. -> range = 'B11' -> { start: { col: 2, row: 11 } }
+ */
+const getIndex4Range = function (range) {
+  let ranges, start, end;
+  //------------------
+  // 'B11:C34'->['B11', 'C34']
+  ranges = range.split(':');
+  // 'B11'->['B', 11]
+  start = splitStr2StrNum(ranges[0]);
+  // 'B'-> 2
+  start = { col: getIndex4Letter(start[0]), row: start[1] };
+  if (ranges.length === 2) {
+    // 'C34'->['C', 34]
+    end = splitStr2StrNum(ranges[1]);
+    // 'C'-> 3
+    end = { col: getIndex4Letter(end[0]), row: end[1] };
+  }
+  return end ? { start, end } : { start };
+};
+
+/**
+ * @method removeEmptyValFromArray
+ * @param {Array} initialArray 
+ * e.g. -> [empty, 1, null, empty, 0]
+ * @returns {Array}
+ * e.g. -> [1, null, 0]
+ */
+const removeEmptyValFromArray = function (initialArray) {
+  let newArray = [];
+  //------------------------------
+  for (let index = 0; index <= initialArray.length; index++) {
+    const item = initialArray[index];
+    if (item === undefined) continue;
+    newArray.push(item);
+  }
+  return newArray;
+};
+
+/**
+ * @method convertRangeArray
+ * @param {Array[]} initialArray
+ * e.g. [empty, [empty, 1, 2]]
+ * @param {String} targetStartRange 
+ * e.g. initialStartRange -> 'A1'
+ * e.g. targetStartRange -> 'B1'
+ * @returns {Array[]}
+ * e.g. targetArray -> [empty, [empty, empty, 1, 2]]
+ */
+const shiftRowRangeArray = function (initialArray, targetStartRange) {
+  let newRangeArray = [], newColArray = [], countColArray = 0, startRow, startCol;
+  //---------------------------------------
+  // e.g. -> indexRange = 'B1' -> { start: { col: 2, row: 1 } }
+  const indexRange = getIndex4Range(targetStartRange);
+  startRow = indexRange.start.row;
+  startCol = indexRange.start.col;
+  if (isDebug && initialArray.length) inspector(`shiftRowRangeArray(${targetStartRange}).initialArray(${initialArray.length}):`, initialArray);
+  initialArray = removeEmptyValFromArray(initialArray);
+  for (let rowIndex = startRow; rowIndex < initialArray.length + startRow; rowIndex++) {
+    let colArray = initialArray[rowIndex - startRow];
+    newColArray = [];
+    colArray = removeEmptyValFromArray(colArray);
+    countColArray = colArray.length;
+    for (let colIndex = startCol; colIndex < countColArray + startCol; colIndex++) {
+      const valueCell = colArray[colIndex - startCol];
+      newColArray[colIndex] = valueCell;
+    }
+    newRangeArray[rowIndex] = newColArray;
+  }
+  if (isDebug && newRangeArray.length) inspector(`shiftRowRangeArray(${targetStartRange}).newRangeArray(${newRangeArray.length}):`, newRangeArray);
+  return newRangeArray;
+};
+
+/**
+ * @method convertRowRangeArray
+ * @param {Array[]} initialArray 
+ * e.g. [empty, [empty, '1:0:0',..., true]]
+ * @param {Array} columnsConfig
+ * e.g. [{}, { header: 'Time', key: 'time', width: 20 },...,{ header: 'IsWorking', key: 'isWorking', width: 12 }] 
+ * @returns {Array[]}
+ * e.g. [empty, {time: '1:0:0',..., isWorking: true}]
+ */
+const convertRowRangeArray = function (initialArray = [], columnsConfig = []) {
+  let newColObject, keyColumn, newRangeArray = [];
+  //------------------------------------
+  newRangeArray = newRangeArray.concat(initialArray);
+  for (let rowIndex = 0; rowIndex < initialArray.length; rowIndex++) {
+    let colArray = initialArray[rowIndex];
+    if (colArray === undefined) continue;
+    newColObject = {};
+    for (let colIndex = 0; colIndex < colArray.length; colIndex++) {
+      const valueCell = colArray[colIndex];
+      if (valueCell === undefined) continue;
+      const columnConfig = columnsConfig[colIndex - 1];
+      if (columnConfig) {
+        keyColumn = columnConfig.key;
+        newColObject[keyColumn] = valueCell;
+      }
+    }
+    newRangeArray[rowIndex] = newColObject;
+  }
+  return newRangeArray;
+};
+
+/**
+ * @method shiftColRangeArray
+ * @param {Array[]} initialArray
+ * e.g. [empty, [empty, 1, 2]]
+ * @param {String} targetStartRange 
+ * e.g. initialStartRange -> 'A1'
+ * e.g. targetStartRange -> 'B1'
+ * @returns {Array[]}
+ * e.g. targetArray -> [empty, empty, [empty, 1, 2]]
+ */
+const shiftColRangeArray = function (initialArray, targetStartRange) {
+  let newRangeArray = [], newRowArray = [], countRowArray = 0, startRow, startCol;
+  //---------------------------------------
+  // e.g. -> indexRange = 'B1' -> { start: { col: 2, row: 1 } }
+  const indexRange = getIndex4Range(targetStartRange);
+  startRow = indexRange.start.row;
+  startCol = indexRange.start.col;
+  if (isDebug && initialArray.length) inspector(`shiftColRangeArray(${targetStartRange}).initialArray(${initialArray.length}):`, initialArray);
+  initialArray = removeEmptyValFromArray(initialArray);
+  for (let colIndex = startCol; colIndex < initialArray.length + startCol; colIndex++) {
+    newRowArray = [];
+    let rowArray = initialArray[colIndex - startCol];
+    rowArray = removeEmptyValFromArray(rowArray);
+    countRowArray = rowArray.length;
+    for (let rowIndex = startRow; rowIndex < countRowArray + startRow; rowIndex++) {
+      const valueCell = rowArray[rowIndex - startRow];
+      newRowArray[rowIndex] = valueCell;
+    }
+    newRangeArray[colIndex] = newRowArray;
+  }
+  if (isDebug && newRangeArray.length) inspector(`shiftColRangeArray(${targetStartRange}).newRangeArray(${newRangeArray.length}):`, newRangeArray);
+  return newRangeArray;
 };
 
 
@@ -145,5 +347,13 @@ module.exports = {
   sortByNumber,
   getGroupsFromArray,
   convertArray2Object,
-  splitStr2StrNum
+  convertObject2Array,
+  splitStr2StrNum,
+  getLetter4Index,
+  getIndex4Letter,
+  getIndex4Range,
+  removeEmptyValFromArray,
+  shiftRowRangeArray,
+  shiftColRangeArray,
+  convertRowRangeArray
 };
