@@ -99,6 +99,29 @@ function histValueFromSource(params = {}, addedValue) {
   }, interval);
 }
 
+/**
+ * Get hist array value from source
+ * @param {Object} params 
+ * @param {Object} addedValue 
+ */
+function histArrayValue(params = {}, addedValue) {
+  // simulate pressure change
+  const _t = 0;
+  const _interval = 200;
+  let t = params.t ? params.t : _t;
+  let interval = params.interval ? params.interval : _interval;
+  setInterval(function () {
+    let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
+    value = params.value.map(v => loRound(v + value, 3));
+    if (isDebug) debug('histArrayValue.value:', value, '; time:', getTime());
+    // debug('histArrayValue.value:', value, '; time:', getTime()); 
+    addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
+    if(isLog) inspector('histArrayValue.addedValue:', formatUAVariable(addedValue));
+    // inspector('histArrayValue.addedValue:', formatUAVariable(addedValue));
+    t = t + 1;
+  }, interval);
+}
+
 function histValueFromFile(params = {}, addedValue) {
   const _t = 0;
   const _interval = 200;
@@ -171,5 +194,6 @@ module.exports = Object.assign({}, opcuaDefaultGetters, {
   valueFromSource2,
   histValueFromSource,
   histValueFromFile,
+  histArrayValue,
   percentageMemUsed
 });

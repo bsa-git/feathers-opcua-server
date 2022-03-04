@@ -139,6 +139,39 @@
       }
     },
     {
+      "browseName": "Device2.ArrayValue",
+      "displayName": "Array value",
+      "ownerName": "Device2",
+      "type": "variable.array",
+      "dataType": "Double",
+      "hist": true,
+      "variableGetType": "valueFromSource",
+      "valueFromSourceParams": {
+        "dataType": "Double",
+        "arrayType": "Array"
+      },
+      "getter": "histArrayValue",
+      "getterParams": {
+        "t": 50,
+        "interval": 200,
+        "value": [
+          1.12359,
+          2.125675,
+          3.12345
+        ]
+      },
+      "valueParams": {
+        "arrayDimensions": [
+          3
+        ],
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10.0
+        },
+        "engineeringUnits": "bar"
+      }
+    },
+    {
       "browseName": "Device2.ValueFromFile",
       "displayName": "Value From File",
       "ownerName": "Device2",

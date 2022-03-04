@@ -318,7 +318,8 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
     // service.sessionRead
     nameNodeIds = ['Device1.Temperature', 'Device2.PressureVesselDevice'];
-    attributeIds = [AttributeIds.Value, AttributeIds.BrowseName];
+    // attributeIds = [AttributeIds.Value, AttributeIds.BrowseName];
+    attributeIds = [AttributeIds.Value];
     readResult = await service.sessionRead(id, nameNodeIds, attributeIds);
 
     readResult.forEach((item, index) => {
@@ -326,6 +327,21 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
         value = item.value.value;
         value = item.value.dataType === DataType.QualifiedName ? value.name : loRound(value, 3);
         console.log(chalk.green(`${nameNodeIds[index]}.value:`), chalk.cyan(value));
+      }
+    });
+
+    // service.sessionRead
+    nameNodeIds = ['Device2.ArrayValue'];
+    attributeIds = [AttributeIds.Value];
+    readResult = await service.sessionRead(id, nameNodeIds, attributeIds);
+
+    readResult.forEach((item, index) => {
+      formatValue = formatDataValue(id, readResult[0], 'Device2.ArrayValue', 'ru');
+      if(isLog) inspector('20# OPC-UA clients: session read.formatValue:', formatValue);
+      if (item.statusCode.name === 'Good') {
+        value = item.value.value;
+        value = item.value.dataType === DataType.QualifiedName ? value.name : value;
+        console.log(chalk.green(`${nameNodeIds[index]}.value:`), '[', chalk.cyan(value), ']');
       }
     });
 
