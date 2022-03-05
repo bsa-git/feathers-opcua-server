@@ -426,7 +426,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
   //============== SESSION HISTORY VALUES ====================//
 
-  it('24# OPC-UA clients: session history value', async () => {
+  it('24# OPC-UA clients: session history value from "Device2.PressureVesselDevice"', async () => {
     let data, readResult = null;
     const service = await getClientService(app, id);
 
@@ -455,6 +455,51 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
           dataValues.forEach(dataValue => {
             if (dataValue.statusCode.name === 'Good') {
               console.log(chalk.green('sessionReadHistoryValues.PressureVesselDevice:'), chalk.cyan(`${loRound(dataValue.value.value, 3)}; Timestamp=${dataValue.sourceTimestamp}`));
+              assert.ok(true, 'OPC-UA clients: session history value');
+            } else {
+              assert.ok(false, 'OPC-UA clients: session history value');
+            }
+          });
+        } else {
+          assert.ok(false, 'OPC-UA clients: session history value');
+        }
+      } else {
+        assert.ok(false, 'OPC-UA clients: session history value');
+      }
+    } else {
+      assert.ok(false, 'OPC-UA clients: session history value');
+    }
+  });
+
+  it('24.2# OPC-UA clients: session history value from "Device2.ArrayValue"', async () => {
+    let data, readResult = null;
+    const service = await getClientService(app, id);
+
+    // service.getItemNodeId
+    readResult = await service.getItemNodeId(id, 'Device2.ArrayValue');
+    if (isLog) inspector('getItemNodeId.readResult:', readResult);
+
+    if (readResult) {
+      // Get start time
+      let start = moment();
+      debug('SessionHistoryValue_From_Device2.ArrayValue.StartTime:', getTime(start, false));
+      // Pause
+      await pause(1000);
+      // Get end time
+      let end = moment();
+      debug('SessionHistoryValue_From_Device2.ArrayValue.EndTime:', getTime(end, false));
+
+      // service.sessionReadHistoryValues
+      readResult = await service.sessionReadHistoryValues(id, 'Device2.ArrayValue', start, end);
+
+      if (isLog) inspector('sessionReadHistoryValues_From_Device2.ArrayValue.readResult:', readResult);
+      // inspector('sessionReadHistoryValues_From_Device2.ArrayValue.readResult:', readResult);
+      if (readResult.length && readResult[0].statusCode.name === 'Good') {
+        if (readResult[0].historyData.dataValues.length) {
+          let dataValues = readResult[0].historyData.dataValues;
+          dataValues.forEach(dataValue => {
+            if (dataValue.statusCode.name === 'Good') {
+              console.log(chalk.green('sessionReadHistoryValues_From_Device2.ArrayValue:'), chalk.cyan(`[${dataValue.value.value}]; Timestamp=${dataValue.sourceTimestamp}`));
               assert.ok(true, 'OPC-UA clients: session history value');
             } else {
               assert.ok(false, 'OPC-UA clients: session history value');

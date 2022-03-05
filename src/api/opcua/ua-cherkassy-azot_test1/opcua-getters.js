@@ -3,6 +3,7 @@ const os = require('os');
 const {
   Variant,
   DataType,
+  VariantArrayType
 } = require('node-opcua');
 
 const chalk = require('chalk');
@@ -94,7 +95,7 @@ function histValueFromSource(params = {}, addedValue) {
     if (isDebug) debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime());
     // debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime()); 
     addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
-    if(isLog) inspector('histValueFromSource.addedValue:', formatUAVariable(addedValue));
+    if (isLog) inspector('histValueFromSource.addedValue:', formatUAVariable(addedValue));
     t = t + 1;
   }, interval);
 }
@@ -115,8 +116,14 @@ function histArrayValue(params = {}, addedValue) {
     value = params.value.map(v => loRound(v + value, 3));
     if (isDebug) debug('histArrayValue.value:', value, '; time:', getTime());
     // debug('histArrayValue.value:', value, '; time:', getTime()); 
-    addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
-    if(isLog) inspector('histArrayValue.addedValue:', formatUAVariable(addedValue));
+    const valueFromSourceParams = {
+      dataType: DataType['Double'],
+      arrayType: VariantArrayType['Array'],// (item) => { return item; },
+      value
+    };
+
+    addedValue.setValueFromSource(valueFromSourceParams);
+    if (isLog) inspector('histArrayValue.addedValue:', formatUAVariable(addedValue));
     // inspector('histArrayValue.addedValue:', formatUAVariable(addedValue));
     t = t + 1;
   }, interval);
@@ -150,7 +157,7 @@ function histValueFromFile(params = {}, addedValue) {
     let dataItem = {};
     dataItems = JSON.parse(data);
     dataItems.forEach(item => {
-      Object.assign(dataItem, {[item.name]: item.value});
+      Object.assign(dataItem, { [item.name]: item.value });
     });
 
     // Set value from source for group 
