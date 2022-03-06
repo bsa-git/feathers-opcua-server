@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
-const { 
-  inspector, 
-  getValueFromNodeId,
-  formatDataValue 
+const {
+  inspector,
+  isNumber,
+  formatDataValue
 } = require('../../../plugins');
 
 const chalk = require('chalk');
@@ -25,12 +25,14 @@ function onChangedCH_M5Handler(params, dataValue) {
   const addressSpaceOption = params.addressSpaceOption;
   const browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
-  if (isLog) inspector('subscriptions.onChangedCH_M5Handler.formatDataValue:', dataValue);
+  if (isLog && dataValue) inspector('subscriptions.onChangedCH_M5Handler.formatDataValue:', dataValue);
   // inspector('subscriptions.onChangedCH_M5Handler.formatDataValue:', dataValue);
-  const value = loRound(dataValue.value.value, 3);
-  const engineeringUnits = dataValue.valueParams.engineeringUnits;
+  let value = dataValue.value.value;
+  value = isNumber(value) ? loRound(value, 3) : `[${value}]`;
+  let engineeringUnits = dataValue.valueParams.engineeringUnits;
+  engineeringUnits = engineeringUnits ? `(${engineeringUnits})` : '';
   const timestamp = dataValue.serverTimestamp;
-  console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} (${engineeringUnits}) Timestamp=${timestamp}`));
+  console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} ${engineeringUnits} Timestamp=${timestamp}`));
 }
 
 module.exports = {

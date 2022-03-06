@@ -198,10 +198,57 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
     }
   });
+
+  it('#7. OPC-UA clients: session history values for "CH_M52_ACM" group', async () => {
+    let dataItem, readResults = null, engineeringUnits = '';
+    //-------------------------------------------------------
+    const service = await getClientService(app, id);
+
+    const srvCurrentState = await service.getSrvCurrentState(id);
+    let variables = srvCurrentState.paramsAddressSpace.variables;
+    variables = variables.filter(v => v.ownerGroup === 'CH_M52_ACM::ValueFromFile').map(v => v.browseName);
+    if (variables.length) {
+      // Get start time
+      let start = moment();
+      debug('OPC-UA clients: session history values for "CH_M52_ACM" group.StartTime:', getTime(start, false));
+      // Pause
+      await pause(1000);
+      // Get end time
+      let end = moment();
+      debug('OPC-UA clients: session history values for "CH_M52_ACM" group.EndTime:', getTime(end, false));
+      readResults = await service.sessionReadHistoryValuesEx(id, variables, start, end);
+      if (isLog) inspector('OPC-UA clients: session history values for "CH_M52_ACM" group.readResults:', readResults);
+      // inspector('OPC-UA clients: session history values for "CH_M51" group.readResults:', readResults);
+      if (readResults.length) {
+        readResults.forEach(readResult => {
+          if (readResult.statusCode.name === 'Good') {
+            if (readResult.historyData.dataValues.length) {
+              readResult.historyData.dataValues.forEach(dataValue => {
+                if (dataValue.statusCode.name === 'Good') {
+                  dataItem = dataValue.value.value;
+                  engineeringUnits = readResult.valueParams.engineeringUnits? `(${readResult.valueParams.engineeringUnits});`: '';
+                  console.log(chalk.green(`historyValue.${readResult.browseName}:`), chalk.cyan(`[${dataItem}] ${engineeringUnits} Timestamp=${dataValue.sourceTimestamp}`));
+                  assert.ok(true, 'OPC-UA clients: session history values for "CH_M52_ACM" group');
+                } else {
+                  assert.ok(false, 'OPC-UA clients: session history values for "CH_M52_ACM" group');
+                }
+              });
+            }
+          } else {
+            assert.ok(false, 'OPC-UA clients: session history values for "CH_M52_ACM" group');
+          }
+        });
+      } else {
+        assert.ok(false, 'OPC-UA clients: session history values for "CH_M52_ACM" group');
+      }
+    } else {
+      assert.ok(false, 'OPC-UA clients: session history values for "CH_M52_ACM" group');
+    }
+  });
   
   //============== START SUBSCRIPTION ====================//
 
-  it('#7. OPC-UA clients: subscription create', async () => {
+  it('#8. OPC-UA clients: subscription create', async () => {
     const service = await getClientService(app, id);
     // service.subscriptionCreate
     const result = await service.subscriptionCreate(id);
@@ -210,7 +257,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(true, 'OPC-UA clients: subscription create');
   });
 
-  it('#8. OPC-UA clients: subscription monitor', async () => {
+  it('#9. OPC-UA clients: subscription monitor for "CH_M51::ValueFromFile" group', async () => {
     const service = await getClientService(app, id);
     const srvCurrentState = await service.getSrvCurrentState(id);
     // Start subscriptionMonitor
@@ -228,8 +275,42 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(true, 'OPC-UA client subscription monitor');
   });
 
+  it('#10. OPC-UA clients: subscription monitor for "CH_M52_ACM::ValueFromFile" group', async () => {
+    const service = await getClientService(app, id);
+    const srvCurrentState = await service.getSrvCurrentState(id);
+    // Start subscriptionMonitor
+    let variables = srvCurrentState.paramsAddressSpace.variables;
+    variables = variables.filter(v => v.ownerGroup === 'CH_M52_ACM::ValueFromFile').map(v => v.browseName);
+    const groups = getGroupsFromArray(variables, 10);
+    for (let index = 0; index < groups.length; index++) {
+      const group = groups[index];
+      const nodeIds = await service.getNodeIds(id, group);
+      // console.log('subscription monitor for "CH_M52_ACM::ValueFromFile" group.nodeIds', nodeIds);
+      for (let index2 = 0; index2 < nodeIds.length; index2++) {
+        const nodeId = nodeIds[index2];
+        await service.subscriptionMonitor(id, 'onChangedCH_M5Handler', { nodeId });
+      }
+    }
+    assert.ok(true, 'OPC-UA client subscription monitor');
+  });
 
-  it('#9. OPC-UA clients: subscription terminate', async () => {
+  /*
+  it('#10.2. OPC-UA clients: subscription monitor for "CH_M52_ACM::ValueFromFile"', async () => {
+    const service = await getClientService(app, id);
+    const srvCurrentState = await service.getSrvCurrentState(id);
+    // Start subscriptionMonitor
+    let variables = srvCurrentState.paramsAddressSpace.variables;
+    const variable = variables.filter(v => v.browseName === 'CH_M52_ACM::ValueFromFile').map(v => v.browseName)[0];
+    const nodeIds = await service.getNodeIds(id, variable);
+    const nodeId = nodeIds.length? nodeIds[0] : null;
+    if(nodeId){
+      await service.subscriptionMonitor(id, 'onChangedGroupHandlerForDB', { nodeId });
+    }
+    assert.ok(true, 'OPC-UA client subscription monitor');
+  });
+  */
+
+  it('#11. OPC-UA clients: subscription terminate', async () => {
     const service = await getClientService(app, id);
     await pause(1000);
     // service.subscriptionTerminate
@@ -242,21 +323,21 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
   
   //===== SESSION CLOSE/CLIENT DISCONNECT/SERVER SHUTDOWN =====//
 
-  it('#10. OPC-UA clients: session close the service', async () => {
+  it('#12. OPC-UA clients: session close the service', async () => {
     const service = await getClientService(app, id);
     const opcuaClient = await service.sessionClose(id);
     if (isLog) inspector('Session close the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
   });
 
-  it('#11. OPC-UA clients: disconnect the service', async () => {
+  it('#13. OPC-UA clients: disconnect the service', async () => {
     const service = await getClientService(app, id);
     const opcuaClient = await service.opcuaClientDisconnect(id);
     if (isLog) inspector('Session close the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
   });
 
-  it('#12. OPC-UA servers: shutdown the service', async () => {
+  it('#14. OPC-UA servers: shutdown the service', async () => {
     const service = await getServerService(app, id);
     // const opcuaServer = await service.opcuaServerShutdown(id, 1500);
     const opcuaServer = await service.opcuaServerShutdown(id);

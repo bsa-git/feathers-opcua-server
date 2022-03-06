@@ -58,13 +58,15 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
   // debug('histValueFromFile.params.path:', params.path); // test/data/tmp/ch-m52_acm
   const path = createPath(params.path);
   const excelMappingFrom = params.excelMappingFrom;
+  const range = excelMappingFrom.range;
+  const header = excelMappingFrom.header;
 
   // Watch read only new file
   readOnlyModifiedFile(path, (filePath, data) => {
 
 
     // Show filePath, data
-    if (true && filePath) console.log(chalk.green(`acmDayValueFromFile.readOnlyModifiedFile(${getTime('', false)}).filePath:`), chalk.cyan(getPathBasename(filePath)));
+    if (isDebug && filePath) console.log(chalk.green(`acmDayValueFromFile.readOnlyModifiedFile(${getTime('', false)}).filePath:`), chalk.cyan(getPathBasename(filePath)));
     // Set value from source
     dataType = formatUAVariable(addedValue).dataType[1];
     // console.log('acmDayValueFromFile.dataType:', dataType);
@@ -76,14 +78,14 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     });
 
     // Sheet to json
-    dataItems = xlsx.sheetToJson('Report1', { range: 'B6:F29', header: excelMappingFrom.header});
+    dataItems = xlsx.sheetToJson('Report1', { range, header});
     if (isDebug && dataItems.length) inspector(`histValueFromFile.dataItems(${dataItems.length}):`, dataItems);
 
     // results = papa.parse(data, { delimiter: ';', header: true });
     // dataItems = results.data[0];
     dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
-    if (true && dataItems) inspector('histValueFromFile.dataItems:', dataItems);
+    if (isDebug && dataItems) inspector('histValueFromFile.dataItems:', dataItems);
 
     // Set value from source for group 
     if (params.addedVariableList) {
@@ -124,9 +126,8 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
 
     // Write new data to xls file
     const fileName = getFileName('DayHist01_14F120-', 'xls', true);
-    const resultPath = xlsx.writeFile([appRoot, path, fileName]);
-    // const jsonData2 = xlsx.readFile(resultPath, 'Report1').sheetToJson();
-    // if (isLog && jsonData2.length) inspector('acmDayValueFromFile.jsonData2:', jsonData2);
+    xlsx.writeFile([appRoot, path, fileName]);
+    
   }, params.interval);
 };
 
