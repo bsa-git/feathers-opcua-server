@@ -74,7 +74,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m51']);
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52']);
-    // removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52_acm']);
+    removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52_acm']);
   });
 
   it('#1. OPC-UA clients: registered the service', async () => {
@@ -294,22 +294,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(true, 'OPC-UA client subscription monitor');
   });
 
-  /*
-  it('#10.2. OPC-UA clients: subscription monitor for "CH_M52_ACM::ValueFromFile"', async () => {
-    const service = await getClientService(app, id);
-    const srvCurrentState = await service.getSrvCurrentState(id);
-    // Start subscriptionMonitor
-    let variables = srvCurrentState.paramsAddressSpace.variables;
-    const variable = variables.filter(v => v.browseName === 'CH_M52_ACM::ValueFromFile').map(v => v.browseName)[0];
-    const nodeIds = await service.getNodeIds(id, variable);
-    const nodeId = nodeIds.length? nodeIds[0] : null;
-    if(nodeId){
-      await service.subscriptionMonitor(id, 'onChangedGroupHandlerForDB', { nodeId });
-    }
-    assert.ok(true, 'OPC-UA client subscription monitor');
-  });
-  */
-
+  
   it('#11. OPC-UA clients: subscription terminate', async () => {
     const service = await getClientService(app, id);
     await pause(1000);

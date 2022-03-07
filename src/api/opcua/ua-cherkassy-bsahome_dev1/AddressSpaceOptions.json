@@ -44,7 +44,7 @@
       "getter": "histValueFromFile",
       "getterParams": {
         "path": "test/data/tmp/ch-m51",
-        "fromFile": "data-CH_M51.csv",
+        "fromFile": "test-data/data-CH_M51.csv",
         "interval": 5000
       }
     },
@@ -60,8 +60,26 @@
       "getter": "histValueFromFile",
       "getterParams": {
         "path": "test/data/tmp/ch-m52",
-        "fromFile": "data-CH_M52.csv",
+        "fromFile": "test-data/data-CH_M52.csv",
         "interval": 5000
+      }
+    },
+    {
+      "browseName": "CH_M52_ACM::ValueFromFile",
+      "displayName": "Значения из файла для CH_M52_ACM",
+      "ownerName": "CH_M52_ACM",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "acmDayValueFromFile",
+      "getterParams": {
+        "path": "test/data/tmp/ch-m52_acm",
+        "fromFile": "test-data/DayReport-CH_M52_ACM.xls",
+        "toFile": "test-data/YearReport-CH_M52_ACM.xlsx",
+        "interval": 500,
+        "excelMappingFrom": {"range": "B6:F29", "header": ["14QN2O", "14QN2O_CORR", "14FVSG", "14FVSG_CORR", "14F105_IS"]}
       }
     }
   ]
