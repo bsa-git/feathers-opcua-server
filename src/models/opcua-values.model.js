@@ -26,7 +26,8 @@ module.exports = function (app) {
     const schema = new Schema({
       tagId: { type: mongoose.ObjectId, required: true },
       tagName: { type: String, required: true },
-      values: [{ tagId: mongoose.ObjectId, key: String, value: Schema.Types.Mixed }]
+      // values: [{ tagId: mongoose.ObjectId, key: String, value: Schema.Types.Mixed, values: [] }]
+      values: [{ tagId: mongoose.ObjectId, key: String, value: Schema.Types.Mixed, items: [Schema.Types.Mixed] }]
     }, {
       timestamps: true
     });

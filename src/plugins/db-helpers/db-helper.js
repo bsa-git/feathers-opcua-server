@@ -243,7 +243,8 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
         if (value === null) {
           value = getInt(value);
         }
-        opcuaValues.push({ key, value });
+        opcuaValues.push( Array.isArray(value)? { key, items: value } : { key, value });
+        // opcuaValues.push({ key, value });
       }
     });
     const data = {

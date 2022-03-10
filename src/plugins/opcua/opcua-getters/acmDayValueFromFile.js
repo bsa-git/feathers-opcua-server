@@ -93,7 +93,7 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     }
 
     // Remove file 
-    // removeFileSync(filePath);
+    removeFileSync(filePath);
   });
 
 

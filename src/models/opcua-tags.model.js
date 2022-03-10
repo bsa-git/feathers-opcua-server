@@ -39,20 +39,21 @@ module.exports = function (app) {
       ownerGroup: { type: String },
       variableGetType: { type: String },
       getter: { type: String },
-      getterParams: {
-        type: {
-          path: { type: String },
-          fromFile: { type: String },
-          interval: { type: Number },
-          dbEnv: { type: String },
-          queryFunc: { type: String },
-          queryParams: {
-            type: {
-              scanerName: { type: String },
-            }
-          }
-        }
-      },
+      // getterParams: {
+      //   type: {
+      //     path: { type: String },
+      //     fromFile: { type: String },
+      //     interval: { type: Number },
+      //     dbEnv: { type: String },
+      //     queryFunc: { type: String },
+      //     queryParams: {
+      //       type: {
+      //         scanerName: { type: String },
+      //       }
+      //     }
+      //   }
+      // },
+      getterParams: Schema.Types.Mixed,
       valueParams: {
         type: {
           engineeringUnits: { type: String },
