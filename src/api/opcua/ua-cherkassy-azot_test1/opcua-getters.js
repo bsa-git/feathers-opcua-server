@@ -115,16 +115,14 @@ function histArrayValue(params = {}, addedValue) {
     let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
     value = params.value.map(v => loRound(v + value, 3));
     if (isDebug) debug('histArrayValue.value:', value, '; time:', getTime());
-    // debug('histArrayValue.value:', value, '; time:', getTime()); 
     const valueFromSourceParams = {
       dataType: DataType['Double'],
-      arrayType: VariantArrayType['Array'],// (item) => { return item; },
+      arrayType: VariantArrayType['Array'],
       value
     };
 
     addedValue.setValueFromSource(valueFromSourceParams);
     if (isLog) inspector('histArrayValue.addedValue:', formatUAVariable(addedValue));
-    // inspector('histArrayValue.addedValue:', formatUAVariable(addedValue));
     t = t + 1;
   }, interval);
 }

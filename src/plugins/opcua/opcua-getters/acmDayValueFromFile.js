@@ -111,7 +111,7 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     jsonData = xlsx.sheetToJson();
     // Map  jsonData   
     jsonData = jsonData.map(row => {
-      if (row['J'] && isBoolean(row['J'])) {
+      if (row['F'] && isBoolean(row['F'])) {
         row['B'] = loRandom(300, 2000);
         row['D'] = loRandom(30000, 300000);
       }

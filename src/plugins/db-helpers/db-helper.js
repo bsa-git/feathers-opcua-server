@@ -285,7 +285,7 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
         savedValue = await createItem(app, 'opcua-values', data);
       }
     }
-    if (isLog) inspector('db-helper.saveOpcuaValue.savedValue:', savedValue);
+    if (isLog && savedValue) inspector('db-helper.saveOpcuaValue.savedValue:', savedValue);
   }
   return savedValue;
 };
@@ -574,46 +574,6 @@ const integrityCheckOpcua = async function (app, isRemote = false) {
       result = false;
     }
   }
-  /** 
-  // Remove opcua values that have no 'owner' tags
-  const cb = async function (data, app) {
-    const idField = getIdField(data[0]);
-    for (let index = 0; index < data.length; index++) {
-      const value = data[index];
-      const valueId = value[idField];
-      const tagName = value['tagName'];
-      const tag = await findItem(app, 'opcua-tags', { browseName: tagName });
-      if (!tag) {
-        const removedItem = await removeItem(app, 'opcua-values', valueId);
-        deleted++;
-        deletedBrowseNames.push(removedItem.tagName);
-      }
-    }
-  };
-  await handleFoundItems(app, 'opcua-values', {}, cb);
-  if (deleted) {
-    logger.error(`db-helper.integrityCheckOpcua.Remove 'OpcuaValues' that have no 'owner' tags: ${deleted}`);
-    if (isLog) inspector('db-helper.integrityCheckOpcua.Remove \'childGroup\' tags that have no \'ownerGroup\' tags:', deletedBrowseNames);
-    deleted = 0;
-    deletedBrowseNames = [];
-    result = false;
-  }
-  */
-  /** 
-  if (!isRemote) {
-    const removedItems = await removeItems(app, 'opcua-values');
-    if (removedItems.length) {
-      deleted = removedItems.length;
-      deletedBrowseNames = removedItems.map(item => item.browseName);
-      logger.error(`db-helper.integrityCheckOpcua.Remove all opcua values if !isRemote: ${deleted}`);
-      if (isLog) inspector('db-helper.integrityCheckOpcua.Remove all opcua values if !isRemote:', deletedBrowseNames);
-      deleted = 0;
-      deletedBrowseNames = [];
-      result = false;
-    }
-  }
-  */
-
   // Remove opcua values that have no 'ownerGroup' tags
   // tagsFromDB = await findItems(app, 'opcua-tags', { type: { $ne: 'object' } });
   if (isRemote) {
