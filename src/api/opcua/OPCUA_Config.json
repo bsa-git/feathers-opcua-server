@@ -239,7 +239,7 @@
     "clientScript": "startSubscriptionMonitor",
     "subscription": "onChangedGroupHandlerForDB",
     "hostTypeDB": "mongodb",
-    "opcuaSaveModeToDB": "localUpdate",
+    "opcuaSaveModeToDB": "remoteUpdate",
     "opcuaRemoteDbUrl": "http://localhost:3131",
     "include": {
       "tests": [
