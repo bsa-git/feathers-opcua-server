@@ -53,12 +53,12 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
   before(function (done) {
     startListenPort(app, done);
-    makeDirSync([appRoot, 'test/data/tmp/ch-m52_acm']);
+    makeDirSync([appRoot, 'test/data/tmp/excel-helper']);
   });
 
   after(function (done) {
     stopListenPort(done);
-    removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52_acm']);
+    removeFilesFromDirSync([appRoot, 'test/data/tmp/excel-helper']);
   });
 
   it('#1: Get cells from xls file', async () => {
@@ -109,7 +109,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
     // Write new data to xls file
     const fileName = getFileName('DayHist01_14F120-', 'xls', true);
-    resultPath = xlsx.writeFile([appRoot, 'test/data/tmp/ch-m52_acm', fileName]);
+    resultPath = xlsx.writeFile([appRoot, 'test/data/tmp/excel-helper', fileName]);
     jsonData2 = xlsx.readFile(resultPath, 'Report1').sheetToJson();
     assert.ok(jsonData.length === jsonData2.length, 'Write data to xls file');
   });
@@ -373,7 +373,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
     // Write new data to xlsx file
     const fileName = getFileName('DayReport1-', 'xlsx', true);
-    resultPath = await exceljs.writeFile([appRoot, 'test/data/tmp/ch-m52_acm', fileName]);
+    resultPath = await exceljs.writeFile([appRoot, 'test/data/tmp/excel-helper', fileName]);
     // console.log('writeFile.resultPath:', resultPath);
 
     // Create exceljs object

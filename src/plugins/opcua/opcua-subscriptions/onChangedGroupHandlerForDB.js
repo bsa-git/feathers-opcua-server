@@ -27,10 +27,13 @@ const isLog = false;
  * @returns {void}
  */
 async function onChangedGroupHandlerForDB(params, dataValue) {
-  if (isLog) inspector('subscriptions.onChangedGroupHandlerForDB.params:', params);
-  // inspector('subscriptions.onChangedGroupHandlerForDB.params:', params);
-  if (isLog) inspector('subscriptions.onChangedGroupHandlerForDB.dataValue:', dataValue);
+  if (isLog && params) inspector('subscriptions.onChangedGroupHandlerForDB.params:', params);
+  if (isLog && dataValue) inspector('subscriptions.onChangedGroupHandlerForDB.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
+
+  // Only for group values
+  if (!addressSpaceOption.group) return;
+
   const browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
   let value = dataValue.value.value;
@@ -40,18 +43,16 @@ async function onChangedGroupHandlerForDB(params, dataValue) {
   const timestamp = dataValue.serverTimestamp;
   engineeringUnits = engineeringUnits ? `(${engineeringUnits})` : '';
 
-  if (addressSpaceOption.group) {
-    // Save data to DB
-    if (isSaveOpcuaToDB()) {
-      const savedValue = await saveOpcuaGroupValue(params.app, browseName, value);
-      if (isLog && savedValue) inspector('onChangedGroupHandlerForDB.savedValue:', savedValue);
-      // inspector('onChangedGroupHandlerForDB.savedValue:', savedValue);
-    }
-
-    value = JSON.parse(value);
-    const valueKeys = Object.keys(value).length;
-    console.log('<<===', chalk.magentaBright(`ID="${params.id}"; `), chalk.greenBright(`Name="${browseName}"; `), chalk.whiteBright(`Number of values=(${valueKeys});`), chalk.cyanBright(`Timestamp=${timestamp}`), '===>>');
+  // Save data to DB
+  if (isSaveOpcuaToDB()) {
+    const savedValue = await saveOpcuaGroupValue(params.app, browseName, value);
+    if (isLog && savedValue) inspector('onChangedGroupHandlerForDB.savedValue:', savedValue);
+    // inspector('onChangedGroupHandlerForDB.savedValue:', savedValue);
   }
+
+  value = JSON.parse(value);
+  const valueKeys = Object.keys(value).length;
+  console.log('<<===', chalk.magentaBright(`ID="${params.id}"; `), chalk.greenBright(`Name="${browseName}"; `), chalk.whiteBright(`Number of values=(${valueKeys});`), chalk.cyanBright(`Timestamp=${timestamp}`), '===>>');
 }
 
 module.exports = onChangedGroupHandlerForDB;

@@ -565,9 +565,13 @@ module.exports = function opcuaClientMixins(service, path) {
         const opcuaOption = getOpcuaConfig(id);
         // Get subscriptionHandler for opcua option
         if(opcuaOption.subscription){
-          subscriptionHandler = getSubscriptionHandler(id, opcuaOption.subscription);
+          subscriptionHandlerName = opcuaOption.subscription;
+          subscriptionHandler = getSubscriptionHandler(id, subscriptionHandlerName);
         }
       }
+    }
+    if(!subscriptionHandler){
+      subscriptionHandler = getSubscriptionHandler(id);
     }
     result = await opcuaClient.client.subscriptionMonitor(subscriptionHandler, itemToMonitor, requestedParameters, timestampsToReturn);
     return result;

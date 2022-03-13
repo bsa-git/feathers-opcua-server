@@ -1132,16 +1132,11 @@ class OpcuaClient {
      *   );
      */
   async subscriptionMonitor(cb = null, itemToMonitor = {}, requestedParameters = {}, timestampsToReturn = TimestampsToReturn.Neither) {
-    let subscriptionHandler, subscriptionHandlerName = '';
     this.subscriptionNotCreated();
     const nodeId = itemToMonitor.nodeId;
-    if (this.getItemNodeId(nodeId)) {
-      // Get subscriptionHandlerName
-      const itemNodeId = this.getItemNodeId(nodeId);
-      if (itemNodeId.subscription) {
-        subscriptionHandlerName = itemNodeId.subscription;
-      }
-
+    // Get itemNodeId
+    const itemNodeId = this.getItemNodeId(nodeId);
+    if (itemNodeId && cb) {
       // subscription.monitor
       const mergeItemToMonitor = loMerge({}, defaultItemToMonitor, itemToMonitor);
       const mergeRequestedParameters = loMerge({}, defaultRequestedParameters, requestedParameters);
@@ -1158,21 +1153,14 @@ class OpcuaClient {
 
       // Run subscriptionHandler
       monitoredItem.on('changed', (dataValue) => {
-        if (isLog) inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
+        if (isLog && dataValue) inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
         const value = dataValue.value.value;
         if (value === null) return;
         itemToMonitor.id = this.id;
         itemToMonitor.locale = this.locale;
         itemToMonitor.addressSpaceOption = itemNodeId;
         dataValue.serverTimestamp = moment().format();
-        if (cb) {
-          cb(itemToMonitor, dataValue);
-        } else {
-          // Get subscriptionHandler
-          subscriptionHandler = getSubscriptionHandler(this.id, subscriptionHandlerName);
-          subscriptionHandler(itemToMonitor, dataValue);
-        }
-
+        cb(itemToMonitor, dataValue);
       });
     }
   }
@@ -1224,7 +1212,7 @@ class OpcuaClient {
 
   /**
    * Get item nodeId
-   * @param {String>} nameNodeId 
+   * @param {String} nameNodeId 
    * e.g nameNodeId = 'Device1.Temperature'|'ns=1;s=Device1.Temperature'
    * @returns {Object}
    */

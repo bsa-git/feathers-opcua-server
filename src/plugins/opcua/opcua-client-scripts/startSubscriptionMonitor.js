@@ -18,17 +18,17 @@ const isLog = false;
  */
 async function startSubscriptionMonitor(id, service) {
   let groups, browseNames;
+  //----------------------------------------------
   // Subscription create
   await service.subscriptionCreate(id);
-
+  // Get server current state 
   const srvCurrentState = await service.getSrvCurrentState(id);
-  // inspector('subscriptionMonitor.srvCurrentState:', srvCurrentState);
+  if(isLog && srvCurrentState) inspector('subscriptionMonitor.srvCurrentState:', srvCurrentState);
   // Start subscriptionMonitor
   const allVariables = srvCurrentState.paramsAddressSpace.variables;
   //---- Group owners  ---//
   browseNames = allVariables.filter(v => v.hist && v.group).map(v => v.browseName);
-  if(isLog) inspector('startSubscriptionMonitor.groupOwners.browseNames:', browseNames);
-  // inspector('subscriptionMonitor.groupOwners.browseNames:', browseNames);
+  if(isLog && browseNames) inspector('startSubscriptionMonitor.groupOwners.browseNames:', browseNames);
   for (let index = 0; index < browseNames.length; index++) {
     const browseName = browseNames[index];
     const nodeIds = await service.getNodeIds(id, browseName);
@@ -52,8 +52,7 @@ async function startSubscriptionMonitor(id, service) {
 
   //---- Only hist values  ---//
   browseNames = allVariables.filter(v => v.hist && !v.group && !v.ownerGroup).map(v => v.browseName);
-  if(isLog) inspector('startSubscriptionMonitor.histValues.browseNames:', browseNames);
-  // inspector('subscriptionMonitor.histValues.browseNames:', browseNames);
+  if(isLog && browseNames) inspector('startSubscriptionMonitor.histValues.browseNames:', browseNames);
   for (let index = 0; index < browseNames.length; index++) {
     const browseName = browseNames[index];
     const nodeIds = await service.getNodeIds(id, browseName);
