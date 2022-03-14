@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
+const moment = require('moment');
 const chalk = require('chalk');
-const papa = require('papaparse');
 
 const {
   appRoot,
@@ -9,7 +9,7 @@ const {
   readOnlyNewFile,
   readOnlyModifiedFile,
   getTime,
-  pause,
+  stripSpecific,
   delay,
   readFileSync,
   writeFileSync,
@@ -65,6 +65,7 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
   // Watch read only new file
   readOnlyModifiedFile(path, (filePath, data) => {
 
+    // console.log('acmDayValueFromFile:', rangeData, rangeDate, headerData);
 
     // Show filePath, data
     if (isDebug && filePath) console.log(chalk.green(`acmDayValueFromFile.readOnlyModifiedFile(${getTime('', false)}).filePath:`), chalk.cyan(getPathBasename(filePath)));
@@ -84,10 +85,13 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
 
     // Sheet to json date
     let date = xlsx.sheetToJson('Report1', { range: rangeDate });
-    if (true && date) inspector('histValueFromFile.date:', date);
+    date = date[0]['A'].split('to:')[0].split('from:')[1].trim();
+    date = moment(date).format().split('T')[0];
+    if (isDebug && date) inspector('histValueFromFile.date:', date);
 
     // Set value from source
     dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
+    dataItems['!value'] = { date };
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
     if (isDebug && dataItems) inspector('histValueFromFile.dataItems:', dataItems);
 
