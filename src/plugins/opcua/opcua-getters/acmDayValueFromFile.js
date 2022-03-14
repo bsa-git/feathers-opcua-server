@@ -58,8 +58,9 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
   // debug('histValueFromFile.params.path:', params.path); // test/data/tmp/ch-m52_acm
   const path = createPath(params.path);
   const excelMappingFrom = params.excelMappingFrom;
-  const range = excelMappingFrom.range;
-  const header = excelMappingFrom.header;
+  const rangeData = excelMappingFrom.rangeData;
+  const headerData = excelMappingFrom.headerData;
+  const rangeDate = excelMappingFrom.rangeDate;
 
   // Watch read only new file
   readOnlyModifiedFile(path, (filePath, data) => {
@@ -77,12 +78,15 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
       sheetName: 'Report1'
     });
 
-    // Sheet to json
-    dataItems = xlsx.sheetToJson('Report1', { range, header});
+    // Sheet to json data
+    dataItems = xlsx.sheetToJson('Report1', { range: rangeData, header: headerData });
     if (isDebug && dataItems.length) inspector(`histValueFromFile.dataItems(${dataItems.length}):`, dataItems);
 
-    // results = papa.parse(data, { delimiter: ';', header: true });
-    // dataItems = results.data[0];
+    // Sheet to json date
+    let date = xlsx.sheetToJson('Report1', { range: rangeDate });
+    if (true && date) inspector('histValueFromFile.date:', date);
+
+    // Set value from source
     dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
     if (isDebug && dataItems) inspector('histValueFromFile.dataItems:', dataItems);
@@ -127,7 +131,7 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     // Write new data to xls file
     const fileName = getFileName('DayHist01_14F120-', 'xls', true);
     xlsx.writeFile([appRoot, path, fileName]);
-    
+
   }, params.interval);
 };
 

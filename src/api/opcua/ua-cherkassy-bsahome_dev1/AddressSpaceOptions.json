@@ -40,6 +40,7 @@
       "dataType": "String",
       "hist": true,
       "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
       "getter": "histValueFromFile",
       "getterParams": {
@@ -56,6 +57,7 @@
       "dataType": "String",
       "hist": true,
       "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
       "getter": "histValueFromFile",
       "getterParams": {
@@ -72,6 +74,7 @@
       "dataType": "String",
       "hist": true,
       "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
       "getter": "acmDayValueFromFile",
       "getterParams": {
@@ -79,7 +82,7 @@
         "fromFile": "test-data/DayReport-CH_M52_ACM.xls",
         "toFile": "test-data/YearReport-CH_M52_ACM.xlsx",
         "interval": 10000,
-        "excelMappingFrom": {"range": "B6:F29", "header": ["14QN2O", "14QN2O_CORR", "14FVSG", "14FVSG_CORR", "14F105_IS"]}
+        "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerData": ["14QN2O", "14QN2O_CORR", "14FVSG", "14FVSG_CORR", "14F105_IS"]}
       }
     }
   ]

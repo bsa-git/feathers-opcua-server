@@ -36,6 +36,7 @@ module.exports = function (app) {
       dataType: { type: String },
       hist: { type: Boolean },
       group: { type: Boolean },
+      subscription: { type: String },
       ownerGroup: { type: String },
       variableGetType: { type: String },
       getter: { type: String },

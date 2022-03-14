@@ -27,7 +27,7 @@ function onChangedCommonHandler(params, dataValue) {
   const addressSpaceOption = params.addressSpaceOption;
   const browseName = addressSpaceOption.browseName;
   const value = dataValue.value.value;
-  console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(value));
+  if(isDebug && browseName && value) console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(value));
 }
 
 module.exports = onChangedCommonHandler;
