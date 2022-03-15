@@ -9,7 +9,6 @@ const { getIdField } = require('./plugins/db-helpers');
 const fakeNormalize = require('./plugins/test-helpers/fake-normalize');
 
 // Get generated fake data
-// let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 let fakeData = fakeNormalize(true);
 
 // Get feathers-specs data
