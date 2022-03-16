@@ -29,8 +29,8 @@ const isLog = false;
 // e.g. argv.script='converterCsvForKEPServer' =>  Converter from `Fox` excel data `.csv` file to KEPServer
 // e.g. argv.script='converterInpForKEPServer' =>  Converter from `Fox` hist data `.inp` file to KEPServer
 const argv = yargs(hideBin(process.argv)).argv;
-if(isDebug && argv) inspector('Yargs.argv:', argv);
-const isScript = argv.script === 'converterCsvForKEPServer' || argv.script === '#2';
+if (isDebug && argv) inspector('Yargs.argv:', argv);
+const isScript = (argv.script === '#2');
 
 // Config for converter from `Fox` excel data `.csv` file to KEPServer
 const csvKepServerConfig = {
@@ -64,61 +64,60 @@ const csvKepServerConfig = {
 
 describe('<<=== ScriptOperations: (#2-converterCsvForKEPServer) ===>>', () => {
 
+  if (!isScript) return;
   // Converter from Fox Excel data `.csv` file to KEPServer
-  if (isScript) {
-    it('#2: ScriptOperations: Converter csv files for KEPServer', () => {
-      try {
-        const config = csvKepServerConfig;
-        let path = config.path;
-        let fileName = config.csvFileNameFrom;
-        // Read file
-        let data = readFileSync([appRoot, path, fileName]);
-        data = papa.parse(data, { delimiter: config.delimiterFrom, header: true });
-        if (isLog) inspector('Converter for KEPServer.jsonData[0]:', data.data[0]);
-        if (isLog) inspector('Converter for KEPServer.meta:', data.meta);
-        // Get data
-        data = data.data;
-        if (isDebug) debug('Amount of data before filtering:', data.length);
-        // Filter data 
-        data = data.filter(item => config.filter.includes(item.Type_tag));
-        if (isDebug) debug('Amount of data after filtering:', data.length);
-        // Write data to json file
-        fileName = config.jsonFileName;
-        writeJsonFileSync([appRoot, path, fileName], data);
+  it('#2: ScriptOperations: Converter csv files for KEPServer', () => {
+    try {
+      const config = csvKepServerConfig;
+      let path = config.path;
+      let fileName = config.csvFileNameFrom;
+      // Read file
+      let data = readFileSync([appRoot, path, fileName]);
+      data = papa.parse(data, { delimiter: config.delimiterFrom, header: true });
+      if (isLog) inspector('Converter for KEPServer.jsonData[0]:', data.data[0]);
+      if (isLog) inspector('Converter for KEPServer.meta:', data.meta);
+      // Get data
+      data = data.data;
+      if (isDebug) debug('Amount of data before filtering:', data.length);
+      // Filter data 
+      data = data.filter(item => config.filter.includes(item.Type_tag));
+      if (isDebug) debug('Amount of data after filtering:', data.length);
+      // Write data to json file
+      fileName = config.jsonFileName;
+      writeJsonFileSync([appRoot, path, fileName], data);
 
-        // Convert data
-        const fields = config.fields;
-        data = data.map(item => {
-          let result = {};
-          result[fields.column1.toField] = item[fields.column1.fromField];
-          result[fields.column2.toField] = `52AW00/${item[fields.column2.fromField[0]]}:${item[fields.column2.fromField[1]]}.PNT\\hist00`;
-          result[fields.column3.toField] = item[fields.column3.default];
-          result[fields.column4.toField] = item[fields.column4.default];
-          result[fields.column5.toField] = item[fields.column5.default];
-          result[fields.column6.toField] = item[fields.column6.default];
-          result[fields.column7.toField] = item[fields.column7.default];
-          result[fields.column8.toField] = item[fields.column8.default];
-          result[fields.column9.toField] = item[fields.column9.default];
-          result[fields.column10.toField] = item[fields.column10.fromField];
-          result[fields.column11.toField] = item[fields.column11.fromField];
-          result[fields.column12.toField] = item[fields.column12.default];
-          result[fields.column13.toField] = item[fields.column13.default];
-          result[fields.column14.toField] = item[fields.column14.default];
-          result[fields.column15.toField] = item[fields.column15.fromField];
-          result[fields.column16.toField] = `${item[fields.column16.fromField[0]]} ${item[fields.column16.fromField[1]]}`;
-          result[fields.column17.toField] = item[fields.column17.default];
-          return result;
-        });
+      // Convert data
+      const fields = config.fields;
+      data = data.map(item => {
+        let result = {};
+        result[fields.column1.toField] = item[fields.column1.fromField];
+        result[fields.column2.toField] = `52AW00/${item[fields.column2.fromField[0]]}:${item[fields.column2.fromField[1]]}.PNT\\hist00`;
+        result[fields.column3.toField] = item[fields.column3.default];
+        result[fields.column4.toField] = item[fields.column4.default];
+        result[fields.column5.toField] = item[fields.column5.default];
+        result[fields.column6.toField] = item[fields.column6.default];
+        result[fields.column7.toField] = item[fields.column7.default];
+        result[fields.column8.toField] = item[fields.column8.default];
+        result[fields.column9.toField] = item[fields.column9.default];
+        result[fields.column10.toField] = item[fields.column10.fromField];
+        result[fields.column11.toField] = item[fields.column11.fromField];
+        result[fields.column12.toField] = item[fields.column12.default];
+        result[fields.column13.toField] = item[fields.column13.default];
+        result[fields.column14.toField] = item[fields.column14.default];
+        result[fields.column15.toField] = item[fields.column15.fromField];
+        result[fields.column16.toField] = `${item[fields.column16.fromField[0]]} ${item[fields.column16.fromField[1]]}`;
+        result[fields.column17.toField] = item[fields.column17.default];
+        return result;
+      });
 
-        // Write data to csv file
-        let csv = papa.unparse(data, { delimiter: config.delimiterTo });
-        fileName = config.csvFileNameTo;
-        writeFileSync([appRoot, path, fileName], csv);
-        assert.ok(true, 'ScriptOperations: Converter for KEPServer');
-      } catch (error) {
-        inspector('#2: ScriptOperations: Converter csv files for KEPServer:', error.message);
-        assert.ok(false, '#2: ScriptOperations: Converter csv files for KEPServer');
-      }
-    });
-  }
+      // Write data to csv file
+      let csv = papa.unparse(data, { delimiter: config.delimiterTo });
+      fileName = config.csvFileNameTo;
+      writeFileSync([appRoot, path, fileName], csv);
+      assert.ok(true, 'ScriptOperations: Converter for KEPServer');
+    } catch (error) {
+      inspector('#2: ScriptOperations: Converter csv files for KEPServer:', error.message);
+      assert.ok(false, '#2: ScriptOperations: Converter csv files for KEPServer');
+    }
+  });
 });

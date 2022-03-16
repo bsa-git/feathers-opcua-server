@@ -29,26 +29,25 @@ const isLog = false;
 // e.g. argv.script='converterCsvForKEPServer' =>  Converter from `Fox` excel data `.csv` file to KEPServer
 // e.g. argv.script='converterInpForKEPServer' =>  Converter from `Fox` hist data `.inp` file to KEPServer
 const argv = yargs(hideBin(process.argv)).argv;
-if(isDebug && argv) inspector('Yargs.argv:', argv);
-const isScript = argv.script === 'updateAddressSpaceOptions' || argv.script === '#1';
+if (isDebug && argv) inspector('Yargs.argv:', argv);
+const isScript = (argv.script === '#1');
 
 describe('<<=== ScriptOperations: (#1-updateAddressSpaceOptions) ===>>', () => {
 
+  if (!isScript) return
   // Update AddressSpaceOptions.json
-  if (isScript) {
-    it('#1: ScriptOperations: update AddressSpaceOptions.json', () => {
-      let path = 'src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json';
-      let options = readFileSync([appRoot, path]);
-      options = JSON.parse(options);
-      options.groups = options.groups.map(item => {
-        if (item.browseName) {
-          item.description = item.displayName;
-          item.displayName = item.aliasName;
-        }
-        return item;
-      });
-      writeFileSync([appRoot, path], options, true);
-      assert.ok(true, 'update AddressSpaceOptions.json');
+  it('#1: ScriptOperations: update AddressSpaceOptions.json', () => {
+    let path = 'src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json';
+    let options = readFileSync([appRoot, path]);
+    options = JSON.parse(options);
+    options.groups = options.groups.map(item => {
+      if (item.browseName) {
+        item.description = item.displayName;
+        item.displayName = item.aliasName;
+      }
+      return item;
     });
-  }
+    writeFileSync([appRoot, path], options, true);
+    assert.ok(true, 'update AddressSpaceOptions.json');
+  });
 });
