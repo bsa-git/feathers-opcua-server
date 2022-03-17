@@ -166,7 +166,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
     await exceljs.init();
     const sheetName = exceljs.getSheet().name;
-    const items = exceljs.getRowCells(sheetName, { header: 'A', range: 'A1:K11' });
+    const items = exceljs.getRowCells(sheetName, { header: 'A', range: 'A8:J11' });
     assert.ok(items.length, 'Get row cells from xlsx data');
 
     loForEach(items, function (item, rowIndex) {
@@ -196,7 +196,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     await exceljs.init();
     const sheetName = exceljs.getSheet().name;
     const options = { header: 1, range: 'B11:D12' };
-    const items = exceljs.getRowValues(sheetName, { header: 1, range: 'B11:D12' });
+    const items = exceljs.getRowValues(sheetName, options);
     assert.ok(items.length, 'Get row cells from xlsx data');
     if (isDebug && items.length) inspector('#6: Get row values from xlsx file.rowCells:', items);
     if (options.header === 1) {
@@ -229,7 +229,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
     await exceljs.init();
     const sheetName = exceljs.getSheet().name;
-    const items = exceljs.getColumnCells(sheetName, { header: 'A', range: 'A1:K11' });
+    const items = exceljs.getColumnCells(sheetName, { header: 'A', range: 'A8:J11' });
     assert.ok(items.length, 'Get row cells from xlsx data');
 
     loForEach(items, function (item) {
@@ -294,14 +294,14 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     await exceljs.init();
     let sheetName = exceljs.getSheet().name;
     let items = exceljs.getRowValues(sheetName, { header: 1 });
+    if(isDebug && items) inspector('#9: Write data to xlsx file.items:', items);
     let items2 = exceljs.getColumnValues(sheetName, { header: 1 });
-    let items3 = exceljs.getRowValues(sheetName, { header: 1, range: 'B11:K34' });
+    if(isDebug && items2) inspector('#9: Write data to xlsx file.items2:', items2);
+    let items3 = exceljs.getRowValues(sheetName, { header: 1, range: 'A11:J34' });
+    if(isDebug && items3) inspector('#9: Write data to xlsx file.items3:', items3);
     let shiftItems3 = shiftRowRangeArray(items3, 'B2');
-    // inspector('#9: Write data to xlsx file.items:', items);
+    if(isDebug && shiftItems3) inspector('#9: Write data to xlsx file.shiftItems3:', shiftItems3);
     assert.ok(items.length && items2.length && items3.length, 'Write data to xlsx file');
-
-    //const shiftItems = shiftRowRangeArray(items, 'D16');
-
 
     // Create new exceljs object
     exceljs = new ExceljsHelperClass({
@@ -335,16 +335,16 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
       { header: 'N2O-CORR', key: 'N2O_CORR', width: 12 },
       { header: 'F120', key: 'F120', width: 12 },
       { header: 'F120-CORR', key: 'F120_CORR', width: 12 },
+      { header: 'IsWorking', key: 'isWorking', width: 12 },
       { header: '12F105', key: '12F105', width: 12 },
       { header: '22F105', key: '22F105', width: 12 },
       { header: '32F105', key: '32F105', width: 12 },
       { header: '42F105', key: '42F105', width: 12 },
-      { header: 'IsWorking', key: 'isWorking', width: 12 },
     ];
     exceljs.addColumns(newColumns, 'TmpReport3');
 
     sheetName = exceljs.getSheet().name;
-    if (isDebug) console.log('worksheet.Report1.sheetName:', sheetName, '; bookOptions.lastPrinted:', exceljs.workbook.lastPrinted);
+    if (isDebug) console.log('worksheet.sheetName:', sheetName, '; bookOptions.lastPrinted:', exceljs.workbook.lastPrinted);
     // Add row values to 'TmpReport1'
     for (let rowIndex = 1; rowIndex <= items.length; rowIndex++) {
       let item = items[rowIndex] ? items[rowIndex] : [];
@@ -353,10 +353,10 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     // Add column values to 'TmpReport2'
     for (let colIndex = 1; colIndex <= items2.length; colIndex++) {
       let item = items2[colIndex] ? items2[colIndex] : [];
-      if (colIndex === 3 || colIndex === 4 || colIndex === 6) {// colIndex = 3,4,6 -> 'C','D','F'
+      if (colIndex === 2 || colIndex === 4) {// colIndex = 2,4 -> 'B','D'
         item = item.map((v, rowIndex) => {// rowIndex -> 11..34
           if (rowIndex >= 11 && rowIndex <= 34) {
-            v = colIndex === 6 ? loRandom(50000, 500000) : loRandom(300, 2000);
+            v = (colIndex === 4) ? loRandom(50000, 500000) : loRandom(300, 2000);
           }
           return v;
         });
@@ -365,6 +365,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     }
     // Add row values to 'TmpReport3'
     shiftItems3 = convertRowRangeArray(shiftItems3, newColumns);
+    if(true && shiftItems3) inspector('#9: Write data to xlsx file.shiftItems3:', shiftItems3);
     for (let rowIndex = 0; rowIndex < shiftItems3.length; rowIndex++) {
       if(!shiftItems3[rowIndex]) continue;
       let item = shiftItems3[rowIndex];
