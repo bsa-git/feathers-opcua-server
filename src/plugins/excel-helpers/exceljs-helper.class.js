@@ -470,6 +470,21 @@ class ExceljsHelperClass {
     return this.getSheet(shIdentifier).insertRows(pos, rowValues, style);
   }
 
+  // Duplicate a Row
+  // e.g. duplicateRow(start, amount = 1, insert = true)
+  // const wb = new ExcelJS.Workbook();
+  // const ws = wb.addWorksheet('duplicateTest');
+  // ws.getCell('A1').value = 'One';
+  // ws.getCell('A2').value = 'Two';
+  // ws.getCell('A3').value = 'Three';
+  // ws.getCell('A4').value = 'Four';
+  // This line will duplicate the row 'One' twice but it will replace rows 'Two' and 'Three'
+  // if third param was true so it would insert 2 new rows with the values and styles of row 'One'
+  // ws.duplicateRow(1,2,false);
+  duplicateRow(start, amount = 1, insert = false, shIdentifier) {
+    return this.getSheet(shIdentifier).duplicateRow(start, amount, insert);
+  }
+
   //================= CELLS =================//
 
   // Get cell

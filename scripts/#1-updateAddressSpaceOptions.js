@@ -34,7 +34,7 @@ const isScript = (argv.script === '#1');
 
 describe('<<=== ScriptOperations: (#1-updateAddressSpaceOptions) ===>>', () => {
 
-  if (!isScript) return
+  if (!isScript) return;
   // Update AddressSpaceOptions.json
   it('#1: ScriptOperations: update AddressSpaceOptions.json', () => {
     let path = 'src/api/opcua/ua-cherkassy-azot-m5/AddressSpaceOptions.json';

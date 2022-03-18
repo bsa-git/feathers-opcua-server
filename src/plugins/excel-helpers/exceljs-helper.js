@@ -143,7 +143,7 @@ const exeljsCreateBook = function (options) {
 
 /**
  * Create a Workbook
- * @method exeljsCreateBook
+ * @method exeljsSetBookProperties
  * @param {Object} workbook
  * @param {Object} options
  * e.g. {

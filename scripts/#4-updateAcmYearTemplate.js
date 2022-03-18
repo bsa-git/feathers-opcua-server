@@ -36,6 +36,7 @@ if(isDebug && argv) inspector('Yargs.argv:', argv);
 const isScript = (argv.script === '#4');
 
 const xlsxFile = '/scripts/api/excel-templates/acm-reports/acmYearTemplate.xlsx';
+const xlsxFileForWrite = '/scripts/api/excel-templates/acm-reports/acmYearTemplate_2022.xlsx';
 
 
 describe('<<=== ScriptOperations: (#4-updateAcmYearTemplate) ===>>', () => {
@@ -51,12 +52,20 @@ describe('<<=== ScriptOperations: (#4-updateAcmYearTemplate) ===>>', () => {
   
     await exceljs.init();
     const sheetName = exceljs.getSheet().name;
-    const cells = exceljs.getCells(sheetName, { range: 'A6:A6' });
+    let cells = exceljs.getCells(sheetName, { range: 'A6:A6' });
     assert.ok(cells.length, 'Get cells from xlsx file');
+
+    // exceljs.duplicateRow(6);
+
+    // cells = exceljs.getCells(sheetName, { range: 'A7:B7' });
   
     loForEach(cells, function (cell) {
       cell = loOmit(cell, ['cell', 'column', 'row']);
-      if (true && cell) inspector(`#4: Update acm year template xlsx file.cell(${cell.address}):`, cell);
+      if (isDebug && cell) inspector(`#4: Update acm year template xlsx file.cell(${cell.address}):`, cell);
     });
+
+    // Write new data to xlsx file
+    // const fileName = getFileName('DayReport1-', 'xlsx', true);
+    const resultPath = await exceljs.writeFile([appRoot, xlsxFileForWrite]);
   });
 });
