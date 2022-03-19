@@ -33,22 +33,8 @@ const isDebug = false;
 
 const xlsFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_M52_ACM.xls';
 const xlsxFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_M52_ACM.xlsx';
-const xlsxFile2 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTemplate.xlsx';
+const xlsxFile2 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/Book1.xlsx';
 const csvFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/data-CH_M51.csv';
-
-// Sample data set
-let student_data = [{
-  Student: 'Nikhil',
-  Age: loRandom(17, 50),
-  Branch: 'ISE',
-  Marks: loRandom(50, 100)
-},
-{
-  Student: 'Amitha',
-  Age: loRandom(17, 50),
-  Branch: 'EC',
-  Marks: loRandom(50, 100)
-}];
 
 describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
@@ -410,7 +396,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     let items = exceljs.getColumnValues(sheetName, { range: 'C12:C35', header: 1 });
     let items2 = exceljs.getColumnValues(sheetName, { range: 'E12:E35', header: 1 });
     if(isDebug && items) inspector('#10: Write data to xlsx file.items:', items);
-    if(true && items2) inspector('#10: Write data to xlsx file.items2:', items2);
+    if(isDebug && items2) inspector('#10: Write data to xlsx file.items2:', items2);
     
     assert.ok(items.length, 'Write data to xlsx file');
 
@@ -443,7 +429,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
       }
     }
     if(isDebug && items) inspector('#10: Write data to xlsx file.items:', items);
-    if(true && items2) inspector('#10: Write data to xlsx file.items2:', items2);
+    if(isDebug && items2) inspector('#10: Write data to xlsx file.items2:', items2);
 
     exceljs.getColumn('C').values = items[3];
     exceljs.getColumn('E').values = items2[5];
@@ -463,5 +449,46 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     sheetName = exceljs.getSheet().name;
     const resultItems = exceljs.getColumnValues(sheetName, { range: 'C12:C35', header: 1 });
     assert.ok(items.length === resultItems.length, `Write data to xlsx file: ${items.length} = ${resultItems.length}`);
+  });
+
+  it('#11: Write data to xlsx file "YearReport"', async () => {
+    let resultPath = '', currentValue = 0;
+    //-----------------------------------
+
+    // Create exceljs object
+    let exceljs = new ExceljsHelperClass({
+      excelPath: [appRoot, xlsxFile2],
+      sheetName: 'Instructions',// Instructions Data_CNBB Results Test
+      bookOptions: {
+        fullCalcOnLoad: true
+      }
+    });
+
+    await exceljs.init();
+    let sheetName = exceljs.getSheet().name;
+    // let items = exceljs.getRowValues(sheetName, { range: 'A6:K6', header: 1 });
+    // if(true && items) inspector('#11: Write data to xlsx file.items:', items);
+    
+    // exceljs.removeSheet('Instructions');
+    // exceljs.removeSheet('Data_CNBB');
+    // exceljs.removeSheet('Results');
+
+    assert.ok(true, 'Write data to xlsx file "YearReport"');
+    
+    // Write new data to xlsx file
+    const fileName = getFileName('YearReport-', 'xlsx', true);
+    resultPath = await exceljs.writeFile([appRoot, 'test/data/tmp/excel-helper', fileName]);
+
+    // Create exceljs object
+    exceljs = new ExceljsHelperClass({
+      excelPath: resultPath,
+      sheetName: 'Instructions'
+    });
+
+    await exceljs.init();
+    sheetName = exceljs.getSheet().name;
+    // const resultItems =  exceljs.getRowValues(sheetName, { range: 'A6:K6', header: 1 });
+    // if(true && resultItems) inspector('#11: Write data to xlsx file.items2:', resultItems);
+    // assert.ok(items.length === resultItems.length, `Write data to xlsx file "YearReport": ${items.length} = ${resultItems.length}`);
   });
 });
