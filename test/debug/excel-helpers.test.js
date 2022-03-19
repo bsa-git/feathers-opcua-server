@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const loOmit = require('lodash/omit');
 const loRandom = require('lodash/random');
+const loRound = require('lodash/round');
 const loStartsWith = require('lodash/startsWith');
 const loForEach = require('lodash/forEach');
 const loIsNumber = require('lodash/isNumber');
@@ -32,7 +33,7 @@ const isDebug = false;
 
 const xlsFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_M52_ACM.xls';
 const xlsxFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_M52_ACM.xlsx';
-const xlsxFile2 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/YearReport-CH_M52_ACM.xlsx';
+const xlsxFile2 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTemplate.xlsx';
 const csvFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/data-CH_M51.csv';
 
 // Sample data set
@@ -61,7 +62,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     // removeFilesFromDirSync([appRoot, 'test/data/tmp/excel-helper']);
   });
 
-  it('#1: Get cells from xls file', async () => {
+  it('#1: Get cells from xls file "DayReport"', async () => {
     let cells;
     //---------------------------------
     const xlsx = new XlsxHelperClass({
@@ -81,7 +82,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     if (isDebug && cells.length) inspector('#1: Get cells from xls file.cells:', cells);
   });
 
-  it('#2: Write data to xls file', async () => {
+  it('#2: Write data to xls file "DayReport"', async () => {
     let resultPath = '', jsonData, jsonData2;
     //-------------------------
     // Create xlsx object
@@ -114,24 +115,6 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     assert.ok(jsonData.length === jsonData2.length, 'Write data to xls file');
   });
 
-  it('#3: Get cells from xlsx file', async () => {
-    // Create exceljs object
-    let exceljs = new ExceljsHelperClass({
-      excelPath: [appRoot, xlsxFile],
-      sheetName: 'Report1'
-    });
-
-    await exceljs.init();
-    const sheetName = exceljs.getSheet().name;
-    const cells = exceljs.getCells(sheetName, { range: 'G11:K11' });
-    assert.ok(cells.length, 'Get cells from xlsx file');
-
-    loForEach(cells, function (cell) {
-      cell = loOmit(cell, ['cell', 'column', 'row']);
-      if (isDebug && cell) inspector(`#3: Get cells from xlsx file.cell(${cell.address}):`, cell);
-    });
-  });
-
   it('#4: Get cells from csv data', async () => {
     // Create exceljs object
     let exceljs = new ExceljsHelperClass({
@@ -155,7 +138,25 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     });
   });
 
-  it('#5: Get row cells from xlsx file', async () => {
+  it('#3: Get cells from xlsx file "DayReport"', async () => {
+    // Create exceljs object
+    let exceljs = new ExceljsHelperClass({
+      excelPath: [appRoot, xlsxFile],
+      sheetName: 'Report1'
+    });
+
+    await exceljs.init();
+    const sheetName = exceljs.getSheet().name;
+    const cells = exceljs.getCells(sheetName, { range: 'G11:K11' });
+    assert.ok(cells.length, 'Get cells from xlsx file');
+
+    loForEach(cells, function (cell) {
+      cell = loOmit(cell, ['cell', 'column', 'row']);
+      if (isDebug && cell) inspector(`#3: Get cells from xlsx file.cell(${cell.address}):`, cell);
+    });
+  });
+
+  it('#5: Get row cells from xlsx file "DayReport"', async () => {
     let cell;
     //-------------------------
     // Create exceljs object
@@ -184,7 +185,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     });
   });
 
-  it('#6: Get row values from xlsx file', async () => {
+  it('#6: Get row values from xlsx file "DayReport"', async () => {
     let cellValue;
     //-------------------------
     // Create exceljs object
@@ -218,7 +219,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     });
   });
 
-  it('#7: Get column cells from xlsx file', async () => {
+  it('#7: Get column cells from xlsx file "DayReport"', async () => {
     let cell;
     //-------------------------
     // Create exceljs object
@@ -247,7 +248,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     });
   });
 
-  it('#8: Get column values from xlsx file', async () => {
+  it('#8: Get column values from xlsx file "DayReport"', async () => {
     let cellValue;
     //-------------------------
     // Create exceljs object
@@ -281,7 +282,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     });
   });
 
-  it('#9: Write data to xlsx file', async () => {
+  it('#9: Write data to xlsx file "DayReport"', async () => {
     let resultPath = '';
     //-------------------------
 
@@ -365,7 +366,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     }
     // Add row values to 'TmpReport3'
     shiftItems3 = convertRowRangeArray(shiftItems3, newColumns);
-    if(true && shiftItems3) inspector('#9: Write data to xlsx file.shiftItems3:', shiftItems3);
+    if(isDebug && shiftItems3) inspector('#9: Write data to xlsx file.shiftItems3:', shiftItems3);
     for (let rowIndex = 0; rowIndex < shiftItems3.length; rowIndex++) {
       if(!shiftItems3[rowIndex]) continue;
       let item = shiftItems3[rowIndex];
@@ -389,5 +390,78 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     const resultItems2 = exceljs.getColumnValues('TmpReport2', { header: 1 });
     assert.ok(items.length === resultItems.length, `Write data to xlsx file: ${items.length} = ${resultItems.length}`);
     assert.ok(items2.length === resultItems2.length, `Write data to xlsx file: ${items2.length} = ${resultItems2.length}`);
+  });
+
+  it('#10: Write data to xlsx file "DayReport"', async () => {
+    let resultPath = '', currentValue = 0;
+    //-------------------------
+
+    // Create exceljs object
+    let exceljs = new ExceljsHelperClass({
+      excelPath: [appRoot, xlsxFile],
+      sheetName: 'data',
+      bookOptions: {
+        fullCalcOnLoad: true
+      }
+    });
+
+    await exceljs.init();
+    let sheetName = exceljs.getSheet().name;
+    let items = exceljs.getColumnValues(sheetName, { range: 'C12:C35', header: 1 });
+    let items2 = exceljs.getColumnValues(sheetName, { range: 'E12:E35', header: 1 });
+    if(isDebug && items) inspector('#10: Write data to xlsx file.items:', items);
+    if(true && items2) inspector('#10: Write data to xlsx file.items2:', items2);
+    
+    assert.ok(items.length, 'Write data to xlsx file');
+
+    for (let colIndex = 0; colIndex < items.length; colIndex++) {
+      if(items[colIndex] === undefined) continue;
+      const item = items[colIndex];
+      for (let colIndex2 = 0; colIndex2 < item.length; colIndex2++) {
+        if(item[colIndex2] === undefined) continue;
+        if(!currentValue) {
+          item[colIndex2] = loRound(loRandom(300, 2000), 3);
+        } else {
+          item[colIndex2] = loRound(item[colIndex2] - loRandom(300, 2000), 3);
+        } 
+        currentValue = item[colIndex2];        
+      }
+    }
+
+    currentValue = 0;
+    for (let colIndex = 0; colIndex < items2.length; colIndex++) {
+      if(items2[colIndex] === undefined) continue;
+      const item = items2[colIndex];
+      for (let colIndex2 = 0; colIndex2 < item.length; colIndex2++) {
+        if(item[colIndex2] === undefined) continue;
+        if(!currentValue) {
+          item[colIndex2] = loRound(loRandom(30, 70), 3);
+        } else {
+          item[colIndex2] = loRound(item[colIndex2] - loRandom(30, 70), 3);
+        } 
+        currentValue = item[colIndex2];        
+      }
+    }
+    if(isDebug && items) inspector('#10: Write data to xlsx file.items:', items);
+    if(true && items2) inspector('#10: Write data to xlsx file.items2:', items2);
+
+    exceljs.getColumn('C').values = items[3];
+    exceljs.getColumn('E').values = items2[5];
+
+    // Write new data to xlsx file
+    const fileName = getFileName('DayReport1-', 'xlsx', true);
+    resultPath = await exceljs.writeFile([appRoot, 'test/data/tmp/excel-helper', fileName]);
+    // console.log('writeFile.resultPath:', resultPath);
+
+    // Create exceljs object
+    exceljs = new ExceljsHelperClass({
+      excelPath: resultPath,
+      sheetName: 'data'
+    });
+
+    await exceljs.init();
+    sheetName = exceljs.getSheet().name;
+    const resultItems = exceljs.getColumnValues(sheetName, { range: 'C12:C35', header: 1 });
+    assert.ok(items.length === resultItems.length, `Write data to xlsx file: ${items.length} = ${resultItems.length}`);
   });
 });

@@ -109,7 +109,9 @@ const dtToObject = function (dt = '', isUtc = true) {
  */
 const getDate = function (dt = '', isUtc = true) {
   dt = dtToObject(dt, isUtc);
-  return `${dt.years}-${dt.months}-${dt.date}`;
+  const months = dt.months > 9? dt.months : `0${dt.months}`;
+  const date = dt.date > 9? dt.date : `0${dt.date}`;
+  return `${dt.years}-${months}-${date}`;
 };
 
 /**
@@ -120,7 +122,10 @@ const getDate = function (dt = '', isUtc = true) {
  */
 const getTime = function (dt = '', isUtc = true) {
   dt = dtToObject(dt, isUtc);
-  return `${dt.hours}:${dt.minutes}:${dt.seconds}.${dt.milliseconds}`;
+  const hours = dt.hours > 9? dt.hours : `0${dt.hours}`;
+  const minutes = dt.minutes > 9? dt.minutes : `0${dt.minutes}`;
+  const seconds = dt.seconds > 9? dt.seconds : `0${dt.seconds}`;
+  return `${hours}:${minutes}:${seconds}.${dt.milliseconds}`;
 };
 
 /**

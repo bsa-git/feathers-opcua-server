@@ -146,6 +146,8 @@ class ExceljsHelperClass {
   //      workbook.created = new Date(1985, 8, 30);
   //      workbook.modified = new Date();
   //      workbook.lastPrinted = new Date(2016, 9, 27);
+  // Force workbook calculation on load
+  // workbook.calcProperties.fullCalcOnLoad = true;
   setBookProperties(options) {
     exeljsSetBookProperties(this.workbook, options);
   }
