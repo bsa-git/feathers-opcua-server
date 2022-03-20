@@ -33,7 +33,7 @@ const isDebug = false;
 
 const xlsFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_M52_ACM.xls';
 const xlsxFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_M52_ACM.xlsx';
-const xlsxFile2 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/Book1.xlsx';
+const xlsxFile2 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTemplate.xlsx'; // acmYearTemplate Book1.xlsx
 const csvFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/data-CH_M51.csv';
 
 describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
@@ -458,7 +458,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     // Create exceljs object
     let exceljs = new ExceljsHelperClass({
       excelPath: [appRoot, xlsxFile2],
-      sheetName: 'Instructions',// Instructions Data_CNBB Results Test
+      sheetName: 'Data_CNBB',// Instructions Data_CNBB Results Test
       bookOptions: {
         fullCalcOnLoad: true
       }
@@ -466,9 +466,16 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
     await exceljs.init();
     let sheetName = exceljs.getSheet().name;
+    const cells = exceljs.getCells(sheetName, { range: 'S1:S2' });
+    loForEach(cells, function (cell) {
+      cell = loOmit(cell, ['cell', 'column', 'row']);
+      if (isDebug && cell) inspector(`#11: Write data to xlsx file "YearReport".cell(${cell.address}):`, cell);
+    });
     // let items = exceljs.getRowValues(sheetName, { range: 'A6:K6', header: 1 });
     // if(true && items) inspector('#11: Write data to xlsx file.items:', items);
     
+    exceljs.duplicateRow(6);
+
     // exceljs.removeSheet('Instructions');
     // exceljs.removeSheet('Data_CNBB');
     // exceljs.removeSheet('Results');

@@ -483,7 +483,7 @@ class ExceljsHelperClass {
   // This line will duplicate the row 'One' twice but it will replace rows 'Two' and 'Three'
   // if third param was true so it would insert 2 new rows with the values and styles of row 'One'
   // ws.duplicateRow(1,2,false);
-  duplicateRow(start, amount = 1, insert = false, shIdentifier) {
+  duplicateRow(start, amount = 1, insert = true, shIdentifier) {
     return this.getSheet(shIdentifier).duplicateRow(start, amount, insert);
   }
 
