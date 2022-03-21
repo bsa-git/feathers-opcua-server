@@ -633,6 +633,87 @@ class ExceljsHelperClass {
     return exeljsGetColumnValues(this.workbook, sheetName, options);
   }
 
+  //================= FORMULA =================//
+
+  // Cells also support convenience getters to access the formula
+  getCellFormula(cell) {
+    return cell.formula;
+  }
+
+  // To distinguish between real and translated formula cells, use the formulaType getter
+  // e.g. worksheet.getCell('A3').formulaType === Enums.FormulaType.Master;
+  //      worksheet.getCell('B3').formulaType === Enums.FormulaType.Shared;
+  // Formula type has the following values: None->0, Master->1, Shared->2
+  getCellFormulaType(cell) {
+    return cell.formulaType;
+  }
+
+  // Cells also support convenience getters to access the result
+  getCellResult(cell) {
+    return cell.result;
+  }
+
+  // A master formula can be assigned to a cell along with the slave cells in its range
+  // example: if the master cell A2 has a formula referencing A1 then if cell B2 shares A2's formula, then it will reference B1.
+  // e.g. worksheet.getCell('A2').value = {
+  //      formula: 'A1',
+  //      result: 10,
+  //      shareType: 'shared',
+  //      ref: 'A2:B3'
+  //    };
+  setCellMasterFormula(cell, formula, ref, result) {
+    cell.value = { formula, result, ref, shareType: 'shared' };
+  }
+  
+  // A shared formula can be assigned to a cell using a new value form:
+  // example: if the master cell A2 has a formula referencing A1 then if cell B2 shares A2's formula, then it will reference B1.
+  // e.g. worksheet.getCell('B2').value = { sharedFormula: 'A2', result: 10 };
+  // This specifies that the cell B2 is a formula that will be derived from the formula in A2 and its result is 10.
+  // The formula convenience getter will translate the formula in A2 to what it should be in B2:
+  // expect(worksheet.getCell('B2').formula).to.equal('B1');
+  setCellSharedFormula(cell, sharedFormula, result) {
+    cell.value = { sharedFormula, result };
+  } 
+
+  // A new way of expressing shared formulae in Excel is the array formula. 
+  // In this form, the master cell is the only cell that contains any information relating to a formula. 
+  // It contains the shareType 'array' along with the range of cells it applies to and the formula that will be copied. 
+  // The rest of the cells are regular cells with regular values.
+  // example: array formulae are not translated in the way shared formulae are. So if master cell A2 refers to A1, then slave cell B2 will also refer to A1.
+  // e.g. worksheet.getCell('A2').value = {
+  //      formula: 'A1',
+  //      result: 10,
+  //      shareType: 'array',
+  //      ref: 'A2:B3'
+  //    };
+  setCellArrayFormula(cell, formula, ref, result) {
+    cell.value = { formula, result, ref, shareType: 'array' };
+  }
+
+  // Shared formulae can be assigned into a sheet using the 'fillFormula' function:
+  // Set A1 to starting number -> worksheet.getCell('A1').value = 1;
+  // Fill A2 to A10 with ascending count starting from A1
+  // e.g. worksheet.fillFormula('A2:A10', 'A1+1', [2,3,4,5,6,7,8,9,10]);
+  fillFormula(ref, formula, result, shIdentifier) {
+    this.getSheet(shIdentifier).fillFormula(ref, formula, result);
+  }
+
+  // Shared formulae can be assigned into a sheet using the 'fillFormula' function:
+  // Set A1 to starting number -> worksheet.getCell('A1').value = 1;
+  // Fill A2 to A10 with ascending count starting from A1
+  // fillFormula can also use a callback function to calculate the value at each cell
+  // e.g. worksheet.fillFormula('A2:A100', 'A1+1', (row, col) => row);
+  fillFormulaWithCallback(ref, formula, callback, shIdentifier) {
+    this.getSheet(shIdentifier).fillFormula(ref, formula, callback);
+  }
+
+  // The fillFormula function can also be used to fill an array formula
+  // fill A2:B3 with array formula "A1"
+  // e.g. worksheet.fillFormula('A2:B3', 'A1', [1,1,1,1], 'array');
+  fillArrayFormula(ref, formula, result, shIdentifier) {
+    this.getSheet(shIdentifier).fillFormula(ref, formula, result, 'array');
+  }
+
   //================= TABLE =================//
 
   // Tables allow for in-sheet manipulation of tabular data.

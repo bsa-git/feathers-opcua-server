@@ -27,6 +27,7 @@ const {
 } = require('../../src/plugins/excel-helpers');
 
 const chalk = require('chalk');
+const moment = require('moment');
 
 const debug = require('debug')('app:excel-helpers.test');
 const isDebug = false;
@@ -452,7 +453,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
   });
 
   it('#11: Write data to xlsx file "YearReport"', async () => {
-    let resultPath = '', currentValue = 0;
+    let resultPath = '', row = null;
     //-----------------------------------
 
     // Create exceljs object
@@ -474,7 +475,20 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     // let items = exceljs.getRowValues(sheetName, { range: 'A6:K6', header: 1 });
     // if(true && items) inspector('#11: Write data to xlsx file.items:', items);
     
-    exceljs.duplicateRow(6);
+    const startRow = 6;
+    
+    // row = exceljs.getLastRow();
+    // if(true && row) inspector('#11: Write data to xlsx file.row:', row.values);
+    
+    const startDate = moment([2022, 0, 1]);
+    const endDate = moment([2022, 0, 2]);
+    let hours = endDate.diff(startDate, 'hours');
+    // console.log('hours:', hours);
+
+    for (let index = startRow; index < hours + startRow - 1; index++) {
+      exceljs.duplicateRow(index);
+      exceljs.getCell(`K${index + 1}`).value = { sharedFormula: `K${startRow}`, result: 'Цех не працює' };
+    }
 
     // exceljs.removeSheet('Instructions');
     // exceljs.removeSheet('Data_CNBB');
