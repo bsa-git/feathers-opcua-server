@@ -453,7 +453,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
   });
 
   it('#11: Write data to xlsx file "YearReport"', async () => {
-    let resultPath = '', row = null;
+    let resultPath = '', selCell = null;
     //-----------------------------------
 
     // Create exceljs object
@@ -480,15 +480,44 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     // row = exceljs.getLastRow();
     // if(true && row) inspector('#11: Write data to xlsx file.row:', row.values);
     
+    const beginDate = moment([2022, 0, 1, 1, 0, 0]).format('YYYY-MM-DD HH:mm');
+    exceljs.getCell(`B${startRow}`).value = beginDate;
+    
     const startDate = moment([2022, 0, 1]);
     const endDate = moment([2022, 0, 2]);
     let hours = endDate.diff(startDate, 'hours');
     // console.log('hours:', hours);
+     
 
     for (let index = startRow; index < hours + startRow - 1; index++) {
+      let valDate = exceljs.getCell(`B${index}`).value;
+      // cellDate.value = beginDate;
+      valDate = moment(valDate).format('YYYY-MM-DD HH:mm');
+      // console.log('valDate:', valDate);
+      valDate = moment(valDate).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+      // console.log('valDate2:', valDate);
       exceljs.duplicateRow(index);
+      exceljs.getCell(`B${index + 1}`).value = valDate; //moment(valDate);
       exceljs.getCell(`K${index + 1}`).value = { sharedFormula: `K${startRow}`, result: 'Цех не працює' };
+      exceljs.getCell(`M${index + 1}`).value = { sharedFormula: `M${startRow}`, result: '' };
+      exceljs.getCell(`N${index + 1}`).value = { sharedFormula: `N${startRow}`, result: '0' };
+      exceljs.getCell(`O${index + 1}`).value = { sharedFormula: `O${startRow}`, result: '0' };
+      exceljs.getCell(`P${index + 1}`).value = { sharedFormula: `P${startRow}`, result: '' };
+      exceljs.getCell(`Q${index + 1}`).value = { sharedFormula: `Q${startRow}`, result: '0' };
+      exceljs.getCell(`R${index + 1}`).value = { sharedFormula: `R${startRow}`, result: '0' };
+      exceljs.getCell(`S${index + 1}`).value = { sharedFormula: `S${startRow}`, result: '' };
+
+
     }
+
+    // actualRowCount
+    const metrics = exceljs.getSheetMetrics();
+    // inspector('metrics:', metrics);
+    exceljs.getCell('I5').value = { formula: `SUM(I${startRow}:I${metrics.actualRowCount})`, result: 0 }; // COUNTIF(K6:K29;"Цех не працює") 'СНВВ не працює'
+    // exceljs.getCell('K5').value = { formula: `COUNTIF(K${startRow}:K${metrics.actualRowCount}; "Цех не працює")`, result: 0 };// COUNTIF(K6; "СНВВ не працює")
+    exceljs.getCell('K5').value = { formula: 'C4+E4', result: 0 };
+    
+    console.log('getCellFormula:', exceljs.getCellFormula(exceljs.getCell('K5')));
 
     // exceljs.removeSheet('Instructions');
     // exceljs.removeSheet('Data_CNBB');
