@@ -467,7 +467,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
     await exceljs.init();
     let sheetName = exceljs.getSheet().name;
-    const cells = exceljs.getCells(sheetName, { range: 'S1:S2' });
+    let cells = exceljs.getCells(sheetName, { range: 'S1:S2' });
     loForEach(cells, function (cell) {
       cell = loOmit(cell, ['cell', 'column', 'row']);
       if (isDebug && cell) inspector(`#11: Write data to xlsx file "YearReport".cell(${cell.address}):`, cell);
@@ -480,24 +480,35 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     // row = exceljs.getLastRow();
     // if(true && row) inspector('#11: Write data to xlsx file.row:', row.values);
     
-    const beginDate = moment([2022, 0, 1, 1, 0, 0]).format('YYYY-MM-DD HH:mm');
-    exceljs.getCell(`B${startRow}`).value = beginDate;
+    // const beginDate = moment([2022, 0, 1, 1, 0, 0]).format('YYYY-MM-DD HH:mm');
+    let currentDate = moment('2022-10-30T00:00:00').format('YYYY-MM-DD HH:mm');
+    exceljs.getCell(`B${startRow}`).value = currentDate;
     
-    const startDate = moment([2022, 0, 1]);
-    const endDate = moment([2022, 0, 2]);
+    const startDate = moment('2022-10-30');
+    const endDate = moment('2022-10-31');
     let hours = endDate.diff(startDate, 'hours');
-    // console.log('hours:', hours);
+    let days = endDate.diff(startDate, 'days');
+    console.log('hours:', hours);
+    console.log('days:', days);
      
 
     for (let index = startRow; index < hours + startRow - 1; index++) {
-      let valDate = exceljs.getCell(`B${index}`).value;
+      
+      cells = exceljs.getCells(sheetName, { range: `B${index}:B${index}` });
+      loForEach(cells, function (cell) {
+        cell = loOmit(cell, ['cell', 'column', 'row']);
+        if (isDebug && cell) inspector(`#11: Write data to xlsx file "YearReport".cell(${cell.address}):`, cell);
+      });
+      
+      // let valDate = exceljs.getCell(`B${index}`).value;
       // cellDate.value = beginDate;
-      valDate = moment(valDate).format('YYYY-MM-DD HH:mm');
-      // console.log('valDate:', valDate);
-      valDate = moment(valDate).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+      // valDate = moment(valDate).format('YYYY-MM-DD HH:mm');
+      console.log('currentDate:', currentDate);
+      let nextDate = moment(currentDate).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+      currentDate = nextDate;
       // console.log('valDate2:', valDate);
       exceljs.duplicateRow(index);
-      exceljs.getCell(`B${index + 1}`).value = valDate; //moment(valDate);
+      exceljs.getCell(`B${index + 1}`).value = nextDate; //moment(valDate);
       exceljs.getCell(`K${index + 1}`).value = { sharedFormula: `K${startRow}`, result: 'Цех не працює' };
       exceljs.getCell(`M${index + 1}`).value = { sharedFormula: `M${startRow}`, result: '' };
       exceljs.getCell(`N${index + 1}`).value = { sharedFormula: `N${startRow}`, result: '0' };
@@ -512,10 +523,10 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
     // actualRowCount
     const metrics = exceljs.getSheetMetrics();
-    // inspector('metrics:', metrics);
+    inspector('metrics:', metrics);
     exceljs.getCell('I5').value = { formula: `SUM(I${startRow}:I${metrics.actualRowCount})`, result: 0 }; // COUNTIF(K6:K29;"Цех не працює") 'СНВВ не працює'
-    // exceljs.getCell('K5').value = { formula: `COUNTIF(K${startRow}:K${metrics.actualRowCount}; "Цех не працює")`, result: 0 };// COUNTIF(K6; "СНВВ не працює")
-    exceljs.getCell('K5').value = { formula: 'C4+E4', result: 0 };
+    // exceljs.getCell('K5').value = { formula: `COUNTIF(K${startRow}:K${metrics.actualRowCount}; "Цех не працює")`, result: 0 };// COUNTIF(K6; "СНВВ не працює") CLEAN(A2)
+    // exceljs.getCell('K5').value = { formula: 'COUNTIF(K6:K29; CLEAN("СНВВ не працює"))', result: 0 };
     
     console.log('getCellFormula:', exceljs.getCellFormula(exceljs.getCell('K5')));
 
