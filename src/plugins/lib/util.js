@@ -109,8 +109,8 @@ const dtToObject = function (dt = '', isUtc = true) {
  */
 const getDate = function (dt = '', isUtc = true) {
   dt = dtToObject(dt, isUtc);
-  const months = dt.months > 9? dt.months : `0${dt.months}`;
-  const date = dt.date > 9? dt.date : `0${dt.date}`;
+  const months = dt.months > 9 ? dt.months : `0${dt.months}`;
+  const date = dt.date > 9 ? dt.date : `0${dt.date}`;
   return `${dt.years}-${months}-${date}`;
 };
 
@@ -122,9 +122,9 @@ const getDate = function (dt = '', isUtc = true) {
  */
 const getTime = function (dt = '', isUtc = true) {
   dt = dtToObject(dt, isUtc);
-  const hours = dt.hours > 9? dt.hours : `0${dt.hours}`;
-  const minutes = dt.minutes > 9? dt.minutes : `0${dt.minutes}`;
-  const seconds = dt.seconds > 9? dt.seconds : `0${dt.seconds}`;
+  const hours = dt.hours > 9 ? dt.hours : `0${dt.hours}`;
+  const minutes = dt.minutes > 9 ? dt.minutes : `0${dt.minutes}`;
+  const seconds = dt.seconds > 9 ? dt.seconds : `0${dt.seconds}`;
   return `${hours}:${minutes}:${seconds}.${dt.milliseconds}`;
 };
 
@@ -137,6 +137,104 @@ const getTime = function (dt = '', isUtc = true) {
 const getDateTime = function (dt = '', isUtc = true) {
   dt = dtToObject(dt, isUtc);
   return `${dt.years}-${dt.months}-${dt.date}T${dt.hours}:${dt.minutes}:${dt.seconds}.${dt.milliseconds}`;
+};
+
+/**
+ * Shift time by one hour
+ * @method shiftTimeByOneHour
+ * @param {Number|String} dt 
+ * @param {Boolean} isUtc 
+ * @returns {String} 
+ * e.g. 2021-01-10T00:00:00.000 -> 2021-01-10T01:00:00.000 ... 2021-01-10T23:00:00.000 -> 2021-01-10T00:00:00.000
+ */
+const shiftTimeByOneHour = function (dt = '', isUtc = true) {
+  let dtString = '';
+  //---------------------------
+  if (isUtc) {
+    dtString = moment.utc(dt).format();
+  } else {
+    dtString = moment(dt).format();
+  }
+
+  dt = dtToObject(dt, isUtc);
+  const hours = dt.hours;
+  switch (hours) {
+  case 0:
+    dtString = strReplace(dtString, '00:', '01:');
+    break;
+  case 1:
+    dtString = strReplace(dtString, '01:', '02:');
+    break;
+  case 2:
+    dtString = strReplace(dtString, '02:', '03:');
+    break;
+  case 3:
+    dtString = strReplace(dtString, '03:', '04:');
+    break;
+  case 4:
+    dtString = strReplace(dtString, '04:', '05:');
+    break;
+  case 5:
+    dtString = strReplace(dtString, '05:', '06:');
+    break;
+  case 6:
+    dtString = strReplace(dtString, '06:', '07:');
+    break;
+  case 7:
+    dtString = strReplace(dtString, '07:', '08:');
+    break;
+  case 8:
+    dtString = strReplace(dtString, '08:', '09:');
+    break;
+  case 9:
+    dtString = strReplace(dtString, '09:', '10:');
+    break;
+  case 10:
+    dtString = strReplace(dtString, '10:', '11:');
+    break;
+  case 11:
+    dtString = strReplace(dtString, '11:', '12:');
+    break;
+  case 12:
+    dtString = strReplace(dtString, '12:', '13:');
+    break;
+  case 13:
+    dtString = strReplace(dtString, '13:', '14:');
+    break;
+  case 14:
+    dtString = strReplace(dtString, '14:', '15:');
+    break;
+  case 15:
+    dtString = strReplace(dtString, '15:', '16:');
+    break;
+  case 16:
+    dtString = strReplace(dtString, '16:', '17:');
+    break;
+  case 17:
+    dtString = strReplace(dtString, '17:', '18:');
+    break;
+  case 18:
+    dtString = strReplace(dtString, '18:', '19:');
+    break;
+  case 19:
+    dtString = strReplace(dtString, '19:', '20:');
+    break;
+  case 20:
+    dtString = strReplace(dtString, '20:', '21:');
+    break;
+  case 21:
+    dtString = strReplace(dtString, '21:', '22:');
+    break;
+  case 22:
+    dtString = strReplace(dtString, '22:', '23:');
+    break;
+  case 23:
+    dtString = strReplace(dtString, '23:', '00:');
+    break;
+  default:
+    break;
+  }
+  return dtString;
 };
 
 /**
@@ -228,7 +326,7 @@ const getFloat = function (value, precision = 0) {
   if (Number.isNaN(Number.parseFloat(value))) {
     return 0;
   }
-  if(precision){
+  if (precision) {
     return loRound(parseFloat(value), precision);
   }
   return parseFloat(value);
@@ -246,54 +344,54 @@ const getRegex = function (type) {
   switch (type) {
   case 'phone':
     /*
-                    (123) 456-7890
-                    +(123) 456-7890
-                    +(123)-456-7890
-                    +(123) - 456-7890
-                    +(123) - 456-78-90
-                    123-456-7890
-                    123.456.7890
-                    1234567890
-                    +31636363634
-                    +380980029669
-                    075-63546725
-                    */
+                        (123) 456-7890
+                        +(123) 456-7890
+                        +(123)-456-7890
+                        +(123) - 456-7890
+                        +(123) - 456-78-90
+                        123-456-7890
+                        123.456.7890
+                        1234567890
+                        +31636363634
+                        +380980029669
+                        075-63546725
+                        */
     return '^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\\./0-9]*$';
   case 'zip_code':
     /*
-                    12345
-                    12345-6789
-                    */
+                        12345
+                        12345-6789
+                        */
     return '^[0-9]{5}(?:-[0-9]{4})?$';
   case 'lat':
     /*
-                    +90.0
-                    45
-                    -90
-                    -90.000
-                    +90
-                    47.123123
-                    */
+                        +90.0
+                        45
+                        -90
+                        -90.000
+                        +90
+                        47.123123
+                        */
     return '^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'long':
     /*
-                    -127.554334
-                    180
-                    -180
-                    -180.0000
-                    +180
-                    179.999999
-                    */
+                        -127.554334
+                        180
+                        -180
+                        -180.0000
+                        +180
+                        179.999999
+                        */
     return '^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'lat_and_long':
     /*
-                    +90.0, -127.554334
-                    45, 180
-                    -90, -180
-                    -90.000, -180.0000
-                    +90, +180
-                    47.1231231, 179.99999999
-                    */
+                        +90.0, -127.554334
+                        45, 180
+                        -90, -180
+                        -90.000, -180.0000
+                        +90, +180
+                        47.1231231, 179.99999999
+                        */
     return '^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$';
   default:
     return '//g';
@@ -406,7 +504,7 @@ const getRandomValue = function (v = 10) {
  * @param {Array} omit
  * @returns {Boolean}
  */
-const isDeepStrictEqual = function(object1, object2, omit = []) {
+const isDeepStrictEqual = function (object1, object2, omit = []) {
   let result = true;
   //---------------------
   object1 = loOmit(object1, omit);
@@ -425,7 +523,7 @@ const isDeepStrictEqual = function(object1, object2, omit = []) {
     const areObjects = isObject(val1) && isObject(val2);
     if (
       areObjects && !isDeepStrictEqual(val1, val2, omit) ||
-      !areObjects &&  !loIsEqual(val1, val2)
+      !areObjects && !loIsEqual(val1, val2)
     ) {
       result = false;
       break;
@@ -441,21 +539,21 @@ const isDeepStrictEqual = function(object1, object2, omit = []) {
  * @param {Array} omit
  * @returns {Boolean}
  */
-const isDeepEqual = function(object1, object2, omit = []) {
+const isDeepEqual = function (object1, object2, omit = []) {
   let result = true;
   //---------------------
   object1 = loOmit(object1, omit);
   object2 = loOmit(object2, omit);
 
   const keys1 = Object.keys(object1);
-  
+
   for (const key of keys1) {
     const val1 = object1[key];
     const val2 = object2[key];
     const areObjects = isObject(val1) && isObject(val2);
     if (
       areObjects && !isDeepEqual(val1, val2, omit) ||
-      !areObjects &&  !loIsEqual(val1, val2)
+      !areObjects && !loIsEqual(val1, val2)
     ) {
       result = false;
       break;
@@ -475,6 +573,7 @@ module.exports = {
   getDate,
   getTime,
   getDateTime,
+  shiftTimeByOneHour,
   stripSlashes,
   stripSpecific,
   strReplace,
