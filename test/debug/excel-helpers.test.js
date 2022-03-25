@@ -477,11 +477,11 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     
     // Get all hours for date range
     const startDate = moment('2022-01-01');
-    const endDate = moment('2023-01-01');
+    const endDate = moment('2022-01-02');
     let hours = endDate.diff(startDate, 'hours');
     let days = endDate.diff(startDate, 'days');
-    console.log('hours:', hours);
-    console.log('days:', days);
+    if(isDebug && hours) console.log('hours:', hours);
+    if(isDebug && days) console.log('days:', days);
      
     // Add rows
     for (let index = startRow; index < hours + startRow - 1; index++) {
@@ -505,7 +505,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
     // actualRowCount
     const metrics = exceljs.getSheetMetrics();
-    inspector('metrics:', metrics);
+    if(isDebug && metrics) inspector('metrics:', metrics);
     assert.ok(true, 'Write data to xlsx file "YearReport"');
     
     // Write new data to xlsx file
