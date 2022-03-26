@@ -36,6 +36,7 @@ const isDebug = false;
 const xlsFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_M52_ACM.xls';
 const xlsxFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_M52_ACM.xlsx';
 const xlsxFile2 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTemplate.xlsx'; // acmYearTemplate Book1.xlsx
+const xlsxFile3 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTemplate2.xlsx';
 const csvFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/data-CH_M51.csv';
 
 describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
@@ -523,5 +524,84 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     const resultItems = exceljs.getCells(sheetName, { range: `A${startRow}:A${metrics.actualRowCount}` });
     const actualRows = metrics.actualRowCount - startRow + 1;
     assert.ok(actualRows  === resultItems.length, `Write data to xlsx file "YearReport": ${actualRows} = ${resultItems.length}`);
+  });
+
+  it('#12: Write data to xlsx file "YearReport2"', async () => {
+    let resultPath = '', selCell = null;
+    //-----------------------------------
+
+    // Create exceljs object
+    let exceljs = new ExceljsHelperClass({
+      excelPath: [appRoot, xlsxFile3],
+      sheetName: 'Data_CNBB',// Instructions Data_CNBB Results Test
+      bookOptions: {
+        fullCalcOnLoad: true
+      }
+    });
+
+    await exceljs.init();
+    let sheetName = exceljs.getSheet().name;
+    // Set start row number     
+    const startRow = 20;
+    // Get current date    
+    let currentDate = moment.utc([2022, 0, 1, 0, 0, 0]).format();
+    // Set start date cell
+    exceljs.getCell(`B${startRow}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM-DD');
+    exceljs.getCell(`C${startRow}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('HH:mm');
+    
+    // Get all hours for date range
+    const startDate = moment('2022-01-01');
+    const endDate = moment('2022-01-02');
+    let hours = endDate.diff(startDate, 'hours');
+    let days = endDate.diff(startDate, 'days');
+    if(true && hours) console.log('hours:', hours);
+    if(true && days) console.log('days:', days);
+     
+    // Add rows
+    for (let index = startRow; index < hours + startRow - 1; index++) {
+      // Add 1 hour and get "nextDate"
+      let nextDate = moment.utc(currentDate).add(1, 'hours').format();
+      currentDate = nextDate;
+      // Duplicate row
+      exceljs.duplicateRow(index);
+      // Set date cell
+      exceljs.getCell(`B${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM-DD');
+      exceljs.getCell(`C${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('HH:mm');
+      // Set shared formulas
+      // exceljs.getCell(`E${index + 1}`).value = { sharedFormula: `E${startRow}`, result: '' };
+      // exceljs.getCell(`G${index + 1}`).value = { sharedFormula: `G${startRow}`, result: '' };
+      // exceljs.getCell(`I${index + 1}`).value = { sharedFormula: `I${startRow}`, result: '' };
+      // exceljs.getCell(`K${index + 1}`).value = { sharedFormula: `K${startRow}`, result: '' };
+      // exceljs.getCell(`L${index + 1}`).value = { sharedFormula: `L${startRow}`, result: 'чи робить СНВВ?' };
+      
+      // exceljs.getCell(`N${index + 1}`).value = { sharedFormula: `N${startRow}`, result: '' };
+      // exceljs.getCell(`O${index + 1}`).value = { sharedFormula: `O${startRow}`, result: '' };
+      // exceljs.getCell(`P${index + 1}`).value = { sharedFormula: `P${startRow}`, result: '' };
+      // exceljs.getCell(`Q${index + 1}`).value = { sharedFormula: `Q${startRow}`, result: '' };
+      // exceljs.getCell(`R${index + 1}`).value = { sharedFormula: `R${startRow}`, result: '' };
+      // exceljs.getCell(`S${index + 1}`).value = { sharedFormula: `S${startRow}`, result: '' };
+      // exceljs.getCell(`T${index + 1}`).value = { sharedFormula: `T${startRow}`, result: '' };
+    }
+
+    // actualRowCount
+    const metrics = exceljs.getSheetMetrics();
+    if(true && metrics) inspector('metrics:', metrics);
+    assert.ok(true, 'Write data to xlsx file "YearReport2"');
+    
+    // Write new data to xlsx file
+    const fileName = getFileName('YearReport2-', 'xlsx', true);
+    resultPath = await exceljs.writeFile([appRoot, 'test/data/tmp/excel-helper', fileName]);
+
+    // Create exceljs object
+    exceljs = new ExceljsHelperClass({
+      excelPath: resultPath,
+      sheetName: 'Data_CNBB'
+    });
+
+    await exceljs.init();
+    sheetName = exceljs.getSheet().name;
+    const resultItems = exceljs.getCells(sheetName, { range: `B${startRow}:B${metrics.actualRowCount}` });
+    const actualRows = metrics.actualRowCount - startRow + 1;
+    assert.ok(actualRows  === resultItems.length, `Write data to xlsx file "YearReport2": ${actualRows} = ${resultItems.length}`);
   });
 });
