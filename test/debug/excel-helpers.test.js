@@ -36,7 +36,7 @@ const isDebug = false;
 const xlsFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_M52_ACM.xls';
 const xlsxFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_M52_ACM.xlsx';
 const xlsxFile2 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTemplate.xlsx'; // acmYearTemplate Book1.xlsx
-const xlsxFile3 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTemplate2.xlsx';
+const xlsxFile3 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/Book2.xlsx';
 const csvFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/data-CH_M51.csv';
 
 describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
@@ -568,19 +568,19 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
       exceljs.getCell(`B${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM-DD');
       exceljs.getCell(`C${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('HH:mm');
       // Set shared formulas
-      // exceljs.getCell(`E${index + 1}`).value = { sharedFormula: `E${startRow}`, result: '' };
-      // exceljs.getCell(`G${index + 1}`).value = { sharedFormula: `G${startRow}`, result: '' };
-      // exceljs.getCell(`I${index + 1}`).value = { sharedFormula: `I${startRow}`, result: '' };
-      // exceljs.getCell(`K${index + 1}`).value = { sharedFormula: `K${startRow}`, result: '' };
-      // exceljs.getCell(`L${index + 1}`).value = { sharedFormula: `L${startRow}`, result: 'чи робить СНВВ?' };
+      exceljs.getCell(`E${index + 1}`).value = { sharedFormula: `E${startRow}`, result: '' };
+      exceljs.getCell(`G${index + 1}`).value = { sharedFormula: `G${startRow}`, result: '' };
+      exceljs.getCell(`I${index + 1}`).value = { sharedFormula: `I${startRow}`, result: '' };
+      exceljs.getCell(`K${index + 1}`).value = { sharedFormula: `K${startRow}`, result: '' };
+      exceljs.getCell(`L${index + 1}`).value = { sharedFormula: `L${startRow}`, result: '' };
       
-      // exceljs.getCell(`N${index + 1}`).value = { sharedFormula: `N${startRow}`, result: '' };
-      // exceljs.getCell(`O${index + 1}`).value = { sharedFormula: `O${startRow}`, result: '' };
-      // exceljs.getCell(`P${index + 1}`).value = { sharedFormula: `P${startRow}`, result: '' };
-      // exceljs.getCell(`Q${index + 1}`).value = { sharedFormula: `Q${startRow}`, result: '' };
-      // exceljs.getCell(`R${index + 1}`).value = { sharedFormula: `R${startRow}`, result: '' };
-      // exceljs.getCell(`S${index + 1}`).value = { sharedFormula: `S${startRow}`, result: '' };
-      // exceljs.getCell(`T${index + 1}`).value = { sharedFormula: `T${startRow}`, result: '' };
+      exceljs.getCell(`N${index + 1}`).value = { sharedFormula: `N${startRow}`, result: '' };
+      exceljs.getCell(`O${index + 1}`).value = { sharedFormula: `O${startRow}`, result: '' };
+      exceljs.getCell(`P${index + 1}`).value = { sharedFormula: `P${startRow}`, result: '' };
+      exceljs.getCell(`Q${index + 1}`).value = { sharedFormula: `Q${startRow}`, result: '' };
+      exceljs.getCell(`R${index + 1}`).value = { sharedFormula: `R${startRow}`, result: '' };
+      exceljs.getCell(`S${index + 1}`).value = { sharedFormula: `S${startRow}`, result: '' };
+      exceljs.getCell(`T${index + 1}`).value = { sharedFormula: `T${startRow}`, result: '' };
     }
 
     // actualRowCount
