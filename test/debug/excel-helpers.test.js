@@ -284,13 +284,13 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     await exceljs.init();
     let sheetName = exceljs.getSheet().name;
     let items = exceljs.getRowValues(sheetName, { header: 1 });
-    if(isDebug && items) inspector('#9: Write data to xlsx file.items:', items);
+    if (isDebug && items) inspector('#9: Write data to xlsx file.items:', items);
     let items2 = exceljs.getColumnValues(sheetName, { header: 1 });
-    if(isDebug && items2) inspector('#9: Write data to xlsx file.items2:', items2);
+    if (isDebug && items2) inspector('#9: Write data to xlsx file.items2:', items2);
     let items3 = exceljs.getRowValues(sheetName, { header: 1, range: 'A11:J34' });
-    if(isDebug && items3) inspector('#9: Write data to xlsx file.items3:', items3);
+    if (isDebug && items3) inspector('#9: Write data to xlsx file.items3:', items3);
     let shiftItems3 = shiftRowRangeArray(items3, 'B2');
-    if(isDebug && shiftItems3) inspector('#9: Write data to xlsx file.shiftItems3:', shiftItems3);
+    if (isDebug && shiftItems3) inspector('#9: Write data to xlsx file.shiftItems3:', shiftItems3);
     assert.ok(items.length && items2.length && items3.length, 'Write data to xlsx file');
 
     // Create new exceljs object
@@ -355,9 +355,9 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     }
     // Add row values to 'TmpReport3'
     shiftItems3 = convertRowRangeArray(shiftItems3, newColumns);
-    if(isDebug && shiftItems3) inspector('#9: Write data to xlsx file.shiftItems3:', shiftItems3);
+    if (isDebug && shiftItems3) inspector('#9: Write data to xlsx file.shiftItems3:', shiftItems3);
     for (let rowIndex = 0; rowIndex < shiftItems3.length; rowIndex++) {
-      if(!shiftItems3[rowIndex]) continue;
+      if (!shiftItems3[rowIndex]) continue;
       let item = shiftItems3[rowIndex];
       exceljs.addRow(item, 'TmpReport3');
     }
@@ -398,41 +398,41 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     let sheetName = exceljs.getSheet().name;
     let items = exceljs.getColumnValues(sheetName, { range: 'C12:C35', header: 1 });
     let items2 = exceljs.getColumnValues(sheetName, { range: 'E12:E35', header: 1 });
-    if(isDebug && items) inspector('#10: Write data to xlsx file.items:', items);
-    if(isDebug && items2) inspector('#10: Write data to xlsx file.items2:', items2);
-    
+    if (isDebug && items) inspector('#10: Write data to xlsx file.items:', items);
+    if (isDebug && items2) inspector('#10: Write data to xlsx file.items2:', items2);
+
     assert.ok(items.length, 'Write data to xlsx file');
 
     for (let colIndex = 0; colIndex < items.length; colIndex++) {
-      if(items[colIndex] === undefined) continue;
+      if (items[colIndex] === undefined) continue;
       const item = items[colIndex];
       for (let colIndex2 = 0; colIndex2 < item.length; colIndex2++) {
-        if(item[colIndex2] === undefined) continue;
-        if(!currentValue) {
+        if (item[colIndex2] === undefined) continue;
+        if (!currentValue) {
           item[colIndex2] = loRound(loRandom(300, 2000), 3);
         } else {
           item[colIndex2] = loRound(item[colIndex2] - loRandom(300, 2000), 3);
-        } 
-        currentValue = item[colIndex2];        
+        }
+        currentValue = item[colIndex2];
       }
     }
 
     currentValue = 0;
     for (let colIndex = 0; colIndex < items2.length; colIndex++) {
-      if(items2[colIndex] === undefined) continue;
+      if (items2[colIndex] === undefined) continue;
       const item = items2[colIndex];
       for (let colIndex2 = 0; colIndex2 < item.length; colIndex2++) {
-        if(item[colIndex2] === undefined) continue;
-        if(!currentValue) {
+        if (item[colIndex2] === undefined) continue;
+        if (!currentValue) {
           item[colIndex2] = loRound(loRandom(30, 70), 3);
         } else {
           item[colIndex2] = loRound(item[colIndex2] - loRandom(30, 70), 3);
-        } 
-        currentValue = item[colIndex2];        
+        }
+        currentValue = item[colIndex2];
       }
     }
-    if(isDebug && items) inspector('#10: Write data to xlsx file.items:', items);
-    if(isDebug && items2) inspector('#10: Write data to xlsx file.items2:', items2);
+    if (isDebug && items) inspector('#10: Write data to xlsx file.items:', items);
+    if (isDebug && items2) inspector('#10: Write data to xlsx file.items2:', items2);
 
     exceljs.getColumn('C').values = items[3];
     exceljs.getColumn('E').values = items2[5];
@@ -475,15 +475,15 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     let currentDate = moment.utc([2022, 0, 1, 0, 0, 0]).format();
     // Set start date cell
     exceljs.getCell(`B${startRow}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM-DD HH:mm');
-    
+
     // Get all hours for date range
     const startDate = moment('2022-01-01');
     const endDate = moment('2022-01-02');
     let hours = endDate.diff(startDate, 'hours');
     let days = endDate.diff(startDate, 'days');
-    if(isDebug && hours) console.log('hours:', hours);
-    if(isDebug && days) console.log('days:', days);
-     
+    if (isDebug && hours) console.log('hours:', hours);
+    if (isDebug && days) console.log('days:', days);
+
     // Add rows
     for (let index = startRow; index < hours + startRow - 1; index++) {
       // Add 1 hour and get "nextDate"
@@ -506,9 +506,9 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
     // actualRowCount
     const metrics = exceljs.getSheetMetrics();
-    if(isDebug && metrics) inspector('metrics:', metrics);
+    if (isDebug && metrics) inspector('metrics:', metrics);
     assert.ok(true, 'Write data to xlsx file "YearReport"');
-    
+
     // Write new data to xlsx file
     const fileName = getFileName('YearReport-', 'xlsx', true);
     resultPath = await exceljs.writeFile([appRoot, 'test/data/tmp/excel-helper', fileName]);
@@ -523,7 +523,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     sheetName = exceljs.getSheet().name;
     const resultItems = exceljs.getCells(sheetName, { range: `A${startRow}:A${metrics.actualRowCount}` });
     const actualRows = metrics.actualRowCount - startRow + 1;
-    assert.ok(actualRows  === resultItems.length, `Write data to xlsx file "YearReport": ${actualRows} = ${resultItems.length}`);
+    assert.ok(actualRows === resultItems.length, `Write data to xlsx file "YearReport": ${actualRows} = ${resultItems.length}`);
   });
 
   it('#12: Write data to xlsx file "YearReport2"', async () => {
@@ -548,15 +548,28 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     // Set start date cell
     exceljs.getCell(`B${startRow}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM-DD');
     exceljs.getCell(`C${startRow}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('HH:mm');
-    
+
+    // Set data cell
+    exceljs.getCell(`H${startRow}`).value = 1;
+    exceljs.getCell(`J${startRow}`).value = loRandom(0, 1);
+    let isRun = !!exceljs.getCell(`J${startRow}`).value;
+    if (isRun) {
+      exceljs.getCell(`D${startRow}`).value = loRandom(300, 2000);
+      exceljs.getCell(`F${startRow}`).value = loRandom(30000, 300000);
+    } else {
+      exceljs.getCell(`D${startRow}`).value = 0;
+      exceljs.getCell(`F${startRow}`).value = 0;
+    }
+
+
     // Get all hours for date range
     const startDate = moment('2022-01-01');
-    const endDate = moment('2022-01-02');
+    const endDate = moment('2023-01-01');
     let hours = endDate.diff(startDate, 'hours');
     let days = endDate.diff(startDate, 'days');
-    if(true && hours) console.log('hours:', hours);
-    if(true && days) console.log('days:', days);
-     
+    if (true && hours) console.log('hours:', hours);
+    if (true && days) console.log('days:', days);
+
     // Add rows
     for (let index = startRow; index < hours + startRow - 1; index++) {
       // Add 1 hour and get "nextDate"
@@ -567,13 +580,14 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
       // Set date cell
       exceljs.getCell(`B${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM-DD');
       exceljs.getCell(`C${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('HH:mm');
+
       // Set shared formulas
       exceljs.getCell(`E${index + 1}`).value = { sharedFormula: `E${startRow}`, result: '' };
       exceljs.getCell(`G${index + 1}`).value = { sharedFormula: `G${startRow}`, result: '' };
       exceljs.getCell(`I${index + 1}`).value = { sharedFormula: `I${startRow}`, result: '' };
       exceljs.getCell(`K${index + 1}`).value = { sharedFormula: `K${startRow}`, result: '' };
       exceljs.getCell(`L${index + 1}`).value = { sharedFormula: `L${startRow}`, result: '' };
-      
+
       exceljs.getCell(`N${index + 1}`).value = { sharedFormula: `N${startRow}`, result: '' };
       exceljs.getCell(`O${index + 1}`).value = { sharedFormula: `O${startRow}`, result: '' };
       exceljs.getCell(`P${index + 1}`).value = { sharedFormula: `P${startRow}`, result: '' };
@@ -581,13 +595,28 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
       exceljs.getCell(`R${index + 1}`).value = { sharedFormula: `R${startRow}`, result: '' };
       exceljs.getCell(`S${index + 1}`).value = { sharedFormula: `S${startRow}`, result: '' };
       exceljs.getCell(`T${index + 1}`).value = { sharedFormula: `T${startRow}`, result: '' };
+
+      // Set data cell
+      exceljs.getCell(`H${index + 1}`).value = 1;
+      exceljs.getCell(`J${index + 1}`).value = loRandom(0, 1);
+      let isRun = !!exceljs.getCell(`J${index + 1}`).value;
+      if (isRun) {
+        exceljs.getCell(`E${index + 1}`).value = loRandom(0, 1);
+        exceljs.getCell(`G${index + 1}`).value = loRandom(0, 1);
+        exceljs.getCell(`D${index + 1}`).value = loRandom(300, 2000);
+        exceljs.getCell(`F${index + 1}`).value = loRandom(30000, 300000);
+      } else {
+        exceljs.getCell(`D${index + 1}`).value = 0;
+        exceljs.getCell(`F${index + 1}`).value = 0;
+      }
+
     }
 
     // actualRowCount
     const metrics = exceljs.getSheetMetrics();
-    if(true && metrics) inspector('metrics:', metrics);
+    if (true && metrics) inspector('metrics:', metrics);
     assert.ok(true, 'Write data to xlsx file "YearReport2"');
-    
+
     // Write new data to xlsx file
     const fileName = getFileName('YearReport2-', 'xlsx', true);
     resultPath = await exceljs.writeFile([appRoot, 'test/data/tmp/excel-helper', fileName]);
@@ -602,6 +631,6 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     sheetName = exceljs.getSheet().name;
     const resultItems = exceljs.getCells(sheetName, { range: `B${startRow}:B${metrics.actualRowCount}` });
     const actualRows = metrics.actualRowCount - startRow + 1;
-    assert.ok(actualRows  === resultItems.length, `Write data to xlsx file "YearReport2": ${actualRows} = ${resultItems.length}`);
+    assert.ok(actualRows === resultItems.length, `Write data to xlsx file "YearReport2": ${actualRows} = ${resultItems.length}`);
   });
 });
