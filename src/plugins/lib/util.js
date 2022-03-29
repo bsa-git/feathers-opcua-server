@@ -562,6 +562,15 @@ const isDeepEqual = function (object1, object2, omit = []) {
   return result;
 };
 
+/**
+ * Color argb to RGB
+ * @param {*} color 
+ * @returns 
+ */
+const argbToRGB = function (color) {
+  return '#'+ ('000000' + (color & 0xFFFFFF).toString(16)).slice(-6);
+}
+
 module.exports = {
   appRoot,
   delayTime,
@@ -589,5 +598,6 @@ module.exports = {
   cloneObject,
   getRandomValue,
   isDeepStrictEqual,
-  isDeepEqual
+  isDeepEqual,
+  argbToRGB
 };

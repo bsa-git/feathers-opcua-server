@@ -346,6 +346,113 @@ class ExceljsHelperClass {
     return this;
   }
 
+  // Set column number formats
+  // e.g. ws.getColumn('A').numFmt = '# ?/?';
+  setColumnNumberFormat(column, numFmt){
+    column.numFmt = numFmt;
+  }
+
+  // Set column font
+  // e.g. ws.getColumn('A').font = {
+  //   name: 'Comic Sans MS',
+  //   family: 4,
+  //   size: 16,
+  //   underline: true,
+  //   bold: true
+  // };
+  // for the vertical align:
+  // e.g. ws.getColumn('C').font = {
+  //   vertAlign: 'superscript'
+  // };
+  setColumnFont(column, font){
+    column.font = font;
+  }
+
+  // Set column alignment
+  // set column alignment to top-left, middle-center, bottom-right
+  // e.g.  ws.getColumn('A').alignment = { vertical: 'top', horizontal: 'left' };
+  // e.g.  ws.getColumn('A').alignment = { vertical: 'middle', horizontal: 'center' };
+  // e.g.  ws.getColumn('A').alignment = { vertical: 'bottom', horizontal: 'right' };
+  // set column to wrap-text
+  // e.g. ws.getColumn('A').alignment = { wrapText: true };
+  // set column indent to 1
+  // e.g. ws.getColumn('column').alignment = { indent: 1 };
+  // set column text rotation to 30deg upwards, 45deg downwards and vertical text
+  // e.g. ws.getColumn('A').alignment = { textRotation: 30 };
+  // e.g. ws.getColumn('A').alignment = { textRotation: -45 };
+  // e.g. ws.getColumn('A').alignment = { textRotation: 'vertical' }; 
+  setColumnAlignment(column, alignment){
+    column.alignment = alignment;
+  }
+
+  // Set column border
+  // set single thin border around A1
+  // e.g.  ws.getColumn('A').border = {
+  //   top: {style:'thin'},
+  //   left: {style:'thin'},
+  //   bottom: {style:'thin'},
+  //   right: {style:'thin'}
+  // };
+  // set double thin green border around A3
+  // e.g.  ws.getColumn('A').border = {
+  //   top: {style:'double', color: {argb:'FF00FF00'}},
+  //   left: {style:'double', color: {argb:'FF00FF00'}},
+  //   bottom: {style:'double', color: {argb:'FF00FF00'}},
+  //   right: {style:'double', color: {argb:'FF00FF00'}}
+  // };
+  // set thick red cross in A5
+  // e.g. ws.getColumn('A').border = {
+  //   diagonal: {up: true, down: true, style:'thick', color: {argb:'FFFF0000'}}
+  // };
+  setColumnBorder(column, border){
+    column.border = border;
+  }
+
+  // Set column fill
+  // fill column A with red darkVertical stripes
+  // e.g. ws.getColumn('A').fill = {
+  //   type: 'pattern',
+  //   pattern:'darkVertical',
+  //   fgColor:{argb:'FFFF0000'}
+  // };
+  // fill column B with yellow dark trellis and blue behind
+  // e.g. ws.getColumn('B').fill = {
+  //   type: 'pattern',
+  //   pattern:'darkTrellis',
+  //   fgColor:{argb:'FFFFFF00'},
+  //   bgColor:{argb:'FF0000FF'}
+  // };
+  // fill column C with solid coral
+  // ws.getColumn('C').fill = {
+  //   type: 'pattern',
+  //   pattern:'solid',
+  //   fgColor:{argb:'F08080'},
+  // };
+  // fill column D with blue-white-blue gradient from left to right
+  // e.g. ws.getColumn('D').fill = {
+  //   type: 'gradient',
+  //   gradient: 'angle',
+  //   degree: 0,
+  //   stops: [
+  //     {position:0, color:{argb:'FF0000FF'}},
+  //     {position:0.5, color:{argb:'FFFFFFFF'}},
+  //     {position:1, color:{argb:'FF0000FF'}}
+  //   ]
+  // };
+  // fill column E with red-green gradient from center
+  // e.g. ws.getColumn('E').fill = {
+  //   type: 'gradient',
+  //   gradient: 'path',
+  //   center:{left:0.5,top:0.5},
+  //   stops: [
+  //     {position:0, color:{argb:'FFFF0000'}},
+  //     {position:1, color:{argb:'FF00FF00'}}
+  //   ]
+  // };
+  setColumnFill(column, fill){
+    column.fill = fill;
+  }
+
   //================== ROWS =================//
 
   // Get multiple row objects. If it doesn't already exist, new empty ones will be returned
@@ -365,6 +472,113 @@ class ExceljsHelperClass {
   // e.g. const row = worksheet.lastRow;
   getLastRow(shIdentifier) {
     return this.getSheet(shIdentifier).lastRow;
+  }
+
+  // Set row number formats
+  // e.g. ws.getRow(1).numFmt = '# ?/?';
+  setRowNumberFormat(row, numFmt){
+    row.numFmt = numFmt;
+  }
+
+  // Set row font
+  // e.g. ws.getRow(1).font = {
+  //   name: 'Comic Sans MS',
+  //   family: 4,
+  //   size: 16,
+  //   underline: true,
+  //   bold: true
+  // };
+  // for the vertical align:
+  // e.g. ws.getRow(3).font = {
+  //   vertAlign: 'superscript'
+  // };
+  setRowFont(row, font){
+    row.font = font;
+  }
+
+  // Set row alignment
+  // set row alignment to top-left, middle-center, bottom-right
+  // e.g.  ws.getRow(1).alignment = { vertical: 'top', horizontal: 'left' };
+  // e.g.  ws.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
+  // e.g.  ws.getRow(1).alignment = { vertical: 'bottom', horizontal: 'right' };
+  // set row to wrap-text
+  // e.g. ws.getRow(1).alignment = { wrapText: true };
+  // set row indent to 1
+  // e.g. ws.getRow(1).alignment = { indent: 1 };
+  // set row text rotation to 30deg upwards, 45deg downwards and vertical text
+  // e.g. ws.getRow(1).alignment = { textRotation: 30 };
+  // e.g. ws.getRow(1).alignment = { textRotation: -45 };
+  // e.g. ws.getRow(1).alignment = { textRotation: 'vertical' }; 
+  setRowAlignment(row, alignment){
+    row.alignment = alignment;
+  }
+
+  // Set row border
+  // set single thin border around A1
+  // e.g.  ws.getRow(1).border = {
+  //   top: {style:'thin'},
+  //   left: {style:'thin'},
+  //   bottom: {style:'thin'},
+  //   right: {style:'thin'}
+  // };
+  // set double thin green border around A3
+  // e.g.  ws.getRow('A3').border = {
+  //   top: {style:'double', color: {argb:'FF00FF00'}},
+  //   left: {style:'double', color: {argb:'FF00FF00'}},
+  //   bottom: {style:'double', color: {argb:'FF00FF00'}},
+  //   right: {style:'double', color: {argb:'FF00FF00'}}
+  // };
+  // set thick red cross in A5
+  // e.g. ws.getRow('A5').border = {
+  //   diagonal: {up: true, down: true, style:'thick', color: {argb:'FFFF0000'}}
+  // };
+  setRowBorder(row, border){
+    row.border = border;
+  }
+
+  // Set row fill
+  // fill row 1 with red darkVertical stripes
+  // e.g. ws.getRow(1).fill = {
+  //   type: 'pattern',
+  //   pattern:'darkVertical',
+  //   fgColor:{argb:'FFFF0000'}
+  // };
+  // fill row 2 with yellow dark trellis and blue behind
+  // e.g. ws.getRow(2).fill = {
+  //   type: 'pattern',
+  //   pattern:'darkTrellis',
+  //   fgColor:{argb:'FFFFFF00'},
+  //   bgColor:{argb:'FF0000FF'}
+  // };
+  // fill row 3 with solid coral
+  // ws.getRow(3).fill = {
+  //   type: 'pattern',
+  //   pattern:'solid',
+  //   fgColor:{argb:'F08080'},
+  // };
+  // fill row 4 with blue-white-blue gradient from left to right
+  // e.g. ws.getRow(4).fill = {
+  //   type: 'gradient',
+  //   gradient: 'angle',
+  //   degree: 0,
+  //   stops: [
+  //     {position:0, color:{argb:'FF0000FF'}},
+  //     {position:0.5, color:{argb:'FFFFFFFF'}},
+  //     {position:1, color:{argb:'FF0000FF'}}
+  //   ]
+  // };
+  // fill row 5 with red-green gradient from center
+  // e.g. ws.getRow(5).fill = {
+  //   type: 'gradient',
+  //   gradient: 'path',
+  //   center:{left:0.5,top:0.5},
+  //   stops: [
+  //     {position:0, color:{argb:'FFFF0000'}},
+  //     {position:1, color:{argb:'FF00FF00'}}
+  //   ]
+  // };
+  setRowFill(row, fill){
+    row.fill = fill;
   }
 
   // Iterate over all rows that have values in a worksheet
@@ -531,6 +745,118 @@ class ExceljsHelperClass {
   unMergeCells(address, shIdentifier) {
     this.getSheet(shIdentifier).unMergeCells(address);
     return this;
+  }
+
+  // Set cell number formats
+  // display value as '1 3/5':
+  // e.g. ws.getCell('A1').value = 1.6;
+  // e.g. ws.getCell('A1').numFmt = '# ?/?';
+  // display value as '1.60%':
+  // e.g. ws.getCell('B1').value = 0.016;
+  // e.g. ws.getCell('B1').numFmt = '0.00%';
+  setCellNumberFormat(cell, numFmt){
+    cell.numFmt = numFmt;
+  }
+
+  // Set cell font
+  // e.g. ws.getCell('A1').font = {
+  //   name: 'Comic Sans MS',
+  //   family: 4,
+  //   size: 16,
+  //   underline: true,
+  //   bold: true
+  // };
+  // for the vertical align:
+  // e.g. ws.getCell('A3').font = {
+  //   vertAlign: 'superscript'
+  // };
+  setCellFont(cell, font){
+    cell.font = font;
+  }
+
+  // Set cell alignment
+  // set cell alignment to top-left, middle-center, bottom-right
+  // e.g.  ws.getCell('A1').alignment = { vertical: 'top', horizontal: 'left' };
+  // e.g.  ws.getCell('B1').alignment = { vertical: 'middle', horizontal: 'center' };
+  // e.g.  ws.getCell('C1').alignment = { vertical: 'bottom', horizontal: 'right' };
+  // set cell to wrap-text
+  // e.g. ws.getCell('D1').alignment = { wrapText: true };
+  // set cell indent to 1
+  // e.g. ws.getCell('E1').alignment = { indent: 1 };
+  // set cell text rotation to 30deg upwards, 45deg downwards and vertical text
+  // e.g. ws.getCell('F1').alignment = { textRotation: 30 };
+  // e.g. ws.getCell('G1').alignment = { textRotation: -45 };
+  // e.g. ws.getCell('H1').alignment = { textRotation: 'vertical' }; 
+  setCellAlignment(cell, alignment){
+    cell.alignment = alignment;
+  }
+
+  // Set cell border
+  // set single thin border around A1
+  // e.g.  ws.getCell('A1').border = {
+  //   top: {style:'thin'},
+  //   left: {style:'thin'},
+  //   bottom: {style:'thin'},
+  //   right: {style:'thin'}
+  // };
+  // set double thin green border around A3
+  // e.g.  ws.getCell('A3').border = {
+  //   top: {style:'double', color: {argb:'FF00FF00'}},
+  //   left: {style:'double', color: {argb:'FF00FF00'}},
+  //   bottom: {style:'double', color: {argb:'FF00FF00'}},
+  //   right: {style:'double', color: {argb:'FF00FF00'}}
+  // };
+  // set thick red cross in A5
+  // e.g. ws.getCell('A5').border = {
+  //   diagonal: {up: true, down: true, style:'thick', color: {argb:'FFFF0000'}}
+  // };
+  setCellBorder(cell, border){
+    cell.border = border;
+  }
+
+  // Set cell fill
+  // fill A1 with red darkVertical stripes
+  // e.g. ws.getCell('A1').fill = {
+  //   type: 'pattern',
+  //   pattern:'darkVertical',
+  //   fgColor:{argb:'FFFF0000'}
+  // };
+  // fill A2 with yellow dark trellis and blue behind
+  // e.g. ws.getCell('A2').fill = {
+  //   type: 'pattern',
+  //   pattern:'darkTrellis',
+  //   fgColor:{argb:'FFFFFF00'},
+  //   bgColor:{argb:'FF0000FF'}
+  // };
+  // fill A3 with solid coral
+  // ws.getCell('A3').fill = {
+  //   type: 'pattern',
+  //   pattern:'solid',
+  //   fgColor:{argb:'F08080'},
+  // };
+  // fill A4 with blue-white-blue gradient from left to right
+  // e.g. ws.getCell('A4').fill = {
+  //   type: 'gradient',
+  //   gradient: 'angle',
+  //   degree: 0,
+  //   stops: [
+  //     {position:0, color:{argb:'FF0000FF'}},
+  //     {position:0.5, color:{argb:'FFFFFFFF'}},
+  //     {position:1, color:{argb:'FF0000FF'}}
+  //   ]
+  // };
+  // fill A5 with red-green gradient from center
+  // e.g. ws.getCell('A5').fill = {
+  //   type: 'gradient',
+  //   gradient: 'path',
+  //   center:{left:0.5,top:0.5},
+  //   stops: [
+  //     {position:0, color:{argb:'FFFF0000'}},
+  //     {position:1, color:{argb:'FF00FF00'}}
+  //   ]
+  // };
+  setCellFill(cell, fill){
+    cell.fill = fill;
   }
 
   // Iterate over all current cells in this column
@@ -712,6 +1038,78 @@ class ExceljsHelperClass {
   // e.g. worksheet.fillFormula('A2:B3', 'A1', [1,1,1,1], 'array');
   fillArrayFormula(ref, formula, result, shIdentifier) {
     this.getSheet(shIdentifier).fillFormula(ref, formula, result, 'array');
+  }
+
+  //================= COMMENTS =================//
+
+  // Cell Comments
+  // Add old style comment to a cell:
+  // e.g.  plain text note -> worksheet.getCell('A1').note = 'Hello, ExcelJS!';
+  // colourful formatted note:
+  // e.g. ws.getCell('B1').note = {
+  //   texts: [
+  //     {'font': {'size': 12, 'color': {'theme': 0}, 'name': 'Calibri', 'family': 2, 'scheme': 'minor'}, 'text': 'This is '},
+  //   ],
+  //   margins: {
+  //     insetmode: 'custom',
+  //     inset: [0.25, 0.25, 0.35, 0.35]
+  //   },
+  //   protection: {
+  //     locked: True,
+  //     lockText: False
+  //   },
+  //   editAs: 'twoCells',
+  // };
+  /**
+   * @param {Object} cell 
+   * @param {String|Object} comment 
+   */
+  setCellComments(cell, comment) {
+    cell.note  = comment;
+  }
+
+  // Set texts properties
+  // e.g. worksheet.getCell('A1').note.texts = [
+  //  {'font': {'size': 12, 'color': {'theme': 0}, 'name': 'Calibri', 'family': 2, 'scheme': 'minor'}, 'text': 'This is '},
+  //  {'font': {'italic': true, 'size': 12, 'color': {'theme': 0}, 'name': 'Calibri', 'scheme': 'minor'}, 'text': 'a'}
+  //]
+  /**
+   * @param {Object} cell 
+   * @param {Object[]} texts 
+   */
+  setCellCommentTexts(cell, texts) {
+    cell.note.texts  = texts;
+  }
+
+  // Determine the page margin setting mode of the cell annotation, automatic or custom mode.
+  // e.g. ws.getCell('B1').note.margins = { insetmode: 'custom', inset: [0.25, 0.25, 0.35, 0.35]}
+  /**
+   * @param {Object} cell 
+   * @param {Object} margins 
+   */
+  setCellCommentMargins(cell, margins) {
+    cell.note.margins  = margins;
+  }
+
+  // Specifying the lock status of objects and object text using protection attributes
+  // e.g. ws.getCell('B1').note.protection = { locked: 'False', lockText: 'False',};
+  /**
+   * @param {Object} cell 
+   * @param {Object} protection 
+   */
+  setCellCommentProtection(cell, protection) {
+    cell.note.protection  = protection;
+  }
+
+  // The cell comments can also have the property 'editAs' which will control how the comments is anchored to the cell(s). 
+  // It can have one of the following values:
+  // e.g. ws.getCell('B1').note.editAs = 'twoCells';
+  /**
+   * @param {Object} cell 
+   * @param {Object} editAs 
+   */
+  setCellCommentEditAs(cell, editAs) {
+    cell.note.editAs  = editAs;
   }
 
   //================= TABLE =================//

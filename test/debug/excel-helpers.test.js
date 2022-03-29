@@ -36,7 +36,7 @@ const isDebug = false;
 const xlsFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_M52_ACM.xls';
 const xlsxFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_M52_ACM.xlsx';
 const xlsxFile2 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTemplate.xlsx'; // acmYearTemplate Book1.xlsx
-const xlsxFile3 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/Book2.xlsx';
+const xlsxFile3 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTemplate2.xlsx';
 const csvFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/data-CH_M51.csv';
 
 describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
@@ -561,10 +561,26 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
       exceljs.getCell(`F${startRow}`).value = 0;
     }
 
+    exceljs.addSheetConditionalFormatting({
+      ref: 'L7:L7',
+      rules: [
+        {
+          type: 'expression',
+          formulae: ['L7=""'],
+          style: { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FF00FF00' } } },
+        },
+        {
+          type: 'expression',
+          formulae: ['L7=1'],
+          style: { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFFFFF00' } } },
+        }
+      ]
+    });
+
 
     // Get all hours for date range
     const startDate = moment('2022-01-01');
-    const endDate = moment('2023-01-01');
+    const endDate = moment('2022-01-02');
     let hours = endDate.diff(startDate, 'hours');
     let days = endDate.diff(startDate, 'days');
     if (true && hours) console.log('hours:', hours);
