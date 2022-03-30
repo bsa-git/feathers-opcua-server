@@ -41,7 +41,7 @@ class ExceljsHelperClass {
     // Read excel file
     if (this.params.excelPath) {
       await this.readFile(this.params.excelPath, this.params.sheetName);
-      if(this.params.bookOptions){
+      if (this.params.bookOptions) {
         this.setBookProperties(this.params.bookOptions);
       }
     }
@@ -50,7 +50,7 @@ class ExceljsHelperClass {
     if (this.params.csvPath) {
       const csvOptions = this.params.csvOptions ? this.params.csvOptions : {};
       await this.readCsvFile(this.params.csvPath, csvOptions);
-      if(this.params.bookOptions){
+      if (this.params.bookOptions) {
         this.setBookProperties(this.params.bookOptions);
       }
     }
@@ -134,7 +134,7 @@ class ExceljsHelperClass {
   //      workbook.lastPrinted = new Date(2016, 9, 27);
   createBook(options) {
     this.workbook = exeljsCreateBook(options);
-    if(options){
+    if (options) {
       this.setBookProperties(options);
     }
   }
@@ -288,8 +288,21 @@ class ExceljsHelperClass {
   //  }
   //]
   //})
-  addSheetConditionalFormatting(options, shIdentifier) {
-    this.getSheet(shIdentifier).addConditionalFormatting(options);
+  /**
+   * @param {String|Array} ref 
+   * @param {Array} rules 
+   * @param {Number|String} shIdentifier 
+   * @returns {Object}
+   */
+  addSheetConditionalFormatting(ref, rules = [], shIdentifier) {
+    if(Array.isArray(ref)){
+      for (let index = 0; index < ref.length; index++) {
+        const refItem = ref[index];
+        this.getSheet(shIdentifier).addConditionalFormatting({ ref: refItem, rules });
+      }
+    }else{
+      this.getSheet(shIdentifier).addConditionalFormatting({ ref, rules });
+    }
     return this;
   }
 
@@ -348,7 +361,7 @@ class ExceljsHelperClass {
 
   // Set column number formats
   // e.g. ws.getColumn('A').numFmt = '# ?/?';
-  setColumnNumberFormat(column, numFmt){
+  setColumnNumberFormat(column, numFmt) {
     column.numFmt = numFmt;
   }
 
@@ -364,7 +377,7 @@ class ExceljsHelperClass {
   // e.g. ws.getColumn('C').font = {
   //   vertAlign: 'superscript'
   // };
-  setColumnFont(column, font){
+  setColumnFont(column, font) {
     column.font = font;
   }
 
@@ -381,7 +394,7 @@ class ExceljsHelperClass {
   // e.g. ws.getColumn('A').alignment = { textRotation: 30 };
   // e.g. ws.getColumn('A').alignment = { textRotation: -45 };
   // e.g. ws.getColumn('A').alignment = { textRotation: 'vertical' }; 
-  setColumnAlignment(column, alignment){
+  setColumnAlignment(column, alignment) {
     column.alignment = alignment;
   }
 
@@ -404,7 +417,7 @@ class ExceljsHelperClass {
   // e.g. ws.getColumn('A').border = {
   //   diagonal: {up: true, down: true, style:'thick', color: {argb:'FFFF0000'}}
   // };
-  setColumnBorder(column, border){
+  setColumnBorder(column, border) {
     column.border = border;
   }
 
@@ -449,7 +462,7 @@ class ExceljsHelperClass {
   //     {position:1, color:{argb:'FF00FF00'}}
   //   ]
   // };
-  setColumnFill(column, fill){
+  setColumnFill(column, fill) {
     column.fill = fill;
   }
 
@@ -476,7 +489,7 @@ class ExceljsHelperClass {
 
   // Set row number formats
   // e.g. ws.getRow(1).numFmt = '# ?/?';
-  setRowNumberFormat(row, numFmt){
+  setRowNumberFormat(row, numFmt) {
     row.numFmt = numFmt;
   }
 
@@ -492,7 +505,7 @@ class ExceljsHelperClass {
   // e.g. ws.getRow(3).font = {
   //   vertAlign: 'superscript'
   // };
-  setRowFont(row, font){
+  setRowFont(row, font) {
     row.font = font;
   }
 
@@ -509,7 +522,7 @@ class ExceljsHelperClass {
   // e.g. ws.getRow(1).alignment = { textRotation: 30 };
   // e.g. ws.getRow(1).alignment = { textRotation: -45 };
   // e.g. ws.getRow(1).alignment = { textRotation: 'vertical' }; 
-  setRowAlignment(row, alignment){
+  setRowAlignment(row, alignment) {
     row.alignment = alignment;
   }
 
@@ -532,7 +545,7 @@ class ExceljsHelperClass {
   // e.g. ws.getRow('A5').border = {
   //   diagonal: {up: true, down: true, style:'thick', color: {argb:'FFFF0000'}}
   // };
-  setRowBorder(row, border){
+  setRowBorder(row, border) {
     row.border = border;
   }
 
@@ -577,7 +590,7 @@ class ExceljsHelperClass {
   //     {position:1, color:{argb:'FF00FF00'}}
   //   ]
   // };
-  setRowFill(row, fill){
+  setRowFill(row, fill) {
     row.fill = fill;
   }
 
@@ -754,7 +767,7 @@ class ExceljsHelperClass {
   // display value as '1.60%':
   // e.g. ws.getCell('B1').value = 0.016;
   // e.g. ws.getCell('B1').numFmt = '0.00%';
-  setCellNumberFormat(cell, numFmt){
+  setCellNumberFormat(cell, numFmt) {
     cell.numFmt = numFmt;
   }
 
@@ -770,7 +783,7 @@ class ExceljsHelperClass {
   // e.g. ws.getCell('A3').font = {
   //   vertAlign: 'superscript'
   // };
-  setCellFont(cell, font){
+  setCellFont(cell, font) {
     cell.font = font;
   }
 
@@ -787,7 +800,7 @@ class ExceljsHelperClass {
   // e.g. ws.getCell('F1').alignment = { textRotation: 30 };
   // e.g. ws.getCell('G1').alignment = { textRotation: -45 };
   // e.g. ws.getCell('H1').alignment = { textRotation: 'vertical' }; 
-  setCellAlignment(cell, alignment){
+  setCellAlignment(cell, alignment) {
     cell.alignment = alignment;
   }
 
@@ -810,7 +823,7 @@ class ExceljsHelperClass {
   // e.g. ws.getCell('A5').border = {
   //   diagonal: {up: true, down: true, style:'thick', color: {argb:'FFFF0000'}}
   // };
-  setCellBorder(cell, border){
+  setCellBorder(cell, border) {
     cell.border = border;
   }
 
@@ -855,7 +868,7 @@ class ExceljsHelperClass {
   //     {position:1, color:{argb:'FF00FF00'}}
   //   ]
   // };
-  setCellFill(cell, fill){
+  setCellFill(cell, fill) {
     cell.fill = fill;
   }
 
@@ -990,7 +1003,7 @@ class ExceljsHelperClass {
   setCellMasterFormula(cell, formula, ref, result) {
     cell.value = { formula, result, ref, shareType: 'shared' };
   }
-  
+
   // A shared formula can be assigned to a cell using a new value form:
   // example: if the master cell A2 has a formula referencing A1 then if cell B2 shares A2's formula, then it will reference B1.
   // e.g. worksheet.getCell('B2').value = { sharedFormula: 'A2', result: 10 };
@@ -999,7 +1012,7 @@ class ExceljsHelperClass {
   // expect(worksheet.getCell('B2').formula).to.equal('B1');
   setCellSharedFormula(cell, sharedFormula, result) {
     cell.value = { sharedFormula, result };
-  } 
+  }
 
   // A new way of expressing shared formulae in Excel is the array formula. 
   // In this form, the master cell is the only cell that contains any information relating to a formula. 
@@ -1065,7 +1078,7 @@ class ExceljsHelperClass {
    * @param {String|Object} comment 
    */
   setCellComments(cell, comment) {
-    cell.note  = comment;
+    cell.note = comment;
   }
 
   // Set texts properties
@@ -1078,7 +1091,7 @@ class ExceljsHelperClass {
    * @param {Object[]} texts 
    */
   setCellCommentTexts(cell, texts) {
-    cell.note.texts  = texts;
+    cell.note.texts = texts;
   }
 
   // Determine the page margin setting mode of the cell annotation, automatic or custom mode.
@@ -1088,7 +1101,7 @@ class ExceljsHelperClass {
    * @param {Object} margins 
    */
   setCellCommentMargins(cell, margins) {
-    cell.note.margins  = margins;
+    cell.note.margins = margins;
   }
 
   // Specifying the lock status of objects and object text using protection attributes
@@ -1098,7 +1111,7 @@ class ExceljsHelperClass {
    * @param {Object} protection 
    */
   setCellCommentProtection(cell, protection) {
-    cell.note.protection  = protection;
+    cell.note.protection = protection;
   }
 
   // The cell comments can also have the property 'editAs' which will control how the comments is anchored to the cell(s). 
@@ -1109,7 +1122,7 @@ class ExceljsHelperClass {
    * @param {Object} editAs 
    */
   setCellCommentEditAs(cell, editAs) {
-    cell.note.editAs  = editAs;
+    cell.note.editAs = editAs;
   }
 
   //================= TABLE =================//

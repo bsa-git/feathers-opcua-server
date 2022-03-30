@@ -4,6 +4,7 @@ const arrayOperations = require('./array-operations');
 const httpOperations = require('./http-operations');
 const util = require('./util');
 const typeOf = require('./type-of');
+const colors = require('./colors');
 
 module.exports = Object.assign({},
   fileOperations,
@@ -12,4 +13,5 @@ module.exports = Object.assign({},
   httpOperations,
   util,
   typeOf,
+  colors
 );

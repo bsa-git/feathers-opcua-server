@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 const { join } = require('path');
 const moment = require('moment');
+const Color = require('color');
 const chalk = require('chalk');
 const appRoot = join(__dirname, '../../../');
-const { isObject } = require('./type-of');
+const { isString, isArray, isObject } = require('./type-of');
 
 const loRound = require('lodash/round');
 const loToPlainObject = require('lodash/toPlainObject');
@@ -563,13 +564,54 @@ const isDeepEqual = function (object1, object2, omit = []) {
 };
 
 /**
- * Color argb to RGB
- * @param {*} color 
- * @returns 
+ * Color rgb to argb
+ * @param {String|Object|Array|Arguments} color 
+ * e.g. color = [255, 255, 255]
+ * e.g. color = {r: 255, g: 255, b: 255}
+ * e.g. color = 'rgb(255, 255, 255)'
+ * e.g. color = 255, 255, 255
+ * @returns {String}
+ * e.g. FFF2DCDB
  */
-const argbToRGB = function (color) {
-  return '#'+ ('000000' + (color & 0xFFFFFF).toString(16)).slice(-6);
-}
+const  rgbToARGB = function (color) {
+  let argbColor = '';
+  //-------------------------
+  if(isArray(color)) {// color = [255, 255, 255]
+    argbColor = Color.rgb(color).hex().replace('#', 'FF'); 
+  }
+  if(isObject(color)) {// color = {r: 255, g: 255, b: 255}
+    argbColor = Color(color).hex().replace('#', 'FF'); 
+  }
+  if(isString(color)) {// color = 'rgb(255, 255, 255)'
+    argbColor = Color(color).hex().replace('#', 'FF'); 
+  }
+  if(!argbColor) {// color = 255, 255, 255
+    argbColor = Color.rgb(arguments[0], arguments[1], arguments[2]).hex().replace('#', 'FF'); 
+  }
+  return argbColor;
+};
+
+/**
+ * Color hex to argb
+ * @param {String} color 
+ * e.g. color = #9E9E9E
+ * @returns {String}
+ * e.g. FF9E9E9E
+ */
+const  hexToARGB = function (color) {
+  return color.replace('#', 'FF');
+};
+
+/**
+ * Color hex to rgba
+ * @param {String} color 
+ * e.g. color = #9E9E9E
+ * @returns {String}
+ * e.g. 9E9E9EFF
+ */
+const  hexToRGBA = function (color) {
+  return `${color.replace('#', '')}FF`;
+};
 
 module.exports = {
   appRoot,
@@ -599,5 +641,7 @@ module.exports = {
   getRandomValue,
   isDeepStrictEqual,
   isDeepEqual,
-  argbToRGB
+  rgbToARGB,
+  hexToARGB,
+  hexToRGBA
 };

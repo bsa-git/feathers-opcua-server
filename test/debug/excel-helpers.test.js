@@ -11,6 +11,8 @@ const app = require('../../src/app');
 const {
   appRoot,
   inspector,
+  rgbToARGB,
+  hexToARGB,
   startListenPort,
   stopListenPort,
   makeDirSync,
@@ -22,6 +24,8 @@ const {
   shiftTimeByOneHour
 } = require('../../src/plugins');
 
+const colors = require('../../src/plugins/lib/colors');
+
 const {
   XlsxHelperClass,
   ExceljsHelperClass,
@@ -29,6 +33,7 @@ const {
 
 const chalk = require('chalk');
 const moment = require('moment');
+const Color = require('color');
 
 const debug = require('debug')('app:excel-helpers.test');
 const isDebug = false;
@@ -38,6 +43,47 @@ const xlsxFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_
 const xlsxFile2 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTemplate.xlsx'; // acmYearTemplate Book1.xlsx
 const xlsxFile3 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTemplate2.xlsx';
 const csvFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/data-CH_M51.csv';
+
+// Colors for cells
+const argbColors = {
+  gray: rgbToARGB(166, 166, 166),
+  red: rgbToARGB(150, 54, 52),
+  rose: rgbToARGB(242, 220, 219)
+};
+
+// Rules for cells
+const rulesForCells = {
+  errorSign: [
+    {
+      type: 'cellIs',
+      operator: 'equal',
+      formulae: ['""'],
+      style: { 
+        fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: argbColors.gray } },
+        border: {
+          top: { style: 'thin', color: { argb: argbColors.red } },
+          left: { style: 'thin', color: { argb: argbColors.red } },
+          bottom: { style: 'thin', color: { argb: argbColors.red } },
+          right: { style: 'thin', color: { argb: argbColors.red } }
+        }
+      }, 
+    },
+    {
+      type: 'cellIs',
+      operator: 'greaterThan',
+      formulae: ['0'],
+      style: { 
+        fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: hexToARGB(colors.red.lighten4) } },
+        font: {
+          color: { argb: argbColors.red },
+          bold: true,
+          italic: true
+        }
+      }, 
+    }
+  ]
+};
+
 
 describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
@@ -561,23 +607,6 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
       exceljs.getCell(`F${startRow}`).value = 0;
     }
 
-    exceljs.addSheetConditionalFormatting({
-      ref: 'L7:L7',
-      rules: [
-        {
-          type: 'expression',
-          formulae: ['L7=""'],
-          style: { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FF00FF00' } } },
-        },
-        {
-          type: 'expression',
-          formulae: ['L7=1'],
-          style: { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFFFFF00' } } },
-        }
-      ]
-    });
-
-
     // Get all hours for date range
     const startDate = moment('2022-01-01');
     const endDate = moment('2022-01-02');
@@ -596,6 +625,9 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
       // Set date cell
       exceljs.getCell(`B${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM-DD');
       exceljs.getCell(`C${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('HH:mm');
+
+      // Set conditional formatting for cells
+      exceljs.addSheetConditionalFormatting([`E${index + 1}`, `G${index + 1}`, `I${index + 1}`, `K${index + 1}`], rulesForCells.errorSign);
 
       // Set shared formulas
       exceljs.getCell(`E${index + 1}`).value = { sharedFormula: `E${startRow}`, result: '' };
@@ -625,6 +657,8 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
         exceljs.getCell(`D${index + 1}`).value = 0;
         exceljs.getCell(`F${index + 1}`).value = 0;
       }
+
+      
 
     }
 
