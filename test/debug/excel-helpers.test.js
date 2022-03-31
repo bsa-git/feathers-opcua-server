@@ -44,6 +44,9 @@ const xlsxFile2 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTempl
 const xlsxFile3 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTemplate2.xlsx';
 const csvFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/data-CH_M51.csv';
 
+
+console.log('rgbToARGB:', rgbToARGB(192, 0, 0));
+
 // Colors for cells
 const argbColors = {
   gray: rgbToARGB(166, 166, 166),
@@ -59,12 +62,12 @@ const rulesForCells = {
       operator: 'equal',
       formulae: ['""'],
       style: { 
-        fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: argbColors.gray } },
+        fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: hexToARGB(colors.grey.lighten1) } },
         border: {
-          top: { style: 'thin', color: { argb: argbColors.red } },
-          left: { style: 'thin', color: { argb: argbColors.red } },
-          bottom: { style: 'thin', color: { argb: argbColors.red } },
-          right: { style: 'thin', color: { argb: argbColors.red } }
+          top: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
+          left: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
+          bottom: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
+          right: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } }
         }
       }, 
     },
@@ -73,15 +76,151 @@ const rulesForCells = {
       operator: 'greaterThan',
       formulae: ['0'],
       style: { 
-        fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: hexToARGB(colors.red.lighten4) } },
+        fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: hexToARGB(colors.red.lighten5) } },
         font: {
-          color: { argb: argbColors.red },
+          color: { argb: hexToARGB(colors.red.darken3) },
           bold: true,
           italic: true
         }
       }, 
     }
-  ]
+  ],
+  realValue: [
+    {
+      type: 'cellIs',
+      operator: 'equal',
+      formulae: ['""'],
+      style: { 
+        fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: hexToARGB(colors.grey.lighten3) } },
+        border: {
+          top: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
+          left: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
+          bottom: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
+          right: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } }
+        }
+      }, 
+    },
+  ],
+  isRun: [
+    {
+      type: 'cellIs',
+      operator: 'equal',
+      formulae: ['""'],
+      style: { 
+        fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: hexToARGB(colors.grey.lighten3) } },
+        border: {
+          top: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
+          left: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
+          bottom: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
+          right: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } }
+        }
+      }, 
+    },
+    {
+      type: 'cellIs',
+      operator: 'equal',
+      formulae: ['0'],
+      style: {
+        font: {
+          color: { argb: hexToARGB(colors.red.darken3) },
+          bold: true,
+          italic: true
+        },
+      }, 
+    },
+    {
+      type: 'cellIs',
+      operator: 'equal',
+      formulae: ['1'],
+      style: {
+        font: {
+          color: { argb: hexToARGB(colors.green.darken4) },
+          bold: true,
+          italic: true
+        },
+      }, 
+    },
+  ],
+  status: [
+    {
+      type: 'cellIs',
+      operator: 'equal',
+      formulae: ['"OK"'],
+      style: {
+        font: {
+          color: { argb: hexToARGB(colors.green.darken4) },
+          bold: true,
+          italic: true
+        },
+      }, 
+    },
+    {
+      type: 'cellIs',
+      operator: 'equal',
+      formulae: ['"чи робить СНВВ?"', '"чи роблять агрегати?"'],
+      style: { 
+        font: {
+          color: { argb: hexToARGB(colors.red.darken3) },
+          // bold: true,
+          italic: true
+        },
+      }, 
+    },
+    {
+      type: 'cellIs',
+      operator: 'equal',
+      formulae: ['"агрегати не працюють"'],
+      style: { 
+        font: {
+          color: { argb: hexToARGB(colors.indigo.darken4) },
+          // bold: true,
+          italic: true
+        },
+      }, 
+    },
+    {
+      type: 'cellIs',
+      operator: 'equal',
+      formulae: ['"СНВВ не працює"'],
+      style: { 
+        font: {
+          color: { argb: hexToARGB(colors.red.darken3) },
+          bold: true,
+          italic: true
+        },
+      }, 
+    },
+  ],
+  calcValue: [
+    {
+      type: 'cellIs',
+      operator: 'equal',
+      formulae: ['""'],
+      style: { 
+        fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: hexToARGB(colors.grey.base) } },
+        border: {
+          top: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
+          left: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
+          bottom: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
+          right: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } }
+        }
+      }, 
+    },
+    {
+      type: 'cellIs',
+      operator: 'greaterThan',
+      formulae: ['""'],
+      style: { 
+        fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: hexToARGB(colors.yellow.lighten4) } },
+        border: {
+          top: { style: 'thin', color: { argb: hexToARGB(colors.shades.black) } },
+          left: { style: 'thin', color: { argb: hexToARGB(colors.shades.black) } },
+          bottom: { style: 'thin', color: { argb: hexToARGB(colors.shades.black) } },
+          right: { style: 'thin', color: { argb: hexToARGB(colors.shades.black) } }
+        }
+      }, 
+    }
+  ],
 };
 
 
@@ -609,7 +748,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
     // Get all hours for date range
     const startDate = moment('2022-01-01');
-    const endDate = moment('2022-01-02');
+    const endDate = moment('2022-02-01');
     let hours = endDate.diff(startDate, 'hours');
     let days = endDate.diff(startDate, 'days');
     if (true && hours) console.log('hours:', hours);
@@ -627,7 +766,11 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
       exceljs.getCell(`C${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('HH:mm');
 
       // Set conditional formatting for cells
+      exceljs.addSheetConditionalFormatting([`D${index + 1}`, `F${index + 1}`, `N${index + 1}:T${index + 1}`], rulesForCells.realValue);
       exceljs.addSheetConditionalFormatting([`E${index + 1}`, `G${index + 1}`, `I${index + 1}`, `K${index + 1}`], rulesForCells.errorSign);
+      exceljs.addSheetConditionalFormatting([`H${index + 1}`, `J${index + 1}`], rulesForCells.isRun);
+      exceljs.addSheetConditionalFormatting([`L${index + 1}`], rulesForCells.status);
+      // exceljs.addSheetConditionalFormatting([`N${index + 1}:T${index + 1}`], rulesForCells.realValue);
 
       // Set shared formulas
       exceljs.getCell(`E${index + 1}`).value = { sharedFormula: `E${startRow}`, result: '' };
