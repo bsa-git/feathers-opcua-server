@@ -44,16 +44,6 @@ const xlsxFile2 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTempl
 const xlsxFile3 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTemplate2.xlsx';
 const csvFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/data-CH_M51.csv';
 
-
-console.log('rgbToARGB:', rgbToARGB(192, 0, 0));
-
-// Colors for cells
-const argbColors = {
-  gray: rgbToARGB(166, 166, 166),
-  red: rgbToARGB(150, 54, 52),
-  rose: rgbToARGB(242, 220, 219)
-};
-
 // Rules for cells
 const rulesForCells = {
   errorSign: [
@@ -61,7 +51,7 @@ const rulesForCells = {
       type: 'cellIs',
       operator: 'equal',
       formulae: ['""'],
-      style: { 
+      style: {
         fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: hexToARGB(colors.grey.lighten1) } },
         border: {
           top: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
@@ -69,20 +59,20 @@ const rulesForCells = {
           bottom: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
           right: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } }
         }
-      }, 
+      },
     },
     {
       type: 'cellIs',
       operator: 'greaterThan',
       formulae: ['0'],
-      style: { 
+      style: {
         fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: hexToARGB(colors.red.lighten5) } },
         font: {
           color: { argb: hexToARGB(colors.red.darken3) },
           bold: true,
           italic: true
         }
-      }, 
+      },
     }
   ],
   realValue: [
@@ -90,7 +80,7 @@ const rulesForCells = {
       type: 'cellIs',
       operator: 'equal',
       formulae: ['""'],
-      style: { 
+      style: {
         fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: hexToARGB(colors.grey.lighten3) } },
         border: {
           top: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
@@ -98,7 +88,7 @@ const rulesForCells = {
           bottom: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
           right: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } }
         }
-      }, 
+      },
     },
   ],
   isRun: [
@@ -106,7 +96,7 @@ const rulesForCells = {
       type: 'cellIs',
       operator: 'equal',
       formulae: ['""'],
-      style: { 
+      style: {
         fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: hexToARGB(colors.grey.lighten3) } },
         border: {
           top: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
@@ -114,7 +104,7 @@ const rulesForCells = {
           bottom: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
           right: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } }
         }
-      }, 
+      },
     },
     {
       type: 'cellIs',
@@ -126,7 +116,7 @@ const rulesForCells = {
           bold: true,
           italic: true
         },
-      }, 
+      },
     },
     {
       type: 'cellIs',
@@ -138,7 +128,7 @@ const rulesForCells = {
           bold: true,
           italic: true
         },
-      }, 
+      },
     },
   ],
   status: [
@@ -152,43 +142,43 @@ const rulesForCells = {
           bold: true,
           italic: true
         },
-      }, 
+      },
     },
     {
       type: 'cellIs',
       operator: 'equal',
       formulae: ['"чи робить СНВВ?"', '"чи роблять агрегати?"'],
-      style: { 
+      style: {
         font: {
           color: { argb: hexToARGB(colors.red.darken3) },
           // bold: true,
           italic: true
         },
-      }, 
+      },
     },
     {
       type: 'cellIs',
       operator: 'equal',
       formulae: ['"агрегати не працюють"'],
-      style: { 
+      style: {
         font: {
           color: { argb: hexToARGB(colors.indigo.darken4) },
           // bold: true,
           italic: true
         },
-      }, 
+      },
     },
     {
       type: 'cellIs',
       operator: 'equal',
       formulae: ['"СНВВ не працює"'],
-      style: { 
+      style: {
         font: {
           color: { argb: hexToARGB(colors.red.darken3) },
           bold: true,
           italic: true
         },
-      }, 
+      },
     },
   ],
   calcValue: [
@@ -196,7 +186,7 @@ const rulesForCells = {
       type: 'cellIs',
       operator: 'equal',
       formulae: ['""'],
-      style: { 
+      style: {
         fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: hexToARGB(colors.grey.base) } },
         border: {
           top: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
@@ -204,13 +194,13 @@ const rulesForCells = {
           bottom: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } },
           right: { style: 'thin', color: { argb: hexToARGB(colors.red.darken4) } }
         }
-      }, 
+      },
     },
     {
       type: 'cellIs',
       operator: 'greaterThan',
       formulae: ['""'],
-      style: { 
+      style: {
         fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: hexToARGB(colors.yellow.lighten4) } },
         border: {
           top: { style: 'thin', color: { argb: hexToARGB(colors.shades.black) } },
@@ -218,7 +208,7 @@ const rulesForCells = {
           bottom: { style: 'thin', color: { argb: hexToARGB(colors.shades.black) } },
           right: { style: 'thin', color: { argb: hexToARGB(colors.shades.black) } }
         }
-      }, 
+      },
     }
   ],
 };
@@ -731,24 +721,25 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     // Get current date    
     let currentDate = moment.utc([2022, 0, 1, 0, 0, 0]).format();
     // Set start date cell
-    exceljs.getCell(`B${startRow}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM-DD');
-    exceljs.getCell(`C${startRow}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('HH:mm');
+    exceljs.getCell(`B${startRow}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM');
+    exceljs.getCell(`C${startRow}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM-DD');
+    exceljs.getCell(`D${startRow}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('HH:mm');
 
     // Set data cell
-    exceljs.getCell(`H${startRow}`).value = 1;
-    exceljs.getCell(`J${startRow}`).value = loRandom(0, 1);
-    let isRun = !!exceljs.getCell(`J${startRow}`).value;
+    exceljs.getCell(`I${startRow}`).value = 1;
+    exceljs.getCell(`K${startRow}`).value = loRandom(0, 1);
+    let isRun = !!exceljs.getCell(`K${startRow}`).value;
     if (isRun) {
-      exceljs.getCell(`D${startRow}`).value = loRandom(300, 2000);
-      exceljs.getCell(`F${startRow}`).value = loRandom(30000, 300000);
+      exceljs.getCell(`E${startRow}`).value = loRandom(300, 2000);
+      exceljs.getCell(`G${startRow}`).value = loRandom(30000, 300000);
     } else {
-      exceljs.getCell(`D${startRow}`).value = 0;
-      exceljs.getCell(`F${startRow}`).value = 0;
+      exceljs.getCell(`E${startRow}`).value = 0;
+      exceljs.getCell(`G${startRow}`).value = 0;
     }
 
     // Get all hours for date range
     const startDate = moment('2022-01-01');
-    const endDate = moment('2022-02-01');
+    const endDate = moment('2023-01-01');
     let hours = endDate.diff(startDate, 'hours');
     let days = endDate.diff(startDate, 'days');
     if (true && hours) console.log('hours:', hours);
@@ -759,56 +750,78 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
       // Add 1 hour and get "nextDate"
       let nextDate = moment.utc(currentDate).add(1, 'hours').format();
       currentDate = nextDate;
+      
       // Duplicate row
       exceljs.duplicateRow(index);
+      
       // Set date cell
-      exceljs.getCell(`B${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM-DD');
-      exceljs.getCell(`C${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('HH:mm');
-
-      // Set conditional formatting for cells
-      exceljs.addSheetConditionalFormatting([`D${index + 1}`, `F${index + 1}`, `N${index + 1}:T${index + 1}`], rulesForCells.realValue);
-      exceljs.addSheetConditionalFormatting([`E${index + 1}`, `G${index + 1}`, `I${index + 1}`, `K${index + 1}`], rulesForCells.errorSign);
-      exceljs.addSheetConditionalFormatting([`H${index + 1}`, `J${index + 1}`], rulesForCells.isRun);
-      exceljs.addSheetConditionalFormatting([`L${index + 1}`], rulesForCells.status);
-      // exceljs.addSheetConditionalFormatting([`N${index + 1}:T${index + 1}`], rulesForCells.realValue);
+      exceljs.getCell(`B${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM');
+      exceljs.getCell(`C${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM-DD');
+      exceljs.getCell(`D${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('HH:mm');
 
       // Set shared formulas
-      exceljs.getCell(`E${index + 1}`).value = { sharedFormula: `E${startRow}`, result: '' };
-      exceljs.getCell(`G${index + 1}`).value = { sharedFormula: `G${startRow}`, result: '' };
-      exceljs.getCell(`I${index + 1}`).value = { sharedFormula: `I${startRow}`, result: '' };
-      exceljs.getCell(`K${index + 1}`).value = { sharedFormula: `K${startRow}`, result: '' };
+      exceljs.getCell(`F${index + 1}`).value = { sharedFormula: `F${startRow}`, result: '' };
+      exceljs.getCell(`H${index + 1}`).value = { sharedFormula: `H${startRow}`, result: '' };
+      exceljs.getCell(`J${index + 1}`).value = { sharedFormula: `J${startRow}`, result: '' };
       exceljs.getCell(`L${index + 1}`).value = { sharedFormula: `L${startRow}`, result: '' };
+      exceljs.getCell(`M${index + 1}`).value = { sharedFormula: `M${startRow}`, result: '' };
 
-      exceljs.getCell(`N${index + 1}`).value = { sharedFormula: `N${startRow}`, result: '' };
       exceljs.getCell(`O${index + 1}`).value = { sharedFormula: `O${startRow}`, result: '' };
       exceljs.getCell(`P${index + 1}`).value = { sharedFormula: `P${startRow}`, result: '' };
       exceljs.getCell(`Q${index + 1}`).value = { sharedFormula: `Q${startRow}`, result: '' };
       exceljs.getCell(`R${index + 1}`).value = { sharedFormula: `R${startRow}`, result: '' };
       exceljs.getCell(`S${index + 1}`).value = { sharedFormula: `S${startRow}`, result: '' };
       exceljs.getCell(`T${index + 1}`).value = { sharedFormula: `T${startRow}`, result: '' };
+      exceljs.getCell(`U${index + 1}`).value = { sharedFormula: `U${startRow}`, result: '' };
 
       // Set data cell
-      exceljs.getCell(`H${index + 1}`).value = 1;
-      exceljs.getCell(`J${index + 1}`).value = loRandom(0, 1);
-      let isRun = !!exceljs.getCell(`J${index + 1}`).value;
+      exceljs.getCell(`I${index + 1}`).value = 1;
+      exceljs.getCell(`K${index + 1}`).value = loRandom(0, 1);
+      let isRun = !!exceljs.getCell(`K${index + 1}`).value;
       if (isRun) {
-        exceljs.getCell(`E${index + 1}`).value = loRandom(0, 1);
-        exceljs.getCell(`G${index + 1}`).value = loRandom(0, 1);
-        exceljs.getCell(`D${index + 1}`).value = loRandom(300, 2000);
-        exceljs.getCell(`F${index + 1}`).value = loRandom(30000, 300000);
+        exceljs.getCell(`F${index + 1}`).value = loRandom(0, 1);
+        exceljs.getCell(`H${index + 1}`).value = loRandom(0, 1);
+        exceljs.getCell(`E${index + 1}`).value = loRandom(300, 2000);
+        exceljs.getCell(`G${index + 1}`).value = loRandom(30000, 300000);
       } else {
-        exceljs.getCell(`D${index + 1}`).value = 0;
-        exceljs.getCell(`F${index + 1}`).value = 0;
+        exceljs.getCell(`E${index + 1}`).value = 0;
+        exceljs.getCell(`G${index + 1}`).value = 0;
       }
-
-      
-
     }
 
     // actualRowCount
     const metrics = exceljs.getSheetMetrics();
     if (true && metrics) inspector('metrics:', metrics);
     assert.ok(true, 'Write data to xlsx file "YearReport2"');
+
+    // Set conditional formatting for cells
+    exceljs.addSheetConditionalFormatting([
+      `E${startRow}:E${metrics.rowCount}`, 
+      `G${startRow}:G${metrics.rowCount}`
+    ], rulesForCells.realValue);
+    exceljs.addSheetConditionalFormatting([
+      `F${startRow}:F${metrics.rowCount}`,
+      `H${startRow}:H${metrics.rowCount}`,
+      `J${startRow}:J${metrics.rowCount}`,
+      `L${startRow}:L${metrics.rowCount}`
+    ], rulesForCells.errorSign);
+    exceljs.addSheetConditionalFormatting([
+      `I${startRow}:I${metrics.rowCount}`, 
+      `K${startRow}:K${metrics.rowCount}`
+    ], rulesForCells.isRun);
+    exceljs.addSheetConditionalFormatting([
+      `M${startRow}:M${metrics.rowCount}`
+    ], rulesForCells.status);
+    exceljs.addSheetConditionalFormatting([
+      `O${startRow}:O${metrics.rowCount}`,
+      `P${startRow}:P${metrics.rowCount}`,
+      `Q${startRow}:Q${metrics.rowCount}`,
+      `R${startRow}:R${metrics.rowCount}`,
+      `S${startRow}:S${metrics.rowCount}`,
+      `T${startRow}:T${metrics.rowCount}`,
+      `U${startRow}:U${metrics.rowCount}`
+    ], rulesForCells.realValue);
+
 
     // Write new data to xlsx file
     const fileName = getFileName('YearReport2-', 'xlsx', true);
