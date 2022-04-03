@@ -14,7 +14,9 @@ const isDebug = false;
 
 /**
  * Simulate for value
- * @param {Object} params 
+ * @param {Object[]} inputArguments 
+ * @param {Object} context
+ * @param {Function} callback
  * @returns {Variant}
  */
 function sumMethod(inputArguments, context, callback) {

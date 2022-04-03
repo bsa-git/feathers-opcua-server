@@ -11,7 +11,6 @@ const app = require('../../src/app');
 const {
   appRoot,
   inspector,
-  rgbToARGB,
   hexToARGB,
   startListenPort,
   stopListenPort,
@@ -223,7 +222,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
   after(function (done) {
     stopListenPort(done);
-    // removeFilesFromDirSync([appRoot, 'test/data/tmp/excel-helper']);
+    removeFilesFromDirSync([appRoot, 'test/data/tmp/excel-helper']);
   });
 
   it('#1: Get cells from xls file "DayReport"', async () => {
@@ -702,7 +701,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
   });
 
   it('#12: Write data to xlsx file "YearReport2"', async () => {
-    let resultPath = '', selCell = null;
+    let resultPath = '';
     //-----------------------------------
 
     // Create exceljs object

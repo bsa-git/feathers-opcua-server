@@ -19,6 +19,7 @@ const {
 const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/OPCUA_ServerOptions`);
 const opcuaDefaultHistoricalDataNodeOptions = require(`${appRoot}/src/api/opcua/ServerHistoricalDataNodeOptions`);
 const opcuaDefaultGetters = require('./opcua-getters');
+const opcuaDefaultMethods = require('./opcua-methods');
 
 const loMerge = require('lodash/merge');
 const loOmit = require('lodash/omit');
@@ -393,21 +394,16 @@ class OpcuaServer {
     }
     if (isLog) inspector('constructAddressSpace.filterParams:', params);
     // Merge getters
-    if (getters) {
-      getters = Object.assign({}, opcuaDefaultGetters, getters);
-    }
     if (getters === null && opcuaConfig.paths.getters) {
       getters = require(`${appRoot}${opcuaConfig.paths.getters}`);
     }
-    if (!getters) {
-      getters = Object.assign({}, opcuaDefaultGetters);
-      // debug('constructAddressSpace.getters:', getters);
-    }
+    getters = Object.assign({}, opcuaDefaultGetters, getters ? getters : {});
+
     // Merge methods
     if (methods === null && opcuaConfig.paths.methods) {
       methods = require(`${appRoot}${opcuaConfig.paths.methods}`);
     }
-    methods = Object.assign({}, methods ? methods : {});
+    methods = Object.assign({}, opcuaDefaultMethods, methods ? methods : {});
 
     // Get addressSpace and  namespace
     const addressSpace = this.opcuaServer.engine.addressSpace;
