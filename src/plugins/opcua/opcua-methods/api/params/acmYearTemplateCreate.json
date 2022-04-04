@@ -1,6 +1,7 @@
 {
     "inputFile": "acmYearTemplate.xlsx",
     "outputFile": "acmYearReport-2022.xlsx",
+    "startYear": 2022,
     "startDate": "2022-01-01",
     "endDate": "2023-01-01",
     "startRow": 20,
@@ -11,12 +12,12 @@
               "operator": "equal",
               "formulae": ["\"\""],
               "style": {
-                "fill": { "type": "pattern", "pattern": "solid", "bgColor": { "argb": "colors.grey.lighten1" } },
+                "fill": { "type": "pattern", "pattern": "solid", "bgColor": { "argb": "grey.lighten1" } },
                 "border": {
-                  "top": { "style": "thin", "color": { "argb": "colors.red.darken4" } },
-                  "left": { "style": "thin", "color": { "argb": "colors.red.darken4" } },
-                  "bottom": { "style": "thin", "color": { "argb": "colors.red.darken4" } },
-                  "right": { "style": "thin", "color": { "argb": "colors.red.darken4" } }
+                  "top": { "style": "thin", "color": { "argb": "red.darken4" } },
+                  "left": { "style": "thin", "color": { "argb": "red.darken4" } },
+                  "bottom": { "style": "thin", "color": { "argb": "red.darken4" } },
+                  "right": { "style": "thin", "color": { "argb": "red.darken4" } }
                 }
               }
             },
@@ -25,9 +26,9 @@
               "operator": "greaterThan",
               "formulae": ["0"],
               "style": {
-                "fill": { "type": "pattern", "pattern": "solid", "bgColor": { "argb": "colors.red.lighten5" } },
+                "fill": { "type": "pattern", "pattern": "solid", "bgColor": { "argb": "red.lighten5" } },
                 "font": {
-                  "color": { "argb": "colors.red.darken3" },
+                  "color": { "argb": "red.darken3" },
                   "bold": true,
                   "italic": true
                 }
@@ -40,12 +41,12 @@
               "operator": "equal",
               "formulae": ["\"\""],
               "style": {
-                "fill": { "type": "pattern", "pattern": "solid", "bgColor": { "argb": "colors.grey.lighten3" } },
+                "fill": { "type": "pattern", "pattern": "solid", "bgColor": { "argb": "grey.lighten3" } },
                 "border": {
-                  "top": { "style": "thin", "color": { "argb": "colors.red.darken4" } },
-                  "left": { "style": "thin", "color": { "argb": "colors.red.darken4" } },
-                  "bottom": { "style": "thin", "color": { "argb": "colors.red.darken4" } },
-                  "right": { "style": "thin", "color": { "argb": "colors.red.darken4" } }
+                  "top": { "style": "thin", "color": { "argb": "red.darken4" } },
+                  "left": { "style": "thin", "color": { "argb": "red.darken4" } },
+                  "bottom": { "style": "thin", "color": { "argb": "red.darken4" } },
+                  "right": { "style": "thin", "color": { "argb": "red.darken4" } }
                 }
               }
             }
@@ -56,12 +57,12 @@
               "operator": "equal",
               "formulae": ["\"\""],
               "style": {
-                "fill": { "type": "pattern", "pattern": "solid", "bgColor": { "argb": "colors.grey.lighten3" } },
+                "fill": { "type": "pattern", "pattern": "solid", "bgColor": { "argb": "grey.lighten3" } },
                 "border": {
-                  "top": { "style": "thin", "color": { "argb": "colors.red.darken4" } },
-                  "left": { "style": "thin", "color": { "argb": "colors.red.darken4" } },
-                  "bottom": { "style": "thin", "color": { "argb": "colors.red.darken4" } },
-                  "right": { "style": "thin", "color": { "argb": "colors.red.darken4" } }
+                  "top": { "style": "thin", "color": { "argb": "red.darken4" } },
+                  "left": { "style": "thin", "color": { "argb": "red.darken4" } },
+                  "bottom": { "style": "thin", "color": { "argb": "red.darken4" } },
+                  "right": { "style": "thin", "color": { "argb": "red.darken4" } }
                 }
               }
             },
@@ -71,7 +72,7 @@
               "formulae": ["0"],
               "style": {
                 "font": {
-                  "color": { "argb": "colors.red.darken3" },
+                  "color": { "argb": "red.darken3" },
                   "bold": true,
                   "italic": true
                 }
@@ -83,7 +84,7 @@
               "formulae": ["1"],
               "style": {
                 "font": {
-                  "color": { "argb": "colors.green.darken4" },
+                  "color": { "argb": "green.darken4" },
                   "bold": true,
                   "italic": true
                 }
@@ -97,7 +98,7 @@
               "formulae": ["\"OK\""],
               "style": {
                 "font": {
-                  "color": { "argb": "colors.green.darken4" },
+                  "color": { "argb": "green.darken4" },
                   "bold": true,
                   "italic": true
                 }
@@ -109,7 +110,7 @@
               "formulae": ["\"чи робить СНВВ?\"", "\"чи роблять агрегати?\""],
               "style": {
                 "font": {
-                  "color": { "argb": "colors.red.darken3" },
+                  "color": { "argb": "red.darken3" },
                   "italic": true
                 }
               }
@@ -120,7 +121,7 @@
               "formulae": ["\"агрегати не працюють\""],
               "style": {
                 "font": {
-                  "color": { "argb": "colors.indigo.darken4" },
+                  "color": { "argb": "indigo.darken4" },
                   "italic": true
                 }
               }
@@ -131,7 +132,7 @@
               "formulae": ["\"СНВВ не працює\""],
               "style": {
                 "font": {
-                  "color": { "argb": "colors.red.darken3" },
+                  "color": { "argb": "red.darken3" },
                   "bold": true,
                   "italic": true
                 }

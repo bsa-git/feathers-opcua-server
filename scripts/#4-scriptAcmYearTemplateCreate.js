@@ -11,61 +11,60 @@ const {
 } = require('../src/plugins/lib');
 
 const {
-  writeFileSync,
-  writeJsonFileSync,
-  readFileSync,
-  doesFileExist,
-  removeFileSync
-} = require('../src/plugins/lib/file-operations');
+  methodAcmYearTemplateCreate
+} = require('../src/plugins/opcua/opcua-methods');
 
 const {
   ExceljsHelperClass,
 } = require('../src/plugins/excel-helpers');
 
-const chalk = require('chalk');
-const papa = require('papaparse');
 
-const debug = require('debug')('app:file-operations.script');
+
+const debug = require('debug')('app:#4-scriptAcmYearTemplateCreate');
 const isDebug = false;
-const isLog = false;
+
 
 // Get argv
 // e.g. argv.script='updateAddressSpaceOptions' =>  Update AddressSpaceOptions.json
 const argv = yargs(hideBin(process.argv)).argv;
-if(isDebug && argv) inspector('Yargs.argv:', argv);
+if (isDebug && argv) inspector('Yargs.argv:', argv);
 const isScript = (argv.script === '#4');
 
-const xlsxFile = '/scripts/api/excel-templates/acm-reports/acmYearTemplate.xlsx';
-const xlsxFileForWrite = '/scripts/api/excel-templates/acm-reports/acmYearTemplate_2022.xlsx';
+
+describe('<<=== ScriptOperations: (#4-scriptAcmYearTemplateCreate) ===>>', () => {
+
+  if (!isScript) return;
+
+  it('#4: ScriptOperations: create acm year template xlsx file', async () => {
+    const result = await methodAcmYearTemplateCreate([{ value: argv.params }]);
+    assert.ok(result, '#4-scriptAcmYearTemplateCreate');
+    if (result) {
+
+      const resultPath = result.resultPath;
+      const params = result.params;
+
+      if (isDebug && resultPath) debug('resultPath:', resultPath);
+      if (isDebug && params) inspector('#4-scriptAcmYearTemplateCreate.params:', params);
+
+      // Create exceljs object
+      const exceljs = new ExceljsHelperClass({
+        excelPath: resultPath,
+        sheetName: 'Data_CNBB'
+      });
+
+      await exceljs.init();
+      const sheetName = exceljs.getSheet().name;
+
+      if (true && result.hours) console.log('hours:', result.hours);
+      if (true && result.days) console.log('days:', result.days);
+      const metrics = exceljs.getSheetMetrics();
+      if (true && metrics) inspector('metrics:', metrics);
 
 
-describe('<<=== ScriptOperations: (#4-updateAcmYearTemplate) ===>>', () => {
+      const resultItems = exceljs.getCells(sheetName, { range: `B${params.startRow}:B${metrics.rowCount}` });
+      // const actualRows = metrics.actualRowCount - startRow + 1;
+      assert.ok(result.hours === resultItems.length, `Write data to xlsx file "${params.outputFile}": ${result.hours} = ${resultItems.length}`);
+    }
 
-  if(!isScript) return;
-  // Update AddressSpaceOptions.json
-  it('#4: ScriptOperations: update acm year template xlsx file', async () => {
-    // Create exceljs object
-    let exceljs = new ExceljsHelperClass({
-      excelPath: [appRoot, xlsxFile],
-      sheetName: 'Data_CNBB'
-    });
-  
-    await exceljs.init();
-    const sheetName = exceljs.getSheet().name;
-    let cells = exceljs.getCells(sheetName, { range: 'A6:A6' });
-    assert.ok(cells.length, 'Get cells from xlsx file');
-
-    // exceljs.duplicateRow(6);
-
-    // cells = exceljs.getCells(sheetName, { range: 'A7:B7' });
-  
-    loForEach(cells, function (cell) {
-      cell = loOmit(cell, ['cell', 'column', 'row']);
-      if (isDebug && cell) inspector(`#4: Update acm year template xlsx file.cell(${cell.address}):`, cell);
-    });
-
-    // Write new data to xlsx file
-    // const fileName = getFileName('DayReport1-', 'xlsx', true);
-    const resultPath = await exceljs.writeFile([appRoot, xlsxFileForWrite]);
   });
 });

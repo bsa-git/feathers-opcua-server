@@ -1,29 +1,56 @@
 /* eslint-disable no-unused-vars */
 const Path = require('path');
 const join = Path.join;
+
+const loForEach = require('lodash/forEach');
+const loAt = require('lodash/at');
+const loRandom = require('lodash/random');
+const loRound = require('lodash/round');
+
 const {
-    DataType,
-    StatusCodes,
+  DataType,
+  StatusCodes,
 } = require('node-opcua');
 
 const {
-    appRoot,
-    inspector,
-    hexToARGB,
+  appRoot,
+  inspector,
+  hexToARGB,
+  shiftTimeByOneHour
 } = require('../../lib');
 
-const colors = require('../../src/plugins/lib/colors');
+const colors = require('../../lib/colors');
 
 const {
-    ExceljsHelperClass,
-} = require('../../src/plugins/excel-helpers');
+  ExceljsHelperClass,
+} = require('../../excel-helpers');
 
 const moment = require('moment');
 
 const dataPath = '/src/plugins/opcua/opcua-methods/api/data';
 let paramsPath = '/src/plugins/opcua/opcua-methods/api/params';
 
-const isLog = false;
+const isDebug = false;
+
+// Set data cells
+const setDataCells = (index, excel) => {
+  excel.getCell(`I${index}`).value = 1;
+  excel.getCell(`K${index}`).value = loRandom(0, 1);
+  let isRun = !!excel.getCell(`K${index}`).value;
+  if (isRun) {
+    excel.getCell(`E${index}`).value = loRandom(300, 2000);
+    excel.getCell(`G${index}`).value = loRandom(30000, 300000);
+  } else {
+    excel.getCell(`E${index}`).value = 0;
+    excel.getCell(`G${index}`).value = 0;
+  }
+};
+// Set date cells
+const setDateCells = (index, date, excel) => {
+  excel.getCell(`B${index}`).value = moment.utc(shiftTimeByOneHour(date)).format('YYYY-MM');
+  excel.getCell(`C${index}`).value = moment.utc(shiftTimeByOneHour(date)).format('YYYY-MM-DD');
+  excel.getCell(`D${index}`).value = moment.utc(shiftTimeByOneHour(date)).format('HH:mm');
+};
 
 /**
  * Create acm year template
@@ -31,143 +58,160 @@ const isLog = false;
  * @param {Object} context
  * @param {Function} callback
  */
-module.exports = async (inputArguments, context, callback) => {
-    let resultPath = '';
-    //-----------------------------------
-    let paramFile = inputArguments[0].value;
-    paramsPath = [appRoot, paramsPath, paramFile]
-    paramFile = require(join(...paramsPath));
-    
-    // path = req //join(...path);
-    // Create exceljs object
-    let exceljs = new ExceljsHelperClass({
-        excelPath: [appRoot, xlsxFile3],
-        sheetName: 'Data_CNBB',// Instructions Data_CNBB Results Test
-        bookOptions: {
-            fullCalcOnLoad: true
-        }
-    });
+module.exports = async (inputArguments, context, callback = null) => {
+  let resultPath = '';
+  //-----------------------------------
+  let paramsFile = inputArguments[0].value;
+  paramsPath = [appRoot, paramsPath, paramsFile];
+  const params = require(join(...paramsPath));
+  if (isDebug && params) inspector('methodAcmYearTemplateCreate.params:', params);
 
-    await exceljs.init();
-    let sheetName = exceljs.getSheet().name;
-    // Set start row number     
-    const startRow = 20;
-    // Get current date    
-    let currentDate = moment.utc([2022, 0, 1, 0, 0, 0]).format();
-    // Set start date cell
-    exceljs.getCell(`B${startRow}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM');
-    exceljs.getCell(`C${startRow}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM-DD');
-    exceljs.getCell(`D${startRow}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('HH:mm');
+  // Update colors for params.rulesForCells
+  loForEach(params.rulesForCells, function (value, key) {
+    loForEach(value, (item) => {
+      let argb = '';
+      //----------------
+      if (item.style.fill) {
+        argb = item.style.fill.bgColor.argb;
+        argb = loAt(colors, [argb]);
+        item.style.fill.bgColor.argb = hexToARGB(argb[0]);
+      }
+      if (item.style.border) {
+        // top
+        argb = item.style.border.top.color.argb;
+        argb = loAt(colors, [argb]);
+        item.style.border.top.color.argb = hexToARGB(argb[0]);
+        // left
+        argb = item.style.border.left.color.argb;
+        argb = loAt(colors, [argb]);
+        item.style.border.left.color.argb = hexToARGB(argb[0]);
+        // bottom
+        argb = item.style.border.bottom.color.argb;
+        argb = loAt(colors, [argb]);
+        item.style.border.bottom.color.argb = hexToARGB(argb[0]);
+        // right
+        argb = item.style.border.right.color.argb;
+        argb = loAt(colors, [argb]);
+        item.style.border.right.color.argb = hexToARGB(argb[0]);
+      }
+      if (item.style.font) {
+        argb = item.style.font.color.argb;
+        argb = loAt(colors, [argb]);
+        item.style.font.color.argb = hexToARGB(argb[0]);
+      }
+    });
+  });
+  if (isDebug && params) inspector('methodAcmYearTemplateCreate.params.rulesForCells:', params.rulesForCells);
+  const rulesForCells = params.rulesForCells;
+
+  // Create exceljs object
+  let exceljs = new ExceljsHelperClass({
+    excelPath: [appRoot, dataPath, params.inputFile],
+    sheetName: 'Data_CNBB',// Instructions Data_CNBB Results Test
+    bookOptions: {
+      fullCalcOnLoad: true
+    }
+  });
+
+  await exceljs.init();
+  let sheetName = exceljs.getSheet().name;
+  // Set start row number     
+  const startRow = params.startRow;
+  // Get current date    
+  let currentDate = moment.utc([params.startYear, 0, 1, 0, 0, 0]).format();
+  // Set start date cell
+  setDateCells(startRow, currentDate, exceljs);
+
+  // Set data cell
+  setDataCells(startRow, exceljs);
+
+  // Get all hours for date range
+  const startDate = moment(params.startDate);
+  const endDate = moment(params.endDate);
+  let hours = endDate.diff(startDate, 'hours');
+  let days = endDate.diff(startDate, 'days');
+  if (isDebug && hours) console.log('hours:', hours);
+  if (isDebug && days) console.log('days:', days);
+
+  // Add rows
+  for (let index = startRow; index < hours + startRow - 1; index++) {
+    // Add 1 hour and get "nextDate"
+    let nextDate = moment.utc(currentDate).add(1, 'hours').format();
+    currentDate = nextDate;
+
+    // Duplicate row
+    exceljs.duplicateRow(index);
+
+    // Set date cell
+    setDateCells(index + 1, currentDate, exceljs);
+
+    // Set shared formulas
+    exceljs.getCell(`F${index + 1}`).value = { sharedFormula: `F${startRow}`, result: '' };
+    exceljs.getCell(`H${index + 1}`).value = { sharedFormula: `H${startRow}`, result: '' };
+    exceljs.getCell(`J${index + 1}`).value = { sharedFormula: `J${startRow}`, result: '' };
+    exceljs.getCell(`L${index + 1}`).value = { sharedFormula: `L${startRow}`, result: '' };
+    exceljs.getCell(`M${index + 1}`).value = { sharedFormula: `M${startRow}`, result: '' };
+
+    exceljs.getCell(`O${index + 1}`).value = { sharedFormula: `O${startRow}`, result: '' };
+    exceljs.getCell(`P${index + 1}`).value = { sharedFormula: `P${startRow}`, result: '' };
+    exceljs.getCell(`Q${index + 1}`).value = { sharedFormula: `Q${startRow}`, result: '' };
+    exceljs.getCell(`R${index + 1}`).value = { sharedFormula: `R${startRow}`, result: '' };
+    exceljs.getCell(`S${index + 1}`).value = { sharedFormula: `S${startRow}`, result: '' };
+    exceljs.getCell(`T${index + 1}`).value = { sharedFormula: `T${startRow}`, result: '' };
+    exceljs.getCell(`U${index + 1}`).value = { sharedFormula: `U${startRow}`, result: '' };
 
     // Set data cell
-    exceljs.getCell(`I${startRow}`).value = 1;
-    exceljs.getCell(`K${startRow}`).value = loRandom(0, 1);
-    let isRun = !!exceljs.getCell(`K${startRow}`).value;
-    if (isRun) {
-        exceljs.getCell(`E${startRow}`).value = loRandom(300, 2000);
-        exceljs.getCell(`G${startRow}`).value = loRandom(30000, 300000);
-    } else {
-        exceljs.getCell(`E${startRow}`).value = 0;
-        exceljs.getCell(`G${startRow}`).value = 0;
-    }
+    setDataCells(index + 1, exceljs);
 
-    // Get all hours for date range
-    const startDate = moment('2022-01-01');
-    const endDate = moment('2023-01-01');
-    let hours = endDate.diff(startDate, 'hours');
-    let days = endDate.diff(startDate, 'days');
-    if (true && hours) console.log('hours:', hours);
-    if (true && days) console.log('days:', days);
+  }
 
-    // Add rows
-    for (let index = startRow; index < hours + startRow - 1; index++) {
-        // Add 1 hour and get "nextDate"
-        let nextDate = moment.utc(currentDate).add(1, 'hours').format();
-        currentDate = nextDate;
+  // actualRowCount
+  const metrics = exceljs.getSheetMetrics();
+  if (isDebug && metrics) inspector('metrics:', metrics);
 
-        // Duplicate row
-        exceljs.duplicateRow(index);
-
-        // Set date cell
-        exceljs.getCell(`B${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM');
-        exceljs.getCell(`C${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('YYYY-MM-DD');
-        exceljs.getCell(`D${index + 1}`).value = moment.utc(shiftTimeByOneHour(currentDate)).format('HH:mm');
-
-        // Set shared formulas
-        exceljs.getCell(`F${index + 1}`).value = { sharedFormula: `F${startRow}`, result: '' };
-        exceljs.getCell(`H${index + 1}`).value = { sharedFormula: `H${startRow}`, result: '' };
-        exceljs.getCell(`J${index + 1}`).value = { sharedFormula: `J${startRow}`, result: '' };
-        exceljs.getCell(`L${index + 1}`).value = { sharedFormula: `L${startRow}`, result: '' };
-        exceljs.getCell(`M${index + 1}`).value = { sharedFormula: `M${startRow}`, result: '' };
-
-        exceljs.getCell(`O${index + 1}`).value = { sharedFormula: `O${startRow}`, result: '' };
-        exceljs.getCell(`P${index + 1}`).value = { sharedFormula: `P${startRow}`, result: '' };
-        exceljs.getCell(`Q${index + 1}`).value = { sharedFormula: `Q${startRow}`, result: '' };
-        exceljs.getCell(`R${index + 1}`).value = { sharedFormula: `R${startRow}`, result: '' };
-        exceljs.getCell(`S${index + 1}`).value = { sharedFormula: `S${startRow}`, result: '' };
-        exceljs.getCell(`T${index + 1}`).value = { sharedFormula: `T${startRow}`, result: '' };
-        exceljs.getCell(`U${index + 1}`).value = { sharedFormula: `U${startRow}`, result: '' };
-
-        // Set data cell
-        exceljs.getCell(`I${index + 1}`).value = 1;
-        exceljs.getCell(`K${index + 1}`).value = loRandom(0, 1);
-        let isRun = !!exceljs.getCell(`K${index + 1}`).value;
-        if (isRun) {
-            exceljs.getCell(`F${index + 1}`).value = loRandom(0, 1);
-            exceljs.getCell(`H${index + 1}`).value = loRandom(0, 1);
-            exceljs.getCell(`E${index + 1}`).value = loRandom(300, 2000);
-            exceljs.getCell(`G${index + 1}`).value = loRandom(30000, 300000);
-        } else {
-            exceljs.getCell(`E${index + 1}`).value = 0;
-            exceljs.getCell(`G${index + 1}`).value = 0;
-        }
-    }
-
-    // actualRowCount
-    const metrics = exceljs.getSheetMetrics();
-    if (true && metrics) inspector('metrics:', metrics);
-    assert.ok(true, 'Write data to xlsx file "YearReport2"');
-
-    // Set conditional formatting for cells
-    exceljs.addSheetConditionalFormatting([
-        `E${startRow}:E${metrics.rowCount}`,
-        `G${startRow}:G${metrics.rowCount}`
-    ], rulesForCells.realValue);
-    exceljs.addSheetConditionalFormatting([
-        `F${startRow}:F${metrics.rowCount}`,
-        `H${startRow}:H${metrics.rowCount}`,
-        `J${startRow}:J${metrics.rowCount}`,
-        `L${startRow}:L${metrics.rowCount}`
-    ], rulesForCells.errorSign);
-    exceljs.addSheetConditionalFormatting([
-        `I${startRow}:I${metrics.rowCount}`,
-        `K${startRow}:K${metrics.rowCount}`
-    ], rulesForCells.isRun);
-    exceljs.addSheetConditionalFormatting([
-        `M${startRow}:M${metrics.rowCount}`
-    ], rulesForCells.status);
-    exceljs.addSheetConditionalFormatting([
-        `O${startRow}:O${metrics.rowCount}`,
-        `P${startRow}:P${metrics.rowCount}`,
-        `Q${startRow}:Q${metrics.rowCount}`,
-        `R${startRow}:R${metrics.rowCount}`,
-        `S${startRow}:S${metrics.rowCount}`,
-        `T${startRow}:T${metrics.rowCount}`,
-        `U${startRow}:U${metrics.rowCount}`
-    ], rulesForCells.realValue);
+  // Set conditional formatting for cells
+  exceljs.addSheetConditionalFormatting([
+    `E${startRow}:E${metrics.rowCount}`,
+    `G${startRow}:G${metrics.rowCount}`
+  ], rulesForCells.realValue);
+  exceljs.addSheetConditionalFormatting([
+    `F${startRow}:F${metrics.rowCount}`,
+    `H${startRow}:H${metrics.rowCount}`,
+    `J${startRow}:J${metrics.rowCount}`,
+    `L${startRow}:L${metrics.rowCount}`
+  ], rulesForCells.errorSign);
+  exceljs.addSheetConditionalFormatting([
+    `I${startRow}:I${metrics.rowCount}`,
+    `K${startRow}:K${metrics.rowCount}`
+  ], rulesForCells.isRun);
+  exceljs.addSheetConditionalFormatting([
+    `M${startRow}:M${metrics.rowCount}`
+  ], rulesForCells.status);
+  exceljs.addSheetConditionalFormatting([
+    `O${startRow}:O${metrics.rowCount}`,
+    `P${startRow}:P${metrics.rowCount}`,
+    `Q${startRow}:Q${metrics.rowCount}`,
+    `R${startRow}:R${metrics.rowCount}`,
+    `S${startRow}:S${metrics.rowCount}`,
+    `T${startRow}:T${metrics.rowCount}`,
+    `U${startRow}:U${metrics.rowCount}`
+  ], rulesForCells.realValue);
 
 
-    // Write new data to xlsx file
-    const fileName = getFileName('YearReport2-', 'xlsx', true);
-    resultPath = await exceljs.writeFile([appRoot, 'test/data/tmp/excel-helper', fileName]);
+  // Write new data to xlsx file
+  resultPath = await exceljs.writeFile([appRoot, dataPath, params.outputFile]);
 
-    // CallBack
-    const callMethodResult = {
-        statusCode: StatusCodes.Good,
-        outputArguments: [{
-            dataType: DataType.String,
-            value: 'OK'
-        }]
-    };
+  // CallBack
+  const callMethodResult = {
+    statusCode: StatusCodes.Good,
+    outputArguments: [{
+      dataType: DataType.String,
+      value: 'OK'
+    }]
+  };
+  if (callback) {
     callback(null, callMethodResult);
+  } else {
+    return { resultPath, params, hours, days };
+  }
 };
