@@ -51,18 +51,21 @@ const getFileName = function (prefix = '', ex = 'json', isMsec = false) {
 /**
  * @method getPathBasename
  * @param {String|Array} path
+ * @param {String} ext
  * @returns {String} 
+ * e.g. path.basename('/foo/bar/baz/asdf/quux.html') -> 'quux.html'
+ * e.g. path.basename('/foo/bar/baz/asdf/quux.html', '.html') -> 'quux'
  */
-const getPathBasename = function (path) {
+const getPathBasename = function (path, ext) {
   let basename = '';
   const platform = os.platform();
   if (Array.isArray(path)) {
     path = join(...path);
   }
   if (platform === 'win32') {
-    basename = Path.win32.basename(path);
+    basename = Path.win32.basename(path, ext);
   } else {
-    basename = Path.posix.basename(path);
+    basename = Path.posix.basename(path, ext);
   }
   return basename;
 };
@@ -71,6 +74,7 @@ const getPathBasename = function (path) {
  * @method getPathExtname
  * @param {String|Array} path
  * @returns {String} 
+ * e.g. path.extname('index.html') -> '.html'
  */
 const getPathExtname = function (path) {
   if (Array.isArray(path)) {

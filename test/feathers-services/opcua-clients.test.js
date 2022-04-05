@@ -337,7 +337,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
     readResult.forEach((item, index) => {
       formatValue = formatDataValue(id, readResult[0], 'Device2.ArrayValue', 'ru');
-      if(isLog) inspector('20# OPC-UA clients: session read.formatValue:', formatValue);
+      if (isLog) inspector('20# OPC-UA clients: session read.formatValue:', formatValue);
       if (item.statusCode.name === 'Good') {
         value = item.value.value;
         value = item.value.dataType === DataType.QualifiedName ? value.name : value;
@@ -717,10 +717,12 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
       }
     ]];
     callResults = await service.sessionCallMethod(id, 'Device1.SumMethod', inputArguments);
-    console.log(chalk.green('Device1.SumMethod.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
-    console.log(chalk.green('Device1.SumMethod.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));
-
-    assert.ok(callResults, 'OPC-UA clientS: session call method');
+    inspector('session call method.callResults:', callResults);
+    if (callResults.length) {
+      console.log(chalk.green('Device1.SumMethod.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
+      console.log(chalk.green('Device1.SumMethod.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));
+    }
+    assert.ok(callResults.length, 'OPC-UA clientS: session call method');
   });
 
   it('32# OPC-UA clients: session get method argument definition', async () => {

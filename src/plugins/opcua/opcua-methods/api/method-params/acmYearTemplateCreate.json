@@ -1,0 +1,270 @@
+{
+  "pointID": "ТВим01",
+  "emissionPointID": "ТВ16",
+  "pointDescription": "Цех М-5, відділення 1, агрегати 2/1÷3/1",
+  "qal2СoncentrationMultiplier": 0.9352,
+  "qal2VolumeMultiplier": 1.1951,
+  "qal2СoncentrationAdition": 0,
+  "qal2VolumeAdition": 0,
+  "inputFile": "acmYearTemplate.xlsx",
+  "outputFile": "acmM51_YearReport1.xlsx",
+  "startYear": 2022,
+  "startDate": "2022-01-01",
+  "endDate": "2023-01-01",
+  "startRow": 20,
+  "isSetData": false,
+  "rulesForCells": {
+    "errorSign": [
+      {
+        "type": "cellIs",
+        "operator": "equal",
+        "formulae": [
+          "\"\""
+        ],
+        "style": {
+          "fill": {
+            "type": "pattern",
+            "pattern": "solid",
+            "bgColor": {
+              "argb": "grey.lighten1"
+            }
+          },
+          "border": {
+            "top": {
+              "style": "thin",
+              "color": {
+                "argb": "red.darken4"
+              }
+            },
+            "left": {
+              "style": "thin",
+              "color": {
+                "argb": "red.darken4"
+              }
+            },
+            "bottom": {
+              "style": "thin",
+              "color": {
+                "argb": "red.darken4"
+              }
+            },
+            "right": {
+              "style": "thin",
+              "color": {
+                "argb": "red.darken4"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "cellIs",
+        "operator": "greaterThan",
+        "formulae": [
+          "0"
+        ],
+        "style": {
+          "fill": {
+            "type": "pattern",
+            "pattern": "solid",
+            "bgColor": {
+              "argb": "red.lighten5"
+            }
+          },
+          "font": {
+            "color": {
+              "argb": "red.darken3"
+            },
+            "bold": true,
+            "italic": true
+          }
+        }
+      }
+    ],
+    "realValue": [
+      {
+        "type": "cellIs",
+        "operator": "equal",
+        "formulae": [
+          "\"\""
+        ],
+        "style": {
+          "fill": {
+            "type": "pattern",
+            "pattern": "solid",
+            "bgColor": {
+              "argb": "grey.lighten3"
+            }
+          },
+          "border": {
+            "top": {
+              "style": "thin",
+              "color": {
+                "argb": "red.darken4"
+              }
+            },
+            "left": {
+              "style": "thin",
+              "color": {
+                "argb": "red.darken4"
+              }
+            },
+            "bottom": {
+              "style": "thin",
+              "color": {
+                "argb": "red.darken4"
+              }
+            },
+            "right": {
+              "style": "thin",
+              "color": {
+                "argb": "red.darken4"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "isRun": [
+      {
+        "type": "cellIs",
+        "operator": "equal",
+        "formulae": [
+          "\"\""
+        ],
+        "style": {
+          "fill": {
+            "type": "pattern",
+            "pattern": "solid",
+            "bgColor": {
+              "argb": "grey.lighten3"
+            }
+          },
+          "border": {
+            "top": {
+              "style": "thin",
+              "color": {
+                "argb": "red.darken4"
+              }
+            },
+            "left": {
+              "style": "thin",
+              "color": {
+                "argb": "red.darken4"
+              }
+            },
+            "bottom": {
+              "style": "thin",
+              "color": {
+                "argb": "red.darken4"
+              }
+            },
+            "right": {
+              "style": "thin",
+              "color": {
+                "argb": "red.darken4"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "cellIs",
+        "operator": "equal",
+        "formulae": [
+          "0"
+        ],
+        "style": {
+          "font": {
+            "color": {
+              "argb": "red.darken3"
+            },
+            "bold": true,
+            "italic": true
+          }
+        }
+      },
+      {
+        "type": "cellIs",
+        "operator": "equal",
+        "formulae": [
+          "1"
+        ],
+        "style": {
+          "font": {
+            "color": {
+              "argb": "green.darken4"
+            },
+            "bold": true,
+            "italic": true
+          }
+        }
+      }
+    ],
+    "status": [
+      {
+        "type": "cellIs",
+        "operator": "equal",
+        "formulae": [
+          "\"OK\""
+        ],
+        "style": {
+          "font": {
+            "color": {
+              "argb": "green.darken4"
+            },
+            "bold": true,
+            "italic": true
+          }
+        }
+      },
+      {
+        "type": "cellIs",
+        "operator": "equal",
+        "formulae": [
+          "\"чи робить СНВВ?\"",
+          "\"чи роблять агрегати?\""
+        ],
+        "style": {
+          "font": {
+            "color": {
+              "argb": "red.darken3"
+            },
+            "italic": true
+          }
+        }
+      },
+      {
+        "type": "cellIs",
+        "operator": "equal",
+        "formulae": [
+          "\"агрегати не працюють\""
+        ],
+        "style": {
+          "font": {
+            "color": {
+              "argb": "indigo.darken4"
+            },
+            "italic": true
+          }
+        }
+      },
+      {
+        "type": "cellIs",
+        "operator": "equal",
+        "formulae": [
+          "\"СНВВ не працює\""
+        ],
+        "style": {
+          "font": {
+            "color": {
+              "argb": "red.darken3"
+            },
+            "bold": true,
+            "italic": true
+          }
+        }
+      }
+    ]
+  }
+}

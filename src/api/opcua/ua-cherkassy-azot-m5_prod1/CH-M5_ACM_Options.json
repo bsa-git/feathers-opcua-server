@@ -1,0 +1,42 @@
+{
+  "objects": [
+    {
+      "browseName": "CH_M5_ACM",
+      "displayName": "Черкассы 'АЗОТ' цех M5 ACM",
+      "type": "object"
+    }
+  ],
+  "methods": [
+    {
+      "browseName": "CH_M5_ACM:YearTemplateCreate",
+      "aliasName": "YearTemplateCreate",
+      "displayName": "Create an annual report template",
+      "ownerName": "CH_M5_ACM",
+      "type": "method",
+      "bindMethod": "methodAcmYearTemplateCreate",
+      "inputArguments": [
+        {
+          "name": "parameterFileName",
+          "description": {
+            "text": "Parameter file name"
+          },
+          "dataType": "String"
+        }
+      ],
+      "outputArguments": [
+        {
+          "name": "methodExecutionResult",
+          "description": {
+            "text": "Method execution result"
+          },
+          "dataType": "String",
+          "valueRank": 1
+        }
+      ],
+      "userAccessLevel": {
+        "inputArguments": "CurrentRead",
+        "outputArguments": "CurrentRead"
+      }
+    }
+  ]
+}

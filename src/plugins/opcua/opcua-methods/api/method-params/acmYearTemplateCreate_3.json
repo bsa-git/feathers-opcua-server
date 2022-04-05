@@ -1,0 +1,11 @@
+{
+  "baseParams": "acmYearTemplateCreate.json",
+  "pointID": "ТВим03",
+  "emissionPointID": "ТВ18",
+  "pointDescription": "Цех М-5, відділення 2, агрегати 5/2÷7/2",
+  "qal2СoncentrationMultiplier": 0.9352,
+  "qal2VolumeMultiplier": 1.1951,
+  "qal2СoncentrationAdition": 0,
+  "qal2VolumeAdition": 0,
+  "outputFile": "acmM52_YearReport2.xlsx"
+}

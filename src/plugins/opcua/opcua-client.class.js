@@ -110,7 +110,7 @@ class OpcuaClient {
     params = params ? loMerge(this.params, params) : this.params;
     this.opcuaClient = OPCUAClient.create(params);
     // Retrying connection
-    const endpointUrl = (this.srvCurrentState && this.srvCurrentState.endpointUrl)? this.srvCurrentState.endpointUrl : '';
+    const endpointUrl = (this.srvCurrentState && this.srvCurrentState.endpointUrl) ? this.srvCurrentState.endpointUrl : '';
     this.opcuaClient.on('backoff', (retry) => console.log(chalk.yellow('Retrying to connect to:'), endpointUrl, ' attempt: ', retry));
     this.currentState.applicationUri = this.opcuaClient._applicationUri;
     this.currentState.isCreated = true;
@@ -130,7 +130,7 @@ class OpcuaClient {
   async opcuaClientConnect(params = {}) {
     this.opcuaClientNotCreated();
     await this.opcuaClient.connect(params.endpointUrl);
-    if(!this.srvCurrentState){
+    if (!this.srvCurrentState) {
       this.srvCurrentState = params;
     }
     this.currentState.isConnect = true;
@@ -890,14 +890,18 @@ class OpcuaClient {
     // Get nodeIds
     this.getNodeIds(nameNodeIds).forEach((itemNodeId, index) => {
       if (isString(itemNodeId)) {
-        const ownerName = this.getItemNodeId(itemNodeId).ownerName;
-        const ownerNodeId = this.getItemNodeId(ownerName).nodeId;
-        itemNodeIds.push({ objectId: ownerNodeId, methodId: itemNodeId, inputArguments: inputArguments[index] });
+        if (this.getItemNodeId(itemNodeId)) {
+          const ownerName = this.getItemNodeId(itemNodeId).ownerName;
+          const ownerNodeId = this.getItemNodeId(ownerName).nodeId;
+          itemNodeIds.push({ objectId: ownerNodeId, methodId: itemNodeId, inputArguments: inputArguments[index] });
+        }
       } else {
         if (itemNodeId.methodId && !itemNodeId.objectId && !itemNodeId.inputArguments) {
-          const ownerName = this.getItemNodeId(itemNodeId.methodId).ownerName;
-          const ownerNodeId = this.getItemNodeId(ownerName).nodeId;
-          itemNodeIds.push(Object.assign(itemNodeId, { objectId: ownerNodeId, inputArguments: inputArguments[index] }));
+          if (this.getItemNodeId(itemNodeId)) {
+            const ownerName = this.getItemNodeId(itemNodeId.methodId).ownerName;
+            const ownerNodeId = this.getItemNodeId(ownerName).nodeId;
+            itemNodeIds.push(Object.assign(itemNodeId, { objectId: ownerNodeId, inputArguments: inputArguments[index] }));
+          }
         }
         if (itemNodeId.methodId && itemNodeId.objectId && !itemNodeId.inputArguments) {
           itemNodeIds.push(Object.assign(itemNodeId, { inputArguments: inputArguments[index] }));

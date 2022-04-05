@@ -15,6 +15,8 @@ const {
 const {
   appRoot,
   inspector,
+  getPathExtname,
+  getPathBasename,
   hexToARGB,
   shiftTimeByOneHour
 } = require('../../lib');
@@ -27,8 +29,8 @@ const {
 
 const moment = require('moment');
 
-const dataPath = '/src/plugins/opcua/opcua-methods/api/data';
-let paramsPath = '/src/plugins/opcua/opcua-methods/api/params';
+const dataPath = '/src/plugins/opcua/opcua-methods/api/method-data';
+let paramsPath = '/src/plugins/opcua/opcua-methods/api/method-params';
 
 const isDebug = false;
 
@@ -51,6 +53,13 @@ const setDateCells = (index, date, excel) => {
   excel.getCell(`C${index}`).value = moment.utc(shiftTimeByOneHour(date)).format('YYYY-MM-DD');
   excel.getCell(`D${index}`).value = moment.utc(shiftTimeByOneHour(date)).format('HH:mm');
 };
+// Set data cells
+const setErrDataCells = (index, excel) => {
+  excel.getCell(`F${index}`).value = 0;
+  excel.getCell(`H${index}`).value = 0;
+  excel.getCell(`J${index}`).value = 0;
+  excel.getCell(`L${index}`).value = 0;
+};
 
 /**
  * Create acm year template
@@ -62,8 +71,15 @@ module.exports = async (inputArguments, context, callback = null) => {
   let resultPath = '';
   //-----------------------------------
   let paramsFile = inputArguments[0].value;
-  paramsPath = [appRoot, paramsPath, paramsFile];
-  const params = require(join(...paramsPath));
+  let paramFullsPath = [appRoot, paramsPath, paramsFile];
+  let params = require(join(...paramFullsPath));
+  if(params.baseParams){
+    paramFullsPath = [appRoot, paramsPath, params.baseParams];
+    const baseParams = require(join(...paramFullsPath));
+    params = Object.assign({}, baseParams, params);
+  }
+  
+  
   if (isDebug && params) inspector('methodAcmYearTemplateCreate.params:', params);
 
   // Update colors for params.rulesForCells
@@ -120,10 +136,20 @@ module.exports = async (inputArguments, context, callback = null) => {
   // Get current date    
   let currentDate = moment.utc([params.startYear, 0, 1, 0, 0, 0]).format();
   // Set start date cell
+  console.log('currentDate:', currentDate);
   setDateCells(startRow, currentDate, exceljs);
 
+  // Set param data
+  exceljs.getCell('H1').value = params.pointID;
+  exceljs.getCell('H2').value = params.emissionPointID;
+  exceljs.getCell('H3').value = params.pointDescription;
+  exceljs.getCell('R2').value = params.qal2СoncentrationMultiplier;
+  exceljs.getCell('T2').value = params.qal2VolumeMultiplier;
+  exceljs.getCell('R3').value = params.qal2СoncentrationAdition;
+  exceljs.getCell('T3').value = params.qal2VolumeAdition;
+
   // Set data cell
-  setDataCells(startRow, exceljs);
+  if(params.isSetData) setDataCells(startRow, exceljs);
 
   // Get all hours for date range
   const startDate = moment(params.startDate);
@@ -160,8 +186,12 @@ module.exports = async (inputArguments, context, callback = null) => {
     exceljs.getCell(`T${index + 1}`).value = { sharedFormula: `T${startRow}`, result: '' };
     exceljs.getCell(`U${index + 1}`).value = { sharedFormula: `U${startRow}`, result: '' };
 
-    // Set data cell
-    setDataCells(index + 1, exceljs);
+    // Set data cell 
+    if(params.isSetData) {
+      setDataCells(index + 1, exceljs);
+    } else {
+      setErrDataCells(index + 1, exceljs);
+    }
 
   }
 
@@ -199,14 +229,17 @@ module.exports = async (inputArguments, context, callback = null) => {
 
 
   // Write new data to xlsx file
-  resultPath = await exceljs.writeFile([appRoot, dataPath, params.outputFile]);
+  const ext = getPathExtname(params.outputFile);
+  const basename = getPathBasename(params.outputFile, ext);
+  const outputFile = `${basename}-${params.startYear}${ext}`;
+  resultPath = await exceljs.writeFile([appRoot, dataPath, outputFile]);
 
   // CallBack
   const callMethodResult = {
     statusCode: StatusCodes.Good,
     outputArguments: [{
-      dataType: DataType.String,
-      value: 'OK'
+      dataType: DataType.UInt32,
+      value: 1
     }]
   };
   if (callback) {
