@@ -404,6 +404,7 @@ class OpcuaServer {
       methods = require(`${appRoot}${opcuaConfig.paths.methods}`);
     }
     methods = Object.assign({}, opcuaDefaultMethods, methods ? methods : {});
+    if (isLog) inspector('constructAddressSpace.methods:', methods);
 
     // Get addressSpace and  namespace
     const addressSpace = this.opcuaServer.engine.addressSpace;

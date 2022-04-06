@@ -250,23 +250,36 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   it('#8. OPC-UA clients: session call method "methodAcmYearTemplateCreate"', async () => {
     let callResults = [];
+    //------------------------------------------------
     const service = await getClientService(app, id);
-    // service.sessionCallMethod
+    // Set input argument
+    const inputArgument = {
+      baseParams: 'acmYearTemplateCreate.json',
+      isTest: true,
+      pointID: 'ТВим02',
+      emissionPointID: 'ТВ17',
+      pointDescription: 'Цех М-5, відділення 2, агрегати 1/2÷4/2',
+      qal2СoncentrationMultiplier: 0.9352,
+      qal2VolumeMultiplier: 1.1951,
+      qal2СoncentrationAdition: 0,
+      qal2VolumeAdition: 0,
+      outputFile: 'acmM52_YearReport1.xlsx'
+    };
     const inputArguments = [[
       {
         dataType: DataType.String,
-        value: 'acmYearTemplateCreate_3.json',
+        value: JSON.stringify(inputArgument),
       }
     ]];
     callResults = await service.sessionCallMethod(id, 'CH_M5_ACM:YearTemplateCreate', inputArguments);
     if (callResults.length) {
-      inspector('methodAcmYearTemplateCreate.callResults:', callResults);
+      if(isDebug) inspector('methodAcmYearTemplateCreate.callResults:', callResults);
       console.log(chalk.green('CH_M5_ACM:YearTemplateCreate.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
       // console.log(chalk.green('CH_M5_ACM:YearTemplateCreate.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));
     }
     assert.ok(callResults.length, 'OPC-UA clients: session call method "methodAcmYearTemplateCreate"');
   });
-
+  
   //============== START SUBSCRIPTION ====================//
 
   it('#9. OPC-UA clients: subscription create', async () => {

@@ -717,7 +717,7 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
       }
     ]];
     callResults = await service.sessionCallMethod(id, 'Device1.SumMethod', inputArguments);
-    inspector('session call method.callResults:', callResults);
+    if(isLog) inspector('session call method.callResults:', callResults);
     if (callResults.length) {
       console.log(chalk.green('Device1.SumMethod.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
       console.log(chalk.green('Device1.SumMethod.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));

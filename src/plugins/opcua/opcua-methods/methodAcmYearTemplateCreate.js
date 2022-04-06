@@ -29,7 +29,8 @@ const {
 
 const moment = require('moment');
 
-const dataPath = '/src/plugins/opcua/opcua-methods/api/method-data';
+const dataTestPath = '/src/api/opcua/ua-cherkassy-azot_test2/test-data';
+let dataPath = '/src/plugins/opcua/opcua-methods/api/method-data';
 let paramsPath = '/src/plugins/opcua/opcua-methods/api/method-params';
 
 const isDebug = false;
@@ -67,19 +68,24 @@ const setErrDataCells = (index, excel) => {
  * @param {Object} context
  * @param {Function} callback
  */
-module.exports = async (inputArguments, context, callback = null) => {
-  let resultPath = '';
+module.exports = async (inputArguments, context, callback) => {
+  let resultPath = '', params = null, paramFullsPath;
   //-----------------------------------
-  let paramsFile = inputArguments[0].value;
-  let paramFullsPath = [appRoot, paramsPath, paramsFile];
-  let params = require(join(...paramFullsPath));
-  if(params.baseParams){
+  if (callback) {
+    params = JSON.parse(inputArguments[0].value);
+  } else {
+    let paramsFile = inputArguments[0].value;
+    paramFullsPath = [appRoot, paramsPath, paramsFile];
+    params = require(join(...paramFullsPath));
+  }
+
+  if (params.baseParams) {
     paramFullsPath = [appRoot, paramsPath, params.baseParams];
     const baseParams = require(join(...paramFullsPath));
     params = Object.assign({}, baseParams, params);
   }
-  
-  
+
+
   if (isDebug && params) inspector('methodAcmYearTemplateCreate.params:', params);
 
   // Update colors for params.rulesForCells
@@ -136,7 +142,6 @@ module.exports = async (inputArguments, context, callback = null) => {
   // Get current date    
   let currentDate = moment.utc([params.startYear, 0, 1, 0, 0, 0]).format();
   // Set start date cell
-  console.log('currentDate:', currentDate);
   setDateCells(startRow, currentDate, exceljs);
 
   // Set param data
@@ -149,7 +154,7 @@ module.exports = async (inputArguments, context, callback = null) => {
   exceljs.getCell('T3').value = params.qal2VolumeAdition;
 
   // Set data cell
-  if(params.isSetData) setDataCells(startRow, exceljs);
+  if (params.isSetData) setDataCells(startRow, exceljs);
 
   // Get all hours for date range
   const startDate = moment(params.startDate);
@@ -187,7 +192,7 @@ module.exports = async (inputArguments, context, callback = null) => {
     exceljs.getCell(`U${index + 1}`).value = { sharedFormula: `U${startRow}`, result: '' };
 
     // Set data cell 
-    if(params.isSetData) {
+    if (params.isSetData) {
       setDataCells(index + 1, exceljs);
     } else {
       setErrDataCells(index + 1, exceljs);
@@ -232,14 +237,15 @@ module.exports = async (inputArguments, context, callback = null) => {
   const ext = getPathExtname(params.outputFile);
   const basename = getPathBasename(params.outputFile, ext);
   const outputFile = `${basename}-${params.startYear}${ext}`;
+  if(params.isTest) dataPath = dataTestPath;
   resultPath = await exceljs.writeFile([appRoot, dataPath, outputFile]);
 
   // CallBack
   const callMethodResult = {
     statusCode: StatusCodes.Good,
     outputArguments: [{
-      dataType: DataType.UInt32,
-      value: 1
+      dataType: DataType.String,
+      value: JSON.stringify({ resultPath, params, hours, days })
     }]
   };
   if (callback) {

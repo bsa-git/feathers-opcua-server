@@ -16,9 +16,9 @@
       "bindMethod": "methodAcmYearTemplateCreate",
       "inputArguments": [
         {
-          "name": "parameterFileName",
+          "name": "methodParameters",
           "description": {
-            "text": "Parameter file name"
+            "text": "Method parameters"
           },
           "dataType": "String"
         }
