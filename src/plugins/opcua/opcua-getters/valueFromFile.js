@@ -33,7 +33,7 @@ const valueFromFile = function (params = {}, addedValue) {
   let id = params.myOpcuaServer.id;
   //------------------------------
   // Read file
-  let csv = readFileSync([appRoot, '/src/api/opcua', id, params.fromFile]);
+  let csv = readFileSync([appRoot, params.fromFile]);
   results = papa.parse(csv, { delimiter: ';', header: true });
   loForEach(results.data[0], function (value, key) {
     results.data[0][key] = getRandomValue(value);

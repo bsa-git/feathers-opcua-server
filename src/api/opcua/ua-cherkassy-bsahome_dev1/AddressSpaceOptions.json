@@ -25,7 +25,7 @@
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M52_ACM2",
       "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM2",
       "type": "object"
@@ -45,7 +45,7 @@
       "getter": "histValueFromFile",
       "getterParams": {
         "path": "test/data/tmp/ch-m51",
-        "fromFile": "test-data/data-CH_M51.csv",
+        "fromFile": "test/data/csv/data-CH_M51.csv",
         "interval": 5000
       }
     },
@@ -62,7 +62,7 @@
       "getter": "histValueFromFile",
       "getterParams": {
         "path": "test/data/tmp/ch-m52",
-        "fromFile": "test-data/data-CH_M52.csv",
+        "fromFile": "test/data/csv/data-CH_M52.csv",
         "interval": 5000
       }
     },
@@ -79,8 +79,8 @@
       "getter": "acmDayValueFromFile",
       "getterParams": {
         "path": "test/data/tmp/ch-m52_acm",
-        "fromFile": "test-data/DayReport-CH_M52_ACM.xls",
-        "toFile": "test-data/YearReport-CH_M52_ACM.xlsx",
+        "fromFile": "test/data/excel/DayReport-CH_M52_ACM.xls",
+        "toFile": "test/data/excel/YearReport-CH_M52_ACM.xlsx",
         "interval": 10000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerData": ["14QN2O", "14QN2O_CORR", "14FVSG", "14FVSG_CORR", "14F105_IS"]}
       }

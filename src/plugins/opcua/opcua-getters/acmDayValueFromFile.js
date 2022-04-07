@@ -111,7 +111,7 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     //------------------------
     // Create xlsx object
     let xlsx = new XlsxHelperClass({
-      excelPath: [appRoot, '/src/api/opcua', id, params.fromFile],
+      excelPath: [appRoot, params.fromFile],
       sheetName: 'Report1'
     });
 

@@ -29,7 +29,7 @@ const {
 
 const moment = require('moment');
 
-const dataTestPath = '/src/api/opcua/ua-cherkassy-azot_test2/test-data';
+const dataTestPath = '/test/data/tmp/ch-m52_acm';
 let dataPath = '/src/plugins/opcua/opcua-methods/api/method-data';
 let paramsPath = '/src/plugins/opcua/opcua-methods/api/method-params';
 

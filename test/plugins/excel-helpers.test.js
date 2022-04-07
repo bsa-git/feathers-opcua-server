@@ -37,10 +37,10 @@ const Color = require('color');
 const debug = require('debug')('app:excel-helpers.test');
 const isDebug = false;
 
-const xlsFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_M52_ACM.xls';
-const xlsxFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/DayReport-CH_M52_ACM.xlsx';
-const xlsxFile2 = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/acmYearTemplate.xlsx';
-const csvFile = '/src/api/opcua/ua-cherkassy-azot_test2/test-data/data-CH_M51.csv';
+const xlsFile = '/test/data/excel/DayReport-CH_M52_ACM.xls';
+const xlsxFile = '/test/data/excel/DayReport-CH_M52_ACM.xlsx';
+const xlsxFile2 = '/test/data/excel/acmYearTemplate.xlsx';
+const csvFile = '/test/data/csv/data-CH_M51.csv';
 
 // Rules for cells
 const rulesForCells = {

@@ -69,7 +69,7 @@ const histValueFromFile = function (params = {}, addedValue) {
   });
   // Write file
   setInterval(function () {
-    let csv = readFileSync([appRoot, '/src/api/opcua', id, params.fromFile]);
+    let csv = readFileSync([appRoot, params.fromFile]);
     if (csv) {
       results = papa.parse(csv, { delimiter: ';', header: true });
       loForEach(results.data[0], function (value, key) {
