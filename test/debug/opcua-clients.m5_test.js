@@ -3,7 +3,7 @@ const assert = require('assert');
 const app = require('../../src/app');
 
 const {
-  UserTokenType, DataType
+  DataType
 } = require('node-opcua');
 
 const {
@@ -67,6 +67,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     makeDirSync([appRoot, 'test/data/tmp/ch-m51']);
     makeDirSync([appRoot, 'test/data/tmp/ch-m52']);
     makeDirSync([appRoot, 'test/data/tmp/ch-m52_acm']);
+    makeDirSync([appRoot, 'test/data/tmp/excel-helper']);
   });
 
   after(function (done) {
@@ -75,6 +76,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m51']);
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52']);
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52_acm']);
+    removeFilesFromDirSync([appRoot, 'test/data/tmp/excel-helper']);
   });
 
   it('#1. OPC-UA clients: registered the service', async () => {
@@ -263,7 +265,8 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       qal2VolumeMultiplier: 1.1951,
       qal2СoncentrationAdition: 0,
       qal2VolumeAdition: 0,
-      outputFile: 'acmM52_YearReport1.xlsx'
+      outputFile: 'acmM52_YearReport1.xlsx',
+      endDate: '2022-02-01',
     };
     const inputArguments = [[
       {

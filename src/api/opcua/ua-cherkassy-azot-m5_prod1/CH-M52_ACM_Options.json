@@ -68,23 +68,18 @@
       "ownerName": "CH_M52_ACM",
       "ownerGroup": "CH_M52_ACM::ValueFromFile",
       "type": "variable.array",
-      "dataType": "Double",
+      "dataType": "Byte",
       "hist": true,
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
-        "dataType": "Double",
+        "dataType": "Byte",
         "arrayType": "Array"
       },
       "getter": "plugForVariable",
       "valueParams": {
         "arrayDimensions": [
           24
-        ],
-        "engineeringUnitsRange": {
-          "low": 0,
-          "high": 2000
-        },
-        "engineeringUnits": "milligram_per_cubic_metre"
+        ]
       },
       "description": "Коррекция по концентрация N2O (Q N2O)"
     },
@@ -122,23 +117,18 @@
       "ownerName": "CH_M52_ACM",
       "ownerGroup": "CH_M52_ACM::ValueFromFile",
       "type": "variable.array",
-      "dataType": "Double",
+      "dataType": "Byte",
       "hist": true,
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
-        "dataType": "Double",
+        "dataType": "Byte",
         "arrayType": "Array"
       },
       "getter": "plugForVariable",
       "valueParams": {
         "arrayDimensions": [
           24
-        ],
-        "engineeringUnitsRange": {
-          "low": 0,
-          "high": 900000
-        },
-        "engineeringUnits": "cubic_metre_per_hour"
+        ]
       },
       "description": "Коррекция по расходу выхл. газов (F VSG)"
     },
@@ -149,11 +139,11 @@
       "ownerName": "CH_M52_ACM",
       "ownerGroup": "CH_M52_ACM::ValueFromFile",
       "type": "variable.array",
-      "dataType": "Boolean",
+      "dataType": "Byte",
       "hist": true,
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
-        "dataType": "Boolean",
+        "dataType": "Byte",
         "arrayType": "Array"
       },
       "getter": "plugForVariable",

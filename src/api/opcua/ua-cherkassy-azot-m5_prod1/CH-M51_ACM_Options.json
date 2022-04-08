@@ -33,9 +33,9 @@
   ],
   "groups": [
     {
-      "browseName": "CH_M51_ACM::23N2O:23QN2O_HOUR",
-      "aliasName": "23QN2O_HOUR",
-      "displayName": "23QN2O_HOUR",
+      "browseName": "CH_M51_ACM::23N2O:23QN2O",
+      "aliasName": "23QN2O",
+      "displayName": "23QN2O",
       "ownerName": "CH_M51_ACM",
       "ownerGroup": "CH_M51_ACM::ValueFromFile",
       "type": "variable.array",
@@ -60,9 +60,9 @@
       "description": "Концентрация N2O (Q N2O)"
     },
     {
-      "browseName": "CH_M51_ACM::23VSG:23FVSG_HOUR",
-      "aliasName": "23FVSG_HOUR",
-      "displayName": "23FVSG_HOUR",
+      "browseName": "CH_M51_ACM::23VSG:23FVSG",
+      "aliasName": "23FVSG",
+      "displayName": "23FVSG",
       "ownerName": "CH_M51_ACM",
       "ownerGroup": "CH_M51_ACM::ValueFromFile",
       "type": "variable.array",
@@ -87,71 +87,61 @@
       "description": "Расход выхл. газов (F VSG)"
     },
     {
-      "browseName": "CH_M51_ACM::23N2O:23QN2O_CORR_HOUR",
-      "aliasName": "23QN2O_CORR_HOUR",
-      "displayName": "23QN2O_CORR_HOUR",
+      "browseName": "CH_M51_ACM::23N2O:23QN2O_CORR",
+      "aliasName": "23QN2O_CORR",
+      "displayName": "23QN2O_CORR",
       "ownerName": "CH_M51_ACM",
       "ownerGroup": "CH_M51_ACM::ValueFromFile",
       "type": "variable.array",
-      "dataType": "Double",
+      "dataType": "Byte",
       "hist": true,
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
-        "dataType": "Double",
+        "dataType": "Byte",
         "arrayType": "Array"
       },
       "getter": "plugForVariable",
       "valueParams": {
         "arrayDimensions": [
           24
-        ],
-        "engineeringUnitsRange": {
-          "low": 0,
-          "high": 2000
-        },
-        "engineeringUnits": "milligram_per_cubic_metre"
+        ]
       },
       "description": "Коррекция по концентрация N2O (Q N2O)"
     },
     {
-      "browseName": "CH_M51_ACM::23VSG:23FVSG_CORR_HOUR",
-      "aliasName": "23FVSG_CORR_HOUR",
-      "displayName": "23FVSG_CORR_HOUR",
+      "browseName": "CH_M51_ACM::23VSG:23FVSG_CORR",
+      "aliasName": "23FVSG_CORR",
+      "displayName": "23FVSG_CORR",
       "ownerName": "CH_M51_ACM",
       "ownerGroup": "CH_M51_ACM::ValueFromFile",
       "type": "variable.array",
-      "dataType": "Double",
+      "dataType": "Byte",
       "hist": true,
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
-        "dataType": "Double",
+        "dataType": "Byte",
         "arrayType": "Array"
       },
       "getter": "plugForVariable",
       "valueParams": {
         "arrayDimensions": [
           24
-        ],
-        "engineeringUnitsRange": {
-          "low": 0,
-          "high": 900000
-        },
-        "engineeringUnits": "cubic_metre_per_hour"
+        ]
       },
       "description": "Коррекция по расходу выхл. газов (F VSG)"
     },
     {
-      "browseName": "CH_M51_ACM::23HNO3:23F105_HOUR_IS",
-      "aliasName": "23F105_HOUR_IS",
-      "displayName": "23F105_HOUR_IS",
+      "browseName": "CH_M51_ACM::23HNO3:23F105_IS",
+      "aliasName": "23F105_IS",
+      "displayName": "23F105_IS",
       "ownerName": "CH_M51_ACM",
       "ownerGroup": "CH_M51_ACM::ValueFromFile",
       "type": "variable.array",
-      "dataType": "Boolean",
+      "dataType": "Byte",
       "hist": true,
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
-        "dataType": "Boolean",
+        "dataType": "Byte",
         "arrayType": "Array"
       },
       "getter": "plugForVariable",

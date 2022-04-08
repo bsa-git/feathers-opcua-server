@@ -6,6 +6,7 @@ const {
   appRoot,
   inspector,
   isBoolean,
+  isNumber,
   readOnlyNewFile,
   readOnlyModifiedFile,
   getTime,
@@ -119,7 +120,7 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     jsonData = xlsx.sheetToJson();
     // Map  jsonData   
     jsonData = jsonData.map(row => {
-      if (row['F'] && isBoolean(row['F'])) {
+      if (row['F'] && isNumber(row['F'])) {
         row['B'] = loRandom(300, 2000);
         row['D'] = loRandom(30000, 300000);
       }

@@ -33,9 +33,9 @@
   ],
   "groups": [
     {
-      "browseName": "CH_M52_ACM2::57N2O:57QN2O_HOUR",
-      "aliasName": "57QN2O_HOUR",
-      "displayName": "57QN2O_HOUR",
+      "browseName": "CH_M52_ACM2::57N2O:57QN2O",
+      "aliasName": "57QN2O",
+      "displayName": "57QN2O",
       "ownerName": "CH_M52_ACM2",
       "ownerGroup": "CH_M52_ACM2::ValueFromFile",
       "type": "variable.array",
@@ -60,9 +60,9 @@
       "description": "Концентрация N2O (Q N2O)"
     },
     {
-      "browseName": "CH_M52_ACM2::57VSG:57FVSG_HOUR",
-      "aliasName": "57FVSG_HOUR",
-      "displayName": "57FVSG_HOUR",
+      "browseName": "CH_M52_ACM2::57VSG:57FVSG",
+      "aliasName": "57FVSG",
+      "displayName": "57FVSG",
       "ownerName": "CH_M52_ACM2",
       "ownerGroup": "CH_M52_ACM2::ValueFromFile",
       "type": "variable.array",
@@ -87,71 +87,61 @@
       "description": "Расход выхл. газов (F VSG)"
     },
     {
-      "browseName": "CH_M52_ACM2::57N2O:57QN2O_CORR_HOUR",
-      "aliasName": "57QN2O_CORR_HOUR",
-      "displayName": "57QN2O_CORR_HOUR",
+      "browseName": "CH_M52_ACM2::57N2O:57QN2O_CORR",
+      "aliasName": "57QN2O_CORR",
+      "displayName": "57QN2O_CORR",
       "ownerName": "CH_M52_ACM2",
       "ownerGroup": "CH_M52_ACM2::ValueFromFile",
       "type": "variable.array",
-      "dataType": "Double",
+      "dataType": "Byte",
       "hist": true,
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
-        "dataType": "Double",
+        "dataType": "Byte",
         "arrayType": "Array"
       },
       "getter": "plugForVariable",
       "valueParams": {
         "arrayDimensions": [
           24
-        ],
-        "engineeringUnitsRange": {
-          "low": 0,
-          "high": 2000
-        },
-        "engineeringUnits": "milligram_per_cubic_metre"
+        ]
       },
       "description": "Коррекция по концентрация N2O (Q N2O)"
     },
     {
-      "browseName": "CH_M52_ACM2::57VSG:57FVSG_CORR_HOUR",
-      "aliasName": "57FVSG_CORR_HOUR",
-      "displayName": "57FVSG_CORR_HOUR",
+      "browseName": "CH_M52_ACM2::57VSG:57FVSG_CORR",
+      "aliasName": "57FVSG_CORR",
+      "displayName": "57FVSG_CORR",
       "ownerName": "CH_M52_ACM2",
       "ownerGroup": "CH_M52_ACM2::ValueFromFile",
       "type": "variable.array",
-      "dataType": "Double",
+      "dataType": "Byte",
       "hist": true,
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
-        "dataType": "Double",
+        "dataType": "Byte",
         "arrayType": "Array"
       },
       "getter": "plugForVariable",
       "valueParams": {
         "arrayDimensions": [
           24
-        ],
-        "engineeringUnitsRange": {
-          "low": 0,
-          "high": 900000
-        },
-        "engineeringUnits": "cubic_metre_per_hour"
+        ]
       },
       "description": "Коррекция по расходу выхл. газов (F VSG)"
     },
     {
-      "browseName": "CH_M52_ACM2::57HNO3:57F105_HOUR_IS",
-      "aliasName": "57F105_HOUR_IS",
-      "displayName": "57F105_HOUR_IS",
+      "browseName": "CH_M52_ACM2::57HNO3:57F105_IS",
+      "aliasName": "57F105_IS",
+      "displayName": "57F105_IS",
       "ownerName": "CH_M52_ACM2",
       "ownerGroup": "CH_M52_ACM2::ValueFromFile",
       "type": "variable.array",
-      "dataType": "Boolean",
+      "dataType": "Byte",
       "hist": true,
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
-        "dataType": "Boolean",
+        "dataType": "Byte",
         "arrayType": "Array"
       },
       "getter": "plugForVariable",

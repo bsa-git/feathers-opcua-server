@@ -29,7 +29,7 @@ const {
 
 const moment = require('moment');
 
-const dataTestPath = '/test/data/tmp/ch-m52_acm';
+const dataTestPath = '/test/data/tmp/excel-helper';
 let dataPath = '/src/plugins/opcua/opcua-methods/api/method-data';
 let paramsPath = '/src/plugins/opcua/opcua-methods/api/method-params';
 
