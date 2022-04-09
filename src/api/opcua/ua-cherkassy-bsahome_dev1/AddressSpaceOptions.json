@@ -1,13 +1,13 @@
 {
   "objects": [
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M51",
       "displayName": "Черкассы 'АЗОТ' цех M5-1",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M52",
       "displayName": "Черкассы 'АЗОТ' цех M5-2",
       "type": "object"
@@ -28,6 +28,12 @@
       "isEnable": false,
       "browseName": "CH_M52_ACM2",
       "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM2",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_M5_ACM",
+      "displayName": "Черкассы 'АЗОТ' цех M5 ACM",
       "type": "object"
     }
   ],

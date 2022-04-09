@@ -35,9 +35,9 @@ async function onChangedGroupHandlerForDB(params, dataValue) {
   if (!addressSpaceOption.group) return;
 
   const browseName = addressSpaceOption.browseName;
+  if (isDebug && dataValue) inspector('subscriptions.onChangedGroupHandlerForDB.formatDataValue:', dataValue);
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
   let value = dataValue.value.value;
-  if (isLog) inspector('subscriptions.onChangedGroupHandlerForDB.formatDataValue:', dataValue);
   // value = (addressSpaceOption.dataType === 'Double') ? loRound(value, 3) : value;
   let engineeringUnits = (dataValue.valueParams && dataValue.valueParams.engineeringUnits) ? dataValue.valueParams.engineeringUnits : '';
   const timestamp = dataValue.serverTimestamp;

@@ -555,7 +555,7 @@ const getOpcuaTags = function (browseName = '') {
       obj.histParams.savingValuesMode = getSavingValuesMode();
       return obj;
     });
-    opcuaTags = loConcat(opcuaTags, mergedOpcuaOptionsObjects, mergedOpcuaOptions.variables, mergedOpcuaOptions.groups);
+    opcuaTags = loConcat(opcuaTags, mergedOpcuaOptionsObjects, mergedOpcuaOptions.variables, mergedOpcuaOptions.groups, mergedOpcuaOptions.methods);
   });
   opcuaTags = opcuaTags.filter(item => item && item.browseName);
 
@@ -1128,6 +1128,7 @@ const getInitValueForDataType = function (dataType) {
  */
 const convertAnyToValue = function (dataType, value) {
   let result = null;
+  //-----------------------------------------------
   dataType = dataType.toLowerCase();
   switch (dataType) {
   case 'boolean':
