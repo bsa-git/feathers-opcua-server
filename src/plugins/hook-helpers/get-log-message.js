@@ -21,7 +21,7 @@ module.exports = async function getLogMessage(context) {
   const loHasProp = require('lodash/has');
   const loKebabCase = require('lodash/kebabCase');
   // Get json log data
-  const jsonLogData = readJsonFileSync([appRoot, 'src/api/app/app-log-msg.json']) || {};
+  const jsonLogData = readJsonFileSync([appRoot, 'src/api/app/log-messages/app-log-msg.json']) || {};
   const getLogData = (name) => {
     return jsonLogData.filter(item => !item.isConfig).find(item => item.name === name);
   };

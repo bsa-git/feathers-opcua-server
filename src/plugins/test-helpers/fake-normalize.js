@@ -26,7 +26,7 @@ const countMongodbId = 24;
 const countNedbId = 16;
 
 // Get json log data
-const jsonLogData = readJsonFileSync(`${appRoot}/src/api/app/app-log-msg.json`) || {};
+const jsonLogData = readJsonFileSync(`${appRoot}/src/api/app/log-messages/app-log-msg.json`) || {};
 const getLogData = (name) => {
   return jsonLogData.filter(item => !item.isConfig).find(item => item.name === name);
 };

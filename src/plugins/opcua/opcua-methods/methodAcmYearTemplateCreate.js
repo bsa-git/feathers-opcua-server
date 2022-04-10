@@ -30,8 +30,8 @@ const {
 const moment = require('moment');
 
 const dataTestPath = '/test/data/tmp/excel-helper';
-let dataPath = '/src/plugins/opcua/opcua-methods/api/method-data';
-let paramsPath = '/src/plugins/opcua/opcua-methods/api/method-params';
+let dataPath = '/src/api/app/opcua-methods/data';
+let paramsPath = '/src/api/app/opcua-methods/params';
 
 const isDebug = false;
 
