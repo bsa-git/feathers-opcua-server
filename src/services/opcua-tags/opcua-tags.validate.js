@@ -53,6 +53,28 @@ let base = merge({},
       ownerGroup: {
         type: 'string'
       },
+      bindMethod: {
+        type: 'string'
+      },
+      inputArguments: {
+        type: 'array',
+        items: {
+          type: 'object'
+        }
+      },
+      outputArguments: {
+        type: 'array',
+        items: {
+          type: 'object'
+        }
+      },
+      userAccessLevel: {
+        type: 'object',
+        properties: {
+          inputArguments: { type: 'string' },
+          outputArguments: { type: 'string' }
+        }
+      },
       variableGetType: {
         type: 'string'
       },
