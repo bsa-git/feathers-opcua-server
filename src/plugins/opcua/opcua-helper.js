@@ -5,6 +5,7 @@ const {
   inspector,
   isTrue,
   appRoot,
+  getBitDepthOS,
   getParseUrl,
   getHostname,
   getMyIp,
@@ -947,6 +948,37 @@ const executeOpcuaClientScript = async (service, id) => {
 };
 
 /**
+ * Set value from source
+ * @param {Object} addedVariable 
+ * e.g. {
+  dataType: 3,
+  arrayType: 1,
+  value: [
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0
+  ]
+}
+ * @param {Object} valueWithParams 
+ * @returns {Object}
+ * e.g. {
+  dataType: 3,
+  arrayType: 1,
+  value: Uint8Array(24) [
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0
+  ]
+}
+ */
+const setOpcuaValueFromSource = (addedVariable, valueWithParams) => {
+  convertArrayToTypedArray(valueWithParams);
+  addedVariable.setValueFromSource(valueWithParams);
+  if (isLog && valueWithParams) inspector('setValueFromSource:', valueWithParams);
+  return valueWithParams;
+};
+
+/**
  * @method setValueFromSourceForGroup 
  * @param {Object} params 
  * @param {Object} dataItems 
@@ -1160,6 +1192,51 @@ const convertAnyToValue = function (dataType, value) {
 };
 
 /**
+ * Convert simple array to TypedArray
+ * @param {Object} valueWithParams 
+ * @returns {Object}
+ */
+const convertArrayToTypedArray = function (valueWithParams) {
+  let result = null;
+  //-----------------------------------------------
+  // getOsPlatform,
+  // getOsArchitecture,
+  const bitDepthOS = getBitDepthOS();
+  let dataType = valueWithParams.dataType;
+  let value = valueWithParams.value;
+  if (!Array.isArray(value)) return valueWithParams;
+  dataType = loIsString(dataType) ? dataType.toLowerCase() : opcuaDataType[dataType].toLowerCase();
+  switch (dataType) {
+  case 'boolean':
+    result = value.map(v => getInt(v));
+    result = new Uint8Array(result);
+    break;
+  case 'sbyte':
+  case 'byte':
+    result = new Uint8Array(value);
+    break;
+  case 'uint16':
+    result = new Uint16Array(value);
+    break;
+  case 'int32':
+  case 'uint32':
+    result = new Uint32Array(value);
+    break;
+  case 'float':
+  case 'double':
+    result = (bitDepthOS === 64)? new Float64Array(value) : new Float32Array(value);
+    break;
+  default:
+    break;
+  }
+  if (isDebug) debug('convertAnyToValue.dataType:', dataType, result);
+  if (result) {
+    valueWithParams.value = result;
+  }
+  return valueWithParams;
+};
+
+/**
  * @method getTimestamp
  * @param {String|Object} timestamp 
  * e.g. Mon Feb 08 2021 11:47:22 GMT+0200 (GMT+02:00) | 2022-01-12T12:10:12
@@ -1336,9 +1413,11 @@ module.exports = {
   isOpcuaServerInList,
   isOpcuaClientInList,
   executeOpcuaClientScript,
+  setOpcuaValueFromSource,
   setValueFromSourceForGroup,
   convertAliasListToBrowseNameList,
   convertAnyToValue,
+  convertArrayToTypedArray,
   convertTo,
   getInitValueForDataType,
   getTimestamp,

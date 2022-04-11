@@ -16,7 +16,8 @@ const {
 
 const {
   formatUAVariable,
-  setValueFromSourceForGroup
+  setValueFromSourceForGroup,
+  setOpcuaValueFromSource
 } = require('../../../plugins/opcua/opcua-helper');
 
 const {
@@ -121,7 +122,8 @@ function histArrayValue(params = {}, addedValue) {
       value
     };
 
-    addedValue.setValueFromSource(valueFromSourceParams);
+    // addedValue.setValueFromSource(valueFromSourceParams);
+    setOpcuaValueFromSource(addedValue, valueFromSourceParams);
     if (isLog) inspector('histArrayValue.addedValue:', formatUAVariable(addedValue));
     t = t + 1;
   }, interval);

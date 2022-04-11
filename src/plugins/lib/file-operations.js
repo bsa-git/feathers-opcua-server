@@ -32,6 +32,64 @@ const getOsPlatform = function () {
 };
 
 /**
+ * @method getOsArchitecture
+ * @returns {String}
+ * e.g. 'arm', 'arm64', 'ia32', 'mips', 'mipsel', 'ppc', 'ppc64', 's390', 's390x', 'x32', and 'x64'
+ */
+const getOsArchitecture = function () {
+  return os.arch();
+};
+
+/**
+ * @method getBitDepthOS
+ * @returns {Number}
+ * e.g. for 'x32' -> 32, 'x64' -> 64
+ * e.g. 'arm', 'arm64', 'ia32', 'mips', 'mipsel', 'ppc', 'ppc64', 's390', 's390x', 'x32', and 'x64'
+ */
+const getBitDepthOS = function () {
+  let result = 32;
+  //--------------------
+  switch (getOsArchitecture()) {
+  case 'arm':
+    result = 32;
+    break;
+  case 'arm64':
+    result = 64;
+    break;
+  case 'ia32':
+    result = 32;
+    break;
+  case 'mips':
+    result = 32;
+    break;
+  case 'mipsel':
+    result = 64;
+    break;
+  case 'ppc':
+    result = 32;
+    break;
+  case 'ppc64':
+    result = 64;
+    break;
+  case 's390':
+    result = 32;
+    break;
+  case 's390x':
+    result = 64;
+    break;
+  case 'x32':
+    result = 32;
+    break;
+  case 'x64':
+    result = 64;
+    break;
+  default:
+    break;
+  }
+  return result;
+};
+
+/**
  * @method getFileName
  * @param {String} prefix
  * @param {String} ex
@@ -742,6 +800,8 @@ const removeFileSync = function (path) {
 
 module.exports = {
   getOsPlatform,
+  getOsArchitecture,
+  getBitDepthOS,
   getFileName,
   getPathBasename,
   getPathExtname,

@@ -56,7 +56,7 @@ const csvKepServerConfig = {
   filter: ['AI', 'AIs', 'AO'],
   delimiterFrom: ';',
   delimiterTo: ',',
-  path: 'scripts/api/toKEPServer/fromFoxExcel',
+  path: 'src/app/scripts/toKEPServer/fromFoxExcel',
   jsonFileName: 'm52_v210616.json',
   csvFileNameFrom: 'm52_v210616.csv',
   csvFileNameTo: 'm52-kepServer_v210616.csv',

@@ -8,7 +8,9 @@ const {
   getOpcuaConfig,
   getEngineeringUnit,
   mergeOpcuaConfigOptions,
-  getInitValueForDataType
+  getInitValueForDataType,
+  convertArrayToTypedArray,
+  setOpcuaValueFromSource
 } = require('./opcua-helper');
 const {
   OPCUAServer,
@@ -711,7 +713,8 @@ class OpcuaServer {
     if (!valueFromSourceParams.dataType) {
       valueFromSourceParams.dataType = DataType[variable.dataType];
     }
-    addedVariable.setValueFromSource(valueFromSourceParams);
+    // Set OPCUA value from source
+    setOpcuaValueFromSource(addedVariable, valueFromSourceParams);
   }
 }
 
