@@ -66,13 +66,10 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
   // Watch read only new file
   readOnlyModifiedFile(path, (filePath, data) => {
 
-    // console.log('acmDayValueFromFile:', rangeData, rangeDate, headerData);
-
     // Show filePath, data
     if (isDebug && filePath) console.log(chalk.green(`acmDayValueFromFile.readOnlyModifiedFile(${getTime('', false)}).filePath:`), chalk.cyan(getPathBasename(filePath)));
     // Set value from source
     dataType = formatUAVariable(addedValue).dataType[1];
-    // console.log('acmDayValueFromFile.dataType:', dataType);
 
     // Create xlsx object
     let xlsx = new XlsxHelperClass({

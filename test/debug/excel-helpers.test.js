@@ -604,7 +604,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
         currentValue = item[colIndex2];
       }
     }
-    if (isDebug && items) inspector('#10: Write data to xlsx file.items:', items);
+    if (true && items) inspector('#10: Write data to xlsx file.items:', items);
     if (isDebug && items2) inspector('#10: Write data to xlsx file.items2:', items2);
 
     exceljs.getColumn('C').values = items[3];
@@ -667,7 +667,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
     // Get all hours for date range
     const startDate = moment('2022-01-01');
-    const endDate = moment('2023-01-01');
+    const endDate = moment('2022-02-01');
     let hours = endDate.diff(startDate, 'hours');
     let days = endDate.diff(startDate, 'days');
     if (true && hours) console.log('hours:', hours);

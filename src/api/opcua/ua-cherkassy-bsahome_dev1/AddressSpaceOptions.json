@@ -80,7 +80,7 @@
       "dataType": "String",
       "hist": true,
       "group": true,
-      "subscription": "onChangedGroupHandlerForDB",
+      "subscription": "onChangedGroupHandlerForASM",
       "variableGetType": "valueFromSource",
       "getter": "acmDayValueFromFile",
       "getterParams": {
