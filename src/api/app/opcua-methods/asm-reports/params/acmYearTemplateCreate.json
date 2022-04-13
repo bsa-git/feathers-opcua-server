@@ -12,6 +12,8 @@
   "startDate": "2022-01-01",
   "endDate": "2023-01-01",
   "startRow": 20,
+  "dateColumn": "C",
+  "dataColumns": {"23QN2O": "E", "23QN2O_CORR": "F", "23FVSG": "G", "23FVSG_CORR": "H", "23F105_IS": "K"},
   "isSetData": false,
   "rulesForCells": {
     "errorSign": [

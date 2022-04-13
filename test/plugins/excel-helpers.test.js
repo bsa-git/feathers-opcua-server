@@ -604,7 +604,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
         currentValue = item[colIndex2];
       }
     }
-    if (true && items) inspector('#10: Write data to xlsx file.items:', items);
+    if (isDebug && items) inspector('#10: Write data to xlsx file.items:', items);
     if (isDebug && items2) inspector('#10: Write data to xlsx file.items2:', items2);
 
     exceljs.getColumn('C').values = items[3];
@@ -629,7 +629,7 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
   
 
-  it('#12: Write data to xlsx file "YearReport2"', async () => {
+  it('#11: Write data to xlsx file "YearReport2"', async () => {
     let resultPath = '';
     //-----------------------------------
 

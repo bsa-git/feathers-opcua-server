@@ -60,7 +60,7 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
   const path = createPath(params.path);
   const excelMappingFrom = params.excelMappingFrom;
   const rangeData = excelMappingFrom.rangeData;
-  const headerData = excelMappingFrom.headerData;
+  const headerNames = excelMappingFrom.headerNames;
   const rangeDate = excelMappingFrom.rangeDate;
 
   // Watch read only new file
@@ -78,7 +78,7 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     });
 
     // Sheet to json data
-    dataItems = xlsx.sheetToJson('Report1', { range: rangeData, header: headerData });
+    dataItems = xlsx.sheetToJson('Report1', { range: rangeData, header: headerNames });
     if (isDebug && dataItems.length) inspector(`histValueFromFile.dataItems(${dataItems.length}):`, dataItems);
 
     // Sheet to json date

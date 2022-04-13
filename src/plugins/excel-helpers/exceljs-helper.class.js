@@ -972,6 +972,157 @@ class ExceljsHelperClass {
     return exeljsGetColumnValues(this.workbook, sheetName, options);
   }
 
+  //================= NAMES =================//
+
+  // Individual cells (or multiple groups of cells) can have names assigned to them. 
+  // The names can be used in formulas and data validation (and probably more)
+
+  // assign (or get) a name for a cell (will overwrite any other names that cell had)
+  // e.g. worksheet.getCell('A1').name = 'PI';
+  // expect(worksheet.getCell('A1').name).to.equal('PI');
+  setCellName(cell, name) {
+    cell.name = name;
+  }
+
+  getCellName(cell) {
+    return cell.name;
+  }
+
+  // assign (or get) an array of names for a cell (cells can have more than one name)
+  // e.g. worksheet.getCell('A1').names = ['thing1', 'thing2'];
+  // expect(worksheet.getCell('A1').names).to.have.members(['thing1', 'thing2']);
+  setCellNames(cell, names = []) {
+    cell.names = names;
+  }
+
+  getCellNames(cell) {
+    return cell.names;
+  }
+
+  // remove a name from a cell
+  // e.g. worksheet.getCell('A1').removeName('thing1');
+  // expect(worksheet.getCell('A1').names).to.have.members(['thing2']);
+  removeCellName(cell, name) {
+    cell.removeName(name);
+  }
+
+  //============== DATA VALIDATION ==============//
+
+  /**
+    Cells can define what values are valid or not and provide prompting to the user to help guide them
+    Validation types can be one of the following: list, whole, decimal, textLength, custom
+    For types other than list or custom, the following operators affect the validation: 
+      between, notBetween, equal, notEqual, greaterThan, lessThan, greaterThanOrEqual, lessThanOrEqual
+
+    // Specify list of valid values (One, Two, Three, Four).
+    // Excel will provide a dropdown with these values.
+    e.g. worksheet.getCell('A1').dataValidation = {
+          type: 'list',
+          allowBlank: true,
+          formulae: ['"One,Two,Three,Four"']
+        };
+    // Specify list of valid values from a range.
+    // Excel will provide a dropdown with these values. 
+    e.g. worksheet.getCell('A1').dataValidation = {
+          type: 'list',
+          allowBlank: true,
+          formulae: ['$D$5:$F$5']
+        };
+    // Specify Cell must be a whole number that is not 5.
+    // Show the user an appropriate error message if they get it wrong
+    e.g. worksheet.getCell('A1').dataValidation = {
+          type: 'whole',
+          operator: 'notEqual',
+          showErrorMessage: true,
+          formulae: [5],
+          errorStyle: 'error',
+          errorTitle: 'Five',
+          error: 'The value must not be Five'
+        };
+    // Specify Cell must be a decimal number between 1.5 and 7.
+    // Add 'tooltip' to help guid the user
+    e.g. worksheet.getCell('A1').dataValidation = {
+          type: 'decimal',
+          operator: 'between',
+          allowBlank: true,
+          showInputMessage: true,
+          formulae: [1.5, 7],
+          promptTitle: 'Decimal',
+          prompt: 'The value must between 1.5 and 7'
+        };
+    // Specify Cell must be have a text length less than 15
+    e.g. worksheet.getCell('A1').dataValidation = {
+          type: 'textLength',
+          operator: 'lessThan',
+          showErrorMessage: true,
+          allowBlank: true,
+          formulae: [15]
+        };
+    // Specify Cell must be have be a date before 1st Jan 2016
+    e.g. worksheet.getCell('A1').dataValidation = {
+          type: 'date',
+          operator: 'lessThan',
+          showErrorMessage: true,
+          allowBlank: true,
+          formulae: [new Date(2016,0,1)]
+        };
+   */
+  setCellDataValidation(cell, params) {
+    cell.dataValidation = params;
+  }
+
+  //================= COMMENTS =================//
+
+  /**
+  Add old style comment to a cell
+  // plain text note
+  e.g. worksheet.getCell('A1').note = 'Hello, ExcelJS!';
+  // colourful formatted note
+  e.g. ws.getCell('B1').note = {
+          texts: [
+            {'font': {'size': 12, 'color': {'theme': 0}, 'name': 'Calibri', 'family': 2, 'scheme': 'minor'}, 'text': 'This is '},
+            {'font': {'italic': true, 'size': 12, 'color': {'theme': 0}, 'name': 'Calibri', 'scheme': 'minor'}, 'text': 'a'},
+            {'font': {'size': 12, 'color': {'theme': 1}, 'name': 'Calibri', 'family': 2, 'scheme': 'minor'}, 'text': ' '},
+            {'font': {'size': 12, 'color': {'argb': 'FFFF6600'}, 'name': 'Calibri', 'scheme': 'minor'}, 'text': 'colorful'},
+            {'font': {'size': 12, 'color': {'theme': 1}, 'name': 'Calibri', 'family': 2, 'scheme': 'minor'}, 'text': ' text '},
+            {'font': {'size': 12, 'color': {'argb': 'FFCCFFCC'}, 'name': 'Calibri', 'scheme': 'minor'}, 'text': 'with'},
+            {'font': {'size': 12, 'color': {'theme': 1}, 'name': 'Calibri', 'family': 2, 'scheme': 'minor'}, 'text': ' in-cell '},
+            {'font': {'bold': true, 'size': 12, 'color': {'theme': 1}, 'name': 'Calibri', 'family': 2, 'scheme': 'minor'}, 'text': 'format'},
+          ],
+          margins: {
+            insetmode: 'custom',
+            inset: [0.25, 0.25, 0.35, 0.35]
+          },
+          protection: {
+            locked: True,
+            lockText: False
+          },
+          editAs: 'twoCells',
+        };
+  
+  */
+
+  /**
+   * Set cell comment
+   * @param {Object} cell 
+   * @param {String|Object} note 
+   */
+  setCellComment(cell, note) {
+    cell.note = note;
+  }
+
+  setCellCommentMargins(cell, margins) {
+    cell.note.margins = margins;
+  }
+
+  setCellCommentProtection(cell, protection) {
+    cell.note.protection = protection;
+  }
+
+  setCellCommentEditAs(cell, editAs) {
+    cell.note.editAs = editAs;
+  }
+
   //================= FORMULA =================//
 
   // Cells also support convenience getters to access the formula
