@@ -4,6 +4,12 @@ const {
 } = require('../../lib');
 
 const {
+  showInfoForGroupHandler,
+  saveOpcuaGroupValueToDB,
+  updateYearReportForASM
+} = require('./lib');
+
+const {
   isSaveOpcuaToDB,
   saveOpcuaGroupValue
 } = require('../../db-helpers');
@@ -32,25 +38,14 @@ async function onChangedGroupHandlerForDB(params, dataValue) {
   const addressSpaceOption = params.addressSpaceOption;
 
   // Only for group values
-  if (!addressSpaceOption.group) return;
-
-  const browseName = addressSpaceOption.browseName;
-  if (isDebug && dataValue) inspector('subscriptions.onChangedGroupHandlerForDB.formatDataValue:', dataValue);
-  dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
-  let value = dataValue.value.value;
-  let engineeringUnits = (dataValue.valueParams && dataValue.valueParams.engineeringUnits) ? dataValue.valueParams.engineeringUnits : '';
-  const timestamp = dataValue.serverTimestamp;
-  engineeringUnits = engineeringUnits ? `(${engineeringUnits})` : '';
+  if (addressSpaceOption && !addressSpaceOption.group) return;
 
   // Save data to DB
-  if (isSaveOpcuaToDB()) {
-    const savedValue = await saveOpcuaGroupValue(params.app, browseName, value);
-    if (isLog && savedValue) inspector('onChangedGroupHandlerForDB.savedValue:', savedValue);
-  }
+  const savedValue = await saveOpcuaGroupValueToDB(params, dataValue);
+  if (isLog && savedValue) inspector('onChangedGroupHandlerForASM.savedValue:', savedValue);
 
-  value = JSON.parse(value);
-  const valueKeys = Object.keys(value).length;
-  console.log('<<===', chalk.magentaBright(`ID="${params.id}"; `), chalk.greenBright(`Name="${browseName}"; `), chalk.whiteBright(`Number of values=(${valueKeys});`), chalk.cyanBright(`Timestamp=${timestamp}`), '===>>');
+  // Show info
+  showInfoForGroupHandler(params, dataValue);
 }
 
 module.exports = onChangedGroupHandlerForDB;
