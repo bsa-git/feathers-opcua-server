@@ -252,11 +252,11 @@ const exeljsGetCells = function (workbook, sheetName = '', options = {}) {
           myCell.value = isObject(cell.value) && cell.value.result ? cell.value.result : cell.value;
           myCell.valueType = getValueType(myCell.value);
           myCell.cellType = valueTypes[cell.type];
-          if (myCell.name) {
-            myCell.name = myCell.name;
+          if (cell.name) {
+            myCell.name = cell.name;
           }
-          if (myCell.names) {
-            myCell.names = myCell.names;
+          if (cell.names && cell.names.length) {
+            myCell.names = cell.names;
           }
           if (myCell.valueType === 'Number') {
             myCell.value = loRound(myCell.value, 3);
