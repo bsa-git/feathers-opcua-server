@@ -30,6 +30,9 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
   const savedValue = await saveOpcuaGroupValueToDB(params, dataValue);
   if (isLog && savedValue) inspector('onChangedGroupHandlerForASM.savedValue:', savedValue);
 
+  // Update year report
+  await updateYearReportForASM(params, dataValue);
+
   // Show info
   showInfoForGroupHandler(params, dataValue);
 }

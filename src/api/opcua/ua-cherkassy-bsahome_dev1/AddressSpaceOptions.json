@@ -1,13 +1,13 @@
 {
   "objects": [
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M51",
       "displayName": "Черкассы 'АЗОТ' цех M5-1",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M52",
       "displayName": "Черкассы 'АЗОТ' цех M5-2",
       "type": "object"
@@ -86,7 +86,7 @@
       "getterParams": {
         "path": "test/data/tmp/ch-m52_acm",
         "fromFile": "test/data/excel/DayReport-CH_M52_ACM.xls",
-        "toFile": "test/data/excel/YearReport-CH_M52_ACM.xlsx",
+        "toFile": "acmM52_YearReport1-${ year }.xlsx",
         "interval": 10000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["14QN2O", "14QN2O_CORR", "14FVSG", "14FVSG_CORR", "14F105_IS"]}
       }
