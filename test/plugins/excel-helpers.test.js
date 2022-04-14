@@ -277,6 +277,24 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     assert.ok(jsonData.length === jsonData2.length, 'Write data to xls file');
   });
 
+  it('#3: Get cells from xlsx file "DayReport"', async () => {
+    // Create exceljs object
+    let exceljs = new ExceljsHelperClass({
+      excelPath: [appRoot, xlsxFile],
+      sheetName: 'Report1'
+    });
+
+    await exceljs.init();
+    const sheetName = exceljs.getSheet().name;
+    const cells = exceljs.getCells(sheetName, { range: 'G11:K11' });
+    assert.ok(cells.length, 'Get cells from xlsx file');
+
+    loForEach(cells, function (cell) {
+      cell = loOmit(cell, ['cell', 'column', 'row']);
+      if (isDebug && cell) inspector(`#3: Get cells from xlsx file.cell(${cell.address}):`, cell);
+    });
+  });
+
   it('#4: Get cells from csv data', async () => {
     // Create exceljs object
     let exceljs = new ExceljsHelperClass({
@@ -297,24 +315,6 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     loForEach(cells, function (cell) {
       cell = loOmit(cell, ['cell', 'column', 'row']);
       if (isDebug && cell) inspector(`#4: Get cells from csv data.cell(${cell.address}):`, cell);
-    });
-  });
-
-  it('#3: Get cells from xlsx file "DayReport"', async () => {
-    // Create exceljs object
-    let exceljs = new ExceljsHelperClass({
-      excelPath: [appRoot, xlsxFile],
-      sheetName: 'Report1'
-    });
-
-    await exceljs.init();
-    const sheetName = exceljs.getSheet().name;
-    const cells = exceljs.getCells(sheetName, { range: 'G11:K11' });
-    assert.ok(cells.length, 'Get cells from xlsx file');
-
-    loForEach(cells, function (cell) {
-      cell = loOmit(cell, ['cell', 'column', 'row']);
-      if (isDebug && cell) inspector(`#3: Get cells from xlsx file.cell(${cell.address}):`, cell);
     });
   });
 
