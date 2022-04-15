@@ -83,7 +83,7 @@
       "getterParams": {
         "path": "test/data/tmp/ch-m52_acm",
         "fromFile": "test/data/excel/DayReport-CH_M52_ACM.xls",
-        "toFile": "test/data/excel/YearReport-CH_M52_ACM.xlsx",
+        "toFile": "DayHist01_14F120",
         "interval": 500,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["14QN2O", "14QN2O_CORR", "14FVSG", "14FVSG_CORR", "14F105_IS"]}
       }

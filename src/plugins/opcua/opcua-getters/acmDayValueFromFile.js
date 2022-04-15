@@ -5,25 +5,17 @@ const chalk = require('chalk');
 const {
   appRoot,
   inspector,
-  isBoolean,
   isNumber,
-  readOnlyNewFile,
   readOnlyModifiedFile,
   getTime,
-  stripSpecific,
-  delay,
-  readFileSync,
-  writeFileSync,
   removeFileSync,
   getFileName,
   getPathBasename,
   createPath,
-  getRandomValue
 } = require('../../lib');
 
 const {
   XlsxHelperClass,
-  ExceljsHelperClass,
 } = require('../../excel-helpers');
 
 const loForEach = require('lodash/forEach');
@@ -36,7 +28,6 @@ const {
   setValueFromSourceForGroup,
   convertAliasListToBrowseNameList
 } = require('../opcua-helper');
-const { index } = require('cheerio/lib/api/traversing');
 
 const debug = require('debug')('app:opcua-getters/histValueFromFile');
 const isDebug = false;
@@ -52,7 +43,7 @@ const isLog = false;
  * @returns {void}
  */
 const acmDayValueFromFile = function (params = {}, addedValue) {
-  let dataItems, dataItems2, dataType, results;
+  let dataItems, currentDate, dataType;
   let id = params.myOpcuaServer.id;
   //------------------------------------
   // Create path
@@ -107,6 +98,17 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
   setInterval(function () {
     let jsonData;
     //------------------------
+
+    // Get current date    
+    if(currentDate){
+      currentDate = moment.utc(currentDate).add(1, 'days').format('YYYY-MM-DD');
+    } else {
+      const startYear = moment.utc().format('YYYY');
+      currentDate = moment.utc([startYear, 0, 1]).format('YYYY-MM-DD');
+    }
+    const nextDate = moment.utc(currentDate).add(1, 'days').format('YYYY-MM-DD');
+    const templateDate = `data period - from: ${currentDate} 00:00 to: ${nextDate} 00:00`;
+
     // Create xlsx object
     let xlsx = new XlsxHelperClass({
       excelPath: [appRoot, params.fromFile],
@@ -115,7 +117,9 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
 
     // Sheet to json
     jsonData = xlsx.sheetToJson();
+
     // Map  jsonData   
+    jsonData[0]['A'] = templateDate;
     jsonData = jsonData.map(row => {
       if (row['F'] && isNumber(row['F'])) {
         row['B'] = loRandom(300, 2000);
@@ -124,6 +128,8 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
       return row;
     });
 
+    // console.log('jsonData[0][\'A\']:', jsonData[0]['A']);
+
     // Create xlsx object
     xlsx = new XlsxHelperClass({
       jsonData,
@@ -131,7 +137,7 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     });
 
     // Write new data to xls file
-    const fileName = getFileName('DayHist01_14F120-', 'xls', true);
+    const fileName = getFileName(`${params.toFile}-`, 'xls', true);
     xlsx.writeFile([appRoot, path, fileName]);
 
   }, params.interval);
