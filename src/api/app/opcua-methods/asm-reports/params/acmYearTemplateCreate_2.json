@@ -1,5 +1,5 @@
 {
-  "baseParams": "acmYearTemplateCreate.json",
+  "baseParams": 1,
   "pointID": "ТВим02",
   "emissionPointID": "ТВ17",
   "pointDescription": "Цех М-5, відділення 2, агрегати 1/2÷4/2",

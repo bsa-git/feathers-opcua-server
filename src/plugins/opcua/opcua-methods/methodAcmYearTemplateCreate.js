@@ -15,6 +15,7 @@ const {
 const {
   appRoot,
   inspector,
+  isNumber,
   getPathExtname,
   getPathBasename,
   hexToARGB,
@@ -32,6 +33,10 @@ const moment = require('moment');
 const dataTestPath = '/test/data/tmp/excel-helper';
 let dataPath = '/src/api/app/opcua-methods/asm-reports/data';
 let paramsPath = '/src/api/app/opcua-methods/asm-reports/params';
+
+const {
+  paramsFileName,
+} = require(join(...[appRoot, paramsPath]));
 
 const isDebug = false;
 
@@ -71,16 +76,18 @@ const setErrDataCells = (index, excel) => {
 module.exports = async (inputArguments, context, callback) => {
   let resultPath = '', params = null, paramFullsPath;
   //-----------------------------------
+  const inputArg = inputArguments[0].value;
   if (callback) {
-    params = JSON.parse(inputArguments[0].value);
+    params = JSON.parse(inputArg);
   } else {
-    let paramsFile = inputArguments[0].value;
+    let paramsFile = isNumber(inputArg)? paramsFileName + inputArg : inputArg;
     paramFullsPath = [appRoot, paramsPath, paramsFile];
     params = require(join(...paramFullsPath));
   }
 
   if (params.baseParams) {
-    paramFullsPath = [appRoot, paramsPath, params.baseParams];
+    let baseParamsFile = isNumber(params.baseParams)? paramsFileName + params.baseParams : params.baseParams; 
+    paramFullsPath = [appRoot, paramsPath, baseParamsFile];
     const baseParams = require(join(...paramFullsPath));
     params = Object.assign({}, baseParams, params);
   }
@@ -139,8 +146,12 @@ module.exports = async (inputArguments, context, callback) => {
   let sheetName = exceljs.getSheet().name;
   // Set start row number     
   const startRow = params.startRow;
-  // Get current date    
-  let currentDate = moment.utc([params.startYear, 0, 1, 0, 0, 0]).format();
+  // Get current date
+  let startYear = moment.utc().format('YYYY');
+  if(params.startYear){
+    startYear = params.startYear;
+  }
+  let currentDate = moment.utc([startYear, 0, 1, 0, 0, 0]).format();
   // Set start date cell
   setDateCells(startRow, currentDate, exceljs);
 
@@ -156,9 +167,11 @@ module.exports = async (inputArguments, context, callback) => {
   // Set data cell
   if (params.isSetData) setDataCells(startRow, exceljs);
 
-  // Get all hours for date range
-  const startDate = moment(params.startDate);
-  const endDate = moment(params.endDate);
+  // Get all hours for date range 
+  const startDate = moment.utc([startYear, 0, 1]);
+  const period = params.reportingPeriod;
+  const endDate = moment.utc([startYear, 0, 1]).add(period[0], period[1]);
+  // const endDate = moment(params.endDate);
   let hours = endDate.diff(startDate, 'hours');
   let days = endDate.diff(startDate, 'days');
   if (isDebug && hours) console.log('hours:', hours);
@@ -236,7 +249,7 @@ module.exports = async (inputArguments, context, callback) => {
   // Write new data to xlsx file
   const ext = getPathExtname(params.outputFile);
   const basename = getPathBasename(params.outputFile, ext);
-  const outputFile = `${basename}-${params.startYear}${ext}`;
+  const outputFile = `${basename}-${startYear}${ext}`;
   if(params.isTest) dataPath = dataTestPath;
   resultPath = await exceljs.writeFile([appRoot, dataPath, outputFile]);
 

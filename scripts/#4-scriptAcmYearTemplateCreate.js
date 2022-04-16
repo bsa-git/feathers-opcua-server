@@ -2,8 +2,6 @@
 const assert = require('assert');
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
-const loOmit = require('lodash/omit');
-const loForEach = require('lodash/forEach');
 
 const {
   appRoot,
@@ -29,7 +27,6 @@ const isDebug = false;
 const argv = yargs(hideBin(process.argv)).argv;
 if (isDebug && argv) inspector('Yargs.argv:', argv);
 const isScript = (argv.script === '#4');
-
 
 describe('<<=== ScriptOperations: (#4-scriptAcmYearTemplateCreate) ===>>', () => {
 

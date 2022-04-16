@@ -256,7 +256,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     const service = await getClientService(app, id);
     // Set input argument
     const inputArgument = {
-      baseParams: 'acmYearTemplateCreate.json',
+      baseParams: 1,
       isTest: true,
       pointID: 'ТВим02',
       emissionPointID: 'ТВ17',
@@ -266,7 +266,8 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       qal2СoncentrationAdition: 0,
       qal2VolumeAdition: 0,
       outputFile: 'acmM52_YearReport1.xlsx',
-      endDate: '2022-02-01',
+      reportingPeriod: [1, 'months'],
+      // endDate: '2022-02-01',
     };
     const inputArguments = [[
       {
