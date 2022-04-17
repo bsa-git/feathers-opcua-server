@@ -265,9 +265,9 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       qal2VolumeMultiplier: 1.1951,
       qal2СoncentrationAdition: 0,
       qal2VolumeAdition: 0,
-      outputFile: 'acmM52_YearReport1.xlsx',
+      outputFile: 'acmM52_YearReport1-${ year }.xlsx',
       reportingPeriod: [1, 'months'],
-      // endDate: '2022-02-01',
+      // startYear: 2020,
     };
     const inputArguments = [[
       {

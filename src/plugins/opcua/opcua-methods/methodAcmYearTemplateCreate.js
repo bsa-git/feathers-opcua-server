@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-vars */
 const Path = require('path');
 const join = Path.join;
+const chalk = require('chalk');
 
 const loForEach = require('lodash/forEach');
 const loAt = require('lodash/at');
 const loRandom = require('lodash/random');
-const loRound = require('lodash/round');
+const loTemplate = require('lodash/template');
 
 const {
   DataType,
@@ -16,8 +17,7 @@ const {
   appRoot,
   inspector,
   isNumber,
-  getPathExtname,
-  getPathBasename,
+  doesFileExist,
   hexToARGB,
   shiftTimeByOneHour
 } = require('../../lib');
@@ -74,20 +74,38 @@ const setErrDataCells = (index, excel) => {
  * @param {Function} callback
  */
 module.exports = async (inputArguments, context, callback) => {
-  let resultPath = '', params = null, paramFullsPath;
+  let resultPath = '', paramsFile, baseParamsFile, params = null, paramFullsPath;
   //-----------------------------------
+  
+  // Get params
   const inputArg = inputArguments[0].value;
   if (callback) {
     params = JSON.parse(inputArg);
   } else {
-    let paramsFile = isNumber(inputArg)? paramsFileName + inputArg : inputArg;
+    if(isNumber(inputArg)){
+      paramsFile = loTemplate(paramsFileName)({ pointNumber: inputArg });
+    }else{
+      paramsFile = inputArg;
+    }
     paramFullsPath = [appRoot, paramsPath, paramsFile];
+    if(!doesFileExist(paramFullsPath)){
+      console.log(chalk.redBright(`Run script - ERROR. File with name "${paramsFile}" not found.`));
+      throw new Error(`Run script - ERROR. File with name "${paramsFile}" not found.`);
+    }
     params = require(join(...paramFullsPath));
   }
 
   if (params.baseParams) {
-    let baseParamsFile = isNumber(params.baseParams)? paramsFileName + params.baseParams : params.baseParams; 
+    if(isNumber(params.baseParams)){
+      baseParamsFile = loTemplate(paramsFileName)({ pointNumber: params.baseParams });
+    }else{
+      baseParamsFile = params.baseParams;
+    }
     paramFullsPath = [appRoot, paramsPath, baseParamsFile];
+    if(!doesFileExist(paramFullsPath)){
+      console.log(chalk.redBright(`Run script - ERROR. File with name "${paramsFile}" not found.`));
+      throw new Error(`Run script - ERROR. File with name "${paramsFile}" not found.`);
+    }
     const baseParams = require(join(...paramFullsPath));
     params = Object.assign({}, baseParams, params);
   }
@@ -247,9 +265,7 @@ module.exports = async (inputArguments, context, callback) => {
 
 
   // Write new data to xlsx file
-  const ext = getPathExtname(params.outputFile);
-  const basename = getPathBasename(params.outputFile, ext);
-  const outputFile = `${basename}-${startYear}${ext}`;
+  const outputFile = loTemplate(params.outputFile)({ year: startYear });
   if(params.isTest) dataPath = dataTestPath;
   resultPath = await exceljs.writeFile([appRoot, dataPath, outputFile]);
 

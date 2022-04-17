@@ -7,6 +7,6 @@
   "qal2VolumeMultiplier": 1.1951,
   "qal2СoncentrationAdition": 0,
   "qal2VolumeAdition": 0,
-  "outputFile": "acmM52_YearReport1.xlsx",
+  "outputFile": "acmM52_YearReport2-${ year }.xlsx",
   "dataColumns": {"14QN2O": "E", "14QN2O_CORR": "F", "14FVSG": "G", "14FVSG_CORR": "H", "14F105_IS": "K"}
 }

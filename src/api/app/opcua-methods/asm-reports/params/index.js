@@ -3,7 +3,7 @@ const acmYearTemplateCreate_2 = require('./acmYearTemplateCreate_2.json');
 const acmYearTemplateCreate_3 = require('./acmYearTemplateCreate_3.json');
 
 module.exports = {
-  paramsFileName: 'acmYearTemplateCreate_',
+  paramsFileName: 'acmYearTemplateCreate_${ pointNumber }.json',
   acmYearTemplateCreate_1,
   acmYearTemplateCreate_2,
   acmYearTemplateCreate_3

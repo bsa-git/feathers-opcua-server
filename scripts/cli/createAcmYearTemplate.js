@@ -17,21 +17,37 @@ const isDebug = false;
 
 (async function createAcmYearTemplate() {
   // Get argv
-  const argv = yargs(hideBin(process.argv)).argv;
-  if (isDebug && argv) inspector('Yargs.argv:', argv);
+  const argv = yargs(hideBin(process.argv))
+    .scriptName('createAcmYearTemplate')
+    .usage('Usage: $0 -p num')
+    .example(
+      '$0 -p 2',
+      'Returns the file name (acmM52_YearReport2-2022.xlsx) when creating a template for the reporting period.'
+    )
+    .option('p', {
+      alias: 'params',
+      describe: 'Parameter number for the script.',
+      demandOption: "The params is required.",
+      type: "number",
+      nargs: 1,
+    })
+    .describe("help", "Show help.") // Override --help usage message.
+    .describe("version", "Show version number.") // Override --version usage message.
+    .epilog("copyright 2022")
+    .argv;
+
+  if (true && argv) inspector('Yargs.argv:', argv);
+
   // Run script
-  const result = await methodAcmYearTemplateCreate([{ value: argv.params }]);
-
-  if (result) {
-
-    const resultPath = result.resultPath;
-    const params = result.params;
-
-    console.log(chalk.green('Run script - OK!'), 'resultFile:', chalk.cyan(getPathBasename(resultPath)));
-    
-    if (isDebug && resultPath) console.log('createAcmYearTemplate.resultPath:', resultPath);
-    if (isDebug && params) inspector('createAcmYearTemplate.params:', params);
+  if (Array.isArray(argv.params)) {
+    for (let index = 0; index < argv.params.length; index++) {
+      const param = argv.params[index];
+      const result = await methodAcmYearTemplateCreate([{ value: param }]);
+      console.log(chalk.green('Run script - OK!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
+    }
   } else {
-    console.log(chalk.green('Run script - ERROR'));
+    const result = await methodAcmYearTemplateCreate([{ value: argv.params }]);
+    console.log(chalk.green('Run script - OK!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
   }
+
 })()
