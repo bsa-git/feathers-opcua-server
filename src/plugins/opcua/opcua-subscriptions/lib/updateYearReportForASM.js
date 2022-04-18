@@ -6,7 +6,8 @@ const logger = require('../../../../logger');
 const {
   appRoot,
   inspector,
-  doesFileExist
+  doesFileExist,
+  makeDirSync
 } = require('../../../lib');
 
 const {
@@ -22,11 +23,16 @@ const moment = require('moment');
 const loForEach = require('lodash/forEach');
 const loTemplate = require('lodash/template');
 const loOmit = require('lodash/omit');
-const { filter } = require('compression');
 
 const dataTestPath = '/test/data/tmp/excel-helper';
 let dataPath = '/src/api/app/opcua-methods/asm-reports/data';
 let paramsPath = '/src/api/app/opcua-methods/asm-reports/params';
+
+makeDirSync([appRoot, dataTestPath]);
+
+const {
+  paramsFileName,
+} = require(join(...[appRoot, paramsPath]));
 
 const isLog = false;
 
@@ -59,23 +65,24 @@ async function updateYearReportForASM(params, dataValue) {
   const reportDate = groupValue['!value'].date;
   const reportYear = reportDate.split('-')[0];
 
-  // Get file name
-  let reportFileName = addressSpaceOption.getterParams.toFile;
-  reportFileName = loTemplate(reportFileName)({ year: reportYear });
+  // Get params for year report
+  const pointID = addressSpaceOption.getterParams.pointID;
+  const paramsFile = loTemplate(paramsFileName)({ pointID });
+  paramFullsPath = [appRoot, paramsPath, paramsFile];
+  paramsReport = require(join(...paramFullsPath));
+
+  if (paramsReport.baseParams) {
+    const baseParamsFile = loTemplate(paramsFileName)({ pointID: paramsReport.baseParams });
+    paramFullsPath = [appRoot, paramsPath, baseParamsFile];
+    const baseParams = require(join(...paramFullsPath));
+    paramsReport = Object.assign({}, baseParams, paramsReport);
+  }
+
+  // Get report file name
+  const reportFileName = loTemplate(paramsReport.outputTemplateFile)({ pointID, year: reportYear });
 
   if (doesFileExist([appRoot, dataPath, reportFileName])) {
-
-    // Get params for year report
-    const paramsFile = addressSpaceOption.getterParams.paramsFile;
-    paramFullsPath = [appRoot, paramsPath, paramsFile];
-    paramsReport = require(join(...paramFullsPath));
-
-    if (paramsReport.baseParams) {
-      paramFullsPath = [appRoot, paramsPath, paramsReport.baseParams];
-      const baseParams = require(join(...paramFullsPath));
-      paramsReport = Object.assign({}, baseParams, paramsReport);
-    }
-
+    
     // Create exceljs object
     let exceljs = new ExceljsHelperClass({
       excelPath: [appRoot, dataPath, reportFileName],
@@ -126,6 +133,10 @@ async function updateYearReportForASM(params, dataValue) {
       //   if (true && column === 'G') inspector(`updateYearReportForASM.cell(${cell.address}):`, cell);
       // });
     });
+
+    // Write report file
+    const outputReportFile = loTemplate(paramsReport.outputReportFile)({ pointID, year: reportYear });
+    const resultPath = await exceljs.writeFile([appRoot, dataTestPath, outputReportFile]);
 
 
   } else {

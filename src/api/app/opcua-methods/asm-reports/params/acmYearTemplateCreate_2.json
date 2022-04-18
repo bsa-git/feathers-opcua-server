@@ -1,12 +1,12 @@
 {
   "baseParams": 1,
-  "pointID": "ТВим02",
+  "pointID": 2,
+  "namePointID": "ТВим02",
   "emissionPointID": "ТВ17",
   "pointDescription": "Цех М-5, відділення 2, агрегати 1/2÷4/2",
   "qal2СoncentrationMultiplier": 0.9352,
   "qal2VolumeMultiplier": 1.1951,
   "qal2СoncentrationAdition": 0,
   "qal2VolumeAdition": 0,
-  "outputFile": "acmM52_YearReport2-${ year }.xlsx",
   "dataColumns": {"14QN2O": "E", "14QN2O_CORR": "F", "14FVSG": "G", "14FVSG_CORR": "H", "14F105_IS": "K"}
 }

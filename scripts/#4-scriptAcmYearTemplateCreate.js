@@ -60,7 +60,7 @@ describe('<<=== ScriptOperations: (#4-scriptAcmYearTemplateCreate) ===>>', () =>
 
       const resultItems = exceljs.getCells(sheetName, { range: `B${params.startRow}:B${metrics.rowCount}` });
       // const actualRows = metrics.actualRowCount - startRow + 1;
-      assert.ok(result.hours === resultItems.length, `Write data to xlsx file "${params.outputFile}": ${result.hours} = ${resultItems.length}`);
+      assert.ok(result.hours === resultItems.length, `Write data to xlsx file "${params.outputTemplateFile}": ${result.hours} = ${resultItems.length}`);
     }
 
   });

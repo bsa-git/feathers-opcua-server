@@ -258,14 +258,14 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     const inputArgument = {
       baseParams: 1,
       isTest: true,
-      pointID: 'ТВим02',
+      pointID: 2,
+      namePointID: 'ТВим02',
       emissionPointID: 'ТВ17',
       pointDescription: 'Цех М-5, відділення 2, агрегати 1/2÷4/2',
       qal2СoncentrationMultiplier: 0.9352,
       qal2VolumeMultiplier: 1.1951,
       qal2СoncentrationAdition: 0,
       qal2VolumeAdition: 0,
-      outputFile: 'acmM52_YearReport1-${ year }.xlsx',
       reportingPeriod: [1, 'months'],
       // startYear: 2020,
     };

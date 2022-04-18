@@ -1,5 +1,6 @@
 {
-  "pointID": "ТВим01",
+  "pointID": 1,
+  "namePointID": "ТВим01",
   "emissionPointID": "ТВ16",
   "pointDescription": "Цех М-5, відділення 1, агрегати 2/1÷3/1",
   "qal2СoncentrationMultiplier": 0.9352,
@@ -7,7 +8,8 @@
   "qal2СoncentrationAdition": 0,
   "qal2VolumeAdition": 0,
   "inputFile": "acmYearTemplate.xlsx",
-  "outputFile": "acmM51_YearReport1-${ year }.xlsx",
+  "outputTemplateFile": "acmYearTemplate${ pointID }-${ year }.xlsx",
+  "outputReportFile": "acmYearReport${ pointID }-${ year }.xlsx",
   "startRow": 20,
   "reportingPeriod": [1, "years"],
   "dateColumn": "C",

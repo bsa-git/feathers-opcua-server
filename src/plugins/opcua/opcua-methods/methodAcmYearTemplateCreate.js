@@ -7,6 +7,7 @@ const loForEach = require('lodash/forEach');
 const loAt = require('lodash/at');
 const loRandom = require('lodash/random');
 const loTemplate = require('lodash/template');
+const loStartsWith = require('lodash/startsWith');
 
 const {
   DataType,
@@ -16,10 +17,10 @@ const {
 const {
   appRoot,
   inspector,
-  isNumber,
   doesFileExist,
   hexToARGB,
-  shiftTimeByOneHour
+  shiftTimeByOneHour,
+  makeDirSync
 } = require('../../lib');
 
 const colors = require('../../lib/colors');
@@ -33,6 +34,8 @@ const moment = require('moment');
 const dataTestPath = '/test/data/tmp/excel-helper';
 let dataPath = '/src/api/app/opcua-methods/asm-reports/data';
 let paramsPath = '/src/api/app/opcua-methods/asm-reports/params';
+
+makeDirSync([appRoot, dataTestPath]);
 
 const {
   paramsFileName,
@@ -76,19 +79,15 @@ const setErrDataCells = (index, excel) => {
 module.exports = async (inputArguments, context, callback) => {
   let resultPath = '', paramsFile, baseParamsFile, params = null, paramFullsPath;
   //-----------------------------------
-  
+
   // Get params
   const inputArg = inputArguments[0].value;
   if (callback) {
     params = JSON.parse(inputArg);
   } else {
-    if(isNumber(inputArg)){
-      paramsFile = loTemplate(paramsFileName)({ pointNumber: inputArg });
-    }else{
-      paramsFile = inputArg;
-    }
+    paramsFile = loTemplate(paramsFileName)({ pointID: inputArg });
     paramFullsPath = [appRoot, paramsPath, paramsFile];
-    if(!doesFileExist(paramFullsPath)){
+    if (!doesFileExist(paramFullsPath)) {
       console.log(chalk.redBright(`Run script - ERROR. File with name "${paramsFile}" not found.`));
       throw new Error(`Run script - ERROR. File with name "${paramsFile}" not found.`);
     }
@@ -96,15 +95,11 @@ module.exports = async (inputArguments, context, callback) => {
   }
 
   if (params.baseParams) {
-    if(isNumber(params.baseParams)){
-      baseParamsFile = loTemplate(paramsFileName)({ pointNumber: params.baseParams });
-    }else{
-      baseParamsFile = params.baseParams;
-    }
+    baseParamsFile = loTemplate(paramsFileName)({ pointID: params.baseParams });
     paramFullsPath = [appRoot, paramsPath, baseParamsFile];
-    if(!doesFileExist(paramFullsPath)){
-      console.log(chalk.redBright(`Run script - ERROR. File with name "${paramsFile}" not found.`));
-      throw new Error(`Run script - ERROR. File with name "${paramsFile}" not found.`);
+    if (!doesFileExist(paramFullsPath)) {
+      console.log(chalk.redBright(`Run script - ERROR. File with name "${baseParamsFile}" not found.`));
+      throw new Error(`Run script - ERROR. File with name "${baseParamsFile}" not found.`);
     }
     const baseParams = require(join(...paramFullsPath));
     params = Object.assign({}, baseParams, params);
@@ -120,31 +115,43 @@ module.exports = async (inputArguments, context, callback) => {
       //----------------
       if (item.style.fill) {
         argb = item.style.fill.bgColor.argb;
-        argb = loAt(colors, [argb]);
-        item.style.fill.bgColor.argb = hexToARGB(argb[0]);
+        if (!loStartsWith(argb, 'FF')) {
+          argb = loAt(colors, [argb]);
+          item.style.fill.bgColor.argb = hexToARGB(argb[0]);
+        }
       }
       if (item.style.border) {
         // top
         argb = item.style.border.top.color.argb;
-        argb = loAt(colors, [argb]);
-        item.style.border.top.color.argb = hexToARGB(argb[0]);
+        if (!loStartsWith(argb, 'FF')) {
+          argb = loAt(colors, [argb]);
+          item.style.border.top.color.argb = hexToARGB(argb[0]);
+        }
         // left
         argb = item.style.border.left.color.argb;
-        argb = loAt(colors, [argb]);
-        item.style.border.left.color.argb = hexToARGB(argb[0]);
+        if (!loStartsWith(argb, 'FF')) {
+          argb = loAt(colors, [argb]);
+          item.style.border.left.color.argb = hexToARGB(argb[0]);
+        }
         // bottom
         argb = item.style.border.bottom.color.argb;
-        argb = loAt(colors, [argb]);
-        item.style.border.bottom.color.argb = hexToARGB(argb[0]);
+        if (!loStartsWith(argb, 'FF')) {
+          argb = loAt(colors, [argb]);
+          item.style.border.bottom.color.argb = hexToARGB(argb[0]);
+        }
         // right
         argb = item.style.border.right.color.argb;
-        argb = loAt(colors, [argb]);
-        item.style.border.right.color.argb = hexToARGB(argb[0]);
+        if (!loStartsWith(argb, 'FF')) {
+          argb = loAt(colors, [argb]);
+          item.style.border.right.color.argb = hexToARGB(argb[0]);
+        }
       }
       if (item.style.font) {
         argb = item.style.font.color.argb;
-        argb = loAt(colors, [argb]);
-        item.style.font.color.argb = hexToARGB(argb[0]);
+        if (!loStartsWith(argb, 'FF')) {
+          argb = loAt(colors, [argb]);
+          item.style.font.color.argb = hexToARGB(argb[0]);
+        }
       }
     });
   });
@@ -154,7 +161,7 @@ module.exports = async (inputArguments, context, callback) => {
   // Create exceljs object
   let exceljs = new ExceljsHelperClass({
     excelPath: [appRoot, dataPath, params.inputFile],
-    sheetName: 'Data_CNBB',// Instructions Data_CNBB Results Test
+    sheetName: 'Data_CNBB',
     bookOptions: {
       fullCalcOnLoad: true
     }
@@ -166,7 +173,7 @@ module.exports = async (inputArguments, context, callback) => {
   const startRow = params.startRow;
   // Get current date
   let startYear = moment.utc().format('YYYY');
-  if(params.startYear){
+  if (params.startYear) {
     startYear = params.startYear;
   }
   let currentDate = moment.utc([startYear, 0, 1, 0, 0, 0]).format();
@@ -174,7 +181,7 @@ module.exports = async (inputArguments, context, callback) => {
   setDateCells(startRow, currentDate, exceljs);
 
   // Set param data
-  exceljs.getCell('H1').value = params.pointID;
+  exceljs.getCell('H1').value = params.namePointID;
   exceljs.getCell('H2').value = params.emissionPointID;
   exceljs.getCell('H3').value = params.pointDescription;
   exceljs.getCell('R2').value = params.qal2СoncentrationMultiplier;
@@ -265,8 +272,8 @@ module.exports = async (inputArguments, context, callback) => {
 
 
   // Write new data to xlsx file
-  const outputFile = loTemplate(params.outputFile)({ year: startYear });
-  if(params.isTest) dataPath = dataTestPath;
+  const outputFile = loTemplate(params.outputTemplateFile)({ pointID: params.pointID, year: startYear });
+  if (params.isTest) dataPath = dataTestPath;
   resultPath = await exceljs.writeFile([appRoot, dataPath, outputFile]);
 
   // CallBack

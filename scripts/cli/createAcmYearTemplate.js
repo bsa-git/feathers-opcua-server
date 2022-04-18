@@ -36,7 +36,7 @@ const isDebug = false;
     .epilog("copyright 2022")
     .argv;
 
-  if (true && argv) inspector('Yargs.argv:', argv);
+  if (isDebug && argv) inspector('Yargs.argv:', argv);
 
   // Run script
   if (Array.isArray(argv.params)) {

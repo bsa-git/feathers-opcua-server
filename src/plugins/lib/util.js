@@ -599,7 +599,7 @@ const  rgbToARGB = function (color) {
  * e.g. FF9E9E9E
  */
 const  hexToARGB = function (color) {
-  return color.replace('#', 'FF');
+  return color? color.replace('#', 'FF') : '';
 };
 
 /**
