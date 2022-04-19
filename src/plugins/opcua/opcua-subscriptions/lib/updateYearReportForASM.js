@@ -137,7 +137,7 @@ async function updateYearReportForASM(params, dataValue) {
     // Write report file
     const outputReportFile = loTemplate(paramsReport.outputReportFile)({ pointID, year: reportYear });
     const resultPath = await exceljs.writeFile([appRoot, dataTestPath, outputReportFile]);
-
+    if (true && resultPath) inspector('updateYearReportForASM.resultPath:', resultPath);
 
   } else {
     logger.error(`There is no file "${reportFileName}" for the reporting period on the automated monitoring system.`);

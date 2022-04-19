@@ -76,7 +76,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m51']);
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52']);
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52_acm']);
-    removeFilesFromDirSync([appRoot, 'test/data/tmp/excel-helper']);
+    // removeFilesFromDirSync([appRoot, 'test/data/tmp/excel-helper']);
   });
 
   it('#1. OPC-UA clients: registered the service', async () => {
@@ -256,7 +256,6 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     const service = await getClientService(app, id);
     // Set input argument
     const inputArgument = {
-      baseParams: 1,
       isTest: true,
       pointID: 2,
       namePointID: 'ТВим02',

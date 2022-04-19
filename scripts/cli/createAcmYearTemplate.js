@@ -22,32 +22,32 @@ const isDebug = false;
     .usage('Usage: $0 -p num')
     .example(
       '$0 -p 2',
-      'Returns the file name (acmM52_YearReport2-2022.xlsx) when creating a template for the reporting period.'
+      'Returns the file name (acmYearTemplate2-2022.xlsx) when creating a template for the reporting period.'
     )
     .option('p', {
-      alias: 'params',
-      describe: 'Parameter number for the script.',
-      demandOption: "The params is required.",
-      type: "number",
+      alias: 'point',
+      describe: 'Point number for the script.',
+      demandOption: 'The params is required.',
+      type: 'number',
       nargs: 1,
     })
-    .describe("help", "Show help.") // Override --help usage message.
-    .describe("version", "Show version number.") // Override --version usage message.
-    .epilog("copyright 2022")
+    .describe('help', 'Show help.') // Override --help usage message.
+    .describe('version', 'Show version number.') // Override --version usage message.
+    .epilog('copyright 2022')
     .argv;
 
   if (isDebug && argv) inspector('Yargs.argv:', argv);
 
   // Run script
-  if (Array.isArray(argv.params)) {
-    for (let index = 0; index < argv.params.length; index++) {
-      const param = argv.params[index];
-      const result = await methodAcmYearTemplateCreate([{ value: param }]);
+  if (Array.isArray(argv.point)) {
+    for (let index = 0; index < argv.point.length; index++) {
+      const point = argv.point[index];
+      const result = await methodAcmYearTemplateCreate([{ value: point }]);
       console.log(chalk.green('Run script - OK!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
     }
   } else {
-    const result = await methodAcmYearTemplateCreate([{ value: argv.params }]);
-    console.log(chalk.green('Run script - OK!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
+    const result = await methodAcmYearTemplateCreate([{ value: argv.point }]);
+    console.log(chalk.green('Run script - OK!!!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
   }
 
-})()
+})();

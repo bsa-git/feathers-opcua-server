@@ -94,16 +94,18 @@ module.exports = async (inputArguments, context, callback) => {
     params = require(join(...paramFullsPath));
   }
 
-  if (params.baseParams) {
-    baseParamsFile = loTemplate(paramsFileName)({ pointID: params.baseParams });
-    paramFullsPath = [appRoot, paramsPath, baseParamsFile];
-    if (!doesFileExist(paramFullsPath)) {
-      console.log(chalk.redBright(`Run script - ERROR. File with name "${baseParamsFile}" not found.`));
-      throw new Error(`Run script - ERROR. File with name "${baseParamsFile}" not found.`);
-    }
-    const baseParams = require(join(...paramFullsPath));
-    params = Object.assign({}, baseParams, params);
+  if(!params.baseParams){
+    params.baseParams = 1;
   }
+
+  baseParamsFile = loTemplate(paramsFileName)({ pointID: params.baseParams });
+  paramFullsPath = [appRoot, paramsPath, baseParamsFile];
+  if (!doesFileExist(paramFullsPath)) {
+    console.log(chalk.redBright(`Run script - ERROR. File with name "${baseParamsFile}" not found.`));
+    throw new Error(`Run script - ERROR. File with name "${baseParamsFile}" not found.`);
+  }
+  const baseParams = require(join(...paramFullsPath));
+  params = Object.assign({}, baseParams, params);
 
 
   if (isDebug && params) inspector('methodAcmYearTemplateCreate.params:', params);
