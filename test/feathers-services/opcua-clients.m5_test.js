@@ -66,7 +66,9 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     // Make dirs
     makeDirSync([appRoot, 'test/data/tmp/ch-m51']);
     makeDirSync([appRoot, 'test/data/tmp/ch-m52']);
-    makeDirSync([appRoot, 'test/data/tmp/ch-m52_acm']);
+    makeDirSync([appRoot, 'test/data/tmp/ch-m5acm_1']);
+    makeDirSync([appRoot, 'test/data/tmp/ch-m5acm_2']);
+    makeDirSync([appRoot, 'test/data/tmp/ch-m5acm_3']);
     makeDirSync([appRoot, 'test/data/tmp/excel-helper']);
   });
 
@@ -75,8 +77,10 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m51']);
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52']);
-    removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52_acm']);
-    // removeFilesFromDirSync([appRoot, 'test/data/tmp/excel-helper']);
+    removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m5acm_1']);
+    removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m5acm_2']);
+    removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m5acm_3']);
+    removeFilesFromDirSync([appRoot, 'test/data/tmp/excel-helper']);
   });
 
   it('#1. OPC-UA clients: registered the service', async () => {

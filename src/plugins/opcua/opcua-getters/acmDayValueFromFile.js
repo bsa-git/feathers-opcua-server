@@ -47,7 +47,6 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
   let id = params.myOpcuaServer.id;
   //------------------------------------
   // Create path
-  // debug('histValueFromFile.params.path:', params.path); // test/data/tmp/ch-m52_acm
   const path = createPath(params.path);
   const excelMappingFrom = params.excelMappingFrom;
   const rangeData = excelMappingFrom.rangeData;

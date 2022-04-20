@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const Path = require('path');
 const join = Path.join;
+const chalk = require('chalk');
 const logger = require('../../../../logger');
 
 const {
@@ -24,11 +25,8 @@ const loForEach = require('lodash/forEach');
 const loTemplate = require('lodash/template');
 const loOmit = require('lodash/omit');
 
-const dataTestPath = '/test/data/tmp/excel-helper';
 let dataPath = '/src/api/app/opcua-methods/asm-reports/data';
 let paramsPath = '/src/api/app/opcua-methods/asm-reports/params';
-
-makeDirSync([appRoot, dataTestPath]);
 
 const {
   paramsFileName,
@@ -44,7 +42,7 @@ const isLog = false;
  * @returns {void}
  */
 async function updateYearReportForASM(params, dataValue) {
-  let resultPath = '', paramsReport = null, paramFullsPath;
+  let reportFile, paramsReport = null, paramFullsPath;
   //-----------------------------------
 
   if (isLog && params) inspector('updateYearReportForASM.params:', params);
@@ -78,14 +76,21 @@ async function updateYearReportForASM(params, dataValue) {
     paramsReport = Object.assign({}, baseParams, paramsReport);
   }
 
-  // Get report file name
-  const reportFileName = loTemplate(paramsReport.outputTemplateFile)({ pointID, year: reportYear });
+  // Get year report file
+  const outputReportPath = addressSpaceOption.getterParams.toPath;
+  makeDirSync([appRoot, outputReportPath]);
+  const outputReportFile = loTemplate(paramsReport.outputReportFile)({ pointID, year: reportYear });
+  reportFile = [appRoot, outputReportPath, outputReportFile];
+  if (!doesFileExist(reportFile)) {
+    const outputTemplateFile = loTemplate(paramsReport.outputTemplateFile)({ pointID, year: reportYear });
+    reportFile = [appRoot, dataPath, outputTemplateFile];
+  }
 
-  if (doesFileExist([appRoot, dataPath, reportFileName])) {
+  if (doesFileExist(reportFile)) {
     
     // Create exceljs object
     let exceljs = new ExceljsHelperClass({
-      excelPath: [appRoot, dataPath, reportFileName],
+      excelPath: reportFile,
       sheetName: 'Data_CNBB',
       bookOptions: {
         fullCalcOnLoad: true
@@ -115,7 +120,7 @@ async function updateYearReportForASM(params, dataValue) {
     // Set cell value to groupValue
     loForEach(paramsReport.dataColumns, function (column, alias) {
       dateCells = exceljs.getCells(sheetName, { range: `${column}${startRow4Date}:${column}${endRow4Date}` });
-      console.log('dateCells:', dateCells.length, 'startRow4Date:', startRow4Date, 'endRow4Date:', endRow4Date, 'alias:', alias);
+      // console.log('dateCells:', dateCells.length, 'startRow4Date:', startRow4Date, 'endRow4Date:', endRow4Date, 'alias:', alias);
       loForEach(groupValue, function (items, tag) {
         let tagAlias = tag.split(':');
         tagAlias = tagAlias[tagAlias.length - 1];
@@ -127,20 +132,14 @@ async function updateYearReportForASM(params, dataValue) {
           }
         }
       });
-      // Show cells
-      // loForEach(dateCells, function (cell) {
-      //   cell = loOmit(cell, ['cell', 'column', 'row']);
-      //   if (true && column === 'G') inspector(`updateYearReportForASM.cell(${cell.address}):`, cell);
-      // });
     });
 
     // Write report file
-    const outputReportFile = loTemplate(paramsReport.outputReportFile)({ pointID, year: reportYear });
-    const resultPath = await exceljs.writeFile([appRoot, dataTestPath, outputReportFile]);
-    if (true && resultPath) inspector('updateYearReportForASM.resultPath:', resultPath);
+    const resultPath = await exceljs.writeFile([appRoot, outputReportPath, outputReportFile]);
+    if (true && resultPath) console.log(chalk.green('Update asm year report - OK!'), 'reportDate:', chalk.cyan(reportDate), 'resultFile:', chalk.cyan(outputReportFile));
 
   } else {
-    logger.error(`There is no file "${reportFileName}" for the reporting period on the automated monitoring system.`);
+    logger.error(`There is no file "${reportFile[2]}" for the reporting period on the automated monitoring system.`);
   }
 }
 

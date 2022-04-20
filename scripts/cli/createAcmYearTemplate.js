@@ -47,7 +47,7 @@ const isDebug = false;
     }
   } else {
     const result = await methodAcmYearTemplateCreate([{ value: argv.point }]);
-    console.log(chalk.green('Run script - OK!!!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
+    console.log(chalk.green('Run script - OK!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
   }
 
 })();
