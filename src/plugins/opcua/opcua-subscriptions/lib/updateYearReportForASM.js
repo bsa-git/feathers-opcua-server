@@ -87,7 +87,7 @@ async function updateYearReportForASM(params, dataValue) {
   }
 
   if (doesFileExist(reportFile)) {
-    
+
     // Create exceljs object
     let exceljs = new ExceljsHelperClass({
       excelPath: reportFile,
@@ -120,7 +120,6 @@ async function updateYearReportForASM(params, dataValue) {
     // Set cell value to groupValue
     loForEach(paramsReport.dataColumns, function (column, alias) {
       dateCells = exceljs.getCells(sheetName, { range: `${column}${startRow4Date}:${column}${endRow4Date}` });
-      // console.log('dateCells:', dateCells.length, 'startRow4Date:', startRow4Date, 'endRow4Date:', endRow4Date, 'alias:', alias);
       loForEach(groupValue, function (items, tag) {
         let tagAlias = tag.split(':');
         tagAlias = tagAlias[tagAlias.length - 1];
@@ -132,6 +131,14 @@ async function updateYearReportForASM(params, dataValue) {
           }
         }
       });
+      // Set values for 'CHBB'
+      if (alias.includes('CHBB')) {
+        for (let index = 0; index < dateCells.length; index++) {
+          const dateCell = dateCells[index];
+          dateCell.cell.value = 1;
+          dateCell.value = 1;
+        }
+      }
     });
 
     // Write report file

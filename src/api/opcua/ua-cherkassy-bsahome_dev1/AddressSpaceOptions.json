@@ -84,6 +84,7 @@
       "variableGetType": "valueFromSource",
       "getter": "acmDayValueFromFile",
       "getterParams": {
+        "isTest": true,
         "path": "test/data/tmp/ch-m5acm_2",
         "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/asmDayReport.xls",

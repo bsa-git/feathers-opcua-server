@@ -53,6 +53,8 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
   const headerNames = excelMappingFrom.headerNames;
   const rangeDate = excelMappingFrom.rangeDate;
 
+  const startYear = moment.utc().format('YYYY');
+
   // Watch read only new file
   readOnlyModifiedFile(path, (filePath, data) => {
 
@@ -101,8 +103,11 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     // Get current date    
     if(currentDate){
       currentDate = moment.utc(currentDate).add(1, 'days').format('YYYY-MM-DD');
+      const currentYear = currentDate.split('-')[0];
+      if((currentYear !== startYear) && params.isTest){
+        currentDate = moment.utc([startYear, 0, 1]).format('YYYY-MM-DD');
+      }
     } else {
-      const startYear = moment.utc().format('YYYY');
       currentDate = moment.utc([startYear, 0, 1]).format('YYYY-MM-DD');
     }
     const nextDate = moment.utc(currentDate).add(1, 'days').format('YYYY-MM-DD');
@@ -123,6 +128,11 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
       if (row['F'] && isNumber(row['F'])) {
         row['B'] = loRandom(300, 2000);
         row['D'] = loRandom(30000, 300000);
+        row['F'] = loRandom(0, 1);
+        if(row['F']){
+          row['C'] = loRandom(0, 1);
+          row['E'] = loRandom(0, 1);
+        }
       }
       return row;
     });

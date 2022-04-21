@@ -2,6 +2,7 @@
 const Path = require('path');
 const join = Path.join;
 const chalk = require('chalk');
+const moment = require('moment');
 
 const loForEach = require('lodash/forEach');
 const loAt = require('lodash/at');
@@ -28,8 +29,6 @@ const colors = require('../../lib/colors');
 const {
   ExceljsHelperClass,
 } = require('../../excel-helpers');
-
-const moment = require('moment');
 
 const dataTestPath = '/test/data/tmp/excel-helper';
 let dataPath = '/src/api/app/opcua-methods/asm-reports/data';
