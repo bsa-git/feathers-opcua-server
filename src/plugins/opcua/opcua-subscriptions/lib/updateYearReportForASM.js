@@ -50,7 +50,6 @@ async function updateYearReportForASM(params, dataValue) {
   const addressSpaceOption = params.addressSpaceOption;
 
   // Only for group values
-  if (addressSpaceOption && !addressSpaceOption.group) return;
   if (isLog && addressSpaceOption) inspector('updateYearReportForASM.addressSpaceOption:', addressSpaceOption);
 
   // Get group value
@@ -87,9 +86,9 @@ async function updateYearReportForASM(params, dataValue) {
   }
 
   if (doesFileExist(reportFile)) {
-
+    // inspector('updateYearReportForASM.reportFile:', reportFile);
     // Create exceljs object
-    let exceljs = new ExceljsHelperClass({
+    const exceljs = new ExceljsHelperClass({
       excelPath: reportFile,
       sheetName: 'Data_CNBB',
       bookOptions: {

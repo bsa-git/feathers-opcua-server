@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+const moment = require('moment');
+
 const {
   inspector,
 } = require('../../lib');
@@ -10,6 +12,8 @@ const {
 } = require('./lib');
 
 const isLog = false;
+
+const functionBusy = {};
 
 /**
  * @method onChangedCommonHandle
@@ -23,8 +27,17 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
   if (isLog && dataValue) inspector('onChangedGroupHandlerForASM.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 
+  const browseName = addressSpaceOption.browseName;
+  
   // Only for group values
-  if (addressSpaceOption && !addressSpaceOption.group) return;
+  if (!addressSpaceOption.group) return;
+  if(functionBusy[browseName]) return;
+  
+  // Set functionBusy to true
+  functionBusy[browseName] = true;
+
+  const startTime = moment.utc().format();
+  if(isLog && startTime) console.log('onChangedGroupHandlerForASM.startTime:', startTime, 'browseName:', browseName);
 
   // Save data to DB
   const savedValue = await saveOpcuaGroupValueToDB(params, dataValue);
@@ -35,6 +48,12 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
 
   // Show info
   showInfoForGroupHandler(params, dataValue);
+
+  // Set functionBusy to true
+  functionBusy[browseName] = false;
+
+  const endTime = moment.utc().format();
+  if(isLog && endTime) console.log('onChangedGroupHandlerForASM.endTime:', endTime, 'browseName:', browseName);
 }
 
 module.exports = onChangedGroupHandlerForASM;

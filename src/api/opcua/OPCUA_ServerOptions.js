@@ -171,13 +171,13 @@ module.exports = {
     * the maximum number of simultaneous sessions allowed.
     * @type {Number}
     */
-  maxAllowedSessionNumber: 10,
+  maxAllowedSessionNumber: 100,
 
   /**
     * the maximum number authorized simultaneous connections per endpoint
     * @type {Number}
     */
-  maxConnectionsPerEndpoint: 10,
+  maxConnectionsPerEndpoint: 100,
 
   /**
     * the nodeset.xml file(s) to load

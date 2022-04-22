@@ -240,6 +240,12 @@
     "hostTypeDB": "mongodb",
     "opcuaSaveModeToDB": "localUpdate",
     "opcuaRemoteDbUrl": "http://localhost:3131",
+    "security": {
+      "mode": "SignAndEncrypt",
+      "policy": "Basic256Sha256",
+      "userName": "",
+      "password": ""
+    },
     "include": {
       "tests": [
         "mssql-tedious.test2.js"

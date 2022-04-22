@@ -145,8 +145,9 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
       sheetName: 'Report1'
     });
 
-    // Write new data to xls file
-    const fileName = getFileName(`${params.toFile}-`, 'xls', true);
+    // Write new data to xls file fromFile
+    const toFile = getPathBasename(params.fromFile, '.xls');
+    const fileName = getFileName(`${toFile}-`, 'xls', true);
     xlsx.writeFile([appRoot, path, fileName]);
 
   }, params.interval);

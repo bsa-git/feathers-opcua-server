@@ -40,7 +40,7 @@ async function showInfoForGroupHandler(params, dataValue) {
   if(Object.keys(value).includes('!value')){
     valueKeys = valueKeys - 1;  
   }
-  console.log('<<===', chalk.magentaBright(`ID="${params.id}"; `), chalk.greenBright(`Name="${browseName}"; `), chalk.whiteBright(`Number of values=(${valueKeys});`), chalk.cyanBright(`tm=${timestamp}`), '===>>');
+  console.log('<=', chalk.magentaBright(`ID="${params.id}"; `), chalk.greenBright(`Name="${browseName}"; `), chalk.whiteBright(`Values=(${valueKeys});`), chalk.cyanBright(`tm=${timestamp}`), '=>');
 }
 
 module.exports = showInfoForGroupHandler;

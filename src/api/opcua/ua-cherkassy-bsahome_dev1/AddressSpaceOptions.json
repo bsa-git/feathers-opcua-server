@@ -1,19 +1,19 @@
 {
   "objects": [
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_M51",
       "displayName": "Черкассы 'АЗОТ' цех M5-1",
       "type": "object"
     },
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_M52",
       "displayName": "Черкассы 'АЗОТ' цех M5-2",
       "type": "object"
     },
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_M51_ACM",
       "displayName": "Черкассы 'АЗОТ' цех M5/1 ACM",
       "type": "object"
@@ -25,13 +25,13 @@
       "type": "object"
     },
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_M52_ACM2",
       "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM2",
       "type": "object"
     },
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_M5_ACM",
       "displayName": "Черкассы 'АЗОТ' цех M5 ACM",
       "type": "object"
@@ -73,6 +73,27 @@
       }
     },
     {
+      "browseName": "CH_M51_ACM::ValueFromFile",
+      "displayName": "Значения из файла для CH_M51_ACM",
+      "ownerName": "CH_M51_ACM",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForASM",
+      "variableGetType": "valueFromSource",
+      "getter": "acmDayValueFromFile",
+      "getterParams": {
+        "isTest": true,
+        "path": "test/data/tmp/ch-m5acm_1",
+        "toPath": "test/data/tmp/excel-helper",
+        "fromFile": "test/data/excel/asmDayReport.xls",
+        "pointID": 1,
+        "interval": 30000,
+        "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["23QN2O", "23QN2O_CORR", "23FVSG", "23FVSG_CORR", "23F105_IS"]}
+      }
+    },
+    {
       "browseName": "CH_M52_ACM::ValueFromFile",
       "displayName": "Значения из файла для CH_M52_ACM",
       "ownerName": "CH_M52_ACM",
@@ -89,8 +110,29 @@
         "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/asmDayReport.xls",
         "pointID": 2,
-        "interval": 10000,
+        "interval": 30000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["14QN2O", "14QN2O_CORR", "14FVSG", "14FVSG_CORR", "14F105_IS"]}
+      }
+    },
+    {
+      "browseName": "CH_M52_ACM2::ValueFromFile",
+      "displayName": "Значения из файла для CH_M52_ACM2",
+      "ownerName": "CH_M52_ACM2",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForASM",
+      "variableGetType": "valueFromSource",
+      "getter": "acmDayValueFromFile",
+      "getterParams": {
+        "isTest": true,
+        "path": "test/data/tmp/ch-m5acm_3",
+        "toPath": "test/data/tmp/excel-helper",
+        "fromFile": "test/data/excel/asmDayReport.xls",
+        "pointID": 3,
+        "interval": 30000,
+        "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["57QN2O", "57QN2O_CORR", "57FVSG", "57FVSG_CORR", "57F105_IS"]}
       }
     }
   ]

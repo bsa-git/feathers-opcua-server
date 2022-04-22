@@ -1,7 +1,7 @@
 {
   "requestedPublishingInterval": 100,
   "requestedLifetimeCount": 60,
-  "requestedMaxKeepAliveCount": 10,
+  "requestedMaxKeepAliveCount": 100,
   "maxNotificationsPerPublish":  100,
   "publishingEnabled": true,
   "priority": 1
