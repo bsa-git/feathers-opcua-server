@@ -940,9 +940,9 @@ const executeOpcuaClientScript = async (service, id) => {
   const defaultScriptName = 'startSubscriptionMonitor';
   //----------------------------------------------------
   const opcuaOption = getOpcuaConfig(id);
-  if (isDebug) debug('getOpcuaClientScript.opcuaOption:', opcuaOption);
+  if (isDebug && opcuaOption) debug('getOpcuaClientScript.opcuaOption:', opcuaOption);
   const scriptName = opcuaOption.clientScript ? opcuaOption.clientScript : defaultScriptName;
-  if (isDebug) debug('getOpcuaClientScript.scriptName:', scriptName);
+  if (isDebug && scriptName) debug('getOpcuaClientScript.scriptName:', scriptName);
   const script = getOpcuaClientScript(id, scriptName);
   await script(id, service);
 };

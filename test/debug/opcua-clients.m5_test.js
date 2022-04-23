@@ -286,6 +286,41 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     }
     assert.ok(callResults.length, 'OPC-UA clients: session call method "methodAcmYearTemplateCreate"');
   });
+
+  /** 
+  it('#8.2 OPC-UA clients: session call method "methodAcmYearTemplateCreate"', async () => {
+    let callResults = [];
+    //------------------------------------------------
+    const service = await getClientService(app, id);
+    // Set input argument
+    const inputArgument = {
+      isTest: true,
+      pointID: 2,
+      namePointID: 'ТВим02',
+      emissionPointID: 'ТВ17',
+      pointDescription: 'Цех М-5, відділення 2, агрегати 1/2÷4/2',
+      qal2СoncentrationMultiplier: 0.9352,
+      qal2VolumeMultiplier: 1.1951,
+      qal2СoncentrationAdition: 0,
+      qal2VolumeAdition: 0,
+      reportingPeriod: [1, 'months'],
+      // startYear: 2020,
+    };
+    const inputArguments = [[
+      {
+        dataType: DataType.String,
+        value: JSON.stringify(inputArgument),
+      }
+    ]];
+    callResults = await service.sessionCallMethod(id, 'CH_M5_ACM:YearTemplateCreate', inputArguments);
+    if (callResults.length) {
+      if(isDebug) inspector('methodAcmYearTemplateCreate.callResults:', callResults);
+      console.log(chalk.green('CH_M5_ACM:YearTemplateCreate.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
+      // console.log(chalk.green('CH_M5_ACM:YearTemplateCreate.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));
+    }
+    assert.ok(callResults.length, 'OPC-UA clients: session call method "methodAcmYearTemplateCreate"');
+  });
+  */
   
   //============== START SUBSCRIPTION ====================//
 

@@ -115,10 +115,9 @@ module.exports = async function opcuaBootstrap(app) {
           serverInfo: { applicationName: id },
         }
       };
-      if (isLog) inspector('opcuaBootstrap.srvData:', srvData);
+      if (isLog && srvData) inspector('opcuaBootstrap.srvData:', srvData);
       opcuaServer = await service.create(srvData);
-      if (isLog) inspector('opcuaBootstrap.opcuaServer:', opcuaServer.server.getCurrentState());
-      // inspector('opcuaBootstrap.opcuaServer:', opcuaServer.server.getCurrentState());
+      if (isLog && opcuaServer) inspector('opcuaBootstrap.opcuaServer:', opcuaServer.server.getCurrentState());
     }
     // Create service for OPC-UA client
     service = await getClientService(app, id);
@@ -135,8 +134,7 @@ module.exports = async function opcuaBootstrap(app) {
       opcuaClient = await service.create(clientData);
       // Execute client script
       await executeOpcuaClientScript(service, id);
-      if (isLog) inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
-      // inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
+      if (isLog && opcuaClient) inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
     }
   }
 };
