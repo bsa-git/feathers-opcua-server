@@ -3,7 +3,8 @@ const assert = require('assert');
 const app = require('../../src/app');
 
 const {
-  DataType
+  DataType,
+  VariantArrayType
 } = require('node-opcua');
 
 const {
@@ -252,42 +253,53 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     }
   });
 
-  //============== SESSION CALL METHOD ====================//
+  //============== SESSION WRITE VALUE ====================//
 
-  it('#8. OPC-UA clients: session call method "methodAcmYearTemplateCreate"', async () => {
-    let callResults = [];
-    //------------------------------------------------
+  it('#8 OPC-UA clients: session write single node value', async () => {
+    let readResult, statusCode = null;
     const service = await getClientService(app, id);
-    // Set input argument
-    const inputArgument = {
-      isTest: true,
-      pointID: 2,
-      namePointID: 'ТВим02',
-      emissionPointID: 'ТВ17',
-      pointDescription: 'Цех М-5, відділення 2, агрегати 1/2÷4/2',
-      qal2СoncentrationMultiplier: 0.9352,
-      qal2VolumeMultiplier: 1.1951,
-      qal2СoncentrationAdition: 0,
-      qal2VolumeAdition: 0,
-      reportingPeriod: [1, 'months'],
-      // startYear: 2020,
+
+    const arrayOfvalues = new Uint16Array([2, 23, 23, 12, 24, 3, 25, 3, 26, 3, 27, 3, 28, 1, 43690, 1, 1261, 0, 0, 0, 0, 0, 0, 0]);
+
+    // service.sessionWriteSingleNode
+    const dataForWrite = {
+      dataType: DataType.UInt16,
+      arrayType: VariantArrayType.Array,
+      value: arrayOfvalues,
     };
-    const inputArguments = [[
-      {
-        dataType: DataType.String,
-        value: JSON.stringify(inputArgument),
-      }
-    ]];
-    callResults = await service.sessionCallMethod(id, 'CH_M5_ACM:YearTemplateCreate', inputArguments);
-    if (callResults.length) {
-      if(isDebug) inspector('methodAcmYearTemplateCreate.callResults:', callResults);
-      console.log(chalk.green('CH_M5_ACM:YearTemplateCreate.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
-      // console.log(chalk.green('CH_M5_ACM:YearTemplateCreate.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));
-    }
-    assert.ok(callResults.length, 'OPC-UA clients: session call method "methodAcmYearTemplateCreate"');
+    statusCode = await service.sessionWriteSingleNode(id, 'CH_M5_ACM::VariableForWrite', dataForWrite);
+    console.log(chalk.green('CH_M5_ACM::VariableForWrite.statusCode:'), chalk.cyan(statusCode.name));
+
+    // service.sessionRead
+    readResult = await service.sessionRead(id, 'CH_M5_ACM::VariableForWrite');
+    readResult = readResult[0].value.value;
+    console.log(chalk.green('CH_M5_ACM::VariableForWrite.readResult:'), chalk.cyan(`'${readResult}'`));
+
+    assert.ok(readResult.length === arrayOfvalues.length, 'OPC-UA clients: session write single node value');
   });
 
-  /** 
+  it('#8.1 OPC-UA clients: session write single node value', async () => {
+    let readResult, statusCode = null;
+    //-----------------------------------
+    const service = await getClientService(app, id);
+    // service.sessionWriteSingleNode
+    const dataForWrite = {
+      dataType: DataType.String,
+      value: 'StopScript',
+    };
+    statusCode = await service.sessionWriteSingleNode(id, 'CH_M5_ACM::RunCommand', dataForWrite);
+    console.log(chalk.green('CH_M5_ACM::RunCommand.statusCode:'), chalk.cyan(statusCode.name));
+
+    // service.sessionRead
+    readResult = await service.sessionRead(id, 'CH_M5_ACM::RunCommand');
+    readResult = readResult[0].value.value;
+    console.log(chalk.green('CH_M5_ACM::RunCommand.readResult:'), chalk.cyan(`'${readResult}'`));
+
+    assert.ok(readResult === dataForWrite.value, 'OPC-UA clients: session write single node value');
+  });
+
+  //============== SESSION CALL METHOD ====================//
+
   it('#8.2 OPC-UA clients: session call method "methodAcmYearTemplateCreate"', async () => {
     let callResults = [];
     //------------------------------------------------
@@ -312,7 +324,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
         value: JSON.stringify(inputArgument),
       }
     ]];
-    callResults = await service.sessionCallMethod(id, 'CH_M5_ACM:YearTemplateCreate', inputArguments);
+    callResults = await service.sessionCallMethod(id, 'CH_M5_ACM::YearTemplateCreate', inputArguments);
     if (callResults.length) {
       if(isDebug) inspector('methodAcmYearTemplateCreate.callResults:', callResults);
       console.log(chalk.green('CH_M5_ACM:YearTemplateCreate.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
@@ -320,8 +332,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     }
     assert.ok(callResults.length, 'OPC-UA clients: session call method "methodAcmYearTemplateCreate"');
   });
-  */
-  
+
   //============== START SUBSCRIPTION ====================//
 
   it('#9. OPC-UA clients: subscription create', async () => {

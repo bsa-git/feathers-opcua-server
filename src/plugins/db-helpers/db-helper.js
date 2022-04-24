@@ -549,9 +549,9 @@ const integrityCheckOpcua = async function (app, isRemote = false) {
 
   // Get all 'childGroup' tags 
   if (isRemote) {
-    tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: [ 'object', 'method' ] }, group: { $ne: true }, ownerName: { $in: objTagBrowseNames } });
+    tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: [ 'object', 'method' ] }, group: { $ne: true }, ownerGroup: true, ownerName: { $in: objTagBrowseNames } });
   } else {
-    tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: [ 'object', 'method' ] }, group: { $ne: true } });
+    tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: [ 'object', 'method' ] }, group: { $ne: true }, ownerGroup: true });
   }
   // Remove 'childGroup' tags that have no 'ownerGroup' tags
   if (tagsFromDB.length) {

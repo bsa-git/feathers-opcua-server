@@ -243,8 +243,8 @@
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
-      "userName": "",
-      "password": ""
+      "userName": "OPCUA_ADMIN_NAME",
+      "password": "OPCUA_ADMIN_PASS"
     },
     "include": {
       "tests": [

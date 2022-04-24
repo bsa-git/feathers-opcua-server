@@ -16,7 +16,8 @@
     "email": "bs261257@gmail.com"
   },
   "bin": {
-    "createAcmYearTemplate": "./scripts/cli/createAcmYearTemplate.js"
+    "createAcmYearTemplate": "./scripts/cli/createAcmYearTemplate.js",
+    "createOpcuaAcmYearTemplate": "./scripts/cli/createOpcuaAcmYearTemplate.js"
   },
   "contributors": [],
   "bugs": {},

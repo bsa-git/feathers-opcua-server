@@ -783,7 +783,9 @@ class OpcuaClient {
   async sessionWriteSingleNode(nameNodeId, variantValue) {
     this.sessionNotCreated();
     // Get nodeIds
-    const nodeId = this.getNodeIds(nameNodeId)[0];
+    let nodeId = this.getNodeIds(nameNodeId);
+    console.log('sessionWriteSingleNode.nodeId:', nodeId);
+    nodeId = nodeId[0];
     const statusCode = await this.session.writeSingleNode(nodeId, variantValue);
     if (isLog) inspector('plugins.opcua-client.class::sessionWriteSingleNode.statusCode:', statusCode);
     return statusCode;
@@ -918,46 +920,6 @@ class OpcuaClient {
     if (isLog) inspector('plugins.opcua-client.class::sessionCallMethod.result:', result);
     return result;
   }
-
-  /** 
-  async sessionCallMethodAsync(nameNodeIds, inputArguments = []) {
-    let result = [], itemNodeIds = [];
-    this.sessionNotCreated();
-    // Get nodeIds
-    this.getNodeIds(nameNodeIds).forEach((itemNodeId, index) => {
-      if (isString(itemNodeId)) {
-        if (this.getItemNodeId(itemNodeId)) {
-          const ownerName = this.getItemNodeId(itemNodeId).ownerName;
-          const ownerNodeId = this.getItemNodeId(ownerName).nodeId;
-          itemNodeIds.push({ objectId: ownerNodeId, methodId: itemNodeId, inputArguments: inputArguments[index] });
-        }
-      } else {
-        if (itemNodeId.methodId && !itemNodeId.objectId && !itemNodeId.inputArguments) {
-          if (this.getItemNodeId(itemNodeId)) {
-            const ownerName = this.getItemNodeId(itemNodeId.methodId).ownerName;
-            const ownerNodeId = this.getItemNodeId(ownerName).nodeId;
-            itemNodeIds.push(Object.assign(itemNodeId, { objectId: ownerNodeId, inputArguments: inputArguments[index] }));
-          }
-        }
-        if (itemNodeId.methodId && itemNodeId.objectId && !itemNodeId.inputArguments) {
-          itemNodeIds.push(Object.assign(itemNodeId, { inputArguments: inputArguments[index] }));
-        }
-        if (itemNodeId.nodeId && itemNodeId.objectId && itemNodeId.inputArguments) {
-          itemNodeIds.push(itemNodeId);
-        }
-      }
-    });
-
-    if (itemNodeIds.length) {
-      result = await this.session.call(itemNodeIds);
-      result = await this.opcuaClient.withSessionAsync(itemNodeIds, async (session) => { 
-
-      })
-    }
-    if (isLog) inspector('plugins.opcua-client.class::sessionCallMethod.result:', result);
-    return result;
-  }
-  */
 
   /**
    * Get arguments definition for session
@@ -1217,6 +1179,7 @@ class OpcuaClient {
    */
   getNodeIds(nameNodeIds) {
     let itemNodeId = null, itemNodeIds = [];
+    //----------------------------------------
     if (!this.srvCurrentState) return null;
     let nodeIds = this.srvCurrentState.paramsAddressSpace;
     if (nodeIds) {

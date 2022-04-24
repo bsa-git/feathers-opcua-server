@@ -6,9 +6,20 @@
       "type": "object"
     }
   ],
+  "variables": [
+    {
+      "browseName": "CH_M5_ACM::RunCommand",
+      "aliasName": "RunCommand",
+      "displayName": "Variable For RunCommand",
+      "ownerName": "CH_M5_ACM",
+      "type": "variable.simple",
+      "dataType": "String",
+      "description": "Executing commands on an 'CH_M5_ACM' object"
+    }
+  ],
   "methods": [
     {
-      "browseName": "CH_M5_ACM:YearTemplateCreate",
+      "browseName": "CH_M5_ACM::YearTemplateCreate",
       "aliasName": "YearTemplateCreate",
       "displayName": "Create an annual report template",
       "ownerName": "CH_M5_ACM",

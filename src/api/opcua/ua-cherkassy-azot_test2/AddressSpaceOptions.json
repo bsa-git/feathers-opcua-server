@@ -71,6 +71,25 @@
       }
     },
     {
+      "browseName": "CH_M5_ACM::VariableForWrite",
+      "aliasName": "VariableForWrite",
+      "displayName": "Variable For Write",
+      "ownerName": "CH_M5_ACM",
+      "type": "variable.simple",
+      "dataType": "UInt16",
+      "valueParams": {
+        "arrayDimensions": [
+          24
+        ],
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 50000
+        },
+        "engineeringUnits": "milligram_per_cubic_metre"
+      },
+      "description": "Concentration of N2O (Q N2O)"
+    },
+    {
       "browseName": "CH_M52_ACM::ValueFromFile",
       "displayName": "Значения из файла для CH_M52_ACM",
       "ownerName": "CH_M52_ACM",
