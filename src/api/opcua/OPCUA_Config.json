@@ -232,7 +232,7 @@
     "id": "ua-cherkassy-bsahome_dev1",
     "name": "380-472-bsahome_dev1",
     "description": "Opcua server and client for `azot-m5` tags from `opc.tcp://BSA-HOME:26570`",
-    "endpointUrl": "",
+    "endpointUrl": "opc.tcp://BSA-HOME:26570",
     "endpointPort": 26570,
     "srvServiceUrl": "http://BSA-HOME:3030",
     "clientServiceUrl": "http://BSA-HOME:3030",

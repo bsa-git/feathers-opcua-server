@@ -596,6 +596,8 @@ const mergeOpcuaConfigOptions = function (id) {
             if (findedIndex > -1) {
               const mergeValue = loMerge({}, baseOptions[key][findedIndex], val);
               baseOptions[key][findedIndex] = mergeValue;
+            } else {
+              baseOptions[key].push(val);
             }
           });
         } else {
@@ -1224,7 +1226,7 @@ const convertArrayToTypedArray = function (valueWithParams) {
     break;
   case 'float':
   case 'double':
-    result = (bitDepthOS === 64)? new Float64Array(value) : new Float32Array(value);
+    result = (bitDepthOS === 64) ? new Float64Array(value) : new Float32Array(value);
     break;
   default:
     break;

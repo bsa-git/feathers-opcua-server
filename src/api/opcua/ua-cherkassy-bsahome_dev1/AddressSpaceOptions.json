@@ -32,8 +32,8 @@
     },
     {
       "isEnable": true,
-      "browseName": "CH_M5_ACM",
-      "displayName": "Черкассы 'АЗОТ' цех M5 ACM",
+      "browseName": "CH_M5",
+      "displayName": "Черкассы 'АЗОТ' цех M5",
       "type": "object"
     }
   ],

@@ -32,8 +32,8 @@
     },
     {
       "isEnable": true,
-      "browseName": "CH_M5_ACM",
-      "displayName": "Черкассы 'АЗОТ' цех M5 ACM",
+      "browseName": "CH_M5",
+      "displayName": "Черкассы 'АЗОТ' цех M5",
       "type": "object"
     }
   ],
@@ -71,10 +71,10 @@
       }
     },
     {
-      "browseName": "CH_M5_ACM::VariableForWrite",
+      "browseName": "CH_M5::VariableForWrite",
       "aliasName": "VariableForWrite",
       "displayName": "Variable For Write",
-      "ownerName": "CH_M5_ACM",
+      "ownerName": "CH_M5",
       "type": "variable.simple",
       "dataType": "UInt16",
       "valueParams": {

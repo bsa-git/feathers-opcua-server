@@ -5,6 +5,10 @@ const {
   formatDataValue
 } = require('../../../plugins');
 
+const {
+  logger
+} = require('../../../logger');
+
 const chalk = require('chalk');
 const loRound = require('lodash/round');
 
@@ -32,9 +36,29 @@ function onChangedCH_M5Handler(params, dataValue) {
   let engineeringUnits = dataValue.valueParams.engineeringUnits;
   engineeringUnits = engineeringUnits ? `(${engineeringUnits})` : '';
   const timestamp = dataValue.serverTimestamp;
-  console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} ${engineeringUnits} Timestamp=${timestamp}`));
+  console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} ${engineeringUnits}`), 'Timestamp=', chalk.cyan(`${timestamp}`));
+}
+
+/**
+ * @method onChangedRunCommand
+ * @param {Object} params 
+ * @param {Object} dataValue
+ * @returns {void}
+ */
+function onChangedRunCommand(params, dataValue) {
+  if (isLog && params) inspector('onChangedRunCommand.params:', params);
+  if (isLog && dataValue) inspector('onChangedRunCommand.dataValue:', dataValue);
+  const addressSpaceOption = params.addressSpaceOption;
+  const browseName = addressSpaceOption.browseName;
+  dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
+  if (isLog && dataValue) inspector('onChangedRunCommand.formatDataValue:', dataValue);
+  let value = dataValue.value.value;
+  
+  const timestamp = dataValue.serverTimestamp;
+  console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`'${value}'`), 'Timestamp=', chalk.cyan(`${timestamp}`));
 }
 
 module.exports = {
-  onChangedCH_M5Handler
+  onChangedCH_M5Handler,
+  onChangedRunCommand
 };

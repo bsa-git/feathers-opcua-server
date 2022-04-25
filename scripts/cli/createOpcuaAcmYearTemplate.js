@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+/* eslint-disable no-unused-vars */
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const chalk = require('chalk');
@@ -10,8 +10,8 @@ const {
 } = require('../../src/plugins/lib');
 
 const {
-  methodAcmYearTemplateCreate
-} = require('../../src/plugins/opcua/opcua-methods');
+  opcuaClientSessionAsync
+} = require('../../src/plugins/opcua/opcua-client-scripts/lib');
 
 const { AttributeIds, OPCUAClient, DataType, VariantArrayType } = require('node-opcua');
 const endpointUrl = 'opc.tcp://localhost:26570'; //  opc.tcp://BSA-HOME:26570
@@ -38,41 +38,29 @@ const argv = yargs(hideBin(process.argv))
 
 const isDebug = false;
 
+const sessionWrite = async (session, params) => {
+  const nodeToWrite = {
+    nodeId: params.nodeId,// ns=1;s=CH_M5_ACM::VariableForWrite
+    attributeId: AttributeIds.Value,
+    value: {
+      value: {
+        dataType: DataType.String,
+        value: 'Start',
+      }
+    }
+  };
+  const statusCode = await session.write(nodeToWrite);
+  // console.log("write statusCode = ", statusCode.toString());
+  // console.log(chalk.green('Run script - OK!'), 'statusCode:', chalk.cyan(statusCode.toString()));
+  return statusCode.toString();
+};
+
 (async function createOpcuaAcmYearTemplate() {
 
   if (isDebug && argv) inspector('Yargs.argv:', argv);
 
   // Run script
-  if (Array.isArray(argv.point)) {
-    for (let index = 0; index < argv.point.length; index++) {
-      const point = argv.point[index];
-      const result = await methodAcmYearTemplateCreate([{ value: point }]);
-      console.log(chalk.green('Run script - OK!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
-    }
-  } else {
-    // const result = await methodAcmYearTemplateCreate([{ value: argv.point }]);
-    const client = OPCUAClient.create({ endpointMustExist: false });
-
-    await client.withSessionAsync(endpointUrl, async (session) => {
-
-      const arrayOfvalues = new Uint16Array([2, 23, 23, 12, 24, 3, 25, 3, 26, 3, 27, 3, 28, 1, 43690, 1, 1261, 0, 0, 0, 0, 0, 0, 0]);
-      const nodeToWrite = {
-        nodeId: 'ns=1;s=CH_M5_ACM::VariableForWrite',// ns=1;s=CH_M5_ACM::VariableForWrite
-        attributeId: AttributeIds.Value,
-        value: {
-          value: {
-            dataType: DataType.UInt16,
-            arrayType: VariantArrayType.Array,
-            value: arrayOfvalues,
-          }
-        }
-      };
-      const statusCode = await session.write(nodeToWrite);
-      // console.log("write statusCode = ", statusCode.toString());
-      console.log(chalk.green('Run script - OK!'), 'statusCode:', chalk.cyan(statusCode.toString()));
-    });
-
-    
-  }
+  const result = await opcuaClientSessionAsync(endpointUrl, {nodeId: 'ns=1;s=CH_M5::RunCommand'}, sessionWrite);
+  console.log(chalk.green('Run script - OK!'), 'result:', chalk.cyan(result));
 
 })();

@@ -1,28 +1,29 @@
 {
   "objects": [
     {
-      "browseName": "CH_M5_ACM",
-      "displayName": "Черкассы 'АЗОТ' цех M5 ACM",
+      "browseName": "CH_M5",
+      "displayName": "Черкассы 'АЗОТ' цех M5",
       "type": "object"
     }
   ],
   "variables": [
     {
-      "browseName": "CH_M5_ACM::RunCommand",
+      "browseName": "CH_M5::RunCommand",
       "aliasName": "RunCommand",
       "displayName": "Variable For RunCommand",
-      "ownerName": "CH_M5_ACM",
+      "ownerName": "CH_M5",
       "type": "variable.simple",
       "dataType": "String",
-      "description": "Executing commands on an 'CH_M5_ACM' object"
+      "hist": true,
+      "description": "Executing commands on an 'CH_M5' object"
     }
   ],
   "methods": [
     {
-      "browseName": "CH_M5_ACM::YearTemplateCreate",
+      "browseName": "CH_M5::YearTemplateCreate",
       "aliasName": "YearTemplateCreate",
       "displayName": "Create an annual report template",
-      "ownerName": "CH_M5_ACM",
+      "ownerName": "CH_M5",
       "type": "method",
       "bindMethod": "methodAcmYearTemplateCreate",
       "inputArguments": [
