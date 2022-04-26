@@ -329,7 +329,7 @@ const formatConfigOption = function (configOption, locale) {
  * e.g. ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT'] ||
  * @param {String} locale 
  * e.g. locale -> 'ru'|'en'
- * @param {Object[]}
+ * @returns {Object[]}
  */
 const formatHistoryResults = function (id, historyResults, browseNames, locale = '') {
   let results = [], result, option, value, browseName;
@@ -383,7 +383,7 @@ const formatHistoryResults = function (id, historyResults, browseNames, locale =
  * e.g. 'CH_M51::01AMIAK:01F4.PNT'
  * @param {String} locale 
  * e.g. locale -> 'ru'|'en'
- * @param {Object}
+ * @returns {Object}
  */
 const formatDataValue = function (id, dataValue, browseName, locale = '') {
   let result, option;
@@ -415,6 +415,31 @@ const formatDataValue = function (id, dataValue, browseName, locale = '') {
   } else {
     result = dataValue;
   }
+  return result;
+};
+
+/**
+ * @method formatSimpleDataValue
+ * @param {Object} dataValue 
+ * @returns {Object}
+ */
+const formatSimpleDataValue = function (dataValue) {
+  let result = {};
+  //---------------------
+  loMerge(result, dataValue.sourceTimestamp ? { sourceTimestamp: getTimestamp(dataValue.sourceTimestamp) } : {});
+  loMerge(result, dataValue.serverTimestamp ? { serverTimestamp: getTimestamp(dataValue.serverTimestamp) } : {});
+  result.statusCode = {
+    code: dataValue.statusCode._value,
+    description: dataValue.statusCode._description,
+    name: dataValue.statusCode._name
+  };
+
+  result.value = {};
+  loMerge(result.value, dataValue.value.dataType ? { dataType: getOpcuaDataType(dataValue.value.dataType)[0] } : {});
+  loMerge(result.value, dataValue.value.arrayType ? { arrayType: dataValue.value.arrayType } : {});
+  loMerge(result.value, dataValue.value.dimensions ? { dimensions: dataValue.value.dimensions } : {});
+  result.value.value = dataValue.value.value;
+
   return result;
 };
 
@@ -1392,6 +1417,7 @@ module.exports = {
   formatConfigOption,
   formatHistoryResults,
   formatDataValue,
+  formatSimpleDataValue,
   getOpcuaConfig,
   getOpcuaConfigForIp,
   getOpcuaConfigForMe,

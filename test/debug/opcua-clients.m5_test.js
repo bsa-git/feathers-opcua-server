@@ -344,6 +344,8 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(true, 'OPC-UA clients: subscription create');
   });
 
+  //============== SUBSCRIPTION MONITOR ====================//
+
   it('#12. OPC-UA clients: subscription monitor for "CH_M51::ValueFromFile" group', async () => {
     const service = await getClientService(app, id);
     const srvCurrentState = await service.getSrvCurrentState(id);
@@ -395,6 +397,8 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(true, 'OPC-UA client subscription monitor');
   });
 
+  //============== SESSION WRITE VALUE ====================//
+
   it('#15. OPC-UA clients: session write single node value', async () => {
     let readResult, statusCode = null;
     //-----------------------------------
@@ -414,6 +418,8 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
     assert.ok(readResult === dataForWrite.value, 'OPC-UA clients: session write single node value');
   });
+
+  //============== SUBSCRIPTION TERMINATE ====================//
 
   it('#16. OPC-UA clients: subscription terminate', async () => {
     const service = await getClientService(app, id);

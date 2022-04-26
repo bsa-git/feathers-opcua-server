@@ -49,6 +49,21 @@ const sessionWrite = async (session, params) => {
       }
     }
   };
+
+  // Set input argument
+  // const inputArgument = {
+  //   isTest: true,
+  //   pointID: 2,
+  //   reportingPeriod: [1, 'months'],
+  //   // startYear: 2020,
+  // };
+  // const inputArguments = [[
+  //   {
+  //     dataType: DataType.String,
+  //     value: JSON.stringify(inputArgument),
+  //   }
+  // ]];
+
   const statusCode = await session.write(nodeToWrite);
   // console.log("write statusCode = ", statusCode.toString());
   // console.log(chalk.green('Run script - OK!'), 'statusCode:', chalk.cyan(statusCode.toString()));

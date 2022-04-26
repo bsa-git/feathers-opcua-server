@@ -17,7 +17,8 @@
   },
   "bin": {
     "createAcmYearTemplate": "./scripts/cli/createAcmYearTemplate.js",
-    "createOpcuaAcmYearTemplate": "./scripts/cli/createOpcuaAcmYearTemplate.js"
+    "createOpcuaAcmYearTemplate": "./scripts/cli/createOpcuaAcmYearTemplate.js",
+    "runOpcuaCommand": "./scripts/cli/runOpcuaCommand.js"
   },
   "contributors": [],
   "bugs": {},
