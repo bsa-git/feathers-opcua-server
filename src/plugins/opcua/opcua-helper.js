@@ -402,7 +402,7 @@ const formatDataValue = function (id, dataValue, browseName, locale = '') {
     loMerge(result, dataValue.sourceTimestamp ? { sourceTimestamp: getTimestamp(dataValue.sourceTimestamp) } : {});
     loMerge(result, dataValue.serverTimestamp ? { serverTimestamp: getTimestamp(dataValue.serverTimestamp) } : {});
     result.statusCode = {
-      code: dataValue.statusCode.code,
+      code: dataValue.statusCode._value,
       description: dataValue.statusCode._description,
       name: dataValue.statusCode._name
     };

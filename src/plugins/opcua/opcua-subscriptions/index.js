@@ -4,6 +4,7 @@ const onChangedGroupHandler = require('./onChangedGroupHandler');
 const onChangedGroupHandlerForDB = require('./onChangedGroupHandlerForDB');
 const onChangedGroupItemsHandler = require('./onChangedGroupItemsHandler');
 const onChangedGroupHandlerForASM = require('./onChangedGroupHandlerForASM');
+const onChangedRunCommand = require('./onChangedRunCommand');
 
 module.exports = {
   onChangedCommonHandler,
@@ -11,4 +12,5 @@ module.exports = {
   onChangedGroupHandlerForDB,
   onChangedGroupItemsHandler,
   onChangedGroupHandlerForASM,
+  onChangedRunCommand
 };

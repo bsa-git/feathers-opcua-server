@@ -39,6 +39,17 @@
   ],
   "variables": [
     {
+      "browseName": "CH_M5::RunCommand",
+      "aliasName": "RunCommand",
+      "displayName": "Variable For RunCommand",
+      "ownerName": "CH_M5",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "subscription": "onChangedRunCommand",
+      "description": "Executing commands on an 'CH_M5' object"
+    },
+    {
       "browseName": "CH_M51::ValueFromFile",
       "displayName": "Значения из файла для CH_M51",
       "ownerName": "CH_M51",
