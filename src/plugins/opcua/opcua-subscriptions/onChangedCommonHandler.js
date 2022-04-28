@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+const loOmit = require('lodash/omit');
+
 const { 
   inspector, 
 } = require('../../lib');
@@ -22,7 +24,7 @@ const isLog = false;
  * @returns {void}
  */
 function onChangedCommonHandler(params, dataValue) {
-  if (isLog) inspector('subscriptions.onChangedCommonHandle.params:', params);
+  if (isLog) inspector('subscriptions.onChangedCommonHandle.params:', loOmit(params, ['myOpcuaClient']));
   if (isLog) inspector('subscriptions.onChangedCommonHandle.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
   const browseName = addressSpaceOption.browseName;

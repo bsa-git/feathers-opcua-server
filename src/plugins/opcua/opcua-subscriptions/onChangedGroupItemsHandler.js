@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
+const loOmit = require('lodash/omit');
+
 const { 
   inspector, 
 } = require('../../lib');
 
 const { 
-  getValueFromNodeId,
   formatDataValue 
 } = require('../opcua-helper');
 
 const chalk = require('chalk');
-const loRound = require('lodash/round');
 
 const debug = require('debug')('app:opcua-subscriptions/onChangedGroupHandler');
 const isDebug = false;
@@ -22,7 +22,7 @@ const isLog = false;
  * @returns {void}
  */
 function onChangedGroupItemsHandler(params, dataValue) {
-  if (isLog) inspector('subscriptions.onChangedGroupItemsHandler.params:', params);
+  if (isLog) inspector('subscriptions.onChangedGroupItemsHandler.params:', loOmit(params, ['myOpcuaClient']));
   if (isLog) inspector('subscriptions.onChangedGroupItemsHandler.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
   const browseName = addressSpaceOption.browseName;

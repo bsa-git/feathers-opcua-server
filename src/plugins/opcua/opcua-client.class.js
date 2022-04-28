@@ -1138,6 +1138,8 @@ class OpcuaClient {
      *   );
      */
   async subscriptionMonitor(cb = null, itemToMonitor = {}, requestedParameters = {}, timestampsToReturn = TimestampsToReturn.Neither) {
+    let self = this;
+    //----------------------------------
     this.subscriptionNotCreated();
     const nodeId = itemToMonitor.nodeId;
     // Get itemNodeId
@@ -1165,6 +1167,7 @@ class OpcuaClient {
         itemToMonitor.id = this.id;
         itemToMonitor.locale = this.locale;
         itemToMonitor.addressSpaceOption = itemNodeId;
+        itemToMonitor.myOpcuaClient = self;
         dataValue.serverTimestamp = moment().format();
         cb(itemToMonitor, dataValue);
       });

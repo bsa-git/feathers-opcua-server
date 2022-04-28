@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const moment = require('moment');
+const loOmit = require('lodash/omit');
 
 const {
   inspector,
@@ -7,8 +8,7 @@ const {
 
 const {
   showInfoForHandler,
-  saveOpcuaGroupValueToDB,
-  updateYearReportForASM
+  runCommand,
 } = require('./lib');
 
 const isLog = false;
@@ -23,7 +23,7 @@ const functionBusy = {};
  * @returns {void}
  */
 async function onChangedRunCommand(params, dataValue) {
-  if (isLog && params) inspector('onChangedRunCommand.params:', params);
+  if (isLog && params) inspector('onChangedRunCommand.params:', loOmit(params, ['myOpcuaClient']));
   if (isLog && dataValue) inspector('onChangedRunCommand.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 
@@ -38,15 +38,8 @@ async function onChangedRunCommand(params, dataValue) {
   const startTime = moment.utc().format();
   if(isLog && startTime) console.log('onChangedRunCommand.startTime:', startTime, 'browseName:', browseName);
 
-  /** 
-  // Save data to DB
-  const savedValue = await saveOpcuaGroupValueToDB(params, dataValue);
-  if (isLog && savedValue) inspector('onChangedRunCommand.savedValue:', savedValue);
-
-  // Update year report
-  await updateYearReportForASM(params, dataValue);
-
-  */
+  // Run command
+  await runCommand(params, dataValue);
 
   // Show info
   showInfoForHandler(params, dataValue);

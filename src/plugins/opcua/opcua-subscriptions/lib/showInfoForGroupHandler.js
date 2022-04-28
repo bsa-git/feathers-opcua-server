@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+const loOmit = require('lodash/omit');
+
 const {
   inspector,
 } = require('../../../lib');
@@ -22,7 +24,7 @@ const isLog = false;
  * @returns {void}
  */
 async function showInfoForGroupHandler(params, dataValue) {
-  if (isLog && params) inspector('showInfoForGroupHandler.params:', params);
+  if (isLog && params) inspector('showInfoForGroupHandler.params:', loOmit(params, ['myOpcuaClient']));
   if (isLog && dataValue) inspector('showInfoForGroupHandler.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 

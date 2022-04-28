@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+const loOmit = require('lodash/omit');
+
 const { 
   inspector, 
 } = require('../../lib');
@@ -22,7 +24,7 @@ const isLog = false;
  * @returns {void}
  */
 function onChangedGroupHandler(params, dataValue) {
-  if (isLog) inspector('subscriptions.onChangedGroupHandler.params:', params);
+  if (isLog) inspector('subscriptions.onChangedGroupHandler.params:', loOmit(params, ['myOpcuaClient']));
   if (isLog) inspector('subscriptions.onChangedGroupHandler.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
   const browseName = addressSpaceOption.browseName;

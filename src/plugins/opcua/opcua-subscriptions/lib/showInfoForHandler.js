@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+const loOmit = require('lodash/omit');
+
 const {
   inspector,
 } = require('../../../lib');
@@ -10,7 +12,7 @@ const {
 const chalk = require('chalk');
 const moment = require('moment');
 
-const debug = require('debug')('app:showInfoForGroupHandler');
+const debug = require('debug')('app:showInfoForHandler');
 const isDebug = false;
 const isLog = false;
 
@@ -24,7 +26,7 @@ const isLog = false;
 async function showInfoForHandler(params, dataValue) {
   let valueKeys = 0;
   //---------------------
-  if (isLog && params) inspector('showInfoForHandler.params:', params);
+  if (isLog && params) inspector('showInfoForHandler.params:', loOmit(params, ['myOpcuaClient']));
   // inspector('showInfoForHandler.params:', params);
   if (isLog && dataValue) inspector('showInfoForHandler.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;

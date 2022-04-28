@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+const loOmit = require('lodash/omit');
+
 const {
   inspector,
 } = require('../../../lib');
@@ -24,7 +26,7 @@ const isLog = false;
  * @returns {void}
  */
 async function saveOpcuaGroupValueToDB(params, dataValue) {
-  if (isLog && params) inspector('saveOpcuaGroupValueToDB.params:', params);
+  if (isLog && params) inspector('saveOpcuaGroupValueToDB.params:', loOmit(params, ['myOpcuaClient']));
   if (isLog && dataValue) inspector('saveOpcuaGroupValueToDB.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const moment = require('moment');
+const loOmit = require('lodash/omit');
 
 const {
   inspector,
@@ -23,7 +24,7 @@ const functionBusy = {};
  * @returns {void}
  */
 async function onChangedGroupHandlerForASM(params, dataValue) {
-  if (isLog && params) inspector('onChangedGroupHandlerForASM.params:', params);
+  if (isLog && params) inspector('onChangedGroupHandlerForASM.params:', loOmit(params, ['myOpcuaClient']));
   if (isLog && dataValue) inspector('onChangedGroupHandlerForASM.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 

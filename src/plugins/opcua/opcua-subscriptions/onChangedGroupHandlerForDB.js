@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+const loOmit = require('lodash/omit');
+
 const {
   inspector,
 } = require('../../lib');
@@ -6,23 +8,9 @@ const {
 const {
   showInfoForGroupHandler,
   saveOpcuaGroupValueToDB,
-  updateYearReportForASM
 } = require('./lib');
 
-const {
-  isSaveOpcuaToDB,
-  saveOpcuaGroupValue
-} = require('../../db-helpers');
-
-const {
-  getValueFromNodeId,
-  formatDataValue
-} = require('../opcua-helper');
-
-const chalk = require('chalk');
-const loRound = require('lodash/round');
-
-const debug = require('debug')('app:opcua-subscriptions/onChangedGroupHandlerForDB');
+const debug = require('debug')('app:onChangedGroupHandlerForDB');
 const isDebug = false;
 const isLog = false;
 
@@ -33,7 +21,7 @@ const isLog = false;
  * @returns {void}
  */
 async function onChangedGroupHandlerForDB(params, dataValue) {
-  if (isLog && params) inspector('subscriptions.onChangedGroupHandlerForDB.params:', params);
+  if (isLog && params) inspector('subscriptions.onChangedGroupHandlerForDB.params:', loOmit(params, ['myOpcuaClient']));
   if (isLog && dataValue) inspector('subscriptions.onChangedGroupHandlerForDB.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 
