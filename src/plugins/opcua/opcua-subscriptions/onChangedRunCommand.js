@@ -23,7 +23,7 @@ const functionBusy = {};
  * @returns {void}
  */
 async function onChangedRunCommand(params, dataValue) {
-  if (isLog && params) inspector('onChangedRunCommand.params:', loOmit(params, ['myOpcuaClient']));
+  if (isLog && params) inspector('onChangedRunCommand.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isLog && dataValue) inspector('onChangedRunCommand.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 

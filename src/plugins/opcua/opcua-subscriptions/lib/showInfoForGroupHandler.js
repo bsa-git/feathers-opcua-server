@@ -24,7 +24,7 @@ const isLog = false;
  * @returns {void}
  */
 async function showInfoForGroupHandler(params, dataValue) {
-  if (isLog && params) inspector('showInfoForGroupHandler.params:', loOmit(params, ['myOpcuaClient']));
+  if (isLog && params) inspector('showInfoForGroupHandler.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isLog && dataValue) inspector('showInfoForGroupHandler.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 

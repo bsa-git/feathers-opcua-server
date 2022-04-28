@@ -26,7 +26,7 @@ const isLog = false;
  * @returns {void}
  */
 async function saveOpcuaGroupValueToDB(params, dataValue) {
-  if (isLog && params) inspector('saveOpcuaGroupValueToDB.params:', loOmit(params, ['myOpcuaClient']));
+  if (isLog && params) inspector('saveOpcuaGroupValueToDB.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isLog && dataValue) inspector('saveOpcuaGroupValueToDB.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 

@@ -45,7 +45,7 @@ async function updateYearReportForASM(params, dataValue) {
   let reportFile, paramsReport = null, paramFullsPath;
   //-----------------------------------
 
-  if (isLog && params) inspector('updateYearReportForASM.params:', loOmit(params, ['myOpcuaClient']));
+  if (isLog && params) inspector('updateYearReportForASM.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isLog && dataValue) inspector('updateYearReportForASM.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 

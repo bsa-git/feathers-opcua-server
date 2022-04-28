@@ -21,7 +21,7 @@ const isLog = false;
  * @returns {void}
  */
 async function onChangedGroupHandlerForDB(params, dataValue) {
-  if (isLog && params) inspector('subscriptions.onChangedGroupHandlerForDB.params:', loOmit(params, ['myOpcuaClient']));
+  if (isLog && params) inspector('subscriptions.onChangedGroupHandlerForDB.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isLog && dataValue) inspector('subscriptions.onChangedGroupHandlerForDB.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 

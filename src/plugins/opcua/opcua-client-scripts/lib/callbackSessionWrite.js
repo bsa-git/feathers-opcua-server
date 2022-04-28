@@ -21,7 +21,7 @@ const isDebug = false;
  * @param {Object} params 
  * @returns {String}
  */
- const callbackSessionWrite = async (session, params) => {
+const callbackSessionWrite = async (session, params) => {
 
   const nodeToWrite = {
     nodeId: params.nodeId,

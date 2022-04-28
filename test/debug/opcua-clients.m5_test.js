@@ -328,7 +328,6 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     if (callResults.length) {
       if(isDebug) inspector('methodAcmYearTemplateCreate.callResults:', callResults);
       console.log(chalk.green('CH_M5:YearTemplateCreate.statusCode:'), chalk.cyan(callResults[0].statusCode.name));
-      // console.log(chalk.green('CH_M5:YearTemplateCreate.callResult:'), chalk.cyan(callResults[0].outputArguments[0].value));
     }
     assert.ok(callResults.length, 'OPC-UA clients: session call method "methodAcmYearTemplateCreate"');
   });

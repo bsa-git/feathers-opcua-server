@@ -24,7 +24,7 @@ const isLog = false;
  * @returns {void}
  */
 function onChangedCommonHandler(params, dataValue) {
-  if (isLog) inspector('subscriptions.onChangedCommonHandle.params:', loOmit(params, ['myOpcuaClient']));
+  if (isLog) inspector('subscriptions.onChangedCommonHandle.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isLog) inspector('subscriptions.onChangedCommonHandle.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
   const browseName = addressSpaceOption.browseName;

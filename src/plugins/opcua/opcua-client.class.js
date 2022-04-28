@@ -4,15 +4,15 @@ const {
   isString,
   isObject,
   appRoot,
-  getHostname
 } = require('../lib');
+
 const {
   getOpcuaConfig,
-  getSubscriptionHandler,
   formatHistoryResults,
   getSecurityMode,
   getSecurityPolicy,
 } = require('./opcua-helper');
+
 const {
   OPCUAClient,
   ClientSubscription,

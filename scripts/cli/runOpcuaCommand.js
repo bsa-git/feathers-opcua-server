@@ -23,7 +23,7 @@ const argv = yargs(hideBin(process.argv))
   .usage('Usage: $0 -c str -p 2 -o str')
   .example([
     ['$0 -c "ch-m5CreateAcmYearTemplate" -p 2 -o "{ \'url\': \'opc.tcp://localhost:26575\' }"',
-    'Returns the file name (acmYearTemplate2-2022.xlsx) when creating a template for the reporting period.']
+      'Returns the file name (acmYearTemplate2-2022.xlsx) when creating a template for the reporting period.']
   ])
   .option('command', {
     alias: 'c',
@@ -68,7 +68,7 @@ if(argv.point) argvOptions.point = argv.point;
     options.nodeId = nodeId;
   } else {
     // Command error
-    inspector('runOpcuaCommand.options:', options);
+    inspector('runOpcuaCommand_ERROR.options:', options);
     throw new Error(`Command error. This command "${options.command}" does not exist or there are not enough options.`);
   }
   const result = await opcuaClientSessionAsync(options.url, options, callbackSessionWrite);

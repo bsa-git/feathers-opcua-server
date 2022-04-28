@@ -24,7 +24,7 @@ const isLog = false;
  * @returns {void}
  */
 function onChangedGroupHandler(params, dataValue) {
-  if (isLog) inspector('subscriptions.onChangedGroupHandler.params:', loOmit(params, ['myOpcuaClient']));
+  if (isLog) inspector('subscriptions.onChangedGroupHandler.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isLog) inspector('subscriptions.onChangedGroupHandler.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
   const browseName = addressSpaceOption.browseName;

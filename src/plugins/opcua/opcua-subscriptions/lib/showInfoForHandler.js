@@ -26,8 +26,7 @@ const isLog = false;
 async function showInfoForHandler(params, dataValue) {
   let valueKeys = 0;
   //---------------------
-  if (isLog && params) inspector('showInfoForHandler.params:', loOmit(params, ['myOpcuaClient']));
-  // inspector('showInfoForHandler.params:', params);
+  if (isLog && params) inspector('showInfoForHandler.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isLog && dataValue) inspector('showInfoForHandler.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 
