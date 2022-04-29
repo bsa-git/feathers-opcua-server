@@ -75,7 +75,7 @@ const setErrDataCells = (index, excel) => {
  * @param {Object} context
  * @param {Function} callback
  */
-module.exports = async (inputArguments, context, callback) => {
+const methodAcmYearTemplateCreate = async (inputArguments, context, callback) => {
   let resultPath = '', paramsFile, baseParamsFile, params = null, paramFullsPath;
   //-----------------------------------
 
@@ -195,7 +195,7 @@ module.exports = async (inputArguments, context, callback) => {
 
   // Get all hours for date range 
   const startDate = moment.utc([startYear, 0, 1]);
-  const period = params.reportingPeriod;
+  const period = params.period;
   const endDate = moment.utc([startYear, 0, 1]).add(period[0], period[1]);
   // const endDate = moment(params.endDate);
   let hours = endDate.diff(startDate, 'hours');
@@ -291,3 +291,5 @@ module.exports = async (inputArguments, context, callback) => {
     return { resultPath, params, hours, days };
   }
 };
+
+module.exports = methodAcmYearTemplateCreate;

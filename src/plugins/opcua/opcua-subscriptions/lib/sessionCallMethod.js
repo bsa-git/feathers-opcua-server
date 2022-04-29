@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const loOmit = require('lodash/omit');
+const chalk = require('chalk');
 
 const {
   inspector,
@@ -24,18 +25,15 @@ const isLog = false;
  * @returns {Object[]}
  */
 async function sessionCallMethod(params) {
-  let callResults;
-  //----------------------------------
 
-  if (isLog && params) inspector('sessionCallMethod.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && params) inspector('sessionCallMethod.params:', loOmit(params, ['myOpcuaClient', 'app']));
   // Get arguments for function
   const client = params.myOpcuaClient;
-  const id = params.id;
-  const nodeId = params.nodeId;
+  const browseName = params.browseName;
   const inputArguments = params.inputArguments;
   // Run function 'sessionCallMethod'
-  callResults = await client.sessionCallMethod(id, nodeId, inputArguments);
-
+  const callResults = await client.sessionCallMethod(browseName, inputArguments);
+  return callResults; 
 }
 
 module.exports = sessionCallMethod;

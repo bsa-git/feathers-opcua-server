@@ -54,7 +54,7 @@ const sessionWrite = async (session, params) => {
   // const inputArgument = {
   //   isTest: true,
   //   pointID: 2,
-  //   reportingPeriod: [1, 'months'],
+  //   period: [1, 'months'],
   //   // startYear: 2020,
   // };
   // const inputArguments = [[

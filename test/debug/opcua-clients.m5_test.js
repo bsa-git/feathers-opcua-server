@@ -315,7 +315,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       qal2VolumeMultiplier: 1.1951,
       qal2СoncentrationAdition: 0,
       qal2VolumeAdition: 0,
-      reportingPeriod: [1, 'months'],
+      period: [1, 'months'],
       // startYear: 2020,
     };
     const inputArguments = [[

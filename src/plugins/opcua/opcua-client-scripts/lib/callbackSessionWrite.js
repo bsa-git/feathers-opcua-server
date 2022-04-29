@@ -24,7 +24,7 @@ const isDebug = false;
 const callbackSessionWrite = async (session, params) => {
 
   const nodeToWrite = {
-    nodeId: params.nodeId,
+    nodeId: params.opt.nodeId,
     attributeId: AttributeIds.Value,
     value: {
       value: {
@@ -35,7 +35,7 @@ const callbackSessionWrite = async (session, params) => {
   };
 
   const nodeToRead = {
-    nodeId: params.nodeId,
+    nodeId: params.opt.nodeId,
     attributeId: AttributeIds.Value,
   };
   // Session write data

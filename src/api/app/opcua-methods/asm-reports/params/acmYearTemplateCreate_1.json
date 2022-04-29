@@ -11,7 +11,7 @@
   "outputTemplateFile": "acmYearTemplate${ pointID }-${ year }.xlsx",
   "outputReportFile": "acmYearReport${ pointID }-${ year }.xlsx",
   "startRow": 20,
-  "reportingPeriod": [1, "years"],
+  "period": [1, "years"],
   "dateColumn": "C",
   "dataColumns": {"23QN2O": "E", "23QN2O_CORR": "F", "23FVSG": "G", "23FVSG_CORR": "H", "23F105_IS": "K", "23CHBB": "I"},
   "isSetData": false,

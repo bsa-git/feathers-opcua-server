@@ -20,9 +20,9 @@ const isDebug = false;
 // Get argv
 const argv = yargs(hideBin(process.argv))
   .scriptName('runOpcuaCommand')
-  .usage('Usage: $0 -c str -p 2 -o str')
+  .usage('Usage: $0 -c str --opt.point num')
   .example([
-    ['$0 -c "ch-m5CreateAcmYearTemplate" -p 2 -o "{ \'url\': \'opc.tcp://localhost:26575\' }"',
+    ['$0 -c "ch-m5CreateAcmYearTemplate" --opt.point 2 --opt.test --opt.period 1 "months"',
       'Returns the file name (acmYearTemplate2-2022.xlsx) when creating a template for the reporting period.']
   ])
   .option('command', {
@@ -32,20 +32,14 @@ const argv = yargs(hideBin(process.argv))
     type: 'string',
     nargs: 1,
   })
-  .option('point', {
-    alias: 'p',
-    describe: 'Point number for the script.',
-    demandOption: false,
-    type: 'number',
-    nargs: 1,
-  })
-  .option('options', {
-    alias: 'o',
-    describe: 'Options string for the script.',
-    demandOption: false,
-    default: '{ "url": "opc.tcp://localhost:26570" }',
-    type: 'string',
-    nargs: 1,
+  .option('opt')
+  .default('opt.url', 'opc.tcp://localhost:26570', '(Endpoint URL)')
+  .array('opt.period')
+  .boolean('opt.test')
+  .coerce('opt', o => {
+    // o.name = opt.name.toLowerCase()
+    // o.password = '[SECRET]'
+    return o;
   })
   .describe('help', 'Show help.') // Override --help usage message.
   .describe('version', 'Show version number.') // Override --version usage message.
@@ -54,23 +48,18 @@ const argv = yargs(hideBin(process.argv))
 
 
 if (isDebug && argv) inspector('Yargs.argv:', argv);
-// Convert argv.options to json format
-let argvOptions = strReplace(argv.options, '\'', '"');
-argvOptions = JSON.parse(argvOptions);
-// Add propertys for argvOptions
-argvOptions.command = argv.command;
-if(argv.point) argvOptions.point = argv.point;  
 
 // Run script
 (async function runOpcuaCommand(options) {
-  const nodeId = checkRunCommand(options);
-  if(nodeId){
-    options.nodeId = nodeId;
+  const checkResult = checkRunCommand(options);
+  if(checkResult){
+    options.opt.nodeId = checkResult.nodeId;
+    options.opt.browseName = checkResult.browseName;
   } else {
     // Command error
     inspector('runOpcuaCommand_ERROR.options:', options);
     throw new Error(`Command error. This command "${options.command}" does not exist or there are not enough options.`);
   }
-  const result = await opcuaClientSessionAsync(options.url, options, callbackSessionWrite);
+  const result = await opcuaClientSessionAsync(options.opt.url, options, callbackSessionWrite);
   console.log(chalk.green(`Run session write command "${options.command}" - OK!`), 'result:', chalk.cyan(result));
-})(argvOptions);
+})(argv);
