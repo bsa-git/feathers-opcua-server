@@ -63,7 +63,7 @@
       "getterParams": {
         "path": "test/data/tmp/ch-m51",
         "fromFile": "test/data/csv/data-CH_M51.csv",
-        "interval": 5000
+        "interval": 10000
       }
     },
     {
@@ -80,7 +80,7 @@
       "getterParams": {
         "path": "test/data/tmp/ch-m52",
         "fromFile": "test/data/csv/data-CH_M52.csv",
-        "interval": 5000
+        "interval": 10000
       }
     },
     {

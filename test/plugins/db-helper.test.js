@@ -140,8 +140,10 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
       browseName: 'NoChildGroup',
       displayName: 'Any display name',
       type: 'variable.simple',
-      ownerName: 'CH_M51'
+      ownerName: 'CH_M51',
+      group: true
     });
+
     if (createdItem) {
       await integrityCheckOpcua(app);
       findedItem = await findItem(app, 'opcua-tags', { browseName: createdItem['browseName'] });

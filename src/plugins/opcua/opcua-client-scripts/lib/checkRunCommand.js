@@ -13,12 +13,13 @@ const isDebug = false;
  * @returns {String}
  */
 function checkRunCommand(options) {
-  let result = null;
+  let result = null, points;
   //----------------
   // Run script
   switch (options.command) {
-  case 'ch-m5CreateAcmYearTemplate':
-    if(options.opt.point) {
+  case 'ch_m5CreateAcmYearTemplate':
+    points = options.opt.points;
+    if(points && points.length) {
       result = {};
       result.nodeId = 'ns=1;s=CH_M5::RunCommand';
       result.browseName = 'CH_M5::YearTemplateCreate';

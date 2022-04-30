@@ -22,7 +22,7 @@ const argv = yargs(hideBin(process.argv))
   .scriptName('runOpcuaCommand')
   .usage('Usage: $0 -c str --opt.point num')
   .example([
-    ['$0 -c "ch-m5CreateAcmYearTemplate" --opt.point 2 --opt.test --opt.period 1 "months"',
+    ['$0 -c "ch_m5CreateAcmYearTemplate" --opt.points 2 --opt.test --opt.period 1 "months"',
       'Returns the file name (acmYearTemplate2-2022.xlsx) when creating a template for the reporting period.']
   ])
   .option('command', {
@@ -35,6 +35,7 @@ const argv = yargs(hideBin(process.argv))
   .option('opt')
   .default('opt.url', 'opc.tcp://localhost:26570', '(Endpoint URL)')
   .array('opt.period')
+  .array('opt.points')
   .boolean('opt.test')
   .coerce('opt', o => {
     // o.name = opt.name.toLowerCase()

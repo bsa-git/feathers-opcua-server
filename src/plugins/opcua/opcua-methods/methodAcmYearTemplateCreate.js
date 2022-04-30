@@ -31,8 +31,8 @@ const {
 } = require('../../excel-helpers');
 
 const dataTestPath = '/test/data/tmp/excel-helper';
-let dataPath = '/src/api/app/opcua-methods/asm-reports/data';
-let paramsPath = '/src/api/app/opcua-methods/asm-reports/params';
+const dataPath = '/src/api/app/opcua-methods/asm-reports/data';
+const paramsPath = '/src/api/app/opcua-methods/asm-reports/params';
 
 makeDirSync([appRoot, dataTestPath]);
 
@@ -77,23 +77,35 @@ const setErrDataCells = (index, excel) => {
  */
 const methodAcmYearTemplateCreate = async (inputArguments, context, callback) => {
   let resultPath = '', paramsFile, baseParamsFile, params = null, paramFullsPath;
-  //-----------------------------------
+  let pointID;
+  //----------------------------------------------------------------------------
 
   // Get params
   const inputArg = inputArguments[0].value;
   if (callback) {
     params = JSON.parse(inputArg);
+    pointID = params.pointID;
   } else {
-    paramsFile = loTemplate(paramsFileName)({ pointID: inputArg });
-    paramFullsPath = [appRoot, paramsPath, paramsFile];
-    if (!doesFileExist(paramFullsPath)) {
-      console.log(chalk.redBright(`Run script - ERROR. File with name "${paramsFile}" not found.`));
-      throw new Error(`Run script - ERROR. File with name "${paramsFile}" not found.`);
-    }
-    params = require(join(...paramFullsPath));
+    pointID = inputArg;
+  }
+  // Get params data
+  paramsFile = loTemplate(paramsFileName)({ pointID });
+  paramFullsPath = [appRoot, paramsPath, paramsFile];
+  if (!doesFileExist(paramFullsPath)) {
+    console.log(chalk.redBright(`Run script - ERROR. File with name "${paramsFile}" not found.`));
+    throw new Error(`Run script - ERROR. File with name "${paramsFile}" not found.`);
   }
 
-  if(!params.baseParams){
+  const _params = require(join(...paramFullsPath));
+
+  if (params) {
+    params = Object.assign({}, _params, params);
+  } else {
+    params = Object.assign({}, _params);
+  }
+
+
+  if (!params.baseParams) {
     params.baseParams = 1;
   }
 
@@ -274,8 +286,12 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
 
   // Write new data to xlsx file
   const outputFile = loTemplate(params.outputTemplateFile)({ pointID: params.pointID, year: startYear });
-  if (params.isTest) dataPath = dataTestPath;
-  resultPath = await exceljs.writeFile([appRoot, dataPath, outputFile]);
+  if (params.isTest) {
+    resultPath = await exceljs.writeFile([appRoot, dataTestPath, outputFile]);
+  } else{
+    resultPath = await exceljs.writeFile([appRoot, dataPath, outputFile]);
+  }
+  
 
   // CallBack
   const callMethodResult = {

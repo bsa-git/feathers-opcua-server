@@ -548,20 +548,21 @@ const integrityCheckOpcua = async function (app, isRemote = false) {
   }
 
   // Get all 'childGroup' tags 
-  // if (isRemote) {
-  //   tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: [ 'object', 'method' ] }, group: { $ne: true }, ownerGroup: true, ownerName: { $in: objTagBrowseNames } });
-  // } else {
-  //   tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: [ 'object', 'method' ] }, group: { $ne: true }, ownerGroup: true });
-  // }
-
   if (isRemote) {
-    tagsFromDB = await findItems(app, 'opcua-tags', { ownerGroup: true, ownerName: { $in: objTagBrowseNames } });
+    tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: [ 'object', 'method' ] }, group: { $ne: true }, ownerName: { $in: objTagBrowseNames } });
   } else {
-    tagsFromDB = await findItems(app, 'opcua-tags', { ownerGroup: true });
+    tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: [ 'object', 'method' ] }, group: { $ne: true } });
   }
+
+  // if (isRemote) {
+  //   tagsFromDB = await findItems(app, 'opcua-tags', { ownerGroup: true, ownerName: { $in: objTagBrowseNames } });
+  // } else {
+  //   tagsFromDB = await findItems(app, 'opcua-tags', { ownerGroup: true });
+  // }
 
   // Remove 'childGroup' tags that have no 'ownerGroup' tags
   if (tagsFromDB.length) {
+    tagsFromDB = tagsFromDB.filter(tag => !!tag.ownerGroup );
     const idField = getIdField(tagsFromDB[0]);
     for (let index = 0; index < tagsFromDB.length; index++) {
       const tag = tagsFromDB[index];
