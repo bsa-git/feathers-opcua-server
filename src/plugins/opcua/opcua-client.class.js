@@ -915,6 +915,7 @@ class OpcuaClient {
     });
 
     if (itemNodeIds.length) {
+      if(isDebug && itemNodeIds) inspector('sessionCallMethod.itemNodeIds:', itemNodeIds);
       result = await this.session.call(itemNodeIds);
     }
     if (isLog) inspector('plugins.opcua-client.class::sessionCallMethod.result:', result);

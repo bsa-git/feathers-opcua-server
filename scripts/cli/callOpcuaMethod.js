@@ -10,24 +10,24 @@ const {
 } = require('../../src/plugins/lib');
 
 const {
-  checkRunCommand,
-  callbackSessionWrite,
+  checkCallMethod,
+  callbackSessionCallMethod,
   opcuaClientSessionAsync
 } = require('../../src/plugins/opcua/opcua-client-scripts/lib');
 
 const isDebug = false;
 
-// Get argv for 'runOpcuaCommand'
+// Get argv for 'callOpcuaMethod'
 const argv = yargs(hideBin(process.argv))
-  .scriptName('runOpcuaCommand')
-  .usage('Usage: $0 -c str --opt.point num')
+  .scriptName('callOpcuaMethod')
+  .usage('Usage: $0 -m str --opt.point num')
   .example([
-    ['$0 -c "ch_m5CreateAcmYearTemplate" --opt.points 2 --opt.test --opt.period 1 "months" --opt.year 2020',
+    ['$0 -m "ch_m5CreateAcmYearTemplate" --opt.points 2 --opt.test --opt.period 1 "months"  --opt.year 2020',
       'Returns the file name (acmYearTemplate2-2020.xlsx) when creating a template for the reporting period.']
   ])
-  .option('command', {
-    alias: 'c',
-    describe: 'Command string for the script.',
+  .option('method', {
+    alias: 'm',
+    describe: 'Method name for the script.',
     demandOption: 'The params is required.',
     type: 'string',
     nargs: 1,
@@ -51,13 +51,16 @@ const argv = yargs(hideBin(process.argv))
 if (isDebug && argv) inspector('Yargs.argv:', argv);
 
 // Run script
-(async function runOpcuaCommand(options) {
-  const checkResult = checkRunCommand(options);
+(async function callOpcuaMethod(options) {
+  // Check call method options
+  const checkResult = checkCallMethod(options);
   if(!checkResult){
-    // Command error
-    inspector('runOpcuaCommand_ERROR.options:', options);
-    throw new Error(`Command error. This command "${options.command}" does not exist or there are not enough options.`);
+    // Method error
+    inspector('callOpcuaMethod_ERROR.options:', options);
+    throw new Error(`Method error. This method "${options.method}" does not exist or there are not enough options.`);
   }
-  const result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionWrite);
-  console.log(chalk.green(`Run session write command "${options.command}" - OK!`), 'result:', chalk.cyan(result));
+  const result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionCallMethod);
+  // Check call method result
+  checkCallMethod(options, result);
+  // console.log(chalk.green(`Run session call command "${options.method}" - OK!`), 'result:', chalk.cyan(result));
 })(argv);

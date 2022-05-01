@@ -35,11 +35,13 @@ async function ch_m5CreateAcmYearTemplate(params, value) {
   if (isDebug && value) inspector('ch_m5CreateAcmYearTemplate.value:', value);
 
   const opt = value.opt;
+  const opcua = value.opcua;
 
   // Set input argument
   if (opt.test) inputArgument.isTest = opt.test;
   if (opt.point) inputArgument.pointID = opt.point;
   if (opt.period) inputArgument.period = opt.period;
+  if (opt.year) inputArgument.startYear = opt.year;
 
   inputArguments.push([
     {
@@ -48,8 +50,9 @@ async function ch_m5CreateAcmYearTemplate(params, value) {
     }
   ]);
 
-  params.inputArguments = inputArguments;
-  params.browseName = opt.browseName;
+  params.opcua = {};
+  params.opcua.inputArguments = inputArguments;
+  params.opcua.browseName = opcua.browseName;
 
   result = await sessionCallMethod(params);
   if (isDebug && result) inspector('ch_m5CreateAcmYearTemplate.result:', result);

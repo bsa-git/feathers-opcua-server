@@ -10,25 +10,25 @@ const isDebug = false;
 /**
  * @name checkRunCommand
  * @param {Object} options 
- * @returns {String}
+ * @returns {Object}
  */
 function checkRunCommand(options) {
-  let result = null, points;
+  let resultOptions = null, points;
   //----------------
   // Run script
   switch (options.command) {
   case 'ch_m5CreateAcmYearTemplate':
     points = options.opt.points;
-    if(points && points.length) {
-      result = {};
-      result.nodeId = 'ns=1;s=CH_M5::RunCommand';
-      result.browseName = 'CH_M5::YearTemplateCreate';
-    } 
+    if (points && points.length) {
+      resultOptions = Object.assign({}, options, { opcua: {} });
+      resultOptions.opcua.nodeId = 'ns=1;s=CH_M5::RunCommand';
+      resultOptions.opcua.browseName = 'CH_M5::YearTemplateCreate';
+    }
     break;
   default:
     break;
   }
-  return result;
+  return resultOptions;
 }
 
 module.exports = checkRunCommand;

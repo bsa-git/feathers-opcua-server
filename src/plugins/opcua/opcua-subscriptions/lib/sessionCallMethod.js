@@ -29,8 +29,8 @@ async function sessionCallMethod(params) {
   if (isDebug && params) inspector('sessionCallMethod.params:', loOmit(params, ['myOpcuaClient', 'app']));
   // Get arguments for function
   const client = params.myOpcuaClient;
-  const browseName = params.browseName;
-  const inputArguments = params.inputArguments;
+  const browseName = params.opcua.browseName;
+  const inputArguments = params.opcua.inputArguments;
   // Run function 'sessionCallMethod'
   const callResults = await client.sessionCallMethod(browseName, inputArguments);
   return callResults; 

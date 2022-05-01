@@ -1,9 +1,13 @@
 const checkRunCommand = require('./checkRunCommand');
+const checkCallMethod = require('./checkCallMethod');
 const opcuaClientSessionAsync = require('./opcuaClientSessionAsync');
 const callbackSessionWrite = require('./callbackSessionWrite');
+const callbackSessionCallMethod = require('./callbackSessionCallMethod');
 
 module.exports = {
   checkRunCommand,
+  checkCallMethod,
   opcuaClientSessionAsync,
-  callbackSessionWrite
+  callbackSessionWrite,
+  callbackSessionCallMethod
 };
