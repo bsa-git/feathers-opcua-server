@@ -1,22 +1,11 @@
 /* eslint-disable no-unused-vars */
 const loOmit = require('lodash/omit');
-const chalk = require('chalk');
 
 const {
   inspector,
 } = require('../../../lib');
 
-const {
-  formatDataValue
-} = require('../../opcua-helper');
-
-const {
-  checkRunCommand
-} = require('../../opcua-client-scripts/lib');
-
-const debug = require('debug')('app:runCommand');
 const isDebug = false;
-const isLog = false;
 
 /**
  * @method sessionCallMethod
