@@ -26,7 +26,7 @@ function ch_m5CreateAcmYearTemplate(options, result) {
 
   if (options) {
     if (isDebug && options) inspector('ch_m5CreateAcmYearTemplate.options:', options);
-    
+
     resultOptions = Object.assign({}, options, { opcua: {} });
 
     resultOptions.opcua.ownerNodeId = 'ns=1;i=1663';
@@ -40,19 +40,17 @@ function ch_m5CreateAcmYearTemplate(options, result) {
     if (opt.period) inputArgument.period = opt.period;
     if (opt.year) inputArgument.startYear = opt.year;
 
-    inputArguments.push([
-      {
-        dataType: DataType.String,
-        value: JSON.stringify(inputArgument),
-      }
-    ]);
+    inputArguments.push({
+      dataType: DataType.String,
+      value: JSON.stringify(inputArgument),
+    });
 
     resultOptions.opcua.inputArguments = inputArguments;
     return resultOptions;
   }
 
   if (result) {
-    if (true && result) inspector('ch_m5CreateAcmYearTemplate.result:', result);
+    if (isDebug && result) inspector('ch_m5CreateAcmYearTemplate.result:', result);
 
     statusCode = result[0].statusCode.name;
     if (statusCode === 'Good') {

@@ -24,10 +24,11 @@ const callbackSessionCallMethod = async (session, params) => {
   const inputArguments = params.opcua.inputArguments;
 
   itemNodeIds.push({ objectId, methodId, inputArguments });
+  if (isDebug && itemNodeIds) inspector('callbackSessionCallMethod.itemNodeIds:', itemNodeIds);
 
   // Session call method
   result = await session.call(itemNodeIds);
-  if (isDebug && result) inspector('ch_m5CreateAcmYearTemplate.result:', result);
+  if (isDebug && result) inspector('callbackSessionCallMethod.result:', result);
   return result;
 };
 

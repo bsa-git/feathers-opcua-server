@@ -22,7 +22,7 @@ const argv = yargs(hideBin(process.argv))
   .scriptName('callOpcuaMethod')
   .usage('Usage: $0 -m str --opt.point num')
   .example([
-    ['$0 -m "ch_m5CreateAcmYearTemplate" --opt.points 2 --opt.test --opt.period 1 "months"  --opt.year 2020',
+    ['$0 -m "ch_m5CreateAcmYearTemplate" --opt.point 2 --opt.test --opt.period 1 "months"  --opt.year 2020',
       'Returns the file name (acmYearTemplate2-2020.xlsx) when creating a template for the reporting period.']
   ])
   .option('method', {
@@ -35,7 +35,7 @@ const argv = yargs(hideBin(process.argv))
   .option('opt')
   .default('opt.url', 'opc.tcp://localhost:26570', '(Endpoint URL)')
   .array('opt.period')
-  .array('opt.points')
+  // .array('opt.points')
   .boolean('opt.test')
   .coerce('opt', o => {
     // o.name = opt.name.toLowerCase()
@@ -54,7 +54,7 @@ if (isDebug && argv) inspector('Yargs.argv:', argv);
 (async function callOpcuaMethod(options) {
   // Check call method options
   const checkResult = checkCallMethod(options);
-  if(!checkResult){
+  if (!checkResult) {
     // Method error
     inspector('callOpcuaMethod_ERROR.options:', options);
     throw new Error(`Method error. This method "${options.method}" does not exist or there are not enough options.`);
@@ -62,5 +62,4 @@ if (isDebug && argv) inspector('Yargs.argv:', argv);
   const result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionCallMethod);
   // Check call method result
   checkCallMethod(options, result);
-  // console.log(chalk.green(`Run session call command "${options.method}" - OK!`), 'result:', chalk.cyan(result));
 })(argv);
