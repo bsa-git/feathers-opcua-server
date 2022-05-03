@@ -54,6 +54,8 @@ async function ch_m5CreateAcmYearTemplate(params, value) {
   params.opcua.inputArguments = inputArguments;
   params.opcua.browseName = opcua.browseName;
 
+  // sessionCallMethod(params);
+   
   result = await sessionCallMethod(params);
   if (isDebug && result) inspector('ch_m5CreateAcmYearTemplate.result:', result);
 

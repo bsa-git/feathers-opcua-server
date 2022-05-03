@@ -21,7 +21,8 @@ const {
   doesFileExist,
   hexToARGB,
   shiftTimeByOneHour,
-  makeDirSync
+  makeDirSync,
+  getPathBasename
 } = require('../../lib');
 
 const colors = require('../../lib/colors');
@@ -302,6 +303,7 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
     }]
   };
   if (callback) {
+    // console.log(chalk.green('runMethod.methodAcmYearTemplateCreate:'), chalk.cyan(StatusCodes.Good), 'resultFile:', chalk.cyan(getPathBasename(resultPath)));
     callback(null, callMethodResult);
   } else {
     return { resultPath, params, hours, days };

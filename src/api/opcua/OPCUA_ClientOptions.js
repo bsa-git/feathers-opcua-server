@@ -79,7 +79,7 @@ module.exports = {
    * the requested session timeout in CreateSession (ms)
    */
 
-  requestedSessionTimeout: 60000,
+  requestedSessionTimeout: 600000,
 
   /**
    * set to false if the client should accept server endpoint mismatch

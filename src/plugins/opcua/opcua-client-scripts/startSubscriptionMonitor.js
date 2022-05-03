@@ -23,12 +23,12 @@ async function startSubscriptionMonitor(id, service) {
   await service.subscriptionCreate(id);
   // Get server current state 
   const srvCurrentState = await service.getSrvCurrentState(id);
-  if(isLog && srvCurrentState) inspector('subscriptionMonitor.srvCurrentState:', srvCurrentState);
+  if (isLog && srvCurrentState) inspector('subscriptionMonitor.srvCurrentState:', srvCurrentState);
   // Start subscriptionMonitor
   const allVariables = srvCurrentState.paramsAddressSpace.variables;
   //---- Group owners  ---//
-  browseNames = allVariables.filter(v => v.hist && v.group).map(v => v.browseName);
-  if(isLog && browseNames) inspector('startSubscriptionMonitor.groupOwners.browseNames:', browseNames);
+  browseNames = allVariables.filter(v => v.hist && v.group && v.subscription).map(v => v.browseName);
+  if (isDebug && browseNames.length) inspector('startSubscriptionMonitor.groupOwners.browseNames:', browseNames);
   for (let index = 0; index < browseNames.length; index++) {
     const browseName = browseNames[index];
     const nodeIds = await service.getNodeIds(id, browseName);
@@ -38,7 +38,8 @@ async function startSubscriptionMonitor(id, service) {
       await service.subscriptionMonitor(id, '', { nodeId });
     }
     // Subscription monitor for group members
-    const groupBrowseNames = allVariables.filter(v => v.ownerGroup === browseName).map(v => v.browseName);
+    const groupBrowseNames = allVariables.filter(v => v.hist && (v.ownerGroup === browseName) && v.subscription).map(v => v.browseName);
+    if (isDebug && groupBrowseNames.length) inspector('startSubscriptionMonitor.groupBrowseNames:', groupBrowseNames);
     groups = getGroupsFromArray(groupBrowseNames, 10);
     for (let index = 0; index < groups.length; index++) {
       const group = groups[index];
@@ -51,8 +52,8 @@ async function startSubscriptionMonitor(id, service) {
   }
 
   //---- Only hist values  ---//
-  browseNames = allVariables.filter(v => v.hist && !v.group && !v.ownerGroup).map(v => v.browseName);
-  if(isLog && browseNames) inspector('startSubscriptionMonitor.histValues.browseNames:', browseNames);
+  browseNames = allVariables.filter(v => v.hist && !v.group && !v.ownerGroup && v.subscription).map(v => v.browseName);
+  if (isDebug && browseNames.length) inspector('startSubscriptionMonitor.histValues.browseNames:', browseNames);
   for (let index = 0; index < browseNames.length; index++) {
     const browseName = browseNames[index];
     const nodeIds = await service.getNodeIds(id, browseName);
