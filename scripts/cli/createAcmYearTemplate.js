@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+/* eslint-disable no-unused-vars */
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const chalk = require('chalk');
@@ -36,17 +36,19 @@ const isDebug = false;
     .epilog('copyright 2022')
     .argv;
 
-  if (isDebug && argv) inspector('Yargs.argv:', argv);
+  if (true && argv) inspector('Yargs.argv:', argv);
 
   // Run script
   if (Array.isArray(argv.point)) {
     for (let index = 0; index < argv.point.length; index++) {
       const point = argv.point[index];
       const result = await methodAcmYearTemplateCreate([{ value: point }]);
+      if(isDebug && result) inspector('createAcmYearTemplate.result:', result);
       console.log(chalk.green('Run script - OK!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
     }
   } else {
     const result = await methodAcmYearTemplateCreate([{ value: argv.point }]);
+    if(isDebug && result) inspector('createAcmYearTemplate.result:', result);
     console.log(chalk.green('Run script - OK!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
   }
 

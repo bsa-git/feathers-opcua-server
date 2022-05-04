@@ -2,6 +2,12 @@
   "objects": [
     {
       "isEnable": true,
+      "browseName": "CH_M5",
+      "displayName": "Черкассы 'АЗОТ' цех M5",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
       "browseName": "CH_M51",
       "displayName": "Черкассы 'АЗОТ' цех M5/1",
       "type": "object"
@@ -31,49 +37,60 @@
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_A3",
       "displayName": "Черкассы 'АЗОТ' цех A3",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_NG-UPG2",
       "displayName": "Черкассы 'АЗОТ' узел ПГ №2",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M7-313",
       "displayName": "Черкассы 'АЗОТ' цех М7-313",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M7-357",
       "displayName": "Черкассы 'АЗОТ' цех М7-357",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M7-657",
       "displayName": "Черкассы 'АЗОТ' цех М7-657",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M9",
       "displayName": "Черкассы 'АЗОТ' цех М9",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M2",
       "displayName": "Черкассы 'АЗОТ' цех М2",
       "type": "object"
     }
   ],
   "variables": [
+    {
+      "browseName": "CH_M5::RunCommand",
+      "aliasName": "RunCommand",
+      "displayName": "Variable For RunCommand",
+      "ownerName": "CH_M5",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "subscription": "onChangedRunCommand",
+      "description": "Executing commands on an 'CH_M5' object"
+    },
     {
       "browseName": "CH_M51::ValueFromFile",
       "displayName": "Значения из файла для CH_M51",
@@ -82,6 +99,7 @@
       "dataType": "String",
       "hist": true,
       "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
       "getter": "histValueFromHttpPath",
       "getterParams": {
@@ -97,11 +115,75 @@
       "dataType": "String",
       "hist": true,
       "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
       "getter": "histValueFromHttpPath",
       "getterParams": {
         "path": "http://192.168.3.5/www_m5/m5_data/",
         "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M51_ACM::ValueFromFile",
+      "displayName": "Значения из файла для CH_M51_ACM",
+      "ownerName": "CH_M51_ACM",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForASM",
+      "variableGetType": "valueFromSource",
+      "getter": "acmDayValueFromFile",
+      "getterParams": {
+        "isTest": true,
+        "path": "test/data/tmp/ch-m5acm_1",
+        "toPath": "test/data/tmp/excel-helper",
+        "fromFile": "test/data/excel/asmDayReport.xls",
+        "pointID": 1,
+        "interval": 30000,
+        "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["23QN2O", "23QN2O_CORR", "23FVSG", "23FVSG_CORR", "23F105_IS"]}
+      }
+    },
+    {
+      "browseName": "CH_M52_ACM::ValueFromFile",
+      "displayName": "Значения из файла для CH_M52_ACM",
+      "ownerName": "CH_M52_ACM",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForASM",
+      "variableGetType": "valueFromSource",
+      "getter": "acmDayValueFromFile",
+      "getterParams": {
+        "isTest": true,
+        "path": "test/data/tmp/ch-m5acm_2",
+        "toPath": "test/data/tmp/excel-helper",
+        "fromFile": "test/data/excel/asmDayReport.xls",
+        "pointID": 2,
+        "interval": 30000,
+        "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["14QN2O", "14QN2O_CORR", "14FVSG", "14FVSG_CORR", "14F105_IS"]}
+      }
+    },
+    {
+      "browseName": "CH_M52_ACM2::ValueFromFile",
+      "displayName": "Значения из файла для CH_M52_ACM2",
+      "ownerName": "CH_M52_ACM2",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": true,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForASM",
+      "variableGetType": "valueFromSource",
+      "getter": "acmDayValueFromFile",
+      "getterParams": {
+        "isTest": true,
+        "path": "test/data/tmp/ch-m5acm_3",
+        "toPath": "test/data/tmp/excel-helper",
+        "fromFile": "test/data/excel/asmDayReport.xls",
+        "pointID": 3,
+        "interval": 30000,
+        "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["57QN2O", "57QN2O_CORR", "57FVSG", "57FVSG_CORR", "57F105_IS"]}
       }
     },
     {
@@ -112,6 +194,7 @@
       "dataType": "String",
       "hist": true,
       "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
       "getter": "histValuesFromDB",
       "getterParams": {
@@ -131,6 +214,7 @@
       "dataType": "String",
       "hist": true,
       "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
       "getter": "histValuesFromDB",
       "getterParams": {
@@ -150,6 +234,7 @@
       "dataType": "String",
       "hist": true,
       "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
       "getter": "histValuesFromDB",
       "getterParams": {
@@ -169,6 +254,7 @@
       "dataType": "String",
       "hist": true,
       "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
       "getter": "histValuesFromDB",
       "getterParams": {
@@ -188,6 +274,7 @@
       "dataType": "String",
       "hist": true,
       "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
       "getter": "histValuesFromDB",
       "getterParams": {
@@ -207,6 +294,7 @@
       "dataType": "String",
       "hist": true,
       "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
       "getter": "histValuesFromDB",
       "getterParams": {
@@ -226,6 +314,7 @@
       "dataType": "String",
       "hist": true,
       "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
       "getter": "histValuesFromDB",
       "getterParams": {

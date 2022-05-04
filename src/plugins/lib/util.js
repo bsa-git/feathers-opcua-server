@@ -138,7 +138,7 @@ const getTime = function (dt = '', isUtc = true) {
 const getDateTime = function (dt = '', isUtc = true) {
   dt = dtToObject(dt, isUtc);
   return `${dt.years}-${dt.months}-${dt.date}T${dt.hours}:${dt.minutes}:${dt.seconds}.${dt.milliseconds}`;
-};
+};// time interval
 
 /**
  * Shift time by one hour

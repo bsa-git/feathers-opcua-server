@@ -6,7 +6,6 @@ const chalk = require('chalk');
 
 const {
   inspector,
-  strReplace
 } = require('../../src/plugins/lib');
 
 const {
@@ -20,7 +19,7 @@ const isDebug = false;
 // Get argv for 'runOpcuaCommand'
 const argv = yargs(hideBin(process.argv))
   .scriptName('runOpcuaCommand')
-  .usage('Usage: $0 -c str --opt.point num')
+  .usage('Usage: $0 -c str --opt.points num')
   .example([
     ['$0 -c "ch_m5CreateAcmYearTemplate" --opt.points 2 --opt.test --opt.period 1 "months" --opt.year 2020',
       'Returns the file name (acmYearTemplate2-2020.xlsx) when creating a template for the reporting period.']
@@ -59,5 +58,6 @@ if (isDebug && argv) inspector('Yargs.argv:', argv);
     throw new Error(`Command error. This command "${options.command}" does not exist or there are not enough options.`);
   }
   const result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionWrite);
+  if(isDebug && result) inspector('runOpcuaCommand.result:', result);
   console.log(chalk.green(`Run session write command "${options.command}" - OK!`), 'result:', chalk.cyan(result));
 })(argv);

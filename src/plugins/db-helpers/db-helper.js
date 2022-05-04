@@ -452,7 +452,7 @@ const integrityCheckOpcua = async function (app, isRemote = false) {
   //---------------------------------------------------------------
   // Get opcua tags 
   const opcuaTags = getOpcuaTags();
-  if (isLog) inspector('db-helper.integrityCheckOpcua.opcuaTags:', opcuaTags);
+  if (isDebug && opcuaTags) inspector('db-helper.integrityCheckOpcua.opcuaTags:', opcuaTags);
 
   objTagBrowseNames = opcuaTags.filter(tag => tag.type === 'object').map(tag => tag.browseName);
   tagBrowseNames = opcuaTags.map(tag => tag.browseName);
@@ -509,7 +509,7 @@ const integrityCheckOpcua = async function (app, isRemote = false) {
     }
     if (deleted) {
       logger.error(`db-helper.integrityCheckOpcua.Remove 'variables' tags that have no owner tags: ${deleted}`);
-      if (isLog) inspector('db-helper.integrityCheckOpcua.Remove \'variables\' tags that have no owner tags:', deletedBrowseNames);
+      if (isDebug && deletedBrowseNames.length) inspector('db-helper.integrityCheckOpcua.Remove \'variables\' tags that have no owner tags:', deletedBrowseNames);
       deleted = 0;
       deletedBrowseNames = [];
       result = false;
@@ -540,7 +540,7 @@ const integrityCheckOpcua = async function (app, isRemote = false) {
     }
     if (deleted) {
       logger.error(`db-helper.integrityCheckOpcua.Remove 'ownerGroup' tags that have no 'childGroup' tags: ${deleted}`);
-      if (isLog) inspector('db-helper.integrityCheckOpcua.Remove \'ownerGroup\' tags that have no \'childGroup\' tags:', deletedBrowseNames);
+      if (isDebug && deletedBrowseNames.length) inspector('db-helper.integrityCheckOpcua.Remove \'ownerGroup\' tags that have no \'childGroup\' tags:', deletedBrowseNames);
       deleted = 0;
       deletedBrowseNames = [];
       result = false;
@@ -553,12 +553,6 @@ const integrityCheckOpcua = async function (app, isRemote = false) {
   } else {
     tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: [ 'object', 'method' ] }, group: { $ne: true } });
   }
-
-  // if (isRemote) {
-  //   tagsFromDB = await findItems(app, 'opcua-tags', { ownerGroup: true, ownerName: { $in: objTagBrowseNames } });
-  // } else {
-  //   tagsFromDB = await findItems(app, 'opcua-tags', { ownerGroup: true });
-  // }
 
   // Remove 'childGroup' tags that have no 'ownerGroup' tags
   if (tagsFromDB.length) {
@@ -578,14 +572,13 @@ const integrityCheckOpcua = async function (app, isRemote = false) {
     }
     if (deleted) {
       logger.error(`db-helper.integrityCheckOpcua.Remove 'childGroup' tags that have no 'ownerGroup' tags: ${deleted}`);
-      if (isLog) inspector('db-helper.integrityCheckOpcua.Remove \'childGroup\' tags that have no \'ownerGroup\' tags:', deletedBrowseNames);
+      if (isDebug && deletedBrowseNames.length) inspector('db-helper.integrityCheckOpcua.Remove \'childGroup\' tags that have no \'ownerGroup\' tags:', deletedBrowseNames);
       deleted = 0;
       deletedBrowseNames = [];
       result = false;
     }
   }
   // Remove opcua values that have no 'ownerGroup' tags
-  // tagsFromDB = await findItems(app, 'opcua-tags', { type: { $ne: 'object' } });
   if (isRemote) {
     tagsFromDB = await findItems(app, 'opcua-tags', { group: true, ownerName: { $in: objTagBrowseNames } });
   } else {
@@ -604,7 +597,7 @@ const integrityCheckOpcua = async function (app, isRemote = false) {
   }
   if (deleted) {
     logger.error(`db-helper.integrityCheckOpcua.Remove opcua values that have no 'ownerGroup' tags: ${deleted}`);
-    if (isLog) inspector('db-helper.integrityCheckOpcua.Remove opcua values that have no \'ownerGroup\' tags:', deletedBrowseNames);
+    if (isDebug && deletedBrowseNames.length) inspector('db-helper.integrityCheckOpcua.Remove opcua values that have no \'ownerGroup\' tags:', deletedBrowseNames);
     deleted = 0;
     deletedBrowseNames = [];
     result = false;

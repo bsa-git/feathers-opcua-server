@@ -292,7 +292,6 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
   } else{
     resultPath = await exceljs.writeFile([appRoot, dataPath, outputFile]);
   }
-  
 
   // CallBack
   const callMethodResult = {
@@ -303,7 +302,6 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
     }]
   };
   if (callback) {
-    // console.log(chalk.green('runMethod.methodAcmYearTemplateCreate:'), chalk.cyan(StatusCodes.Good), 'resultFile:', chalk.cyan(getPathBasename(resultPath)));
     callback(null, callMethodResult);
   } else {
     return { resultPath, params, hours, days };
