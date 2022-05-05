@@ -138,7 +138,43 @@ const getTime = function (dt = '', isUtc = true) {
 const getDateTime = function (dt = '', isUtc = true) {
   dt = dtToObject(dt, isUtc);
   return `${dt.years}-${dt.months}-${dt.date}T${dt.hours}:${dt.minutes}:${dt.seconds}.${dt.milliseconds}`;
-};// time interval
+};
+
+/**
+ * @method getTimeDuration
+ * @param {Object|String|Array} startTime 
+ * @param {Object|String|Array} endTime 
+ * @param {String} unit 
+ * e.g. years, months, weeks, days, hours, minutes, seconds, and milliseconds 
+ * @returns {Number}
+ */
+const getTimeDuration = function (startTime, endTime, unit) {
+  startTime = moment.utc(startTime);
+  endTime = moment.utc(endTime);
+  if(unit){
+    return endTime.diff(startTime, unit);
+  }else{
+    return endTime.diff(startTime);// return -> milliseconds
+  }
+};
+
+/**
+ * @method getTimeDuration
+ * @param {Object|String|Array} startTime 
+ * @param {Array} period 
+ * e.g. [1, 'hours']
+ * @param {Boolean} isUtc 
+ * @returns {Number}
+ */
+const getNextDateTime = function (startDateTime, period, isUtc = true) {
+  startDateTime = moment.utc(startDateTime);
+  const nextDateTime = moment.utc(startDateTime).add(period[0], period[1]);
+  if(isUtc){
+    return moment.utc(nextDateTime).format();
+  }else{
+    return moment(nextDateTime).format();
+  }
+};
 
 /**
  * Shift time by one hour
@@ -624,6 +660,8 @@ module.exports = {
   getDate,
   getTime,
   getDateTime,
+  getTimeDuration,
+  getNextDateTime,
   shiftTimeByOneHour,
   stripSlashes,
   stripSpecific,

@@ -4,6 +4,7 @@ const saveOpcuaGroupValueToDB = require('./saveOpcuaGroupValueToDB');
 const updateYearReportForASM = require('./updateYearReportForASM');
 const runCommand = require('./runCommand');
 const sessionCallMethod = require('./sessionCallMethod');
+const sessionReadHistoryValues = require('./sessionReadHistoryValues');
 
 module.exports = {
   showInfoForHandler,
@@ -11,5 +12,6 @@ module.exports = {
   saveOpcuaGroupValueToDB,
   updateYearReportForASM,
   runCommand,
-  sessionCallMethod
+  sessionCallMethod,
+  sessionReadHistoryValues
 };

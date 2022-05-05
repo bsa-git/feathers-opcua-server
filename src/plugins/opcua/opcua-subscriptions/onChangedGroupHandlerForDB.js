@@ -8,6 +8,7 @@ const {
 const {
   showInfoForGroupHandler,
   saveOpcuaGroupValueToDB,
+  sessionReadHistoryValues
 } = require('./lib');
 
 const debug = require('debug')('app:onChangedGroupHandlerForDB');
@@ -27,6 +28,8 @@ async function onChangedGroupHandlerForDB(params, dataValue) {
 
   // Only for group values
   if (addressSpaceOption && !addressSpaceOption.group) return;
+
+  // await sessionReadHistoryValues(params);
 
   // Save data to DB
   const savedValue = await saveOpcuaGroupValueToDB(params, dataValue);

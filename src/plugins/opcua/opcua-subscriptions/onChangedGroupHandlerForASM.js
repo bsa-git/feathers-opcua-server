@@ -4,6 +4,7 @@ const loOmit = require('lodash/omit');
 
 const {
   inspector,
+  getTimeDuration
 } = require('../../lib');
 
 const {
@@ -12,7 +13,7 @@ const {
   updateYearReportForASM
 } = require('./lib');
 
-const isLog = false;
+const isDebug = false;
 
 const functionBusy = {};
 
@@ -24,8 +25,8 @@ const functionBusy = {};
  * @returns {void}
  */
 async function onChangedGroupHandlerForASM(params, dataValue) {
-  if (isLog && params) inspector('onChangedGroupHandlerForASM.params:', loOmit(params, ['myOpcuaClient', 'app']));
-  if (isLog && dataValue) inspector('onChangedGroupHandlerForASM.dataValue:', dataValue);
+  if (isDebug && params) inspector('onChangedGroupHandlerForASM.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && dataValue) inspector('onChangedGroupHandlerForASM.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 
   const browseName = addressSpaceOption.browseName;
@@ -38,11 +39,11 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
   functionBusy[browseName] = true;
 
   const startTime = moment.utc().format();
-  if(isLog && startTime) console.log('onChangedGroupHandlerForASM.startTime:', startTime, 'browseName:', browseName);
+  if(isDebug && startTime) console.log('onChangedGroupHandlerForASM.startTime:', startTime, 'browseName:', browseName);
 
   // Save data to DB
   const savedValue = await saveOpcuaGroupValueToDB(params, dataValue);
-  if (isLog && savedValue) inspector('onChangedGroupHandlerForASM.savedValue:', savedValue);
+  if (isDebug && savedValue) inspector('onChangedGroupHandlerForASM.savedValue:', savedValue);
 
   // Update year report
   await updateYearReportForASM(params, dataValue);
@@ -54,7 +55,9 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
   functionBusy[browseName] = false;
 
   const endTime = moment.utc().format();
-  if(isLog && endTime) console.log('onChangedGroupHandlerForASM.endTime:', endTime, 'browseName:', browseName);
+  const timeDuration = getTimeDuration(startTime, endTime);
+  if(isDebug && endTime) console.log('onChangedGroupHandlerForASM.endTime:', endTime, 'browseName:', browseName);
+  if(true && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', timeDuration, 'browseName:', browseName);
 }
 
 module.exports = onChangedGroupHandlerForASM;

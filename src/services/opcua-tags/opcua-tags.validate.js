@@ -45,7 +45,7 @@ let base = merge({},
         type: 'string'
       },
       hist: {
-        type: 'boolean'
+        type: ['string', 'integer', 'boolean', 'object']
       },
       group: {
         type: 'boolean'

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-const { 
-  appRoot, 
+const {
+  appRoot,
   inspector,
   inspectorToLog,
 } = require('../lib');
@@ -19,12 +19,14 @@ const {
   makeAccessLevelFlag,
 } = require('node-opcua');
 const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/OPCUA_ServerOptions`);
-const opcuaDefaultHistoricalDataNodeOptions = require(`${appRoot}/src/api/opcua/ServerHistoricalDataNodeOptions`);
+// const opcuaDefaultHistoricalDataNodeOptions = require(`${appRoot}/src/api/opcua/ServerHistoricalDataNodeOptions`);
+const opcuaDefaultVariableHistorianOptions = require(`${appRoot}/src/api/opcua/ServerVariableHistorianOptions`);
 const opcuaDefaultGetters = require('./opcua-getters');
 const opcuaDefaultMethods = require('./opcua-methods');
 
 const loMerge = require('lodash/merge');
 const loOmit = require('lodash/omit');
+const loIsInteger = require('lodash/isInteger');
 const chalk = require('chalk');
 
 const debug = require('debug')('app:opcua-server.class');
@@ -161,7 +163,7 @@ class OpcuaServer {
         userIdentityTokens: endpoint.userIdentityTokens
       };
     });
-    
+
     this.currentState.endpoints = endpoints;
     this.currentState.isStarted = true;
     if (isLog) inspector('opcuaServerStart.currentState.endpoints:', this.currentState.endpoints);
@@ -512,7 +514,14 @@ class OpcuaServer {
                     it sets the historizing flag of the variable
                     it starts recording value changes into a small online data storage of 2000 values.
                   */
-                  addressSpace.installHistoricalDataNode(addedVariable, opcuaDefaultHistoricalDataNodeOptions);
+                  // Set new maxOnlineValues
+                  if (loIsInteger(v.hist)) {
+                    const variableHistorianOptions = Object.assign({}, opcuaDefaultVariableHistorianOptions, { maxOnlineValues: v.hist });
+                    addressSpace.installHistoricalDataNode(addedVariable, variableHistorianOptions);
+                  } else {
+                    addressSpace.installHistoricalDataNode(addedVariable, opcuaDefaultVariableHistorianOptions);
+                  }
+
                   // If a variable has group - get group variables
                   if (v.group) {
                     getterParams.addedVariableList = addedVariableList;
@@ -664,7 +673,12 @@ class OpcuaServer {
             it sets the historizing flag of the variable
             it starts recording value changes into a small online data storage of 2000 values.
           */
-          addressSpace.installHistoricalDataNode(addedVariable, opcuaDefaultHistoricalDataNodeOptions);
+          if (loIsInteger(v.hist)) {
+            const variableHistorianOptions = Object.assign({}, opcuaDefaultVariableHistorianOptions, { maxOnlineValues: v.hist });
+            addressSpace.installHistoricalDataNode(addedVariable, variableHistorianOptions);
+          } else {
+            addressSpace.installHistoricalDataNode(addedVariable, opcuaDefaultVariableHistorianOptions);
+          }
         }
         // Run getter
         // addedVariable.strDataType = v.dataType;
@@ -688,7 +702,7 @@ class OpcuaServer {
     // Add "value" to getterParams
     loMerge(getterParams, value === undefined ? {} : { value });
     getterParams.dataType = variable.dataType;
-    if(getterParams.value === null && getterParams.dataType){
+    if (getterParams.value === null && getterParams.dataType) {
       getterParams.value = getInitValueForDataType(getterParams.dataType);
     }
     // Add "this" to getterParams

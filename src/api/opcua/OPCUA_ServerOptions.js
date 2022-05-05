@@ -87,9 +87,11 @@ module.exports = {
   /**
     * the TCP port to listen to.
     * @type {Number}
-    * @default 26543
+    * @default 26543|26540
+    * e.g. 26540 is intended for unencrypted communication.
+    * e.g. 26543 is intended for tls/ssl encryption.
     */
-  port: 26543,
+  port: (process.env.NODE_ENV === 'production')? 26543 : 26540,
   /**
     * the possible security policies that the server will expose
     Basic128 = "http://opcfoundation.org/UA/SecurityPolicy#Basic128",
@@ -165,7 +167,7 @@ module.exports = {
     * Use a large value ( i.e 15000 ms) for slow connections or embedded devices.
     * @type {Number}
     */
-  timeout: 10000,
+  timeout: 15000,
 
   /**
     * the maximum number of simultaneous sessions allowed.
