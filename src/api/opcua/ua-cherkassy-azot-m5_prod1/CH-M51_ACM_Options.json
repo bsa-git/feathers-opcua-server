@@ -22,7 +22,7 @@
       "ownerName": "CH_M51_ACM",
       "type": "variable.simple",
       "dataType": "String",
-      "hist": true,
+      "hist": 1,
       "group": true,
       "variableGetType": "valueFromSource",
       "getter": "acmDayValueFromPath",
@@ -40,7 +40,7 @@
       "ownerGroup": "CH_M51_ACM::ValueFromFile",
       "type": "variable.array",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
         "dataType": "Double",
@@ -67,7 +67,7 @@
       "ownerGroup": "CH_M51_ACM::ValueFromFile",
       "type": "variable.array",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
         "dataType": "Double",
@@ -94,7 +94,7 @@
       "ownerGroup": "CH_M51_ACM::ValueFromFile",
       "type": "variable.array",
       "dataType": "Byte",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
         "dataType": "Byte",
@@ -116,7 +116,7 @@
       "ownerGroup": "CH_M51_ACM::ValueFromFile",
       "type": "variable.array",
       "dataType": "Byte",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
         "dataType": "Byte",
@@ -138,7 +138,7 @@
       "ownerGroup": "CH_M51_ACM::ValueFromFile",
       "type": "variable.array",
       "dataType": "Byte",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
         "dataType": "Byte",

@@ -50,6 +50,7 @@ const pause = function (ms) {
   return new Promise(function (resolve) {
     setTimeout(() => {
       debug(`Pause: ${ms} MSec`);
+      console.log('Pause: ', chalk.cyan(`${ms} (MSec)`));
       resolve('done!');
     }, ms);
   });

@@ -19,7 +19,6 @@ const {
   makeAccessLevelFlag,
 } = require('node-opcua');
 const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/OPCUA_ServerOptions`);
-// const opcuaDefaultHistoricalDataNodeOptions = require(`${appRoot}/src/api/opcua/ServerHistoricalDataNodeOptions`);
 const opcuaDefaultVariableHistorianOptions = require(`${appRoot}/src/api/opcua/ServerVariableHistorianOptions`);
 const opcuaDefaultGetters = require('./opcua-getters');
 const opcuaDefaultMethods = require('./opcua-methods');
@@ -515,7 +514,7 @@ class OpcuaServer {
                     it starts recording value changes into a small online data storage of 2000 values.
                   */
                   // Set new maxOnlineValues
-                  if (loIsInteger(v.hist)) {
+                  if (v.hist > 1) {
                     const variableHistorianOptions = Object.assign({}, opcuaDefaultVariableHistorianOptions, { maxOnlineValues: v.hist });
                     addressSpace.installHistoricalDataNode(addedVariable, variableHistorianOptions);
                   } else {
@@ -673,7 +672,7 @@ class OpcuaServer {
             it sets the historizing flag of the variable
             it starts recording value changes into a small online data storage of 2000 values.
           */
-          if (loIsInteger(v.hist)) {
+          if (v.hist > 1) {
             const variableHistorianOptions = Object.assign({}, opcuaDefaultVariableHistorianOptions, { maxOnlineValues: v.hist });
             addressSpace.installHistoricalDataNode(addedVariable, variableHistorianOptions);
           } else {

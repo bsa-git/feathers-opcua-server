@@ -14,7 +14,7 @@
       "ownerName": "CH_M5",
       "type": "variable.simple",
       "dataType": "String",
-      "hist": true,
+      "hist": 1,
       "description": "Executing commands on an 'CH_M5' object"
     }
   ],

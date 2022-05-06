@@ -2,22 +2,22 @@
 const Path = require('path');
 const join = Path.join;
 const chalk = require('chalk');
-const logger = require('../../../../logger');
+const logger = require('../../../../../logger');
 
 const {
   appRoot,
   inspector,
   doesFileExist,
   makeDirSync
-} = require('../../../lib');
+} = require('../../../../lib');
 
 const {
   formatDataValue
-} = require('../../opcua-helper');
+} = require('../../../opcua-helper');
 
 const {
   ExceljsHelperClass,
-} = require('../../../excel-helpers');
+} = require('../../../../excel-helpers');
 
 const moment = require('moment');
 

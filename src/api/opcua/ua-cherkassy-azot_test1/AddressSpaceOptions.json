@@ -123,7 +123,7 @@
       "ownerName": "Device2",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "histValueFromSource",
       "getterParams": {
@@ -144,7 +144,7 @@
       "ownerName": "Device2",
       "type": "variable.array",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "valueFromSourceParams": {
         "dataType": "Double",
@@ -182,7 +182,7 @@
       "ownerName": "Device2",
       "type": "variable.simple",
       "dataType": "String",
-      "hist": true,
+      "hist": 1,
       "group": true,
       "variableGetType": "valueFromSource",
       "getter": "histValueFromFile",
@@ -202,7 +202,7 @@
       "ownerGroup": "Device2.ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -221,7 +221,7 @@
       "ownerGroup": "Device2.ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {

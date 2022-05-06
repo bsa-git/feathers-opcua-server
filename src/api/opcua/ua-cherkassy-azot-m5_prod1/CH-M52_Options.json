@@ -35,7 +35,7 @@
       "ownerName": "CH_M52",
       "type": "variable.simple",
       "dataType": "String",
-      "hist": true,
+      "hist": 1,
       "group": true,
       "variableGetType": "valueFromSource",
       "getter": "histValueFromPath",
@@ -53,7 +53,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -73,7 +73,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -93,7 +93,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -113,7 +113,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -133,7 +133,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -153,7 +153,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -173,7 +173,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -193,7 +193,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -213,7 +213,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -233,7 +233,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -253,7 +253,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -273,7 +273,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -293,7 +293,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -313,7 +313,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -333,7 +333,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -353,7 +353,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -373,7 +373,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -393,7 +393,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -413,7 +413,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -433,7 +433,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -453,7 +453,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -473,7 +473,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -493,7 +493,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -513,7 +513,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -533,7 +533,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -553,7 +553,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -573,7 +573,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -593,7 +593,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -613,7 +613,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -633,7 +633,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -653,7 +653,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -673,7 +673,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -693,7 +693,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -713,7 +713,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -733,7 +733,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -753,7 +753,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -773,7 +773,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -796,7 +796,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -816,7 +816,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -836,7 +836,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -856,7 +856,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -876,7 +876,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -896,7 +896,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -916,7 +916,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -936,7 +936,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -956,7 +956,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -976,7 +976,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -996,7 +996,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1016,7 +1016,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1039,7 +1039,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1059,7 +1059,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1079,7 +1079,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1099,7 +1099,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1119,7 +1119,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1139,7 +1139,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1159,7 +1159,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1179,7 +1179,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1199,7 +1199,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1219,7 +1219,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1239,7 +1239,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1259,7 +1259,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1282,7 +1282,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1302,7 +1302,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1322,7 +1322,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1342,7 +1342,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1362,7 +1362,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1382,7 +1382,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1402,7 +1402,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1422,7 +1422,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1442,7 +1442,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1462,7 +1462,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1482,7 +1482,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1502,7 +1502,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1525,7 +1525,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1545,7 +1545,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1565,7 +1565,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1585,7 +1585,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1605,7 +1605,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1625,7 +1625,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1645,7 +1645,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1665,7 +1665,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1685,7 +1685,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1705,7 +1705,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1725,7 +1725,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1745,7 +1745,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1768,7 +1768,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1788,7 +1788,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1808,7 +1808,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1828,7 +1828,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1848,7 +1848,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1868,7 +1868,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1888,7 +1888,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1908,7 +1908,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1928,7 +1928,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1948,7 +1948,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1968,7 +1968,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -1988,7 +1988,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2011,7 +2011,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2031,7 +2031,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2051,7 +2051,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2071,7 +2071,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2091,7 +2091,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2111,7 +2111,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2131,7 +2131,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2151,7 +2151,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2171,7 +2171,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2191,7 +2191,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2211,7 +2211,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2231,7 +2231,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2254,7 +2254,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2274,7 +2274,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2294,7 +2294,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2314,7 +2314,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2334,7 +2334,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2354,7 +2354,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2374,7 +2374,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2394,7 +2394,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2414,7 +2414,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2434,7 +2434,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2454,7 +2454,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
@@ -2474,7 +2474,7 @@
       "ownerGroup": "CH_M52::ValueFromFile",
       "type": "variable.analog",
       "dataType": "Double",
-      "hist": true,
+      "hist": 1,
       "variableGetType": "valueFromSource",
       "getter": "plugForVariable",
       "valueParams": {
