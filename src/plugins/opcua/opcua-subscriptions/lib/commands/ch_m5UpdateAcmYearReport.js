@@ -35,13 +35,13 @@ const {
 const isLog = false;
 
 /**
- * @method updateYearReportForASM
+ * @method ch_m5UpdateAcmYearReport
  * 
  * @param {Object} params 
  * @param {Object} dataValue
  * @returns {void}
  */
-async function updateYearReportForASM(params, dataValue) {
+async function ch_m5UpdateAcmYearReport(params, dataValue) {
   let reportFile, paramsReport = null, paramFullsPath;
   //-----------------------------------
 
@@ -149,4 +149,4 @@ async function updateYearReportForASM(params, dataValue) {
   }
 }
 
-module.exports = updateYearReportForASM;
+module.exports = ch_m5UpdateAcmYearReport;
