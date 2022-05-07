@@ -32,7 +32,7 @@ const {
   paramsFileName,
 } = require(join(...[appRoot, paramsPath]));
 
-const isLog = false;
+const isDebug = false;
 
 /**
  * @method ch_m5UpdateAcmYearReport
@@ -45,20 +45,20 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
   let reportFile, paramsReport = null, paramFullsPath;
   //-----------------------------------
 
-  if (isLog && params) inspector('updateYearReportForASM.params:', loOmit(params, ['myOpcuaClient', 'app']));
-  if (isLog && dataValue) inspector('updateYearReportForASM.dataValue:', dataValue);
+  if (true && params) inspector('ch_m5UpdateAcmYearReport.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (true && dataValue) inspector('ch_m5UpdateAcmYearReport.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 
   // Only for group values
-  if (isLog && addressSpaceOption) inspector('updateYearReportForASM.addressSpaceOption:', addressSpaceOption);
+  if (isDebug && addressSpaceOption) inspector('ch_m5UpdateAcmYearReport.addressSpaceOption:', addressSpaceOption);
 
   // Get group value
   const browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
-  if (isLog && dataValue) inspector('saveOpcuaGroupValueToDB.formatDataValue:', dataValue);
+  if (isDebug && dataValue) inspector('ch_m5UpdateAcmYearReport.formatDataValue:', dataValue);
   let groupValue = dataValue.value.value;
   groupValue = JSON.parse(groupValue);
-  if (isLog && groupValue) inspector('saveOpcuaGroupValueToDB.value:', groupValue);
+  if (isDebug && groupValue) inspector('ch_m5UpdateAcmYearReport.value:', groupValue);
   const reportDate = groupValue['!value'].date;
   const reportYear = reportDate.split('-')[0];
 
@@ -104,14 +104,14 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
 
     // Get actual row count
     const metrics = exceljs.getSheetMetrics();
-    if (isLog && metrics) inspector('metrics:', metrics);
+    if (isDebug && metrics) inspector('metrics:', metrics);
     // Get cells for report date
     let dateCells = exceljs.getCells(sheetName, { range: `${dateColumn}${startRow}:${dateColumn}${metrics.rowCount}` });
     dateCells = dateCells.filter(dateCell => dateCell.value === reportDate);
     // Show cells
     loForEach(dateCells, function (cell) {
       cell = loOmit(cell, ['cell', 'column', 'row']);
-      if (isLog && cell) inspector(`updateYearReportForASM.cell(${cell.address}):`, cell);
+      if (isDebug && cell) inspector(`ch_m5UpdateAcmYearReport.cell(${cell.address}):`, cell);
     });
     // Get start/end row for report date  
     const startRow4Date = dateCells[0]['address2'].row;

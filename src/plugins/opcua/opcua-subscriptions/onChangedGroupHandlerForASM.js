@@ -62,7 +62,7 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
   const endTime = moment.utc().format();
   const timeDuration = getTimeDuration(startTime, endTime);
   if (isDebug && endTime) console.log('onChangedGroupHandlerForASM.endTime:', endTime, 'browseName:', browseName);
-  if (true && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
+  if (isDebug && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
 }
 
 module.exports = onChangedGroupHandlerForASM;
