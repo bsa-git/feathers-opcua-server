@@ -9,7 +9,6 @@
   "variables": [
     {
       "browseName": "CH_M5::RunCommand",
-      "aliasName": "RunCommand",
       "displayName": "Variable For RunCommand",
       "ownerName": "CH_M5",
       "type": "variable.simple",
@@ -21,7 +20,6 @@
   "methods": [
     {
       "browseName": "CH_M5::YearTemplateCreate",
-      "aliasName": "YearTemplateCreate",
       "displayName": "Create an annual report template",
       "ownerName": "CH_M5",
       "type": "method",
@@ -31,6 +29,43 @@
           "name": "methodParameters",
           "description": {
             "text": "Method parameters"
+          },
+          "dataType": "String"
+        }
+      ],
+      "outputArguments": [
+        {
+          "name": "methodExecutionResult",
+          "description": {
+            "text": "Method execution result"
+          },
+          "dataType": "String",
+          "valueRank": 1
+        }
+      ],
+      "userAccessLevel": {
+        "inputArguments": "CurrentRead",
+        "outputArguments": "CurrentRead"
+      }
+    },
+    {
+      "browseName": "CH_M5::YearReportUpdate",
+      "displayName": "Update an annual report",
+      "ownerName": "CH_M5",
+      "type": "method",
+      "bindMethod": "methodAcmYearReportUpdate",
+      "inputArguments": [
+        {
+          "name": "methodParameters",
+          "description": {
+            "text": "Method parameters"
+          },
+          "dataType": "String"
+        },
+        {
+          "name": "methodDataValue",
+          "description": {
+            "text": "Method dataValue"
           },
           "dataType": "String"
         }

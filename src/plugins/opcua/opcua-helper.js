@@ -545,6 +545,18 @@ const getOpcuaSaveModeToDB = function () {
   return myConfig ? myConfig.opcuaSaveModeToDB : process.env.DEFAULT_OPCUA_SAVEMODE_TODB;
 };
 
+
+/**
+ * @method whereMethodsAreExecuted
+ * @param {String} id
+ * @returns {String}
+ * e.g. (client|server)
+ */
+const whereMethodsAreExecuted = function (id) {
+  const config = getOpcuaConfig(id);
+  return config.executeMethodsFrom ? config.executeMethodsFrom : process.env.DEFAULT_EXECUTE_METHODS_FROM;
+};
+
 /**
  * @method getSavingValuesMode
  * @returns {String}
@@ -1424,6 +1436,7 @@ module.exports = {
   getOpcuaConfigsForMe,
   getOpcuaConfigOptions,
   getOpcuaSaveModeToDB,
+  whereMethodsAreExecuted,
   getSavingValuesMode,
   mergeOpcuaConfigOptions,
   getOpcuaTags,

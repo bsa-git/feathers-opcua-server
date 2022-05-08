@@ -2,30 +2,27 @@
 const Path = require('path');
 const join = Path.join;
 const chalk = require('chalk');
-const logger = require('../../../../../logger');
+
+const {
+  DataType,
+} = require('node-opcua');
 
 const {
   appRoot,
   inspector,
-  doesFileExist,
-  makeDirSync
+  getPathBasename
 } = require('../../../../lib');
 
+const sessionCallMethod = require('../sessionCallMethod');
+const methodAcmYearReportUpdate = require('../../../opcua-methods/methodAcmYearReportUpdate');
+
 const {
-  formatDataValue
+  formatDataValue,
+  whereMethodsAreExecuted
 } = require('../../../opcua-helper');
 
-const {
-  ExceljsHelperClass,
-} = require('../../../../excel-helpers');
-
-const moment = require('moment');
-
-const loForEach = require('lodash/forEach');
-const loTemplate = require('lodash/template');
 const loOmit = require('lodash/omit');
 
-let dataPath = '/src/api/app/opcua-methods/asm-reports/data';
 let paramsPath = '/src/api/app/opcua-methods/asm-reports/params';
 
 const {
@@ -42,110 +39,56 @@ const isDebug = false;
  * @returns {void}
  */
 async function ch_m5UpdateAcmYearReport(params, dataValue) {
-  let reportFile, paramsReport = null, paramFullsPath;
+  let result, inputArgument, inputArgument2, inputArguments = [];
+  let statusCode, outputArguments;
   //-----------------------------------
 
-  if (true && params) inspector('ch_m5UpdateAcmYearReport.params:', loOmit(params, ['myOpcuaClient', 'app']));
-  if (true && dataValue) inspector('ch_m5UpdateAcmYearReport.dataValue:', dataValue);
+  if (isDebug && params) inspector('ch_m5UpdateAcmYearReport.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && dataValue) inspector('ch_m5UpdateAcmYearReport.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
-
-  // Only for group values
-  if (isDebug && addressSpaceOption) inspector('ch_m5UpdateAcmYearReport.addressSpaceOption:', addressSpaceOption);
 
   // Get group value
   const browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
   if (isDebug && dataValue) inspector('ch_m5UpdateAcmYearReport.formatDataValue:', dataValue);
-  let groupValue = dataValue.value.value;
-  groupValue = JSON.parse(groupValue);
-  if (isDebug && groupValue) inspector('ch_m5UpdateAcmYearReport.value:', groupValue);
-  const reportDate = groupValue['!value'].date;
-  const reportYear = reportDate.split('-')[0];
 
-  // Get params for year report
-  const pointID = addressSpaceOption.getterParams.pointID;
-  const paramsFile = loTemplate(paramsFileName)({ pointID });
-  paramFullsPath = [appRoot, paramsPath, paramsFile];
-  paramsReport = require(join(...paramFullsPath));
+  inputArgument = JSON.stringify(loOmit(params, ['myOpcuaClient', 'app']));
+  inputArgument2 = dataValue.value.value;
 
-  if (paramsReport.baseParams) {
-    const baseParamsFile = loTemplate(paramsFileName)({ pointID: paramsReport.baseParams });
-    paramFullsPath = [appRoot, paramsPath, baseParamsFile];
-    const baseParams = require(join(...paramFullsPath));
-    paramsReport = Object.assign({}, baseParams, paramsReport);
-  }
+  inputArguments.push(
+    {
+      dataType: DataType.String,
+      value: inputArgument,
+    }
+  );
 
-  // Get year report file
-  const outputReportPath = addressSpaceOption.getterParams.toPath;
-  makeDirSync([appRoot, outputReportPath]);
-  const outputReportFile = loTemplate(paramsReport.outputReportFile)({ pointID, year: reportYear });
-  reportFile = [appRoot, outputReportPath, outputReportFile];
-  if (!doesFileExist(reportFile)) {
-    const outputTemplateFile = loTemplate(paramsReport.outputTemplateFile)({ pointID, year: reportYear });
-    reportFile = [appRoot, dataPath, outputTemplateFile];
-  }
+  inputArguments.push(
+    {
+      dataType: DataType.String,
+      value: inputArgument2,
+    }
+  );
 
-  if (doesFileExist(reportFile)) {
-    // inspector('updateYearReportForASM.reportFile:', reportFile);
-    // Create exceljs object
-    const exceljs = new ExceljsHelperClass({
-      excelPath: reportFile,
-      sheetName: 'Data_CNBB',
-      bookOptions: {
-        fullCalcOnLoad: true
-      }
-    });
+  if (whereMethodsAreExecuted(params.id) === 'server') {
+    // Set opcua properties
+    params.opcua = {};
+    params.opcua.browseName = 'ns=1;s=CH_M5::YearReportUpdate';
+    params.opcua.inputArguments = inputArguments;
+    // Run session call method
+    result = await sessionCallMethod(params);
+    if (true && result) inspector('ch_m5UpdateAcmYearReport.result:', result);
 
-    await exceljs.init();
-    let sheetName = exceljs.getSheet().name;
-    // Get range of cells for report date     
-    const startRow = paramsReport.startRow;
-    const dateColumn = paramsReport.dateColumn;
+    statusCode = result[0].statusCode.name;
+    outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, reportDate }
 
-    // Get actual row count
-    const metrics = exceljs.getSheetMetrics();
-    if (isDebug && metrics) inspector('metrics:', metrics);
-    // Get cells for report date
-    let dateCells = exceljs.getCells(sheetName, { range: `${dateColumn}${startRow}:${dateColumn}${metrics.rowCount}` });
-    dateCells = dateCells.filter(dateCell => dateCell.value === reportDate);
-    // Show cells
-    loForEach(dateCells, function (cell) {
-      cell = loOmit(cell, ['cell', 'column', 'row']);
-      if (isDebug && cell) inspector(`ch_m5UpdateAcmYearReport.cell(${cell.address}):`, cell);
-    });
-    // Get start/end row for report date  
-    const startRow4Date = dateCells[0]['address2'].row;
-    const endRow4Date = dateCells[dateCells.length - 1]['address2'].row;
-    // Set cell value to groupValue
-    loForEach(paramsReport.dataColumns, function (column, alias) {
-      dateCells = exceljs.getCells(sheetName, { range: `${column}${startRow4Date}:${column}${endRow4Date}` });
-      loForEach(groupValue, function (items, tag) {
-        let tagAlias = tag.split(':');
-        tagAlias = tagAlias[tagAlias.length - 1];
-        if ((tagAlias === alias) && (dateCells.length === items.length)) {
-          for (let index = 0; index < items.length; index++) {
-            const item = items[index];
-            dateCells[index].cell.value = item;
-            dateCells[index].value = item;
-          }
-        }
-      });
-      // Set values for 'CHBB'
-      if (alias.includes('CHBB')) {
-        for (let index = 0; index < dateCells.length; index++) {
-          const dateCell = dateCells[index];
-          dateCell.cell.value = 1;
-          dateCell.value = 1;
-        }
-      }
-    });
-
-    // Write report file
-    const resultPath = await exceljs.writeFile([appRoot, outputReportPath, outputReportFile]);
-    if (true && resultPath) console.log(chalk.green('Update asm year report - OK!'), 'reportDate:', chalk.cyan(reportDate), 'resultFile:', chalk.cyan(outputReportFile));
-
+    if (statusCode === 'Good') {
+      if(true && result) console.log(chalk.green('Update asm year report - OK!'), 'reportDate:', chalk.cyan(outputArguments.reportDate), 'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath)));
+    } else {
+      console.log(chalk.green('ch_m5UpdateAcmYearReport:'), chalk.cyan(statusCode));
+    }
   } else {
-    logger.error(`There is no file "${reportFile[2]}" for the reporting period on the automated monitoring system.`);
+    result = await methodAcmYearReportUpdate(inputArguments);
+    if(isDebug && result) console.log(chalk.green('Update asm year report - OK!'), 'reportDate:', chalk.cyan(result.reportDate), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
   }
 }
 

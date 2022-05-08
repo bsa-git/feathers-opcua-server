@@ -81,6 +81,7 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
   let pointID;
   //----------------------------------------------------------------------------
 
+  if (isDebug && inputArguments.length) inspector('methodAcmYearTemplateCreate.inputArguments:', inputArguments);
   // Get params
   const inputArg = inputArguments[0].value;
   if (callback) {

@@ -4,7 +4,6 @@ const chalk = require('chalk');
 
 const {
   DataType,
-  VariantArrayType
 } = require('node-opcua');
 
 const {
@@ -14,7 +13,6 @@ const {
 
 
 const sessionCallMethod = require('../sessionCallMethod');
-const e = require('cors');
 
 const debug = require('debug')('app:ch_m5CreateAcmYearTemplate');
 const isDebug = false;
@@ -43,12 +41,12 @@ async function ch_m5CreateAcmYearTemplate(params, value) {
   if (opt.period) inputArgument.period = opt.period;
   if (opt.year) inputArgument.startYear = opt.year;
 
-  inputArguments.push([
+  inputArguments.push(
     {
       dataType: DataType.String,
       value: JSON.stringify(inputArgument),
     }
-  ]);
+  );
 
   params.opcua = {};
   params.opcua.inputArguments = inputArguments;
