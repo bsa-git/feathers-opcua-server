@@ -28,6 +28,7 @@ const functionBusy = {};
  * @returns {void}
  */
 async function onChangedGroupHandlerForASM(params, dataValue) {
+
   if (isDebug && params) inspector('onChangedGroupHandlerForASM.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isDebug && dataValue) inspector('onChangedGroupHandlerForASM.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
@@ -44,25 +45,31 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
   const startTime = moment.utc().format();
   if (isDebug && startTime) console.log('onChangedGroupHandlerForASM.startTime:', startTime, 'browseName:', browseName);
 
-  // Save data to DB
-  const savedValue = await saveOpcuaGroupValueToDB(params, dataValue);
-  if (isDebug && savedValue) inspector('onChangedGroupHandlerForASM.savedValue:', savedValue);
+  try {
+    // Save data to DB
+    const savedValue = await saveOpcuaGroupValueToDB(params, dataValue);
+    if (isDebug && savedValue) inspector('onChangedGroupHandlerForASM.savedValue:', savedValue);
 
-  // Update year report
-  await ch_m5UpdateAcmYearReport(params, dataValue);
+    // Update year report
+    await ch_m5UpdateAcmYearReport(params, dataValue);
 
-  // await pause(100000);
+    // await pause(100000);
 
-  // Show info
-  showInfoForGroupHandler(params, dataValue);
+    // Show info
+    showInfoForGroupHandler(params, dataValue);
 
-  // Set functionBusy to true
-  functionBusy[browseName] = false;
+    // Set functionBusy to true
+    functionBusy[browseName] = false;
 
-  const endTime = moment.utc().format();
-  const timeDuration = getTimeDuration(startTime, endTime);
-  if (isDebug && endTime) console.log('onChangedGroupHandlerForASM.endTime:', endTime, 'browseName:', browseName);
-  if (isDebug && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
+    const endTime = moment.utc().format();
+    const timeDuration = getTimeDuration(startTime, endTime);
+    if (isDebug && endTime) console.log('onChangedGroupHandlerForASM.endTime:', endTime, 'browseName:', browseName);
+    if (isDebug && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
+
+  } catch (error) {
+    // Set functionBusy to true
+    functionBusy[browseName] = false;
+  }
 }
 
 module.exports = onChangedGroupHandlerForASM;

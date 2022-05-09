@@ -41,12 +41,12 @@ async function ch_m5CreateAcmYearTemplate(params, value) {
   if (opt.period) inputArgument.period = opt.period;
   if (opt.year) inputArgument.startYear = opt.year;
 
-  inputArguments.push(
+  inputArguments.push([
     {
       dataType: DataType.String,
       value: JSON.stringify(inputArgument),
     }
-  );
+  ]);
 
   params.opcua = {};
   params.opcua.inputArguments = inputArguments;

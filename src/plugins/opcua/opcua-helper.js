@@ -550,11 +550,17 @@ const getOpcuaSaveModeToDB = function () {
  * @method whereMethodsAreExecuted
  * @param {String} id
  * @returns {String}
- * e.g. (client|server)
+ * e.g. (client|server|asyncServer)
  */
 const whereMethodsAreExecuted = function (id) {
   const config = getOpcuaConfig(id);
-  return config.executeMethodsFrom ? config.executeMethodsFrom : process.env.DEFAULT_EXECUTE_METHODS_FROM;
+  const executeMethodsFrom = config.executeMethodsFrom ? config.executeMethodsFrom : process.env.DEFAULT_EXECUTE_METHODS_FROM;
+  if (executeMethodsFrom === 'client' || executeMethodsFrom === 'server' || executeMethodsFrom === 'asyncServer') {
+    return executeMethodsFrom;
+  } else {
+    throw new Error(`whereMethodsAreExecuted function has an invalid value: '${executeMethodsFrom}'. List of correct values: 'client', 'server', 'asyncServer'.`);
+  }
+
 };
 
 /**

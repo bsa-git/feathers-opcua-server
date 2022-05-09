@@ -40,10 +40,10 @@ function ch_m5CreateAcmYearTemplate(options, result) {
     if (opt.period) inputArgument.period = opt.period;
     if (opt.year) inputArgument.startYear = opt.year;
 
-    inputArguments.push({
+    inputArguments.push([{
       dataType: DataType.String,
       value: JSON.stringify(inputArgument),
-    });
+    }]);
 
     resultOptions.opcua.inputArguments = inputArguments;
     return resultOptions;
