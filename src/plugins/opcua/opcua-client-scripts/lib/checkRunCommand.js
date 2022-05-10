@@ -22,7 +22,6 @@ function checkRunCommand(options) {
     if (points && points.length) {
       resultOptions = Object.assign({}, options, { opcua: {} });
       resultOptions.opcua.nodeId = 'ns=1;s=CH_M5::RunCommand';
-      resultOptions.opcua.browseName = 'CH_M5::YearTemplateCreate';
     }
     break;
   default:

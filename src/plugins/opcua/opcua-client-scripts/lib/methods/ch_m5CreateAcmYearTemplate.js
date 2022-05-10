@@ -13,18 +13,18 @@ const {
 const isDebug = false;
 
 /**
- * @method onChangedCommonHandle
+ * @method ch_m5CreateAcmYearTemplate
  * 
- * @param {Object} params 
- * @param {Object} dataValue
- * @returns {void}
+ * @param {Object} options 
+ * @param {Object} result
+ * @returns {Object|String}
  */
 function ch_m5CreateAcmYearTemplate(options, result) {
   let resultOptions, inputArgument = {}, inputArguments = [];
   let statusCode, outputArguments;
   //----------------------------------
 
-  if (options) {
+  if (!result) {
     if (isDebug && options) inspector('ch_m5CreateAcmYearTemplate.options:', options);
 
     resultOptions = Object.assign({}, options, { opcua: {} });
@@ -40,10 +40,10 @@ function ch_m5CreateAcmYearTemplate(options, result) {
     if (opt.period) inputArgument.period = opt.period;
     if (opt.year) inputArgument.startYear = opt.year;
 
-    inputArguments.push([{
+    inputArguments.push({
       dataType: DataType.String,
       value: JSON.stringify(inputArgument),
-    }]);
+    });
 
     resultOptions.opcua.inputArguments = inputArguments;
     return resultOptions;
@@ -57,8 +57,11 @@ function ch_m5CreateAcmYearTemplate(options, result) {
       outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, hours, days }
       console.log(chalk.green('callMethod.ch_m5CreateAcmYearTemplate:'), chalk.cyan(statusCode), 'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath)));
     } else {
-      console.log(chalk.green('callMethod.ch_m5CreateAcmYearTemplate:'), chalk.cyan(statusCode));
+      inspector('allMethod.ch_m5CreateAcmYearTemplate.options:', options);
+      inspector('allMethod.ch_m5CreateAcmYearTemplate.result:', result);
+      console.log(chalk.green('callMethod.ch_m5CreateAcmYearTemplate.statusCode:'), chalk.cyan(statusCode));
     }
+    return statusCode;
   }
 }
 

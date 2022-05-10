@@ -29,7 +29,7 @@ async function ch_m5CreateAcmYearTemplate(params, value) {
   let statusCode, outputArguments;
   //----------------------------------
 
-  if (isDebug && params) inspector('ch_m5CreateAcmYearTemplate.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (true && params) inspector('ch_m5CreateAcmYearTemplate.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isDebug && value) inspector('ch_m5CreateAcmYearTemplate.value:', value);
 
   const opt = value.opt;
@@ -47,21 +47,19 @@ async function ch_m5CreateAcmYearTemplate(params, value) {
       value: JSON.stringify(inputArgument),
     }
   ]);
-
-  params.opcua = {};
-  params.opcua.inputArguments = inputArguments;
-  params.opcua.browseName = opcua.browseName;
-
-  // sessionCallMethod(params);
-   
-  result = await sessionCallMethod(params);
+  // Run server method
+  const client = params.myOpcuaClient;
+  const browseName = 'CH_M5::YearTemplateCreate';
+  result = await client.sessionCallMethod(browseName, inputArguments);
   if (isDebug && result) inspector('ch_m5CreateAcmYearTemplate.result:', result);
 
   statusCode = result[0].statusCode.name;
-  outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, hours, days }
+  if(result[0].outputArguments.length){
+    outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, hours, days }
+  }
 
   if(statusCode === 'Good') {
-    console.log(chalk.green('runCommand.ch_m5CreateAcmYearTemplate:'), chalk.cyan(statusCode), 'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath)));
+    if(true && result) console.log(chalk.green('runCommand.ch_m5CreateAcmYearTemplate:'), chalk.cyan(statusCode), 'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath)));
   } else {
     console.log(chalk.green('runCommand.ch_m5CreateAcmYearTemplate:'), chalk.cyan(statusCode));
   }

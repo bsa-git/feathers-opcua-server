@@ -7,7 +7,7 @@ const {
   inspector,
   strReplace,
   getFloat
-} = require('../src/plugins/lib');
+} = require('../../src/plugins/lib');
 
 const {
   writeFileSync,
@@ -15,7 +15,7 @@ const {
   readFileSync,
   doesFileExist,
   removeFileSync
-} = require('../src/plugins/lib/file-operations');
+} = require('../../src/plugins/lib/file-operations');
 
 const chalk = require('chalk');
 const papa = require('papaparse');

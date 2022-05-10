@@ -163,7 +163,8 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
   if (callback) {
     callback(null, callMethodResult);
   } else {
-    return { resultPath, params, reportDate };
+    const statusCode = 'Good';
+    return { statusCode, resultPath, params, reportDate };
   }
 }
 

@@ -48,7 +48,7 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
   const addressSpaceOption = params.addressSpaceOption;
 
   // Get group value
-  const browseName = addressSpaceOption.browseName;
+  let browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
   if (isDebug && dataValue) inspector('ch_m5UpdateAcmYearReport.formatDataValue:', dataValue);
 
@@ -68,27 +68,32 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
 
   if (whereMethodsAreExecuted(params.id) === 'client') {
     result = await methodAcmYearReportUpdate(inputArguments);
-    if(isDebug && result) console.log(chalk.green('Update asm year report - OK!'), 'reportDate:', chalk.cyan(result.reportDate), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
+    if (result.statusCode === 'Good') {
+      if (true && result) console.log(chalk.green('Update asm year report - OK!'), 'reportDate:', chalk.cyan(result.reportDate), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
+    } else {
+      inspector('subscription.ch_m5UpdateAcmYearReport.inputArguments:', inputArguments);
+      inspector('subscription.ch_m5UpdateAcmYearReport.result:', result);
+      console.log(chalk.redBright('Update asm year report - ERROR!'));
+    }
   }
 
   if (whereMethodsAreExecuted(params.id) === 'server') {
+
     // Set opcua properties
-    params.opcua = {};
-    params.opcua.browseName = 'CH_M5::YearReportUpdate'; // 'ns=1;s=CH_M5::YearReportUpdate'
-    params.opcua.inputArguments = inputArguments;
-    // Run session call method
-    result = await sessionCallMethod(params);
+    const client = params.myOpcuaClient;
+    browseName = 'CH_M5::YearReportUpdate';
+    const result = await client.sessionCallMethod(browseName, inputArguments);
     if (isDebug && result) inspector('ch_m5UpdateAcmYearReport.result:', result);
 
     statusCode = result[0].statusCode.name;
-    if(result[0].outputArguments.length){
-      outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, reportDate }
-    }
-
     if (statusCode === 'Good') {
-      if(isDebug && result) console.log(chalk.green('Update asm year report - OK!'), 'reportDate:', chalk.cyan(outputArguments.reportDate), 'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath)));
+      outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, reportDate }
+      if (true && result) console.log(chalk.green('Update asm year report - OK!'), 'reportDate:', chalk.cyan(outputArguments.reportDate), 'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath)));
     } else {
-      console.log(chalk.green('ch_m5UpdateAcmYearReport:'), chalk.cyan(statusCode));
+      inspector('subscription.ch_m5UpdateAcmYearReport.browseName:', browseName);
+      inspector('subscription.ch_m5UpdateAcmYearReport.inputArguments:', inputArguments);
+      inspector('subscription.ch_m5UpdateAcmYearReport.result:', result);
+      console.log(chalk.redBright('Update asm year report - ERROR!'), 'statusCode: ', chalk.cyan(statusCode));
     }
   }
 
@@ -102,12 +107,12 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
     if (isDebug && result) inspector('ch_m5UpdateAcmYearReport.result:', result);
 
     statusCode = result[0].statusCode.name;
-    if(result[0].outputArguments.length){
+    if (result[0].outputArguments.length) {
       outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, reportDate }
     }
 
     if (statusCode === 'Good') {
-      if(isDebug && result) console.log(chalk.green('Update asm year report - OK!'), 'reportDate:', chalk.cyan(outputArguments.reportDate), 'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath)));
+      if (isDebug && result) console.log(chalk.green('Update asm year report - OK!'), 'reportDate:', chalk.cyan(outputArguments.reportDate), 'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath)));
     } else {
       console.log(chalk.green('ch_m5UpdateAcmYearReport:'), chalk.cyan(statusCode));
     }

@@ -67,7 +67,7 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     if (isDebug && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
 
   } catch (error) {
-    // Set functionBusy to true
+    // Set functionBusy to false
     functionBusy[browseName] = false;
   }
 }

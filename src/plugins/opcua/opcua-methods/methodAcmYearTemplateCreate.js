@@ -305,7 +305,8 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
   if (callback) {
     callback(null, callMethodResult);
   } else {
-    return { resultPath, params, hours, days };
+    const statusCode = 'Good'; 
+    return { statusCode, resultPath, params, hours, days };
   }
 };
 
