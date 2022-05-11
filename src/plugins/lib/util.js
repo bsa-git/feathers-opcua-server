@@ -9,6 +9,7 @@ const { isString, isArray, isObject } = require('./type-of');
 const loRound = require('lodash/round');
 const loToPlainObject = require('lodash/toPlainObject');
 const loIsEqual = require('lodash/isEqual');
+const loIsFunction = require('lodash/isFunction');
 const loOmit = require('lodash/omit');
 
 const debug = require('debug')('app:util');
@@ -42,15 +43,15 @@ function delay(ms) {
 
 /**
 * Pause
-* @param ms
+* @param {Number} ms
+* @param {Boolean} show
 * @return {Promise}
 * e.g. await pause(1000);
 */
-const pause = function (ms) {
+const pause = function (ms, show = true) {
   return new Promise(function (resolve) {
     setTimeout(() => {
-      debug(`Pause: ${ms} MSec`);
-      console.log('Pause: ', chalk.cyan(`${ms} (MSec)`));
+      if(show) console.log('Pause: ', chalk.cyan(`${ms} (MSec)`));
       resolve('done!');
     }, ms);
   });
@@ -58,18 +59,25 @@ const pause = function (ms) {
 
 /**
  * Awaiting positive completion of a function
- * @param fn
- * @param cb
+ * @param {Function} fn
+ * @param {Function|any} cb
  * @param delay
  */
 const waitTimeout = function (fn, cb = null, delay = 0) {
+  let result;
+  //------------------------
   let _delay = delay ? delay : 1000;
   let timerId = setTimeout(function request() {
-    let result = fn();
+    if (loIsFunction(cb)) {
+      result = fn();
+    } else {
+      result = fn(cb);
+    }
+
     if (!result) {
       timerId = setTimeout(request, _delay);
     } else {
-      if (cb) cb();
+      if (loIsFunction(cb)) cb();
       clearInterval(timerId);
     }
   }, _delay);
@@ -152,9 +160,9 @@ const getDateTime = function (dt = '', isUtc = true) {
 const getTimeDuration = function (startTime, endTime, unit) {
   startTime = moment.utc(startTime);
   endTime = moment.utc(endTime);
-  if(unit){
+  if (unit) {
     return endTime.diff(startTime, unit);
-  }else{
+  } else {
     return endTime.diff(startTime);// return -> milliseconds
   }
 };
@@ -170,9 +178,9 @@ const getTimeDuration = function (startTime, endTime, unit) {
 const getNextDateTime = function (startDateTime, period, isUtc = true) {
   startDateTime = moment.utc(startDateTime);
   const nextDateTime = moment.utc(startDateTime).add(period[0], period[1]);
-  if(isUtc){
+  if (isUtc) {
     return moment.utc(nextDateTime).format();
-  }else{
+  } else {
     return moment(nextDateTime).format();
   }
 };
@@ -382,54 +390,54 @@ const getRegex = function (type) {
   switch (type) {
   case 'phone':
     /*
-                        (123) 456-7890
-                        +(123) 456-7890
-                        +(123)-456-7890
-                        +(123) - 456-7890
-                        +(123) - 456-78-90
-                        123-456-7890
-                        123.456.7890
-                        1234567890
-                        +31636363634
-                        +380980029669
-                        075-63546725
-                        */
+                          (123) 456-7890
+                          +(123) 456-7890
+                          +(123)-456-7890
+                          +(123) - 456-7890
+                          +(123) - 456-78-90
+                          123-456-7890
+                          123.456.7890
+                          1234567890
+                          +31636363634
+                          +380980029669
+                          075-63546725
+                          */
     return '^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\\./0-9]*$';
   case 'zip_code':
     /*
-                        12345
-                        12345-6789
-                        */
+                          12345
+                          12345-6789
+                          */
     return '^[0-9]{5}(?:-[0-9]{4})?$';
   case 'lat':
     /*
-                        +90.0
-                        45
-                        -90
-                        -90.000
-                        +90
-                        47.123123
-                        */
+                          +90.0
+                          45
+                          -90
+                          -90.000
+                          +90
+                          47.123123
+                          */
     return '^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'long':
     /*
-                        -127.554334
-                        180
-                        -180
-                        -180.0000
-                        +180
-                        179.999999
-                        */
+                          -127.554334
+                          180
+                          -180
+                          -180.0000
+                          +180
+                          179.999999
+                          */
     return '^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'lat_and_long':
     /*
-                        +90.0, -127.554334
-                        45, 180
-                        -90, -180
-                        -90.000, -180.0000
-                        +90, +180
-                        47.1231231, 179.99999999
-                        */
+                          +90.0, -127.554334
+                          45, 180
+                          -90, -180
+                          -90.000, -180.0000
+                          +90, +180
+                          47.1231231, 179.99999999
+                          */
     return '^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$';
   default:
     return '//g';
@@ -610,20 +618,20 @@ const isDeepEqual = function (object1, object2, omit = []) {
  * @returns {String}
  * e.g. FFF2DCDB
  */
-const  rgbToARGB = function (color) {
+const rgbToARGB = function (color) {
   let argbColor = '';
   //-------------------------
-  if(isArray(color)) {// color = [255, 255, 255]
-    argbColor = Color.rgb(color).hex().replace('#', 'FF'); 
+  if (isArray(color)) {// color = [255, 255, 255]
+    argbColor = Color.rgb(color).hex().replace('#', 'FF');
   }
-  if(isObject(color)) {// color = {r: 255, g: 255, b: 255}
-    argbColor = Color(color).hex().replace('#', 'FF'); 
+  if (isObject(color)) {// color = {r: 255, g: 255, b: 255}
+    argbColor = Color(color).hex().replace('#', 'FF');
   }
-  if(isString(color)) {// color = 'rgb(255, 255, 255)'
-    argbColor = Color(color).hex().replace('#', 'FF'); 
+  if (isString(color)) {// color = 'rgb(255, 255, 255)'
+    argbColor = Color(color).hex().replace('#', 'FF');
   }
-  if(!argbColor) {// color = 255, 255, 255
-    argbColor = Color.rgb(arguments[0], arguments[1], arguments[2]).hex().replace('#', 'FF'); 
+  if (!argbColor) {// color = 255, 255, 255
+    argbColor = Color.rgb(arguments[0], arguments[1], arguments[2]).hex().replace('#', 'FF');
   }
   return argbColor;
 };
@@ -635,8 +643,8 @@ const  rgbToARGB = function (color) {
  * @returns {String}
  * e.g. FF9E9E9E
  */
-const  hexToARGB = function (color) {
-  return color? color.replace('#', 'FF') : '';
+const hexToARGB = function (color) {
+  return color ? color.replace('#', 'FF') : '';
 };
 
 /**
@@ -646,7 +654,7 @@ const  hexToARGB = function (color) {
  * @returns {String}
  * e.g. 9E9E9EFF
  */
-const  hexToRGBA = function (color) {
+const hexToRGBA = function (color) {
   return `${color.replace('#', '')}FF`;
 };
 

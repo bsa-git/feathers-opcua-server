@@ -13,12 +13,17 @@ const {
   getPathBasename
 } = require('../../../../lib');
 
-const sessionCallMethod = require('../sessionCallMethod');
+const {
+  callbackSessionCallMethod,
+  opcuaClientSessionAsync
+} = require('../../../opcua-client-scripts/lib');
+
 const methodAcmYearReportUpdate = require('../../../opcua-methods/methodAcmYearReportUpdate');
 
 const {
   formatDataValue,
-  whereMethodsAreExecuted
+  whereMethodsAreExecuted,
+  getOpcuaConfig
 } = require('../../../opcua-helper');
 
 const loOmit = require('lodash/omit');
@@ -53,20 +58,24 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
   if (isDebug && dataValue) inspector('ch_m5UpdateAcmYearReport.formatDataValue:', dataValue);
 
   inputArgument = JSON.stringify(loOmit(params, ['myOpcuaClient', 'app']));
-  inputArgument2 = dataValue.value.value;
+  inputArgument = { dataType: DataType.String, value: inputArgument };
 
-  inputArguments.push([
-    {
-      dataType: DataType.String,
-      value: inputArgument,
-    },
-    {
-      dataType: DataType.String,
-      value: inputArgument2,
-    }
-  ]);
+  inputArgument2 = dataValue.value.value;
+  inputArgument2 = { dataType: DataType.String, value: inputArgument2 };
+
+  // inputArguments.push([
+  //   {
+  //     dataType: DataType.String,
+  //     value: inputArgument,
+  //   },
+  //   {
+  //     dataType: DataType.String,
+  //     value: inputArgument2,
+  //   }
+  // ]);
 
   if (whereMethodsAreExecuted(params.id) === 'client') {
+    inputArguments.push([inputArgument, inputArgument2]);
     result = await methodAcmYearReportUpdate(inputArguments);
     if (result.statusCode === 'Good') {
       if (true && result) console.log(chalk.green('Update asm year report - OK!'), 'reportDate:', chalk.cyan(result.reportDate), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
@@ -78,11 +87,11 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
   }
 
   if (whereMethodsAreExecuted(params.id) === 'server') {
-
+    inputArguments.push([inputArgument, inputArgument2]);
     // Set opcua properties
     const client = params.myOpcuaClient;
     browseName = 'CH_M5::YearReportUpdate';
-    const result = await client.sessionCallMethod(browseName, inputArguments);
+    result = await client.sessionCallMethod(browseName, inputArguments);
     if (isDebug && result) inspector('ch_m5UpdateAcmYearReport.result:', result);
 
     statusCode = result[0].statusCode.name;
@@ -98,21 +107,28 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
   }
 
   if (whereMethodsAreExecuted(params.id) === 'asyncServer') {
+    inputArguments.push(inputArgument);
+    inputArguments.push(inputArgument2);
+    // Get endpointUrl 
+    const opcuaConfig = getOpcuaConfig(params.id);
+    const endpointUrl = opcuaConfig.endpointUrl;
+
+    // if (true && inputArguments) inspector('ch_m5UpdateAcmYearReport.inputArguments:', inputArguments);
+
+
     // Set opcua properties
-    params.opcua = {};
-    params.opcua.browseName = 'ns=1;s=CH_M5::YearReportUpdate';
-    params.opcua.inputArguments = inputArguments;
-    // Run session call method
-    result = await sessionCallMethod(params);
+    const opcua = {};
+    opcua.ownerNodeId = 'ns=1;i=1663';
+    opcua.nodeId = 'ns=1;s=CH_M5::YearReportUpdate';
+    opcua.inputArguments = inputArguments;
+
+    result = await opcuaClientSessionAsync(endpointUrl, { opcua }, callbackSessionCallMethod);
     if (isDebug && result) inspector('ch_m5UpdateAcmYearReport.result:', result);
 
     statusCode = result[0].statusCode.name;
-    if (result[0].outputArguments.length) {
-      outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, reportDate }
-    }
-
     if (statusCode === 'Good') {
-      if (isDebug && result) console.log(chalk.green('Update asm year report - OK!'), 'reportDate:', chalk.cyan(outputArguments.reportDate), 'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath)));
+      outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, reportDate }
+      if (true && result) console.log(chalk.green('Update asm year report - OK!'), 'reportDate:', chalk.cyan(outputArguments.reportDate), 'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath)));
     } else {
       console.log(chalk.green('ch_m5UpdateAcmYearReport:'), chalk.cyan(statusCode));
     }
