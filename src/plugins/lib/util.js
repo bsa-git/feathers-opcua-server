@@ -11,76 +11,45 @@ const loToPlainObject = require('lodash/toPlainObject');
 const loIsEqual = require('lodash/isEqual');
 const loIsFunction = require('lodash/isFunction');
 const loOmit = require('lodash/omit');
+const loDelay = require('lodash/delay');
 
 const debug = require('debug')('app:util');
-
-/**
- * Delay time
- * @param sec
- * @return {Promise}
- * e.g. await delayTime(2);
- */
-const delayTime = function (sec = 1) {
-  return new Promise(function (resolve) {
-    setTimeout(() => {
-      debug(`delayTime: ${sec * 1000} MSec`);
-      resolve('done!');
-    }, sec * 1000);
-  });
-};
-
-/**
- * Delay
- * @param {Number} ms 
- * @returns {Promise}
- * e.g. delay(1000).then(() => alert("Hello!"))
- */
-function delay(ms) {
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve, ms);
-  });
-}
+const isDebug = false;
 
 /**
 * Pause
 * @param {Number} ms
 * @param {Boolean} show
 * @return {Promise}
-* e.g. await pause(1000);
+* e.g. await pause(1000, true) -> 'Pause: 1000 (MSec)'
 */
-const pause = function (ms, show = true) {
+const pause = function (ms, show = false) {
   return new Promise(function (resolve) {
     setTimeout(() => {
-      if(show) console.log('Pause: ', chalk.cyan(`${ms} (MSec)`));
+      if (show) console.log('Pause: ', chalk.cyan(`${ms} (MSec)`));
       resolve('done!');
     }, ms);
   });
 };
 
 /**
- * Awaiting positive completion of a function
+ * Awaiting negative completion of a function
+ * @async
+ * @method waitTimeout
  * @param {Function} fn
- * @param {Function|any} cb
- * @param delay
+ * @param {Array} args
+ * @param {Number} wait
+ * e.g. result = fn(...args); if(result === false) then -> return from cycle 
  */
-const waitTimeout = function (fn, cb = null, delay = 0) {
+const waitTimeout = function (fn, args = [], wait = 1000) {
   let result;
   //------------------------
-  let _delay = delay ? delay : 1000;
-  let timerId = setTimeout(function request() {
-    if (loIsFunction(cb)) {
-      result = fn();
-    } else {
-      result = fn(cb);
-    }
-
-    if (!result) {
-      timerId = setTimeout(request, _delay);
-    } else {
-      if (loIsFunction(cb)) cb();
-      clearInterval(timerId);
-    }
-  }, _delay);
+  do {
+    result = fn(...args);
+    if (result) loDelay(() => {
+      if (isDebug && wait) console.log('Pause: ', chalk.cyan(`${wait} (MSec)`));
+    }, wait);
+  } while (result);
 };
 
 /**
@@ -390,54 +359,54 @@ const getRegex = function (type) {
   switch (type) {
   case 'phone':
     /*
-                          (123) 456-7890
-                          +(123) 456-7890
-                          +(123)-456-7890
-                          +(123) - 456-7890
-                          +(123) - 456-78-90
-                          123-456-7890
-                          123.456.7890
-                          1234567890
-                          +31636363634
-                          +380980029669
-                          075-63546725
-                          */
+                            (123) 456-7890
+                            +(123) 456-7890
+                            +(123)-456-7890
+                            +(123) - 456-7890
+                            +(123) - 456-78-90
+                            123-456-7890
+                            123.456.7890
+                            1234567890
+                            +31636363634
+                            +380980029669
+                            075-63546725
+                            */
     return '^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\\./0-9]*$';
   case 'zip_code':
     /*
-                          12345
-                          12345-6789
-                          */
+                            12345
+                            12345-6789
+                            */
     return '^[0-9]{5}(?:-[0-9]{4})?$';
   case 'lat':
     /*
-                          +90.0
-                          45
-                          -90
-                          -90.000
-                          +90
-                          47.123123
-                          */
+                            +90.0
+                            45
+                            -90
+                            -90.000
+                            +90
+                            47.123123
+                            */
     return '^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'long':
     /*
-                          -127.554334
-                          180
-                          -180
-                          -180.0000
-                          +180
-                          179.999999
-                          */
+                            -127.554334
+                            180
+                            -180
+                            -180.0000
+                            +180
+                            179.999999
+                            */
     return '^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'lat_and_long':
     /*
-                          +90.0, -127.554334
-                          45, 180
-                          -90, -180
-                          -90.000, -180.0000
-                          +90, +180
-                          47.1231231, 179.99999999
-                          */
+                            +90.0, -127.554334
+                            45, 180
+                            -90, -180
+                            -90.000, -180.0000
+                            +90, +180
+                            47.1231231, 179.99999999
+                            */
     return '^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$';
   default:
     return '//g';
@@ -660,9 +629,7 @@ const hexToRGBA = function (color) {
 
 module.exports = {
   appRoot,
-  delayTime,
   pause,
-  delay,
   waitTimeout,
   isValidDateTime,
   dtToObject,

@@ -16,7 +16,7 @@ const {
 
 const {
   checkQueueOfSubscribe
-} = require('../../opcua');
+} = require('../opcua-helper');
 
 const {
   showInfoForGroupHandler,
@@ -30,22 +30,6 @@ const isDebug = false;
 // Queue of subscribe
 let queueOfSubscribe = [];
 
-
-/**
- * @method checkQueueOfSubscribe
- * @param {String} browseName 
- * @returns {Boolean}
- */
-// const checkQueueOfSubscribe = (browseName) => {
-//   let isBusy = false;
-//   //---------------------------
-//   const subscribe = loHead(queueOfSubscribe);
-//   if(subscribe){
-//     isBusy = subscribe.browseName !== browseName;
-//   }
-//   if(true && isBusy) console.log(`${browseName} wait:'`, loHead(queueOfSubscribe).browseName);
-//   return isBusy;
-// };
 
 /**
  * @method onChangedGroupHandlerForASM
@@ -78,15 +62,18 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     dataValue
   });
 
+  
   if(true && queueOfSubscribe.length) inspector('checkQueueOfSubscribe.queueOfSubscribe:', queueOfSubscribe.map(s => s.browseName));
 
   try {
 
     // WaitTimeout
     do {
-      result = checkQueueOfSubscribe(queueOfSubscribe, browseName);
+      result = checkQueueOfSubscribe(queueOfSubscribe, browseName, true);
       if(result) await pause(1000, false);
     } while (result);
+
+    // waitTimeout(checkQueueOfSubscribe, [queueOfSubscribe, browseName]);
 
     // Get current subscribe
     const subscribe = loHead(queueOfSubscribe);

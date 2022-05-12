@@ -1423,15 +1423,18 @@ const getSecurityPolicy = function (value) {
 
 /**
  * @method checkQueueOfSubscribe
+ * @param {Array} queueOfSubscribe 
  * @param {String} browseName 
+ * @param {Boolean} show
  * @returns {Boolean}
  */
-const checkQueueOfSubscribe = (queueOfSubscribe, browseName) => {
+const checkQueueOfSubscribe = (queueOfSubscribe, browseName, show = false) => {
   let isBusy = false;
   //---------------------------
   const subscribe = loHead(queueOfSubscribe);
   if(subscribe){
     isBusy = subscribe.browseName !== browseName;
+    if(show && isBusy) console.log(`'${browseName}'`, chalk.cyan(' wait '), `'${subscribe.browseName}'`);
   }
   return isBusy;
 };
