@@ -41,6 +41,7 @@ const loConcat = require('lodash/concat');
 const loOmit = require('lodash/omit');
 const loAt = require('lodash/at');
 const loForEach = require('lodash/forEach');
+const loHead = require('lodash/head');
 const { isString } = require('../lib/type-of');
 
 const debug = require('debug')('app:opcua-helper');
@@ -1420,6 +1421,21 @@ const getSecurityPolicy = function (value) {
   return value.split('#')[1];
 };
 
+/**
+ * @method checkQueueOfSubscribe
+ * @param {String} browseName 
+ * @returns {Boolean}
+ */
+const checkQueueOfSubscribe = (queueOfSubscribe, browseName) => {
+  let isBusy = false;
+  //---------------------------
+  const subscribe = loHead(queueOfSubscribe);
+  if(subscribe){
+    isBusy = subscribe.browseName !== browseName;
+  }
+  return isBusy;
+};
+
 
 module.exports = {
   nodeIdToString,
@@ -1473,5 +1489,6 @@ module.exports = {
   canServiceRun,
   canDbClientRun,
   getSecurityMode,
-  getSecurityPolicy
+  getSecurityPolicy,
+  checkQueueOfSubscribe
 };

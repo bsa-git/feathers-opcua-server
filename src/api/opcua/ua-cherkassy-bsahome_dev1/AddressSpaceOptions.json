@@ -100,7 +100,7 @@
         "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/asmDayReport.xls",
         "pointID": 1,
-        "interval": 25000,
+        "interval": 20000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["23QN2O", "23QN2O_CORR", "23FVSG", "23FVSG_CORR", "23F105_IS"]}
       }
     },

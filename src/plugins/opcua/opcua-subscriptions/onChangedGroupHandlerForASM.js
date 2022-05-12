@@ -4,6 +4,8 @@ const chalk = require('chalk');
 
 const loOmit = require('lodash/omit');
 const loForEach = require('lodash/forEach');
+const loHead = require('lodash/head');
+const loDrop = require('lodash/drop');
 
 const {
   inspector,
@@ -11,6 +13,10 @@ const {
   waitTimeout,
   pause,
 } = require('../../lib');
+
+const {
+  checkQueueOfSubscribe
+} = require('../../opcua');
 
 const {
   showInfoForGroupHandler,
@@ -21,30 +27,28 @@ const ch_m5UpdateAcmYearReport = require('./lib/commands/ch_m5UpdateAcmYearRepor
 
 const isDebug = false;
 
-const functionBusy = {};
-const tagQueueData = [];
+// Queue of subscribe
+let queueOfSubscribe = [];
+
 
 /**
- * checkFunctionBusy
- * @param {String} browseName
+ * @method checkQueueOfSubscribe
+ * @param {String} browseName 
  * @returns {Boolean}
- * e.g. if functionBusy -> { tag1: true, ... , tagN: false } then return false
- * e.g. if functionBusy -> { tag1: false, ... , tagN: false } then return true
  */
-const checkFunctionBusy = (browseName) => {
-  let isBusy = false;
-  //---------------------------
-  loForEach(functionBusy, function (value, key) {
-    if (key !== browseName && !isBusy) {
-      isBusy = value;
-      if(isDebug && isBusy) console.log(`${browseName} wait:'`, key);
-    }
-  });
-  return isBusy;
-};
+// const checkQueueOfSubscribe = (browseName) => {
+//   let isBusy = false;
+//   //---------------------------
+//   const subscribe = loHead(queueOfSubscribe);
+//   if(subscribe){
+//     isBusy = subscribe.browseName !== browseName;
+//   }
+//   if(true && isBusy) console.log(`${browseName} wait:'`, loHead(queueOfSubscribe).browseName);
+//   return isBusy;
+// };
 
 /**
- * @method onChangedCommonHandle
+ * @method onChangedGroupHandlerForASM
  * 
  * @param {Object} params 
  * @param {Object} dataValue
@@ -53,6 +57,11 @@ const checkFunctionBusy = (browseName) => {
 async function onChangedGroupHandlerForASM(params, dataValue) {
   let result = false;
   //---------------------------------------------------------
+  
+  // Get startTime
+  const startTime = moment.utc().format();
+  if (isDebug && startTime) console.log('onChangedGroupHandlerForASM.startTime:', startTime, 'browseName:', browseName);
+  
   if (isDebug && params) inspector('onChangedGroupHandlerForASM.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isDebug && dataValue) inspector('onChangedGroupHandlerForASM.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
@@ -61,25 +70,33 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
 
   // Only for group values
   if (!addressSpaceOption.group) return;
-  if (functionBusy[browseName]) return;
+  
+  // Add subscribe to queue
+  queueOfSubscribe.push({
+    browseName,
+    params,
+    dataValue
+  });
 
-  // Set functionBusy to true
-  functionBusy[browseName] = true;
-
-  const startTime = moment.utc().format();
-  if (isDebug && startTime) console.log('onChangedGroupHandlerForASM.startTime:', startTime, 'browseName:', browseName);
+  if(true && queueOfSubscribe.length) inspector('checkQueueOfSubscribe.queueOfSubscribe:', queueOfSubscribe.map(s => s.browseName));
 
   try {
+
+    // WaitTimeout
+    do {
+      result = checkQueueOfSubscribe(queueOfSubscribe, browseName);
+      if(result) await pause(1000, false);
+    } while (result);
+
+    // Get current subscribe
+    const subscribe = loHead(queueOfSubscribe);
+    params = subscribe.params;
+    dataValue = subscribe.dataValue;
+
     // Save data to DB
     const savedValue = await saveOpcuaGroupValueToDB(params, dataValue);
     if (isDebug && savedValue) inspector('onChangedGroupHandlerForASM.savedValue:', savedValue);
 
-    // Update year report
-    // waitTimeout(checkFunctionBusy, browseName);
-    do {
-      result = checkFunctionBusy(browseName);
-      if(result) await pause(1000, false);
-    } while (result);
     // Run update acm year report
     await ch_m5UpdateAcmYearReport(params, dataValue);
 
@@ -89,16 +106,19 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     showInfoForGroupHandler(params, dataValue);
 
     // Set functionBusy to true
-    functionBusy[browseName] = false;
+    // functionBusy[browseName] = false;
 
     const endTime = moment.utc().format();
     const timeDuration = getTimeDuration(startTime, endTime);
     if (isDebug && endTime) console.log('onChangedGroupHandlerForASM.endTime:', endTime, 'browseName:', browseName);
     if (true && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
 
+    // Drop element from the beginning of array
+    queueOfSubscribe = loDrop(queueOfSubscribe);
+
   } catch (error) {
-    // Set functionBusy to false
-    functionBusy[browseName] = false;
+    // Drop element from the beginning of array
+    queueOfSubscribe = loDrop(queueOfSubscribe);
   }
 }
 

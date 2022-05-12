@@ -237,7 +237,7 @@
     "srvServiceUrl": "http://BSA-HOME:3030",
     "clientServiceUrl": "http://BSA-HOME:3030",
     "clientScript": "startSubscriptionMonitor",
-    "executeMethodsFrom": "server",
+    "executeMethodsFrom": "client",
     "hostTypeDB": "mongodb",
     "opcuaSaveModeToDB": "localUpdate",
     "opcuaRemoteDbUrl": "http://localhost:3131",
