@@ -6,11 +6,13 @@ const loOmit = require('lodash/omit');
 const loForEach = require('lodash/forEach');
 const loHead = require('lodash/head');
 const loDrop = require('lodash/drop');
+const loDelay  = require('lodash/delay');
 
 const {
   inspector,
   getTimeDuration,
   waitTimeout,
+  waitTill,
   pause,
 } = require('../../lib');
 
@@ -63,17 +65,15 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
   });
 
   
-  if(true && queueOfSubscribe.length) inspector('checkQueueOfSubscribe.queueOfSubscribe:', queueOfSubscribe.map(s => s.browseName));
+  if(isDebug && queueOfSubscribe.length) inspector('checkQueueOfSubscribe.queueOfSubscribe:', queueOfSubscribe.map(s => s.browseName));
 
   try {
 
     // WaitTimeout
     do {
-      result = checkQueueOfSubscribe(queueOfSubscribe, browseName, true);
+      result = checkQueueOfSubscribe(queueOfSubscribe, browseName, false);
       if(result) await pause(1000, false);
     } while (result);
-
-    // waitTimeout(checkQueueOfSubscribe, [queueOfSubscribe, browseName]);
 
     // Get current subscribe
     const subscribe = loHead(queueOfSubscribe);
