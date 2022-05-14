@@ -31,14 +31,16 @@ async function onChangedGroupHandlerForDB(params, dataValue) {
     // Only for group values
     if (addressSpaceOption && !addressSpaceOption.group) return;
 
-    // await sessionReadHistoryValues(params);
-
     // Save data to DB
     const p1 = saveOpcuaGroupValueToDB(params, dataValue);
+    // Read history values
+    // const p2 = sessionReadHistoryValues(params);
+
 
     // Show info
-    Promise.all([p1]).then(results => {
+    Promise.all([p1, 'p2']).then(results => {
       if (isDebug && results.length) inspector('saveOpcuaGroupValueToDB.savedValue:', results[0]);
+      if (isDebug && results.length) inspector('sessionReadHistoryValues.readResult:', results[1]);
       showInfoForGroupHandler(params, dataValue);
     });     
 
