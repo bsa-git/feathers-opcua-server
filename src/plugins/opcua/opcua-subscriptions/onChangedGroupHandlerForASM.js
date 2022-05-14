@@ -65,7 +65,7 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     });
 
 
-    if (isDebug && queueOfSubscribe.length) inspector('checkQueueOfSubscribe.queueOfSubscribe:', queueOfSubscribe.map(s => s.browseName));
+    if (true && queueOfSubscribe.length) inspector('onChangedGroupHandlerForASM.queueOfSubscribe:', queueOfSubscribe.map(s => s.browseName));
 
     // WaitTimeout
     do {
@@ -79,27 +79,48 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     dataValue = subscribe.dataValue;
 
     // Save data to DB
-    const savedValue = await saveOpcuaGroupValueToDB(params, dataValue);
-    if (isDebug && savedValue) inspector('onChangedGroupHandlerForASM.savedValue:', savedValue);
+    // const savedValue = await saveOpcuaGroupValueToDB(params, dataValue);
+    const p1 = saveOpcuaGroupValueToDB(params, dataValue);
+    // if (isDebug && savedValue) inspector('onChangedGroupHandlerForASM.savedValue:', savedValue);
 
     // Run update acm year report
-    await ch_m5UpdateAcmYearReport(params, dataValue);
+    // await ch_m5UpdateAcmYearReport(params, dataValue);
+    const p2 = ch_m5UpdateAcmYearReport(params, dataValue);
 
     // await pause(10000);
 
     // Show info
-    showInfoForGroupHandler(params, dataValue);
+    // showInfoForGroupHandler(params, dataValue);
+
+    // Show info
+    Promise.all([p1, p2]).then(results => {
+      
+      if (isDebug && results.length) inspector('saveOpcuaGroupValueToDB.savedValue:', results[0]);
+      if (isDebug && results.length) inspector('ch_m5UpdateAcmYearReport.readResult:', results[1]);
+      
+      // Show info
+      showInfoForGroupHandler(params, dataValue);
+
+      // endTime and timeDuration
+      const endTime = moment.utc().format();
+      const timeDuration = getTimeDuration(startTime, endTime);
+      if (isDebug && endTime) console.log('onChangedGroupHandlerForASM.endTime:', endTime, 'browseName:', browseName);
+      if (isDebug && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
+
+      // Drop element from the beginning of array
+      queueOfSubscribe = loDrop(queueOfSubscribe);
+    });
 
     // Set functionBusy to true
     // functionBusy[browseName] = false;
 
-    const endTime = moment.utc().format();
-    const timeDuration = getTimeDuration(startTime, endTime);
-    if (isDebug && endTime) console.log('onChangedGroupHandlerForASM.endTime:', endTime, 'browseName:', browseName);
-    if (true && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
+    // const endTime = moment.utc().format();
+    // const timeDuration = getTimeDuration(startTime, endTime);
+    // if (isDebug && endTime) console.log('onChangedGroupHandlerForASM.endTime:', endTime, 'browseName:', browseName);
+    // if (true && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
 
-    // Drop element from the beginning of array
-    queueOfSubscribe = loDrop(queueOfSubscribe);
+    // // Drop element from the beginning of array
+    // queueOfSubscribe = loDrop(queueOfSubscribe);
 
   } catch (error) {
     // Drop element from the beginning of array

@@ -63,17 +63,7 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
   inputArgument2 = dataValue.value.value;
   inputArgument2 = { dataType: DataType.String, value: inputArgument2 };
 
-  // inputArguments.push([
-  //   {
-  //     dataType: DataType.String,
-  //     value: inputArgument,
-  //   },
-  //   {
-  //     dataType: DataType.String,
-  //     value: inputArgument2,
-  //   }
-  // ]);
-
+  // Run method from client
   if (whereMethodsAreExecuted(params.id) === 'client') {
     inputArguments.push([inputArgument, inputArgument2]);
     result = await methodAcmYearReportUpdate(inputArguments);
@@ -84,8 +74,11 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
       inspector('subscription.ch_m5UpdateAcmYearReport.result:', result);
       console.log(chalk.redBright('Update asm year report - ERROR!'));
     }
+
+    return result;
   }
 
+  // Run method from server
   if (whereMethodsAreExecuted(params.id) === 'server') {
     inputArguments.push([inputArgument, inputArgument2]);
     // Set opcua properties
@@ -104,17 +97,17 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
       inspector('subscription.ch_m5UpdateAcmYearReport.result:', result);
       console.log(chalk.redBright('Update asm year report - ERROR!'), 'statusCode: ', chalk.cyan(statusCode));
     }
+
+    return result;
   }
 
+  // Run method from async server
   if (whereMethodsAreExecuted(params.id) === 'asyncServer') {
     inputArguments.push(inputArgument);
     inputArguments.push(inputArgument2);
     // Get endpointUrl 
     const opcuaConfig = getOpcuaConfig(params.id);
     const endpointUrl = opcuaConfig.endpointUrl;
-
-    // if (true && inputArguments) inspector('ch_m5UpdateAcmYearReport.inputArguments:', inputArguments);
-
 
     // Set opcua properties
     const opcua = {};
@@ -132,6 +125,8 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
     } else {
       console.log(chalk.green('ch_m5UpdateAcmYearReport:'), chalk.cyan(statusCode));
     }
+
+    return result;
   }
 }
 
