@@ -16,7 +16,6 @@ const {
 
 const debug = require('debug')('app:saveOpcuaGroupValueToDB');
 const isDebug = false;
-const isLog = false;
 
 /**
  * @method onChangedCommonHandle
@@ -26,8 +25,8 @@ const isLog = false;
  * @returns {void}
  */
 async function saveOpcuaGroupValueToDB(params, dataValue) {
-  if (isLog && params) inspector('saveOpcuaGroupValueToDB.params:', loOmit(params, ['myOpcuaClient', 'app']));
-  if (isLog && dataValue) inspector('saveOpcuaGroupValueToDB.dataValue:', dataValue);
+  if (isDebug && params) inspector('saveOpcuaGroupValueToDB.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && dataValue) inspector('saveOpcuaGroupValueToDB.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 
   // Only for group values
@@ -35,14 +34,14 @@ async function saveOpcuaGroupValueToDB(params, dataValue) {
 
   const browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
-  if (isLog && dataValue) inspector('saveOpcuaGroupValueToDB.formatDataValue:', dataValue);
+  if (isDebug && dataValue) inspector('saveOpcuaGroupValueToDB.formatDataValue:', dataValue);
   let value = dataValue.value.value;
   const timestamp = dataValue.serverTimestamp;
 
   // Save data to DB
   if (isSaveOpcuaToDB()) {
     const savedValue = await saveOpcuaGroupValue(params.app, browseName, value);
-    if (isLog && savedValue) inspector('saveOpcuaGroupValueToDB.savedValue:', savedValue);
+    if (isDebug && savedValue) inspector('saveOpcuaGroupValueToDB.savedValue:', savedValue);
     return savedValue;
   }
 }

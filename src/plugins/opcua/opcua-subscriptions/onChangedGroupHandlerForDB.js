@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 const loOmit = require('lodash/omit');
+const logger = require('../../../logger');
 
 const {
   inspector,
-} = require('../../lib');
+} = require('../../lib'); 
 
 const {
   showInfoForGroupHandler,
@@ -13,7 +14,6 @@ const {
 
 const debug = require('debug')('app:onChangedGroupHandlerForDB');
 const isDebug = false;
-const isLog = false;
 
 /**
  * @method onChangedGroupHandlerForDB
@@ -22,21 +22,31 @@ const isLog = false;
  * @returns {void}
  */
 async function onChangedGroupHandlerForDB(params, dataValue) {
-  if (isLog && params) inspector('subscriptions.onChangedGroupHandlerForDB.params:', loOmit(params, ['myOpcuaClient', 'app']));
-  if (isLog && dataValue) inspector('subscriptions.onChangedGroupHandlerForDB.dataValue:', dataValue);
-  const addressSpaceOption = params.addressSpaceOption;
+  
+  try {
+    if (isDebug && params) inspector('subscriptions.onChangedGroupHandlerForDB.params:', loOmit(params, ['myOpcuaClient', 'app']));
+    if (isDebug && dataValue) inspector('subscriptions.onChangedGroupHandlerForDB.dataValue:', dataValue);
+    const addressSpaceOption = params.addressSpaceOption;
 
-  // Only for group values
-  if (addressSpaceOption && !addressSpaceOption.group) return;
+    // Only for group values
+    if (addressSpaceOption && !addressSpaceOption.group) return;
 
-  // await sessionReadHistoryValues(params);
+    // await sessionReadHistoryValues(params);
 
-  // Save data to DB
-  const savedValue = await saveOpcuaGroupValueToDB(params, dataValue);
-  if (isLog && savedValue) inspector('onChangedGroupHandlerForASM.savedValue:', savedValue);
+    // Save data to DB
+    const p1 = saveOpcuaGroupValueToDB(params, dataValue);
 
-  // Show info
-  showInfoForGroupHandler(params, dataValue);
+    // Show info
+    Promise.all([p1]).then(results => {
+      if (isDebug && results.length) inspector('saveOpcuaGroupValueToDB.savedValue:', results[0]);
+      showInfoForGroupHandler(params, dataValue);
+    });     
+
+  } catch (error) {
+    logger.error(`onChangedGroupHandlerForDB.Error: ${error.message}`);
+  }
+  
+  
 }
 
 module.exports = onChangedGroupHandlerForDB;

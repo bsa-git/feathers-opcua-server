@@ -6,7 +6,7 @@ const loOmit = require('lodash/omit');
 const loForEach = require('lodash/forEach');
 const loHead = require('lodash/head');
 const loDrop = require('lodash/drop');
-const loDelay  = require('lodash/delay');
+const loDelay = require('lodash/delay');
 
 const {
   inspector,
@@ -43,36 +43,34 @@ let queueOfSubscribe = [];
 async function onChangedGroupHandlerForASM(params, dataValue) {
   let result = false;
   //---------------------------------------------------------
-  
-  // Get startTime
-  const startTime = moment.utc().format();
-  if (isDebug && startTime) console.log('onChangedGroupHandlerForASM.startTime:', startTime, 'browseName:', browseName);
-  
-  if (isDebug && params) inspector('onChangedGroupHandlerForASM.params:', loOmit(params, ['myOpcuaClient', 'app']));
-  if (isDebug && dataValue) inspector('onChangedGroupHandlerForASM.dataValue:', dataValue);
-  const addressSpaceOption = params.addressSpaceOption;
-
-  const browseName = addressSpaceOption.browseName;
-
-  // Only for group values
-  if (!addressSpaceOption.group) return;
-  
-  // Add subscribe to queue
-  queueOfSubscribe.push({
-    browseName,
-    params,
-    dataValue
-  });
-
-  
-  if(isDebug && queueOfSubscribe.length) inspector('checkQueueOfSubscribe.queueOfSubscribe:', queueOfSubscribe.map(s => s.browseName));
-
   try {
+    // Get startTime
+    const startTime = moment.utc().format();
+    if (isDebug && startTime) console.log('onChangedGroupHandlerForASM.startTime:', startTime, 'browseName:', browseName);
+
+    if (isDebug && params) inspector('onChangedGroupHandlerForASM.params:', loOmit(params, ['myOpcuaClient', 'app']));
+    if (isDebug && dataValue) inspector('onChangedGroupHandlerForASM.dataValue:', dataValue);
+    const addressSpaceOption = params.addressSpaceOption;
+
+    const browseName = addressSpaceOption.browseName;
+
+    // Only for group values
+    if (!addressSpaceOption.group) return;
+
+    // Add subscribe to queue
+    queueOfSubscribe.push({
+      browseName,
+      params,
+      dataValue
+    });
+
+
+    if (isDebug && queueOfSubscribe.length) inspector('checkQueueOfSubscribe.queueOfSubscribe:', queueOfSubscribe.map(s => s.browseName));
 
     // WaitTimeout
     do {
       result = checkQueueOfSubscribe(queueOfSubscribe, browseName, false);
-      if(result) await pause(1000, false);
+      if (result) await pause(1000, false);
     } while (result);
 
     // Get current subscribe
