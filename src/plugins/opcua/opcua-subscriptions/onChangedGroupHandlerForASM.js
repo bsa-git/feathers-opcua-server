@@ -79,18 +79,10 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     dataValue = subscribe.dataValue;
 
     // Save data to DB
-    // const savedValue = await saveOpcuaGroupValueToDB(params, dataValue);
     const p1 = saveOpcuaGroupValueToDB(params, dataValue);
-    // if (isDebug && savedValue) inspector('onChangedGroupHandlerForASM.savedValue:', savedValue);
 
     // Run update acm year report
-    // await ch_m5UpdateAcmYearReport(params, dataValue);
     const p2 = ch_m5UpdateAcmYearReport(params, dataValue);
-
-    // await pause(10000);
-
-    // Show info
-    // showInfoForGroupHandler(params, dataValue);
 
     // Show info
     Promise.all([p1, p2]).then(results => {
@@ -110,18 +102,6 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
       // Drop element from the beginning of array
       queueOfSubscribe = loDrop(queueOfSubscribe);
     });
-
-    // Set functionBusy to true
-    // functionBusy[browseName] = false;
-
-    // const endTime = moment.utc().format();
-    // const timeDuration = getTimeDuration(startTime, endTime);
-    // if (isDebug && endTime) console.log('onChangedGroupHandlerForASM.endTime:', endTime, 'browseName:', browseName);
-    // if (true && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
-
-    // // Drop element from the beginning of array
-    // queueOfSubscribe = loDrop(queueOfSubscribe);
-
   } catch (error) {
     // Drop element from the beginning of array
     queueOfSubscribe = loDrop(queueOfSubscribe);

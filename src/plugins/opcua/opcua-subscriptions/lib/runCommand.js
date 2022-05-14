@@ -14,7 +14,6 @@ const ch_m5CreateAcmYearTemplate = require('./commands/ch_m5CreateAcmYearTemplat
 
 const debug = require('debug')('app:runCommand');
 const isDebug = false;
-const isLog = false;
 
 /**
  * @method onChangedCommonHandle
@@ -24,15 +23,15 @@ const isLog = false;
  * @returns {void}
  */
 async function runCommand(params, dataValue) {
-  let points;
-  //--------------------
+  let points, result, results = [];
+  //--------------------------------
   if (isDebug && params) inspector('runCommand.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isDebug && dataValue) inspector('runCommand.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 
   const browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
-  if (isLog && dataValue) inspector('runCommand.formatDataValue:', dataValue);
+  if (isDebug && dataValue) inspector('runCommand.formatDataValue:', dataValue);
 
   let value = dataValue.value.value;
   value = JSON.parse(value);
@@ -45,13 +44,14 @@ async function runCommand(params, dataValue) {
     for (let index = 0; index < points.length; index++) {
       const point = points[index];
       value.opt.point = point;
-      await ch_m5CreateAcmYearTemplate(params, value);
+      result = await ch_m5CreateAcmYearTemplate(params, value);
+      results.push(result);
     }
     break;
   default:
     break;
   }
-
+  return results;
 }
 
 module.exports = runCommand;
