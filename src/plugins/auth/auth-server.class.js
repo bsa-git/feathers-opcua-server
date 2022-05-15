@@ -35,7 +35,7 @@ const randomDigits = (len) => {
   while (str.length < len) {
     str += parseInt('0x' + crypto.randomBytes(4).toString('hex')).toString();
   }
-  return str.substr(0, len);
+  return str.substring(0, len);
 };
 
 /**
@@ -494,19 +494,21 @@ class AuthServer {
   }
 
   /**
-   * Get long token
-   * @param len
-   * @return {Promise}
+   * @async
+   * @method getLongToken
+   * @param {Number} len
+   * @return {String}
    */
   static getLongToken(len) {
     return randomBytes(len);
   }
 
   /**
-   * Get short token
-   * @param len
-   * @param ifDigits
-   * @return {*}
+   * @async
+   * @method getShortToken
+   * @param {Number} len
+   * @param {Boolean} ifDigits
+   * @return {String}
    */
   static getShortToken(len, ifDigits) {
     if (ifDigits) {
@@ -514,10 +516,10 @@ class AuthServer {
     }
 
     return randomBytes(Math.floor(len / 2) + 1).then(function (str) {
-      str = str.substr(0, len);
+      str = str.substring(0, len);
       if (str.match(/^[0-9]+$/)) {
         // tests will fail on all digits
-        str = 'q' + str.substr(1); // shhhh, secret.
+        str = 'q' + str.substring(1); // shhhh, secret.
       }
       return str;
     });

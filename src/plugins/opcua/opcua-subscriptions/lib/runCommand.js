@@ -27,11 +27,6 @@ async function runCommand(params, dataValue) {
   //--------------------------------
   if (isDebug && params) inspector('runCommand.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isDebug && dataValue) inspector('runCommand.dataValue:', dataValue);
-  const addressSpaceOption = params.addressSpaceOption;
-
-  const browseName = addressSpaceOption.browseName;
-  dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
-  if (isDebug && dataValue) inspector('runCommand.formatDataValue:', dataValue);
 
   let value = dataValue.value.value;
   value = JSON.parse(value);

@@ -12,12 +12,18 @@ const {
 } = require('../../lib');
 
 const {
+  AuthServer
+} = require('../../auth');
+
+const {
   showInfoForHandler,
   runCommand,
+  sessionWrite
 } = require('./lib');
 
 const {
-  checkQueueOfSubscribe
+  checkTokenQueueOfSubscribe,
+  formatSimpleDataValue
 } = require('../opcua-helper');
 
 const isDebug = false;
@@ -47,20 +53,33 @@ async function onChangedRunCommand(params, dataValue) {
 
     const browseName = addressSpaceOption.browseName;
 
+    // Format simple DataValue
+    dataValue = formatSimpleDataValue(dataValue);
+    const statusCode = dataValue.statusCode.name;
+    let value = dataValue.value.value;
+
+    if(statusCode !== 'Good' ||  !value) return;
+
+    // Get token
+    let token = await AuthServer.getShortToken(8);
+    token = `${browseName}(${token})`;
+    if (isDebug && token) console.log('onChangedRunCommand.token:', token);
+
     // Add subscribe to queue
     queueOfSubscribe.push({
+      token,
       browseName,
       params,
       dataValue
     });
 
+    if (isDebug && queueOfSubscribe.length) inspector('onChangedRunCommand.queueOfSubscribe:', queueOfSubscribe.map(s => s.token));
+
     // WaitTimeout
     do {
-      result = checkQueueOfSubscribe(queueOfSubscribe, browseName, false);
+      result = checkTokenQueueOfSubscribe(queueOfSubscribe, token, false);
       if (result) await pause(1000, false);
     } while (result);
-
-    if (true && queueOfSubscribe.length) inspector('onChangedRunCommand.queueOfSubscribe:', queueOfSubscribe.map(s => s.browseName));
 
     // Get current subscribe
     const subscribe = loHead(queueOfSubscribe);
@@ -69,15 +88,17 @@ async function onChangedRunCommand(params, dataValue) {
 
     // Run command
     const p1 = runCommand(params, dataValue);
+    // Clear command
+    const p2 = sessionWrite(params, '');
 
     // Show info
-    Promise.all([p1, 'p2']).then(results => {
+    Promise.all([p1, p2]).then(results => {
       
-      if (isDebug && results.length) inspector('onChangedRunCommand.savedValue:', results[0]);
+      if (isDebug && results.length) inspector('runCommand.results:', results[0]);
+      if (isDebug && results.length) inspector('sessionWrite.results:', results[1]);
       
       // Show info
       showInfoForHandler(params, dataValue);
-
       // endTime and timeDuration
       const endTime = moment.utc().format();
       const timeDuration = getTimeDuration(startTime, endTime);

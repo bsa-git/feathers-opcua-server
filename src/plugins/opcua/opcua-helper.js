@@ -421,27 +421,35 @@ const formatDataValue = function (id, dataValue, browseName, locale = '') {
 
 /**
  * @method formatSimpleDataValue
- * @param {Object} dataValue 
- * @returns {Object}
+ * @param {Object|Object[]} dataValue 
+ * @returns {Object|Object[]}
  */
 const formatSimpleDataValue = function (dataValue) {
-  let result = {};
-  //---------------------
-  loMerge(result, dataValue.sourceTimestamp ? { sourceTimestamp: getTimestamp(dataValue.sourceTimestamp) } : {});
-  loMerge(result, dataValue.serverTimestamp ? { serverTimestamp: getTimestamp(dataValue.serverTimestamp) } : {});
-  result.statusCode = {
-    code: dataValue.statusCode._value,
-    description: dataValue.statusCode._description,
-    name: dataValue.statusCode._name
-  };
+  let result, results = [], dataValues;
+  //------------------------------------------------
+  dataValues = Array.isArray(dataValue) ? dataValue : [dataValue];
 
-  result.value = {};
-  loMerge(result.value, dataValue.value.dataType ? { dataType: getOpcuaDataType(dataValue.value.dataType)[0] } : {});
-  loMerge(result.value, dataValue.value.arrayType ? { arrayType: dataValue.value.arrayType } : {});
-  loMerge(result.value, dataValue.value.dimensions ? { dimensions: dataValue.value.dimensions } : {});
-  result.value.value = dataValue.value.value;
+  for (let index = 0; index < dataValues.length; index++) {
+    const _dataValue = dataValues[index];
+    result = {};
+    loMerge(result, _dataValue.sourceTimestamp ? { sourceTimestamp: getTimestamp(_dataValue.sourceTimestamp) } : {});
+    loMerge(result, _dataValue.serverTimestamp ? { serverTimestamp: getTimestamp(_dataValue.serverTimestamp) } : {});
+    result.statusCode = {
+      code: _dataValue.statusCode._value,
+      description: _dataValue.statusCode._description,
+      name: _dataValue.statusCode._name
+    };
 
-  return result;
+    result.value = {};
+    loMerge(result.value, _dataValue.value.dataType ? { dataType: getOpcuaDataType(_dataValue.value.dataType)[0] } : {});
+    loMerge(result.value, _dataValue.value.arrayType ? { arrayType: _dataValue.value.arrayType } : {});
+    loMerge(result.value, _dataValue.value.dimensions ? { dimensions: _dataValue.value.dimensions } : {});
+    result.value.value = _dataValue.value.value;
+
+    results.push(result);
+  }
+
+  return Array.isArray(dataValue) ? results : result;
 };
 
 /**
@@ -1432,9 +1440,27 @@ const checkQueueOfSubscribe = function (queue, browseName, show = false) {
   let isBusy = false;
   //---------------------------
   const subscribe = loHead(queue);
-  if(subscribe){
+  if (subscribe) {
     isBusy = subscribe.browseName !== browseName;
-    if(show && isBusy) console.log(`'${browseName}'`, chalk.cyan(' wait '), `'${subscribe.browseName}'`);
+    if (show && isBusy) console.log(`'${browseName}'`, chalk.cyan(' wait '), `'${subscribe.browseName}'`);
+  }
+  return isBusy;
+};
+
+/**
+ * @method checkTokenQueueOfSubscribe
+ * @param {Array} queue 
+ * @param {String} token 
+ * @param {Boolean} show
+ * @returns {Boolean}
+ */
+const checkTokenQueueOfSubscribe = function (queue, token, show = false) {
+  let isBusy = false;
+  //---------------------------
+  const subscribe = loHead(queue);
+  if (subscribe) {
+    isBusy = subscribe.token !== token;
+    if (show && isBusy) console.log(`'${token}'`, chalk.cyan(' wait '), `'${subscribe.token}'`);
   }
   return isBusy;
 };
@@ -1493,5 +1519,6 @@ module.exports = {
   canDbClientRun,
   getSecurityMode,
   getSecurityPolicy,
-  checkQueueOfSubscribe
+  checkQueueOfSubscribe,
+  checkTokenQueueOfSubscribe
 };

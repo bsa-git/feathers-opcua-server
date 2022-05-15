@@ -58,13 +58,15 @@ const urlExists = async function (target) {
  * @async
  * 
  * @param {String} url 
+ * @param {Boolean} showMsg 
  * @returns {Boolean}
  */
-const isUrlExists = async function (url) {
+const isUrlExists = async function (url, showMsg = false) {
   try {
     await urlExists(url);
     return true;
   } catch (error) {
+    if(showMsg) logger.error(`This URL "${url}" does not exist`);
     return false;
   }
 };
