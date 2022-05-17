@@ -20,11 +20,9 @@ function checkCallMethod(options, result) {
   switch (options.method) {
   case 'ch_m5CreateAcmYearTemplate':
     if (options.opt && options.opt.point) {
+      checkResult = ch_m5CreateAcmYearTemplate(options);
       if (result) {
-        checkResult = ch_m5CreateAcmYearTemplate(options);
         checkResult = ch_m5CreateAcmYearTemplate(checkResult, result);
-      } else {
-        checkResult = ch_m5CreateAcmYearTemplate(options);
       }
     }
     break;

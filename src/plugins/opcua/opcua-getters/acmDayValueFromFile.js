@@ -74,14 +74,14 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     if (isDebug && dataItems.length) inspector(`histValueFromFile.dataItems(${dataItems.length}):`, dataItems);
 
     // Sheet to json date
-    let date = xlsx.sheetToJson('Report1', { range: rangeDate });
-    date = date[0]['A'].split('to:')[0].split('from:')[1].trim();
-    date = moment(date).format().split('T')[0];
-    if (isDebug && date) inspector('histValueFromFile.date:', date);
+    let dateTime = xlsx.sheetToJson('Report1', { range: rangeDate });
+    dateTime = dateTime[0]['A'].split('to:')[0].split('from:')[1].trim();
+    dateTime = moment.utc(dateTime).format('YYYY-MM-DDTHH:mm:ss');
+    if (isDebug && dateTime) inspector('histValueFromFile.dateTime:', dateTime);
 
     // Set value from source
     dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
-    dataItems['!value'] = { date };
+    dataItems['!value'] = { dateTime };
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
     if (isDebug && dataItems) inspector('histValueFromFile.dataItems:', dataItems);
 

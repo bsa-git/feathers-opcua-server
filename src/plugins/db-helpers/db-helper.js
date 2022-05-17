@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
+const moment = require('moment');
 const logger = require('../../logger');
 const {
   getOpcuaTags,
@@ -217,7 +218,7 @@ const getIdField = function (items) {
  * @returns {Object}
  */
 const saveOpcuaGroupValue = async function (app, browseName, value) {
-  let tags, opcuaValue, opcuaValues = [], groupItems = [];
+  let tags, opcuaValue = null, opcuaValues = [], groupItems = [];
   let savedValue = null, findedItem, idField, itemId;
   //----------------------------------------------------------
 
@@ -232,7 +233,7 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
   }
 
   tags = await findItems(app, 'opcua-tags', { browseName });
-  if (tags.length) {
+  if (opcuaValue && tags.length) {
     const tag = tags[0];
     // Exit else tag is disable
     if (tag.isEnable === false) return savedValue;
@@ -247,7 +248,94 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
         if (value === null) {
           value = getInt(value);
         }
-        opcuaValues.push( Array.isArray(value)? opcuaValue['!value']? { key, items: value, value: opcuaValue['!value'] } : { key, items: value } : { key, value });
+        opcuaValues.push(Array.isArray(value) ? opcuaValue['!value'] ? { key, items: value, value: opcuaValue['!value'] } : { key, items: value } : { key, value });
+      }
+    });
+    const data = {
+      tagName: tag.browseName,
+      values: opcuaValues
+    };
+
+    if (isLog) inspector('db-helper.saveOpcuaGroupValue.data:', data);
+
+    if (isRemoteOpcuaToDB()) {
+      const remoteDbUrl = getOpcuaRemoteDbUrl();
+      const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
+      if (appRestClient) {
+        if (isUpdateOpcuaToDB()) {
+          findedItem = await findItem(appRestClient, 'opcua-values', { tagName: tag.browseName, $sort: { updatedAt: -1 }, });
+          if (!findedItem) {
+            savedValue = await createItem(appRestClient, 'opcua-values', data);
+          } else {
+            idField = getIdField(findedItem);
+            itemId = findedItem[idField];
+            savedValue = await patchItem(appRestClient, 'opcua-values', itemId, data);
+          }
+        } else {
+          savedValue = await createItem(appRestClient, 'opcua-values', data);
+        }
+      }
+    } else {
+      if (isUpdateOpcuaToDB()) {
+        findedItem = await findItem(app, 'opcua-values', { tagName: tag.browseName, $sort: { updatedAt: -1 }, });
+        if (!findedItem) {
+          savedValue = await createItem(app, 'opcua-values', data);
+        } else {
+          idField = getIdField(findedItem);
+          itemId = findedItem[idField];
+          savedValue = await patchItem(app, 'opcua-values', itemId, data);
+        }
+      } else {
+        savedValue = await createItem(app, 'opcua-values', data);
+      }
+    }
+    if (isLog && savedValue) inspector('db-helper.saveOpcuaValue.savedValue:', savedValue);
+  }
+  return savedValue;
+};
+
+/**
+ * @method saveStoreOpcuaGroupValue
+ * @async
+ * 
+ * @param {Object} app
+ * @param {String} browseName 
+ * @param {String|Object} value 
+ * @returns {Object}
+ */
+const saveStoreOpcuaGroupValue = async function (app, browseName, value) {
+  let tags, opcuaValue = null, opcuaValues = [], groupItems = [];
+  let savedValue = null, findedItem, idField, itemId;
+  //----------------------------------------------------------
+
+  if (!isSaveOpcuaToDB()) return;
+
+  if (loIsString(value)) {
+    opcuaValue = JSON.parse(value);
+  }
+
+  if (loIsObject(value)) {
+    opcuaValue = value;
+  }
+
+  tags = await findItems(app, 'opcua-tags', { browseName });
+  if (opcuaValue && tags.length) {
+    const tag = tags[0];
+    const store = tag.store;
+    // Exit else tag is disable
+    if (tag.isEnable === false) return savedValue;
+    // Get group items
+    groupItems = await findItems(app, 'opcua-tags', { ownerGroup: browseName });
+    // Normalize opcuaValue
+    loForEach(opcuaValue, (value, key) => {
+      const findedGroupItem = groupItems.find(item => (item.browseName === key) || (item.aliasName === key));
+      if (findedGroupItem) {
+        const groupItemBrowseName = findedGroupItem.browseName;
+        key = opcuaValue['!value'] ? opcuaValue['!value'].dateTime : moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+        if (value === null) {
+          value = getInt(value);
+        }
+        opcuaValues.push(Array.isArray(value) ? opcuaValue['!value'] ? { key, items: value, value: opcuaValue['!value'] } : { key, items: value } : { key, value });
       }
     });
     const data = {
@@ -549,14 +637,14 @@ const integrityCheckOpcua = async function (app, isRemote = false) {
 
   // Get all 'childGroup' tags 
   if (isRemote) {
-    tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: [ 'object', 'method' ] }, group: { $ne: true }, ownerName: { $in: objTagBrowseNames } });
+    tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: ['object', 'method'] }, group: { $ne: true }, ownerName: { $in: objTagBrowseNames } });
   } else {
-    tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: [ 'object', 'method' ] }, group: { $ne: true } });
+    tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: ['object', 'method'] }, group: { $ne: true } });
   }
 
   // Remove 'childGroup' tags that have no 'ownerGroup' tags
   if (tagsFromDB.length) {
-    tagsFromDB = tagsFromDB.filter(tag => !!tag.ownerGroup );
+    tagsFromDB = tagsFromDB.filter(tag => !!tag.ownerGroup);
     const idField = getIdField(tagsFromDB[0]);
     for (let index = 0; index < tagsFromDB.length; index++) {
       const tag = tagsFromDB[index];
@@ -967,6 +1055,7 @@ module.exports = {
   getOpcuaRemoteDbUrl,
   getIdField,
   saveOpcuaGroupValue,
+  saveStoreOpcuaGroupValue,
   removeOpcuaValues,
   saveOpcuaTags,
   integrityCheckOpcua,

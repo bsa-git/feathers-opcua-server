@@ -35,6 +35,7 @@ module.exports = function (app) {
       ownerName: { type: String },
       dataType: { type: String },
       hist: { type: Number },
+      store: Schema.Types.Mixed,
       group: { type: Boolean },
       subscription: { type: String },
       ownerGroup: { type: String },

@@ -47,6 +47,9 @@ let base = merge({},
       hist: {
         type: 'integer'
       },
+      store: {
+        type: 'object'
+      },
       group: {
         type: 'boolean'
       },
@@ -82,19 +85,7 @@ let base = merge({},
         type: 'string'
       },
       getterParams: {
-        type: 'object',
-        properties: {
-          path: { type: 'string' },
-          fromFile: { type: 'string' },
-          interval: { type: 'number' },
-          dbEnv: { type: 'string' },
-          queryFunc: { type: 'string' },
-          queryParams: {
-            properties: {
-              scanerName: { type: 'string' }
-            }
-          }
-        }
+        type: 'object'
       },
       valueParams: {
         type: 'object',

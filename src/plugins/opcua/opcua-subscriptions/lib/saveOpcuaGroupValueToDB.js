@@ -25,6 +25,8 @@ const isDebug = false;
  * @returns {void}
  */
 async function saveOpcuaGroupValueToDB(params, dataValue) {
+  let savedValue = null;
+  //--------------------------
   if (isDebug && params) inspector('saveOpcuaGroupValueToDB.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isDebug && dataValue) inspector('saveOpcuaGroupValueToDB.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
@@ -36,14 +38,13 @@ async function saveOpcuaGroupValueToDB(params, dataValue) {
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
   if (isDebug && dataValue) inspector('saveOpcuaGroupValueToDB.formatDataValue:', dataValue);
   let value = dataValue.value.value;
-  const timestamp = dataValue.serverTimestamp;
 
   // Save data to DB
   if (isSaveOpcuaToDB()) {
-    const savedValue = await saveOpcuaGroupValue(params.app, browseName, value);
+    savedValue = await saveOpcuaGroupValue(params.app, browseName, value);
     if (isDebug && savedValue) inspector('saveOpcuaGroupValueToDB.savedValue:', savedValue);
-    return savedValue;
-  }
+  } 
+  return savedValue;
 }
 
 module.exports = saveOpcuaGroupValueToDB;

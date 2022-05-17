@@ -59,7 +59,7 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
   const addressSpaceOption = params.addressSpaceOption;
 
   // Get report date and year
-  const reportDate = groupValue['!value'].date;
+  const reportDate = groupValue['!value'].dateTime.split('T')[0];
   const reportYear = reportDate.split('-')[0];
 
   // Get params for year report

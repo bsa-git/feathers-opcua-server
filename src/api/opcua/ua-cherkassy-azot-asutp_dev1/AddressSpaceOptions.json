@@ -25,13 +25,13 @@
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M52_ACM",
       "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M52_ACM2",
       "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM2",
       "type": "object"
@@ -130,6 +130,11 @@
       "type": "variable.simple",
       "dataType": "String",
       "hist": 1,
+      "store": {
+        "active": true,
+        "numberOfValuesInDoc": [1, "years"],
+        "numberOfDocsForTag": [5, "years"]
+      },
       "group": true,
       "subscription": "onChangedGroupHandlerForASM",
       "variableGetType": "valueFromSource",
