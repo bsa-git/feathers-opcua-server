@@ -7,10 +7,11 @@ const moment = require('moment');
 const dirTree = require('directory-tree');
 const {
   appRoot,
+  inspector,
   getDate,
   getTime,
   strReplace
-} = require('../lib/util');
+} = require('./util');
 
 const loEndsWith = require('lodash/endsWith');
 const loStartsWith = require('lodash/startsWith');
@@ -103,6 +104,22 @@ const getFileName = function (prefix = '', ex = 'json', isMsec = false) {
   const t = isMsec ? `${tList[0]}.${tList[1]}` : `${tList[0]}`;
   const fileName = `${prefix}${d}_${t}.${ex}`;
   return fileName;
+};
+
+/**
+ * @method getDateTimeFromFileName
+ * @param {String} filePath 
+ * @param {Array} slice 
+ * @param {String} template 
+ * @returns {String}
+ * e.g. filePath='//192.168.3.5/www_m5/m5_data2/data-20220518_075752.txt', slice=[5], template='YYYYMMDD_HHmmss' -> '2022-05-18T07:57:52'
+ */
+const getDateTimeFromFileName = function (filePath, slice = [0], template = 'YYYYMMDD_HHmmss') {
+  let fileName = getPathBasename(filePath);
+  fileName = fileName.split('.')[0].slice(...slice);
+  const dateTime = moment.utc(fileName, template).format('YYYY-MM-DDTHH:mm:ss');
+  if (isDebug && dateTime) inspector('getDateTimeFromFileName.dateTime:', dateTime);
+  return dateTime;
 };
 
 
@@ -803,6 +820,7 @@ module.exports = {
   getOsArchitecture,
   getBitDepthOS,
   getFileName,
+  getDateTimeFromFileName,
   getPathBasename,
   getPathExtname,
   getPathDirname,

@@ -5,6 +5,7 @@ const papa = require('papaparse');
 const {
   inspector,
   readOnlyNewFile,
+  getDateTimeFromFileName,
   createPath
 } = require('../../lib');
 
@@ -41,6 +42,16 @@ const histValueFromPath = function (params = {}, addedValue) {
     results = papa.parse(data, { delimiter: ';', header: true });
     dataItems = results.data[0];
     dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
+    
+    // Get dateTime from fileName
+    // e.g. data-20220518_075752.txt -> 2022-05-18T07:57:52
+    const dateTime = getDateTimeFromFileName(filePath, [5], 'YYYYMMDD_HHmmss');
+    if(isDebug && dateTime) inspector('histValueFromPath.dateTime:', dateTime);
+
+    // Add prop "!value": { dateTime: ''2022-05-17T13:22:56' } to dataItems
+    dataItems['!value'] = { dateTime };
+    if(isDebug && dataItems) inspector('histValueFromHttpPath.dataItems:', dataItems);
+    
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
 
     if (isLog) inspector('histValueFromPath.dataItems:', dataItems);

@@ -25,6 +25,7 @@ const {
   isRemoteOpcuaToDB,
   isUpdateOpcuaToDB,
   getOpcuaRemoteDbUrl,
+  getCountItems
 } = require('../db-helpers');
 
 const {
@@ -60,7 +61,6 @@ module.exports = async function opcuaBootstrap(app) {
   if (!isOpcuaBootstrapAllowed) return;
 
   if (isSaveOpcuaToDB()) {
-
     // Save opcua tags to local DB
     let saveResult = await saveOpcuaTags(app);
     logger.info('opcuaBootstrap.saveOpcuaTags.localDB:', saveResult);
@@ -93,7 +93,7 @@ module.exports = async function opcuaBootstrap(app) {
           logger.error('Result integrity check opcua.remoteDB: ERR');
         }
         if (isUpdateOpcuaToDB()) {
-          removeResult = await removeOpcuaValues(appRestClient, isRemote);
+          removeResult = await removeOpcuaValues(appRestClient);
           if(removeResult) logger.info(`opcuaBootstrap.removeOpcuaValues.localDB: ${removeResult}`);
         }
       }

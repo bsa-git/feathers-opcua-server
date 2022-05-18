@@ -6,6 +6,7 @@ const moment = require('moment');
 const {
   inspector,
   httpGetNewFileFromDir,
+  getDateTimeFromFileName
 } = require('../../lib');
 
 const {
@@ -42,8 +43,8 @@ const histValueFromHttpPath = function (params = {}, addedValue) {
     if(isDebug && dataItems) inspector('histValueFromHttpPath.dataItems:', dataItems);
 
     // Get dateTime from fileName
-    dateTime = fileName.split('.')[0].split('-')[1];
-    dateTime = moment.utc(dateTime, 'YYYYMMDD_HHmmss').format('YYYY-MM-DDTHH:mm:ss');
+    // e.g. data-20220518_075752.txt -> 2022-05-18T07:57:52
+    dateTime = getDateTimeFromFileName(fileName, [5], 'YYYYMMDD_HHmmss');
     if(isDebug && dateTime) inspector('histValueFromHttpPath.dateTime:', dateTime);
 
     // Add prop "!value": { dateTime: ''2022-05-17T13:22:56' } to dataItems

@@ -12,6 +12,7 @@ const loIsEqual = require('lodash/isEqual');
 const loIsFunction = require('lodash/isFunction');
 const loOmit = require('lodash/omit');
 const loDelay = require('lodash/delay');
+const loMerge = require('lodash/merge');
 
 const debug = require('debug')('app:util');
 const isDebug = false;
@@ -534,19 +535,19 @@ const getRandomValue = function (v = 10) {
 const isDeepStrictEqual = function (object1, object2, omit = []) {
   let result = true;
   //---------------------
-  object1 = loOmit(object1, omit);
-  object2 = loOmit(object2, omit);
+  const _object1 = loMerge({}, loOmit(object1, omit));
+  const _object2 = loMerge({}, loOmit(object2, omit));
 
-  const keys1 = Object.keys(object1);
-  const keys2 = Object.keys(object2);
+  const keys1 = Object.keys(_object1);
+  const keys2 = Object.keys(_object2);
 
   if (keys1.length !== keys2.length) {
     return false;
   }
 
   for (const key of keys1) {
-    const val1 = object1[key];
-    const val2 = object2[key];
+    const val1 = _object1[key];
+    const val2 = _object2[key];
     const areObjects = isObject(val1) && isObject(val2);
     if (
       areObjects && !isDeepStrictEqual(val1, val2, omit) ||
@@ -569,14 +570,14 @@ const isDeepStrictEqual = function (object1, object2, omit = []) {
 const isDeepEqual = function (object1, object2, omit = []) {
   let result = true;
   //---------------------
-  object1 = loOmit(object1, omit);
-  object2 = loOmit(object2, omit);
+  const _object1 = loMerge({}, loOmit(object1, omit));
+  const _object2 = loMerge({}, loOmit(object2, omit));
 
-  const keys1 = Object.keys(object1);
+  const keys1 = Object.keys(_object1);
 
   for (const key of keys1) {
-    const val1 = object1[key];
-    const val2 = object2[key];
+    const val1 = _object1[key];
+    const val2 = _object2[key];
     const areObjects = isObject(val1) && isObject(val2);
     if (
       areObjects && !isDeepEqual(val1, val2, omit) ||

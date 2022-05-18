@@ -65,7 +65,8 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     });
 
 
-    if (true && queueOfSubscribe.length) inspector('onChangedGroupHandlerForASM.queueOfSubscribe:', queueOfSubscribe.map(s => s.browseName));
+    if (isDebug && queueOfSubscribe.length)
+      inspector('onChangedGroupHandlerForASM.queueOfSubscribe:', queueOfSubscribe.map(s => s.browseName));
 
     // WaitTimeout
     do {
@@ -86,10 +87,10 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
 
     // Show info
     Promise.all([p1, p2]).then(results => {
-      
+
       if (isDebug && results.length) inspector('saveOpcuaGroupValueToDB.savedValue:', results[0]);
       if (isDebug && results.length) inspector('ch_m5UpdateAcmYearReport.readResult:', results[1]);
-      
+
       // Show info
       showInfoForGroupHandler(params, dataValue);
 

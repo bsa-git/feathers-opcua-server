@@ -10,6 +10,7 @@ const {
   writeFileSync,
   removeFileSync,
   getFileName,
+  getDateTimeFromFileName,
   getPathBasename,
   createPath,
   getRandomValue
@@ -25,8 +26,6 @@ const {
 
 const debug = require('debug')('app:opcua-getters/histValueFromFile');
 const isDebug = false;
-const isLog = false;
-
 
 //=============================================================================
 
@@ -55,9 +54,17 @@ const histValueFromFile = function (params = {}, addedValue) {
     results = papa.parse(data, { delimiter: ';', header: true });
     dataItems = results.data[0];
     dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
-    addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
+    
+    // Get dateTime from fileName
+    // e.g. data-20220518_075752.txt -> 2022-05-18T07:57:52
+    const dateTime = getDateTimeFromFileName(filePath, [5], 'YYYYMMDD_HHmmss');
+    if(isDebug && dateTime) inspector('histValueFromFile.dateTime:', dateTime);
 
-    if (isLog) inspector('histValueFromFile.dataItems:', dataItems);
+    // Add prop "!value": { dateTime: ''2022-05-17T13:22:56' } to dataItems
+    dataItems['!value'] = { dateTime };
+    if(isDebug && dataItems) inspector('histValueFromHttpPath.dataItems:', dataItems);
+    
+    addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
 
     // Remove file 
     removeFileSync(filePath);
@@ -76,7 +83,7 @@ const histValueFromFile = function (params = {}, addedValue) {
         results.data[0][key] = getRandomValue(value);
       });
       csv = papa.unparse(results.data, { delimiter: ';' });
-      if (isLog) inspector('histValueFromFile.csv:', csv);
+      if (isDebug) inspector('histValueFromFile.csv:', csv);
     }
     const fileName = getFileName('data-', 'csv', true);
     writeFileSync([path, fileName], csv);

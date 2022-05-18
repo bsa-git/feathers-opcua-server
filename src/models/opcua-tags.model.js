@@ -57,6 +57,12 @@ module.exports = function (app) {
           }
         }
       },
+      valueFromSourceParams: {
+        type: {
+          dataType: { type: String },
+          arrayType: { type: String }
+        }
+      },
       view: {
         type: {
           tab1: [{ name: String, items: [String] }],

@@ -36,7 +36,6 @@ const loToInteger = require('lodash/toInteger');
 const chalk = require('chalk');
 
 const debug = require('debug')('app:db-helper');
-const isLog = false;
 const isDebug = false;
 
 /**
@@ -104,7 +103,7 @@ const getMssqlConfigFromEnv = (config, prefix) => {
   _config.options.database = database;
   _config.authentication.options.userName = user;
   _config.authentication.options.password = pass;
-  if (isLog) inspector('getMssqlConfigFromEnv._config:', _config);
+  if (isDebug) inspector('getMssqlConfigFromEnv._config:', _config);
   return _config;
 };
 
@@ -256,7 +255,7 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
       values: opcuaValues
     };
 
-    if (isLog) inspector('db-helper.saveOpcuaGroupValue.data:', data);
+    if (isDebug) inspector('db-helper.saveOpcuaGroupValue.data:', data);
 
     if (isRemoteOpcuaToDB()) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
@@ -289,7 +288,7 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
         savedValue = await createItem(app, 'opcua-values', data);
       }
     }
-    if (isLog && savedValue) inspector('db-helper.saveOpcuaValue.savedValue:', savedValue);
+    if (isDebug && savedValue) inspector('db-helper.saveOpcuaValue.savedValue:', savedValue);
   }
   return savedValue;
 };
@@ -343,7 +342,7 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value) {
       values: opcuaValues
     };
 
-    if (isLog) inspector('db-helper.saveOpcuaGroupValue.data:', data);
+    if (isDebug) inspector('db-helper.saveOpcuaGroupValue.data:', data);
 
     if (isRemoteOpcuaToDB()) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
@@ -376,7 +375,7 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value) {
         savedValue = await createItem(app, 'opcua-values', data);
       }
     }
-    if (isLog && savedValue) inspector('db-helper.saveOpcuaValue.savedValue:', savedValue);
+    if (isDebug && savedValue) inspector('db-helper.saveOpcuaValue.savedValue:', savedValue);
   }
   return savedValue;
 };
@@ -389,13 +388,14 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value) {
  * @param {Boolean} isRemote 
  * @returns {Number}
  */
+/** 
 const removeOpcuaValues = async function (app, isRemote = false) {
   let count = 0, removedItems;
   //-------------------------
   if (isRemote) {
     // Get opcua tags 
     const opcuaTags = getOpcuaTags();
-    if (isLog) inspector('db-helper.removeOpcuaValues.opcuaTags:', opcuaTags);
+    if (isDebug) inspector('db-helper.removeOpcuaValues.opcuaTags:', opcuaTags);
     for (let index = 0; index < opcuaTags.length; index++) {
       const tag = opcuaTags[index];
       if (tag.type !== 'object') {
@@ -411,6 +411,41 @@ const removeOpcuaValues = async function (app, isRemote = false) {
       count = count + removedItems.length;
     }
   }
+  return count;
+};
+*/
+
+/**
+ * @async
+ * @method removeOpcuaValues
+ * @param {Object} app 
+ * @returns {Number}
+ */
+const removeOpcuaValues = async function (app) {
+  let count = 0, removedItems;
+  //-------------------------
+  // Get opcua tags 
+  let opcuaTags = getOpcuaTags();
+  // opcuaTags = opcuaTags.filter(tag => !tag.store && (tag.type !== 'object'));
+  opcuaTags = opcuaTags.filter(tag => !!tag.group);
+  const browseNames = opcuaTags.map(tag => tag.browseName);
+  if (isDebug && browseNames.length) inspector('db-helper.removeOpcuaValues.browseNames:', browseNames);
+  const countItems = await getCountItems(app, 'opcua-values');
+  console.log('removeOpcuaValues.countItems:', countItems);
+  removedItems = await removeItems(app, 'opcua-values', { tagName: { $in: browseNames } });
+  if (removedItems.length) {
+    if (true && removedItems) inspector('db-helper.removeOpcuaValues.removedItems:', removedItems.map(item => item.tagName));
+    count = count + removedItems.length;
+  }
+
+  // for (let index = 0; index < opcuaTags.length; index++) {
+  //   const tag = opcuaTags[index];
+  //   removedItems = await removeItems(app, 'opcua-values', { tagName: tag.browseName });
+  //   if (removedItems.length) {
+  //     if (isDebug && removedItems) inspector('db-helper.removeOpcuaValues.removedItems:', removedItems);
+  //     count = count + removedItems.length;
+  //   }
+  // }
   return count;
 };
 
@@ -431,7 +466,7 @@ const saveOpcuaTags = async function (app, isRemote = false) {
   //------------------------------------------------------------
   // Get opcua tags 
   const opcuaTags = getOpcuaTags();
-  if (isLog && opcuaTags.length) inspector('db-helper.saveOpcuaTags.opcuaTags:', opcuaTags);
+  if (isDebug && opcuaTags.length) inspector('db-helper.saveOpcuaTags.opcuaTags:', opcuaTags);
   // "type": "method"
   // const _opcuaTags = opcuaTags.filter(t => t.type === 'method');
   // inspector('db-helper.saveOpcuaTags._opcuaTags:', _opcuaTags);
@@ -446,8 +481,8 @@ const saveOpcuaTags = async function (app, isRemote = false) {
       tagFromDB = tagsFromDB[0];
       idField = getIdField(tagFromDB);
       tagId = tagFromDB[idField];
-      const omit = [idField, 'createdAt', 'updatedAt', '__v'];
-      let equalTags = isDeepEqual(tag, tagFromDB, omit, isRemote);
+      const omit = [idField, 'createdAt', 'updatedAt', '__v', 'inputArguments', 'outputArguments'];
+      let equalTags = isDeepEqual(tag, tagFromDB, omit);
       // Update db tag
       if (!equalTags) {
         tagFromDB = await patchItem(app, 'opcua-tags', tagId, tag);
@@ -469,7 +504,6 @@ const saveOpcuaTags = async function (app, isRemote = false) {
               addedBrowseNames.push(tagFromDB.browseName);
               added = added + 1;
             }
-
           }
         }
       }
@@ -514,13 +548,13 @@ const saveOpcuaTags = async function (app, isRemote = false) {
   total = await getCountItems(app, 'opcua-tags');
 
   if (added) {
-    if (isLog) inspector('db-helper.saveOpcuaTags.addedTags:', addedBrowseNames);
+    if (isDebug) inspector('db-helper.saveOpcuaTags.addedTags:', addedBrowseNames);
   }
   if (updated) {
-    if (isLog) inspector('db-helper.saveOpcuaTags.updatedTags:', updatedBrowseNames);
+    if (isDebug) inspector('db-helper.saveOpcuaTags.updatedTags:', updatedBrowseNames);
   }
   if (deleted) {
-    if (isLog) inspector('db-helper.saveOpcuaTags.deletedTags:', deletedBrowseNames);
+    if (isDebug) inspector('db-helper.saveOpcuaTags.deletedTags:', deletedBrowseNames);
   }
 
   return { added, updated, deleted, total };
@@ -718,7 +752,7 @@ const getCountItems = async function (app, path = '', query = {}) {
     }
     findResults = await service.find(newQuery);
     findResults = findResults.total;
-    if (isDebug) inspector(`getCountItems(path='${path}', query=${JSON.stringify(newQuery)}).findResults:`, findResults);
+    if (isDebug) inspector(`db-helper.getCountItems(path='${path}', query=${JSON.stringify(newQuery)}).findResults:`, findResults);
     return findResults;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
@@ -738,7 +772,7 @@ const getItem = async function (app, path = '', id = null) {
   const service = app.service(path);
   if (service) {
     const getResult = await service.get(id);
-    if (isLog) inspector(`getItem(path='${path}', id='${id}').getResult:`, getResult);
+    if (isDebug) inspector(`db-helper.getItem(path='${path}', id='${id}').getResult:`, getResult);
     return getResult;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
@@ -765,7 +799,7 @@ const findItem = async function (app, path = '', query = {}) {
       newParams = loMerge({}, { query }, { query: { $limit: 1 } });
     }
     findResults = await service.find(newParams);
-    if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
+    if (isDebug) inspector(`db-helper.findItem(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
     // inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
     return findResults.data.length ? findResults.data[0] : null;
   } else {
@@ -793,7 +827,7 @@ const findItems = async function (app, path = '', query = {}) {
       newParams = loMerge({}, { query });
     }
     findResults = await service.find(newParams);
-    if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
+    if (isDebug) inspector(`db-helper.findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
     if (findResults.data.length) {
       const total = findResults.total;
       const limit = findResults.limit;
@@ -832,7 +866,7 @@ const findAllItems = async function (app, path = '', query = {}) {
       newParams = loMerge({}, { query }, { paginate: false });
     }
     findResults = await service.find(newParams);
-    if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(newParams)}).findResults:`, findResults);
+    if (isDebug) inspector(`db-helper.findItems(path='${path}', query=${JSON.stringify(newParams)}).findResults:`, findResults);
     if (!Array.isArray(findResults) && findResults.data.length) {
       const total = findResults.total;
       const limit = findResults.limit;
@@ -872,7 +906,7 @@ const handleFoundItems = async function (app, path = '', query = {}, cb = null) 
       newParams = loMerge({}, { query });
     }
     findResults = await service.find(newParams);
-    if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
+    if (isDebug) inspector(`db-helper.findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
     if (findResults.data.length) {
       const total = findResults.total;
       const limit = findResults.limit;
@@ -915,7 +949,7 @@ const removeItem = async function (app, path = '', id = null) {
   const service = app.service(path);
   if (service) {
     const removeResult = await service.remove(id);
-    if (isLog) inspector(`removeItem(path='${path}', id=${id}).removeResult:`, removeResult);
+    if (isDebug) inspector(`db-helper.removeItem(path='${path}', id=${id}).removeResult:`, removeResult);
     return removeResult;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
@@ -940,7 +974,7 @@ const removeItems = async function (app, path = '', query = {}) {
     } else {
       deleteResults = await service.remove(null, { query });
     }
-    if (isLog) inspector(`removeItems(path='${path}', query=${JSON.stringify(query)}).removeResults:`, deleteResults);
+    if (isDebug && deleteResults.length) inspector(`db-helper.removeItems(path='${path}', query=${JSON.stringify(query)}).removeResults:`, deleteResults);
     return deleteResults;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
@@ -961,7 +995,7 @@ const patchItem = async function (app, path = '', id = '', data = {}) {
   const service = app.service(path);
   if (service) {
     const patchResults = await service.patch(id, data);
-    if (isLog) inspector(`patchItems(path='${path}', data=${JSON.stringify(data)}, patchResults:`, patchResults);
+    if (isDebug) inspector(`db-helper.patchItems(path='${path}', data=${JSON.stringify(data)}, patchResults:`, patchResults);
     return patchResults;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
@@ -988,7 +1022,7 @@ const patchItems = async function (app, path = '', data = {}, query = {}) {
     } else {
       patchResults = await service.patch(null, data, { query });
     }
-    if (isLog) inspector(`patchItems(path='${path}', data=${JSON.stringify(data)}, query=${JSON.stringify(query)}).patchResults:`, patchResults);
+    if (isDebug) inspector(`patchItems(path='${path}', data=${JSON.stringify(data)}, query=${JSON.stringify(query)}).patchResults:`, patchResults);
     return patchResults;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
@@ -1008,7 +1042,7 @@ const createItem = async function (app, path = '', data = {}) {
   const service = app.service(path);
   if (service) {
     const createResult = await service.create(data);
-    if (isLog) inspector(`createItem(path='${path}', createResults:`, createResult);
+    if (isDebug) inspector(`createItem(path='${path}', createResults:`, createResult);
     return createResult;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
@@ -1033,7 +1067,7 @@ const createItems = async function (app, path = '', data = []) {
       const createdItem = await service.create(item);
       createResults.push(createdItem);
     }
-    if (isLog) inspector(`createItems(path='${path}', createResults.length:`, createResults.length);
+    if (isDebug) inspector(`createItems(path='${path}', createResults.length:`, createResults.length);
     return createResults;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);

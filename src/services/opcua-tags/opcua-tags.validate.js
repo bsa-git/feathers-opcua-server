@@ -99,6 +99,13 @@ let base = merge({},
           }
         }
       },
+      valueFromSourceParams: {
+        type: 'object',
+        properties: {
+          dataType: { type: 'string' },
+          arrayType: { type: 'string' }
+        }
+      },
       view: {
         type: 'object',
         properties: {

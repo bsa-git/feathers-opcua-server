@@ -28,7 +28,6 @@ const fakes = fakeNormalize();
 const debug = require('debug')('app:opcua-tags.test');
 
 const isDebug = false;
-const isLog = false;
 
 describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
@@ -44,7 +43,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
     // Get opcua tags 
     const opcuaTags = fakes['opcuaTags'];
-    if (isLog) inspector('fakes.opcuaTags.length', opcuaTags.length);
+    if (isDebug && opcuaTags.length) inspector('fakes.opcuaTags.length', opcuaTags.length);
 
     if (!opcuaTags.length) return;
 
@@ -52,8 +51,8 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     const countItems = await getCountItems(app, 'opcua-tags');
     if (countItems) {
       const removedItems = await removeItems(app, 'opcua-tags');
-      if (isLog) inspector('removeItems.removedItems.length', removedItems.length);
-      assert.ok(removedItems.length, 'Not remove data from services \'opcua-tags\'');
+      if (true && removedItems.length) inspector('removeItems.removedItems.length', removedItems.length);
+      assert.ok(removedItems.length === opcuaTags.length, 'Not remove data from services \'opcua-tags\'');
     }
 
     // Add tags
@@ -61,12 +60,12 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
     // Find one tag
     const findedItem = await findItem(app, 'opcua-tags');
-    if (isLog) inspector('findItem.findedItem', findedItem);
+    if (isDebug) inspector('findItem.findedItem', findedItem);
     assert.ok(opcuaTags.find(tag => tag.browseName === findedItem.browseName), 'Error for test: `Save tags and find tag`');
 
     // Find all tags
     const findedItems = await findItems(app, 'opcua-tags');
-    if (isLog) inspector('Find tags from \'opcua-tags\' service', findedItems);
+    if (isDebug) inspector('Find tags from \'opcua-tags\' service', findedItems);
     assert.ok(findedItems.length === opcuaTags.length, 'Error for test: `Save tags and find tags`');
   });
 
@@ -74,7 +73,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     const errPath = await saveFakesToServices(app, 'opcuaTags');
     const service = app.service('opcua-tags');
     const data = await service.find({});
-    if (isLog) inspector('Save fake data to \'opcua-tags\' service.data[0]', data.data[0]);
+    if (isDebug) inspector('Save fake data to \'opcua-tags\' service.data[0]', data.data[0]);
     assert.ok(errPath === '' && data.data.length, `Not save fakes to services - '${errPath}'`);
   });
 
@@ -82,7 +81,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     const errPath = await saveFakesToServices(app, 'opcuaValues');
     const service = app.service('opcua-values');
     const data = await service.find({});
-    if (isLog) inspector('Save fake data to \'opcua-values\' service.data[0]', data.data[0]);
+    if (isDebug) inspector('Save fake data to \'opcua-values\' service.data[0]', data.data[0]);
     assert.ok(errPath === '' && data.data.length, `Not save fakes to services - '${errPath}'`);
   });
 
@@ -102,7 +101,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
     // Handle fake data from `opcua-values`
     const processedData = await handleFoundItems(app, 'opcua-values', { tagName: 'CH_M51::ValueFromFile' }, cb);
-    if (isLog) inspector('Handle values from \'opcua-values\' service', processedData);
+    if (isDebug) inspector('Handle values from \'opcua-values\' service', processedData);
     // inspector('Handle values from \'opcua-values\' service', processedData);
     assert.ok(processedData.length, 'Error for test: `Handle found values`');
   });
