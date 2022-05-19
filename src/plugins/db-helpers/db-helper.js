@@ -261,34 +261,33 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
       const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
       if (appRestClient) {
-        if (isUpdateOpcuaToDB()) {
-          findedItem = await findItem(appRestClient, 'opcua-values', { tagName: tag.browseName, $sort: { updatedAt: -1 }, });
-          if (!findedItem) {
-            savedValue = await createItem(appRestClient, 'opcua-values', data);
-          } else {
-            idField = getIdField(findedItem);
-            itemId = findedItem[idField];
-            savedValue = await patchItem(appRestClient, 'opcua-values', itemId, data);
-          }
-        } else {
-          savedValue = await createItem(appRestClient, 'opcua-values', data);
-        }
+        savedValue = saveOpcuaValues(appRestClient, tag.browseName, data);
       }
     } else {
-      if (isUpdateOpcuaToDB()) {
-        findedItem = await findItem(app, 'opcua-values', { tagName: tag.browseName, $sort: { updatedAt: -1 }, });
-        if (!findedItem) {
-          savedValue = await createItem(app, 'opcua-values', data);
-        } else {
-          idField = getIdField(findedItem);
-          itemId = findedItem[idField];
-          savedValue = await patchItem(app, 'opcua-values', itemId, data);
-        }
-      } else {
-        savedValue = await createItem(app, 'opcua-values', data);
-      }
+      savedValue = saveOpcuaValues(app, tag.browseName, data);
     }
     if (isDebug && savedValue) inspector('db-helper.saveOpcuaValue.savedValue:', savedValue);
+  }
+  return savedValue;
+};
+
+/**
+ * @method saveOpcuaValues
+ * @param {Object} app 
+ * @param {String} browseName 
+ * @param {Object} data 
+ * @returns {Object}
+ */
+const saveOpcuaValues = async function (app, browseName, data) {
+  let savedValue;
+  //--------------------------------------
+  const findedItem = await findItem(app, 'opcua-values', { tagName: browseName });
+  if (!findedItem) {
+    savedValue = await createItem(app, 'opcua-values', data);
+  } else {
+    const idField = getIdField(findedItem);
+    const itemId = findedItem[idField];
+    savedValue = await patchItem(app, 'opcua-values', itemId, data);
   }
   return savedValue;
 };
@@ -381,71 +380,25 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value) {
 };
 
 /**
- * @method removeOpcuaValues
  * @async
- * 
- * @param {Object} app 
- * @param {Boolean} isRemote 
- * @returns {Number}
- */
-/** 
-const removeOpcuaValues = async function (app, isRemote = false) {
-  let count = 0, removedItems;
-  //-------------------------
-  if (isRemote) {
-    // Get opcua tags 
-    const opcuaTags = getOpcuaTags();
-    if (isDebug) inspector('db-helper.removeOpcuaValues.opcuaTags:', opcuaTags);
-    for (let index = 0; index < opcuaTags.length; index++) {
-      const tag = opcuaTags[index];
-      if (tag.type !== 'object') {
-        removedItems = await removeItems(app, 'opcua-values', { tagName: tag.browseName });
-        if (removedItems.length) {
-          count = count + removedItems.length;
-        }
-      }
-    }
-  } else {
-    removedItems = await removeItems(app, 'opcua-values');
-    if (removedItems.length) {
-      count = count + removedItems.length;
-    }
-  }
-  return count;
-};
-*/
-
-/**
- * @async
- * @method removeOpcuaValues
+ * @method removeOpcuaGroupValues
  * @param {Object} app 
  * @returns {Number}
  */
-const removeOpcuaValues = async function (app) {
+const removeOpcuaGroupValues = async function (app) {
   let count = 0, removedItems;
   //-------------------------
   // Get opcua tags 
   let opcuaTags = getOpcuaTags();
-  // opcuaTags = opcuaTags.filter(tag => !tag.store && (tag.type !== 'object'));
   opcuaTags = opcuaTags.filter(tag => !!tag.group);
   const browseNames = opcuaTags.map(tag => tag.browseName);
   if (isDebug && browseNames.length) inspector('db-helper.removeOpcuaValues.browseNames:', browseNames);
-  const countItems = await getCountItems(app, 'opcua-values');
-  console.log('removeOpcuaValues.countItems:', countItems);
   removedItems = await removeItems(app, 'opcua-values', { tagName: { $in: browseNames } });
   if (removedItems.length) {
-    if (true && removedItems) inspector('db-helper.removeOpcuaValues.removedItems:', removedItems.map(item => item.tagName));
+    if (isDebug && removedItems) inspector('db-helper.removeOpcuaValues.removedItems:', removedItems.map(item => item.tagName));
     count = count + removedItems.length;
   }
 
-  // for (let index = 0; index < opcuaTags.length; index++) {
-  //   const tag = opcuaTags[index];
-  //   removedItems = await removeItems(app, 'opcua-values', { tagName: tag.browseName });
-  //   if (removedItems.length) {
-  //     if (isDebug && removedItems) inspector('db-helper.removeOpcuaValues.removedItems:', removedItems);
-  //     count = count + removedItems.length;
-  //   }
-  // }
   return count;
 };
 
@@ -467,9 +420,6 @@ const saveOpcuaTags = async function (app, isRemote = false) {
   // Get opcua tags 
   const opcuaTags = getOpcuaTags();
   if (isDebug && opcuaTags.length) inspector('db-helper.saveOpcuaTags.opcuaTags:', opcuaTags);
-  // "type": "method"
-  // const _opcuaTags = opcuaTags.filter(t => t.type === 'method');
-  // inspector('db-helper.saveOpcuaTags._opcuaTags:', _opcuaTags);
   for (let index = 0; index < opcuaTags.length; index++) {
     const tag = opcuaTags[index];
     tagBrowseNames.push(tag.browseName);
@@ -481,7 +431,7 @@ const saveOpcuaTags = async function (app, isRemote = false) {
       tagFromDB = tagsFromDB[0];
       idField = getIdField(tagFromDB);
       tagId = tagFromDB[idField];
-      const omit = [idField, 'createdAt', 'updatedAt', '__v', 'inputArguments', 'outputArguments'];
+      const omit = [idField, 'createdAt', 'updatedAt', '__v'];
       let equalTags = isDeepEqual(tag, tagFromDB, omit);
       // Update db tag
       if (!equalTags) {
@@ -799,8 +749,7 @@ const findItem = async function (app, path = '', query = {}) {
       newParams = loMerge({}, { query }, { query: { $limit: 1 } });
     }
     findResults = await service.find(newParams);
-    if (isDebug) inspector(`db-helper.findItem(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
-    // inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
+    if (isDebug && findResults) inspector(`db-helper.findItem(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
     return findResults.data.length ? findResults.data[0] : null;
   } else {
     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
@@ -1088,9 +1037,10 @@ module.exports = {
   getOpcuaSaveModeToDB,
   getOpcuaRemoteDbUrl,
   getIdField,
+  saveOpcuaValues,
   saveOpcuaGroupValue,
   saveStoreOpcuaGroupValue,
-  removeOpcuaValues,
+  removeOpcuaGroupValues,
   saveOpcuaTags,
   integrityCheckOpcua,
   //-------------------

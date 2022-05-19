@@ -19,7 +19,7 @@ const {
 
 const {
   saveOpcuaTags,
-  removeOpcuaValues,
+  removeOpcuaGroupValues,
   integrityCheckOpcua,
   isSaveOpcuaToDB,
   isRemoteOpcuaToDB,
@@ -72,9 +72,9 @@ module.exports = async function opcuaBootstrap(app) {
       logger.error('Result integrity check opcua.localDB: ERR');
     }
     if (isUpdateOpcuaToDB()) {
-      removeResult = await removeOpcuaValues(app);
+      removeResult = await removeOpcuaGroupValues(app);
       if(removeResult)
-        logger.info(`opcuaBootstrap.removeOpcuaValues.localDB: ${removeResult}`);
+        logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: ${removeResult}`);
     }
 
     const isRemote = isRemoteOpcuaToDB();
@@ -93,8 +93,8 @@ module.exports = async function opcuaBootstrap(app) {
           logger.error('Result integrity check opcua.remoteDB: ERR');
         }
         if (isUpdateOpcuaToDB()) {
-          removeResult = await removeOpcuaValues(appRestClient);
-          if(removeResult) logger.info(`opcuaBootstrap.removeOpcuaValues.localDB: ${removeResult}`);
+          removeResult = await removeOpcuaGroupValues(appRestClient);
+          if(removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: ${removeResult}`);
         }
       }
     }

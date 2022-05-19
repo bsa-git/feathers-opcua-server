@@ -3,6 +3,7 @@ const { join } = require('path');
 const moment = require('moment');
 const Color = require('color');
 const chalk = require('chalk');
+const logger = require('../../logger');
 const appRoot = join(__dirname, '../../../');
 const { isString, isArray, isObject } = require('./type-of');
 
@@ -372,54 +373,54 @@ const getRegex = function (type) {
   switch (type) {
   case 'phone':
     /*
-                                (123) 456-7890
-                                +(123) 456-7890
-                                +(123)-456-7890
-                                +(123) - 456-7890
-                                +(123) - 456-78-90
-                                123-456-7890
-                                123.456.7890
-                                1234567890
-                                +31636363634
-                                +380980029669
-                                075-63546725
-                                */
+                                      (123) 456-7890
+                                      +(123) 456-7890
+                                      +(123)-456-7890
+                                      +(123) - 456-7890
+                                      +(123) - 456-78-90
+                                      123-456-7890
+                                      123.456.7890
+                                      1234567890
+                                      +31636363634
+                                      +380980029669
+                                      075-63546725
+                                      */
     return '^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\\./0-9]*$';
   case 'zip_code':
     /*
-                                12345
-                                12345-6789
-                                */
+                                      12345
+                                      12345-6789
+                                      */
     return '^[0-9]{5}(?:-[0-9]{4})?$';
   case 'lat':
     /*
-                                +90.0
-                                45
-                                -90
-                                -90.000
-                                +90
-                                47.123123
-                                */
+                                      +90.0
+                                      45
+                                      -90
+                                      -90.000
+                                      +90
+                                      47.123123
+                                      */
     return '^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'long':
     /*
-                                -127.554334
-                                180
-                                -180
-                                -180.0000
-                                +180
-                                179.999999
-                                */
+                                      -127.554334
+                                      180
+                                      -180
+                                      -180.0000
+                                      +180
+                                      179.999999
+                                      */
     return '^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'lat_and_long':
     /*
-                                +90.0, -127.554334
-                                45, 180
-                                -90, -180
-                                -90.000, -180.0000
-                                +90, +180
-                                47.1231231, 179.99999999
-                                */
+                                      +90.0, -127.554334
+                                      45, 180
+                                      -90, -180
+                                      -90.000, -180.0000
+                                      +90, +180
+                                      47.1231231, 179.99999999
+                                      */
     return '^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$';
   default:
     return '//g';
@@ -542,19 +543,58 @@ const isDeepStrictEqual = function (object1, object2, omit = []) {
   const keys2 = Object.keys(_object2);
 
   if (keys1.length !== keys2.length) {
+    if (true && (keys1.length !== keys2.length)) {
+      logger.error('util.isDeepStrictEqual: keys(%d) for object1 is not equivalent to keys(%d) for object2', keys1.length, keys2.length);
+      inspector('util.isDeepStrictEqual.object1', object1);
+      inspector('util.isDeepStrictEqual.object2', object2);
+    }
     return false;
   }
 
   for (const key of keys1) {
     const val1 = _object1[key];
     const val2 = _object2[key];
-    const areObjects = isObject(val1) && isObject(val2);
-    if (
-      areObjects && !isDeepStrictEqual(val1, val2, omit) ||
-      !areObjects && !loIsEqual(val1, val2)
-    ) {
-      result = false;
-      break;
+    const areArrays = Array.isArray(val1) && Array.isArray(val2);
+    if (areArrays) {
+      if (val1.length !== val2.length) {
+        if (isDebug && (val1.length !== val2.length)) {
+          logger.error('util.isDeepEqual: val1.length(%d) for object1 is not equivalent to val2.length(%d) for object2', val1.length, val2.length);
+          inspector('util.isDeepEqual.object1', object1);
+          inspector('util.isDeepEqual.object2', object2);
+        }
+        return false;
+      }
+      for (let index = 0; index < val1.length; index++) {
+        const item1 = val1[index];
+        const item2 = val2[index];
+        const areObjects = isObject(item1) && isObject(item2);
+        if (
+          areObjects && !isDeepEqual(item1, item2, omit) ||
+          !areObjects && !loIsEqual(item1, item2)
+        ) {
+          if (true && (item1 || item2)) {
+            logger.error(`util.isDeepEqual: val1(${item1}) of object1 is not equivalent to val2(${item2}) of object2.`);
+            inspector('util.isDeepEqual.object1', object1);
+            inspector('util.isDeepEqual.object2', object2);
+          }
+          result = false;
+          break;
+        }
+      }
+    } else {
+      const areObjects = isObject(val1) && isObject(val2);
+      if (
+        areObjects && !isDeepEqual(val1, val2, omit) ||
+        !areObjects && !loIsEqual(val1, val2)
+      ) {
+        if (true && (val1 || val2)) {
+          logger.error(`util.isDeepEqual: val1(${val1}) of object1 is not equivalent to val2(${val2}) of object2.`);
+          inspector('util.isDeepEqual.object1', object1);
+          inspector('util.isDeepEqual.object2', object2);
+        }
+        result = false;
+        break;
+      }
     }
   }
   return result;
@@ -578,13 +618,47 @@ const isDeepEqual = function (object1, object2, omit = []) {
   for (const key of keys1) {
     const val1 = _object1[key];
     const val2 = _object2[key];
-    const areObjects = isObject(val1) && isObject(val2);
-    if (
-      areObjects && !isDeepEqual(val1, val2, omit) ||
-      !areObjects && !loIsEqual(val1, val2)
-    ) {
-      result = false;
-      break;
+    const areArrays = Array.isArray(val1) && Array.isArray(val2);
+    if (areArrays) {
+      if (val1.length !== val2.length) {
+        if (isDebug && (val1.length !== val2.length)) {
+          logger.error('util.isDeepEqual: val1.length(%d) for object1 is not equivalent to val2.length(%d) for object2', val1.length, val2.length);
+          inspector('util.isDeepEqual.object1', object1);
+          inspector('util.isDeepEqual.object2', object2);
+        }
+        return false;
+      }
+      for (let index = 0; index < val1.length; index++) {
+        const item1 = val1[index];
+        const item2 = val2[index];
+        const areObjects = isObject(item1) && isObject(item2);
+        if (
+          areObjects && !isDeepEqual(item1, item2, omit) ||
+          !areObjects && !loIsEqual(item1, item2)
+        ) {
+          if (true && (item1 || item2)) {
+            logger.error(`util.isDeepEqual: val1(${item1}) of object1 is not equivalent to val2(${item2}) of object2.`);
+            inspector('util.isDeepEqual.object1', object1);
+            inspector('util.isDeepEqual.object2', object2);
+          }
+          result = false;
+          break;
+        }
+      }
+    } else {
+      const areObjects = isObject(val1) && isObject(val2);
+      if (
+        areObjects && !isDeepEqual(val1, val2, omit) ||
+        !areObjects && !loIsEqual(val1, val2)
+      ) {
+        if (true && (val1 || val2)) {
+          logger.error(`util.isDeepEqual: val1(${val1}) of object1 is not equivalent to val2(${val2}) of object2.`);
+          inspector('util.isDeepEqual.object1', object1);
+          inspector('util.isDeepEqual.object2', object2);
+        }
+        result = false;
+        break;
+      }
     }
   }
   return result;
