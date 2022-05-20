@@ -179,14 +179,14 @@ const getEnvAdapterDB = function () {
   let envAdapterDB = 'feathers-nedb';
   const envTypeDB = getEnvTypeDB();
   switch (envTypeDB) {
-  case 'nedb':
-    envAdapterDB = 'feathers-nedb';
-    break;
-  case 'mongodb':
-    envAdapterDB = 'feathers-mongoose';
-    break;
-  default:
-    break;
+    case 'nedb':
+      envAdapterDB = 'feathers-nedb';
+      break;
+    case 'mongodb':
+      envAdapterDB = 'feathers-mongoose';
+      break;
+    default:
+      break;
   }
   return envAdapterDB;
 };
@@ -281,14 +281,19 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
 const saveOpcuaValues = async function (app, browseName, data) {
   let savedValue;
   //--------------------------------------
-  const findedItem = await findItem(app, 'opcua-values', { tagName: browseName });
-  if (!findedItem) {
-    savedValue = await createItem(app, 'opcua-values', data);
+  if (isUpdateOpcuaToDB()) {
+    const findedItem = await findItem(app, 'opcua-values', { tagName: browseName });
+    if (!findedItem) {
+      savedValue = await createItem(app, 'opcua-values', data);
+    } else {
+      const idField = getIdField(findedItem);
+      const itemId = findedItem[idField];
+      savedValue = await patchItem(app, 'opcua-values', itemId, data);
+    }
   } else {
-    const idField = getIdField(findedItem);
-    const itemId = findedItem[idField];
-    savedValue = await patchItem(app, 'opcua-values', itemId, data);
+    savedValue = await createItem(app, 'opcua-values', data);
   }
+
   return savedValue;
 };
 
@@ -302,12 +307,13 @@ const saveOpcuaValues = async function (app, browseName, data) {
  * @returns {Object}
  */
 const saveStoreOpcuaGroupValue = async function (app, browseName, value) {
-  let tags, opcuaValue = null, opcuaValues = [], groupItems = [];
+  let tag, opcuaValue = null, opcuaValues = [];
   let savedValue = null, findedItem, idField, itemId;
   //----------------------------------------------------------
 
   if (!isSaveOpcuaToDB()) return;
 
+  // Normalize opcuaValue
   if (loIsString(value)) {
     opcuaValue = JSON.parse(value);
   }
@@ -316,24 +322,22 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value) {
     opcuaValue = value;
   }
 
-  tags = await findItems(app, 'opcua-tags', { browseName });
-  if (opcuaValue && tags.length) {
-    const tag = tags[0];
+  // Find tag for browseName
+  tag = await findItem(app, 'opcua-tags', { browseName });
+  if (opcuaValue && tag && tag.store) {
     const store = tag.store;
-    // Exit else tag is disable
-    if (tag.isEnable === false) return savedValue;
-    // Get group items
-    groupItems = await findItems(app, 'opcua-tags', { ownerGroup: browseName });
+    // Get group tags
+    const groupTags = await findItems(app, 'opcua-tags', { ownerGroup: browseName });
     // Normalize opcuaValue
-    loForEach(opcuaValue, (value, key) => {
-      const findedGroupItem = groupItems.find(item => (item.browseName === key) || (item.aliasName === key));
-      if (findedGroupItem) {
-        const groupItemBrowseName = findedGroupItem.browseName;
-        key = opcuaValue['!value'] ? opcuaValue['!value'].dateTime : moment.utc().format('YYYY-MM-DDTHH:mm:ss');
-        if (value === null) {
-          value = getInt(value);
+    loForEach(opcuaValue, (tagValue, tagBrowseName) => {
+      const findedGroupTag = groupTags.find(tag => (tag.browseName === tagBrowseName));
+      if (findedGroupTag) {
+        // Set key to dateTime
+        const key = opcuaValue['!value'] ? opcuaValue['!value'].dateTime : moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+        if (tagValue === null) {
+          tagValue = getInt(tagValue);
         }
-        opcuaValues.push(Array.isArray(value) ? opcuaValue['!value'] ? { key, items: value, value: opcuaValue['!value'] } : { key, items: value } : { key, value });
+        opcuaValues.push(Array.isArray(tagValue) ? opcuaValue['!value'] ? { key, items: tagValue, value: opcuaValue['!value'] } : { key, items: tagValue } : { key, value: tagValue });
       }
     });
     const data = {

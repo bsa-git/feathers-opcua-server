@@ -29,7 +29,6 @@ const loIsInteger = require('lodash/isInteger');
 const chalk = require('chalk');
 
 const debug = require('debug')('app:opcua-server.class');
-const isLog = false;
 const isDebug = false;
 
 class OpcuaServer {
@@ -115,10 +114,10 @@ class OpcuaServer {
     this.opcuaServer = new OPCUAServer(this.params);
     // this.params.port of the listening socket of the server
     await this.opcuaServer.initialize();
-    if (isDebug) debug('certificateFile = ', this.opcuaServer.certificateFile);
-    if (isDebug) debug('privateKeyFile  = ', this.opcuaServer.privateKeyFile);
-    if (isDebug) debug('rejected folder = ', this.opcuaServer.serverCertificateManager.rejectedFolder);
-    if (isDebug) debug('trusted  folder = ', this.opcuaServer.serverCertificateManager.trustedFolder);
+    if (isDebug && this.opcuaServer) debug('certificateFile = ', this.opcuaServer.certificateFile);
+    if (isDebug && this.opcuaServer) debug('privateKeyFile  = ', this.opcuaServer.privateKeyFile);
+    if (isDebug && this.opcuaServer) debug('rejected folder = ', this.opcuaServer.serverCertificateManager.rejectedFolder);
+    if (isDebug && this.opcuaServer) debug('trusted  folder = ', this.opcuaServer.serverCertificateManager.trustedFolder);
 
     if (this.isOnSignInt) {
       process.on('SIGINT', async () => {
@@ -130,9 +129,7 @@ class OpcuaServer {
     this.currentState.isCreated = true;
     // OPC-UA server created.
     console.log(chalk.yellow('OPCUAServer created ...'), 'opcuaServer.id:', chalk.cyan(this.id));
-    if (isLog) inspector('opcuaServerCreate.params:', this.params);
-
-    // inspectorToLog('opcuaServerCreate.opcuaServer:', this.opcuaServer, 'inspector2.log');
+    if (isDebug && this.params) inspector('opcuaServerCreate.params:', this.params);
   }
 
   /**
@@ -165,10 +162,9 @@ class OpcuaServer {
 
     this.currentState.endpoints = endpoints;
     this.currentState.isStarted = true;
-    if (isLog) inspector('opcuaServerStart.currentState.endpoints:', this.currentState.endpoints);
-    // inspector('opcuaServerStart.currentState.endpoints:', this.currentState.endpoints);
-    if (isLog) inspector('opcuaServerStart.getServerInfo:', this.getServerInfo());
-    if (isLog) inspector('opcuaServerStart.getBuildInfo:', this.getBuildInfo());
+    if (isDebug && this.currentState) inspector('opcuaServerStart.currentState.endpoints:', this.currentState.endpoints);
+    if (isDebug && this) inspector('opcuaServerStart.getServerInfo:', this.getServerInfo());
+    if (isDebug && this) inspector('opcuaServerStart.getBuildInfo:', this.getBuildInfo());
     return endpoints;
   }
 
@@ -373,8 +369,8 @@ class OpcuaServer {
     if (params === null) {
       params = mergeOpcuaConfigOptions(id);
     }
-    if (isLog) inspector('constructAddressSpace.params:', params);
-    // inspector('constructAddressSpace.params:', params);
+    if (isDebug && params) inspector('constructAddressSpace.params:', params);
+
     if (Array.isArray(params.objects) && params.objects.length) {
       params.objects = params.objects.filter(item => item.isEnable || item.isEnable === undefined);
     } else {
@@ -395,7 +391,7 @@ class OpcuaServer {
     } else {
       params.methods = [];
     }
-    if (isLog) inspector('constructAddressSpace.filterParams:', params);
+    if (isDebug && params) inspector('constructAddressSpace.filterParams:', params);
     // Merge getters
     if (getters === null && opcuaConfig.paths.getters) {
       getters = require(`${appRoot}${opcuaConfig.paths.getters}`);
@@ -407,7 +403,7 @@ class OpcuaServer {
       methods = require(`${appRoot}${opcuaConfig.paths.methods}`);
     }
     methods = Object.assign({}, opcuaDefaultMethods, methods ? methods : {});
-    if (isLog) inspector('constructAddressSpace.methods:', methods);
+    if (isDebug && methods) inspector('constructAddressSpace.methods:', methods);
 
     // Get addressSpace and  namespace
     const addressSpace = this.opcuaServer.engine.addressSpace;
@@ -502,7 +498,7 @@ class OpcuaServer {
                   const variables = params.groups.filter(g => v.browseName === g.ownerGroup);
                   // Add group variables
                   addedVariableList = this.addGroupVariables(addressSpace, namespace, object, variables, this.currentState);
-                  if (isLog) inspector('constructAddressSpace.addedVariableList:', addedVariableList);
+                  if (isDebug && addedVariableList) inspector('constructAddressSpace.addedVariableList:', addedVariableList);
                 }
 
                 // If a variable has history
@@ -603,7 +599,7 @@ class OpcuaServer {
       Object.assign(this.currentState.paths, opcuaConfig.paths);
       // inspector('currentState:', this.currentState);
       console.log(chalk.yellow('Server constructed address space'));
-      if (isLog) inspector('constructAddressSpace.addedItemList:', this.addedItemList.map(item => loOmit(item, ['item'])));
+      if (isDebug && this.addedItemList.length) inspector('constructAddressSpace.addedItemList:', this.addedItemList.map(item => loOmit(item, ['item'])));
     }
   }
 
