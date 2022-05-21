@@ -73,8 +73,7 @@ module.exports = async function opcuaBootstrap(app) {
     }
     if (isUpdateOpcuaToDB()) {
       removeResult = await removeOpcuaGroupValues(app);
-      if(removeResult)
-        logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: ${removeResult}`);
+      if(removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: ${removeResult}`);
     }
 
     const isRemote = isRemoteOpcuaToDB();

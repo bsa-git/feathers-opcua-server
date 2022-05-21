@@ -26,6 +26,8 @@ module.exports = function (app) {
     const schema = new Schema({
       tagId: { type: mongoose.ObjectId, required: true },
       tagName: { type: String, required: true },
+      storeBegin: String,
+      storeEnd: String,
       values: [{
         tagId: mongoose.ObjectId,
         key: String,
