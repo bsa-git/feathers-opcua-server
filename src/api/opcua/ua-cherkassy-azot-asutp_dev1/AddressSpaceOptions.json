@@ -131,7 +131,6 @@
       "dataType": "String",
       "hist": 1,
       "store": {
-        "active": true,
         "numberOfValuesInDoc": [1, "years"],
         "numberOfDocsForTag": [5, "years"]
       },

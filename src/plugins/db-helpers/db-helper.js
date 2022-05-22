@@ -13,7 +13,8 @@ const {
   isDeepEqual,
   isDeepStrictEqual,
   getInt,
-  urlExists
+  getStartOfPeriod,
+  getEndOfPeriod,
 } = require('../lib');
 const {
   localStorage,
@@ -261,39 +262,21 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
       const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
       if (appRestClient) {
-        savedValue = saveOpcuaValues(appRestClient, tag.browseName, data);
+        if (isUpdateOpcuaToDB()) {
+          savedValue = saveOpcuaValues(appRestClient, tag.browseName, data);
+        } else {
+          savedValue = await createItem(appRestClient, 'opcua-values', data);
+        }
       }
     } else {
-      savedValue = saveOpcuaValues(app, tag.browseName, data);
+      if (isUpdateOpcuaToDB()) {
+        savedValue = saveOpcuaValues(app, tag.browseName, data);
+      } else {
+        savedValue = await createItem(app, 'opcua-values', data);
+      }
     }
     if (isDebug && savedValue) inspector('db-helper.saveOpcuaValue.savedValue:', savedValue);
   }
-  return savedValue;
-};
-
-/**
- * @method saveOpcuaValues
- * @param {Object} app 
- * @param {String} browseName 
- * @param {Object} data 
- * @returns {Object}
- */
-const saveOpcuaValues = async function (app, browseName, data) {
-  let savedValue;
-  //--------------------------------------
-  if (isUpdateOpcuaToDB()) {
-    const findedItem = await findItem(app, 'opcua-values', { tagName: browseName });
-    if (!findedItem) {
-      savedValue = await createItem(app, 'opcua-values', data);
-    } else {
-      const idField = getIdField(findedItem);
-      const itemId = findedItem[idField];
-      savedValue = await patchItem(app, 'opcua-values', itemId, data);
-    }
-  } else {
-    savedValue = await createItem(app, 'opcua-values', data);
-  }
-
   return savedValue;
 };
 
@@ -307,8 +290,8 @@ const saveOpcuaValues = async function (app, browseName, data) {
  * @returns {Object}
  */
 const saveStoreOpcuaGroupValue = async function (app, browseName, value) {
-  let tag, opcuaValue = null, opcuaValues = [];
-  let savedValue = null, findedItem, idField, itemId;
+  let tag, opcuaValue = null, values = [], savedValues = [];
+  let savedValue = null;
   //----------------------------------------------------------
 
   if (!isSaveOpcuaToDB()) return;
@@ -332,53 +315,103 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value) {
     loForEach(opcuaValue, (tagValue, tagBrowseName) => {
       const findedGroupTag = groupTags.find(tag => (tag.browseName === tagBrowseName));
       if (findedGroupTag) {
+        values = [];
         // Set key to dateTime
         const key = opcuaValue['!value'] ? opcuaValue['!value'].dateTime : moment.utc().format('YYYY-MM-DDTHH:mm:ss');
         if (tagValue === null) {
           tagValue = getInt(tagValue);
         }
-        opcuaValues.push(Array.isArray(tagValue) ? opcuaValue['!value'] ? { key, items: tagValue, value: opcuaValue['!value'] } : { key, items: tagValue } : { key, value: tagValue });
-      }
-    });
-    const data = {
-      tagName: tag.browseName,
-      values: opcuaValues
-    };
+        // Get values
+        values.push(Array.isArray(tagValue) ? opcuaValue['!value'] ? { key, items: tagValue, value: opcuaValue['!value'] } : { key, items: tagValue } : { key, value: tagValue });
+        
+        // Set storeEnd
+        const storeEnd = key;
+        // Get data
+        data = {
+          tagName: tagBrowseName,
+          storeBegin: storeEnd,
+          storeEnd,
+          values
+        };
 
-    if (isDebug) inspector('db-helper.saveOpcuaGroupValue.data:', data);
-
-    if (isRemoteOpcuaToDB()) {
-      const remoteDbUrl = getOpcuaRemoteDbUrl();
-      const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
-      if (appRestClient) {
-        if (isUpdateOpcuaToDB()) {
-          findedItem = await findItem(appRestClient, 'opcua-values', { tagName: tag.browseName, $sort: { updatedAt: -1 }, });
-          if (!findedItem) {
-            savedValue = await createItem(appRestClient, 'opcua-values', data);
-          } else {
-            idField = getIdField(findedItem);
-            itemId = findedItem[idField];
-            savedValue = await patchItem(appRestClient, 'opcua-values', itemId, data);
+        // Save store opcua values
+        if (isRemoteOpcuaToDB()) {
+          const remoteDbUrl = getOpcuaRemoteDbUrl();
+          const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
+          if (appRestClient) {
+            savedValue = saveStoreOpcuaValues(appRestClient, tagBrowseName, data, store);
           }
         } else {
-          savedValue = await createItem(appRestClient, 'opcua-values', data);
+          savedValue = saveStoreOpcuaValues(app, tagBrowseName, data, store);
         }
+        if (isDebug && savedValue) inspector('db-helper.saveStoreOpcuaGroupValue.savedValue:', savedValue);
+        savedValues.push(savedValue);
       }
-    } else {
-      if (isUpdateOpcuaToDB()) {
-        findedItem = await findItem(app, 'opcua-values', { tagName: tag.browseName, $sort: { updatedAt: -1 }, });
-        if (!findedItem) {
-          savedValue = await createItem(app, 'opcua-values', data);
-        } else {
-          idField = getIdField(findedItem);
-          itemId = findedItem[idField];
-          savedValue = await patchItem(app, 'opcua-values', itemId, data);
-        }
-      } else {
-        savedValue = await createItem(app, 'opcua-values', data);
+    });
+  }
+  return savedValues;
+};
+
+/**
+ * @method saveOpcuaValues
+ * @param {Object} app 
+ * @param {String} browseName 
+ * @param {Object} data 
+ * @returns {Object}
+ */
+const saveOpcuaValues = async function (app, browseName, data) {
+  let savedValue;
+  //--------------------------------------
+  const findedItem = await findItem(app, 'opcua-values', { tagName: browseName });
+  if (!findedItem) {
+    savedValue = await createItem(app, 'opcua-values', data);
+  } else {
+    const idField = getIdField(findedItem);
+    const itemId = findedItem[idField];
+    savedValue = await patchItem(app, 'opcua-values', itemId, data);
+  }
+  return savedValue;
+};
+
+/**
+ * @method saveStoreOpcuaValues
+ * @param {Object} app 
+ * @param {String} browseName 
+ * @param {Object} data
+ * @param {Object} store 
+ * e.g. store: {
+        numberOfValuesInDoc: [1, 'years'],
+        numberOfDocsForTag: [5, 'years']
       }
-    }
-    if (isDebug && savedValue) inspector('db-helper.saveOpcuaValue.savedValue:', savedValue);
+ * @returns {Object}
+ */
+const saveStoreOpcuaValues = async function (app, browseName, data, store) {
+  let savedValue;
+  //--------------------------------------
+  const numberOfValuesInDoc = store.numberOfValuesInDoc;
+  const numberOfDocsForTag = store.numberOfDocsForTag;
+  
+  const findedItems = await findItems(app, 'opcua-values', { tagName: browseName, $sort: { createdAt: -1 } });
+  if (!findedItems.length) {
+    savedValue = await createItem(app, 'opcua-values', data);
+  } else {
+    const idField = getIdField(findedItems);
+    const itemId = findedItems[0][idField];
+    let storeBegin =  findedItems[0]['storeBegin'];
+    const startOfPeriod =  getStartOfPeriod(storeBegin, numberOfValuesInDoc[1]).format();
+    const endOfPeriod =  getEndOfPeriod(startOfPeriod, numberOfValuesInDoc).format();
+    if(isDebug && startOfPeriod) console.log('saveStoreOpcuaValues.startAndEndPeriod:', startOfPeriod, endOfPeriod);
+    let storeEnd = findedItems[0]['storeEnd'];
+
+    
+    /**
+     getStartOfPeriod,
+  getEndOfPeriod,
+     */
+
+    storeEnd = moment.utc(storeEnd);
+    
+    savedValue = await patchItem(app, 'opcua-values', itemId, data);
   }
   return savedValue;
 };
@@ -1042,6 +1075,7 @@ module.exports = {
   getOpcuaRemoteDbUrl,
   getIdField,
   saveOpcuaValues,
+  saveStoreOpcuaValues,
   saveOpcuaGroupValue,
   saveStoreOpcuaGroupValue,
   removeOpcuaGroupValues,
