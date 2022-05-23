@@ -15,6 +15,7 @@ const {
   getInt,
   getStartOfPeriod,
   getEndOfPeriod,
+  sortByStringField
 } = require('../lib');
 const {
   localStorage,
@@ -323,13 +324,13 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value) {
         }
         // Get values
         values.push(Array.isArray(tagValue) ? opcuaValue['!value'] ? { key, items: tagValue, value: opcuaValue['!value'] } : { key, items: tagValue } : { key, value: tagValue });
-        
+
         // Set storeEnd
         const storeEnd = key;
         // Get data
         data = {
           tagName: tagBrowseName,
-          storeBegin: storeEnd,
+          storeStart: storeEnd,
           storeEnd,
           values
         };
@@ -386,32 +387,38 @@ const saveOpcuaValues = async function (app, browseName, data) {
  * @returns {Object}
  */
 const saveStoreOpcuaValues = async function (app, browseName, data, store) {
-  let savedValue;
+  let savedValue, values;
   //--------------------------------------
   const numberOfValuesInDoc = store.numberOfValuesInDoc;
   const numberOfDocsForTag = store.numberOfDocsForTag;
-  
+
   const findedItems = await findItems(app, 'opcua-values', { tagName: browseName, $sort: { createdAt: -1 } });
   if (!findedItems.length) {
     savedValue = await createItem(app, 'opcua-values', data);
   } else {
-    const idField = getIdField(findedItems);
-    const itemId = findedItems[0][idField];
-    let storeBegin =  findedItems[0]['storeBegin'];
-    const startOfPeriod =  getStartOfPeriod(storeBegin, numberOfValuesInDoc[1]).format();
-    const endOfPeriod =  getEndOfPeriod(startOfPeriod, numberOfValuesInDoc).format();
-    if(isDebug && startOfPeriod) console.log('saveStoreOpcuaValues.startAndEndPeriod:', startOfPeriod, endOfPeriod);
-    let storeEnd = findedItems[0]['storeEnd'];
-
-    
-    /**
-     getStartOfPeriod,
-  getEndOfPeriod,
-     */
-
-    storeEnd = moment.utc(storeEnd);
-    
-    savedValue = await patchItem(app, 'opcua-values', itemId, data);
+    // Get range of stored values
+    const storeStart = data.storeStart;
+    const startOfPeriod = getStartOfPeriod(storeStart, numberOfValuesInDoc[1]).format('YYYY-MM-DDTHH:mm:ss');
+    const endOfPeriod = getEndOfPeriod(startOfPeriod, numberOfValuesInDoc).format('YYYY-MM-DDTHH:mm:ss');
+    if (isDebug && startOfPeriod) console.log('saveStoreOpcuaValues.startAndEndPeriod:', startOfPeriod, endOfPeriod);
+    // Find a document that matches this range
+    const findedItem = findedItems.find(item => (item.storeStart >= startOfPeriod && item.storeEnd <= endOfPeriod));
+    const idField = getIdField(findedItem);
+    const itemId = findedItem[idField];
+    if (findedItem) {
+      // Get values
+      values = findedItem.values.filter(v => v.key !== storeStart);
+      values = loConcat(values, data.values);
+      values = sortByStringField(values, 'key');
+      // Set range of stored values
+      data.storeStart = values[0].key;
+      data.storeEnd = values[values.length - 1].key;
+      data.values = sortByStringField(values, 'key', false);
+      // Patch service item
+      savedValue = await patchItem(app, 'opcua-values', itemId, data);
+    } else {
+      savedValue = await createItem(app, 'opcua-values', data);
+    }
   }
   return savedValue;
 };

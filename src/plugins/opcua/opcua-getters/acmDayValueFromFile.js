@@ -76,7 +76,7 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     // Sheet to json date
     let dateTime = xlsx.sheetToJson('Report1', { range: rangeDate });
     dateTime = dateTime[0]['A'].split('to:')[0].split('from:')[1].trim();
-    dateTime = moment.utc(dateTime).format('YYYY-MM-DDTHH:mm:ss');
+    dateTime = moment.utc(dateTime).format('YYYY-MM-DD');
     if (isDebug && dateTime) inspector('histValueFromFile.dateTime:', dateTime);
 
     // Set value from source

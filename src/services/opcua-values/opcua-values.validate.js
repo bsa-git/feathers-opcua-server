@@ -17,7 +17,7 @@ let base = merge({},
       _id: { type: ID },
       tagId: { type: ID },
       tagName: { type: 'string' },
-      storeBegin: { type: 'string' },
+      storeStart: { type: 'string' },
       storeEnd: { type: 'string' },
       values: {
         type: 'array',
