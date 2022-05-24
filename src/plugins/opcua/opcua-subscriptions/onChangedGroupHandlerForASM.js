@@ -23,6 +23,7 @@ const {
 const {
   showInfoForGroupHandler,
   saveOpcuaGroupValueToDB,
+  saveStoreOpcuaGroupValueToDB
 } = require('./lib');
 
 const ch_m5UpdateAcmYearReport = require('./lib/commands/ch_m5UpdateAcmYearReport');
@@ -82,14 +83,18 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     // Save data to DB
     const p1 = saveOpcuaGroupValueToDB(params, dataValue);
 
+    // Save data to store DB
+    const p2 = saveStoreOpcuaGroupValueToDB(params, dataValue);
+
     // Run update acm year report
-    const p2 = ch_m5UpdateAcmYearReport(params, dataValue);
+    const p3 = ch_m5UpdateAcmYearReport(params, dataValue);
 
     // Show info
-    Promise.all([p1, p2]).then(results => {
+    Promise.all([p1, p2, p3]).then(results => {
 
       if (isDebug && results.length) inspector('saveOpcuaGroupValueToDB.savedValue:', results[0]);
-      if (isDebug && results.length) inspector('ch_m5UpdateAcmYearReport.readResult:', results[1]);
+      if (isDebug && results.length) inspector('saveStoreOpcuaGroupValueToDB.savedValue:', results[1]);
+      if (isDebug && results.length) inspector('ch_m5UpdateAcmYearReport.readResult:', results[2]);
 
       // Show info
       showInfoForGroupHandler(params, dataValue);

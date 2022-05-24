@@ -19,7 +19,7 @@
       "type": "object"
     },
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_M51_ACM",
       "displayName": "Черкассы 'АЗОТ' цех M5/1 ACM",
       "type": "object"
@@ -131,7 +131,7 @@
       "dataType": "String",
       "hist": 1,
       "store": {
-        "numberOfValuesInDoc": [1, "years"],
+        "numberOfValuesInDoc": [5, "days"],
         "numberOfDocsForTag": [5, "years"]
       },
       "group": true,
