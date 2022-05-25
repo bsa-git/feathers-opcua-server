@@ -474,28 +474,28 @@ const saveOpcuaTags = async function (app, isRemote = false) {
       idField = getIdField(tagFromDB);
       tagId = tagFromDB[idField];
       const omit = [idField, 'createdAt', 'updatedAt', '__v'];
-      let equalTags = isDeepEqual(tag, tagFromDB, omit);
-      // Update db tag
-      if (!equalTags) {
-        tagFromDB = await patchItem(app, 'opcua-tags', tagId, tag);
+      const result = isDeepStrictEqual(tag, tagFromDB, omit, false);
+      // Remove/Update db tag
+      if (!result.isDeepStrictEqual) {
+        // Else result.isDeepStrictEqual = false, then delete tag
+        tagFromDB = await removeItem(app, 'opcua-tags', tagId);
         if (tagFromDB) {
-          updatedBrowseNames.push(tag.browseName);
-          updated = updated + 1;
-        }
-        // Check equal tags again
-        equalTags = isDeepStrictEqual(tag, tagFromDB, omit);
-        // Else equalTags = false, then delete tag
-        if (!equalTags) {
-          tagFromDB = await removeItem(app, 'opcua-tags', tagId);
+          deletedBrowseNames.push(tagFromDB.browseName);
+          deleted = deleted + 1;
+          // Add tag
+          tagFromDB = await createItem(app, 'opcua-tags', tag);
           if (tagFromDB) {
-            deletedBrowseNames.push(tagFromDB.browseName);
-            deleted = deleted + 1;
-            // Add tag
-            tagFromDB = await createItem(app, 'opcua-tags', tag);
-            if (tagFromDB) {
-              addedBrowseNames.push(tagFromDB.browseName);
-              added = added + 1;
-            }
+            addedBrowseNames.push(tagFromDB.browseName);
+            added = added + 1;
+          }
+        }
+      } else {
+        if (!result.isDeepEqual) {
+          // Else result.isDeepEqual = false, then update tag
+          tagFromDB = await patchItem(app, 'opcua-tags', tagId, tag);
+          if (tagFromDB) {
+            updatedBrowseNames.push(tag.browseName);
+            updated = updated + 1;
           }
         }
       }
@@ -692,33 +692,27 @@ const integrityCheckOpcua = async function (app, isRemote = false) {
       result = false;
     }
   }
-  // Remove opcua values that have no 'browseName' tags
-  if (isRemote) {
-    tagsFromDB = await findItems(app, 'opcua-tags', { group: true, ownerName: { $in: objTagBrowseNames } });
-    _tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: ['object', 'method'] }, group: { $ne: true }, ownerName: { $in: objTagBrowseNames } });
-    tagsFromDB = loConcat(tagsFromDB, _tagsFromDB);
-  } else {
-    tagsFromDB = await findItems(app, 'opcua-tags', { group: true });
-    _tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: ['object', 'method'] }, group: { $ne: true } });
-    tagsFromDB = loConcat(tagsFromDB, _tagsFromDB);
-  }
+  // Remove local opcua values that have no 'browseName' tags
+  if (!isRemote) {
+    tagsFromDB = await findItems(app, 'opcua-tags', { type: { $nin: ['object', 'method'] } });
+    tagsFromDB = tagsFromDB.map(tag => tag.browseName);
 
-  tagsFromDB = tagsFromDB.map(tag => tag.browseName);
-  valuesFromDB = await findItems(app, 'opcua-values', { tagName: { $nin: tagsFromDB } });
-  for (let index = 0; index < valuesFromDB.length; index++) {
-    let value = valuesFromDB[index];
-    const idField = getIdField(value);
-    const valueId = value[idField];
-    const removedItem = await removeItem(app, 'opcua-values', valueId);
-    deleted++;
-    deletedBrowseNames.push(removedItem.tagName);
-  }
-  if (deleted) {
-    logger.error(`db-helper.integrityCheckOpcua.Remove opcua values that have no 'ownerGroup' tags: ${deleted}`);
-    if (isDebug && deletedBrowseNames.length) inspector('db-helper.integrityCheckOpcua.Remove opcua values that have no \'ownerGroup\' tags:', deletedBrowseNames);
-    deleted = 0;
-    deletedBrowseNames = [];
-    result = false;
+    valuesFromDB = await findItems(app, 'opcua-values', { tagName: { $nin: tagsFromDB } });
+    for (let index = 0; index < valuesFromDB.length; index++) {
+      let value = valuesFromDB[index];
+      const idField = getIdField(value);
+      const valueId = value[idField];
+      const removedItem = await removeItem(app, 'opcua-values', valueId);
+      deleted++;
+      deletedBrowseNames.push(removedItem.tagName);
+    }
+    if (deleted) {
+      logger.error(`db-helper.integrityCheckOpcua.Remove opcua values that have no 'ownerGroup' tags: ${deleted}`);
+      if (isDebug && deletedBrowseNames.length) inspector('db-helper.integrityCheckOpcua.Remove opcua values that have no \'ownerGroup\' tags:', deletedBrowseNames);
+      deleted = 0;
+      deletedBrowseNames = [];
+      result = false;
+    }
   }
 
   return result;

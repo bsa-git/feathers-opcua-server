@@ -585,74 +585,37 @@ const getRandomValue = function (v = 10) {
  * @param {Object} object1 
  * @param {Object} object2 
  * @param {Array} omit
- * @returns {Boolean}
+ * @returns {Object}
+ * e.g. { isDeepStrictEqual: false,  isDeepEqual: undefined }
+ * e.g. { isDeepStrictEqual: true,  isDeepEqual: false }
+ * e.g. { isDeepStrictEqual: true,  isDeepEqual: true }
  */
-const isDeepStrictEqual = function (object1, object2, omit = []) {
-  let result = true;
+const isDeepStrictEqual = function (object1, object2, omit = [], isView = false) {
+  let result = { isDeepStrictEqual: undefined,  isDeepEqual: undefined };
   //---------------------
-  let _object1 = loMerge({}, object1);
-  let _object2 = loMerge({}, object2);
-  _object1 = loOmit(object1, omit);
-  _object2 = loOmit(object2, omit);
+  object1 = loOmit(object1, omit);
+  object2 = loOmit(object2, omit);
 
-  const keys1 = Object.keys(_object1);
-  const keys2 = Object.keys(_object2);
+  const keys1 = Object.keys(object1);
+  const keys2 = Object.keys(object2);
 
   if (keys1.length !== keys2.length) {
-    if (true && (keys1.length !== keys2.length)) {
-      logger.error('util.isDeepStrictEqual: keys(%d) for object1 is not equivalent to keys(%d) for object2', keys1.length, keys2.length);
+    if (isView && (keys1.length !== keys2.length)) {
+      logger.error('util.isDeepStrictEqual: length of keys1(%d) for object1 is not equivalent to length of keys2(%d) for object2', keys1.length, keys2.length);
       inspector('util.isDeepStrictEqual.object1', object1);
       inspector('util.isDeepStrictEqual.object2', object2);
     }
-    return false;
+    return result.isDeepStrictEqual = false;
+  }
+  
+  result.isDeepStrictEqual = true;
+  
+  if(isDeepEqual(object1, object2, omit, isView)){
+    result.isDeepEqual = true;
+  } else {
+    result.isDeepEqual = false;
   }
 
-  for (const key of keys1) {
-    const val1 = _object1[key];
-    const val2 = _object2[key];
-    const areArrays = Array.isArray(val1) && Array.isArray(val2);
-    if (areArrays) {
-      if (val1.length !== val2.length) {
-        if (true && (val1.length !== val2.length)) {
-          logger.error('util.isDeepEqual: val1.length(%d) for object1 is not equivalent to val2.length(%d) for object2', val1.length, val2.length);
-          inspector('util.isDeepEqual.object1', object1);
-          inspector('util.isDeepEqual.object2', object2);
-        }
-        return false;
-      }
-      for (let index = 0; index < val1.length; index++) {
-        const item1 = val1[index];
-        const item2 = val2[index];
-        const areObjects = isObject(item1) && isObject(item2);
-        if (
-          areObjects && !isDeepEqual(item1, item2, omit) ||
-          !areObjects && !loIsEqual(item1, item2)
-        ) {
-          if (true && (item1 || item2)) {
-            logger.error(`util.isDeepEqual: val1(${item1}) of object1 is not equivalent to val2(${item2}) of object2.`);
-            inspector('util.isDeepEqual.object1', object1);
-            inspector('util.isDeepEqual.object2', object2);
-          }
-          result = false;
-          break;
-        }
-      }
-    } else {
-      const areObjects = isObject(val1) && isObject(val2);
-      if (
-        areObjects && !isDeepEqual(val1, val2, omit) ||
-        !areObjects && !loIsEqual(val1, val2)
-      ) {
-        if (true && (val1 || val2)) {
-          logger.error(`util.isDeepEqual: val1(${val1}) of object1 is not equivalent to val2(${val2}) of object2.`);
-          inspector('util.isDeepEqual.object1', object1);
-          inspector('util.isDeepEqual.object2', object2);
-        }
-        result = false;
-        break;
-      }
-    }
-  }
   return result;
 };
 
@@ -663,28 +626,28 @@ const isDeepStrictEqual = function (object1, object2, omit = []) {
  * @param {Array} omit
  * @returns {Boolean}
  */
-const isDeepEqual = function (object1, object2, omit = []) {
+const isDeepEqual = function (object1, object2, omit = [], isView = false) {
   let result = true;
   //---------------------
-  let _object1 = loMerge({}, object1);
-  let _object2 = loMerge({}, object2);
-  _object1 = loOmit(_object1, omit);
-  _object2 = loOmit(_object2, omit);
+  object1 = loOmit(object1, omit);
+  object2 = loOmit(object2, omit);
 
-  const keys1 = Object.keys(_object1);
+  const keys1 = Object.keys(object1);
 
   for (const key of keys1) {
-    const val1 = _object1[key];
-    const val2 = _object2[key];
+    if(result === false) break;
+    const val1 = object1[key];
+    const val2 = object2[key];
     const areArrays = Array.isArray(val1) && Array.isArray(val2);
     if (areArrays) {
       if (val1.length !== val2.length) {
-        if (true && (val1.length !== val2.length)) {
+        if (isView && (val1.length !== val2.length)) {
           logger.error('util.isDeepEqual: val1.length(%d) for object1 is not equivalent to val2.length(%d) for object2', val1.length, val2.length);
-          inspector('util.isDeepEqual.object1', object1);
-          inspector('util.isDeepEqual.object2', object2);
+          inspector('util.isDeepEqual.val1', val1);
+          inspector('util.isDeepEqual.val2', val2);
         }
-        return false;
+        result = false;
+        break;
       }
       for (let index = 0; index < val1.length; index++) {
         const item1 = val1[index];
@@ -694,26 +657,25 @@ const isDeepEqual = function (object1, object2, omit = []) {
           areObjects && !isDeepEqual(item1, item2, omit) ||
           !areObjects && !loIsEqual(item1, item2)
         ) {
-          if (true && (item1 || item2)) {
-            logger.error(`util.isDeepEqual: val1(${item1}) of object1 is not equivalent to val2(${item2}) of object2.`);
-            inspector('util.isDeepEqual.object1', object1);
-            inspector('util.isDeepEqual.object2', object2);
+          if (isView && (item1 || item2)) {
+            logger.error(`util.isDeepEqual: val1('${item1}') of object1 is not equivalent to val2('${item2}') of object2.`);
+            inspector('util.isDeepEqual.val1', val1);
+            inspector('util.isDeepEqual.val2', val2);
           }
           result = false;
           break;
         }
       }
-      // if(!result) break;
     } else {
       const areObjects = isObject(val1) && isObject(val2);
       if (
         areObjects && !isDeepEqual(val1, val2, omit) ||
         !areObjects && !loIsEqual(val1, val2)
       ) {
-        if (true && (val1 || val2)) {
-          logger.error(`util.isDeepEqual: val1(${val1}) of object1 is not equivalent to val2(${val2}) of object2.`);
-          inspector('util.isDeepEqual.object1', object1);
-          inspector('util.isDeepEqual.object2', object2);
+        if (isView && (val1 || val2)) {
+          logger.error(`util.isDeepEqual: val1 for key('${key}') of object1 is not equivalent to val2 for key('${key}') of object2.`);
+          inspector(`util.isDeepEqual.${key}:`, val1);
+          inspector(`util.isDeepEqual.${key}:`, val2);
         }
         result = false;
         break;

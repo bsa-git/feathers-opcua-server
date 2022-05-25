@@ -40,14 +40,15 @@ module.exports = function (app) {
       subscription: { type: String },
       ownerGroup: { type: String },
       bindMethod: { type: String },
-      inputArguments: [Schema.Types.Mixed],
-      outputArguments: [Schema.Types.Mixed],
+      inputArguments: Schema.Types.Mixed,
+      outputArguments: Schema.Types.Mixed,
       userAccessLevel: Schema.Types.Mixed,
       variableGetType: { type: String },
       getter: { type: String },
       getterParams: Schema.Types.Mixed,
       valueParams: {
         type: {
+          arrayDimensions: [Number],
           engineeringUnits: { type: String },
           engineeringUnitsRange: {
             type: {
@@ -63,12 +64,7 @@ module.exports = function (app) {
           arrayType: { type: String }
         }
       },
-      view: {
-        type: {
-          tab1: [{ name: String, items: [String] }],
-          tab2: [{ name: String, items: [String] }]
-        }
-      },
+      view: Schema.Types.Mixed,
       histParams: {
         opcuaId: { type: String },
         opcuaUrl: { type: String },

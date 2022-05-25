@@ -65,7 +65,7 @@ module.exports = async function opcuaBootstrap(app) {
     let saveResult = await saveOpcuaTags(app);
     logger.info('opcuaBootstrap.saveOpcuaTags.localDB:', saveResult);
     // Integrity check opcua data
-    integrityResult = await integrityCheckOpcua(app);
+    integrityResult = await integrityCheckOpcua(app, false);
     if (integrityResult) {
       logger.info('Result integrity check opcua.localDB: OK');
     } else {
@@ -85,7 +85,7 @@ module.exports = async function opcuaBootstrap(app) {
         saveResult = await saveOpcuaTags(appRestClient, isRemote);
         logger.info('opcuaBootstrap.saveOpcuaTags.remoteDB:', saveResult);
         // Integrity check opcua data
-        integrityResult = await integrityCheckOpcua(appRestClient);
+        integrityResult = await integrityCheckOpcua(appRestClient, isRemote);
         if (integrityResult) {
           logger.info('Result integrity check opcua.remoteDB: OK');
         } else {
