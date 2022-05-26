@@ -173,23 +173,28 @@ const getNextDateTime = function (startDateTime, period, isUtc = true) {
  * @param {Object|String|Array} dateTime 
  * @param {Array} period
  * e.g. [1, 'years'] 
- * @returns {Object} 
+ * @returns {String} 
+ * e.g. '2022-05-01T00:00:00'
  */
 const getStartOfPeriod = function (dateTime, period) {
   let startList = [], startPeriod, condition;
   //------------------------
+  if(!Array.isArray(period)) new Error('Argument error, argument "period" must be an array');
   // Get start dateTime
-  dateTime = moment.utc(dateTime); 
+  dateTime = moment.utc(dateTime);
   dateTime = dateTime.format('YYYY-MM-DDTHH:mm:ss');
   startPeriod = moment.utc(dateTime).startOf('year');
+  startList.push(startPeriod.format('YYYY-MM-DDTHH:mm:ss'));
 
   do {
-    startList.push(startPeriod.format('YYYY-MM-DDTHH:mm:ss'));
     startPeriod = startPeriod.add(...period);
     condition = (dateTime >= startPeriod.format('YYYY-MM-DDTHH:mm:ss'));
+    if (condition) {
+      startList.push(startPeriod.format('YYYY-MM-DDTHH:mm:ss'));
+    }
   } while (condition);
-  
-  if(isDebug && startList.length) console.log('util.getStartOfPeriod.startList:', startList);
+
+  if (isDebug && startList.length) console.log('util.getStartOfPeriod.startList:', startList);
   return startList[startList.length - 1];
 };
 
@@ -198,27 +203,28 @@ const getStartOfPeriod = function (dateTime, period) {
  * @param {Object|String|Array} dateTime 
  * @param {Array} period
  * e.g. [1, 'years'] 
- * @returns {Object} 
+ * @returns {String} 
+ * e.g. '2022-05-31T23:59:59'
  */
 const getEndOfPeriod = function (dateTime, period) {
-  let startList = [], startPeriod, condition;
+  let startList = [], startPeriod, endPeriod, condition;
   //------------------------
+  if(!Array.isArray(period)) new Error('Argument error, argument "period" must be an array');
   // Get start dateTime
-  dateTime = moment.utc(dateTime); 
+  dateTime = moment.utc(dateTime);
   dateTime = dateTime.format('YYYY-MM-DDTHH:mm:ss');
   startPeriod = moment.utc(dateTime).startOf('year');
+  startPeriod = startPeriod.add(...period).format('YYYY-MM-DDTHH:mm:ss');
+  endPeriod = moment.utc(startPeriod).subtract(1, 'seconds');
 
   do {
-    startList.push(startPeriod.format('YYYY-MM-DDTHH:mm:ss'));
-    startPeriod = startPeriod.add(...period);
-    condition = (dateTime >= startPeriod.format('YYYY-MM-DDTHH:mm:ss'));
-    if(!condition){
-      startPeriod = startPeriod.subtract(1, 'seconds');
-      startList.push(startPeriod.format('YYYY-MM-DDTHH:mm:ss'));
-    }
+    startList.push(endPeriod.format('YYYY-MM-DDTHH:mm:ss'));
+    condition = (dateTime > endPeriod.format('YYYY-MM-DDTHH:mm:ss'));
+    startPeriod = moment.utc(startPeriod).add(...period).format('YYYY-MM-DDTHH:mm:ss');
+    endPeriod = moment.utc(startPeriod).subtract(1, 'seconds');
   } while (condition);
-  
-  if(isDebug && startList.length) console.log('util.getStartOfPeriod.startList:', startList);
+
+  if (isDebug && startList.length) console.log('util.getStartOfPeriod.startList:', startList);
   return startList[startList.length - 1];
 };
 
@@ -427,54 +433,54 @@ const getRegex = function (type) {
   switch (type) {
   case 'phone':
     /*
-                                        (123) 456-7890
-                                        +(123) 456-7890
-                                        +(123)-456-7890
-                                        +(123) - 456-7890
-                                        +(123) - 456-78-90
-                                        123-456-7890
-                                        123.456.7890
-                                        1234567890
-                                        +31636363634
-                                        +380980029669
-                                        075-63546725
-                                        */
+                                          (123) 456-7890
+                                          +(123) 456-7890
+                                          +(123)-456-7890
+                                          +(123) - 456-7890
+                                          +(123) - 456-78-90
+                                          123-456-7890
+                                          123.456.7890
+                                          1234567890
+                                          +31636363634
+                                          +380980029669
+                                          075-63546725
+                                          */
     return '^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\\./0-9]*$';
   case 'zip_code':
     /*
-                                        12345
-                                        12345-6789
-                                        */
+                                          12345
+                                          12345-6789
+                                          */
     return '^[0-9]{5}(?:-[0-9]{4})?$';
   case 'lat':
     /*
-                                        +90.0
-                                        45
-                                        -90
-                                        -90.000
-                                        +90
-                                        47.123123
-                                        */
+                                          +90.0
+                                          45
+                                          -90
+                                          -90.000
+                                          +90
+                                          47.123123
+                                          */
     return '^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'long':
     /*
-                                        -127.554334
-                                        180
-                                        -180
-                                        -180.0000
-                                        +180
-                                        179.999999
-                                        */
+                                          -127.554334
+                                          180
+                                          -180
+                                          -180.0000
+                                          +180
+                                          179.999999
+                                          */
     return '^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'lat_and_long':
     /*
-                                        +90.0, -127.554334
-                                        45, 180
-                                        -90, -180
-                                        -90.000, -180.0000
-                                        +90, +180
-                                        47.1231231, 179.99999999
-                                        */
+                                          +90.0, -127.554334
+                                          45, 180
+                                          -90, -180
+                                          -90.000, -180.0000
+                                          +90, +180
+                                          47.1231231, 179.99999999
+                                          */
     return '^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$';
   default:
     return '//g';
@@ -591,7 +597,7 @@ const getRandomValue = function (v = 10) {
  * e.g. { isDeepStrictEqual: true,  isDeepEqual: true }
  */
 const isDeepStrictEqual = function (object1, object2, omit = [], isView = false) {
-  let result = { isDeepStrictEqual: undefined,  isDeepEqual: undefined };
+  let result = { isDeepStrictEqual: undefined, isDeepEqual: undefined };
   //---------------------
   object1 = loOmit(object1, omit);
   object2 = loOmit(object2, omit);
@@ -607,10 +613,10 @@ const isDeepStrictEqual = function (object1, object2, omit = [], isView = false)
     }
     return result.isDeepStrictEqual = false;
   }
-  
+
   result.isDeepStrictEqual = true;
-  
-  if(isDeepEqual(object1, object2, omit, isView)){
+
+  if (isDeepEqual(object1, object2, omit, isView)) {
     result.isDeepEqual = true;
   } else {
     result.isDeepEqual = false;
@@ -635,7 +641,7 @@ const isDeepEqual = function (object1, object2, omit = [], isView = false) {
   const keys1 = Object.keys(object1);
 
   for (const key of keys1) {
-    if(result === false) break;
+    if (result === false) break;
     const val1 = object1[key];
     const val2 = object2[key];
     const areArrays = Array.isArray(val1) && Array.isArray(val2);

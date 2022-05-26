@@ -391,9 +391,9 @@ const saveStoreOpcuaValues = async function (app, browseName, data, store) {
   } else {
     // Get range of stored values
     const storeStart = data.storeStart;
-    const startOfPeriod = getStartOfPeriod(storeStart, numberOfValuesInDoc[1]).format('YYYY-MM-DDTHH:mm:ss');
-    const endOfPeriod = getEndOfPeriod(storeStart, numberOfValuesInDoc).format('YYYY-MM-DDTHH:mm:ss');
-    if (true && startOfPeriod) console.log('saveStoreOpcuaValues.startAndEndPeriod:', startOfPeriod, endOfPeriod);
+    const startOfPeriod = getStartOfPeriod(storeStart, numberOfValuesInDoc);
+    const endOfPeriod = getEndOfPeriod(storeStart, numberOfValuesInDoc);
+    if (isDebug && startOfPeriod) console.log('saveStoreOpcuaValues.startAndEndPeriod:', startOfPeriod, endOfPeriod);
     // Find a document that matches this range
     const findedItem = findedItems.find(item => {
       const storeStart = moment.utc(item.storeStart).format('YYYY-MM-DDTHH:mm:ss');
@@ -473,6 +473,11 @@ const saveOpcuaTags = async function (app, isRemote = false) {
       tagFromDB = tagsFromDB[0];
       idField = getIdField(tagFromDB);
       tagId = tagFromDB[idField];
+
+      // Check store parameter changes
+      await checkStoreParameterChanges(app, tag, tagFromDB);
+      
+      // Check is deep strict equal
       const omit = [idField, 'createdAt', 'updatedAt', '__v'];
       const result = isDeepStrictEqual(tag, tagFromDB, omit, false);
       // Remove/Update db tag
@@ -550,6 +555,37 @@ const saveOpcuaTags = async function (app, isRemote = false) {
   }
 
   return { added, updated, deleted, total };
+};
+
+/**
+ * @method checkStoreParameterChanges
+ * @param {Object} app 
+ * @param {Object} tag 
+ * @param {Object} tagFromDB 
+ */
+const checkStoreParameterChanges = async function (app, tag, tagFromDB) {
+  // Check store parameter
+  if(tag.store && tagFromDB.store){
+    if(!isDeepEqual(tag.store, tagFromDB.store)){
+      // Remove opcua values
+      const opcuaTags = getOpcuaTags();
+      const browseName = tag.browseName;
+      let countItems = await getCountItems(app, 'opcua-values', { tagName: browseName });
+      if(!countItems) return;
+      const browseNames = opcuaTags.filter(tag => tag.ownerGroup && tag.ownerGroup === browseName).map(tag => tag.browseName);
+      if(isDebug && browseNames.length) inspector('checkStoreParameterChanges.browseNames:', browseNames);
+      countItems = await getCountItems(app, 'opcua-values', { tagName: { $in: browseNames } });
+      const removedItems = await removeItems(app, 'opcua-values', { tagName: { $in: browseNames } });
+      if(isDebug && removedItems.length) console.log('checkStoreParameterChanges.removedItems.length:', removedItems.length);
+      if(isDebug && removedItems.length) inspector('checkStoreParameterChanges.removedItems:', removedItems.map(item => { 
+        return {
+          tagName: item.tagName,
+          storeStart:  item.storeStart,
+          storeEnd:  item.storeEnd
+        };
+      }));
+    }
+  }
 };
 
 /**
@@ -1083,6 +1119,7 @@ module.exports = {
   saveStoreOpcuaGroupValue,
   removeOpcuaGroupValues,
   saveOpcuaTags,
+  checkStoreParameterChanges,
   integrityCheckOpcua,
   //-------------------
   getCountItems,

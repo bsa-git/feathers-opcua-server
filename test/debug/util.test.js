@@ -91,14 +91,18 @@ describe('<<=== Util: (util.test) ===>>', () => {
 
   it('util.getStartOfPeriod', () => {
     const dateTime = moment().utc().format('YYYY-MM-DDTHH:mm:ss');
+    // const dateTime = '2022-01-02T00:00:00';
     const startOfPeriod = getStartOfPeriod(dateTime, [1, 'months']);
+    // const startOfPeriod = getStartOfPeriod(dateTime, [5, 'days']);
     if (true && startOfPeriod) debug('startOfPeriod:', startOfPeriod, ' for dateTime:', dateTime);
     assert.ok(dateTime >= startOfPeriod, `util.getStartOfPeriod: '${startOfPeriod}' for dateTime: ${dateTime}`);
   });
 
   it('util.getEndOfPeriod', () => {
     const dateTime = moment().utc().format('YYYY-MM-DDTHH:mm:ss');
+    // const dateTime = '2022-01-02T00:00:00';
     const endOfPeriod = getEndOfPeriod(dateTime, [1, 'months']);
+    // const endOfPeriod = getEndOfPeriod(dateTime, [5, 'days']);
     if (true && endOfPeriod) debug('endOfPeriod:', endOfPeriod, ' for dateTime:', dateTime);
     assert.ok(dateTime <= endOfPeriod, `util.getEndOfPeriod: '${endOfPeriod}' for dateTime: ${dateTime}`);
   });
