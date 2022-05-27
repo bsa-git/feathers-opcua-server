@@ -42,7 +42,7 @@ let queueOfSubscribe = [];
  * @returns {void}
  */
 async function onChangedGroupHandlerForASM(params, dataValue) {
-  let result = false;
+  let result = false, isQueue = false;
   //---------------------------------------------------------
   try {
     // Get startTime
@@ -54,12 +54,13 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     const addressSpaceOption = params.addressSpaceOption;
 
     const browseName = addressSpaceOption.browseName;
+    isQueue = !!addressSpaceOption.getterParams.isQueue;
 
     // Only for group values
     if (!addressSpaceOption.group) return;
 
     // Add subscribe to queue
-    queueOfSubscribe.push({
+    if (isQueue) queueOfSubscribe.push({
       browseName,
       params,
       dataValue
@@ -70,15 +71,18 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
       inspector('onChangedGroupHandlerForASM.queueOfSubscribe:', queueOfSubscribe.map(s => s.browseName));
 
     // WaitTimeout
-    do {
+    if (isQueue) do {
       result = checkQueueOfSubscribe(queueOfSubscribe, browseName, false);
       if (result) await pause(1000, false);
     } while (result);
 
     // Get current subscribe
-    const subscribe = loHead(queueOfSubscribe);
-    params = subscribe.params;
-    dataValue = subscribe.dataValue;
+    if (isQueue) {
+      const subscribe = loHead(queueOfSubscribe);
+      params = subscribe.params;
+      dataValue = subscribe.dataValue;
+    }
+
 
     // Save data to DB
     const p1 = saveOpcuaGroupValueToDB(params, dataValue);
@@ -87,10 +91,10 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     const p2 = saveStoreOpcuaGroupValueToDB(params, dataValue);
 
     // Run update acm year report
-    const p3 = ch_m5UpdateAcmYearReport(params, dataValue);
+    // const p3 = ch_m5UpdateAcmYearReport(params, dataValue);
 
     // Show info
-    Promise.all([p1, p2, p3]).then(results => {
+    Promise.all([p1, p2, 'p3']).then(results => {
 
       if (isDebug && results.length) inspector('saveOpcuaGroupValueToDB.savedValue:', results[0]);
       if (isDebug && results.length) inspector('saveStoreOpcuaGroupValueToDB.savedValue:', results[1]);
@@ -106,11 +110,11 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
       if (isDebug && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
 
       // Drop element from the beginning of array
-      queueOfSubscribe = loDrop(queueOfSubscribe);
+      if (isQueue) queueOfSubscribe = loDrop(queueOfSubscribe);
     });
   } catch (error) {
     // Drop element from the beginning of array
-    queueOfSubscribe = loDrop(queueOfSubscribe);
+    if (isQueue) queueOfSubscribe = loDrop(queueOfSubscribe);
   }
 }
 
