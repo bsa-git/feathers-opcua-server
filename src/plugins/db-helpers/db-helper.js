@@ -592,8 +592,8 @@ const checkStoreParameterChanges = async function (app, tag, tagFromDB) {
       if(!valuesFromDB.length) return;
 
       // Remove values from DB
-      const removedItems = []; //await removeItems(app, 'opcua-values', { tagName: { $in: browseNames } });
-      if (isDebug && removedItems.length) console.log('checkStoreParameterChanges.removedItems.length:', removedItems.length);
+      const removedItems = await removeItems(app, 'opcua-values', { tagName: { $in: browseNames } });
+      if (true && removedItems.length) console.log('checkStoreParameterChanges.removedItems.length:', removedItems.length);
       if (isDebug && removedItems.length) inspector('checkStoreParameterChanges.removedItems:', removedItems.map(item => {
         return {
           tagName: item.tagName,
@@ -603,7 +603,7 @@ const checkStoreParameterChanges = async function (app, tag, tagFromDB) {
       }));
 
       // Save store parameter changes
-      await saveStoreParameterChanges(app, browseName, valuesFromDB);
+      // await saveStoreParameterChanges(app, browseName, valuesFromDB);
       
     }
   }
@@ -640,12 +640,12 @@ const checkStoreParameterChanges = async function (app, tag, tagFromDB) {
  * }, ..., {...}]
  */
 const saveStoreParameterChanges = async function (app, browseName, valuesFromDB) {
-  let storeTagList = [], dateTimeList = [], resultStoreTagList = [];
-  //--------------------------
+  let storeTagList = [], dateTimeList = [], resultStoreTagList = [], results = [];
+  //---------------------------------------------------------------------------
   // Get opcua tags
   const opcuaTags = getOpcuaTags();
   const browseNames = opcuaTags.filter(tag => tag.ownerGroup && tag.ownerGroup === browseName).map(tag => tag.browseName);
-  if (true && browseNames.length) inspector('checkStoreParameterChanges.browseNames:', browseNames);
+  if (true && browseNames.length) inspector('saveStoreParameterChanges.browseNames:', browseNames);
 
   // Get store tag list
   for (let index = 0; index < browseNames.length; index++) {
@@ -675,7 +675,24 @@ const saveStoreParameterChanges = async function (app, browseName, valuesFromDB)
     resultStoreTagList.push(storeTagValues4DateTime);
   }
 
-  if(true && resultStoreTagList.length) inspector('saveStoreParameterChanges.resultStoreTagList:', resultStoreTagList);
+  if(isDebug && resultStoreTagList.length) inspector('saveStoreParameterChanges.resultStoreTagList:', resultStoreTagList);
+
+  // Save all store opcua group value
+  for (let index = 0; index < resultStoreTagList.length; index++) {
+    const item = resultStoreTagList[index];
+    const result = await saveStoreOpcuaGroupValue(app, browseName, item);
+    results.push(result);
+  }
+  if(true && results.length) console.log('saveStoreParameterChanges.results.length:', results.length);
+  
+  // Promise.all( resultStoreTagList.map(item => saveStoreOpcuaGroupValue(app, browseName, item)) )
+  //   .then(results => {
+  //     if(true && results.length) console.log('saveStoreParameterChanges.results.length:', results.length);
+  //     for (let index = 0; index < results.length; index++) {
+  //       const result = results[index];
+  //       if (isDebug && result) inspector('saveStoreParameterChanges.result:', result);
+  //     }
+  //   });
 
 };
 
