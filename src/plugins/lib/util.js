@@ -242,8 +242,8 @@ const getEndOfPeriod = function (dateTime, period) {
 const getStartEndOfPeriod = function (dateTime, period) {
   const start = getStartOfPeriod(dateTime, period);
   const end = getEndOfPeriod(dateTime, period);
-  return [start, end]
-}
+  return [start, end];
+};
 
 /**
  * Shift time by one hour
@@ -265,80 +265,80 @@ const shiftTimeByOneHour = function (dt = '', isUtc = true) {
   dt = dtToObject(dt, isUtc);
   const hours = dt.hours;
   switch (hours) {
-    case 0:
-      dtString = strReplace(dtString, '00:', '01:');
-      break;
-    case 1:
-      dtString = strReplace(dtString, '01:', '02:');
-      break;
-    case 2:
-      dtString = strReplace(dtString, '02:', '03:');
-      break;
-    case 3:
-      dtString = strReplace(dtString, '03:', '04:');
-      break;
-    case 4:
-      dtString = strReplace(dtString, '04:', '05:');
-      break;
-    case 5:
-      dtString = strReplace(dtString, '05:', '06:');
-      break;
-    case 6:
-      dtString = strReplace(dtString, '06:', '07:');
-      break;
-    case 7:
-      dtString = strReplace(dtString, '07:', '08:');
-      break;
-    case 8:
-      dtString = strReplace(dtString, '08:', '09:');
-      break;
-    case 9:
-      dtString = strReplace(dtString, '09:', '10:');
-      break;
-    case 10:
-      dtString = strReplace(dtString, '10:', '11:');
-      break;
-    case 11:
-      dtString = strReplace(dtString, '11:', '12:');
-      break;
-    case 12:
-      dtString = strReplace(dtString, '12:', '13:');
-      break;
-    case 13:
-      dtString = strReplace(dtString, '13:', '14:');
-      break;
-    case 14:
-      dtString = strReplace(dtString, '14:', '15:');
-      break;
-    case 15:
-      dtString = strReplace(dtString, '15:', '16:');
-      break;
-    case 16:
-      dtString = strReplace(dtString, '16:', '17:');
-      break;
-    case 17:
-      dtString = strReplace(dtString, '17:', '18:');
-      break;
-    case 18:
-      dtString = strReplace(dtString, '18:', '19:');
-      break;
-    case 19:
-      dtString = strReplace(dtString, '19:', '20:');
-      break;
-    case 20:
-      dtString = strReplace(dtString, '20:', '21:');
-      break;
-    case 21:
-      dtString = strReplace(dtString, '21:', '22:');
-      break;
-    case 22:
-      dtString = strReplace(dtString, '22:', '23:');
-      break;
-    case 23:
-      dtString = strReplace(dtString, '23:', '00:');
-      break;
-    default:
-      break;
+  case 0:
+    dtString = strReplace(dtString, '00:', '01:');
+    break;
+  case 1:
+    dtString = strReplace(dtString, '01:', '02:');
+    break;
+  case 2:
+    dtString = strReplace(dtString, '02:', '03:');
+    break;
+  case 3:
+    dtString = strReplace(dtString, '03:', '04:');
+    break;
+  case 4:
+    dtString = strReplace(dtString, '04:', '05:');
+    break;
+  case 5:
+    dtString = strReplace(dtString, '05:', '06:');
+    break;
+  case 6:
+    dtString = strReplace(dtString, '06:', '07:');
+    break;
+  case 7:
+    dtString = strReplace(dtString, '07:', '08:');
+    break;
+  case 8:
+    dtString = strReplace(dtString, '08:', '09:');
+    break;
+  case 9:
+    dtString = strReplace(dtString, '09:', '10:');
+    break;
+  case 10:
+    dtString = strReplace(dtString, '10:', '11:');
+    break;
+  case 11:
+    dtString = strReplace(dtString, '11:', '12:');
+    break;
+  case 12:
+    dtString = strReplace(dtString, '12:', '13:');
+    break;
+  case 13:
+    dtString = strReplace(dtString, '13:', '14:');
+    break;
+  case 14:
+    dtString = strReplace(dtString, '14:', '15:');
+    break;
+  case 15:
+    dtString = strReplace(dtString, '15:', '16:');
+    break;
+  case 16:
+    dtString = strReplace(dtString, '16:', '17:');
+    break;
+  case 17:
+    dtString = strReplace(dtString, '17:', '18:');
+    break;
+  case 18:
+    dtString = strReplace(dtString, '18:', '19:');
+    break;
+  case 19:
+    dtString = strReplace(dtString, '19:', '20:');
+    break;
+  case 20:
+    dtString = strReplace(dtString, '20:', '21:');
+    break;
+  case 21:
+    dtString = strReplace(dtString, '21:', '22:');
+    break;
+  case 22:
+    dtString = strReplace(dtString, '22:', '23:');
+    break;
+  case 23:
+    dtString = strReplace(dtString, '23:', '00:');
+    break;
+  default:
+    break;
   }
   return dtString;
 };
@@ -397,15 +397,15 @@ const isTrue = function (value) {
     value = value.trim().toLowerCase();
   }
   switch (value) {
-    case true:
-    case 'true':
-    case 1:
-    case '1':
-    case 'on':
-    case 'yes':
-      return true;
-    default:
-      return false;
+  case true:
+  case 'true':
+  case 1:
+  case '1':
+  case 'on':
+  case 'yes':
+    return true;
+  default:
+    return false;
   }
 };
 
@@ -448,8 +448,8 @@ const getRegex = function (type) {
     type = type.trim().toLowerCase();
   }
   switch (type) {
-    case 'phone':
-      /*
+  case 'phone':
+    /*
                                             (123) 456-7890
                                             +(123) 456-7890
                                             +(123)-456-7890
@@ -462,15 +462,15 @@ const getRegex = function (type) {
                                             +380980029669
                                             075-63546725
                                             */
-      return '^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\\./0-9]*$';
-    case 'zip_code':
-      /*
+    return '^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\\./0-9]*$';
+  case 'zip_code':
+    /*
                                             12345
                                             12345-6789
                                             */
-      return '^[0-9]{5}(?:-[0-9]{4})?$';
-    case 'lat':
-      /*
+    return '^[0-9]{5}(?:-[0-9]{4})?$';
+  case 'lat':
+    /*
                                             +90.0
                                             45
                                             -90
@@ -478,9 +478,9 @@ const getRegex = function (type) {
                                             +90
                                             47.123123
                                             */
-      return '^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$';
-    case 'long':
-      /*
+    return '^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$';
+  case 'long':
+    /*
                                             -127.554334
                                             180
                                             -180
@@ -488,9 +488,9 @@ const getRegex = function (type) {
                                             +180
                                             179.999999
                                             */
-      return '^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$';
-    case 'lat_and_long':
-      /*
+    return '^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$';
+  case 'lat_and_long':
+    /*
                                             +90.0, -127.554334
                                             45, 180
                                             -90, -180
@@ -498,9 +498,9 @@ const getRegex = function (type) {
                                             +90, +180
                                             47.1231231, 179.99999999
                                             */
-      return '^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$';
-    default:
-      return '//g';
+    return '^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$';
+  default:
+    return '//g';
   }
 };
 
