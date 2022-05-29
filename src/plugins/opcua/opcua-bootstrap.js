@@ -21,6 +21,8 @@ const {
   saveOpcuaTags,
   removeOpcuaGroupValues,
   integrityCheckOpcua,
+  checkStoreParameterChanges,
+  saveStoreParameterChanges,
   isSaveOpcuaToDB,
   isRemoteOpcuaToDB,
   isUpdateOpcuaToDB,
@@ -35,7 +37,6 @@ const {
 
 const debug = require('debug')('app:opcua-bootstrap');
 const isDebug = false;
-const isLog = false;
 
 // Get feathers-specs data
 const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) || {};
@@ -61,6 +62,11 @@ module.exports = async function opcuaBootstrap(app) {
   if (!isOpcuaBootstrapAllowed) return;
 
   if (isSaveOpcuaToDB()) {
+
+    // Check store parameter changes
+    const storeBrowseNames = await checkStoreParameterChanges(app);
+    if (true && storeBrowseNames.length) inspector('checkStoreParameterChanges.storeBrowseNames:', storeBrowseNames);
+
     // Save opcua tags to local DB
     let saveResult = await saveOpcuaTags(app);
     logger.info('opcuaBootstrap.saveOpcuaTags.localDB:', saveResult);
@@ -74,6 +80,12 @@ module.exports = async function opcuaBootstrap(app) {
     if (isUpdateOpcuaToDB()) {
       removeResult = await removeOpcuaGroupValues(app);
       if(removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: ${removeResult}`);
+    }
+
+    if(storeBrowseNames.length){
+      const saveStoreResults = await saveStoreParameterChanges(app, storeBrowseNames);
+      if (isDebug && saveStoreResults.length) inspector('saveStoreParameterChanges.saveStoreResults:', saveStoreResults);
+      logger.info(`opcuaBootstrap.saveStoreParameterChanges.localDB: ${saveStoreResults.length}`);
     }
 
     const isRemote = isRemoteOpcuaToDB();
@@ -114,9 +126,9 @@ module.exports = async function opcuaBootstrap(app) {
           serverInfo: { applicationName: id },
         }
       };
-      if (isLog && srvData) inspector('opcuaBootstrap.srvData:', srvData);
+      if (isDebug && srvData) inspector('opcuaBootstrap.srvData:', srvData);
       opcuaServer = await service.create(srvData);
-      if (isLog && opcuaServer) inspector('opcuaBootstrap.opcuaServer:', opcuaServer.server.getCurrentState());
+      if (isDebug && opcuaServer) inspector('opcuaBootstrap.opcuaServer:', opcuaServer.server.getCurrentState());
     }
     // Create service for OPC-UA client
     service = await getClientService(app, id);
@@ -128,12 +140,12 @@ module.exports = async function opcuaBootstrap(app) {
         }
       };
 
-      if (isLog) inspector('opcuaBootstrap.clientData:', clientData);
+      if (isDebug) inspector('opcuaBootstrap.clientData:', clientData);
       // Create client service
       opcuaClient = await service.create(clientData);
       // Execute client script
       await executeOpcuaClientScript(service, id);
-      if (isLog && opcuaClient) inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
+      if (isDebug && opcuaClient) inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
     }
   }
 };

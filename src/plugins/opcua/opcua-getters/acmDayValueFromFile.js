@@ -100,10 +100,10 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
     let jsonData;
     //------------------------
     // Skip the first cycle to desynchronize the cycles
-    if(currentDate === undefined){
-      currentDate = null;
-      return;
-    }
+    // if(currentDate === undefined){
+    //   currentDate = null;
+    //   return;
+    // }
 
     // Get current date    
     if(currentDate){
