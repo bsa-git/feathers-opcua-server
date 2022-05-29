@@ -32,7 +32,7 @@ const loIsString = require('lodash/isString');
 const loIsInteger = require('lodash/isInteger');
 const loForEach = require('lodash/forEach');
 const loIsEqual = require('lodash/isEqual');
-const loToInteger = require('lodash/toInteger');
+const loOrderBy = require('lodash/orderBy');
 
 
 const chalk = require('chalk');
@@ -745,6 +745,7 @@ const getTagValuesFromStores = function (browseName, storesFromDB) {
     resultStoreTagList.push(storeTagValues4DateTime);
   }
 
+  resultStoreTagList = loOrderBy(resultStoreTagList, item => item['!value']['dateTime'], ['asc']);
   if (isDebug && resultStoreTagList.length) inspector('saveStoreParameterChanges.resultStoreTagList:', resultStoreTagList);
   return resultStoreTagList;
 };
