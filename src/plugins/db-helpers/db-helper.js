@@ -10,6 +10,7 @@ const {
 } = require('../opcua/opcua-helper');
 const {
   inspector,
+  pause,
   isDeepEqual,
   isDeepStrictEqual,
   getInt,
@@ -181,14 +182,14 @@ const getEnvAdapterDB = function () {
   let envAdapterDB = 'feathers-nedb';
   const envTypeDB = getEnvTypeDB();
   switch (envTypeDB) {
-  case 'nedb':
-    envAdapterDB = 'feathers-nedb';
-    break;
-  case 'mongodb':
-    envAdapterDB = 'feathers-mongoose';
-    break;
-  default:
-    break;
+    case 'nedb':
+      envAdapterDB = 'feathers-nedb';
+      break;
+    case 'mongodb':
+      envAdapterDB = 'feathers-mongoose';
+      break;
+    default:
+      break;
   }
   return envAdapterDB;
 };
@@ -420,6 +421,7 @@ const saveStoreOpcuaValues = async function (app, browseName, data, store) {
       const storeEnd = moment.utc(item.storeEnd).format('YYYY-MM-DDTHH:mm:ss');
       return (storeStart >= startOfPeriod && storeEnd <= endOfPeriod);
     });
+
     if (findedItem) {
       // Get itemId
       const idField = getIdField(findedItem);
@@ -586,9 +588,9 @@ const checkStoreParameterChanges = async function (app) {
   const opcuaTags = getOpcuaTags();
   for (let index = 0; index < opcuaTags.length; index++) {
     const tag = opcuaTags[index];
-    if(tag.store){
+    if (tag.store) {
       const tagFromDB = await findItem(app, 'opcua-tags', { browseName: tag.browseName });
-      if(tagFromDB.store && !isDeepEqual(tag.store, tagFromDB.store)){
+      if (tagFromDB.store && !isDeepEqual(tag.store, tagFromDB.store)) {
         storeBrowseNames.push(tag.browseName);
       }
     }
@@ -612,10 +614,10 @@ const saveStoreParameterChanges = async function (app, storeBrowseNames) {
     // Get opcua tags
     const opcuaTags = getOpcuaTags();
     const browseNames = opcuaTags.filter(tag => tag.ownerGroup && tag.ownerGroup === browseName).map(tag => tag.browseName);
-    if (true && browseNames.length) inspector('saveStoreParameterChanges.browseNames:', browseNames);
+    if (isDebug && browseNames.length) inspector('saveStoreParameterChanges.browseNames:', browseNames);
     // Find values from DB 
     const storesFromDB = await findItems(app, 'opcua-values', { tagName: { $in: browseNames } });
-    if (true && storesFromDB.length) console.log('saveStoreParameterChanges.storesFromDB.length:', storesFromDB.length);
+    if (isDebug && storesFromDB.length) console.log('saveStoreParameterChanges.storesFromDB.length:', storesFromDB.length);
     if (isDebug && storesFromDB.length) inspector('saveStoreParameterChanges.storesFromDB:', storesFromDB.map(item => {
       return {
         tagName: item.tagName,
@@ -628,7 +630,7 @@ const saveStoreParameterChanges = async function (app, storeBrowseNames) {
 
     // Remove values from DB
     const removedItems = await removeItems(app, 'opcua-values', { tagName: { $in: browseNames } });
-    if (true && removedItems.length) console.log('saveStoreParameterChanges.removedItems.length:', removedItems.length);
+    if (isDebug && removedItems.length) console.log('saveStoreParameterChanges.removedItems.length:', removedItems.length);
     if (isDebug && removedItems.length) inspector('saveStoreParameterChanges.removedItems:', removedItems.map(item => {
       return {
         tagName: item.tagName,
@@ -639,24 +641,17 @@ const saveStoreParameterChanges = async function (app, storeBrowseNames) {
 
     // Get tag values from stores
     const resultStoreTagList = getTagValuesFromStores(browseName, storesFromDB);
-    if (true && resultStoreTagList.length) console.log('saveStoreParameterChanges.resultStoreTagList.length:', resultStoreTagList.length);
+    if (isDebug && resultStoreTagList.length) console.log('saveStoreParameterChanges.resultStoreTagList.length:', resultStoreTagList.length);
 
     // Save all store opcua group value
     for (let index = 0; index < resultStoreTagList.length; index++) {
       const item = resultStoreTagList[index];
       const result = await saveStoreOpcuaGroupValue(app, browseName, item, true);
+      if (isDebug && result) console.log(`saveStoreParameterChanges('${browseName}').item:`, item);
+      await pause(100);
       results.push(result);
     }
-    if (true && results.length) console.log('saveStoreParameterChanges.results.length:', results.length);
-
-    // Promise.all( resultStoreTagList.map(item => saveStoreOpcuaGroupValue(app, browseName, item)) )
-    //   .then(results => {
-    //     if(true && results.length) console.log('saveStoreParameterChanges.results.length:', results.length);
-    //     for (let index = 0; index < results.length; index++) {
-    //       const result = results[index];
-    //       if (isDebug && result) inspector('saveStoreParameterChanges.result:', result);
-    //     }
-    //   });
+    if (isDebug && results.length) console.log('saveStoreParameterChanges.results.length:', results.length);
   }
   return results;
 };
@@ -744,11 +739,61 @@ const getTagValuesFromStores = function (browseName, storesFromDB) {
     storeTagValues4DateTime = Object.assign({}, ...storeTagValues4DateTime);
     resultStoreTagList.push(storeTagValues4DateTime);
   }
-
+  // Sort result store tag list
   resultStoreTagList = loOrderBy(resultStoreTagList, item => item['!value']['dateTime'], ['asc']);
   if (isDebug && resultStoreTagList.length) inspector('saveStoreParameterChanges.resultStoreTagList:', resultStoreTagList);
   return resultStoreTagList;
 };
+
+/**
+ * @name updateRemoteFromLocalStore
+ * @param {Object} app 
+ * @param {object} appRestClient 
+ * @returns {Object[]}
+ */
+const updateRemoteFromLocalStore = async function (app, appRestClient) {
+  // Get opcua tags
+  const opcuaTags = getOpcuaTags();
+  // Get group browseNames  
+  const groupBrowseNames = opcuaTags.filter(tag => tag.ownerGroup && tag.store).map(tag => tag.browseName);
+  if (isDebug && groupBrowseNames.length) inspector('updateRemoteFromLocalStore.groupBrowseNames:', groupBrowseNames);
+  
+  for (let index = 0; index < groupBrowseNames.length; index++) {
+    const groupBrowseName = groupBrowseNames[index];
+    // Get store browseNames 
+    const storeBrowseNames = opcuaTags.filter(tag => tag.ownerGroup && tag.ownerGroup === groupBrowseName).map(tag => tag.browseName);
+    // Remove values from DB
+    const countBrowseNames = await getCountItems(appRestClient, 'opcua-values', { tagName: { $in: storeBrowseNames } });
+    if (countBrowseNames.length) {
+      const removedItems = await removeItems(appRestClient, 'opcua-values', { tagName: { $in: storeBrowseNames } });
+      if (isDebug && removedItems.length) console.log('updateRemoteFromLocalStore.removedItems.length:', removedItems.length);
+    }
+    // Find stores from local DB 
+    let storesFromLocalDB = await findItems(app, 'opcua-values', { tagName: { $in: storeBrowseNames } });
+    if (isDebug && storesFromLocalDB.length) console.log('updateRemoteFromLocalStore.storesFromLocalDB.length:', storesFromLocalDB.length);
+    // Save stores to remote DB
+    if (storesFromLocalDB.length) {
+      // storesFromLocalDB = storesFromLocalDB.map(store => loOmit(store, [getIdField(store), 'tagId', 'createdAt', 'updatedAt', '__v']));
+      storesFromLocalDB = storesFromLocalDB.map(store => {
+        return {
+          tagName: store.tagName,
+          storeStart: store.storeStart,
+          storeEnd: store.storeEnd,
+          values: store.values.map(v => { return { key: v.key, items: v.items, value: v.value } })
+        }
+      });
+      const createdStores = await createItems(appRestClient, 'opcua-values', storesFromLocalDB);
+      if (isDebug && createdStores.length) console.log('updateRemoteFromLocalStore.createdStores.length:', createdStores.length);
+      if (isDebug && createdStores.length) inspector('updateRemoteFromLocalStore.createdStores:', createdStores.map(item => {
+        return {
+          tagName: item.tagName,
+          storeStart: item.storeStart,
+          storeEnd: item.storeEnd
+        };
+      }));
+    }
+  }
+}
 
 /**
  * @name integrityCheckOpcua
@@ -1284,6 +1329,7 @@ module.exports = {
   checkStoreParameterChanges,
   getTagValuesFromStores,
   saveStoreParameterChanges,
+  updateRemoteFromLocalStore,
   integrityCheckOpcua,
   //-------------------
   getCountItems,

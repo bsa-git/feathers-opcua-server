@@ -65,7 +65,7 @@ module.exports = async function opcuaBootstrap(app) {
 
     // Check store parameter changes
     const storeBrowseNames = await checkStoreParameterChanges(app);
-    if (true && storeBrowseNames.length) inspector('checkStoreParameterChanges.storeBrowseNames:', storeBrowseNames);
+    if (isDebug && storeBrowseNames.length) inspector('checkStoreParameterChanges.storeBrowseNames:', storeBrowseNames);
 
     // Save opcua tags to local DB
     let saveResult = await saveOpcuaTags(app);
