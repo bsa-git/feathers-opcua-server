@@ -25,13 +25,13 @@
       "type": "object"
     },
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_M52_ACM",
       "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM",
       "type": "object"
     },
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_M52_ACM2",
       "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM2",
       "type": "object"
@@ -131,7 +131,7 @@
       "dataType": "String",
       "hist": 1,
       "store": {
-        "numberOfValuesInDoc": [5, "days"],
+        "numberOfValuesInDoc": [1, "years"],
         "numberOfDocsForTag": [5, "years"]
       },
       "group": true,
@@ -144,7 +144,7 @@
         "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/asmDayReport.xls",
         "pointID": 1,
-        "interval": 30000,
+        "interval": 20000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["23QN2O", "23QN2O_CORR", "23FVSG", "23FVSG_CORR", "23F105_IS"]}
       }
     },
@@ -155,6 +155,10 @@
       "type": "variable.simple",
       "dataType": "String",
       "hist": 1,
+      "store": {
+        "numberOfValuesInDoc": [1, "years"],
+        "numberOfDocsForTag": [5, "years"]
+      },
       "group": true,
       "subscription": "onChangedGroupHandlerForASM",
       "variableGetType": "valueFromSource",
@@ -165,7 +169,7 @@
         "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/asmDayReport.xls",
         "pointID": 2,
-        "interval": 35000,
+        "interval": 20000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["14QN2O", "14QN2O_CORR", "14FVSG", "14FVSG_CORR", "14F105_IS"]}
       }
     },
@@ -176,6 +180,10 @@
       "type": "variable.simple",
       "dataType": "String",
       "hist": 1,
+      "store": {
+        "numberOfValuesInDoc": [1, "years"],
+        "numberOfDocsForTag": [5, "years"]
+      },
       "group": true,
       "subscription": "onChangedGroupHandlerForASM",
       "variableGetType": "valueFromSource",
@@ -186,7 +194,7 @@
         "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/asmDayReport.xls",
         "pointID": 3,
-        "interval": 45000,
+        "interval": 20000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["57QN2O", "57QN2O_CORR", "57FVSG", "57FVSG_CORR", "57F105_IS"]}
       }
     },

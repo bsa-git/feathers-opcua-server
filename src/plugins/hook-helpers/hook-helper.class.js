@@ -549,10 +549,11 @@ class HookHelper {
    * 
    * @param {String} path
    * @param {Object[]} data
+   * @param {Number} delay
    * @return {Object[]}
    */
-  async createItems(path = '', data = []) {
-    return await createItems(this.app, path, data);
+  async createItems(path = '', data = [], delay = 0) {
+    return await createItems(this.app, path, data, delay);
   }
 }
 

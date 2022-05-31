@@ -182,14 +182,14 @@ const getEnvAdapterDB = function () {
   let envAdapterDB = 'feathers-nedb';
   const envTypeDB = getEnvTypeDB();
   switch (envTypeDB) {
-    case 'nedb':
-      envAdapterDB = 'feathers-nedb';
-      break;
-    case 'mongodb':
-      envAdapterDB = 'feathers-mongoose';
-      break;
-    default:
-      break;
+  case 'nedb':
+    envAdapterDB = 'feathers-nedb';
+    break;
+  case 'mongodb':
+    envAdapterDB = 'feathers-mongoose';
+    break;
+  default:
+    break;
   }
   return envAdapterDB;
 };
@@ -296,7 +296,8 @@ const saveOpcuaGroupValue = async function (app, browseName, value) {
     'CH_M51_ACM::23VSG:23FVSG_CORR': [1,...,0],
     'CH_M51_ACM::23HNO3:23F105_IS': [1,...,1]
   }
- * @returns {Object}
+  @param {Boolean} changeStore 
+ * @returns {Object[]}
  */
 const saveStoreOpcuaGroupValue = async function (app, browseName, value, changeStore = false) {
   let tag, opcuaValue = null, values = [], savedValues = [];
@@ -342,6 +343,7 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value, changeS
         savedValue = await saveStoreOpcuaValues(app, tagBrowseName, data, store);
 
         // Save opcua values to remote store
+        /** */
         if (isRemoteOpcuaToDB() && !changeStore) {
           const remoteDbUrl = getOpcuaRemoteDbUrl();
           const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
@@ -404,14 +406,14 @@ const saveStoreOpcuaValues = async function (app, browseName, data, store) {
   let savedValue, values;
   //--------------------------------------
   const numberOfValuesInDoc = store.numberOfValuesInDoc;
-  const numberOfDocsForTag = store.numberOfDocsForTag;
+  const _data = Object.assign({}, data);
 
   const findedItems = await findItems(app, 'opcua-values', { tagName: browseName });
   if (!findedItems.length) {
-    savedValue = await createItem(app, 'opcua-values', data);
+    savedValue = await createItem(app, 'opcua-values', _data);
   } else {
     // Get range of stored values
-    const storeStart = data.storeStart;
+    const storeStart = _data.storeStart;
     const startOfPeriod = getStartOfPeriod(storeStart, numberOfValuesInDoc);
     const endOfPeriod = getEndOfPeriod(storeStart, numberOfValuesInDoc);
     if (isDebug && startOfPeriod) console.log('saveStoreOpcuaValues.startAndEndPeriod:', startOfPeriod, endOfPeriod);
@@ -428,16 +430,16 @@ const saveStoreOpcuaValues = async function (app, browseName, data, store) {
       const itemId = findedItem[idField];
       // Get values
       values = findedItem.values.filter(v => v.key !== storeStart);
-      values = loConcat(values, data.values);
+      values = loConcat(values, _data.values);
       values = sortByStringField(values, 'key');
       // Set range of stored values
-      data.storeStart = values[0].key;
-      data.storeEnd = values[values.length - 1].key;
-      data.values = sortByStringField(values, 'key', false);
+      _data.storeStart = values[0].key;
+      _data.storeEnd = values[values.length - 1].key;
+      _data.values = sortByStringField(values, 'key', false);
       // Patch service item
-      savedValue = await patchItem(app, 'opcua-values', itemId, data);
+      savedValue = await patchItem(app, 'opcua-values', itemId, _data);
     } else {
-      savedValue = await createItem(app, 'opcua-values', data);
+      savedValue = await createItem(app, 'opcua-values', _data);
     }
   }
   return savedValue;
@@ -755,16 +757,18 @@ const updateRemoteFromLocalStore = async function (app, appRestClient) {
   // Get opcua tags
   const opcuaTags = getOpcuaTags();
   // Get group browseNames  
-  const groupBrowseNames = opcuaTags.filter(tag => tag.ownerGroup && tag.store).map(tag => tag.browseName);
+  const groupBrowseNames = opcuaTags.filter(tag => tag.group && tag.store).map(tag => tag.browseName);
   if (isDebug && groupBrowseNames.length) inspector('updateRemoteFromLocalStore.groupBrowseNames:', groupBrowseNames);
   
   for (let index = 0; index < groupBrowseNames.length; index++) {
     const groupBrowseName = groupBrowseNames[index];
     // Get store browseNames 
     const storeBrowseNames = opcuaTags.filter(tag => tag.ownerGroup && tag.ownerGroup === groupBrowseName).map(tag => tag.browseName);
+    if (isDebug && storeBrowseNames.length) inspector('updateRemoteFromLocalStore.storeBrowseNames:', storeBrowseNames);
     // Remove values from DB
     const countBrowseNames = await getCountItems(appRestClient, 'opcua-values', { tagName: { $in: storeBrowseNames } });
-    if (countBrowseNames.length) {
+    if (isDebug && countBrowseNames) console.log('updateRemoteFromLocalStore.countBrowseNames:', countBrowseNames);
+    if (countBrowseNames) {
       const removedItems = await removeItems(appRestClient, 'opcua-values', { tagName: { $in: storeBrowseNames } });
       if (isDebug && removedItems.length) console.log('updateRemoteFromLocalStore.removedItems.length:', removedItems.length);
     }
@@ -779,12 +783,12 @@ const updateRemoteFromLocalStore = async function (app, appRestClient) {
           tagName: store.tagName,
           storeStart: store.storeStart,
           storeEnd: store.storeEnd,
-          values: store.values.map(v => { return { key: v.key, items: v.items, value: v.value } })
-        }
+          values: store.values.map(v => { return { key: v.key, items: v.items, value: v.value }; })
+        };
       });
-      const createdStores = await createItems(appRestClient, 'opcua-values', storesFromLocalDB);
-      if (isDebug && createdStores.length) console.log('updateRemoteFromLocalStore.createdStores.length:', createdStores.length);
-      if (isDebug && createdStores.length) inspector('updateRemoteFromLocalStore.createdStores:', createdStores.map(item => {
+      const createdStoresRemoteDB = await createItems(appRestClient, 'opcua-values', storesFromLocalDB, 100);
+      if (isDebug && createdStoresRemoteDB.length) console.log('updateRemoteFromLocalStore.createdStoresRemoteDB.length:', createdStoresRemoteDB.length);
+      if (isDebug && createdStoresRemoteDB.length) inspector('updateRemoteFromLocalStore.createdStoresRemoteDB:', createdStoresRemoteDB.map(item => {
         return {
           tagName: item.tagName,
           storeStart: item.storeStart,
@@ -793,7 +797,7 @@ const updateRemoteFromLocalStore = async function (app, appRestClient) {
       }));
     }
   }
-}
+};
 
 /**
  * @name integrityCheckOpcua
@@ -1288,15 +1292,18 @@ const createItem = async function (app, path = '', data = {}) {
  * @param {Object} app
  * @param {String} path
  * @param {Object[]} data
+ * @param {Number} delay
  * @return {Object[]}
  */
-const createItems = async function (app, path = '', data = []) {
+const createItems = async function (app, path = '', data = [], delay = 0) {
   let createResults = [];
   const service = app.service(path);
   if (service) {
     for (let index = 0; index < data.length; index++) {
       const item = data[index];
       const createdItem = await service.create(item);
+      
+      if(delay) await pause(delay);
       createResults.push(createdItem);
     }
     if (isDebug) inspector(`createItems(path='${path}', createResults.length:`, createResults.length);

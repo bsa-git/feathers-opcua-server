@@ -20,6 +20,7 @@ const {
 const {
   saveOpcuaTags,
   removeOpcuaGroupValues,
+  updateRemoteFromLocalStore,
   integrityCheckOpcua,
   checkStoreParameterChanges,
   saveStoreParameterChanges,
@@ -64,11 +65,11 @@ module.exports = async function opcuaBootstrap(app) {
   if (isSaveOpcuaToDB()) {
 
     // Check store parameter changes
-    const storeBrowseNames = await checkStoreParameterChanges(app);
-    if (isDebug && storeBrowseNames.length) inspector('checkStoreParameterChanges.storeBrowseNames:', storeBrowseNames);
+    const storeChangesBrowseNames = await checkStoreParameterChanges(app);
+    if (isDebug && storeChangesBrowseNames.length) inspector('checkStoreParameterChanges.storeBrowseNames:', storeChangesBrowseNames);
 
     // Save opcua tags to local DB
-    let saveResult = await saveOpcuaTags(app);
+    let saveResult = await saveOpcuaTags(app, false);
     logger.info('opcuaBootstrap.saveOpcuaTags.localDB:', saveResult);
     // Integrity check opcua data
     integrityResult = await integrityCheckOpcua(app, false);
@@ -79,11 +80,11 @@ module.exports = async function opcuaBootstrap(app) {
     }
     if (isUpdateOpcuaToDB()) {
       removeResult = await removeOpcuaGroupValues(app);
-      if(removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: ${removeResult}`);
+      if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: ${removeResult}`);
     }
 
-    if(storeBrowseNames.length){
-      const saveStoreResults = await saveStoreParameterChanges(app, storeBrowseNames);
+    if (storeChangesBrowseNames.length) {
+      const saveStoreResults = await saveStoreParameterChanges(app, storeChangesBrowseNames);
       if (isDebug && saveStoreResults.length) inspector('saveStoreParameterChanges.saveStoreResults:', saveStoreResults);
       logger.info(`opcuaBootstrap.saveStoreParameterChanges.localDB: ${saveStoreResults.length}`);
     }
@@ -103,10 +104,21 @@ module.exports = async function opcuaBootstrap(app) {
         } else {
           logger.error('Result integrity check opcua.remoteDB: ERR');
         }
+        // Remove opcua group values
         if (isUpdateOpcuaToDB()) {
           removeResult = await removeOpcuaGroupValues(appRestClient);
-          if(removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: ${removeResult}`);
+          if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: ${removeResult}`);
         }
+        // Remove opcua group values
+        const updateStores = await updateRemoteFromLocalStore(app, appRestClient);
+        if (isDebug && updateStores.length) console.log('opcuaBootstrap.updateRemoteFromLocalStore.updateStores.length:', updateStores.length);
+        if (isDebug && updateStores.length) inspector('opcuaBootstrap.updateRemoteFromLocalStore.updateStores:', updateStores.map(item => {
+          return {
+            tagName: item.tagName,
+            storeStart: item.storeStart,
+            storeEnd: item.storeEnd
+          };
+        }));
       }
     }
   }

@@ -46,7 +46,12 @@ async function showInfoForHandler(params, dataValue) {
     value = dataValue.value.value;
   }
 
-  console.log('<=', chalk.magentaBright(`ID ="${params.id}"; `), chalk.greenBright(`Name ="${browseName}"; `), chalk.whiteBright(`Values =(${valueKeys? valueKeys : value});`), chalk.cyanBright(`tm =${timestamp}`), '=>');
+  console.log('<=', 
+    chalk.magentaBright(`ID ="${params.id}"; `), 
+    chalk.greenBright(`Name ="${browseName}"; `), 
+    chalk.whiteBright(`Values =(${valueKeys? valueKeys : value});`), 
+    chalk.cyanBright(`TM =${timestamp}`), 
+    '=>');
 }
 
 module.exports = showInfoForHandler;
