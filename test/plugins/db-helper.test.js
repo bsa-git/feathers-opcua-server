@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
 const app = require('../../src/app');
+
+const loConcat = require('lodash/concat');
+
 const {
   inspector,
   checkServicesRegistered,
@@ -11,10 +14,14 @@ const {
 const {
   dbNullIdValue,
   getIdField,
+  checkStoreParameterChanges,
+  saveStoreParameterChanges,
+  saveOpcuaTags,
   integrityCheckOpcua,
   getCountItems,
   createItem,
   createItems,
+  patchItem,
   findItem,
   findItems,
   handleFoundItems,
@@ -42,7 +49,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
   it('#2: Save tags and find tags', async () => {
 
     // Get opcua tags 
-    const opcuaTags = fakes['opcuaTags'];
+    const opcuaTags = loConcat([], fakes['opcuaTags']);
     if (isDebug && opcuaTags.length) inspector('fakes.opcuaTags.length', opcuaTags.length);
 
     if (!opcuaTags.length) return;
@@ -51,7 +58,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     const countItems = await getCountItems(app, 'opcua-tags');
     if (countItems) {
       const removedItems = await removeItems(app, 'opcua-tags');
-      if (true && removedItems.length) inspector('removeItems.removedItems.length', removedItems.length);
+      if (isDebug && removedItems.length) inspector('removeItems.removedItems.length', removedItems.length);
       assert.ok(removedItems.length === opcuaTags.length, 'Not remove data from services \'opcua-tags\'');
     }
 
@@ -60,12 +67,12 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
     // Find one tag
     const findedItem = await findItem(app, 'opcua-tags');
-    if (isDebug) inspector('findItem.findedItem', findedItem);
+    if (isDebug && findedItem) inspector('findItem.findedItem', findedItem);
     assert.ok(opcuaTags.find(tag => tag.browseName === findedItem.browseName), 'Error for test: `Save tags and find tag`');
 
     // Find all tags
     const findedItems = await findItems(app, 'opcua-tags');
-    if (isDebug) inspector('Find tags from \'opcua-tags\' service', findedItems);
+    if (isDebug && findedItems.length) inspector('Find tags from \'opcua-tags\' service', findedItems);
     assert.ok(findedItems.length === opcuaTags.length, 'Error for test: `Save tags and find tags`');
   });
 
@@ -73,7 +80,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     const errPath = await saveFakesToServices(app, 'opcuaTags');
     const service = app.service('opcua-tags');
     const data = await service.find({});
-    if (isDebug) inspector('Save fake data to \'opcua-tags\' service.data[0]', data.data[0]);
+    if (isDebug && data) inspector('Save fake data to \'opcua-tags\' service.data[0]', data.data[0]);
     assert.ok(errPath === '' && data.data.length, `Not save fakes to services - '${errPath}'`);
   });
 
@@ -86,6 +93,9 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
   });
 
   it('#5: Test handle found values', async () => {
+
+    // Save fakes to services
+    await saveFakesToServices(app, 'opcuaTags');
 
     const cb = function (data) {
       const result = {};
@@ -101,7 +111,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
     // Handle fake data from `opcua-values`
     const processedData = await handleFoundItems(app, 'opcua-values', { tagName: 'CH_M51::ValueFromFile' }, cb);
-    if (isDebug) inspector('Handle values from \'opcua-values\' service', processedData);
+    if (isDebug && processedData.length) inspector('Handle values from \'opcua-values\' service', processedData);
     // inspector('Handle values from \'opcua-values\' service', processedData);
     assert.ok(processedData.length, 'Error for test: `Handle found values`');
   });
@@ -109,6 +119,11 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
   it('#6: Test integrity check opcua', async () => {
     let createdItem, findedItem;
     //-------------------------------------------------
+
+    // Save fakes to services
+    await saveFakesToServices(app, 'opcuaTags');
+    await saveFakesToServices(app, 'opcuaValues');
+
     // Remove 'object' tags that have no child tags
     createdItem = await createItem(app, 'opcua-tags', {
       browseName: 'NoChildTags',
@@ -181,5 +196,42 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
       findedItem = await findItem(app, 'opcua-values', { [idField]: id });
       assert.ok(!findedItem, 'Error for test: `Remove opcua values that have no \'owner\' tags`');
     }
+  });
+
+  it('#7: Save store values when store parameter changes', async () => {
+
+    //--------------------------------------
+    // Save fakes to services
+    await saveFakesToServices(app, 'opcuaTags');
+    await saveFakesToServices(app, 'opcuaValues');
+
+    const tagsFromDB = await findItems(app, 'opcua-tags');
+    if (isDebug && tagsFromDB.length) inspector('Save store values when store parameter changes.tagFromDB:', tagsFromDB.find(tag => tag.store));
+
+    // Get opcua tags 
+    let opcuaTags = loConcat([], fakes['opcuaTags']);
+    if (isDebug && opcuaTags.length) inspector('fakes.opcuaTags.length', opcuaTags.length);
+
+    // Change opcuaTag store
+    let newStore = [1, 'days'];
+    opcuaTags.find(tag => tag.store)['store']['numberOfValuesInDoc'] = newStore;
+    newStore = opcuaTags.find(tag => tag.store)['store'];
+    if (isDebug && opcuaTags.length) inspector('Save store values when store parameter changes.opcuaTags:', opcuaTags.find(tag => tag.store));
+
+    // Check store parameter changes
+    const storeBrowseNames = await checkStoreParameterChanges(app, opcuaTags);
+    if (true && storeBrowseNames) inspector('Save store values when store parameter changes.storeBrowseNames:', storeBrowseNames);
+    assert.ok(storeBrowseNames.length, `storeBrowseNames array must not be empty - '${storeBrowseNames.length}'`);
+    
+    // Save opcua tags to local test DB
+    let saveOpcuaTagsResult = await saveOpcuaTags(app, opcuaTags, false);
+    if (true && saveOpcuaTagsResult) inspector('Save store values when store parameter changes.saveOpcuaTagsResult:', saveOpcuaTagsResult);
+
+    // Save store parameter changes
+    const saveStoreResults = await saveStoreParameterChanges(app, storeBrowseNames, opcuaTags);
+    if (true && saveStoreResults.length) inspector('Save store values when store parameter changes.saveStoreResults:', saveStoreResults.length);
+    
+    
+    assert.ok(true, `saveStoreResults array must not be empty - '${saveStoreResults.length}'`);
   });
 });

@@ -312,6 +312,16 @@
       "type": "variable.simple",
       "dataType": "String",
       "hist": 1,
+      "store": {
+        "numberOfValuesInDoc": [
+          2,
+          "days"
+        ],
+        "numberOfDocsForTag": [
+          2,
+          "days"
+        ]
+      },
       "group": true,
       "variableGetType": "valueFromSource",
       "getter": "histValueFromPath",
@@ -400,21 +410,55 @@
           "value": 6.123245
         }
       ]
+    },
+    {
+      "_id": "60af3870270f24162c049c24",
+      "tagId": "60af3870270f24162c049c1f",
+      "tagName": "CH_M51::01AMIAK:01T4",
+      "storeStart": "2022-01-01",
+      "storeEnd": "2022-01-02",
+      "values": [
+        {
+          "key": "2022-01-01",
+          "value": 166.128945
+        },
+        {
+          "key": "2022-01-02",
+          "value": 180.56
+        }
+      ]
+    },
+    {
+      "_id": "60af3870270f24162c049c25",
+      "tagId": "60af3870270f24162c049c20",
+      "tagName": "CH_M51::01AMIAK:01P4_1",
+      "storeStart": "2022-01-01",
+      "storeEnd": "2022-01-02",
+      "values": [
+        {
+          "key": "2022-01-01",
+          "value": 6.128945
+        },
+        {
+          "key": "2022-01-02",
+          "value": 8.56
+        }
+      ]
     }
   ],
   "messages": [
     {
-      "_id": "60af3870270f24162c049c24",
+      "_id": "60af3870270f24162c049c26",
       "userId": "60af3870270f24162c049c09",
       "text": "Mollitia et id et esse."
     },
     {
-      "_id": "60af3870270f24162c049c25",
+      "_id": "60af3870270f24162c049c27",
       "userId": "60af3870270f24162c049c0a",
       "text": "Sit pariatur labore ullam in."
     },
     {
-      "_id": "60af3870270f24162c049c26",
+      "_id": "60af3870270f24162c049c28",
       "userId": "60af3870270f24162c049c0b",
       "text": "Qui sequi non sit ut delectus quam rem et sapiente."
     }

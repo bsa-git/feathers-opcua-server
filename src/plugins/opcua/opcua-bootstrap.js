@@ -11,6 +11,7 @@ const {
 } = require('../lib');
 
 const {
+  getOpcuaTags,
   getOpcuaConfig,
   getServerService,
   getClientService,
@@ -64,12 +65,14 @@ module.exports = async function opcuaBootstrap(app) {
 
   if (isSaveOpcuaToDB()) {
 
+    // Get opcua tags 
+    const opcuaTags = getOpcuaTags();
     // Check store parameter changes
-    const storeChangesBrowseNames = await checkStoreParameterChanges(app);
+    const storeChangesBrowseNames = await checkStoreParameterChanges(app, opcuaTags);
     if (isDebug && storeChangesBrowseNames.length) inspector('checkStoreParameterChanges.storeBrowseNames:', storeChangesBrowseNames);
 
     // Save opcua tags to local DB
-    let saveResult = await saveOpcuaTags(app, false);
+    let saveResult = await saveOpcuaTags(app, opcuaTags, false);
     logger.info('opcuaBootstrap.saveOpcuaTags.localDB:', saveResult);
     // Integrity check opcua data
     integrityResult = await integrityCheckOpcua(app, false);
@@ -84,7 +87,7 @@ module.exports = async function opcuaBootstrap(app) {
     }
 
     if (storeChangesBrowseNames.length) {
-      const saveStoreResults = await saveStoreParameterChanges(app, storeChangesBrowseNames);
+      const saveStoreResults = await saveStoreParameterChanges(app, storeChangesBrowseNames, opcuaTags);
       if (isDebug && saveStoreResults.length) inspector('saveStoreParameterChanges.saveStoreResults:', saveStoreResults);
       logger.info(`opcuaBootstrap.saveStoreParameterChanges.localDB: ${saveStoreResults.length}`);
     }
@@ -95,7 +98,7 @@ module.exports = async function opcuaBootstrap(app) {
       const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
       if (appRestClient) {
         // Save opcua tags to remote DB
-        saveResult = await saveOpcuaTags(appRestClient, isRemote);
+        saveResult = await saveOpcuaTags(appRestClient, opcuaTags, isRemote);
         logger.info('opcuaBootstrap.saveOpcuaTags.remoteDB:', saveResult);
         // Integrity check opcua data
         integrityResult = await integrityCheckOpcua(appRestClient, isRemote);

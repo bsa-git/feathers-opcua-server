@@ -323,6 +323,10 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value, changeS
     loForEach(opcuaValue, async (tagValue, tagBrowseName) => {
       const findedGroupTag = groupTags.find(tag => (tag.browseName === tagBrowseName));
       if (findedGroupTag) {
+
+        const idField = getIdField(findedGroupTag);
+        const itemId = findedGroupTag[idField];
+
         values = [];
         // Set key to dateTime
         const key = opcuaValue['!value'].dateTime;
@@ -332,7 +336,9 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value, changeS
         // Get values
         values.push(Array.isArray(tagValue) ? { key, items: tagValue, value: opcuaValue['!value'] } : { key, value: tagValue });
         // Get data
+
         const data = {
+          tagId: itemId.toString(),
           tagName: tagBrowseName,
           storeStart: key,
           storeEnd: key,
@@ -473,18 +479,18 @@ const removeOpcuaGroupValues = async function (app) {
  * @async
  * 
  * @param {Object} app 
+ * @param {Object[]} opcuaTags 
  * @param {Boolean} isRemote 
  * @returns {Object}
  * e.g. { added: 123, updated: 32, deleted: 12, total: 125}
  */
-const saveOpcuaTags = async function (app, isRemote = false) {
+const saveOpcuaTags = async function (app, opcuaTags, isRemote = false) {
   let idField, tagId, query = {};
   let tagFromDB = null, tagsFromDB = [], tagBrowseNames = [], objTagBrowseNames = [];
   let addedBrowseNames = [], updatedBrowseNames = [], deletedBrowseNames = [];
   let added = 0, updated = 0, deleted = 0, total = 0;
   //------------------------------------------------------------
   // Get opcua tags 
-  const opcuaTags = getOpcuaTags();
   if (isDebug && opcuaTags.length) inspector('db-helper.saveOpcuaTags.opcuaTags:', opcuaTags);
   for (let index = 0; index < opcuaTags.length; index++) {
     const tag = opcuaTags[index];
@@ -581,20 +587,18 @@ const saveOpcuaTags = async function (app, isRemote = false) {
 /**
  * @method checkStoreParameterChanges
  * @param {Object} app 
+ * @param {Object[]} opcuaTags 
  * @returns {String[]} 
  */
-const checkStoreParameterChanges = async function (app) {
+const checkStoreParameterChanges = async function (app, opcuaTags) {
   let storeBrowseNames = [];
   //-------------------------------------
-  // Get opcua tags 
-  const opcuaTags = getOpcuaTags();
-  for (let index = 0; index < opcuaTags.length; index++) {
-    const tag = opcuaTags[index];
-    if (tag.store) {
-      const tagFromDB = await findItem(app, 'opcua-tags', { browseName: tag.browseName });
-      if (tagFromDB.store && !isDeepEqual(tag.store, tagFromDB.store)) {
-        storeBrowseNames.push(tag.browseName);
-      }
+  const _opcuaTags = opcuaTags.filter(tag => tag.store);
+  for (let index = 0; index < _opcuaTags.length; index++) {
+    const tag = _opcuaTags[index];
+    const tagFromDB = await findItem(app, 'opcua-tags', { browseName: tag.browseName });
+    if (tagFromDB && tagFromDB.store && !isDeepEqual(tag.store, tagFromDB.store)) {
+      storeBrowseNames.push(tag.browseName);
     }
   }
   if (isDebug && storeBrowseNames.length) inspector('checkStoreParameterChanges.storeBrowseNames:', storeBrowseNames);
@@ -606,20 +610,21 @@ const checkStoreParameterChanges = async function (app) {
  * @param {Object} app 
  * @param {String[]} storeBrowseNames 
  * e.g. ['CH_M51_ACM::ValueFromFile',...,'CH_M52_ACM::ValueFromFile']
+ * @param {Object[]} opcuaTags 
+ * @returns {Object[]}
  */
-const saveStoreParameterChanges = async function (app, storeBrowseNames) {
+const saveStoreParameterChanges = async function (app, storeBrowseNames, opcuaTags) {
   let results = [];
   //-----------------------------------------------
   // Check store parameter
   for (let index = 0; index < storeBrowseNames.length; index++) {
-    const browseName = storeBrowseNames[index];
-    // Get opcua tags
-    const opcuaTags = getOpcuaTags();
-    const browseNames = opcuaTags.filter(tag => tag.ownerGroup && tag.ownerGroup === browseName).map(tag => tag.browseName);
-    if (isDebug && browseNames.length) inspector('saveStoreParameterChanges.browseNames:', browseNames);
+    const storeBrowseName = storeBrowseNames[index];
+    const groupBrowseNames = opcuaTags.filter(tag => tag.ownerGroup && tag.ownerGroup === storeBrowseName).map(tag => tag.browseName);
+    if (true && groupBrowseNames.length) inspector('saveStoreParameterChanges.groupBrowseNames:', groupBrowseNames);
     // Find values from DB 
-    const storesFromDB = await findItems(app, 'opcua-values', { tagName: { $in: browseNames } });
-    if (isDebug && storesFromDB.length) console.log('saveStoreParameterChanges.storesFromDB.length:', storesFromDB.length);
+    let storesFromDB = await findItems(app, 'opcua-values', { tagName: { $in: groupBrowseNames } });
+    storesFromDB = storesFromDB.filter(item => item.storeStart);
+    if (true && storesFromDB.length) console.log('saveStoreParameterChanges.storesFromDB.length:', storesFromDB.length);
     if (isDebug && storesFromDB.length) inspector('saveStoreParameterChanges.storesFromDB:', storesFromDB.map(item => {
       return {
         tagName: item.tagName,
@@ -630,9 +635,14 @@ const saveStoreParameterChanges = async function (app, storeBrowseNames) {
 
     if (!storesFromDB.length) return;
 
+    const idField = getIdField(storesFromDB);
+    const idsStoresFromDB = storesFromDB.map(item => item[idField]);
+    // const itemId = findedGroupTag[idField];
+
     // Remove values from DB
-    const removedItems = await removeItems(app, 'opcua-values', { tagName: { $in: browseNames } });
-    if (isDebug && removedItems.length) console.log('saveStoreParameterChanges.removedItems.length:', removedItems.length);
+    // const removedItems = await removeItems(app, 'opcua-values', { tagName: { $in: groupBrowseNames } });
+    const removedItems = await removeItems(app, 'opcua-values', { [idField]: { $in: idsStoresFromDB } });
+    if (true && removedItems.length) console.log('saveStoreParameterChanges.removedItems.length:', removedItems.length);
     if (isDebug && removedItems.length) inspector('saveStoreParameterChanges.removedItems:', removedItems.map(item => {
       return {
         tagName: item.tagName,
@@ -642,18 +652,18 @@ const saveStoreParameterChanges = async function (app, storeBrowseNames) {
     }));
 
     // Get tag values from stores
-    const resultStoreTagList = getTagValuesFromStores(browseName, storesFromDB);
-    if (isDebug && resultStoreTagList.length) console.log('saveStoreParameterChanges.resultStoreTagList.length:', resultStoreTagList.length);
+    const resultStoreTagList = getTagValuesFromStores(storeBrowseName, storesFromDB);
+    if (true && resultStoreTagList.length) console.log('saveStoreParameterChanges.resultStoreTagList.length:', resultStoreTagList.length);
 
     // Save all store opcua group value
     for (let index = 0; index < resultStoreTagList.length; index++) {
       const item = resultStoreTagList[index];
-      const result = await saveStoreOpcuaGroupValue(app, browseName, item, true);
-      if (isDebug && result) console.log(`saveStoreParameterChanges('${browseName}').item:`, item);
+      const result = await saveStoreOpcuaGroupValue(app, storeBrowseName, item, true);
+      if (true && result) console.log(`saveStoreParameterChanges('${storeBrowseName}').item:`, item);
       await pause(100);
       results.push(result);
     }
-    if (isDebug && results.length) console.log('saveStoreParameterChanges.results.length:', results.length);
+    if (true && results.length) console.log('saveStoreParameterChanges.results.length:', results.length);
   }
   return results;
 };
@@ -759,7 +769,7 @@ const updateRemoteFromLocalStore = async function (app, appRestClient) {
   // Get group browseNames  
   const groupBrowseNames = opcuaTags.filter(tag => tag.group && tag.store).map(tag => tag.browseName);
   if (isDebug && groupBrowseNames.length) inspector('updateRemoteFromLocalStore.groupBrowseNames:', groupBrowseNames);
-  
+
   for (let index = 0; index < groupBrowseNames.length; index++) {
     const groupBrowseName = groupBrowseNames[index];
     // Get store browseNames 
@@ -1302,8 +1312,8 @@ const createItems = async function (app, path = '', data = [], delay = 0) {
     for (let index = 0; index < data.length; index++) {
       const item = data[index];
       const createdItem = await service.create(item);
-      
-      if(delay) await pause(delay);
+
+      if (delay) await pause(delay);
       createResults.push(createdItem);
     }
     if (isDebug) inspector(`createItems(path='${path}', createResults.length:`, createResults.length);
