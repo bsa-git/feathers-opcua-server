@@ -2,13 +2,14 @@
 const assert = require('assert');
 const app = require('../../src/app');
 
-const loConcat = require('lodash/concat');
+const loCloneDeep = require('lodash/cloneDeep');
 
 const {
   inspector,
   checkServicesRegistered,
   saveFakesToServices,
   fakeNormalize,
+  isDeepEqual
 } = require('../../src/plugins');
 
 const {
@@ -29,9 +30,6 @@ const {
 } = require('../../src/plugins/db-helpers');
 
 
-// Get generated fake data
-const fakes = fakeNormalize();
-
 const debug = require('debug')('app:opcua-tags.test');
 
 const isDebug = false;
@@ -48,8 +46,10 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
   it('#2: Save tags and find tags', async () => {
 
+    // Get generated fake data
+    const fakes = loCloneDeep(fakeNormalize());
     // Get opcua tags 
-    const opcuaTags = loConcat([], fakes['opcuaTags']);
+    const opcuaTags = fakes['opcuaTags'];
     if (isDebug && opcuaTags.length) inspector('fakes.opcuaTags.length', opcuaTags.length);
 
     if (!opcuaTags.length) return;
@@ -201,16 +201,18 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
   it('#7: Save store values when store parameter changes', async () => {
 
     //--------------------------------------
+    
+    const fakes = loCloneDeep(fakeNormalize());
+    // Get opcua tags 
+    const opcuaTags = fakes['opcuaTags'];
+    if (isDebug && opcuaTags.length) inspector('fakes.opcuaTags.length', opcuaTags.length);
+    
     // Save fakes to services
     await saveFakesToServices(app, 'opcuaTags');
     await saveFakesToServices(app, 'opcuaValues');
 
     const tagsFromDB = await findItems(app, 'opcua-tags');
     if (isDebug && tagsFromDB.length) inspector('Save store values when store parameter changes.tagFromDB:', tagsFromDB.find(tag => tag.store));
-
-    // Get opcua tags 
-    let opcuaTags = loConcat([], fakes['opcuaTags']);
-    if (isDebug && opcuaTags.length) inspector('fakes.opcuaTags.length', opcuaTags.length);
 
     // Change opcuaTag store
     let newStore = [1, 'days'];
@@ -220,18 +222,54 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
     // Check store parameter changes
     const storeBrowseNames = await checkStoreParameterChanges(app, opcuaTags);
-    if (true && storeBrowseNames) inspector('Save store values when store parameter changes.storeBrowseNames:', storeBrowseNames);
+    if (isDebug && storeBrowseNames) inspector('Save store values when store parameter changes.storeBrowseNames:', storeBrowseNames);
     assert.ok(storeBrowseNames.length, `storeBrowseNames array must not be empty - '${storeBrowseNames.length}'`);
     
     // Save opcua tags to local test DB
     let saveOpcuaTagsResult = await saveOpcuaTags(app, opcuaTags, false);
-    if (true && saveOpcuaTagsResult) inspector('Save store values when store parameter changes.saveOpcuaTagsResult:', saveOpcuaTagsResult);
+    if (isDebug && saveOpcuaTagsResult) inspector('Save store values when store parameter changes.saveOpcuaTagsResult:', saveOpcuaTagsResult);
+    // saveOpcuaTagsResult -> { added: 0, updated: 1, deleted: 0, total: 4 }
+    assert.deepEqual(saveOpcuaTagsResult, { added: 0, updated: 1, deleted: 0, total: 4 }, 'Two objects, and their child objects, are equal');
+
 
     // Save store parameter changes
     const saveStoreResults = await saveStoreParameterChanges(app, storeBrowseNames, opcuaTags);
-    if (true && saveStoreResults.length) inspector('Save store values when store parameter changes.saveStoreResults:', saveStoreResults.length);
+    if (isDebug && saveStoreResults.length) inspector('Save store values when store parameter changes.saveStoreResults:', saveStoreResults.length);
     
+    // Get opcua values 
+    const valuesFromDB = await findItems(app, 'opcua-values', { storeStart: { $ne: undefined } });
+    if (isDebug && valuesFromDB.length) inspector('Save store values when store parameter changes.valuesFromDB:', valuesFromDB.length);
     
-    assert.ok(true, `saveStoreResults array must not be empty - '${saveStoreResults.length}'`);
+    assert.ok(valuesFromDB.length === 4, `valuesFromDB array must not be empty and is equal to (4) - '${valuesFromDB.length}'`);
   });
+
+  /** 
+  it('#9: Check when store parameter changes', async () => {
+
+    //--------------------------------------
+
+    // Get generated fake data
+    const fakes = loCloneDeep(fakeNormalize());
+    // Get opcua tags 
+    const opcuaTags = fakes['opcuaTags'];
+    if (true && opcuaTags.length) inspector('fakes.opcuaTags.length', opcuaTags.find(tag => tag.store));
+
+    // Save fakes to services
+    await saveFakesToServices(app, 'opcuaTags');
+
+    const tagsFromDB = await findItems(app, 'opcua-tags');
+    if (true && tagsFromDB.length) inspector('Check when store parameter changes.tagFromDB:', tagsFromDB.find(tag => tag.store));
+
+    // Change opcuaTag store
+    let newStore = [1, 'days'];
+    opcuaTags.find(tag => tag.store)['store']['numberOfValuesInDoc'] = newStore;
+    newStore = opcuaTags.find(tag => tag.store)['store'];
+    if (true && opcuaTags.length) inspector('Check when store parameter changes.opcuaTags:', opcuaTags.find(tag => tag.store));
+
+    // Check store parameter changes
+    const storeBrowseNames = await checkStoreParameterChanges(app, opcuaTags);
+    if (true && storeBrowseNames) inspector('Check when store parameter changes.storeBrowseNames:', storeBrowseNames);
+    assert.ok(storeBrowseNames.length, `storeBrowseNames array must not be empty - '${storeBrowseNames.length}'`);
+  });
+  */
 });
