@@ -489,17 +489,22 @@ const saveRemoteStoreOpcuaValues = async function (app, groupBrowseName, data, s
     const startOfPeriod = getStartOfPeriod(storeStart, numberOfValuesInDoc);
     const endOfPeriod = getEndOfPeriod(storeStart, numberOfValuesInDoc);
     if (isDebug && startOfPeriod) console.log('saveRemoteStoreOpcuaValues.startAndEndPeriod:', startOfPeriod, endOfPeriod);
-
+    // Find opcua value for store period
     const findedOpcuaValue = findedOpcuaValues.find(item => {
       const storeStart = moment.utc(item.storeStart).format('YYYY-MM-DDTHH:mm:ss');
       const storeEnd = moment.utc(item.storeEnd).format('YYYY-MM-DDTHH:mm:ss');
       return (storeStart >= startOfPeriod && storeEnd <= endOfPeriod);
     });
 
-    const itemId = findedOpcuaValue[idField];
+    if (findedOpcuaValue) {
+      // Get itemId 
+      const itemId = findedOpcuaValue[idField];
+      // Patch service item
+      savedValue = await patchItem(app, 'opcua-values', itemId, data);
+    } else {
+      savedValue = await createItem(app, 'opcua-values', data);
+    }
 
-    // Patch service item
-    savedValue = await patchItem(app, 'opcua-values', itemId, data);
   }
   return savedValue;
 };

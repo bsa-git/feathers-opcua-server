@@ -1,10 +1,9 @@
 /* eslint-disable no-unused-vars */
-const {getItems, replaceItems} = require('feathers-hooks-common');
-const {inspector, AuthServer, HookHelper, servicesConstraint} = require('../plugins');
+const { getItems, replaceItems } = require('feathers-hooks-common');
+const { inspector, AuthServer, HookHelper, servicesConstraint } = require('../plugins');
 const debug = require('debug')('app:hooks.constraints');
 
 const isDebug = false;
-const isLog = false;
 
 // eslint-disable-next-line no-unused-vars
 module.exports = function (isTest = false) {
@@ -19,19 +18,19 @@ module.exports = function (isTest = false) {
     Modify records and/or context.
      */
     const isCheck = isTest ? true : !AuthServer.isTest();
-    if(isDebug) debug('isCheck:', isCheck);
+    if (isDebug) debug('isCheck:', isCheck);
 
     if (isCheck) {
       // Create HookHelper object
       const hh = new HookHelper(context);
       // Show debug info
-      hh.showDebugInfo('', isLog);
-      hh.showDebugRecords('', isLog);
+      hh.showDebugInfo('', isDebug);
+      hh.showDebugRecords('', isDebug);
 
       // hookHelper.showDebugInfo('authentication.create.after', true);
 
       records = await servicesConstraint(context);
-      if(isLog)inspector('hooks.constraints.records:', records);
+      if (isDebug && records.length) inspector('hooks.constraints.records:', records);
     }
 
     // Place the modified records back in the context.

@@ -13,6 +13,7 @@ const {
   getItem,
   findItems,
   findAllItems,
+  handleFoundItems,
   removeItem,
   removeItems,
   patchItem,
@@ -255,7 +256,7 @@ class HookHelper {
       if (user) {
         target.params.user = user;
       }
-      
+
       if (authenticated) {
         target.params.authenticated = authenticated;
       }
@@ -264,8 +265,8 @@ class HookHelper {
         target.params.authentication = authentication;
       }
 
-      if(provider){
-        target.params.provider = provider;  
+      if (provider) {
+        target.params.provider = provider;
       }
 
       // if(ability){
@@ -477,6 +478,20 @@ class HookHelper {
    */
   async findAllItems(path = '', query = {}) {
     return await findAllItems(this.app, path, query);
+  }
+
+  /**
+ * Process found items
+ * @async
+ * 
+ * @param {Object} app
+ * @param {String} path
+ * @param {Object} query
+ * @param {Function} cb
+ * @return {Object[]}
+ */
+  async handleFoundItems(path = '', query = {}, cb = null) {
+    return await handleFoundItems(this.app, path = '', query = {}, cb = null);
   }
 
   /**
