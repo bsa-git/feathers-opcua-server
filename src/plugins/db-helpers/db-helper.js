@@ -182,14 +182,14 @@ const getEnvAdapterDB = function () {
   let envAdapterDB = 'feathers-nedb';
   const envTypeDB = getEnvTypeDB();
   switch (envTypeDB) {
-    case 'nedb':
-      envAdapterDB = 'feathers-nedb';
-      break;
-    case 'mongodb':
-      envAdapterDB = 'feathers-mongoose';
-      break;
-    default:
-      break;
+  case 'nedb':
+    envAdapterDB = 'feathers-nedb';
+    break;
+  case 'mongodb':
+    envAdapterDB = 'feathers-mongoose';
+    break;
+  default:
+    break;
   }
   return envAdapterDB;
 };
@@ -347,7 +347,8 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value, changeS
         };
 
         // Save opcua values to local store
-        savedValue = await saveLocalStoreOpcuaValues(app, tagBrowseName, data, store);
+        // savedValue = await saveLocalStoreOpcuaValues(app, tagBrowseName, data, store);
+        savedValue = await saveStoreOpcuaValuesThroughHook(app, tagBrowseName, data, store);
 
         // Save opcua values to remote store
         /** */
@@ -355,7 +356,7 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value, changeS
           const remoteDbUrl = getOpcuaRemoteDbUrl();
           const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
           if (appRestClient) {
-            savedValue = await saveLocalStoreOpcuaValues(appRestClient, tagBrowseName, data, store);
+            savedValue = await saveStoreOpcuaValues(appRestClient, tagBrowseName, data, store);
           }
         }
 
@@ -389,7 +390,7 @@ const saveOpcuaValues = async function (app, browseName, data) {
 };
 
 /**
- * @method saveLocalStoreOpcuaValues
+ * @method saveStoreOpcuaValues
  * @param {Object} app 
  * @param {String} browseName 
  * e.g. 'CH_M51_ACM::23N2O:23QN2O'
@@ -409,7 +410,7 @@ const saveOpcuaValues = async function (app, browseName, data) {
       }
  * @returns {Object}
  */
-const saveLocalStoreOpcuaValues = async function (app, browseName, data, store) {
+const saveStoreOpcuaValues = async function (app, browseName, data, store) {
   let savedValue, values;
   //--------------------------------------
   const numberOfValuesInDoc = store.numberOfValuesInDoc;
@@ -423,7 +424,7 @@ const saveLocalStoreOpcuaValues = async function (app, browseName, data, store) 
     const storeStart = _data.storeStart;
     const startOfPeriod = getStartOfPeriod(storeStart, numberOfValuesInDoc);
     const endOfPeriod = getEndOfPeriod(storeStart, numberOfValuesInDoc);
-    if (isDebug && startOfPeriod) console.log('saveLocalStoreOpcuaValues.startAndEndPeriod:', startOfPeriod, endOfPeriod);
+    if (isDebug && startOfPeriod) console.log('saveStoreOpcuaValues.startAndEndPeriod:', startOfPeriod, endOfPeriod);
     // Find a document that matches this range
     const findedItem = findedItems.find(item => {
       const storeStart = moment.utc(item.storeStart).format('YYYY-MM-DDTHH:mm:ss');
@@ -438,7 +439,7 @@ const saveLocalStoreOpcuaValues = async function (app, browseName, data, store) 
       // Get values
       values = findedItem.values.filter(v => v.key !== storeStart);
       values = loConcat(values, _data.values);
-      values = sortByStringField(values, 'key');
+      values = sortByStringField(values, 'key', true);
       // Set range of stored values
       _data.storeStart = values[0].key;
       _data.storeEnd = values[values.length - 1].key;
@@ -453,7 +454,7 @@ const saveLocalStoreOpcuaValues = async function (app, browseName, data, store) 
 };
 
 /**
- * @method saveRemoteStoreOpcuaValues
+ * @method saveStoreOpcuaValuesThroughHook
  * @param {Object} app 
  * @param {String} browseName 
  * e.g. 'CH_M51_ACM::23N2O:23QN2O'
@@ -474,7 +475,7 @@ const saveLocalStoreOpcuaValues = async function (app, browseName, data, store) 
       }      
  * @returns {Object}
  */
-const saveRemoteStoreOpcuaValues = async function (app, groupBrowseName, data, store) {
+const saveStoreOpcuaValuesThroughHook = async function (app, groupBrowseName, data, store) {
   let savedValue;
   //--------------------------------------
   const numberOfValuesInDoc = store.numberOfValuesInDoc;
@@ -488,7 +489,7 @@ const saveRemoteStoreOpcuaValues = async function (app, groupBrowseName, data, s
     const storeStart = data.storeStart;
     const startOfPeriod = getStartOfPeriod(storeStart, numberOfValuesInDoc);
     const endOfPeriod = getEndOfPeriod(storeStart, numberOfValuesInDoc);
-    if (isDebug && startOfPeriod) console.log('saveRemoteStoreOpcuaValues.startAndEndPeriod:', startOfPeriod, endOfPeriod);
+    if (isDebug && startOfPeriod) console.log('saveStoreOpcuaValuesThroughHook.startAndEndPeriod:', startOfPeriod, endOfPeriod);
     // Find opcua value for store period
     const findedOpcuaValue = findedOpcuaValues.find(item => {
       const storeStart = moment.utc(item.storeStart).format('YYYY-MM-DDTHH:mm:ss');
@@ -498,7 +499,7 @@ const saveRemoteStoreOpcuaValues = async function (app, groupBrowseName, data, s
 
     if (findedOpcuaValue) {
       // Get itemId 
-      const itemId = findedOpcuaValue[idField];
+      const itemId = findedOpcuaValue[idField];  //.toString();
       // Patch service item
       savedValue = await patchItem(app, 'opcua-values', itemId, data);
     } else {
@@ -1390,8 +1391,8 @@ module.exports = {
   getOpcuaRemoteDbUrl,
   getIdField,
   saveOpcuaValues,
-  saveLocalStoreOpcuaValues,
-  saveRemoteStoreOpcuaValues,
+  saveStoreOpcuaValues,
+  saveStoreOpcuaValuesThroughHook,
   saveOpcuaGroupValue,
   saveStoreOpcuaGroupValue,
   removeOpcuaGroupValues,

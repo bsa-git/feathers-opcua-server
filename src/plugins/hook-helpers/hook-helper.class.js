@@ -1,5 +1,8 @@
 /* eslint-disable no-unused-vars */
 const loMerge = require('lodash/merge');
+const loIsBuffer = require('lodash/isBuffer');
+const loIsPlainObject = require('lodash/isPlainObject');
+
 const {
   isProvider,
   checkContext,
@@ -24,9 +27,7 @@ const {
 const chalk = require('chalk');
 const debug = require('debug')('app:plugin.hook-helper.class');
 
-const isLog = false;
 const isDebug = false;
-
 
 class HookHelper {
   /**
@@ -224,14 +225,18 @@ class HookHelper {
    * @returns {String}
    */
   getContextId() {
-    let contextId;
-    if (isObject(this.contextId)) {
-      const idField = HookHelper.getIdField(this.contextId);
-      contextId = this.contextId[idField];
-    } else {
-      contextId = this.contextId;
+
+    if(loIsBuffer(this.contextId)){
+      return this.contextId.toString();
     }
-    return contextId;
+
+    if (loIsPlainObject(this.contextId)) {
+      const idField = HookHelper.getIdField(this.contextId);
+      return this.contextId[idField];
+    } 
+    
+    return this.contextId;
+
   }
 
   /**
@@ -323,7 +328,7 @@ class HookHelper {
   /**
    * Get pick records
    * @param {Function} fn
-   * @return {Array|Object}
+   * @return {Object|Object[]}
    */
   getPickRecords(fn) {
     let _records;
@@ -379,7 +384,7 @@ class HookHelper {
    */
   async validateRelationship(path = '', id = null) {
     const result = await this.getItem(path, id.toString());
-    if (isLog) inspector(`validateRelationship(path='${path}', id='${id}').result:`, result);
+    if (isDebug) inspector(`validateRelationship(path='${path}', id='${id}').result:`, result);
     if (!result) {
       throw new errors.BadRequest(`There is no entry in the service('${path}') for id: '${id}'`);
     }
@@ -423,8 +428,7 @@ class HookHelper {
    */
   async validateUnique(servicePath = '', query = {}) {
     let results = await this.getCountItems(servicePath, query);
-    if (isDebug) debug(`validateUnique(servicePath='${servicePath}', query=${JSON.stringify(query)}).results:`, results);
-    // debug(`validateUnique(servicePath='${servicePath}', query=${JSON.stringify(query)}).results:`, results);
+    if (isDebug && servicePath) debug(`validateUnique(servicePath='${servicePath}', query=${JSON.stringify(query)}).results:`, results);
     if (results) {
       throw new errors.BadRequest('Values must be unique');
     }
