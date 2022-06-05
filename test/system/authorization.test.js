@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
-const app = require('../src/app');
+const app = require('../../src/app');
 const port = app.get('port');
-const { inspector, } = require('../src/plugins/lib');
-const { localStorage, loginLocal, feathersClient } = require('../src/plugins/auth');
+const { inspector, } = require('../../src/plugins/lib');
+const { localStorage, loginLocal, feathersClient } = require('../../src/plugins/auth');
 const {
   saveFakesToServices,
   fakeNormalize,
-} = require('../src/plugins/test-helpers');
+} = require('../../src/plugins/test-helpers');
 
 const debug = require('debug')('app:authorization.test');
 
