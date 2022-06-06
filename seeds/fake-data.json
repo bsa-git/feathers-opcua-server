@@ -314,11 +314,11 @@
       "hist": 1,
       "store": {
         "numberOfValuesInDoc": [
-          2,
+          3,
           "days"
         ],
         "numberOfDocsForTag": [
-          2,
+          6,
           "days"
         ]
       },
