@@ -24,11 +24,10 @@ const loForEach = require('lodash/forEach');
 const debug = require('debug')('app:mssql-tedious.test');
 
 const isDebug = false;
-const isLog = false;
 
 let config = MssqlTedious.getDefaultConnConfig();
 config = getMssqlConfigFromEnv(config, 'MSSQL_ASODU_TEST');
-if (isLog) inspector('getMssqlConfigFromEnv.config:', config);
+if (isDebug) inspector('getMssqlConfigFromEnv.config:', config);
 
 const id = 'ua-cherkassy-azot-asutp_dev1';
 
@@ -58,7 +57,7 @@ const getData = function (fileName) {
     loForEach(json, function (value, key) {
       json[key] = getValue(value);
     });
-    if (isLog) inspector('getData.json:', json);
+    if (isDebug) inspector('getData.json:', json);
   }
   return json;
 };
@@ -81,7 +80,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     await db.connect();
     await db.query([], 'DELETE FROM dbo.tblMessages');
     const rows = await db.query([], 'SELECT * FROM tblMessages');
-    if(isLog) inspector('Delete result:', { rows });
+    if(isDebug) inspector('Delete result:', { rows });
     await db.disconnect();
 
     assert.ok(!rows.length, 'Delete rows from table');
@@ -98,7 +97,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     let params = [];
     sql = 'INSERT INTO dbo.tblMessages VALUES (@value, @type, @text)';
     const jsonText = getData('data-CH_M51.csv');
-    if(isLog) inspector('getData:', jsonText);
+    if(isDebug) inspector('getData:', jsonText);
     db.buildParams(params, 'value', TYPES.Char, 'CH_M51::ValueFromFile');
     db.buildParams(params, 'type', TYPES.Char, 'tag');
     db.buildParams(params, 'text', TYPES.Char, JSON.stringify(jsonText));
@@ -112,8 +111,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     db.buildParams(params, 'value', TYPES.Char, 'CH_M51::ValueFromFile');
     db.buildParams(params, 'text', TYPES.Char, null, true);
     rows = await db.query(params, sql);
-    if(isLog) inspector('Request result:', { sql, rows });
-    // inspector('Request result:', { sql, rows });
+    if(isDebug) inspector('Request result:', { sql, rows });
     await db.disconnect();
 
     assert.deepStrictEqual(JSON.parse(rows[0]['text']), jsonText, 'Insert rows to table');
@@ -129,7 +127,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     let params = [];
     sql = 'INSERT INTO dbo.tblMessages VALUES (@value, @type, @text)';
     const jsonText = getData('data-CH_M52.csv');
-    if(isLog) inspector('getData:', jsonText);
+    if(isDebug) inspector('getData:', jsonText);
     db.buildParams(params, 'value', TYPES.Char, 'CH_M52::ValueFromFile');
     db.buildParams(params, 'type', TYPES.Char, 'tag');
     db.buildParams(params, 'text', TYPES.Char, JSON.stringify(jsonText));
@@ -142,7 +140,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     db.buildParams(params, 'type', TYPES.Char, 'tag');
     db.buildParams(params, 'value', TYPES.Char, 'CH_M52::ValueFromFile');
     rows = await db.query(params, sql);
-    if(isLog) inspector('Request result:', { sql, rows });
+    if(isDebug) inspector('Request result:', { sql, rows });
     await db.disconnect();
 
     assert.deepStrictEqual(JSON.parse(rows[0]['Text']), jsonText, 'Insert rows to table');
@@ -158,7 +156,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     let params = [];
     sql = 'UPDATE dbo.tblMessages SET Text = @text WHERE Type = @type AND Value = @value';
     const jsonText = getData('data-CH_M51.csv');
-    if(isLog) inspector('getData:', jsonText);
+    if(isDebug) inspector('getData:', jsonText);
     db.buildParams(params, 'value', TYPES.Char, 'CH_M51::ValueFromFile');
     db.buildParams(params, 'type', TYPES.Char, 'tag');
     db.buildParams(params, 'text', TYPES.Char, JSON.stringify(jsonText));
@@ -170,7 +168,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     db.buildParams(params, 'type', TYPES.Char, 'tag');
     db.buildParams(params, 'value', TYPES.Char, 'CH_M51::ValueFromFile');
     rows = await db.query(params, sql);
-    if(isLog) inspector('Request result:', { sql, rows });
+    if(isDebug) inspector('Request result:', { sql, rows });
     
     await db.disconnect();
 
@@ -192,7 +190,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     db.buildParams(params, 'text', TYPES.Char, null, true);
     // db.buildParams(params, '@text', TYPES.Char, '');
     const rows = await db.proc(params, sql);
-    if(isLog) inspector('Stored procedure result:', { sql, rows });
+    if(isDebug) inspector('Stored procedure result:', { sql, rows });
     // inspector('Stored procedure result:', { sql, rows });
     
     await db.disconnect();
@@ -217,8 +215,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     db.buildParams(params, 'scanerName', TYPES.Char, 'webM51');
     
     rows = await db.query(params, sql);
-    if(isLog) inspector('Request result:', { sql, rows });
-    // inspector('Request result:', rows);
+    if(isDebug) inspector('Request result:', { sql, rows });
     
     await db.disconnect();
 
@@ -242,8 +239,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     db.buildParams(params, 'scanerName', TYPES.Char, 'opcUPG2');
     
     rows = await db.query(params, sql);
-    if(isLog) inspector('Request result:', { sql, rows });
-    inspector('Request result:', rows);
+    if(isDebug) inspector('Request result:', { sql, rows });
     
     await db.disconnect();
 

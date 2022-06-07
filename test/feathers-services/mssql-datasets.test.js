@@ -112,26 +112,4 @@ describe('<<=== MSSQL-Datasets Test (mssql-datasets.test.js) ===>>', () => {
       assert.ok(true, 'MSSQL datasets: service remove');
     }
   });
-
-  /*
-  it('Connecting and request', async () => {
-    const db = new MssqlTedious(config);
-    await db.connect();
-
-    const params = [];
-    // const sql = "select * from tblMessages where number = @number";
-    const sql = 'select * from tblMessages';
-    // For each param do: db.buildParams(params, "name", TYPES.type, variable)
-    // db.buildParams(params, "number", TYPES.Int, number);
-    await db.query(params, sql, result => {
-      console.log('Request result:', { params, sql, rows: result });
-    });
-
-    if(isLog) inspector('Connecting and request.getCurrentState:', db.getCurrentState());
-
-    await db.connDisconnect();
-
-    assert.ok(true, 'Connecting to the database (tedious)');
-  });
-  */
 });
