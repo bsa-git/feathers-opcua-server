@@ -9,7 +9,6 @@ const {
   checkServicesRegistered,
   saveFakesToServices,
   fakeNormalize,
-  isDeepEqual
 } = require('../../src/plugins');
 
 const {
@@ -22,6 +21,7 @@ const {
   getCountItems,
   createItem,
   createItems,
+  getItem,
   patchItem,
   findItem,
   findItems,
@@ -243,33 +243,59 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     assert.ok(valuesFromDB.length === 4, `valuesFromDB array must not be empty and is equal to (4) - '${valuesFromDB.length}'`);
   });
 
-  /** 
-  it('#9: Check when store parameter changes', async () => {
+  it('#8: Save store values for test "store-items" hook', async () => {
 
     //--------------------------------------
 
-    // Get generated fake data
     const fakes = loCloneDeep(fakeNormalize());
-    // Get opcua tags 
-    const opcuaTags = fakes['opcuaTags'];
-    if (true && opcuaTags.length) inspector('fakes.opcuaTags.length', opcuaTags.find(tag => tag.store));
+    // Get opcua values 
+    const opcuaValues = fakes['opcuaValues'];
+    if (isDebug && opcuaValues.length) inspector('fakes.opcuaValues.length', opcuaValues.length);
 
     // Save fakes to services
     await saveFakesToServices(app, 'opcuaTags');
+    await saveFakesToServices(app, 'opcuaValues');
 
-    const tagsFromDB = await findItems(app, 'opcua-tags');
-    if (true && tagsFromDB.length) inspector('Check when store parameter changes.tagFromDB:', tagsFromDB.find(tag => tag.store));
+    const storeTag = await findItem(app, 'opcua-tags', { store: { $ne: undefined } });
+    if (isDebug && storeTag) inspector('Save store values for test "store-items" hook.storeTag:', storeTag);
+    if (storeTag) {
+      const browseName = storeTag.browseName;
+      const storeTags = await findItems(app, 'opcua-tags', { ownerGroup: browseName });
+      if (isDebug && storeTags.length) inspector('Save store values for test "store-items" hook.storeTags:', storeTags);
+      for (let index = 0; index < storeTags.length; index++) {
+        const storeTag = storeTags[index];
+        const idField = getIdField(storeTag);
+        let storeValue = await findItem(app, 'opcua-values', { tagId: storeTag[idField], storeStart: { $ne: undefined } });
+        if (isDebug && storeValue) inspector('Save store values for test "store-items" hook.storeValue:', storeValue);
 
-    // Change opcuaTag store
-    let newStore = [1, 'days'];
-    opcuaTags.find(tag => tag.store)['store']['numberOfValuesInDoc'] = newStore;
-    newStore = opcuaTags.find(tag => tag.store)['store'];
-    if (true && opcuaTags.length) inspector('Check when store parameter changes.opcuaTags:', opcuaTags.find(tag => tag.store));
+        const unitsRange = storeTag.valueParams.engineeringUnitsRange;
+        const storeTagValue = (unitsRange.high - unitsRange.low) / 2;
+        const storeData = {
+          tagId: storeValue.tagId.toString(),
+          tagName: storeValue.tagName,
+          storeStart: '2022-01-03',
+          storeEnd: '2022-01-03',
+          values: [
+            {
+              key: '2022-01-03',
+              value: storeTagValue
+            }
+          ]
+        };
 
-    // Check store parameter changes
-    const storeBrowseNames = await checkStoreParameterChanges(app, opcuaTags);
-    if (true && storeBrowseNames) inspector('Check when store parameter changes.storeBrowseNames:', storeBrowseNames);
-    assert.ok(storeBrowseNames.length, `storeBrowseNames array must not be empty - '${storeBrowseNames.length}'`);
+        // Patch store value
+        const id = storeValue[idField].toString();
+        const patchValue = await patchItem(app, 'opcua-values', id, storeData);
+        if (isDebug && storeValue) inspector('Save store values for test "store-items" hook.patchValue:', patchValue);
+
+        // Get store value 
+        storeValue = await getItem(app, 'opcua-values', id);
+        if (isDebug && storeValue) inspector('Save store values for test "store-items" hook.storeValue:', storeValue);
+
+        const opcuaValue = opcuaValues.find(v => v[idField] === id);
+
+        assert.ok(storeValue.values.length > opcuaValue.values.length, `storeValue.values.length must be greater than opcuaValue.values.length  - (${storeValue.values.length}) > (${opcuaValue.values.length})`);
+      }
+    }
   });
-  */
 });

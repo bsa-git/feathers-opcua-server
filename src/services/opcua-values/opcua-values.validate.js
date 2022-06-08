@@ -24,7 +24,6 @@ let base = merge({},
         items: {
           type: 'object',
           properties: {
-            tagId: { type: ID },
             key: {type: 'string'},
             value: {type: ['string', 'number', 'integer', 'boolean', 'object']},
             items: { type: 'array', items: { type: ['string', 'number', 'integer', 'boolean', 'object', 'array'] } }

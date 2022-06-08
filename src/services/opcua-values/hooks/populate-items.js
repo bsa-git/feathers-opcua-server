@@ -5,12 +5,12 @@ module.exports = function (options = {}) {
     // Create HookHelper object
     const hh = new HookHelper(context);
     // Add items
-    const addItems = async value => {
-      if (value.tagId) {
-        const fieldId = HookHelper.getIdField(value);
-        const tags = await hh.findItems('opcua-tags', { [fieldId]: value.tagId });
+    const addItems = async record => {
+      if (record.tagId) {
+        const fieldId = HookHelper.getIdField(record);
+        const tags = await hh.findItems('opcua-tags', { [fieldId]: record.tagId });
         if (tags.length) {
-          value.tag = tags[0];
+          record.tag = tags[0];
         }
       }
     };

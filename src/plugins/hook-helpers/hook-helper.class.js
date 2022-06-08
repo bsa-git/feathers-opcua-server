@@ -25,8 +25,11 @@ const {
   createItems
 } = require('../db-helpers');
 const chalk = require('chalk');
-const debug = require('debug')('app:plugin.hook-helper.class');
 
+// Get feathers-specs data
+const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) || {};
+
+const debug = require('debug')('app:plugin.hook-helper.class');
 const isDebug = false;
 
 class HookHelper {
@@ -192,8 +195,6 @@ class HookHelper {
    * @return {Boolean}
    */
   static isTest() {
-    // Get feathers-specs data
-    const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) || {};
     return feathersSpecs.app.envTestModeName === process.env.NODE_ENV;
   }
 

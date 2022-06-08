@@ -13,26 +13,27 @@ module.exports = function (options = {}) {
     // Create HookHelper object
     const hh = new HookHelper(context);
     // Add items
-    const addItems = async value => {
+    const addItems = async record => {
       let values;
       //----------------------
       
-      if(!value.storeStart) return;
+      if(!record.storeStart) return;
+      if (!record.values.length > 1) return;
       
       const contextId = hh.getContextId();
       if (contextId) {
         // Get store value
         const storeValue = await hh.getItem('opcua-values', contextId);
         // Get storeStart 
-        const storeStart = storeValue.storeStart;
+        const storeStart = record.storeStart;
         // Get values
         values = storeValue.values.filter(v => v.key !== storeStart);
-        values = loConcat(values, value.values);
+        values = loConcat(values, record.values);
         values = sortByStringField(values, 'key', true);
         // Set range of stored values
-        value.storeStart = values[0].key;
-        value.storeEnd = values[values.length - 1].key;
-        value.values = sortByStringField(values, 'key', false);
+        record.storeStart = values[0].key;
+        record.storeEnd = values[values.length - 1].key;
+        record.values = sortByStringField(values, 'key', false);
       }
     };
     await hh.forEachRecords(addItems);

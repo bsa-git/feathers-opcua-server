@@ -29,7 +29,6 @@ module.exports = function (app) {
       storeStart: String,
       storeEnd: String,
       values: [{
-        tagId: mongoose.ObjectId,
         key: String,
         value: Schema.Types.Mixed,
         items: [Schema.Types.Mixed]

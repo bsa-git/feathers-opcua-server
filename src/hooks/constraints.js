@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const { getItems, replaceItems } = require('feathers-hooks-common');
-const { inspector, AuthServer, HookHelper, servicesConstraint } = require('../plugins');
+const { inspector, HookHelper, servicesConstraint } = require('../plugins');
 const debug = require('debug')('app:hooks.constraints');
 
 const isDebug = false;
@@ -17,7 +17,7 @@ module.exports = function (isTest = false) {
     /*
     Modify records and/or context.
      */
-    const isCheck = isTest ? true : !AuthServer.isTest();
+    const isCheck = isTest ? true : !HookHelper.isTest();
     if (isDebug) debug('isCheck:', isCheck);
 
     if (isCheck) {
