@@ -112,7 +112,7 @@ module.exports = async function opcuaBootstrap(app) {
           removeResult = await removeOpcuaGroupValues(appRestClient);
           if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: ${removeResult}`);
         }
-        // Remove opcua group values
+        // Update remote from local store
         const updateStores = await updateRemoteFromLocalStore(app, appRestClient);
         if (isDebug && updateStores.length) console.log('opcuaBootstrap.updateRemoteFromLocalStore.updateStores.length:', updateStores.length);
         if (isDebug && updateStores.length) inspector('opcuaBootstrap.updateRemoteFromLocalStore.updateStores:', updateStores.map(item => {

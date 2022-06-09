@@ -348,7 +348,7 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value, changeS
 
         // Save opcua values to local store
         // savedValue = await saveLocalStoreOpcuaValues(app, tagBrowseName, data, store);
-        savedValue = await saveStoreOpcuaValuesThroughHook(app, tagBrowseName, data, store);
+        savedValue = await saveStoreOpcuaValues4Hook(app, tagBrowseName, data, store);
 
         // Save opcua values to remote store
         /** */
@@ -454,7 +454,7 @@ const saveStoreOpcuaValues = async function (app, browseName, data, store) {
 };
 
 /**
- * @method saveStoreOpcuaValuesThroughHook
+ * @method saveStoreOpcuaValues4Hook
  * @param {Object} app 
  * @param {String} browseName 
  * e.g. 'CH_M51_ACM::23N2O:23QN2O'
@@ -475,7 +475,7 @@ const saveStoreOpcuaValues = async function (app, browseName, data, store) {
       }      
  * @returns {Object}
  */
-const saveStoreOpcuaValuesThroughHook = async function (app, groupBrowseName, data, store) {
+const saveStoreOpcuaValues4Hook = async function (app, groupBrowseName, data, store) {
   let savedValue;
   //--------------------------------------
   const numberOfValuesInDoc = store.numberOfValuesInDoc;
@@ -489,7 +489,7 @@ const saveStoreOpcuaValuesThroughHook = async function (app, groupBrowseName, da
     const storeStart = data.storeStart;
     const startOfPeriod = getStartOfPeriod(storeStart, numberOfValuesInDoc);
     const endOfPeriod = getEndOfPeriod(storeStart, numberOfValuesInDoc);
-    if (isDebug && startOfPeriod) console.log('saveStoreOpcuaValuesThroughHook.startAndEndPeriod:', startOfPeriod, endOfPeriod);
+    if (isDebug && startOfPeriod) console.log('saveStoreOpcuaValues4Hook.startAndEndPeriod:', startOfPeriod, endOfPeriod);
     // Find opcua value for store period
     const findedOpcuaValue = findedOpcuaValues.find(item => {
       const storeStart = moment.utc(item.storeStart).format('YYYY-MM-DDTHH:mm:ss');
@@ -681,8 +681,7 @@ const saveStoreParameterChanges = async function (app, storeBrowseNames, opcuaTa
     const groupBrowseNames = opcuaTags.filter(tag => tag.ownerGroup && tag.ownerGroup === storeBrowseName).map(tag => tag.browseName);
     if (isDebug && groupBrowseNames.length) inspector('saveStoreParameterChanges.groupBrowseNames:', groupBrowseNames);
     // Find values from DB 
-    let storesFromDB = await findItems(app, 'opcua-values', { tagName: { $in: groupBrowseNames } });
-    storesFromDB = storesFromDB.filter(item => item.storeStart);
+    let storesFromDB = await findItems(app, 'opcua-values', { tagName: { $in: groupBrowseNames }, storeStart: { $ne: undefined } });
     if (isDebug && storesFromDB.length) console.log('saveStoreParameterChanges.storesFromDB.length:', storesFromDB.length);
     if (isDebug && storesFromDB.length) inspector('saveStoreParameterChanges.storesFromDB:', storesFromDB.map(item => {
       return {
@@ -832,15 +831,14 @@ const updateRemoteFromLocalStore = async function (app, appRestClient) {
     const countBrowseNames = await getCountItems(appRestClient, 'opcua-values', { tagName: { $in: storeBrowseNames } });
     if (isDebug && countBrowseNames) console.log('updateRemoteFromLocalStore.countBrowseNames:', countBrowseNames);
     if (countBrowseNames) {
-      const removedItems = await removeItems(appRestClient, 'opcua-values', { tagName: { $in: storeBrowseNames } });
-      if (isDebug && removedItems.length) console.log('updateRemoteFromLocalStore.removedItems.length:', removedItems.length);
+      const removedItems = await removeItems(appRestClient, 'opcua-values', { tagName: { $in: storeBrowseNames }, $select: ['tagName'] });
+      if (isDebug && removedItems.length) console.log('updateRemoteFromLocalStore.removedItems.tagName:', removedItems);
     }
     // Find stores from local DB 
     let storesFromLocalDB = await findItems(app, 'opcua-values', { tagName: { $in: storeBrowseNames } });
     if (isDebug && storesFromLocalDB.length) console.log('updateRemoteFromLocalStore.storesFromLocalDB.length:', storesFromLocalDB.length);
     // Save stores to remote DB
     if (storesFromLocalDB.length) {
-      // storesFromLocalDB = storesFromLocalDB.map(store => loOmit(store, [getIdField(store), 'tagId', 'createdAt', 'updatedAt', '__v']));
       storesFromLocalDB = storesFromLocalDB.map(store => {
         return {
           tagName: store.tagName,
@@ -1392,7 +1390,7 @@ module.exports = {
   getIdField,
   saveOpcuaValues,
   saveStoreOpcuaValues,
-  saveStoreOpcuaValuesThroughHook,
+  saveStoreOpcuaValues4Hook,
   saveOpcuaGroupValue,
   saveStoreOpcuaGroupValue,
   removeOpcuaGroupValues,
