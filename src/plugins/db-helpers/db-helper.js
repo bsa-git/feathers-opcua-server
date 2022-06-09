@@ -680,36 +680,19 @@ const saveStoreParameterChanges = async function (app, storeBrowseNames, opcuaTa
     const storeBrowseName = storeBrowseNames[index];
     const groupBrowseNames = opcuaTags.filter(tag => tag.ownerGroup && tag.ownerGroup === storeBrowseName).map(tag => tag.browseName);
     if (isDebug && groupBrowseNames.length) inspector('saveStoreParameterChanges.groupBrowseNames:', groupBrowseNames);
-    // Find values from DB 
-    let storesFromDB = await findItems(app, 'opcua-values', { tagName: { $in: groupBrowseNames }, storeStart: { $ne: undefined } });
-    if (isDebug && storesFromDB.length) console.log('saveStoreParameterChanges.storesFromDB.length:', storesFromDB.length);
-    if (isDebug && storesFromDB.length) inspector('saveStoreParameterChanges.storesFromDB:', storesFromDB.map(item => {
-      return {
-        tagName: item.tagName,
-        storeStart: item.storeStart,
-        storeEnd: item.storeEnd
-      };
-    }));
-
-    if (!storesFromDB.length) return;
-
-    const idField = getIdField(storesFromDB);
-    const idsStoresFromDB = storesFromDB.map(item => item[idField]);
+    // Get tag values from stores
+    const resultStoreTagList = await getTagValuesFromStores(app, groupBrowseNames);
+    if (isDebug && resultStoreTagList.length) console.log('saveStoreParameterChanges.resultStoreTagList.length:', resultStoreTagList.length);
 
     // Remove values from DB
-    const removedItems = await removeItems(app, 'opcua-values', { [idField]: { $in: idsStoresFromDB } });
-    if (isDebug && removedItems.length) console.log('saveStoreParameterChanges.removedItems.length:', removedItems.length);
-    if (isDebug && removedItems.length) inspector('saveStoreParameterChanges.removedItems:', removedItems.map(item => {
-      return {
-        tagName: item.tagName,
-        storeStart: item.storeStart,
-        storeEnd: item.storeEnd
-      };
-    }));
+    const removedItems = await removeItems(app, 'opcua-values', {
+      tagName: { $in: groupBrowseNames },
+      storeStart: { $ne: undefined },
+      $select: ['tagName', 'storeStart', 'storeEnd']
+    });
 
-    // Get tag values from stores
-    const resultStoreTagList = getTagValuesFromStores(groupBrowseNames, storesFromDB);
-    if (isDebug && resultStoreTagList.length) console.log('saveStoreParameterChanges.resultStoreTagList.length:', resultStoreTagList.length);
+    if (isDebug && removedItems.length) console.log('saveStoreParameterChanges.removedItems.length:', removedItems.length);
+    if (isDebug && removedItems.length) inspector('saveStoreParameterChanges.removedItems:', removedItems);
 
     // Save all store opcua group value
     for (let index = 0; index < resultStoreTagList.length; index++) {
@@ -772,14 +755,23 @@ const saveStoreParameterChanges = async function (app, storeBrowseNames, opcuaTa
  * } 
  * ]
  */
-const getTagValuesFromStores = function (groupBrowseNames, storesFromDB) {
-  let storeTagList = [], dateTimeList = [], resultStoreTagList = [], results = [];
+const getTagValuesFromStores = async function (app, groupBrowseNames) {
+  let storeTagList = [], dateTimeList = [], resultStoreTagList = [];
   //---------------------------------------------------------------------------
 
   // Get store tag list
   for (let index = 0; index < groupBrowseNames.length; index++) {
     const tagName = groupBrowseNames[index];
-    let stores4TagName = storesFromDB.filter(v => v.tagName === tagName);
+    // Find store values from DB 
+    let stores4TagName = await findItems(app, 'opcua-values', { tagName: { $in: groupBrowseNames }, storeStart: { $ne: undefined } });
+    if (isDebug && stores4TagName.length) console.log('getTagValuesFromStores.storesFromDB.length:', stores4TagName.length);
+    if (isDebug && stores4TagName.length) inspector('getTagValuesFromStores.storesFromDB:', stores4TagName.map(item => {
+      return {
+        tagName: item.tagName,
+        storeStart: item.storeStart,
+        storeEnd: item.storeEnd
+      };
+    }));
     stores4TagName = sortByStringField(stores4TagName, 'storeStart');
     for (let index2 = 0; index2 < stores4TagName.length; index2++) {
       const store4TagName = stores4TagName[index2].values;
