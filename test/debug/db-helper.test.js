@@ -18,6 +18,7 @@ const {
   saveStoreParameterChanges,
   saveOpcuaTags,
   integrityCheckOpcua,
+  updateRemoteFromLocalStore,
   getCountItems,
   createItem,
   createItems,
@@ -245,8 +246,6 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
   it('#8: Save store values for test "store-items" hook', async () => {
 
-    //--------------------------------------
-
     const fakes = loCloneDeep(fakeNormalize());
     // Get opcua values 
     const opcuaValues = fakes['opcuaValues'];
@@ -256,10 +255,12 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     await saveFakesToServices(app, 'opcuaTags');
     await saveFakesToServices(app, 'opcuaValues');
 
-    const storeTag = await findItem(app, 'opcua-tags', { store: { $ne: undefined } });
-    if (isDebug && storeTag) inspector('Save store values for test "store-items" hook.storeTag:', storeTag);
-    if (storeTag) {
-      const browseName = storeTag.browseName;
+    // Get group tag
+    const groupTag = await findItem(app, 'opcua-tags', { group: { $ne: undefined }, store: { $ne: undefined } });
+    if (isDebug && groupTag) inspector('Save store values for test "store-items" hook.storeTag:', groupTag);
+    if (groupTag) {
+      const browseName = groupTag.browseName;
+      // Get store tags
       const storeTags = await findItems(app, 'opcua-tags', { ownerGroup: browseName });
       if (isDebug && storeTags.length) inspector('Save store values for test "store-items" hook.storeTags:', storeTags);
       for (let index = 0; index < storeTags.length; index++) {
@@ -294,7 +295,78 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
         const opcuaValue = opcuaValues.find(v => v[idField] === id);
 
-        assert.ok(storeValue.values.length > opcuaValue.values.length, `storeValue.values.length must be greater than opcuaValue.values.length  - (${storeValue.values.length}) > (${opcuaValue.values.length})`);
+        const length1 = storeValue.values.length;
+        const length2 = opcuaValue.values.length;
+        assert.ok(length1 > length2, `length1 must be greater than length2  - (${length1}) > (${length2})`);
+      }
+    }
+  });
+
+  it('#9: Test update remote store from local store', async () => {
+
+    const fakes = loCloneDeep(fakeNormalize());
+    // Get opcua values 
+    const opcuaValues = fakes['opcuaValues'];
+    if (isDebug && opcuaValues.length) inspector('fakes.opcuaValues.length', opcuaValues.length);
+
+    // Get opcua tags 
+    const opcuaTags = fakes['opcuaTags'];
+    if (isDebug && opcuaTags.length) inspector('fakes.opcuaTags.length', opcuaTags.length);
+
+    // Save fakes to services
+    await saveFakesToServices(app, 'opcuaTags');
+    await saveFakesToServices(app, 'opcuaValues');
+
+    // Get group tag
+    const groupTag = await findItem(app, 'opcua-tags', { group: { $ne: undefined }, store: { $ne: undefined } });
+    if (isDebug && groupTag) inspector('Test update remote store from local store.groupTag:', groupTag);
+    if (groupTag) {
+      const browseName = groupTag.browseName;
+      // Get store tags
+      const storeTags = await findItems(app, 'opcua-tags', { ownerGroup: browseName });
+      if (isDebug && storeTags.length) inspector('Test update remote store from local store.storeTags:', storeTags);
+      for (let index = 0; index < storeTags.length; index++) {
+        const storeTag = storeTags[index];
+        const idField = getIdField(storeTag);
+        let storeValue = await findItem(app, 'opcua-values', { tagId: storeTag[idField], storeStart: { $ne: undefined } });
+        if (isDebug && storeValue) inspector('Test update remote store from local store.storeValue:', storeValue);
+
+        const unitsRange = storeTag.valueParams.engineeringUnitsRange;
+        const storeTagValue = (unitsRange.high - unitsRange.low) / 2;
+        const storeData = {
+          tagId: storeValue.tagId.toString(),
+          tagName: storeValue.tagName,
+          storeStart: '2022-01-03',
+          storeEnd: '2022-01-03',
+          values: [
+            {
+              key: '2022-01-03',
+              value: storeTagValue
+            }
+          ]
+        };
+
+        // Patch store value
+        const id = storeValue[idField].toString();
+        const patchValue = await patchItem(app, 'opcua-values', id, storeData);
+        if (isDebug && storeValue) inspector('Test update remote store from local store.patchValue:', patchValue);
+
+        // Get store value 
+        storeValue = await getItem(app, 'opcua-values', id);
+        if (isDebug && storeValue) inspector('Test update remote store from local store.storeValue:', storeValue);
+
+        const opcuaValue = opcuaValues.find(v => v[idField] === id);
+        if (true && opcuaValue) inspector('Test update remote store from local store.opcuaValue:', opcuaValue);
+        
+        const length1 = storeValue.values.length;
+        const length2 = opcuaValue.values.length;
+        assert.ok(length1 > length2, `length1 must be greater than length2  - (${length1}) > (${length2})`);
+
+        // Update remote store from local store
+        const results = await updateRemoteFromLocalStore(app, app, opcuaTags);
+        inspector('Test update remote store from local store.results:', results);
+        // if (true && results.length) inspector('Test update remote store from local store.results:', results);
+
       }
     }
   });
