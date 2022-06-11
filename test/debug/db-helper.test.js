@@ -219,9 +219,9 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     if (isDebug && opcuaTags.length) inspector('Save store values when store parameter changes.opcuaTags:', opcuaTags.find(tag => tag.store));
 
     // Check store parameter changes
-    const storeBrowseNames = await checkStoreParameterChanges(app, opcuaTags);
-    if (isDebug && storeBrowseNames) inspector('Save store values when store parameter changes.storeBrowseNames:', storeBrowseNames);
-    assert.ok(storeBrowseNames.length, `storeBrowseNames array must not be empty - '${storeBrowseNames.length}'`);
+    const groupBrowseNames = await checkStoreParameterChanges(app, opcuaTags);
+    if (isDebug && groupBrowseNames.length) inspector('Save store values when store parameter changes.groupBrowseNames:', groupBrowseNames);
+    assert.ok(groupBrowseNames.length, `groupBrowseNames array must not be empty - '${groupBrowseNames.length}'`);
     
     // Save opcua tags to local test DB
     let saveOpcuaTagsResult = await saveOpcuaTags(app, opcuaTags, false);
@@ -230,7 +230,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
 
     // Save store parameter changes
-    const saveStoreResults = await saveStoreParameterChanges(app, storeBrowseNames, opcuaTags);
+    const saveStoreResults = await saveStoreParameterChanges(app, groupBrowseNames, opcuaTags);
     if (isDebug && saveStoreResults.length) inspector('Save store values when store parameter changes.saveStoreResults:', saveStoreResults.length);
     
     // Get opcua values 

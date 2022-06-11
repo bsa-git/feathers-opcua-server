@@ -310,7 +310,7 @@ const saveOpcuaValues = async function (app, browseName, data) {
  * @async
  * 
  * @param {Object} app
- * @param {String} browseName 
+ * @param {String} groupBrowseName 
  * e.g. 'CH_M51_ACM::ValueFromFile'
  * @param {String|Object} value 
  * e.g. {
@@ -324,8 +324,8 @@ const saveOpcuaValues = async function (app, browseName, data) {
  * @param {Boolean} changeStore 
  * @returns {Object[]}
  */
-const saveStoreOpcuaGroupValue = async function (app, browseName, value, changeStore = false) {
-  let tag, opcuaValue = null, values = [], savedValues = [];
+const saveStoreOpcuaGroupValue = async function (app, groupBrowseName, value, changeStore = false) {
+  let opcuaValue = null, savedValues = [];
   let savedValue = null;
   //----------------------------------------------------------
 
@@ -338,46 +338,46 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value, changeS
     opcuaValue = value;
   }
 
-  // Find tag for browseName
-  tag = await findItem(app, 'opcua-tags', { browseName });
-  if (opcuaValue && tag && tag.store) {
-    const store = Object.assign({}, tag.store);
+  // Find groupTag for browseName
+  const groupTag = await findItem(app, 'opcua-tags', { browseName: groupBrowseName });
+  if (opcuaValue && groupTag && groupTag.store) {
+    const store = Object.assign({}, groupTag.store);
     // Get group tags
-    const groupTags = await findItems(app, 'opcua-tags', { ownerGroup: browseName });
+    const storeTags = await findItems(app, 'opcua-tags', { ownerGroup: groupBrowseName });
 
     // Save store opcua values for hook
     const keys = Object.keys(opcuaValue);
     for (let index = 0; index < keys.length; index++) {
-      const tagBrowseName = keys[index];
-      let tagValue = opcuaValue[tagBrowseName];
+      const storeBrowseName = keys[index];
+      let storeValue = opcuaValue[storeBrowseName];
       // Get groupTag
-      const findedGroupTag = groupTags.find(tag => (tag.browseName === tagBrowseName));
-      if (findedGroupTag) {
+      const findedStoreTag = storeTags.find(tag => (tag.browseName === storeBrowseName));
+      if (findedStoreTag) {
 
-        const idField = getIdField(findedGroupTag);
-        const itemId = findedGroupTag[idField];
+        const idField = getIdField(findedStoreTag);
+        const tagId = findedStoreTag[idField];
         store['idField'] = idField;
 
-        values = [];
+        const opcuaValues = [];
         // Set key to dateTime
         const key = opcuaValue['!value'].dateTime;
-        if (tagValue === null) {
-          tagValue = getInt(tagValue);
+        if (storeValue === null) {
+          storeValue = getInt(storeValue);
         }
         // Get values
-        values.push(Array.isArray(tagValue) ? { key, items: tagValue, value: opcuaValue['!value'] } : { key, value: tagValue });
+        opcuaValues.push(Array.isArray(storeValue) ? { key, items: storeValue, value: opcuaValue['!value'] } : { key, value: storeValue });
 
         // Get data
         const data = {
-          tagId: itemId.toString(),
-          tagName: tagBrowseName,
+          tagId: tagId.toString(),
+          tagName: storeBrowseName,
           storeStart: key,
           storeEnd: key,
-          values
+          values: opcuaValues
         };
 
         // Save opcua values to local store
-        savedValue = await saveStoreOpcuaValues4Hook(app, tagBrowseName, data, store);
+        savedValue = await saveStoreOpcuaValues4Hook(app, storeBrowseName, data, store);
         if (isDebug && savedValue) inspector('saveStoreOpcuaGroupValue.local.savedValue:', savedValue);
         savedValues.push(savedValue);
 
@@ -386,7 +386,7 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value, changeS
           const remoteDbUrl = getOpcuaRemoteDbUrl();
           const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
           if (appRestClient) {
-            savedValue = await saveStoreOpcuaValues4Hook(appRestClient, tagBrowseName, data, store);
+            savedValue = await saveStoreOpcuaValues4Hook(appRestClient, storeBrowseName, data, store);
             if (isDebug && savedValue) inspector('saveStoreOpcuaGroupValue.remote.savedValue:', savedValue);
             savedValues.push(savedValue);
           }
@@ -401,7 +401,7 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value, changeS
 /**
  * @method saveStoreOpcuaValues4Hook
  * @param {Object} app 
- * @param {String} browseName 
+ * @param {String} storeBrowseName 
  * e.g. 'CH_M51_ACM::23N2O:23QN2O'
  * @param {Object} data
  * e.g. const data = {
@@ -420,14 +420,14 @@ const saveStoreOpcuaGroupValue = async function (app, browseName, value, changeS
       }      
  * @returns {Object}
  */
-const saveStoreOpcuaValues4Hook = async function (app, groupBrowseName, data, store) {
+const saveStoreOpcuaValues4Hook = async function (app, storeBrowseName, data, store) {
   let savedValue;
   //--------------------------------------
   const numberOfValuesInDoc = store.numberOfValuesInDoc;
   const idField = store.idField;
 
-  const findedOpcuaValues = await findItems(app, 'opcua-values', { tagName: groupBrowseName, $select: [idField, 'storeStart', 'storeEnd'] });
-  if (!findedOpcuaValues.length) {
+  const findedStoreValues = await findItems(app, 'opcua-values', { tagName: storeBrowseName, $select: [idField, 'storeStart', 'storeEnd'] });
+  if (!findedStoreValues.length) {
     savedValue = await createItem(app, 'opcua-values', data);
     if (isDebug && savedValue) inspector('saveStoreOpcuaValues4Hook.createItem.savedValue:', savedValue);
   } else {
@@ -437,17 +437,17 @@ const saveStoreOpcuaValues4Hook = async function (app, groupBrowseName, data, st
     const endOfPeriod = getEndOfPeriod(storeStart, numberOfValuesInDoc);
     if (isDebug && startOfPeriod) console.log('saveStoreOpcuaValues4Hook.startAndEndPeriod:', startOfPeriod, endOfPeriod);
     // Find opcua value for store period
-    const findedOpcuaValue = findedOpcuaValues.find(item => {
+    const findedStoreValue = findedStoreValues.find(item => {
       const storeStart = moment.utc(item.storeStart).format('YYYY-MM-DDTHH:mm:ss');
       const storeEnd = moment.utc(item.storeEnd).format('YYYY-MM-DDTHH:mm:ss');
       return (storeStart >= startOfPeriod && storeEnd <= endOfPeriod);
     });
 
-    if (findedOpcuaValue) {
-      // Get itemId 
-      const itemId = findedOpcuaValue[idField];
+    if (findedStoreValue) {
+      // Get valueId 
+      const valueId = findedStoreValue[idField];
       // Patch service item and run "store-items" hook
-      savedValue = await patchItem(app, 'opcua-values', itemId, data);// Run "store-items" hook
+      savedValue = await patchItem(app, 'opcua-values', valueId, data);// Run "store-items" hook
       if (isDebug && savedValue) inspector('saveStoreOpcuaValues4Hook.patchItem.savedValue:', savedValue);
     } else {
       savedValue = await createItem(app, 'opcua-values', data);
