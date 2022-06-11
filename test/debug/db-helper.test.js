@@ -212,9 +212,6 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     await saveFakesToServices(app, 'opcuaTags');
     await saveFakesToServices(app, 'opcuaValues');
 
-    const tagsFromDB = await findItems(app, 'opcua-tags');
-    if (isDebug && tagsFromDB.length) inspector('Save store values when store parameter changes.tagFromDB:', tagsFromDB.find(tag => tag.store));
-
     // Change opcuaTag store
     let newStore = [1, 'days'];
     opcuaTags.find(tag => tag.store)['store']['numberOfValuesInDoc'] = newStore;
@@ -229,7 +226,6 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     // Save opcua tags to local test DB
     let saveOpcuaTagsResult = await saveOpcuaTags(app, opcuaTags, false);
     if (isDebug && saveOpcuaTagsResult) inspector('Save store values when store parameter changes.saveOpcuaTagsResult:', saveOpcuaTagsResult);
-    // saveOpcuaTagsResult -> { added: 0, updated: 1, deleted: 0, total: 4 }
     assert.deepEqual(saveOpcuaTagsResult, { added: 0, updated: 1, deleted: 0, total: 4 }, 'Two objects, and their child objects, are equal');
 
 
@@ -325,10 +321,12 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
       // Get store tags
       const storeTags = await findItems(app, 'opcua-tags', { ownerGroup: browseName });
       if (isDebug && storeTags.length) inspector('Test update remote store from local store.storeTags:', storeTags);
+      
+      // Update remote store from local store
       for (let index = 0; index < storeTags.length; index++) {
         const storeTag = storeTags[index];
         const idField = getIdField(storeTag);
-        let storeValue = await findItem(app, 'opcua-values', { tagId: storeTag[idField], storeStart: { $ne: undefined } });
+        let storeValue = await findItem(app, 'opcua-values', { tagName: storeTag.browseName, storeStart: { $ne: undefined } });
         if (isDebug && storeValue) inspector('Test update remote store from local store.storeValue:', storeValue);
 
         const unitsRange = storeTag.valueParams.engineeringUnitsRange;
@@ -355,8 +353,8 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
         storeValue = await getItem(app, 'opcua-values', id);
         if (isDebug && storeValue) inspector('Test update remote store from local store.storeValue:', storeValue);
 
-        const opcuaValue = opcuaValues.find(v => v[idField] === id);
-        if (true && opcuaValue) inspector('Test update remote store from local store.opcuaValue:', opcuaValue);
+        const opcuaValue = opcuaValues.find(v => (v.tagName === storeTag.browseName) && (v.storeStart !== undefined));
+        if (isDebug && opcuaValue) inspector('Test update remote store from local store.opcuaValue:', opcuaValue);
         
         const length1 = storeValue.values.length;
         const length2 = opcuaValue.values.length;
@@ -364,9 +362,8 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
         // Update remote store from local store
         const results = await updateRemoteFromLocalStore(app, app, opcuaTags);
-        inspector('Test update remote store from local store.results:', results);
-        // if (true && results.length) inspector('Test update remote store from local store.results:', results);
-
+        if (isDebug && results.length) inspector('Test update remote store from local store.results:', results);
+        assert.ok(results.length, 'Results length must be greater than 0');
       }
     }
   });
