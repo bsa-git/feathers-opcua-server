@@ -2,6 +2,9 @@
 const errors = require('@feathersjs/errors');
 const logger = require('../../logger');
 const fs = require('fs');
+
+const loReduce = require('lodash/reduce');
+
 const {
   readJsonFileSync,
   inspector,
@@ -114,14 +117,14 @@ module.exports = async function opcuaBootstrap(app) {
         }
         // Update remote from local store
         const updateStores = await updateRemoteFromLocalStore(app, appRestClient, opcuaTags);
-        if (isDebug && updateStores.length) console.log('opcuaBootstrap.updateRemoteFromLocalStore.updateStores.length:', updateStores.length);
-        if (isDebug && updateStores.length) inspector('opcuaBootstrap.updateRemoteFromLocalStore.updateStores:', updateStores.map(item => {
-          return {
-            tagName: item.tagName,
-            storeStart: item.storeStart,
-            storeEnd: item.storeEnd
-          };
-        }));
+
+        // Sum results
+        const sumResults = loReduce(updateStores, function (sum, n) {
+          return sum + n;
+        }, 0);
+
+        if (true && updateStores.length) logger.info(`opcuaBootstrap.updateRemoteFromLocalStore.count: ${sumResults}`);
+        if (isDebug && updateStores.length) inspector('opcuaBootstrap.updateRemoteFromLocalStore.updateStores:', updateStores);
       }
     }
   }

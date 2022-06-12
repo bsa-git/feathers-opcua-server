@@ -34,6 +34,7 @@ const loIsInteger = require('lodash/isInteger');
 const loForEach = require('lodash/forEach');
 const loIsEqual = require('lodash/isEqual');
 const loOrderBy = require('lodash/orderBy');
+const loReduce = require('lodash/reduce');
 
 
 const chalk = require('chalk');
@@ -766,7 +767,7 @@ const getTagValuesFromStores = async function (app, storeBrowseNames) {
  * @returns {Object[]}
  */
 const updateRemoteFromLocalStore = async function (app, appRestClient, opcuaTags) {
-  let results = [];
+  let results = [], sumResults;
   //---------------------
   // Get group browseNames  
   const groupBrowseNames = opcuaTags.filter(tag => tag.group && tag.store).map(tag => tag.browseName);
@@ -798,13 +799,18 @@ const updateRemoteFromLocalStore = async function (app, appRestClient, opcuaTags
       const item = resultStoreTagList[index];
       if (isDebug && item) inspector('updateRemoteFromLocalStore.item:', item);
       const result = await saveStoreOpcuaGroupValue(appRestClient, groupBrowseName, item, true);
-      if (isDebug && result) inspector(`updateRemoteFromLocalStore('${groupBrowseName}').result:`, result);
-      await pause(100);
-      results.push(result);
+      if (isDebug && result.length) inspector(`updateRemoteFromLocalStore('${groupBrowseName}').result.length:`, result.length);
+      // await pause(10);
+      results.push(result.length);
     }
   }
-  if (isDebug && results.length) console.log('saveStoreParameterChanges.results.length:', results.length);
-  if (isDebug && results.length) inspector('saveStoreParameterChanges.results:', results);
+  if (isDebug && results.length) console.log('updateRemoteFromLocalStore.results.length:', results.length);
+  if (isDebug && results.length) inspector('updateRemoteFromLocalStore.results:', results);
+  // Sum results
+  sumResults = loReduce(results, function(sum, n) {
+    return sum + n;
+  }, 0);
+  if (isDebug && results.length) inspector('updateRemoteFromLocalStore.sumResults:', sumResults);
   return results;
 };
 
