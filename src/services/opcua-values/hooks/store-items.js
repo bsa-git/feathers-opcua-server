@@ -7,6 +7,8 @@ const {
   sortByStringField 
 } = require('../../../plugins');
 
+const debug = require('debug')('app:hook.store-items');
+const isDebug = false;
 
 module.exports = function (options = {}) {
   return async context => {
@@ -19,11 +21,13 @@ module.exports = function (options = {}) {
       
       if(!record.storeStart) return;
       if (!record.values.length > 1) return;
+      if(isDebug && record) inspector('hook.store-items.addItems.record:', record);
       
       const contextId = hh.getContextId();
       if (contextId) {
         // Get store value
         const storeValue = await hh.getItem('opcua-values', contextId);
+        if(isDebug && storeValue) inspector('hook.store-items.addItems.storeValue:', storeValue);
         // Get storeStart 
         const storeStart = record.storeStart;
         // Get values
@@ -34,6 +38,7 @@ module.exports = function (options = {}) {
         record.storeStart = values[0].key;
         record.storeEnd = values[values.length - 1].key;
         record.values = sortByStringField(values, 'key', false);
+        if(isDebug && record) inspector('hook.store-items.addItems.UpdateRecord:', record);
       }
     };
     await hh.forEachRecords(addItems);

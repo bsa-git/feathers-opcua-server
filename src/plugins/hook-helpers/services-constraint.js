@@ -127,6 +127,7 @@ module.exports = async function servicesConstraint(context) {
     break;
   case 'opcua-values.create.before':
     normalize = async (record) => {
+      if(record.tagId) return;
       const servicePath = 'opcua-tags';
       const tags = await hookHelper.findItems(servicePath, { browseName: record.tagName });
       if(tags.length){

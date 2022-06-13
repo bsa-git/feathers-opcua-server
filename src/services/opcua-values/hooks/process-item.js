@@ -9,8 +9,13 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
     const { app, data } = context;
 
     // Throw an error if we didn't get a tagId
-    if (!data.tagId) {
-      throw new Error('A `opcua-value` must have a tagId');
+    // if (!data.tagId) {
+    //   throw new Error('A `opcua-value` must have a tagId');
+    // }
+
+    // Throw an error if we didn't get a tagId
+    if (!data.tagName) {
+      throw new Error('A `opcua-value` must have a tagName');
     }
     
     // Throw an error if we didn't get a value
@@ -25,10 +30,22 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
       }
     });
 
-    if(!updateData.tagName){
+    // if(!updateData.tagName){
+    //   const service = app.service('opcua-tags');
+    //   const tag = await service.get(updateData.tagId);
+    //   updateData.tagName = tag.browseName;
+    // }
+
+    if(!updateData.tagId){
       const service = app.service('opcua-tags');
-      const tag = await service.get(updateData.tagId);
-      updateData.tagName = tag.browseName;
+      const tags = await service.find({query: { browseName: updateData.tagName }});
+      if(tags.length){
+        const tag = tags[0];
+        const idField = 'id' in tag ? 'id' : '_id';
+        updateData.tagId = tag[idField].toString();
+      }else{
+        throw new Error(`A "opcua-tags" service must have a record with "browseName" = ${updateData.tagName}`);
+      }
     }
 
     context.data = updateData;
