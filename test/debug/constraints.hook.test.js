@@ -12,8 +12,10 @@ const {
 const {
   dbNullIdValue,
   getCountItems,
-  createItem
+  createItem,
+  getMaxValuesStorage
 } = require('../../src/plugins/db-helpers');
+
 const constraints = require(`${appRoot}/src/hooks/constraints`);
 const app = require(`${appRoot}/src/app`);
 const debug = require('debug')('app:constraints.test');
@@ -30,11 +32,6 @@ const roleGuest = fakes['roles'].find(role => role.alias === 'isGuest');
 // Get max rows for log-messages service
 let maxLogRows = process.env.LOGMSG_MAXROWS;
 maxLogRows = Number.isInteger(maxLogRows) ? maxLogRows : Number.parseInt(maxLogRows);
-
-// Get max rows for opcua-values service
-let maxOpcuaValuesRows = process.env.OPCUA_VALUES_MAXROWS;
-maxOpcuaValuesRows = Number.isInteger(maxOpcuaValuesRows) ? maxOpcuaValuesRows : Number.parseInt(maxOpcuaValuesRows);
-
 
 describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
 
@@ -514,6 +511,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
 
     it('#19: Restrict max rows when add a record to \'opcua-values\' service', async () => {
       let opcuaValuesCount = 0, serviceName = '', serviceResult = {};
+      //--------------------------------------------------------------
       const index = fakes['opcuaTags'].length - 1;
       const opcuaTag = fakes['opcuaTags'][index];
       const idField = 'id' in opcuaTag ? 'id' : '_id';
@@ -521,8 +519,9 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       const tagName = opcuaTag['browseName'];
       const unitRange = opcuaTag.valueParams.engineeringUnitsRange;
       const tagvalue = (unitRange.high - unitRange.low) / 2;
+      const valueId = fakes['opcuaValues'].find(v => v.tagId === tagId)[idField];
 
-      const valueData = { tagId, tagName, values: [
+      const valueData = { /*[idField]: valueId,*/ tagId, tagName, values: [
         {
           key: tagName,
           value: tagvalue
@@ -533,6 +532,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       opcuaValuesCount = await getCountItems(app, serviceName, { tagId });
       if(isDebug) debug('BeforeAdding.opcuaValuesCount:', opcuaValuesCount);
       // Create items
+      const maxOpcuaValuesRows = getMaxValuesStorage();
       for (let index = 0; index < maxOpcuaValuesRows + 20; index++) {
         await createItem(app, serviceName, valueData);
       }

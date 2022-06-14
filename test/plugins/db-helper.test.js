@@ -60,7 +60,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     if (countItems) {
       const removedItems = await removeItems(app, 'opcua-tags');
       if (isDebug && removedItems.length) inspector('removeItems.removedItems.length', removedItems.length);
-      assert.ok(removedItems.length === opcuaTags.length, 'Not remove data from services \'opcua-tags\'');
+      assert.ok(removedItems.length === countItems, 'Not remove data from services \'opcua-tags\'');
     }
 
     // Add tags

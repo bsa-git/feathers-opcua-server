@@ -455,10 +455,12 @@ class HookHelper {
    * 
    * @param {String} path
    * @param {String} id
+   * @param {Object} query
+   * e.g query -> { $select: ['userName', 'userType'] }
    * @return {Object}
    */
-  async getItem(path = '', id = null) {
-    return await getItem(this.app, path, id);
+  async getItem(path = '', id = null, query = {}) {
+    return await getItem(this.app, path, id, query);
   }
 
   /**
@@ -505,10 +507,12 @@ class HookHelper {
    * 
    * @param {String} path
    * @param {String} id
+   * @param {Object} query
+   * e.g query -> { $select: ['userName', 'userType'] }
    * @return {Object}
    */
-  async removeItem(path = '', id = null) {
-    return await removeItem(this.app, path, id);
+  async removeItem(path = '', id = null, query = {}) {
+    return await removeItem(this.app, path, id, query);
   }
 
   /**
@@ -531,10 +535,12 @@ class HookHelper {
    * @param {String} path
    * @param {String} id
    * @param {Object} data
+   * @param {Object} query
+   * e.g query -> { $select: ['userName', 'userType'] }
    * @return {Object}
    */
-  async patchItem(path = '', id = '', data = {}) {
-    return await patchItem(this.app, path, id, data);
+  async patchItem(path = '', id = '', data = {}, query = {}) {
+    return await patchItem(this.app, path, id, data, query);
   }
 
   /**
@@ -557,10 +563,12 @@ class HookHelper {
    * 
    * @param {String} path
    * @param {Object} data
+   * @param {Object} query
+   * e.g query -> { $select: ['userName', 'userType'] }
    * @return {Object}
    */
-  async createItem(path = '', data = {}) {
-    return await createItem(this.app, path, data);
+  async createItem(path = '', data = {}, query = {}) {
+    return await createItem(this.app, path, data, query);
   }
 
   /**
@@ -569,11 +577,12 @@ class HookHelper {
    * 
    * @param {String} path
    * @param {Object[]} data
-   * @param {Number} delay
+   * @param {Object} query
+   * e.g query -> { $select: ['userName', 'userType'] }
    * @return {Object[]}
    */
-  async createItems(path = '', data = [], delay = 0) {
-    return await createItems(this.app, path, data, delay);
+  async createItems(path = '', data = [], query = {}) {
+    return await createItems(this.app, path, data, query);
   }
 }
 

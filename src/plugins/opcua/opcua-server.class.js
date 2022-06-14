@@ -507,7 +507,7 @@ class OpcuaServer {
                   InstallHistoricalDataNode does a few things for us:
                     it instantiate a HA Configuration object
                     it sets the historizing flag of the variable
-                    it starts recording value changes into a small online data storage of 2000 values.
+                    it starts recording value changes into a small online data storage of 1000 values.
                   */
                   // Set new maxOnlineValues
                   if (v.hist > 1) {

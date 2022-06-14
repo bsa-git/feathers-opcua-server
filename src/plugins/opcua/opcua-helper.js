@@ -45,7 +45,6 @@ const loHead = require('lodash/head');
 const { isString } = require('../lib/type-of');
 
 const debug = require('debug')('app:opcua-helper');
-const isLog = false;
 const isDebug = false;
 
 const opcuaDataType = [
@@ -231,7 +230,7 @@ const getOpcuaDataType = function (nodeId = '') {
   nodeId = nodeIdToString(nodeId);
   let value = getValueFromNodeId(nodeId);
   const dataTypeList = loToPairs(DataType);
-  if (isLog) inspector('getOpcuaDataType.DataTypeList:', dataTypeList);
+  if (isDebug) inspector('getOpcuaDataType.DataTypeList:', dataTypeList);
   const dataType = dataTypeList.find(item => {
     return loIsEqual(item[1], loToInteger(value));
   });
@@ -259,7 +258,7 @@ const getEngineeringUnit = function (type, locale) {
   }
   if (engineeringUnit) {
     const args = loAt(engineeringUnit, ['symbol', 'shortName', 'longName']);
-    if (isLog) inspector('formatConfigOption.makeEUInformation:', makeEUInformation(...args));
+    if (isDebug) inspector('formatConfigOption.makeEUInformation:', makeEUInformation(...args));
     result = makeEUInformation(...args);
   }
   return result;
@@ -1028,7 +1027,7 @@ const executeOpcuaClientScript = async (service, id) => {
 const setOpcuaValueFromSource = (addedVariable, valueWithParams) => {
   convertArrayToTypedArray(valueWithParams);
   addedVariable.setValueFromSource(valueWithParams);
-  if (isLog && valueWithParams) inspector('setValueFromSource:', valueWithParams);
+  if (isDebug && valueWithParams) inspector('setValueFromSource:', valueWithParams);
   return valueWithParams;
 };
 
@@ -1048,9 +1047,9 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}) => {
 
   // Get group variable list 
   let groupVariableList = params.addedVariableList;
-  if (isLog) inspector('setValueFromSourceForGroup.groupVariableList.browseName:', groupVariableList.map(v => v.browseName.name));
+  if (isDebug) inspector('setValueFromSourceForGroup.groupVariableList.browseName:', groupVariableList.map(v => v.browseName.name));
   // inspector('setValueFromSourceForGroup.groupVariableList.browseName:', groupVariableList.map(v => v.browseName.name));
-  if (isLog) inspector('setValueFromSourceForGroup.dataItems:', dataItems);
+  if (isDebug) inspector('setValueFromSourceForGroup.dataItems:', dataItems);
   // inspector('setValueFromSourceForGroup.dataItems:', dataItems);
 
   loForEach(dataItems, function (value, key) {
@@ -1060,13 +1059,13 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}) => {
     }
     // Set value from source
     if (groupVariable) {
-      if (isLog) inspector('setValueFromSourceForGroup.groupVariable:', formatUAVariable(groupVariable));
+      if (isDebug) inspector('setValueFromSourceForGroup.groupVariable:', formatUAVariable(groupVariable));
       // inspector('setValueFromSourceForGroup.groupVariable:', formatUAVariable(groupVariable));
       browseName = formatUAVariable(groupVariable).browseName;
       // Run setValueFromSource for groupVariable
       const currentState = params.myOpcuaServer.getCurrentState();
       const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
-      if (isLog) inspector('setValueFromSourceForGroup.variable:', variable);
+      if (isDebug) inspector('setValueFromSourceForGroup.variable:', variable);
       // inspector('setValueFromSourceForGroup.variable:', variable);
 
       if (loIsFunction(opcuaGetters[variable.getter])) {
@@ -1116,7 +1115,7 @@ const convertAliasListToBrowseNameList = (variableList = [], dataItems) => {
       }
     });
   }
-  if (isLog) inspector('convertAliasListToBrowseNameList.browseNameList:', browseNameList);
+  if (isDebug) inspector('convertAliasListToBrowseNameList.browseNameList:', browseNameList);
   return browseNameList;
 };
 
@@ -1348,7 +1347,7 @@ const canTestRun = function (fileName) {
   const myConfig = myConfigs.find(item => item.include && item.include.tests && item.include.tests.length);
   if (isDebug) debug('canTestRun.fileName:', fileName);
   // debug('canTestRun.fileName:', fileName);
-  if (isLog) inspector('canTestRun.myConfig:', myConfig);
+  if (isDebug) inspector('canTestRun.myConfig:', myConfig);
   // inspector('canTestRun.myConfig:', myConfig);
   if (myConfig) {
     const finded = myConfig.include.tests.find(name => name === fileName);
@@ -1369,7 +1368,7 @@ const canServiceRun = function (serviceName) {
   const myConfigs = getOpcuaConfigsForMe();
   const myConfig = myConfigs.find(item => item.exclude && item.exclude.services && item.exclude.services.length);
   if (isDebug) debug('canServiceRun.serviceName:', serviceName);
-  if (isLog) inspector('canServiceRun.myConfig:', myConfig);
+  if (isDebug) inspector('canServiceRun.myConfig:', myConfig);
   if (myConfig) {
     const finded = myConfig.exclude.services.find(name => name === serviceName);
     isService = !finded;
@@ -1387,7 +1386,7 @@ const canDbClientRun = function (dbClientName) {
   const myConfigs = getOpcuaConfigsForMe();
   const myConfig = myConfigs.find(item => item.exclude && item.exclude.dbClients && item.exclude.dbClients.length);
   if (isDebug) debug('canDbClientRun.dbClientName:', dbClientName);
-  if (isLog) inspector('canDbClientRun.myConfig:', myConfig);
+  if (isDebug) inspector('canDbClientRun.myConfig:', myConfig);
   if (myConfig) {
     const finded = myConfig.exclude.dbClients.find(name => name === dbClientName);
     isDbClientName = !finded;
@@ -1465,7 +1464,6 @@ const checkTokenQueueOfSubscribe = function (queue, token, show = false) {
   return isBusy;
 };
 
-
 module.exports = {
   nodeIdToString,
   isNodeId,
@@ -1520,5 +1518,5 @@ module.exports = {
   getSecurityMode,
   getSecurityPolicy,
   checkQueueOfSubscribe,
-  checkTokenQueueOfSubscribe
+  checkTokenQueueOfSubscribe,
 };

@@ -40,6 +40,10 @@ const loOrderBy = require('lodash/orderBy');
 const loReduce = require('lodash/reduce');
 const loCloneDeep = require('lodash/cloneDeep');
 
+// Get max rows for opcua-values service
+let maxOpcuaValuesRows = process.env.OPCUA_VALUES_MAXROWS;
+maxOpcuaValuesRows = Number.isInteger(maxOpcuaValuesRows) ? maxOpcuaValuesRows : Number.parseInt(maxOpcuaValuesRows);
+maxOpcuaValuesRows = 10;
 
 const chalk = require('chalk');
 
@@ -213,6 +217,67 @@ const getIdField = function (items) {
     idField = 'id' in items ? 'id' : '_id';
   }
   return idField ? idField : new Error('Items argument is not an array or object');
+};
+
+/**
+ * @method getMaxValuesStorage
+ * @param {String} valueId 
+ * e.g. valueId -> '60af3870270f24162c049c21'
+ * @returns {Number}
+ */
+const getMaxValuesStorage = function (valueId = '') {
+  // if (!hist) return 0;
+  // if (hist > 1) return hist;
+  return maxOpcuaValuesRows;
+};
+
+const getMaxValuesStorage2 = async function (app, tagId = '') {
+  let result = 0;
+  //----------------------
+  const tag = await getItem(app, 'opcua-tags', tagId);
+  if (isDebug && tag) inspector('getMaxValuesStorage.tag:', tag);
+  if (!tag) return result;
+
+  // This is group tag
+  if (tag.group) {
+    if (!tag.hist) return result;
+    if (tag.hist > 1) return tag.hist;
+    return maxOpcuaValuesRows;
+  }
+  // This is store tag
+  if (tag.ownerGroup) {
+    // Get group tag 
+    const groupTag = await findItem(app, 'opcua-tags', { browseName: tag.ownerGroup, $select: ['store'] });
+    if (isDebug && groupTag) inspector('getMaxValuesStorage.groupTag:', groupTag);
+    const numberOfDocsForTag = groupTag.store.numberOfDocsForTag;
+
+
+    // Find store values
+    let storeValues = await findItems(app, 'opcua-values', {
+      tagId,
+      storeStart: { $ne: undefined },
+      $select: ['storeStart', 'storeEnd'],
+      $sort: { createdAt: 1 }
+    });
+    if (isDebug && storeValues.length) inspector('getMaxValuesStorage.storeValues:', storeValues);
+    if (storeValues.length) {
+      // Get storeStart/storeEnd
+      let storeStart = storeValues[0]['storeStart'];
+      storeStart = moment.utc(storeStart).format('YYYY-MM-DDTHH:mm:ss');
+      let storeEnd = storeValues[storeValues.length - 1]['storeEnd'];
+      storeEnd = moment.utc(storeEnd).format('YYYY-MM-DDTHH:mm:ss');
+      // Get startOfPeriod/endOfPeriod
+      const startOfPeriod = getStartOfPeriod(storeStart, numberOfDocsForTag);
+      const endOfPeriod = getEndOfPeriod(storeStart, numberOfDocsForTag);
+
+      // Sum results
+      const sumResults = loReduce(storeValues, function (sum, storeValue) {
+        return sum + 1;
+      }, 0);
+      if (isDebug && sumResults) inspector('updateRemoteFromLocalStore.sumResults:', sumResults);
+      // (storeStart >= startOfPeriod && storeEnd <= endOfPeriod);
+    }
+  }
 };
 
 //================ Save opcua group value ==============//
@@ -801,14 +866,14 @@ const updateRemoteFromLocalStore = async function (app, appRestClient, opcuaTags
       const idField = 'id' in findedStoreTag ? 'id' : '_id';
       const tagId = findedStoreTag[idField].toString();
       // Find store "opcua-values" for storeBrowseName
-      let findedStoreValues = await findItems(app, 'opcua-values', { 
-        tagName: storeBrowseName, 
-        storeStart: { $ne: undefined }, 
-        $select: ['tagName', 'storeStart', 'storeEnd', 'values'] 
+      let findedStoreValues = await findItems(app, 'opcua-values', {
+        tagName: storeBrowseName,
+        storeStart: { $ne: undefined },
+        $select: ['tagName', 'storeStart', 'storeEnd', 'values']
       });
-      findedStoreValues = findedStoreValues.map(v => { 
+      findedStoreValues = findedStoreValues.map(v => {
         v = loOmit(v, [idField]);
-        v.tagId = tagId; 
+        v.tagId = tagId;
         v.values = v.values.map(item => {
           item = loOmit(item, [idField]);
           return item;
@@ -1042,18 +1107,26 @@ const getCountItems = async function (app, path = '', query = {}) {
 };
 
 /**
-   * Get item
-   * @async
-   * 
-   * @param {Object} app
-   * @param {String} path
-   * @param {String} id
-   * @return {Object}
-   */
-const getItem = async function (app, path = '', id = null) {
+ * Get item
+ * @async
+ * 
+ * @param {Object} app
+ * @param {String} path
+ * @param {String} id
+ * @param {Object} query
+ * e.g query -> { $select: ['userName', 'userType'] }
+ * @return {Object}
+ */
+const getItem = async function (app, path = '', id = null, query = {}) {
+  let getResult;
+  //---------------------
   const service = app.service(path);
   if (service) {
-    const getResult = await service.get(id);
+    if (query.query) {
+      getResult = await service.get(id, query);
+    } else {
+      getResult = await service.get(id, { query });
+    }
     if (isDebug) inspector(`db-helper.getItem(path='${path}', id='${id}').getResult:`, getResult);
     return getResult;
   } else {
@@ -1223,13 +1296,20 @@ const handleFoundItems = async function (app, path = '', query = {}, cb = null) 
  * @param {Object} app
  * @param {String} path
  * @param {String} id
+ * @param {Object} query
+ * e.g query -> { $select: ['userName', 'userType'] }
  * @return {Object}
  */
-const removeItem = async function (app, path = '', id = null) {
-  // id = id.toString();
+const removeItem = async function (app, path = '', id = null, query = {}) {
+  let removeResult;
+  //------------------------
   const service = app.service(path);
   if (service) {
-    const removeResult = await service.remove(id);
+    if (query.query) {
+      removeResult = await service.remove(id, query);
+    } else {
+      removeResult = await service.remove(id, { query });
+    }
     if (isDebug) inspector(`db-helper.removeItem(path='${path}', id=${id}).removeResult:`, removeResult);
     return removeResult;
   } else {
@@ -1270,12 +1350,20 @@ const removeItems = async function (app, path = '', query = {}) {
  * @param {String} path
  * @param {String} id
  * @param {Object} data
+ * @param {Object} query
+ * e.g query -> { $select: ['userName', 'userType'] }
  * @return {Object}
  */
-const patchItem = async function (app, path = '', id = '', data = {}) {
+const patchItem = async function (app, path = '', id = '', data = {}, query = {}) {
+  let patchResults;
+  //-------------------------------
   const service = app.service(path);
   if (service) {
-    const patchResults = await service.patch(id, data);
+    if (query.query) {
+      patchResults = await service.patch(id, data, query);
+    } else {
+      patchResults = await service.patch(id, data, { query });
+    }
     if (isDebug) inspector(`db-helper.patchItems(path='${path}', data=${JSON.stringify(data)}, patchResults:`, patchResults);
     return patchResults;
   } else {
@@ -1384,14 +1472,17 @@ module.exports = {
   getOpcuaSaveModeToDB,
   getOpcuaRemoteDbUrl,
   getIdField,
-  saveOpcuaValues,
-  // saveStoreOpcuaValues,
-  saveStoreOpcuaValues4Hook,
+  getMaxValuesStorage,
+  getMaxValuesStorage2,
+  //------------------
   saveOpcuaGroupValue,
+  saveOpcuaValues,
   saveStoreOpcuaGroupValue,
-  removeOpcuaGroupValues,
-  saveOpcuaTags,
+  saveStoreOpcuaValues4Hook,
+  //-----------------------
   checkStoreParameterChanges,
+  saveOpcuaTags,
+  removeOpcuaGroupValues,
   getTagValuesFromStores,
   saveStoreParameterChanges,
   updateRemoteFromLocalStore,
