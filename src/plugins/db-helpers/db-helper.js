@@ -43,7 +43,9 @@ const loCloneDeep = require('lodash/cloneDeep');
 // Get max rows for opcua-values service
 let maxOpcuaValuesRows = process.env.OPCUA_VALUES_MAXROWS;
 maxOpcuaValuesRows = Number.isInteger(maxOpcuaValuesRows) ? maxOpcuaValuesRows : Number.parseInt(maxOpcuaValuesRows);
-maxOpcuaValuesRows = 10;
+if (AuthServer.isTest()) {
+  maxOpcuaValuesRows = 10;
+}
 
 const chalk = require('chalk');
 
@@ -221,33 +223,29 @@ const getIdField = function (items) {
 
 /**
  * @method getMaxValuesStorage
- * @param {String} valueId 
+ * @param {Object} app 
+ * @param {String} tagId 
  * e.g. valueId -> '60af3870270f24162c049c21'
  * @returns {Number}
  */
-const getMaxValuesStorage = function (valueId = '') {
-  // if (!hist) return 0;
-  // if (hist > 1) return hist;
-  return maxOpcuaValuesRows;
-};
-
-const getMaxValuesStorage2 = async function (app, tagId = '') {
+const getMaxValuesStorage = async function (app, tagId = '') {
   let result = 0;
   //----------------------
   const tag = await getItem(app, 'opcua-tags', tagId);
   if (isDebug && tag) inspector('getMaxValuesStorage.tag:', tag);
   if (!tag) return result;
-
+  
   // This is group tag
   if (tag.group) {
     if (!tag.hist) return result;
     if (tag.hist > 1) return tag.hist;
     return maxOpcuaValuesRows;
   }
+  //==============================
   // This is store tag
   if (tag.ownerGroup) {
     // Get group tag 
-    const groupTag = await findItem(app, 'opcua-tags', { browseName: tag.ownerGroup, $select: ['store'] });
+    const groupTag = await findItem(app, 'opcua-tags', { browseName: tag.ownerGroup, $select: ['browseName', 'store'] });
     if (isDebug && groupTag) inspector('getMaxValuesStorage.groupTag:', groupTag);
     const numberOfDocsForTag = groupTag.store.numberOfDocsForTag;
 
@@ -256,28 +254,31 @@ const getMaxValuesStorage2 = async function (app, tagId = '') {
     let storeValues = await findItems(app, 'opcua-values', {
       tagId,
       storeStart: { $ne: undefined },
-      $select: ['storeStart', 'storeEnd'],
+      $select: ['tagName', 'storeStart', 'storeEnd'],
       $sort: { createdAt: 1 }
     });
-    if (isDebug && storeValues.length) inspector('getMaxValuesStorage.storeValues:', storeValues);
+    if (isDebug && storeValues.length) debug('getMaxValuesStorage.storeValues.length:', storeValues.length);
     if (storeValues.length) {
       // Get storeStart/storeEnd
       let storeStart = storeValues[0]['storeStart'];
-      storeStart = moment.utc(storeStart).format('YYYY-MM-DDTHH:mm:ss');
-      let storeEnd = storeValues[storeValues.length - 1]['storeEnd'];
-      storeEnd = moment.utc(storeEnd).format('YYYY-MM-DDTHH:mm:ss');
       // Get startOfPeriod/endOfPeriod
-      const startOfPeriod = getStartOfPeriod(storeStart, numberOfDocsForTag);
       const endOfPeriod = getEndOfPeriod(storeStart, numberOfDocsForTag);
 
       // Sum results
       const sumResults = loReduce(storeValues, function (sum, storeValue) {
-        return sum + 1;
+        let storeEnd = storeValue['storeEnd'];
+        storeEnd = moment.utc(storeEnd).format('YYYY-MM-DDTHH:mm:ss');
+        if(storeEnd <= endOfPeriod){
+          if (isDebug && storeValue) inspector('getMaxValuesStorage.storeValue:', storeValue);
+          return sum + 1;  
+        }
+        return sum;
       }, 0);
-      if (isDebug && sumResults) inspector('updateRemoteFromLocalStore.sumResults:', sumResults);
-      // (storeStart >= startOfPeriod && storeEnd <= endOfPeriod);
+      if (isDebug && sumResults) debug('getMaxValuesStorage.sumResults:', sumResults);
+      return sumResults;
     }
   }
+  return result;
 };
 
 //================ Save opcua group value ==============//
@@ -1473,7 +1474,6 @@ module.exports = {
   getOpcuaRemoteDbUrl,
   getIdField,
   getMaxValuesStorage,
-  getMaxValuesStorage2,
   //------------------
   saveOpcuaGroupValue,
   saveOpcuaValues,

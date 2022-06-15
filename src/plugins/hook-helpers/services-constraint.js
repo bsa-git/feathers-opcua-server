@@ -9,7 +9,6 @@ const {
 const {
   dbNullIdValue,
   getMaxValuesStorage,
-  getMaxValuesStorage2
 } = require('../db-helpers');
 
 const AuthServer = require('../auth/auth-server.class');
@@ -250,13 +249,8 @@ module.exports = async function servicesConstraint(context) {
     break;
   case 'opcua-values.create.after':
     validate = async (record) => {
-      console.log('hook."opcua-values.create.after".record:', record);
-      // idField = HookHelper.getIdField(record);
-      // valueId = record[idField].toString();
       tagId = record.tagId;
-      maxValuesStorage = getMaxValuesStorage2(hookHelper.app, tagId);
-      console.log('hook."opcua-values.create.after".maxValuesStorage:', maxValuesStorage);
-      maxValuesStorage = getMaxValuesStorage();
+      maxValuesStorage = await getMaxValuesStorage(hookHelper.app, tagId);
       await hookHelper.restrictMaxRows('opcua-values', maxValuesStorage, { tagId });
     };
     await hookHelper.forEachRecords(validate);
