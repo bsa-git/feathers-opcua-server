@@ -234,8 +234,10 @@ const getMaxValuesStorage = async function (app, tagId = '') {
   const tag = await getItem(app, 'opcua-tags', tagId);
   if (isDebug && tag) inspector('getMaxValuesStorage.tag:', tag);
   if (!tag) return result;
+  const tagBrowseName = tag.browseName;
   
   // This is group tag
+  //==============================
   if (tag.group) {
     if (!tag.hist) return result;
     if (tag.hist > 1) return tag.hist;
@@ -254,10 +256,11 @@ const getMaxValuesStorage = async function (app, tagId = '') {
     let storeValues = await findItems(app, 'opcua-values', {
       tagId,
       storeStart: { $ne: undefined },
-      $select: ['tagName', 'storeStart', 'storeEnd'],
-      $sort: { createdAt: 1 }
+      $select: ['tagName', 'storeStart', 'storeEnd']
     });
-    if (isDebug && storeValues.length) debug('getMaxValuesStorage.storeValues.length:', storeValues.length);
+    // Sort by string field for isAscending = true
+    storeValues = sortByStringField(storeValues, 'storeStart', true);
+    if (isDebug && storeValues.length) debug(`getMaxValuesStorage.storeValues.length('${tagBrowseName}'):`, storeValues.length);
     if (storeValues.length) {
       // Get storeStart/storeEnd
       let storeStart = storeValues[0]['storeStart'];
@@ -269,7 +272,7 @@ const getMaxValuesStorage = async function (app, tagId = '') {
         let storeEnd = storeValue['storeEnd'];
         storeEnd = moment.utc(storeEnd).format('YYYY-MM-DDTHH:mm:ss');
         if(storeEnd <= endOfPeriod){
-          if (isDebug && storeValue) inspector('getMaxValuesStorage.storeValue:', storeValue);
+          if (isDebug && storeValue) inspector(`getMaxValuesStorage.storeValue('${endOfPeriod}'):`, storeValue);
           return sum + 1;  
         }
         return sum;

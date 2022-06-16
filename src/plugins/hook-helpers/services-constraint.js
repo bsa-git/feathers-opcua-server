@@ -251,6 +251,12 @@ module.exports = async function servicesConstraint(context) {
     validate = async (record) => {
       tagId = record.tagId;
       maxValuesStorage = await getMaxValuesStorage(hookHelper.app, tagId);
+      if(isDebug && record.storeStart) inspector(`hook.opcua-values.create.after('${record.tagName}'):`, {
+        tagName: record.tagName,
+        storeStart: record.storeStart,
+        storeEnd: record.storeEnd,
+        maxValuesStorage
+      });
       await hookHelper.restrictMaxRows('opcua-values', maxValuesStorage, { tagId });
     };
     await hookHelper.forEachRecords(validate);

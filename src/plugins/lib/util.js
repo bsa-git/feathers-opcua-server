@@ -151,7 +151,7 @@ const getTimeDuration = function (startTime, endTime, unit) {
 };
 
 /**
- * @method getTimeDuration
+ * @method getNextDateTime
  * @param {Object|String|Array} startTime 
  * @param {Array} period 
  * e.g. [1, 'hours']
