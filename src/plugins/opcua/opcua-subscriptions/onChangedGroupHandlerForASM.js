@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+const os = require('os');
 const moment = require('moment');
 const chalk = require('chalk');
 
@@ -45,6 +46,11 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
   let result = false, isQueue = false;
   //---------------------------------------------------------
   try {
+
+    const percentageMemUsed = 1.0 - (os.freemem() / os.totalmem());
+    const value = percentageMemUsed * 100;
+    if (true && value) console.log('onChangedGroupHandlerForASM.percentageMemUsed:', startTime, 'browseName:', value);
+
     // Get startTime
     const startTime = moment.utc().format();
     if (isDebug && startTime) console.log('onChangedGroupHandlerForASM.startTime:', startTime, 'browseName:', browseName);
