@@ -7,7 +7,6 @@ const {
   getOpcuaTags,
   getOpcuaConfigsForMe,
   getOpcuaSaveModeToDB,
-  convertAnyToValue
 } = require('../opcua/opcua-helper');
 
 const {
@@ -22,8 +21,6 @@ const {
 } = require('../lib');
 
 const {
-  localStorage,
-  loginLocal,
   feathersClient,
   AuthServer
 } = require('../auth');
@@ -33,9 +30,7 @@ const loConcat = require('lodash/concat');
 const loOmit = require('lodash/omit');
 const loIsObject = require('lodash/isObject');
 const loIsString = require('lodash/isString');
-const loIsInteger = require('lodash/isInteger');
 const loForEach = require('lodash/forEach');
-const loIsEqual = require('lodash/isEqual');
 const loOrderBy = require('lodash/orderBy');
 const loReduce = require('lodash/reduce');
 const loCloneDeep = require('lodash/cloneDeep');
@@ -896,7 +891,7 @@ const updateRemoteFromLocalStore = async function (app, appRestClient, opcuaTags
       if (isDebug && removedItems.length) inspector('updateRemoteFromLocalStore.removedItems:', removedItems);
 
       // Create values to remote DB for findedStoreValues
-      const createdItems = await createItems(appRestClient, 'opcua-values', findedStoreValues, { $select: ['tagName', 'storeStart', 'storeEnd'] });
+      const createdItems = await createItems(appRestClient, 'opcua-values', findedStoreValues, { $select: [ 'tagId', 'tagName', 'storeStart', 'storeEnd'] });
       if (isDebug && createdItems.length) console.log('updateRemoteFromLocalStore.createdItems.length:', createdItems.length);
       if (isDebug && createdItems.length) inspector('updateRemoteFromLocalStore.createdItems:', createdItems);
 

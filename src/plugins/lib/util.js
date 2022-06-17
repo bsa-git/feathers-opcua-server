@@ -10,10 +10,7 @@ const { isString, isArray, isObject } = require('./type-of');
 const loRound = require('lodash/round');
 const loToPlainObject = require('lodash/toPlainObject');
 const loIsEqual = require('lodash/isEqual');
-const loIsFunction = require('lodash/isFunction');
 const loOmit = require('lodash/omit');
-const loDelay = require('lodash/delay');
-const loMerge = require('lodash/merge');
 
 const debug = require('debug')('app:util');
 const isDebug = false;

@@ -515,7 +515,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       // Get opcua tags
       const opcuaTags = fakes['opcuaTags'];
       // Get group tag 
-      const groupTag = opcuaTags.find(t => t.group && !!t.store);
+      const groupTag = opcuaTags.find(t => t.group);
       const idField = 'id' in groupTag ? 'id' : '_id';
       const tagId = groupTag[idField];
       const tagName = groupTag['browseName'];

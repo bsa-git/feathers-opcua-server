@@ -27,8 +27,8 @@ maxLogRows = Number.isInteger(maxLogRows) ? maxLogRows : Number.parseInt(maxLogR
  * @return {Promise}
  */
 module.exports = async function servicesConstraint(context) {
-  let idField, validate, normalize, tagId, valueId, tag;
-  let maxValuesStorage, record;
+  let idField, validate, normalize, tagId;
+  let maxValuesStorage;
   //-----------------------------------------
 
   // Create HookHelper object
