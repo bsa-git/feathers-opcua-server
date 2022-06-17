@@ -891,7 +891,7 @@ const updateRemoteFromLocalStore = async function (app, appRestClient, opcuaTags
       if (isDebug && removedItems.length) inspector('updateRemoteFromLocalStore.removedItems:', removedItems);
 
       // Create values to remote DB for findedStoreValues
-      const createdItems = await createItems(appRestClient, 'opcua-values', findedStoreValues, { $select: [ 'tagId', 'tagName', 'storeStart', 'storeEnd'] });
+      const createdItems = await createItems(appRestClient, 'opcua-values', findedStoreValues, { $select: ['tagId', 'tagName', 'storeStart', 'storeEnd'] });
       if (isDebug && createdItems.length) console.log('updateRemoteFromLocalStore.createdItems.length:', createdItems.length);
       if (isDebug && createdItems.length) inspector('updateRemoteFromLocalStore.createdItems:', createdItems);
 

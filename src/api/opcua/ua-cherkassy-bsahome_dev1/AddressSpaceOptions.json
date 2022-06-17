@@ -55,7 +55,7 @@
       "ownerName": "CH_M51",
       "type": "variable.simple",
       "dataType": "String",
-      "hist": 1,
+      "hist": 10,
       "group": true,
       "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
@@ -72,7 +72,7 @@
       "ownerName": "CH_M52",
       "type": "variable.simple",
       "dataType": "String",
-      "hist": 1,
+      "hist": 10,
       "group": true,
       "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
@@ -89,7 +89,7 @@
       "ownerName": "CH_M51_ACM",
       "type": "variable.simple",
       "dataType": "String",
-      "hist": 1,
+      "hist": 10,
       "store": {
         "numberOfValuesInDoc": [1, "years"],
         "numberOfDocsForTag": [5, "years"]
@@ -114,7 +114,7 @@
       "ownerName": "CH_M52_ACM",
       "type": "variable.simple",
       "dataType": "String",
-      "hist": 1,
+      "hist": 10,
       "store": {
         "numberOfValuesInDoc": [1, "years"],
         "numberOfDocsForTag": [5, "years"]
@@ -139,7 +139,7 @@
       "ownerName": "CH_M52_ACM2",
       "type": "variable.simple",
       "dataType": "String",
-      "hist": 1,
+      "hist": 10,
       "store": {
         "numberOfValuesInDoc": [1, "years"],
         "numberOfDocsForTag": [5, "years"]
