@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-const os = require('os');
 const moment = require('moment');
 const chalk = require('chalk');
+const os = require('os');
 
 const loOmit = require('lodash/omit');
 const loForEach = require('lodash/forEach');
@@ -47,9 +47,13 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
   //---------------------------------------------------------
   try {
 
-    const percentageMemUsed = 1.0 - (os.freemem() / os.totalmem());
-    const value = percentageMemUsed * 100;
-    if (true && value) console.log('onChangedGroupHandlerForASM.percentageMemUsed:', startTime, 'browseName:', value);
+    console.log('Free Memory ' + String(os.freemem())
+    + ' Bytes out of ' + String(os.totalmem()) + ' Bytes');
+    // const totalmem = os.totalmem();
+    // const freemem = os.freemem();
+    // const percentageMemUsed = (totalmem > 0)? 1.0 - (freemem / totalmem) : `freemem=${freemem}; totalmem=${totalmem}`;
+    // const value = (totalmem > 0)? percentageMemUsed * 100 : percentageMemUsed;
+    // if (true && value) console.log('onChangedGroupHandlerForASM.percentageMemUsed:', startTime, 'browseName:', value);
 
     // Get startTime
     const startTime = moment.utc().format();
@@ -119,6 +123,7 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
       if (isQueue) queueOfSubscribe = loDrop(queueOfSubscribe);
     });
   } catch (error) {
+    console.log(error.message);
     // Drop element from the beginning of array
     if (isQueue) queueOfSubscribe = loDrop(queueOfSubscribe);
   }
