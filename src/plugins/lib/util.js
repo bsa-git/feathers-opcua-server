@@ -19,30 +19,31 @@ const isDebug = false;
 //--------------------- SYSTEM INFO -------------------//
 
 /**
- * @method getTotalMem
- * @param {String} unit
- * e.g. 'bytes'|'kb'|'mb'|'gb' 
- * @returns {Number}
+ * @method percentageMemUsed
+ * @param {Number} precision
+ * @param {String} thousands
+ * @param {String} decimal
+ * @returns {Object}
+ * e.g. result -> {
+ * totalmem: 123243434,
+ * freemem: 1345234,
+ * percentageMemUsed: 24.345,
+ * }
  */
-const getTotalMem = function (unit = 'bytes') {
-  let total_memory = os.totalmem();
-  switch (unit) {
-    case 'bytes':
+const percentageMemUsed = function () {
+  let result = {}, percentageMemUsed;
+  //----------------------------
+  const totalmem = os.totalmem();
+  const freemem = os.freemem();
+  percentageMemUsed = 1 - (freemem / totalmem);
+  percentageMemUsed = percentageMemUsed * 100;
 
-      break;
-    case 'kb':
+  result.totalmem = totalmem;
+  result.freemem = freemem;
+  result.percentageMemUsed = loRound(percentageMemUsed, 3);
+  return result;
+};
 
-      break;
-    case 'mb':
-
-      break;
-    case 'gb':
-
-      break;
-    default:
-      break;
-  }
-}
 
 //--------------------- DATE TIME -------------------//
 /**
@@ -292,80 +293,80 @@ const shiftTimeByOneHour = function (dt = '', isUtc = true) {
   dt = dtToObject(dt, isUtc);
   const hours = dt.hours;
   switch (hours) {
-    case 0:
-      dtString = strReplace(dtString, '00:', '01:');
-      break;
-    case 1:
-      dtString = strReplace(dtString, '01:', '02:');
-      break;
-    case 2:
-      dtString = strReplace(dtString, '02:', '03:');
-      break;
-    case 3:
-      dtString = strReplace(dtString, '03:', '04:');
-      break;
-    case 4:
-      dtString = strReplace(dtString, '04:', '05:');
-      break;
-    case 5:
-      dtString = strReplace(dtString, '05:', '06:');
-      break;
-    case 6:
-      dtString = strReplace(dtString, '06:', '07:');
-      break;
-    case 7:
-      dtString = strReplace(dtString, '07:', '08:');
-      break;
-    case 8:
-      dtString = strReplace(dtString, '08:', '09:');
-      break;
-    case 9:
-      dtString = strReplace(dtString, '09:', '10:');
-      break;
-    case 10:
-      dtString = strReplace(dtString, '10:', '11:');
-      break;
-    case 11:
-      dtString = strReplace(dtString, '11:', '12:');
-      break;
-    case 12:
-      dtString = strReplace(dtString, '12:', '13:');
-      break;
-    case 13:
-      dtString = strReplace(dtString, '13:', '14:');
-      break;
-    case 14:
-      dtString = strReplace(dtString, '14:', '15:');
-      break;
-    case 15:
-      dtString = strReplace(dtString, '15:', '16:');
-      break;
-    case 16:
-      dtString = strReplace(dtString, '16:', '17:');
-      break;
-    case 17:
-      dtString = strReplace(dtString, '17:', '18:');
-      break;
-    case 18:
-      dtString = strReplace(dtString, '18:', '19:');
-      break;
-    case 19:
-      dtString = strReplace(dtString, '19:', '20:');
-      break;
-    case 20:
-      dtString = strReplace(dtString, '20:', '21:');
-      break;
-    case 21:
-      dtString = strReplace(dtString, '21:', '22:');
-      break;
-    case 22:
-      dtString = strReplace(dtString, '22:', '23:');
-      break;
-    case 23:
-      dtString = strReplace(dtString, '23:', '00:');
-      break;
-    default:
-      break;
+  case 0:
+    dtString = strReplace(dtString, '00:', '01:');
+    break;
+  case 1:
+    dtString = strReplace(dtString, '01:', '02:');
+    break;
+  case 2:
+    dtString = strReplace(dtString, '02:', '03:');
+    break;
+  case 3:
+    dtString = strReplace(dtString, '03:', '04:');
+    break;
+  case 4:
+    dtString = strReplace(dtString, '04:', '05:');
+    break;
+  case 5:
+    dtString = strReplace(dtString, '05:', '06:');
+    break;
+  case 6:
+    dtString = strReplace(dtString, '06:', '07:');
+    break;
+  case 7:
+    dtString = strReplace(dtString, '07:', '08:');
+    break;
+  case 8:
+    dtString = strReplace(dtString, '08:', '09:');
+    break;
+  case 9:
+    dtString = strReplace(dtString, '09:', '10:');
+    break;
+  case 10:
+    dtString = strReplace(dtString, '10:', '11:');
+    break;
+  case 11:
+    dtString = strReplace(dtString, '11:', '12:');
+    break;
+  case 12:
+    dtString = strReplace(dtString, '12:', '13:');
+    break;
+  case 13:
+    dtString = strReplace(dtString, '13:', '14:');
+    break;
+  case 14:
+    dtString = strReplace(dtString, '14:', '15:');
+    break;
+  case 15:
+    dtString = strReplace(dtString, '15:', '16:');
+    break;
+  case 16:
+    dtString = strReplace(dtString, '16:', '17:');
+    break;
+  case 17:
+    dtString = strReplace(dtString, '17:', '18:');
+    break;
+  case 18:
+    dtString = strReplace(dtString, '18:', '19:');
+    break;
+  case 19:
+    dtString = strReplace(dtString, '19:', '20:');
+    break;
+  case 20:
+    dtString = strReplace(dtString, '20:', '21:');
+    break;
+  case 21:
+    dtString = strReplace(dtString, '21:', '22:');
+    break;
+  case 22:
+    dtString = strReplace(dtString, '22:', '23:');
+    break;
+  case 23:
+    dtString = strReplace(dtString, '23:', '00:');
+    break;
+  default:
+    break;
   }
   return dtString;
 };
@@ -416,7 +417,6 @@ const getCapitalizeStr = function (value, prefix = '') {
   return _value;
 };
 
-
 //-------------- CONVERT STRING TO BOOLEAN/INTEGER/FLOAT ---------------//
 /**
  * Is true
@@ -428,15 +428,15 @@ const isTrue = function (value) {
     value = value.trim().toLowerCase();
   }
   switch (value) {
-    case true:
-    case 'true':
-    case 1:
-    case '1':
-    case 'on':
-    case 'yes':
-      return true;
-    default:
-      return false;
+  case true:
+  case 'true':
+  case 1:
+  case '1':
+  case 'on':
+  case 'yes':
+    return true;
+  default:
+    return false;
   }
 };
 
@@ -469,6 +469,43 @@ const getFloat = function (value, precision = 0) {
   return parseFloat(value);
 };
 
+/**
+ * @method formatNumber
+ * @param {Number} number 
+ * @param {Number} precision 
+ * @param {String} thousands 
+ * @param {String} decimal 
+ * @returns {String}
+ */
+function formatNumber(number, precision = 0, thousands = ' ', decimal = ',') {
+
+  let decimalSeparator = '.';
+  let thousandSeparator = thousands;
+
+  // Set precision
+  if (precision) {
+    number = loRound(number, precision);
+  }
+
+  // make sure we have a string
+  let result = String(number);
+
+  // split the number in the integer and decimals, if any
+  let parts = result.split(decimalSeparator);
+
+  // reverse the string (1719 becomes 9171)
+  result = parts[0].split('').reverse().join('');
+
+  // add thousand separator each 3 characters, except at the end of the string
+  result = result.replace(/(\d{3}(?!$))/g, '$1' + thousandSeparator);
+
+  // reverse back the integer and replace the original integer
+  parts[0] = result.split('').reverse().join('');
+
+  // recombine integer with decimals
+  return parts.join(decimal);
+}
+
 //-------------- REGEX ---------------//
 
 /**
@@ -481,59 +518,59 @@ const getRegex = function (type) {
     type = type.trim().toLowerCase();
   }
   switch (type) {
-    case 'phone':
-      /*
-                                              (123) 456-7890
-                                              +(123) 456-7890
-                                              +(123)-456-7890
-                                              +(123) - 456-7890
-                                              +(123) - 456-78-90
-                                              123-456-7890
-                                              123.456.7890
-                                              1234567890
-                                              +31636363634
-                                              +380980029669
-                                              075-63546725
-                                              */
-      return '^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\\./0-9]*$';
-    case 'zip_code':
-      /*
-                                              12345
-                                              12345-6789
-                                              */
-      return '^[0-9]{5}(?:-[0-9]{4})?$';
-    case 'lat':
-      /*
-                                              +90.0
-                                              45
-                                              -90
-                                              -90.000
-                                              +90
-                                              47.123123
-                                              */
-      return '^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$';
-    case 'long':
-      /*
-                                              -127.554334
-                                              180
-                                              -180
-                                              -180.0000
-                                              +180
-                                              179.999999
-                                              */
-      return '^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$';
-    case 'lat_and_long':
-      /*
-                                              +90.0, -127.554334
-                                              45, 180
-                                              -90, -180
-                                              -90.000, -180.0000
-                                              +90, +180
-                                              47.1231231, 179.99999999
-                                              */
-      return '^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$';
-    default:
-      return '//g';
+  case 'phone':
+    /*
+                                                (123) 456-7890
+                                                +(123) 456-7890
+                                                +(123)-456-7890
+                                                +(123) - 456-7890
+                                                +(123) - 456-78-90
+                                                123-456-7890
+                                                123.456.7890
+                                                1234567890
+                                                +31636363634
+                                                +380980029669
+                                                075-63546725
+                                                */
+    return '^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\\./0-9]*$';
+  case 'zip_code':
+    /*
+                                                12345
+                                                12345-6789
+                                                */
+    return '^[0-9]{5}(?:-[0-9]{4})?$';
+  case 'lat':
+    /*
+                                                +90.0
+                                                45
+                                                -90
+                                                -90.000
+                                                +90
+                                                47.123123
+                                                */
+    return '^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$';
+  case 'long':
+    /*
+                                                -127.554334
+                                                180
+                                                -180
+                                                -180.0000
+                                                +180
+                                                179.999999
+                                                */
+    return '^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$';
+  case 'lat_and_long':
+    /*
+                                                +90.0, -127.554334
+                                                45, 180
+                                                -90, -180
+                                                -90.000, -180.0000
+                                                +90, +180
+                                                47.1231231, 179.99999999
+                                                */
+    return '^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$';
+  default:
+    return '//g';
   }
 };
 
@@ -798,6 +835,7 @@ const hexToRGBA = function (color) {
 
 module.exports = {
   appRoot,
+  percentageMemUsed,
   pause,
   waitTimeout,
   waitTill,
@@ -819,6 +857,7 @@ module.exports = {
   isTrue,
   getInt,
   getFloat,
+  formatNumber,
   getRegex,
   inspector,
   inspectorToLog,

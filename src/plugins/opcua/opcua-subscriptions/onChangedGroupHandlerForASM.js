@@ -15,6 +15,7 @@ const {
   waitTimeout,
   waitTill,
   pause,
+  percentageMemUsed
 } = require('../../lib');
 
 const {
@@ -47,13 +48,8 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
   //---------------------------------------------------------
   try {
 
-    console.log('Free Memory ' + String(os.freemem())
-    + ' Bytes out of ' + String(os.totalmem()) + ' Bytes');
-    // const totalmem = os.totalmem();
-    // const freemem = os.freemem();
-    // const percentageMemUsed = (totalmem > 0)? 1.0 - (freemem / totalmem) : `freemem=${freemem}; totalmem=${totalmem}`;
-    // const value = (totalmem > 0)? percentageMemUsed * 100 : percentageMemUsed;
-    // if (true && value) console.log('onChangedGroupHandlerForASM.percentageMemUsed:', startTime, 'browseName:', value);
+    const memUsed = percentageMemUsed().percentageMemUsed;  
+    if (isDebug && memUsed) console.log('Percentage Mem Used:', `${memUsed}%`);
 
     // Get startTime
     const startTime = moment.utc().format();
