@@ -1,21 +1,16 @@
 /* eslint-disable no-unused-vars */
 const moment = require('moment');
 const chalk = require('chalk');
-const os = require('os');
 
 const loOmit = require('lodash/omit');
-const loForEach = require('lodash/forEach');
 const loHead = require('lodash/head');
 const loDrop = require('lodash/drop');
-const loDelay = require('lodash/delay');
 
 const {
   inspector,
   getTimeDuration,
-  waitTimeout,
-  waitTill,
   pause,
-  percentageMemUsed
+  sysMemUsage
 } = require('../../lib');
 
 const {
@@ -48,7 +43,7 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
   //---------------------------------------------------------
   try {
 
-    const memUsed = percentageMemUsed().percentageMemUsed;  
+    const memUsed = sysMemUsage().percentageMemUsed;  
     if (isDebug && memUsed) console.log('Percentage Mem Used:', `${memUsed}%`);
 
     // Get startTime

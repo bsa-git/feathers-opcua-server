@@ -19,7 +19,7 @@ const isDebug = false;
 //--------------------- SYSTEM INFO -------------------//
 
 /**
- * @method percentageMemUsed
+ * @method sysMemUsage
  * @param {Number} precision
  * @param {String} thousands
  * @param {String} decimal
@@ -30,7 +30,7 @@ const isDebug = false;
  * percentageMemUsed: 24.345,
  * }
  */
-const percentageMemUsed = function () {
+const sysMemUsage = function () {// sysMemUsage
   let result = {}, percentageMemUsed;
   //----------------------------
   const totalmem = os.totalmem();
@@ -835,7 +835,7 @@ const hexToRGBA = function (color) {
 
 module.exports = {
   appRoot,
-  percentageMemUsed,
+  sysMemUsage,
   pause,
   waitTimeout,
   waitTill,
