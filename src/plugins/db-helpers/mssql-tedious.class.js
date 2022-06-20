@@ -15,7 +15,7 @@ const defaultConnConfig = {
     instanceName: 'instanceName',
     encrypt: false,
     database: 'database',
-    connectTimeout: 3000,
+    connectTimeout: 10000,
     rowCollectionOnDone: true, // Only get row set instead of row by row
     useColumnNames: true, // For easier JSON formatting
     debug: {

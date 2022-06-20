@@ -19,7 +19,6 @@ const { TYPES } = require('tedious');
 
 const debug = require('debug')('app:opcua-getters/histValuesFromDB');
 const isDebug = false;
-const isLog = false;
 
 //=============================================================================
 /**
@@ -39,11 +38,11 @@ const getValuesFromChAsoduDB = async function (db, queryParams) {
   db.buildParams(params, 'scanerName', TYPES.Char, queryParams.scanerName);
 
   let rows = await db.query(params, sql);
-  if (isLog) inspector('selectValuesFromChAsoduDB.query.rows:', rows);
+  if (isDebug && rows.length) inspector('selectValuesFromChAsoduDB.query.rows:', rows);
   // inspector('selectValuesFromChAsoduDB.query.rows:', rows);
   if (rows.length) {
     rows = convertArray2Object(rows, 'TagName', 'Value');
-    if (isLog) inspector('selectValuesFromChAsoduDB.convertArray2Object.rows:', rows);
+    if (isDebug) inspector('selectValuesFromChAsoduDB.convertArray2Object.rows:', rows);
     // inspector('selectValuesFromChAsoduDB.convertArray2Object.rows:', rows);
   } else {
     rows = null;
@@ -64,11 +63,11 @@ function histValuesFromDB(params = {}, addedValue) {
   // Get db config
   let config = MssqlTedious.getDefaultConnConfig();
   config = getMssqlConfigFromEnv(config, params.dbEnv);
-  if (isLog) inspector('getMssqlConfigFromEnv.config:', config);
+  if (isDebug) inspector('getMssqlConfigFromEnv.config:', config);
 
   //--- Set values from source ---
   const setValuesFromSource = function (dataItems) {
-    if (isLog) inspector('histValuesFromDB.dataItems:', dataItems);
+    if (isDebug) inspector('histValuesFromDB.dataItems:', dataItems);
     // inspector('histValuesFromDB.setValuesFromSource.dataItems:', dataItems);
     dataType = formatUAVariable(addedValue).dataType[1];
     dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);

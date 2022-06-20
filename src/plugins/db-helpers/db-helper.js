@@ -7,6 +7,7 @@ const {
   getOpcuaTags,
   getOpcuaConfigsForMe,
   getOpcuaSaveModeToDB,
+  getOpcuaBootstrapParams
 } = require('../opcua/opcua-helper');
 
 const {
@@ -230,7 +231,7 @@ const getMaxValuesStorage = async function (app, tagId = '') {
   if (isDebug && tag) inspector('getMaxValuesStorage.tag:', tag);
   if (!tag) return result;
   const tagBrowseName = tag.browseName;
-  
+
   // This is group tag
   //==============================
   if (tag.group) {
@@ -266,9 +267,9 @@ const getMaxValuesStorage = async function (app, tagId = '') {
       const sumResults = loReduce(storeValues, function (sum, storeValue) {
         let storeEnd = storeValue['storeEnd'];
         storeEnd = moment.utc(storeEnd).format('YYYY-MM-DDTHH:mm:ss');
-        if(storeEnd <= endOfPeriod){
+        if (storeEnd <= endOfPeriod) {
           if (isDebug && storeValue) inspector(`getMaxValuesStorage.storeValue('${endOfPeriod}'):`, storeValue);
-          return sum + 1;  
+          return sum + 1;
         }
         return sum;
       }, 0);
@@ -562,14 +563,14 @@ const saveStoreOpcuaValues4Hook = async function (app, storeBrowseName, data, st
  */
 const saveOpcuaTags = async function (app, opcuaTags, isRemote = false) {
   let idField, tagId, query = {};
-  let tagFromDB = null, tagsFromDB = [], tagBrowseNames = [], objTagBrowseNames = [];
+  let tag, tagFromDB = null, tagsFromDB = [], tagBrowseNames = [], objTagBrowseNames = [];
   let addedBrowseNames = [], updatedBrowseNames = [], deletedBrowseNames = [];
-  let added = 0, updated = 0, deleted = 0, total = 0;
+  let added = 0, updated = 0, deleted = 0, total = 0, total4ThisHost = 0;
   //------------------------------------------------------------
   // Get opcua tags 
   if (isDebug && opcuaTags.length) inspector('db-helper.saveOpcuaTags.opcuaTags:', opcuaTags);
   for (let index = 0; index < opcuaTags.length; index++) {
-    const tag = opcuaTags[index];
+    tag = opcuaTags[index];
     tagBrowseNames.push(tag.browseName);
     if (tag.type === 'object') {
       objTagBrowseNames.push(tag.browseName);
@@ -646,18 +647,21 @@ const saveOpcuaTags = async function (app, opcuaTags, isRemote = false) {
 
   // Get total rows
   total = await getCountItems(app, 'opcua-tags');
-
-  if (added) {
-    if (isDebug) inspector('db-helper.saveOpcuaTags.addedTags:', addedBrowseNames);
-  }
-  if (updated) {
-    if (isDebug) inspector('db-helper.saveOpcuaTags.updatedTags:', updatedBrowseNames);
-  }
-  if (deleted) {
-    if (isDebug) inspector('db-helper.saveOpcuaTags.deletedTags:', deletedBrowseNames);
+  // 
+  if (isRemote) {
+    total4ThisHost = await getCountItems(app, 'opcua-tags', query);
+    total4ThisHost += objTagBrowseNames.length;
   }
 
-  return { added, updated, deleted, total };
+  // For debug - show tag object browse names from database
+  if (isDebug && isRemote && total4ThisHost) {
+    query = { type: 'object', browseName: { $nin: objTagBrowseNames }, $select: ['browseName'] };
+    let tagObjBrowseNamesFromDB = await findItems(app, 'opcua-tags', query);
+    tagObjBrowseNamesFromDB = tagObjBrowseNamesFromDB.map(tag => tag.browseName);
+    console.log('db-helper.saveOpcuaTags.tagObjBrowseNamesFromDB:', tagObjBrowseNamesFromDB.length ? tagObjBrowseNamesFromDB : chalk.yellow('No Data'));
+  }
+
+  return isRemote ? { added, updated, deleted, total4ThisHost, total } : { added, updated, deleted, total };
 };
 
 /**
@@ -667,19 +671,45 @@ const saveOpcuaTags = async function (app, opcuaTags, isRemote = false) {
  * @returns {Number}
  */
 const removeOpcuaGroupValues = async function (app) {
-  let count = 0, removedItems;
+  let removedItems;
   //-------------------------
   // Get opcua tags 
   let opcuaTags = getOpcuaTags();
   opcuaTags = opcuaTags.filter(tag => !!tag.group);
   const browseNames = opcuaTags.map(tag => tag.browseName);
   if (isDebug && browseNames.length) inspector('db-helper.removeOpcuaValues.browseNames:', browseNames);
-  removedItems = await removeItems(app, 'opcua-values', { tagName: { $in: browseNames } });
-  if (removedItems.length) {
-    if (isDebug && removedItems) inspector('db-helper.removeOpcuaValues.removedItems:', removedItems.map(item => item.tagName));
-    count = count + removedItems.length;
-  }
+  removedItems = await removeItems(app, 'opcua-values', { tagName: { $in: browseNames }, $select: ['tagId', 'tagName'] });
+  if (isDebug && removedItems.length) inspector('db-helper.removeOpcuaValues.removedItems:', removedItems.map(item => item.tagName));
 
+  return removedItems.length;
+};
+
+/**
+ * @async
+ * @method removeOpcuaStoreValues
+ * @param {Object} app 
+ * @returns {Number}
+ */
+const removeOpcuaStoreValues = async function (app) {
+  let count = 0, removedItems;
+  //-------------------------
+  // Get opcua tags 
+  let opcuaTags = getOpcuaTags();
+  const groupBrowseNames = opcuaTags.filter(tag => !!tag.group && tag.store).map(tag => tag.browseName);
+  if (isDebug && groupBrowseNames.length) inspector('db-helper.removeOpcuaStoreValues.groupBrowseNames:', groupBrowseNames);
+  for (let index = 0; index < groupBrowseNames.length; index++) {
+    const groupBrowseName = groupBrowseNames[index];
+    const storeBrowseNames = opcuaTags.filter(tag => tag.ownerGroup === groupBrowseName).map(tag => tag.browseName);
+    if (isDebug && storeBrowseNames.length) inspector(`db-helper.removeOpcuaStoreValues.storeBrowseNames('${groupBrowseName}'):`, storeBrowseNames);
+    for (let index2 = 0; index2 < storeBrowseNames.length; index2++) {
+      const storeBrowseName = storeBrowseNames[index2];
+      removedItems = await removeItems(app, 'opcua-values', { tagName: storeBrowseName, $select: ['tagId', 'tagName', 'storeStart', 'storeEnd'] });
+      if (removedItems.length) {
+        if (isDebug && removedItems.length) inspector('db-helper.removeOpcuaValues.removedItems:', removedItems);
+        count = count + removedItems.length;
+      }
+    }
+  }
   return count;
 };
 
@@ -1470,6 +1500,7 @@ module.exports = {
   isMssqlDatasetInList,
   getIdFromMssqlConfig,
   getMssqlConfigFromEnv,
+  //-------------------
   dbNullIdValue,
   getEnvTypeDB,
   getEnvAdapterDB,
@@ -1489,6 +1520,7 @@ module.exports = {
   checkStoreParameterChanges,
   saveOpcuaTags,
   removeOpcuaGroupValues,
+  removeOpcuaStoreValues,
   getTagValuesFromStores,
   saveStoreParameterChanges,
   updateRemoteFromLocalStore,

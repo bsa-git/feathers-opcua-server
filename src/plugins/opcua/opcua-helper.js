@@ -553,6 +553,18 @@ const getOpcuaSaveModeToDB = function () {
   return myConfig ? myConfig.opcuaSaveModeToDB : process.env.DEFAULT_OPCUA_SAVEMODE_TODB;
 };
 
+/**
+ * @method getOpcuaBootstrapParams
+ * @returns {Object|null}
+ * e.g. { clearHistoryAtStartup: true }
+ */
+const getOpcuaBootstrapParams = function () {
+  const myConfigs = getOpcuaConfigsForMe();
+  const myConfig = myConfigs.find(item => item.opcuaBootstrapParams);
+  return myConfig ? myConfig.opcuaBootstrapParams : null;
+};
+
+
 
 /**
  * @method whereMethodsAreExecuted
@@ -1485,6 +1497,7 @@ module.exports = {
   getOpcuaConfigsForMe,
   getOpcuaConfigOptions,
   getOpcuaSaveModeToDB,
+  getOpcuaBootstrapParams,
   whereMethodsAreExecuted,
   getSavingValuesMode,
   mergeOpcuaConfigOptions,

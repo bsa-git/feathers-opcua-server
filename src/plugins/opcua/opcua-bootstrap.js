@@ -18,12 +18,14 @@ const {
   getOpcuaConfig,
   getServerService,
   getClientService,
-  executeOpcuaClientScript
+  executeOpcuaClientScript,
+  getOpcuaBootstrapParams
 } = require('./opcua-helper');
 
 const {
   saveOpcuaTags,
   removeOpcuaGroupValues,
+  removeOpcuaStoreValues,
   updateRemoteFromLocalStore,
   integrityCheckOpcua,
   checkStoreParameterChanges,
@@ -53,7 +55,7 @@ const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) 
  */
 module.exports = async function opcuaBootstrap(app) {
   let service = null, opcuaServer = null, opcuaClient = null;
-  let integrityResult, removeResult;
+  let integrityResult, removeResult, bootstrapParams = null;
   //--------------------------------------------------------
 
   // Determine if command line argument exists for seeding data
@@ -67,6 +69,9 @@ module.exports = async function opcuaBootstrap(app) {
   if (!isOpcuaBootstrapAllowed) return;
 
   if (isSaveOpcuaToDB()) {
+
+    // Get opcua bootstrap params
+    bootstrapParams = getOpcuaBootstrapParams();
 
     // Get opcua tags 
     const opcuaTags = getOpcuaTags();
@@ -95,6 +100,12 @@ module.exports = async function opcuaBootstrap(app) {
       logger.info(`opcuaBootstrap.saveStoreParameterChanges.localDB: ${saveStoreResults.length}`);
     }
 
+    // Remove opcua store values
+    if (bootstrapParams && bootstrapParams.clearHistoryAtStartup) {
+      removeResult = await removeOpcuaStoreValues(app);
+      if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.localDB: ${removeResult}`);
+    }
+
     const isRemote = isRemoteOpcuaToDB();
     if (isRemote) {
       const remoteDbUrl = getOpcuaRemoteDbUrl();
@@ -115,16 +126,22 @@ module.exports = async function opcuaBootstrap(app) {
           removeResult = await removeOpcuaGroupValues(appRestClient);
           if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: ${removeResult}`);
         }
-        // Update remote from local store
-        const updateStores = await updateRemoteFromLocalStore(app, appRestClient, opcuaTags);
 
-        // Sum results
-        const sumResults = loReduce(updateStores, function (sum, n) {
-          return sum + n;
-        }, 0);
+        // Remove opcua remote store values
+        if (bootstrapParams && bootstrapParams.clearHistoryAtStartup) {
+          removeResult = await removeOpcuaStoreValues(appRestClient);
+          if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.remoteDB: ${removeResult}`);
+        } else {
+          // Update remote from local store
+          const updateStores = await updateRemoteFromLocalStore(app, appRestClient, opcuaTags);
+          // Sum results
+          const sumResults = loReduce(updateStores, function (sum, n) {
+            return sum + n;
+          }, 0);
 
-        if (true && updateStores.length) logger.info(`opcuaBootstrap.updateRemoteFromLocalStore.count: ${sumResults}`);
-        if (isDebug && updateStores.length) inspector('opcuaBootstrap.updateRemoteFromLocalStore.updateStores:', updateStores);
+          if (true && updateStores.length) logger.info(`opcuaBootstrap.updateRemoteFromLocalStore.count: ${sumResults}`);
+          if (isDebug && updateStores.length) inspector('opcuaBootstrap.updateRemoteFromLocalStore.updateStores:', updateStores);
+        }
       }
     }
   }
