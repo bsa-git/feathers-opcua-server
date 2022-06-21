@@ -16,7 +16,7 @@ const debug = require('debug')('app:runCommand');
 const isDebug = false;
 
 /**
- * @method onChangedCommonHandle
+ * @method runCommand
  * 
  * @param {Object} params 
  * @param {Object} dataValue

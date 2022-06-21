@@ -27,7 +27,11 @@
       "variableGetType": "valueFromSource",
       "getter": "acmDayValueFromPath",
       "getterParams": {
-        "path": "//192.168.3.5/www_m5/day_reports/m5-1/ACM/23AGR/"
+        "path": "//192.168.3.5/www_m5/day_reports/m5-1/ACM/23AGR/",
+        "toPath": "//192.168.3.5/www_m5/day_reports/m5-1/ACM",
+        "acmPath": "//192.168.3.5/www_m5/day_reports/m5-1/ACM/23AGR/",
+        "pointID": 1,
+        "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["23QN2O", "23QN2O_CORR", "23FVSG", "23FVSG_CORR", "23F105_IS"]}
       }
     }
   ],

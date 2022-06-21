@@ -18,10 +18,10 @@ const debug = require('debug')('app:ch_m5CreateAcmYearTemplate');
 const isDebug = false;
 
 /**
- * @method onChangedCommonHandle
+ * @method ch_m5CreateAcmYearTemplate
  * 
  * @param {Object} params 
- * @param {Object} dataValue
+ * @param {Object} value
  * @returns {void}
  */
 async function ch_m5CreateAcmYearTemplate(params, value) {

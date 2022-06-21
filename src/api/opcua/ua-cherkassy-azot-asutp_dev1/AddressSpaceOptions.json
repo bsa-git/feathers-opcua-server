@@ -25,55 +25,55 @@
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M52_ACM",
       "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M52_ACM2",
       "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM2",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_A3",
       "displayName": "Черкассы 'АЗОТ' цех A3",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_NG-UPG2",
       "displayName": "Черкассы 'АЗОТ' узел ПГ №2",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M7-313",
       "displayName": "Черкассы 'АЗОТ' цех М7-313",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M7-357",
       "displayName": "Черкассы 'АЗОТ' цех М7-357",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M7-657",
       "displayName": "Черкассы 'АЗОТ' цех М7-657",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M9",
       "displayName": "Черкассы 'АЗОТ' цех М9",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M2",
       "displayName": "Черкассы 'АЗОТ' цех М2",
       "type": "object"
@@ -143,6 +143,7 @@
         "path": "test/data/tmp/ch-m5acm_1",
         "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/asmDayReport.xls",
+        "acmPath": "test/data/excel/acm/23agr",
         "pointID": 1,
         "interval": 20000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["23QN2O", "23QN2O_CORR", "23FVSG", "23FVSG_CORR", "23F105_IS"]}

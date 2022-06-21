@@ -38,7 +38,7 @@ const paramsPath = '/src/api/app/opcua-methods/asm-reports/params';
 makeDirSync([appRoot, dataTestPath]);
 
 const {
-  paramsFileName,
+  acmYearTemplateFileName,
 } = require(join(...[appRoot, paramsPath]));
 
 const isDebug = false;
@@ -91,7 +91,7 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
     pointID = inputArg;
   }
   // Get params data
-  paramsFile = loTemplate(paramsFileName)({ pointID });
+  paramsFile = loTemplate(acmYearTemplateFileName)({ pointID });
   paramFullsPath = [appRoot, paramsPath, paramsFile];
   if (!doesFileExist(paramFullsPath)) {
     console.log(chalk.redBright(`Run script - ERROR. File with name "${paramsFile}" not found.`));
@@ -111,7 +111,7 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
     params.baseParams = 1;
   }
 
-  baseParamsFile = loTemplate(paramsFileName)({ pointID: params.baseParams });
+  baseParamsFile = loTemplate(acmYearTemplateFileName)({ pointID: params.baseParams });
   paramFullsPath = [appRoot, paramsPath, baseParamsFile];
   if (!doesFileExist(paramFullsPath)) {
     console.log(chalk.redBright(`Run script - ERROR. File with name "${baseParamsFile}" not found.`));

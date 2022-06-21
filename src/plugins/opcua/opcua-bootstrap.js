@@ -132,7 +132,7 @@ module.exports = async function opcuaBootstrap(app) {
           removeResult = await removeOpcuaStoreValues(appRestClient);
           if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.remoteDB: ${removeResult}`);
         } else {
-          // Update remote from local store
+          // Update remote store from local store
           const updateStores = await updateRemoteFromLocalStore(app, appRestClient, opcuaTags);
           // Sum results
           const sumResults = loReduce(updateStores, function (sum, n) {

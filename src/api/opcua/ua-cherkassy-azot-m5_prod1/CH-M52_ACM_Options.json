@@ -27,9 +27,11 @@
       "variableGetType": "valueFromSource",
       "getter": "acmDayValueFromPath",
       "getterParams": {
-        "fromPath": "//192.168.3.5/www_m5/day_reports/m5-2/ACM/14AGR/",
-        "toPath": "//192.168.3.5/www_m5/day_reports/m5-2/ACM/result/",
-        "templatePath": "//192.168.3.5/www_m5/day_reports/ACM/"
+        "path": "//192.168.3.5/www_m5/day_reports/m5-2/ACM/14AGR",
+        "toPath": "//192.168.3.5/www_m5/day_reports/m5-2/ACM",
+        "acmPath": "//192.168.3.5/www_m5/day_reports/m5-2/ACM/14AGR/",
+        "pointID": 2,
+        "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["14QN2O", "14QN2O_CORR", "14FVSG", "14FVSG_CORR", "14F105_IS"]}
       }
     }
   ],

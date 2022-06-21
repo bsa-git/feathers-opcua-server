@@ -29,7 +29,7 @@ let dataPath = '/src/api/app/opcua-methods/asm-reports/data';
 let paramsPath = '/src/api/app/opcua-methods/asm-reports/params';
 
 const {
-  paramsFileName,
+  acmYearTemplateFileName,
 } = require(join(...[appRoot, paramsPath]));
 
 const isDebug = false;
@@ -64,12 +64,12 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
 
   // Get params for year report
   const pointID = addressSpaceOption.getterParams.pointID;
-  const paramsFile = loTemplate(paramsFileName)({ pointID });
+  const paramsFile = loTemplate(acmYearTemplateFileName)({ pointID });
   paramFullsPath = [appRoot, paramsPath, paramsFile];
   paramsReport = require(join(...paramFullsPath));
 
   if (paramsReport.baseParams) {
-    const baseParamsFile = loTemplate(paramsFileName)({ pointID: paramsReport.baseParams });
+    const baseParamsFile = loTemplate(acmYearTemplateFileName)({ pointID: paramsReport.baseParams });
     paramFullsPath = [appRoot, paramsPath, baseParamsFile];
     const baseParams = require(join(...paramFullsPath));
     paramsReport = Object.assign({}, baseParams, paramsReport);

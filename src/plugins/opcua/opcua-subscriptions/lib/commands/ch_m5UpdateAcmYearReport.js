@@ -30,10 +30,6 @@ const loOmit = require('lodash/omit');
 
 let paramsPath = '/src/api/app/opcua-methods/asm-reports/params';
 
-const {
-  paramsFileName,
-} = require(join(...[appRoot, paramsPath]));
-
 const isDebug = false;
 
 /**
