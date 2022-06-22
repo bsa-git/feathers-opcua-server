@@ -45,7 +45,7 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
   let reportFile, paramsReport = null, paramFullsPath, resultPath;
   //---------------------------------------------------------------
 
-  if (isDebug && inputArguments.length) inspector('methodAcmYearReportUpdate.params:', inputArguments);
+  if (isDebug && inputArguments.length) inspector('methodAcmYearReportUpdate.inputArguments:', inputArguments);
 
   // Get params and group value
   if (!callback) {

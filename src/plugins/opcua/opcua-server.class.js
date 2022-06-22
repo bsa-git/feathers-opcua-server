@@ -361,9 +361,11 @@ class OpcuaServer {
   constructAddressSpace(params = null, getters = null, methods = null) {
     let addedVariable, addedMethod, object = null;
     let addedVariableList, getterParams, valueParams, engineeringUnit;
-    this.opcuaServerNotCreated();
-    const id = this.id;//this.params.serverInfo.applicationName;
     //------------------------------------------------------------------
+
+    this.opcuaServerNotCreated();
+    const id = this.id;
+    
     const opcuaConfig = getOpcuaConfig(id);
     // Merge params
     if (params === null) {
@@ -546,7 +548,7 @@ class OpcuaServer {
                 nodeId: `s=${m.browseName}`,
                 browseName: m.browseName,
                 displayName: m.displayName,
-                description: m.description ? m.description : ''
+                description: m.description ? m.description : '',
               };
               // Method inputArguments merge 
               if (m.inputArguments && m.inputArguments.length) {

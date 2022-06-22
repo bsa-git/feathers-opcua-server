@@ -143,7 +143,7 @@
         "path": "test/data/tmp/ch-m5acm_1",
         "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/asmDayReport.xls",
-        "acmPath": "test/data/excel/acm/23agr",
+        "acmPath": "http://192.168.3.5/www_m5/day_reports/m5-1/ACM/23AGR/",
         "pointID": 1,
         "interval": 20000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["23QN2O", "23QN2O_CORR", "23FVSG", "23FVSG_CORR", "23F105_IS"]}
@@ -169,6 +169,7 @@
         "path": "test/data/tmp/ch-m5acm_2",
         "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/asmDayReport.xls",
+        "acmPath": "http://192.168.3.5/www_m5/day_reports/m5-2/ACM/14AGR/",
         "pointID": 2,
         "interval": 20000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["14QN2O", "14QN2O_CORR", "14FVSG", "14FVSG_CORR", "14F105_IS"]}
@@ -194,6 +195,7 @@
         "path": "test/data/tmp/ch-m5acm_3",
         "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/asmDayReport.xls",
+        "acmPath": "http://192.168.3.5/www_m5/day_reports/m5-2/ACM/57AGR/",
         "pointID": 3,
         "interval": 20000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["57QN2O", "57QN2O_CORR", "57FVSG", "57FVSG_CORR", "57F105_IS"]}

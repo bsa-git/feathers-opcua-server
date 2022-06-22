@@ -8,9 +8,9 @@ const {
   standardUnits,
   makeAccessLevelFlag,
 } = require('node-opcua');
+
 const debug = require('debug')('app:opcua-addressspace-methods');
 const isDebug = false;
-// const isLog = false;
 
 /**
  * Simulate for value
@@ -20,6 +20,9 @@ const isDebug = false;
  * @returns {Variant}
  */
 function sumMethod(inputArguments, context, callback) {
+  
+  if(isDebug && inputArguments.length) console.log('sumMethod.inputArguments', inputArguments);
+
   const number1 = inputArguments[0].value;
   const number2 = inputArguments[1].value;
   let sum = number1 + number2;
