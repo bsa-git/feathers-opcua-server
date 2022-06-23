@@ -53,7 +53,7 @@ const sysMemUsage = function () {// sysMemUsage
 * @return {Promise}
 * e.g. await pause(1000, true) -> 'Pause: 1000 (MSec)'
 */
-const pause = function (ms, show = false) {
+const pause = function (ms = 1000, show = false) {
   return new Promise(function (resolve) {
     setTimeout(() => {
       if (show) console.log('Pause: ', chalk.cyan(`${ms} (MSec)`));

@@ -1,6 +1,6 @@
 {
   "pointID": 1,
-  "asmTagBrowseName": "CH_M51_ACM::ValueFromFile",
+  "acmTagBrowseName": "CH_M51_ACM::ValueFromFile",
   "inputFile": "DayHist01_23F120_${ date }_0000.xls",
   "outputFile": "acmDayReportsData${ pointID }-${ date }.json"
 }

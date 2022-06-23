@@ -19,7 +19,6 @@ const loIsString = require('lodash/isString');
 
 const debug = require('debug')('app:file-operations');
 const isDebug = false;
-const isLog = false;
 //===========================================================
 
 
@@ -792,6 +791,37 @@ const writeFileSync = function (path, data, isJson = false) {
 };
 
 /**
+ * @method writeFileStream
+ * @param {String|Array} path
+ * @param {String|Object|Buffer|TypeArray|DataView} data 
+ * @param {Boolean} isJson 
+ * @returns {String}
+ */
+const writeFileStream = function (path, data) {
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+
+  const dir = getPathParse(path).dir;
+
+  const isAccess = fsAccess(dir, fs.constants.F_OK) && fsAccess(dir, fs.constants.W_OK);
+  if (isAccess) {
+
+    // This opens up the writeable stream to `output`
+    // const writeStream = fs.createWriteStream(path);
+
+    data.pipe(fs.createWriteStream(path));
+    // result.pipe(fs.createWriteStream(resultPath));
+
+    // fs.writeFileSync(path, data); // encoding <string> | <null> Default: 'utf8'
+    if (isDebug && path) debug('File was written for path:', path);
+  } else {
+    throw new Error(`Access error for path: ${dir}; fs.F_OK: ${fsAccess(dir, fs.constants.F_OK)}; fs.W_OK: ${fsAccess(dir, fs.constants.W_OK)};`);
+  }
+  return path;
+};
+
+/**
  * @method writeFileSync
  * @param {String|Array} path
  * @param {String|Object|Buffer|TypeArray|DataView} data 
@@ -850,5 +880,6 @@ module.exports = {
   readJsonFileSync,
   writeFileSync,
   writeJsonFileSync,
+  writeFileStream,
   removeFileSync
 };

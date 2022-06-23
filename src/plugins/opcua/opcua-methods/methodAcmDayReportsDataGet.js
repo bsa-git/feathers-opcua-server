@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+const fs = require('fs');
 const Path = require('path');
 const join = Path.join;
 const chalk = require('chalk');
@@ -8,9 +9,19 @@ const logger = require('../../../logger');
 const {
   appRoot,
   inspector,
+  pause,
   doesFileExist,
-  makeDirSync
+  getPathBasename,
+  writeFileStream,
+  isUrlExists,
+  makeDirSync,
+  httpGetFileNamesFromDir,
+  httpGetFileFromUrl
 } = require('../../lib');
+
+const {
+  getOpcuaTags,
+} = require('../../opcua/opcua-helper');
 
 const {
   ExceljsHelperClass,
@@ -25,6 +36,7 @@ const {
 const loForEach = require('lodash/forEach');
 const loTemplate = require('lodash/template');
 const loOmit = require('lodash/omit');
+const loStartsWith = require('lodash/startsWith');
 
 const dataTestPath = '/test/data/tmp/excel-helper';
 let dataPath = '/src/api/app/opcua-methods/asm-reports/data';
@@ -45,7 +57,7 @@ const isDebug = false;
  */
 async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   let resultPath = '', paramsFile, baseParamsFile, params = null, paramFullsPath;
-  let pointID;
+  let pointID, result;
   //----------------------------------------------------------------------------
 
   if (isDebug && inputArguments.length) inspector('methodAcmDayReportsDataGet.inputArguments:', inputArguments);
@@ -61,7 +73,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   paramsFile = loTemplate(acmDayReportFileName)({ pointID });
   paramFullsPath = [appRoot, paramsPath, paramsFile];
   if (!doesFileExist(paramFullsPath)) {
-    console.log(chalk.redBright(`Run script - ERROR. File with name "${paramsFile}" not found.`));
+    logger.error(chalk.redBright(`Run script - ERROR. File with name "${paramsFile}" not found.`));
     throw new Error(`Run script - ERROR. File with name "${paramsFile}" not found.`);
   }
 
@@ -87,8 +99,40 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   const baseParams = require(join(...paramFullsPath));
   params = Object.assign({}, baseParams, params);
 
+  // Get opcua tags 
+  const opcuaTags = getOpcuaTags();
+  const acmTag = opcuaTags.find(t => t.browseName === params.acmTagBrowseName);
+  if (!acmTag) {
+    logger.error(chalk.redBright(`Run script - ERROR. Tag with browseName "${params.acmTagBrowseName}" not found.`));
+    throw new Error(`Run script - ERROR. Tag with browseName "${params.acmTagBrowseName}" not found.`);
+  }
+
+  params = Object.assign(params, acmTag.getterParams);
 
   if (isDebug && params) inspector('methodAcmDayReportsDataGet.params:', params);
+
+  // Get acm path  
+  const isHttp = loStartsWith(params.acmPath, 'http');
+  if (isHttp && isUrlExists(params.acmPath, true)) {
+    logger.info(`isUrlExists('${params.acmPath}'): OK`);
+    const urls = await httpGetFileNamesFromDir(params.acmPath);
+    if (isDebug && urls.length) console.log('httpGetFileNamesFromDir.urls:', urls);
+    // Get files from urls
+    for (let index = 0; index < urls.length; index++) {
+      const fileName = getPathBasename(urls[index]);
+      if (fileName) {
+        result = await httpGetFileFromUrl({
+          url: urls[index],
+          method: 'get',
+          responseType: 'stream'
+        });
+        // Write file stream
+        resultPath = join(...[appRoot, dataTestPath, fileName]);
+        resultPath = writeFileStream(resultPath, result);
+        await pause();
+      }
+    }
+  }
 
   // Write new data to xlsx file
   const currentDate = moment().format('YYYYMMDD');
@@ -96,7 +140,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   // resultPath = 
   if (params.isTest) {
     resultPath = join(...[appRoot, dataTestPath, outputFile]);
-  } else{
+  } else {
     resultPath = join(...[appRoot, dataPath, outputFile]);
   }
 

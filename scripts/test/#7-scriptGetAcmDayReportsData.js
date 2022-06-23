@@ -33,7 +33,8 @@ describe('<<=== ScriptOperations: (#7-scriptGetAcmDayReportsData) ===>>', () => 
     let result;
     //-----------------
     let options = {
-      point: [1, 2, 3]
+      // point: [1, 2, 3]
+      point: [1]
     };
     // Run script
     if (Array.isArray(options.point)) {

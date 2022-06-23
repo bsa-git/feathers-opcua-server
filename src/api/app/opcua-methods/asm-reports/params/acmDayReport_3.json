@@ -1,6 +1,6 @@
 {
   "baseParams": 1,
   "pointID": 3,
-  "asmTagBrowseName": "CH_M52_ACM2::ValueFromFile",
+  "acmTagBrowseName": "CH_M52_ACM2::ValueFromFile",
   "inputFile": "DayHist01_573F120_${ date }_0000.xls"
 }
