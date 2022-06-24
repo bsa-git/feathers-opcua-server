@@ -7,14 +7,14 @@ const {
 } = require('../../src/plugins/lib');
 
 const {
-  checkCallMethod,
-  callbackSessionCallMethod,
+  checkRunCommand,
+  callbackSessionWrite,
   opcuaClientSessionAsync
 } = require('../../src/plugins/opcua/opcua-client-scripts/lib');
 
 const chalk = require('chalk');
 
-const debug = require('debug')('app:#5-scriptCallOpcuaMetod');
+const debug = require('debug')('app:#4-scriptRunOpcuaCommand');
 const isDebug = false;
 
 // Get argv
@@ -23,33 +23,32 @@ const isDebug = false;
 // e.g. argv.script='#3' =>  Converter from `Fox` hist data `.inp` file to KEPServer
 const argv = yargs(hideBin(process.argv)).argv;
 if (isDebug && argv) inspector('Yargs.argv:', argv);
-const isScript = (argv.script === '#5');
+const isScript = (argv.script === '#1');
 
-describe('<<=== ScriptOperations: (#5-scriptCallOpcuaMetod) ===>>', () => {
-
+describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
+  
   if (!isScript) return;
   // Run opcua command
-  it('#5: ScriptOperations: Call opcua metod', async () => {
+  it('#1: ScriptOperations: Run opcua command', async () => {
     let options = {
-      method: 'ch_m5CreateAcmYearTemplate',
+      command: 'ch_m5CreateAcmYearTemplate',
       opt: {
         url: 'opc.tcp://localhost:26570',// (Endpoint URL)
-        point: 2,
+        points: [1, 2, 3],
         test: true,
         period: [1, 'months'],
         year: 2020
       }
     };
-    // Check call method options
-    const checkResult = checkCallMethod(options);
+    const checkResult = checkRunCommand(options);
     if (!checkResult) {
-      // Method error
-      inspector('callOpcuaMethod_ERROR.options:', options);
-      throw new Error(`Method error. This method "${options.method}" does not exist or there are not enough options.`);
+      // Command error
+      inspector('runOpcuaCommand_ERROR.options:', options);
+      throw new Error(`Command error. This command "${options.command}" does not exist or there are not enough options.`);
     }
-    let result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionCallMethod);
-    // Check call method result
-    result = checkCallMethod(options, result);
+    const result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionWrite);
+    if (isDebug && result) inspector('runOpcuaCommand.result:', result);
+    console.log(chalk.green(`Run session write command "${options.command}" - OK!`), 'result:', chalk.cyan(result));
     assert.ok(result === 'Good', 'Run opcua command');
   });
 });

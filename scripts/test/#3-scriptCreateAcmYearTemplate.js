@@ -22,14 +22,14 @@ const isDebug = false;
 // e.g. argv.script='#3' =>  Converter from `Fox` hist data `.inp` file to KEPServer
 const argv = yargs(hideBin(process.argv)).argv;
 if (isDebug && argv) inspector('Yargs.argv:', argv);
-const isScript = (argv.script === '#6');
+const isScript = (argv.script === '#3');
 
-describe('<<=== ScriptOperations: (#6-scriptCreateAcmYearTemplate) ===>>', () => {
+describe('<<=== ScriptOperations: (#3-scriptCreateAcmYearTemplate) ===>>', () => {
 
   if (!isScript) return;
 
   // Run opcua command
-  it('#6: ScriptOperations: Create acm year template', async () => {
+  it('#3: ScriptOperations: Create acm year template', async () => {
     let result;
     //-----------------
     let options = {

@@ -28,8 +28,6 @@ const {
 
 const loOmit = require('lodash/omit');
 
-let paramsPath = '/src/api/app/opcua-methods/asm-reports/params';
-
 const isDebug = false;
 
 /**

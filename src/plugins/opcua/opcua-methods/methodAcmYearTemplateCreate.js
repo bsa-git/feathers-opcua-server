@@ -32,8 +32,8 @@ const {
 } = require('../../excel-helpers');
 
 const dataTestPath = '/test/data/tmp/excel-helper';
-const dataPath = '/src/api/app/opcua-methods/asm-reports/data';
-const paramsPath = '/src/api/app/opcua-methods/asm-reports/params';
+const dataPath = '/src/api/app/opcua-methods/acm-reports/data';
+const paramsPath = '/src/api/app/opcua-methods/acm-reports/params';
 
 makeDirSync([appRoot, dataTestPath]);
 

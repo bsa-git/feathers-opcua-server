@@ -25,8 +25,8 @@ const loForEach = require('lodash/forEach');
 const loTemplate = require('lodash/template');
 const loOmit = require('lodash/omit');
 
-let dataPath = '/src/api/app/opcua-methods/asm-reports/data';
-let paramsPath = '/src/api/app/opcua-methods/asm-reports/params';
+let dataPath = '/src/api/app/opcua-methods/acm-reports/data';
+let paramsPath = '/src/api/app/opcua-methods/acm-reports/params';
 
 const {
   acmYearTemplateFileName,

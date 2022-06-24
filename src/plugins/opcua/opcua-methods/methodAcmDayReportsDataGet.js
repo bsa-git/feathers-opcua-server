@@ -39,8 +39,8 @@ const loOmit = require('lodash/omit');
 const loStartsWith = require('lodash/startsWith');
 
 const dataTestPath = '/test/data/tmp/excel-helper';
-let dataPath = '/src/api/app/opcua-methods/asm-reports/data';
-let paramsPath = '/src/api/app/opcua-methods/asm-reports/params';
+let dataPath = '/src/api/app/opcua-methods/acm-reports/data';
+let paramsPath = '/src/api/app/opcua-methods/acm-reports/params';
 
 const {
   acmDayReportFileName,

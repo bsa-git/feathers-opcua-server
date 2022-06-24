@@ -38,8 +38,8 @@ const debug = require('debug')('app:excel-helpers.test');
 const isDebug = false;
 
 const testPath = 'test/data/tmp/excel-helper';
-const xlsFile = '/test/data/excel/asmDayReport.xls';
-const xlsxFile = '/test/data/excel/asmDayReport.xlsx';
+const xlsFile = '/test/data/excel/acmDayReport.xls';
+const xlsxFile = '/test/data/excel/acmDayReport.xlsx';
 const xlsxFile2 = '/test/data/excel/acmYearTemplate.xlsx';
 const csvFile = '/test/data/csv/data-CH_M51.csv';
 

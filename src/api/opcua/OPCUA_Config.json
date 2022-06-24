@@ -244,6 +244,9 @@
     "hostTypeDB": "mongodb",
     "opcuaSaveModeToDB": "remoteUpdate",
     "opcuaRemoteDbUrl": "http://localhost:3131",
+    "opcuaBootstrapParams": {
+      "clearHistoryAtStartup": true
+    },
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",

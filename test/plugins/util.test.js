@@ -38,7 +38,7 @@ const object1 = {
     'isTest': true,
     'path': 'test/data/tmp/ch-m5acm_1',
     'toPath': 'test/data/tmp/excel-helper',
-    'fromFile': 'test/data/excel/asmDayReport.xls',
+    'fromFile': 'test/data/excel/acmDayReport.xls',
     'pointID': 1,
     'interval': 30000,
     'excelMappingFrom': {
@@ -69,7 +69,7 @@ const object2 = {
     'path': 'test/data/tmp/ch-m5acm_1',
     'isTest': true,
     'toPath': 'test/data/tmp/excel-helper',
-    'fromFile': 'test/data/excel/asmDayReport.xls',
+    'fromFile': 'test/data/excel/acmDayReport.xls',
     'pointID': 1,
     'interval': 30000,
     'excelMappingFrom': {
