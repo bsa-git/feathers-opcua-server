@@ -373,12 +373,8 @@ const createPath = function (path) {
  * @returns {Boolean}
  */
 const isUncPath = function (path) {
-  // if (loIsString(path)) {
   const isUncPath = require('is-unc-path');
   return isUncPath(path);
-  // } else {
-  //   return false;
-  // }
 };
 
 /**
@@ -498,7 +494,6 @@ const clearDirSync = function (path) {
     path = join(...path);
   }
   const isExist = doesDirExist(path);
-  // const isExist = fsAccess(path);
   if (isExist) {
     if (isDebug) debug('clearDirSync.path:', path);
     removeFilesFromDirSync(path);
@@ -515,6 +510,8 @@ const clearDirSync = function (path) {
  * @param {Boolean} withFileTypes 
  */
 const readDirSync = function (path, withFileTypes = false) {
+  let result = null;
+  //------------------------------
   if (Array.isArray(path)) {
     path = join(...path);
   }
@@ -524,13 +521,49 @@ const readDirSync = function (path, withFileTypes = false) {
     if (withFileTypes) {
       let fileObjs = fs.readdirSync(path, { withFileTypes: true });
       if (isDebug) debug('readDirSync.fileObjs:', fileObjs);
-      return fileObjs;
+      result = fileObjs;
     } else {
       const filenames = fs.readdirSync(path);
       if (isDebug) debug('readDirSync.filenames:', filenames);
-      return filenames;
+      result = filenames;
     }
   }
+  return result;
+};
+
+/**
+ * @method getFileListFromPath
+ * @param {String|Array} path 
+ * @param {String[]} fileList 
+ * @returns {String[]}
+ * e.g. [
+  'c:/reports/acm/23agr/2022/2022-01/DayHist01_23F120_01022022_0000.xls',
+  'c:/reports/acm/23agr/DayHist01_23F120_02232022_0000.xls',
+  'c:/reports/acm/23agr/DayHist01_23F120_02242022_0000.xls'
+]
+ */
+const getFileListFromPath = function (path, fileList = []) {
+  let filenames = [];
+  //--------------------
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  path = toPathWithSep(path);
+  filenames = readDirSync(path);
+  if (isDebug && filenames && filenames.length) inspector('getFileListFromPath.filenames:', filenames);
+  if (filenames && filenames.length) {
+    for (let index = 0; index < filenames.length; index++) {
+      const item = filenames[index];
+      const extname = getPathExtname(item);
+      if (extname) {
+        fileList.push(`${path}${Path.sep}${item}`);
+        if (isDebug && fileList.length) inspector('getFileListFromPath.fileList:', fileList);
+      } else {
+        getFileListFromPath(`${path}${Path.sep}${item}`, fileList);
+      }
+    }
+  }
+  return fileList;
 };
 
 
@@ -874,6 +907,7 @@ module.exports = {
   removeDirFromDirSync,
   clearDirSync,
   readDirSync,
+  getFileListFromPath,
   readOnlyNewFile,
   readOnlyModifiedFile,
   readFileSync,

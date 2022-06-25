@@ -13,6 +13,8 @@ const {
   doesFileExist,
   getPathBasename,
   writeFileStream,
+  getFileListFromPath,
+  isUncPath,
   isUrlExists,
   makeDirSync,
   httpGetFileNamesFromDir,
@@ -89,7 +91,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   if (!params.baseParams) {
     params.baseParams = 1;
   }
-
+  // Get base params file 
   baseParamsFile = loTemplate(acmDayReportFileName)({ pointID: params.baseParams });
   paramFullsPath = [appRoot, paramsPath, baseParamsFile];
   if (!doesFileExist(paramFullsPath)) {
@@ -113,25 +115,35 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
 
   // Get acm path  
   const isHttp = loStartsWith(params.acmPath, 'http');
-  if (isHttp && isUrlExists(params.acmPath, true)) {
-    logger.info(`isUrlExists('${params.acmPath}'): OK`);
-    const urls = await httpGetFileNamesFromDir(params.acmPath);
-    if (isDebug && urls.length) console.log('httpGetFileNamesFromDir.urls:', urls);
-    // Get files from urls
-    for (let index = 0; index < urls.length; index++) {
-      const fileName = getPathBasename(urls[index]);
-      if (fileName) {
-        result = await httpGetFileFromUrl({
-          url: urls[index],
-          method: 'get',
-          responseType: 'stream'
-        });
-        // Write file stream
-        resultPath = join(...[appRoot, dataTestPath, fileName]);
-        resultPath = writeFileStream(resultPath, result);
-        await pause();
+  if (isHttp) {
+    const isExistsURL = await isUrlExists(params.acmPath, true);
+    if (isExistsURL) {
+      if (isDebug && isExistsURL) logger.info(`isExistsURL('${params.acmPath}'): OK`);
+
+      // Get fileNames from path for http
+      const urls = await httpGetFileNamesFromDir(params.acmPath);
+      if (isDebug && urls.length) console.log('httpGetFileNamesFromDir.urls:', urls);
+      // Get files from urls
+      for (let index = 0; index < urls.length; index++) {
+        const fileName = getPathBasename(urls[index]);
+        if (fileName) {
+          const resultData = await httpGetFileFromUrl({
+            url: urls[index],
+            method: 'get',
+            responseType: 'stream'
+          });
+          // Write file stream
+          resultPath = join(...[appRoot, dataTestPath, fileName]);
+          resultPath = writeFileStream(resultPath, resultData);
+          await pause();
+        }
       }
     }
+  } else {
+    const path = isUncPath(params.acmPath) ? params.acmPath : join(...[appRoot, params.acmPath]);
+    if (isDebug && path) inspector('methodAcmDayReportsDataGet.path:', path);
+    const dirList = getFileListFromPath(path);
+    if (isDebug && dirList.length) inspector('methodAcmDayReportsDataGet.dirList:', dirList);
   }
 
   // Write new data to xlsx file

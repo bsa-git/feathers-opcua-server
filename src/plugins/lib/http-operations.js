@@ -122,7 +122,7 @@ const httpGetNewFileFromDir = async function (url) {
  * @method httpGetFileNamesFromDir
  * @param {String} url 
  * @param {String[]} fileList 
- * @returns {Object}
+ * @returns {String[]}
  * e.g. [
   'http://192.168.3.5/www_m5/day_reports/m5-1/ACM/23AGR/2022/2022-01/DayHist01_23F120_01022022_0000.xls',
   'http://192.168.3.5/www_m5/day_reports/m5-1/ACM/23AGR/DayHist01_23F120_02232022_0000.xls',
