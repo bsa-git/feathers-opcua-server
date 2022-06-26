@@ -17,12 +17,12 @@ const {
 
 const { TYPES } = require('tedious');
 
-const debug = require('debug')('app:opcua-getters/histValuesFromDB');
+const debug = require('debug')('app:getterHistValuesFromDB');
 const isDebug = false;
 
 //=============================================================================
 /**
- * @method selectValuesFromChAsoduDB
+ * @method getValuesFromChAsoduDB
  * @param {Object} db 
  * @param {Object} params 
  * @returns {Object}
@@ -51,12 +51,12 @@ const getValuesFromChAsoduDB = async function (db, queryParams) {
 };
 
 /**
- * @method histValuesFromDB
+ * @method getterHistValuesFromDB
  * @param {Object} params 
  * @param {Object} addedValue 
  * @returns {void}
  */
-function histValuesFromDB(params = {}, addedValue) {
+function getterHistValuesFromDB(params = {}, addedValue) {
   let dataItems, dataType, results;
   let id = params.myOpcuaServer.id;
   //------------------------------------
@@ -67,8 +67,7 @@ function histValuesFromDB(params = {}, addedValue) {
 
   //--- Set values from source ---
   const setValuesFromSource = function (dataItems) {
-    if (isDebug) inspector('histValuesFromDB.dataItems:', dataItems);
-    // inspector('histValuesFromDB.setValuesFromSource.dataItems:', dataItems);
+    if (isDebug) inspector('getterHistValuesFromDB.dataItems:', dataItems);
     dataType = formatUAVariable(addedValue).dataType[1];
     dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
@@ -99,4 +98,4 @@ function histValuesFromDB(params = {}, addedValue) {
   }, params.interval);
 }
 
-module.exports = histValuesFromDB;
+module.exports = getterHistValuesFromDB;

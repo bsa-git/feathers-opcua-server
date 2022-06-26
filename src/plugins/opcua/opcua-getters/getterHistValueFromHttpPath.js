@@ -15,18 +15,18 @@ const {
   convertAliasListToBrowseNameList
 } = require('../opcua-helper');
 
-const debug = require('debug')('app:opcua-getters/histValueFromHttpPath');
+const debug = require('debug')('app:getterHistValueFromHttpPath');
 const isDebug = false;
 
 //=============================================================================
 
 /**
- * @method histValueFromHttpPath
+ * @method getterHistValueFromHttpPath
  * @param {Object} params 
  * @param {Object} addedValue 
  * @returns {void}
  */
-const histValueFromHttpPath = function (params = {}, addedValue) {
+const getterHistValueFromHttpPath = function (params = {}, addedValue) {
   let dataItems, dataType, results;
   
   // Set value from source
@@ -40,16 +40,16 @@ const histValueFromHttpPath = function (params = {}, addedValue) {
     dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
     if (isDebug && fileName) console.log(chalk.green('fileName:'), chalk.cyan(fileName));
-    if(isDebug && dataItems) inspector('histValueFromHttpPath.dataItems:', dataItems);
+    if(isDebug && dataItems) inspector('getterHistValueFromHttpPath.dataItems:', dataItems);
 
     // Get dateTime from fileName
     // e.g. data-20220518_075752.txt -> 2022-05-18T07:57:52
     dateTime = getDateTimeFromFileName(fileName, [5], 'YYYYMMDD_HHmmss');
-    if(isDebug && dateTime) inspector('histValueFromHttpPath.dateTime:', dateTime);
+    if(isDebug && dateTime) inspector('getterHistValueFromHttpPath.dateTime:', dateTime);
 
     // Add prop "!value": { dateTime: ''2022-05-17T13:22:56' } to dataItems
     dataItems['!value'] = { dateTime };
-    if(isDebug && dataItems) inspector('histValueFromHttpPath.dataItems:', dataItems);
+    if(isDebug && dataItems) inspector('getterHistValueFromHttpPath.dataItems:', dataItems);
 
     // Set value from source for group 
     if (params.addedVariableList) {
@@ -65,4 +65,4 @@ const histValueFromHttpPath = function (params = {}, addedValue) {
   }, params.interval);
 };
 
-module.exports = histValueFromHttpPath;
+module.exports = getterHistValueFromHttpPath;

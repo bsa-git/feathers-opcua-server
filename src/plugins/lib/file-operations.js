@@ -532,7 +532,7 @@ const readDirSync = function (path, withFileTypes = false) {
 };
 
 /**
- * @method getFileListFromPath
+ * @method getFileListFromDir
  * @param {String|Array} path 
  * @param {String[]} fileList 
  * @returns {String[]}
@@ -542,7 +542,7 @@ const readDirSync = function (path, withFileTypes = false) {
   'c:/reports/acm/23agr/DayHist01_23F120_02242022_0000.xls'
 ]
  */
-const getFileListFromPath = function (path, fileList = []) {
+const getFileListFromDir = function (path, fileList = []) {
   let filenames = [];
   //--------------------
   if (Array.isArray(path)) {
@@ -550,16 +550,16 @@ const getFileListFromPath = function (path, fileList = []) {
   }
   path = toPathWithSep(path);
   filenames = readDirSync(path);
-  if (isDebug && filenames && filenames.length) inspector('getFileListFromPath.filenames:', filenames);
+  if (isDebug && filenames && filenames.length) inspector('getFileListFromDir.filenames:', filenames);
   if (filenames && filenames.length) {
     for (let index = 0; index < filenames.length; index++) {
       const item = filenames[index];
       const extname = getPathExtname(item);
       if (extname) {
         fileList.push(`${path}${Path.sep}${item}`);
-        if (isDebug && fileList.length) inspector('getFileListFromPath.fileList:', fileList);
+        if (isDebug && fileList.length) inspector('getFileListFromDir.fileList:', fileList);
       } else {
-        getFileListFromPath(`${path}${Path.sep}${item}`, fileList);
+        getFileListFromDir(`${path}${Path.sep}${item}`, fileList);
       }
     }
   }
@@ -907,7 +907,7 @@ module.exports = {
   removeDirFromDirSync,
   clearDirSync,
   readDirSync,
-  getFileListFromPath,
+  getFileListFromDir,
   readOnlyNewFile,
   readOnlyModifiedFile,
   readFileSync,

@@ -13,7 +13,7 @@ const {
   doesFileExist,
   getPathBasename,
   writeFileStream,
-  getFileListFromPath,
+  getFileListFromDir,
   isUncPath,
   isUrlExists,
   makeDirSync,
@@ -26,7 +26,7 @@ const {
 } = require('../../opcua/opcua-helper');
 
 const {
-  ExceljsHelperClass,
+  XlsxHelperClass
 } = require('../../excel-helpers');
 
 const {
@@ -59,7 +59,7 @@ const isDebug = false;
  */
 async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   let resultPath = '', paramsFile, baseParamsFile, params = null, paramFullsPath;
-  let pointID, result;
+  let pointID, dirList = [], path;
   //----------------------------------------------------------------------------
 
   if (isDebug && inputArguments.length) inspector('methodAcmDayReportsDataGet.inputArguments:', inputArguments);
@@ -93,13 +93,15 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   }
   // Get base params file 
   baseParamsFile = loTemplate(acmDayReportFileName)({ pointID: params.baseParams });
-  paramFullsPath = [appRoot, paramsPath, baseParamsFile];
-  if (!doesFileExist(paramFullsPath)) {
-    console.log(chalk.redBright(`Run script - ERROR. File with name "${baseParamsFile}" not found.`));
-    throw new Error(`Run script - ERROR. File with name "${baseParamsFile}" not found.`);
+  if (baseParamsFile !== paramsFile) {
+    paramFullsPath = [appRoot, paramsPath, baseParamsFile];
+    if (!doesFileExist(paramFullsPath)) {
+      console.log(chalk.redBright(`Run script - ERROR. File with name "${baseParamsFile}" not found.`));
+      throw new Error(`Run script - ERROR. File with name "${baseParamsFile}" not found.`);
+    }
+    const baseParams = require(join(...paramFullsPath));
+    params = Object.assign({}, baseParams, params);
   }
-  const baseParams = require(join(...paramFullsPath));
-  params = Object.assign({}, baseParams, params);
 
   // Get opcua tags 
   const opcuaTags = getOpcuaTags();
@@ -108,10 +110,11 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
     logger.error(chalk.redBright(`Run script - ERROR. Tag with browseName "${params.acmTagBrowseName}" not found.`));
     throw new Error(`Run script - ERROR. Tag with browseName "${params.acmTagBrowseName}" not found.`);
   }
+  // Get acm params
+  const acmPath = acmTag.getterParams.acmPath;
+  params = Object.assign(params, { acmPath });
 
-  params = Object.assign(params, acmTag.getterParams);
-
-  if (isDebug && params) inspector('methodAcmDayReportsDataGet.params:', params);
+  if (true && params) inspector('methodAcmDayReportsDataGet.params:', params);
 
   // Get acm path  
   const isHttp = loStartsWith(params.acmPath, 'http');
@@ -135,16 +138,41 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
           // Write file stream
           resultPath = join(...[appRoot, dataTestPath, fileName]);
           resultPath = writeFileStream(resultPath, resultData);
+          dirList.push(resultPath);
           await pause();
         }
       }
     }
   } else {
-    const path = isUncPath(params.acmPath) ? params.acmPath : join(...[appRoot, params.acmPath]);
+    path = isUncPath(params.acmPath) ? params.acmPath : join(...[appRoot, params.acmPath]);
     if (isDebug && path) inspector('methodAcmDayReportsDataGet.path:', path);
-    const dirList = getFileListFromPath(path);
-    if (isDebug && dirList.length) inspector('methodAcmDayReportsDataGet.dirList:', dirList);
+    dirList = getFileListFromDir(path);
+    if (true && dirList.length) inspector('methodAcmDayReportsDataGet.dirList:', dirList);
   }
+
+  // Convert xls data to json data 
+  for (let index = 0; index < dirList.length; index++) {
+    const xlsPath = dirList[index];
+    // Create xlsx object
+    let xlsx = new XlsxHelperClass({
+      excelPath: xlsPath,
+      sheetName: 'Report1'
+    });
+
+    // Sheet to json data
+    const dataItems = xlsx.sheetToJson('Report1', { range: params.rangeData, header: params.headerNames });
+    if (true && dataItems.length) inspector(`methodAcmDayReportsDataGet.dataItems(${dataItems.length}):`, dataItems);
+
+    // Sheet to json date
+    let dateTime = xlsx.sheetToJson('Report1', { range: params.rangeDate });
+    dateTime = dateTime[0]['A'].split('to:')[0].split('from:')[1].trim();
+    dateTime = moment.utc(dateTime).format('YYYY-MM-DD');
+    if (true && dateTime) console.log('methodAcmDayReportsDataGet.dateTime:', dateTime);
+
+    
+  }
+
+
 
   // Write new data to xlsx file
   const currentDate = moment().format('YYYYMMDD');

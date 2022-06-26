@@ -324,7 +324,7 @@
       },
       "group": true,
       "variableGetType": "valueFromSource",
-      "getter": "histValueFromPath",
+      "getter": "getterHistValueFromPath",
       "getterParams": {
         "path": "//192.168.3.5/www_m5/m5_data2",
         "interval": 15000
@@ -341,7 +341,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -362,7 +362,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,

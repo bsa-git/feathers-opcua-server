@@ -129,7 +129,7 @@ function histArrayValue(params = {}, addedValue) {
   }, interval);
 }
 
-function histValueFromFile(params = {}, addedValue) {
+function getterHistValueFromFile(params = {}, addedValue) {
   const _t = 0;
   const _interval = 200;
   const _path = 'test/data/tmp';
@@ -141,13 +141,13 @@ function histValueFromFile(params = {}, addedValue) {
   // Watch read only new file
   readOnlyNewFile([appRoot, path], (filePath, data) => {
     // Show filePath, data
-    if (isDebug) console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
-    if (isDebug) console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
+    if (isDebug) console.log(chalk.green('getterHistValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
+    if (isDebug) console.log(chalk.green('getterHistValueFromFile.data:'), chalk.cyan(data));
     // Set value from source
     dataType = formatUAVariable(addedValue).dataType[1];
     addedValue.setValueFromSource({ dataType, value: data });
 
-    if (isLog) inspector('histValueFromFile.addedValue:', formatUAVariable(addedValue));
+    if (isLog) inspector('getterHistValueFromFile.addedValue:', formatUAVariable(addedValue));
 
     // Remove file 
     removeFileSync(filePath);
@@ -200,7 +200,7 @@ module.exports = Object.assign({}, opcuaDefaultGetters, {
   valueFromSource1,
   valueFromSource2,
   histValueFromSource,
-  histValueFromFile,
+  getterHistValueFromFile,
   histArrayValue,
   percentageMemUsed
 });

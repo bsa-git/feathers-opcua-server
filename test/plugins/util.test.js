@@ -33,7 +33,7 @@ const object1 = {
   'group': true,
   'subscription': 'onChangedGroupHandlerForASM',
   'variableGetType': 'valueFromSource',
-  'getter': 'acmDayValueFromFile',
+  'getter': 'getterAcmDayValueFromFile',
   'getterParams': {
     'isTest': true,
     'path': 'test/data/tmp/ch-m5acm_1',
@@ -64,7 +64,7 @@ const object2 = {
   'group': true,
   'subscription': 'onChangedGroupHandlerForASM',
   'variableGetType': 'valueFromSource',
-  'getter': 'acmDayValueFromFile',
+  'getter': 'getterAcmDayValueFromFile',
   'getterParams': {
     'path': 'test/data/tmp/ch-m5acm_1',
     'isTest': true,

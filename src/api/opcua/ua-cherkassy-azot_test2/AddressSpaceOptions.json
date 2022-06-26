@@ -47,7 +47,7 @@
       "hist": 1,
       "group": true,
       "variableGetType": "valueFromSource",
-      "getter": "histValueFromFile",
+      "getter": "getterHistValueFromFile",
       "getterParams": {
         "path": "test/data/tmp/ch-m51",
         "fromFile": "test/data/csv/data-CH_M51.csv",
@@ -63,7 +63,7 @@
       "hist": 1,
       "group": false,
       "variableGetType": "valueFromSource",
-      "getter": "histValueFromFile",
+      "getter": "getterHistValueFromFile",
       "getterParams": {
         "path": "test/data/tmp/ch-m52",
         "fromFile": "test/data/csv/data-CH_M52.csv",
@@ -98,7 +98,7 @@
       "hist": 1,
       "group": true,
       "variableGetType": "valueFromSource",
-      "getter": "acmDayValueFromFile",
+      "getter": "getterAcmDayValueFromFile",
       "getterParams": {
         "path": "test/data/tmp/ch-m5acm_2",
         "fromFile": "test/data/excel/acm/acmDayReport.xls",

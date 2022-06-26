@@ -12,22 +12,22 @@ const {
   DataType,
 } = require('node-opcua');
 
-const debug = require('debug')('app:opcua-getters/plugForVariable');
+const debug = require('debug')('app:getterPlugForVariable');
 const isDebug = false;
 
 //=============================================================================
 
 
 /**
- * @method plugForVariable
+ * @method getterPlugForVariable
  * @param {Object} params 
  * @param {Object} addedValue 
  * @returns {any}
  */
-const plugForVariable = function (params = {}, addedValue) {
+const getterPlugForVariable = function (params = {}, addedValue) {
   let value;
   //-----------------------------------------------
-  if (isDebug) debug('plugForVariable.params:', params);
+  if (isDebug) debug('getterPlugForVariable.params:', params);
   if (addedValue) {
     value = getInitValueForDataType(params.dataType);
     addedValue.setValueFromSource({ dataType: DataType[params.dataType], value });
@@ -54,4 +54,4 @@ const plugForVariable = function (params = {}, addedValue) {
   }
 };
 
-module.exports = plugForVariable;
+module.exports = getterPlugForVariable;

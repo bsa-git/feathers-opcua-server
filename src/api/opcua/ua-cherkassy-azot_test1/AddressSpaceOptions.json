@@ -185,7 +185,7 @@
       "hist": 1,
       "group": true,
       "variableGetType": "valueFromSource",
-      "getter": "histValueFromFile",
+      "getter": "getterHistValueFromFile",
       "getterParams": {
         "path": "test/data/tmp/test1",
         "t": 50,
@@ -204,7 +204,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -223,7 +223,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,

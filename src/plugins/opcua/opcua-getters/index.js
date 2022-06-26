@@ -1,17 +1,17 @@
-const acmDayValueFromFile = require('./acmDayValueFromFile');
-const histValueFromFile = require('./histValueFromFile');
-const histValueFromHttpPath = require('./histValueFromHttpPath');
-const histValueFromPath = require('./histValueFromPath');
-const histValuesFromDB = require('./histValuesFromDB');
-const plugForVariable = require('./plugForVariable');
-const valueFromFile = require('./valueFromFile');
+const getterAcmDayValueFromFile = require('./getterAcmDayValueFromFile');
+const getterHistValueFromFile = require('./getterHistValueFromFile');
+const getterHistValueFromHttpPath = require('./getterHistValueFromHttpPath');
+const getterHistValueFromPath = require('./getterHistValueFromPath');
+const getterHistValuesFromDB = require('./getterHistValuesFromDB');
+const getterPlugForVariable = require('./getterPlugForVariable');
+const getterValueFromFile = require('./getterValueFromFile');
 
 module.exports = {
-  acmDayValueFromFile,
-  histValueFromFile,
-  histValueFromHttpPath,
-  histValueFromPath,
-  histValuesFromDB,
-  plugForVariable,
-  valueFromFile
+  getterAcmDayValueFromFile,
+  getterHistValueFromFile,
+  getterHistValueFromHttpPath,
+  getterHistValueFromPath,
+  getterHistValuesFromDB,
+  getterPlugForVariable,
+  getterValueFromFile
 };

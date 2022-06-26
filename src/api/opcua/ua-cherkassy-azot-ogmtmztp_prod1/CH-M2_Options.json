@@ -48,7 +48,7 @@
       "hist": 1,
       "group": true,
       "variableGetType": "valueFromSource",
-      "getter": "histValuesFromDB",
+      "getter": "getterHistValuesFromDB",
       "getterParams": {
         "dbEnv": "MSSQL_ASODU_TEST",
         "queryFunc": "getValuesFromChAsoduDB",
@@ -70,7 +70,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -90,7 +90,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -110,7 +110,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -130,7 +130,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -150,7 +150,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -170,7 +170,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -190,7 +190,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -210,7 +210,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -230,7 +230,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -250,7 +250,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -270,7 +270,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -290,7 +290,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -310,7 +310,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -330,7 +330,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -350,7 +350,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -370,7 +370,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -390,7 +390,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -410,7 +410,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -430,7 +430,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -450,7 +450,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -470,7 +470,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -490,7 +490,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -510,7 +510,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -530,7 +530,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -550,7 +550,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": -50,
@@ -570,7 +570,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -590,7 +590,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -610,7 +610,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": -200,
@@ -630,7 +630,7 @@
       "dataType": "Double",
       "hist": 1,
       "variableGetType": "valueFromSource",
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,

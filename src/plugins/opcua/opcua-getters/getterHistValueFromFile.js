@@ -24,31 +24,29 @@ const {
   convertAliasListToBrowseNameList
 } = require('../opcua-helper');
 
-const debug = require('debug')('app:opcua-getters/histValueFromFile');
+const debug = require('debug')('app:getterAcmDayValueFromFile');
 const isDebug = false;
 
 //=============================================================================
 
 /**
- * @method histValueFromFile
+ * @method getterHistValueFromFile
  * @param {Object} params 
  * @param {Object} addedValue 
  * @returns {void}
  */
-const histValueFromFile = function (params = {}, addedValue) {
+const getterHistValueFromFile = function (params = {}, addedValue) {
   let dataItems, dataType, results;
   let id = params.myOpcuaServer.id;
   //------------------------------------
   // Create path
-  // debug('histValueFromFile.params.path:', params.path);
   const path = createPath(params.path);
 
   // Watch read only new file
   readOnlyNewFile(path, (filePath, data) => {
     // Show filePath, data
-    if (isDebug) console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
-    // console.log(chalk.green('histValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
-    if (isDebug) console.log(chalk.green('histValueFromFile.data:'), chalk.cyan(data));
+    if (isDebug) console.log(chalk.green('getterHistValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
+    if (isDebug) console.log(chalk.green('getterHistValueFromFile.data:'), chalk.cyan(data));
     // Set value from source
     dataType = formatUAVariable(addedValue).dataType[1];
     results = papa.parse(data, { delimiter: ';', header: true });
@@ -58,11 +56,11 @@ const histValueFromFile = function (params = {}, addedValue) {
     // Get dateTime from fileName
     // e.g. data-20220518_075752.txt -> 2022-05-18T07:57:52
     const dateTime = getDateTimeFromFileName(filePath, [5], 'YYYYMMDD_HHmmss');
-    if(isDebug && dateTime) inspector('histValueFromFile.dateTime:', dateTime);
+    if(isDebug && dateTime) inspector('getterHistValueFromFile.dateTime:', dateTime);
 
     // Add prop "!value": { dateTime: ''2022-05-17T13:22:56' } to dataItems
     dataItems['!value'] = { dateTime };
-    if(isDebug && dataItems) inspector('histValueFromHttpPath.dataItems:', dataItems);
+    if(isDebug && dataItems) inspector('getterHistValueFromFile.dataItems:', dataItems);
     
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
 
@@ -83,7 +81,7 @@ const histValueFromFile = function (params = {}, addedValue) {
         results.data[0][key] = getRandomValue(value);
       });
       csv = papa.unparse(results.data, { delimiter: ';' });
-      if (isDebug) inspector('histValueFromFile.csv:', csv);
+      if (isDebug) inspector('getterHistValueFromFile.csv:', csv);
     }
     const fileName = getFileName('data-', 'csv', true);
     writeFileSync([path, fileName], csv);
@@ -91,4 +89,4 @@ const histValueFromFile = function (params = {}, addedValue) {
 };
 
 
-module.exports = histValueFromFile;
+module.exports = getterHistValueFromFile;

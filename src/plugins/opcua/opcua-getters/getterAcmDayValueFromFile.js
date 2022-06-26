@@ -29,7 +29,7 @@ const {
   convertAliasListToBrowseNameList
 } = require('../opcua-helper');
 
-const debug = require('debug')('app:opcua-getters/histValueFromFile');
+const debug = require('debug')('app:getterAcmDayValueFromFile');
 const isDebug = false;
 const isLog = false;
 
@@ -37,12 +37,12 @@ const isLog = false;
 //=============================================================================
 
 /**
- * @method histValueFromFile
+ * @method getterAcmDayValueFromFile
  * @param {Object} params 
  * @param {Object} addedValue 
  * @returns {void}
  */
-const acmDayValueFromFile = function (params = {}, addedValue) {
+const getterAcmDayValueFromFile = function (params = {}, addedValue) {
   let dataItems, currentDate, dataType;
   let id = params.myOpcuaServer.id;
   //------------------------------------
@@ -59,7 +59,10 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
   readOnlyModifiedFile(path, (filePath, data) => {
 
     // Show filePath, data
-    if (isDebug && filePath) console.log(chalk.green(`acmDayValueFromFile.readOnlyModifiedFile(${getTime('', false)}).filePath:`), chalk.cyan(getPathBasename(filePath)));
+    if (isDebug && filePath) console.log(chalk.green(
+      `getterAcmDayValueFromFile.readOnlyModifiedFile(${getTime('', false)}).filePath:`), 
+    chalk.cyan(getPathBasename(filePath))
+    );
     // Set value from source
     dataType = formatUAVariable(addedValue).dataType[1];
 
@@ -71,19 +74,19 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
 
     // Sheet to json data
     dataItems = xlsx.sheetToJson('Report1', { range: rangeData, header: headerNames });
-    if (isDebug && dataItems.length) inspector(`histValueFromFile.dataItems(${dataItems.length}):`, dataItems);
+    if (isDebug && dataItems.length) inspector(`getterAcmDayValueFromFile.dataItems(${dataItems.length}):`, dataItems);
 
     // Sheet to json date
     let dateTime = xlsx.sheetToJson('Report1', { range: rangeDate });
     dateTime = dateTime[0]['A'].split('to:')[0].split('from:')[1].trim();
     dateTime = moment.utc(dateTime).format('YYYY-MM-DD');
-    if (isDebug && dateTime) inspector('histValueFromFile.dateTime:', dateTime);
+    if (isDebug && dateTime) inspector('getterAcmDayValueFromFile.dateTime:', dateTime);
 
     // Set value from source
     dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
     dataItems['!value'] = { dateTime };
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
-    if (isDebug && dataItems) inspector('histValueFromFile.dataItems:', dataItems);
+    if (isDebug && dataItems) inspector('getterAcmDayValueFromFile.dataItems:', dataItems);
 
     // Set value from source for group 
     if (params.addedVariableList) {
@@ -159,4 +162,4 @@ const acmDayValueFromFile = function (params = {}, addedValue) {
 };
 
 
-module.exports = acmDayValueFromFile;
+module.exports = getterAcmDayValueFromFile;

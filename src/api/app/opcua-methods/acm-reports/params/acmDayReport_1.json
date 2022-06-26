@@ -2,5 +2,9 @@
   "pointID": 1,
   "acmTagBrowseName": "CH_M51_ACM::ValueFromFile",
   "inputFile": "DayHist01_23F120_${ date }_0000.xls",
-  "outputFile": "acmDayReportsData${ pointID }-${ date }.json"
+  "headerNames": ["23QN2O", "23QN2O_CORR", "23FVSG", "23FVSG_CORR", "23F105_IS"],
+  "rangeData": "B11:F34",
+  "rangeDate": "A1:A1",
+  "outputFile": "acmDayReportsData${ pointID }-${ date }.json",
+  "outputPath": "test/data/tmp/excel-helper"
 }

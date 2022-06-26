@@ -15,18 +15,18 @@ const {
   convertAliasListToBrowseNameList
 } = require('../opcua-helper');
 
-const debug = require('debug')('app:opcua-getters/histValueFromPath');
+const debug = require('debug')('app:getterHistValueFromPath');
 const isDebug = false;
 const isLog = false;
 
 //=============================================================================
 
 /**
- * @method histValueFromFileForCH_M51
+ * @method getterHistValueFromPath
  * @param {Object} params 
  * @param {Object} addedValue 
  */
-const histValueFromPath = function (params = {}, addedValue) {
+const getterHistValueFromPath = function (params = {}, addedValue) {
   let dataItems, dataType, results;
   //----------------------------------
   // Create path
@@ -35,8 +35,8 @@ const histValueFromPath = function (params = {}, addedValue) {
   // Watch read only new file
   readOnlyNewFile(path, (filePath, data) => {
     // Show filePath, data
-    if (isDebug) console.log(chalk.green('histValueFromPath.file:'), chalk.cyan(filePath));
-    if (isDebug) console.log(chalk.green('histValueFromPath.data:'), chalk.cyan(data));
+    if (isDebug) console.log(chalk.green('getterHistValueFromPath.file:'), chalk.cyan(filePath));
+    if (isDebug) console.log(chalk.green('getterHistValueFromPath.data:'), chalk.cyan(data));
     // Set value from source
     dataType = formatUAVariable(addedValue).dataType[1];
     results = papa.parse(data, { delimiter: ';', header: true });
@@ -46,15 +46,15 @@ const histValueFromPath = function (params = {}, addedValue) {
     // Get dateTime from fileName
     // e.g. data-20220518_075752.txt -> 2022-05-18T07:57:52
     const dateTime = getDateTimeFromFileName(filePath, [5], 'YYYYMMDD_HHmmss');
-    if(isDebug && dateTime) inspector('histValueFromPath.dateTime:', dateTime);
+    if(isDebug && dateTime) inspector('getterHistValueFromPath.dateTime:', dateTime);
 
     // Add prop "!value": { dateTime: ''2022-05-17T13:22:56' } to dataItems
     dataItems['!value'] = { dateTime };
-    if(isDebug && dataItems) inspector('histValueFromHttpPath.dataItems:', dataItems);
+    if(isDebug && dataItems) inspector('getterHistValueFromPath.dataItems:', dataItems);
     
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
 
-    if (isLog) inspector('histValueFromPath.dataItems:', dataItems);
+    if (isLog) inspector('getterHistValueFromPath.dataItems:', dataItems);
 
     // Set value from source for group 
     if (params.addedVariableList) {
@@ -64,4 +64,4 @@ const histValueFromPath = function (params = {}, addedValue) {
 };
 
 
-module.exports = histValueFromPath;
+module.exports = getterHistValueFromPath;

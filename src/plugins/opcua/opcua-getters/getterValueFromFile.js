@@ -16,19 +16,19 @@ const {
   convertAliasListToBrowseNameList
 } = require('../opcua-helper');
 
-const debug = require('debug')('app:opcua-getters/valueFromFile');
+const debug = require('debug')('app:getterValueFromFile');
 const isDebug = false;
 const isLog = false;
 
 //=============================================================================
 
 /**
- * @method valueFromFile
+ * @method getterValueFromFile
  * @param {Object} params 
  * @param {Object} addedValue 
  * @returns {String}
  */
-const valueFromFile = function (params = {}, addedValue) {
+const getterValueFromFile = function (params = {}, addedValue) {
   let dataItems, results;
   let id = params.myOpcuaServer.id;
   //------------------------------
@@ -40,7 +40,7 @@ const valueFromFile = function (params = {}, addedValue) {
   });
   dataItems = results.data[0];
   dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
-  if (isLog) inspector('valueFromFile.dataItems:', dataItems);
+  if (isLog) inspector('getterValueFromFile.dataItems:', dataItems);
   // Set value from source for group 
   if (params.addedVariableList) {
     setValueFromSourceForGroup(params, dataItems);
@@ -49,4 +49,4 @@ const valueFromFile = function (params = {}, addedValue) {
 };
 
 
-module.exports = valueFromFile;
+module.exports = getterValueFromFile;

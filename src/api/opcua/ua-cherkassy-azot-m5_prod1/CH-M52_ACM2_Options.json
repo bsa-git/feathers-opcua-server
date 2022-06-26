@@ -31,7 +31,7 @@
         "toPath": "//192.168.3.5/www_m5/day_reports/m5-2/ACM",
         "acmPath": "//192.168.3.5/www_m5/day_reports/m5-2/ACM/57AGR/",
         "pointID": 3,
-        "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["57QN2O", "57QN2O_CORR", "57FVSG", "57FVSG_CORR", "57F105_IS"]}
+        "excelMappingFrom": {"rangeData": "B11:F34", "rangeDate": "A1:A1", "headerNames": ["57QN2O", "57QN2O_CORR", "57FVSG", "57FVSG_CORR", "57F105_IS"]}
       }
     }
   ],
@@ -50,7 +50,7 @@
         "dataType": "Double",
         "arrayType": "Array"
       },
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "arrayDimensions": [
           24
@@ -77,7 +77,7 @@
         "dataType": "Double",
         "arrayType": "Array"
       },
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "arrayDimensions": [
           24
@@ -104,7 +104,7 @@
         "dataType": "Byte",
         "arrayType": "Array"
       },
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "arrayDimensions": [
           24
@@ -126,7 +126,7 @@
         "dataType": "Byte",
         "arrayType": "Array"
       },
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "arrayDimensions": [
           24
@@ -148,7 +148,7 @@
         "dataType": "Byte",
         "arrayType": "Array"
       },
-      "getter": "plugForVariable",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "arrayDimensions": [
           24

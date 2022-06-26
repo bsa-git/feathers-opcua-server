@@ -2,5 +2,6 @@
   "baseParams": 1,
   "pointID": 3,
   "acmTagBrowseName": "CH_M52_ACM2::ValueFromFile",
-  "inputFile": "DayHist01_573F120_${ date }_0000.xls"
+  "inputFile": "DayHist01_57F120_${ date }_0000.xls",
+  "headerNames": ["57QN2O", "57QN2O_CORR", "57FVSG", "57FVSG_CORR", "57F105_IS"]
 }
