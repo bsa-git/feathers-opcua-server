@@ -71,6 +71,7 @@
     "cors": "^2.8.5",
     "cross-env": "^7.0.2",
     "debug": "^4.1.1",
+    "del": "^6.1.1",
     "directory-tree": "^2.2.5",
     "dotenv": "^8.2.0",
     "dotenv-webpack": "^1.8.0",

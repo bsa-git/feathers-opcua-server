@@ -1108,7 +1108,7 @@ const convertAliasListToBrowseNameList = (variableList = [], dataItems) => {
     loForEach(aliasValueList, function (values, key) {
       const variable = variableList.find(v => v.aliasName === key);
       if (variable) {
-        const formatVariable = formatUAVariable(variable);
+        const formatVariable = variable.nodeId ? formatUAVariable(variable) : variable;
         const browseName = formatVariable.browseName;
         browseNameList[browseName] = values;
       }
@@ -1117,7 +1117,7 @@ const convertAliasListToBrowseNameList = (variableList = [], dataItems) => {
     loForEach(dataItems, function (value, key) {
       const variable = variableList.find(v => v.aliasName === key);
       if (variable) {
-        const formatVariable = formatUAVariable(variable);
+        const formatVariable = variable.nodeId ? formatUAVariable(variable) : variable;
         const browseName = formatVariable.browseName;
         dataType = formatVariable.dataType;
         dataType = opcuaDataTypeToString(dataType);

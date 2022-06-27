@@ -5,8 +5,11 @@ const { hideBin } = require('yargs/helpers');
 const chalk = require('chalk');
 
 const {
+  appRoot,
   inspector,
-  getPathBasename
+  getPathBasename,
+  makeDirSync,
+  removeFilesFromDirSync
 } = require('../../src/plugins/lib');
 
 const {
@@ -37,8 +40,14 @@ const argv = yargs(hideBin(process.argv))
 
 if (isDebug && argv) inspector('Yargs.argv:', argv);
 
+const dataTestPath = '/test/data/tmp/excel-helper';
 
 (async function getAcmDayReportsData(options) {
+
+  // Make dirs
+  makeDirSync([appRoot, dataTestPath]);
+  // Remove files from dir
+  removeFilesFromDirSync([appRoot, dataTestPath]);
 
   // Run script
   if (Array.isArray(options.point)) {
@@ -46,12 +55,20 @@ if (isDebug && argv) inspector('Yargs.argv:', argv);
       const point = options.point[index];
       const result = await methodAcmDayReportsDataGet([{ value: point }]);
       if (isDebug && result) inspector('getAcmDayReportsData.result:', result);
-      console.log(chalk.green('Run script - OK!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
+      if (result.resultPath) {
+        console.log(chalk.green('Run script - OK!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
+      } else {
+        console.log(chalk.green('Run script - OK!'));
+      }
     }
   } else {
     const result = await methodAcmDayReportsDataGet([{ value: options.point }]);
     if (isDebug && result) inspector('getAcmDayReportsData.result:', result);
-    console.log(chalk.green('Run script - OK!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
+    if (result.resultPath) {
+      console.log(chalk.green('Run script - OK!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
+    } else {
+      console.log(chalk.green('Run script - OK!'));
+    }
   }
 
 })(argv);

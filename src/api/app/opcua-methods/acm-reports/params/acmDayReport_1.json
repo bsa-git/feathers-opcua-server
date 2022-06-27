@@ -6,5 +6,7 @@
   "rangeData": "B11:F34",
   "rangeDate": "A1:A1",
   "outputFile": "acmDayReportsData${ pointID }-${ date }.json",
-  "outputPath": "test/data/tmp/excel-helper"
+  "outputPath": "test/data/tmp/excel-helper",
+  "isRemoveXlsFiles": true,
+  "isSaveOutputFile": true
 }

@@ -5,6 +5,8 @@ const Path = require('path');
 const join = Path.join;
 const moment = require('moment');
 const dirTree = require('directory-tree');
+const del = require('del');
+
 const {
   appRoot,
   inspector,
@@ -50,41 +52,41 @@ const getBitDepthOS = function () {
   let result = 32;
   //--------------------
   switch (getOsArchitecture()) {
-  case 'arm':
-    result = 32;
-    break;
-  case 'arm64':
-    result = 64;
-    break;
-  case 'ia32':
-    result = 32;
-    break;
-  case 'mips':
-    result = 32;
-    break;
-  case 'mipsel':
-    result = 64;
-    break;
-  case 'ppc':
-    result = 32;
-    break;
-  case 'ppc64':
-    result = 64;
-    break;
-  case 's390':
-    result = 32;
-    break;
-  case 's390x':
-    result = 64;
-    break;
-  case 'x32':
-    result = 32;
-    break;
-  case 'x64':
-    result = 64;
-    break;
-  default:
-    break;
+    case 'arm':
+      result = 32;
+      break;
+    case 'arm64':
+      result = 64;
+      break;
+    case 'ia32':
+      result = 32;
+      break;
+    case 'mips':
+      result = 32;
+      break;
+    case 'mipsel':
+      result = 64;
+      break;
+    case 'ppc':
+      result = 32;
+      break;
+    case 'ppc64':
+      result = 64;
+      break;
+    case 's390':
+      result = 32;
+      break;
+    case 's390x':
+      result = 64;
+      break;
+    case 'x32':
+      result = 32;
+      break;
+    case 'x64':
+      result = 64;
+      break;
+    default:
+      break;
   }
   return result;
 };
@@ -219,12 +221,30 @@ const getDirectoryList = function (path) {
  * @method toPathWithSep
  * @param {Array|String} path 
  * @returns {String}
+ * e.g. sep depends on operating system 
+ * e.g os -> win32 -> sep = \\
+ * e.g os -> unix -> sep = /
  */
 const toPathWithSep = function (path) {
   if (Array.isArray(path)) {
     path = join(...path);
   } else {
     path = join('', path);
+  }
+  return path;
+};// path.posix.join()
+
+/**
+ * @method toPathWithPosixSep
+ * @param {Array|String} path 
+ * @returns {String}
+ * * e.g. sep only -> /
+ */
+const toPathWithPosixSep = function (path) {
+  if (Array.isArray(path)) {
+    path = Path.posix.join(...path);
+  } else {
+    path = Path.posix.join('', path);
   }
   return path;
 };
@@ -416,6 +436,18 @@ const winPathToUncPath = function (path, host = 'localhost', share = 'drv') {
   }
 };
 
+/**
+ * @method removeFileSync
+ * @param {String|Array} path 
+ * @returns {String}
+ */
+const removeFileSync = function (path) {
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  fs.unlinkSync(path);
+  return path;
+};
 
 /**
  * @method removeFilesFromDirSync
@@ -423,6 +455,7 @@ const winPathToUncPath = function (path, host = 'localhost', share = 'drv') {
  */
 const removeFilesFromDirSync = function (path) {
   let fileObjs = [], newPath = '';
+  //--------------------------------
   if (Array.isArray(path)) {
     path = join(...path);
   }
@@ -503,6 +536,41 @@ const clearDirSync = function (path) {
   return path;
 };
 
+/**
+ * @method removeItemsSync
+ * 
+ * @param {String | String[]} patterns 
+ * @param {Object} options
+ * @returns {String[]} 
+ * e.g. del.sync(['public/assets/**', '!public/assets', '!public/assets/goat.png']);
+ */
+const removeItemsSync = async function (patterns, options = {}) {
+  const deletedItems = del.sync(patterns, options);
+  if(isDebug && deletedItems.length) inspector('removeItemsSync.deletedItems:', deletedItems);
+  if(options.dryRun){
+    inspector('removeItemsSync.Files and directories that would be deleted:', deletedItems);
+  }
+  return deletedItems;
+}
+
+/**
+ * @method removeItems
+ * @async
+ * 
+ * @param {String | String[]} patterns 
+ * @param {Object} options
+ * @returns {Promise<String[]>} 
+ * e.g. const deletedFilePaths = await del(['temp/*.js', '!temp/unicorn.js']);
+   e.g. const deletedDirectoryPaths = await del(['temp', 'public']);
+ */
+const removeItems = async function (patterns, options) {
+  const deletedItems = await del(patterns, options);
+  if(isDebug && deletedItems.length) inspector('removeItems.deletedItems:', deletedItems);
+  if(options.dryRun){
+    inspector('removeItems.Files and directories that would be deleted:', deletedItems);
+  }
+  return deletedItems;
+}
 
 /**
  * @method readDirSync
@@ -824,6 +892,16 @@ const writeFileSync = function (path, data, isJson = false) {
 };
 
 /**
+ * @method writeFileSync
+ * @param {String|Array} path
+ * @param {String|Object|Buffer|TypeArray|DataView} data 
+ * @returns {String}
+ */
+const writeJsonFileSync = function (path, data) {
+  return writeFileSync(path, data, true);
+};
+
+/**
  * @method writeFileStream
  * @param {String|Array} path
  * @param {String|Object|Buffer|TypeArray|DataView} data 
@@ -854,30 +932,6 @@ const writeFileStream = function (path, data) {
   return path;
 };
 
-/**
- * @method writeFileSync
- * @param {String|Array} path
- * @param {String|Object|Buffer|TypeArray|DataView} data 
- * @returns {String}
- */
-const writeJsonFileSync = function (path, data) {
-  return writeFileSync(path, data, true);
-};
-
-/**
- * @method removeFileSync
- * @param {String|Array} path 
- * @returns {String}
- */
-const removeFileSync = function (path) {
-  if (Array.isArray(path)) {
-    path = join(...path);
-  }
-  fs.unlinkSync(path);
-  return path;
-};
-
-
 module.exports = {
   getOsPlatform,
   getOsArchitecture,
@@ -891,6 +945,7 @@ module.exports = {
   getPathToArray,
   getDirectoryList,
   toPathWithSep,
+  toPathWithPosixSep,
   doesFileExist,
   doesDirExist,
   fsAccess,
@@ -903,9 +958,6 @@ module.exports = {
   createPath,
   isUncPath,
   winPathToUncPath,
-  removeFilesFromDirSync,
-  removeDirFromDirSync,
-  clearDirSync,
   readDirSync,
   getFileListFromDir,
   readOnlyNewFile,
@@ -915,5 +967,10 @@ module.exports = {
   writeFileSync,
   writeJsonFileSync,
   writeFileStream,
-  removeFileSync
+  removeFileSync,
+  removeFilesFromDirSync,
+  removeDirFromDirSync,
+  clearDirSync,
+  removeItemsSync,
+  removeItems
 };
