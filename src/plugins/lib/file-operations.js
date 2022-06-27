@@ -52,41 +52,41 @@ const getBitDepthOS = function () {
   let result = 32;
   //--------------------
   switch (getOsArchitecture()) {
-    case 'arm':
-      result = 32;
-      break;
-    case 'arm64':
-      result = 64;
-      break;
-    case 'ia32':
-      result = 32;
-      break;
-    case 'mips':
-      result = 32;
-      break;
-    case 'mipsel':
-      result = 64;
-      break;
-    case 'ppc':
-      result = 32;
-      break;
-    case 'ppc64':
-      result = 64;
-      break;
-    case 's390':
-      result = 32;
-      break;
-    case 's390x':
-      result = 64;
-      break;
-    case 'x32':
-      result = 32;
-      break;
-    case 'x64':
-      result = 64;
-      break;
-    default:
-      break;
+  case 'arm':
+    result = 32;
+    break;
+  case 'arm64':
+    result = 64;
+    break;
+  case 'ia32':
+    result = 32;
+    break;
+  case 'mips':
+    result = 32;
+    break;
+  case 'mipsel':
+    result = 64;
+    break;
+  case 'ppc':
+    result = 32;
+    break;
+  case 'ppc64':
+    result = 64;
+    break;
+  case 's390':
+    result = 32;
+    break;
+  case 's390x':
+    result = 64;
+    break;
+  case 'x32':
+    result = 32;
+    break;
+  case 'x64':
+    result = 64;
+    break;
+  default:
+    break;
   }
   return result;
 };
@@ -551,7 +551,7 @@ const removeItemsSync = async function (patterns, options = {}) {
     inspector('removeItemsSync.Files and directories that would be deleted:', deletedItems);
   }
   return deletedItems;
-}
+};
 
 /**
  * @method removeItems
@@ -570,7 +570,7 @@ const removeItems = async function (patterns, options) {
     inspector('removeItems.Files and directories that would be deleted:', deletedItems);
   }
   return deletedItems;
-}
+};
 
 /**
  * @method readDirSync

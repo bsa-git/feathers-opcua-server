@@ -197,7 +197,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
 
   // Remove files from dir
   if(params.isRemoveXlsFiles){
-    removeItemsSync(`${params.outputPath}/*.xls`, { dryRun: true } );
+    removeItemsSync(`${params.outputPath}/*.xls`, { dryRun: false } );
   }
 
   // Write data to resultPath
