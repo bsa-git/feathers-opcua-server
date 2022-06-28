@@ -97,15 +97,13 @@ const httpGetNewFileFromDir = async function (url) {
     });
     filenames = filenames.filter(item => !(item.includes('[') && item.includes(']')));
     filenames = sortByString(filenames, false);
-    if (true && filenames.length) inspector('httpGetLastFileFromDir.filenames:', filenames);
-    // inspector('httpGetLastFileFromDir.filenames:', filenames);
+    if (isDebug && filenames.length) inspector('httpGetLastFileFromDir.filenames:', filenames);
     // Get content from last file
     if (filenames.length) {
       url = `${url}/${filenames[0]}`;
       response = await axios.get(url);
       data = response.data;
-      if (true && data) inspector(`httpGetLastFileFromDir (${filenames[0]}):`, data);
-      // inspector(`HttpOperations: get data from file (${filenames[0]}):`, dataItems);
+      if (isDebug && data) inspector(`httpGetLastFileFromDir (${filenames[0]}):`, data);
       result = { name: filenames[0], data };
     }
   } catch (error) {

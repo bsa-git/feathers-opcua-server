@@ -34,7 +34,7 @@ describe('<<=== ScriptOperations: (#4-scriptGetAcmDayReportsData) ===>>', () => 
   if (!isScript) return;
 
   before(() => {
-    // Make dirs
+    // Make dir
     makeDirSync([appRoot, dataTestPath]);
     // Remove files from dir
     removeFilesFromDirSync([appRoot, dataTestPath]);

@@ -1,16 +1,18 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const logger = require('../../logger');
+const moment = require('moment');
 const fs = require('fs');
 
 const loReduce = require('lodash/reduce');
+const loTemplate = require('lodash/template');
 
 const {
-  readJsonFileSync,
-  inspector,
   appRoot,
+  inspector,
+  readJsonFileSync,
+  removeFilesFromDirSync,  
   isTrue,
-  urlExists,
 } = require('../lib');
 
 const {
@@ -30,6 +32,7 @@ const {
   integrityCheckOpcua,
   checkStoreParameterChanges,
   saveStoreParameterChanges,
+  saveStoreOpcuaGroupValue,
   isSaveOpcuaToDB,
   isRemoteOpcuaToDB,
   isUpdateOpcuaToDB,
@@ -40,6 +43,11 @@ const {
 const {
   feathersClient
 } = require('../auth');
+
+const {
+  methodAcmDayReportsDataGet
+} = require('./opcua-methods');
+const { root } = require('cheerio/lib/static');
 
 
 const debug = require('debug')('app:opcua-bootstrap');
@@ -56,6 +64,7 @@ const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) 
 module.exports = async function opcuaBootstrap(app) {
   let service = null, opcuaServer = null, opcuaClient = null;
   let integrityResult, removeResult, bootstrapParams = null;
+  let syncResult = null, dataItems = [], savedValues = [], savedValuesCount = 0;
   //--------------------------------------------------------
 
   // Determine if command line argument exists for seeding data
@@ -104,6 +113,45 @@ module.exports = async function opcuaBootstrap(app) {
     if (bootstrapParams && bootstrapParams.clearHistoryAtStartup) {
       removeResult = await removeOpcuaStoreValues(app);
       if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.localDB: ${removeResult}`);
+    }
+
+    // Sync opcua store values
+    if (bootstrapParams && bootstrapParams.syncHistoryAtStartup) {
+      // Remove files from dir
+      // removeFilesFromDirSync([appRoot, dataTestPath]);
+      // Get opcua group store tags 
+      const opcuaGroupTags = opcuaTags.filter(t => t.group && t.store);
+      if (isDebug && opcuaGroupTags.length) inspector('opcuaBootstrap.opcuaGroupTags:', opcuaGroupTags);
+      for (let index = 0; index < opcuaGroupTags.length; index++) {
+        const opcuaGroupTag = opcuaGroupTags[index];
+        const pointID = opcuaGroupTag.getterParams.pointID;
+        const groupBrowseName = opcuaGroupTag.browseName;
+        // Run metod
+        syncResult = await methodAcmDayReportsDataGet([{ value: pointID }]);
+        if (isDebug && syncResult) inspector('opcuaBootstrap.methodAcmDayReportsDataGet.syncResult:', syncResult);
+        if(syncResult.statusCode === 'Good'){
+          // Get dataItems
+          if(syncResult.params.isSaveOutputFile){
+            let outputFile = syncResult.params.outputFile;
+            const outputPath = syncResult.params.outputPath;
+            const currentDate = moment().format('YYYYMMDD');
+            outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
+            dataItems = readJsonFileSync([appRoot, outputPath, outputFile])['dataItems'];
+            // inspector('opcuaBootstrap.dataItems:', dataItems);
+          } else {
+            dataItems = syncResult.dataItems;
+          }
+          // Save store opcua group value
+          for (let index2 = 0; index2 < dataItems.length; index2++) {
+            const dataItem = dataItems[index2];
+            if (isDebug && dataItem) inspector('opcuaBootstrap.dataItem:', dataItem);
+            savedValues = await saveStoreOpcuaGroupValue(app, groupBrowseName, dataItem, true);
+            savedValuesCount += savedValues.length;
+            if (isDebug && savedValues.length) inspector('opcuaBootstrap.saveStoreOpcuaGroupValue.savedValues:', savedValues);
+          }
+        }
+      }
+      logger.info(`opcuaBootstrap.syncHistoryAtStartup.localDB: ${savedValuesCount}`);
     }
 
     const isRemote = isRemoteOpcuaToDB();

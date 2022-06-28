@@ -431,11 +431,6 @@ const saveStoreOpcuaGroupValue = async function (app, groupBrowseName, value, ch
       // Get groupTag
       const findedStoreTag = storeTags.find(tag => (tag.browseName === storeBrowseName));
       if (findedStoreTag) {
-
-        // const idField = getIdField(findedStoreTag);
-        // const tagId = findedStoreTag[idField];
-        // store['idField'] = idField;
-
         const opcuaValues = [];
         // Set key to dateTime
         const key = opcuaValue['!value'].dateTime;
