@@ -12,6 +12,7 @@ const loRound = require('lodash/round');
 const loToPlainObject = require('lodash/toPlainObject');
 const loIsEqual = require('lodash/isEqual');
 const loOmit = require('lodash/omit');
+const loReplace = require('lodash/replace');
 
 const debug = require('debug')('app:util');
 const isDebug = false;
@@ -394,9 +395,34 @@ const stripSpecific = function (value, symbol = '') {
   return trimValue;
 };
 
+/**
+ * Replace string
+ * @param {String} value 
+ * @param {String} substr 
+ * @param {String} newSubstr 
+ * @returns 
+ */
 const strReplace = function (value, substr, newSubstr = '') {
   const regEx = new RegExp(substr, 'gi');
-  const replacedValue = value.replace(regEx, newSubstr);
+  const replacedValue =  value.replace(regEx, newSubstr);
+  return replacedValue;
+};
+
+/**
+ * Replace string extended
+ * @param {String} value 
+ * e.g. 'c:\\temp\\lib'
+ * @param {String|RegExp} substr 
+ * e.g. String -> '\\'
+ * e.g. RegExp -> /\\/gi
+ * @param {String} newSubstr 
+ * e.g. '/'
+ * @returns {String} 
+ * e.g. 'c:/temp\\lib'
+ * e.g. 'c:/temp/lib'
+ */
+const strReplaceEx = function (value, substr, newSubstr = '') {
+  const replacedValue =  loReplace(value, substr, newSubstr);
   return replacedValue;
 };
 
@@ -853,6 +879,7 @@ module.exports = {
   stripSlashes,
   stripSpecific,
   strReplace,
+  strReplaceEx,
   getCapitalizeStr,
   isTrue,
   getInt,

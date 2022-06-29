@@ -65,6 +65,7 @@ module.exports = async function opcuaBootstrap(app) {
   let service = null, opcuaServer = null, opcuaClient = null;
   let integrityResult, removeResult, bootstrapParams = null;
   let syncResult = null, dataItems = [], savedValues = [], savedValuesCount = 0;
+  let syncResultOutputPath;
   //--------------------------------------------------------
 
   // Determine if command line argument exists for seeding data
@@ -117,8 +118,6 @@ module.exports = async function opcuaBootstrap(app) {
 
     // Sync opcua store values
     if (bootstrapParams && bootstrapParams.syncHistoryAtStartup) {
-      // Remove files from dir
-      // removeFilesFromDirSync([appRoot, dataTestPath]);
       // Get opcua group store tags 
       const opcuaGroupTags = opcuaTags.filter(t => t.group && t.store);
       if (isDebug && opcuaGroupTags.length) inspector('opcuaBootstrap.opcuaGroupTags:', opcuaGroupTags);
@@ -128,15 +127,15 @@ module.exports = async function opcuaBootstrap(app) {
         const groupBrowseName = opcuaGroupTag.browseName;
         // Run metod
         syncResult = await methodAcmDayReportsDataGet([{ value: pointID }]);
+        syncResultOutputPath = syncResult.params.outputPath;
         if (isDebug && syncResult) inspector('opcuaBootstrap.methodAcmDayReportsDataGet.syncResult:', syncResult);
         if(syncResult.statusCode === 'Good'){
           // Get dataItems
           if(syncResult.params.isSaveOutputFile){
             let outputFile = syncResult.params.outputFile;
-            const outputPath = syncResult.params.outputPath;
             const currentDate = moment().format('YYYYMMDD');
             outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
-            dataItems = readJsonFileSync([appRoot, outputPath, outputFile])['dataItems'];
+            dataItems = readJsonFileSync([appRoot, syncResultOutputPath, outputFile])['dataItems'];
             // inspector('opcuaBootstrap.dataItems:', dataItems);
           } else {
             dataItems = syncResult.dataItems;
@@ -152,6 +151,8 @@ module.exports = async function opcuaBootstrap(app) {
         }
       }
       logger.info(`opcuaBootstrap.syncHistoryAtStartup.localDB: ${savedValuesCount}`);
+      // Remove files from dir
+      removeFilesFromDirSync([appRoot, syncResultOutputPath]);
     }
 
     const isRemote = isRemoteOpcuaToDB();

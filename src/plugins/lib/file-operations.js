@@ -4,6 +4,7 @@ const os = require('os');
 const Path = require('path');
 const join = Path.join;
 const moment = require('moment');
+var minimatch = require('minimatch');
 const dirTree = require('directory-tree');
 const del = require('del');
 
@@ -12,12 +13,14 @@ const {
   inspector,
   getDate,
   getTime,
-  strReplace
+  strReplace,
+  strReplaceEx
 } = require('./util');
 
 const loEndsWith = require('lodash/endsWith');
 const loStartsWith = require('lodash/startsWith');
 const loIsString = require('lodash/isString');
+const loReplace = require('lodash/replace');
 
 const debug = require('debug')('app:file-operations');
 const isDebug = false;
@@ -238,13 +241,15 @@ const toPathWithSep = function (path) {
  * @method toPathWithPosixSep
  * @param {Array|String} path 
  * @returns {String}
- * * e.g. sep only -> /
+ * e.g. sep only -> /
+ * e.g.'C:/NodeServer/feathers-opcua-server/test/data/excel/acm'
  */
 const toPathWithPosixSep = function (path) {
   if (Array.isArray(path)) {
+    path = path.map(p => strReplaceEx(p, /\\/gi, '/'));
     path = Path.posix.join(...path);
   } else {
-    path = Path.posix.join('', path);
+    path = strReplaceEx(path, /\\/gi, '/');
   }
   return path;
 };
@@ -603,6 +608,10 @@ const readDirSync = function (path, withFileTypes = false) {
  * @method getFileListFromDir
  * @param {String|Array} path 
  * @param {String[]} fileList 
+ * @param {String} pattern 
+ * e.g. '*.xls'
+ * @param {Object} options
+ * e.g. { matchBase: true }
  * @returns {String[]}
  * e.g. [
   'c:/reports/acm/23agr/2022/2022-01/DayHist01_23F120_01022022_0000.xls',
@@ -610,7 +619,7 @@ const readDirSync = function (path, withFileTypes = false) {
   'c:/reports/acm/23agr/DayHist01_23F120_02242022_0000.xls'
 ]
  */
-const getFileListFromDir = function (path, fileList = []) {
+const getFileListFromDir = function (path, fileList = [], pattern = '', options = {}) {
   let filenames = [];
   //--------------------
   if (Array.isArray(path)) {
@@ -627,9 +636,14 @@ const getFileListFromDir = function (path, fileList = []) {
         fileList.push(`${path}${Path.sep}${item}`);
         if (isDebug && fileList.length) inspector('getFileListFromDir.fileList:', fileList);
       } else {
-        getFileListFromDir(`${path}${Path.sep}${item}`, fileList);
+        getFileListFromDir(`${path}${Path.sep}${item}`, fileList, pattern, options);
       }
     }
+  }
+  if (isDebug && fileList.length) inspector('getFileListFromDir.fileList:', fileList);
+  if(pattern){
+    fileList = minimatch.match(fileList, pattern, options);
+    if (isDebug && fileList.length) inspector('getFileListFromDir.minimatch.fileList:', fileList);
   }
   return fileList;
 };
@@ -917,14 +931,7 @@ const writeFileStream = function (path, data) {
 
   const isAccess = fsAccess(dir, fs.constants.F_OK) && fsAccess(dir, fs.constants.W_OK);
   if (isAccess) {
-
-    // This opens up the writeable stream to `output`
-    // const writeStream = fs.createWriteStream(path);
-
     data.pipe(fs.createWriteStream(path));
-    // result.pipe(fs.createWriteStream(resultPath));
-
-    // fs.writeFileSync(path, data); // encoding <string> | <null> Default: 'utf8'
     if (isDebug && path) debug('File was written for path:', path);
   } else {
     throw new Error(`Access error for path: ${dir}; fs.F_OK: ${fsAccess(dir, fs.constants.F_OK)}; fs.W_OK: ${fsAccess(dir, fs.constants.W_OK)};`);

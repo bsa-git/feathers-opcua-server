@@ -2,6 +2,7 @@
 const url = require('url');
 const axios = require('axios');
 const cheerio = require('cheerio');
+var minimatch = require('minimatch');
 const logger = require('../../logger');
 
 const {
@@ -120,6 +121,10 @@ const httpGetNewFileFromDir = async function (url) {
  * @method httpGetFileNamesFromDir
  * @param {String} url 
  * @param {String[]} fileList 
+ * @param {String} pattern 
+ * e.g. '*.xls'
+ * @param {Object} options
+ * e.g. { matchBase: true }
  * @returns {String[]}
  * e.g. [
   'http://192.168.3.5/www_m5/day_reports/m5-1/ACM/23AGR/2022/2022-01/DayHist01_23F120_01022022_0000.xls',
@@ -127,7 +132,7 @@ const httpGetNewFileFromDir = async function (url) {
   'http://192.168.3.5/www_m5/day_reports/m5-1/ACM/23AGR/DayHist01_23F120_02242022_0000.xls'
 ]
  */
-const httpGetFileNamesFromDir = async function (url, fileList = []) {
+const httpGetFileNamesFromDir = async function (url, fileList = [], pattern = '', options = {}) {
   let result = null;
   //-----------------------
   // Get fileNames from url 
@@ -152,7 +157,7 @@ const httpGetFileNamesFromDir = async function (url, fileList = []) {
       if (extname) {
         fileList.push(`${url}/${item}`);
       } else {
-        await httpGetFileNamesFromDir(`${url}/${item}`, fileList);
+        await httpGetFileNamesFromDir(`${url}/${item}`, fileList, pattern, options);
       }
     }
   } catch (error) {
@@ -161,6 +166,11 @@ const httpGetFileNamesFromDir = async function (url, fileList = []) {
     } else {
       console.log(chalk.red('error:'), 'http-operations.httpGetNewFileFromDir.url:', chalk.cyan(`${error.message}!`));
     }
+  }
+  if (isDebug && fileList.length) inspector('httpGetFileNamesFromDir.fileList:', fileList);
+  if(pattern){
+    fileList = minimatch.match(fileList, pattern, options);
+    if (isDebug && fileList.length) inspector('httpGetFileNamesFromDir.minimatch.fileList:', fileList);
   }
   return fileList;
 };

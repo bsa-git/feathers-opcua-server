@@ -21,7 +21,9 @@ const {
   unwatchFile,
   removeFileSync,
   getOsPlatform,
-  winPathToUncPath
+  winPathToUncPath,
+  getFileListFromDir,
+  toPathWithPosixSep
 } = require('../../src/plugins/lib/file-operations');
 
 const chalk = require('chalk');
@@ -29,7 +31,6 @@ const papa = require('papaparse');
 
 const debug = require('debug')('app:file-operations.test');
 const isDebug = false;
-const isLog = false;
 
 /**
  * Call back for event readOnlyNewFile 
@@ -83,7 +84,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
   after(async () => {
   });
 
-  it('FileOperations: writeFileSync/readFileSync', () => {
+  it('#1: FileOperations: writeFileSync/readFileSync', () => {
     const data = { value: '12345-ABC' };
     let path = writeFileSync([appRoot, 'test/data/tmp/fo/1.json'], data, true);
 
@@ -95,13 +96,13 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     assert.ok(result.value === data.value, 'FileOperations: writeFileSync/readFileSync');
   });
 
-  it('FileOperations: makeDirSync', () => {
+  it('#2: FileOperations: makeDirSync', () => {
     let path = makeDirSync([appRoot, 'test/data/tmp/fo/tmp2']);
     const isExist = doesDirExist(path);
     assert.ok(isExist === true, 'FileOperations: makeDirSync');
   });
 
-  it('FileOperations: writeFileSync/readFileSync', () => {
+  it('#3: FileOperations: writeFileSync/readFileSync', () => {
     const data = { value: '67890-ABC' };
     let path = writeFileSync([appRoot, 'test/data/tmp/fo/tmp2/2.json'], data, true);
 
@@ -112,7 +113,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     assert.ok(result.value === data.value, 'FileOperations: writeFileSync/readFileSync');
   });
 
-  it('FileOperations: UNC directory operations', () => {
+  it('#4: FileOperations: UNC directory operations', () => {
 
     if (getOsPlatform() === 'win32') {
 
@@ -148,7 +149,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
 
   });
 
-  it('FileOperations: readDirSync', () => {
+  it('#5: FileOperations: readDirSync', () => {
     const filenames = readDirSync([appRoot, 'test/data/tmp']);
     inspector('FileOperations: readDirSync.filenames:', filenames);
     const fileObjs = readDirSync([appRoot, 'test/data/tmp'], true);
@@ -156,7 +157,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     assert.ok(true, 'FileOperations: readDirSync');
   });
 
-  it('FileOperations: readOnlyNewFile', () => {
+  it('#6: FileOperations: readOnlyNewFile', () => {
     let path = readOnlyNewFile([appRoot, 'test/data/tmp/fo'], cbReadOnlyNewFile);
 
     const data = { value: '12345-NewFile' };
@@ -165,7 +166,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     assert.ok(true, 'FileOperations: readOnlyNewFile');
   });
 
-  it('FileOperations: readOnlyModifiedFile', () => {
+  it('#7: FileOperations: readOnlyModifiedFile', () => {
     let path = readOnlyModifiedFile([appRoot, 'test/data/tmp/fo'], cbReadOnlyModifiedFile);
 
     const data = { value: '12345-ModifiedFile' };
@@ -174,7 +175,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     assert.ok(true, 'FileOperations: readOnlyModifiedFile');
   });
 
-  it('FileOperations: watchFile', async () => {
+  it('#8: FileOperations: watchFile', async () => {
     // Watch file
     let path = watchFile([appRoot, 'test/data/tmp/fo/new.json'], cbWatchFile, { interval: 100 });
     if (isDebug) debug('FileOperations: watchFile.path:', path);
@@ -186,5 +187,21 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     // Stop watching for changes on filename
     // unwatchFile(path);
     assert.ok(true, 'FileOperations: watchFile');
+  });
+
+  it('#9: FileOperations: Get file list from dir', () => {
+    let fileNames = [], filterFileNames = [];
+    //---------------------------------------------------------------
+    const testPath = 'test/data/excel/acm';
+    // Get file names without pattern filter
+    fileNames = getFileListFromDir([appRoot, testPath]);
+    if (isDebug && fileNames.length) inspector(`FileOperations: Get file list from dir (${testPath}):`, fileNames);
+    // Get posix path for pattern  filter
+    const posixPath = toPathWithPosixSep([appRoot, testPath]);
+    if(isDebug && posixPath) console.log('toPathWithPosixSep.posixPath:', posixPath);
+    // Get file names with pattern filter
+    filterFileNames = getFileListFromDir([appRoot, testPath], [], `${posixPath}/**/2022/**/*.xls`, { matchBase: true });
+    if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from dir (${posixPath}):`, filterFileNames);
+    assert.ok(fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from dir');
   });
 });
