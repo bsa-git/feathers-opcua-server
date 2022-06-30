@@ -23,7 +23,8 @@ const {
   getOsPlatform,
   winPathToUncPath,
   getFileListFromDir,
-  toPathWithPosixSep
+  toPathWithSep,
+  toPathWithPosixSep,
 } = require('../../src/plugins/lib/file-operations');
 
 const chalk = require('chalk');
@@ -202,6 +203,22 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     // Get file names with pattern filter
     filterFileNames = getFileListFromDir([appRoot, testPath], [], `${posixPath}/**/2022/**/*.xls`, { matchBase: true });
     if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from dir (${posixPath}):`, filterFileNames);
-    assert.ok(fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from dir');
+    assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from dir');
+  });
+
+  it('#10: FileOperations: Get file list from unc dir', () => {
+    let fileNames = [], filterFileNames = [];
+    //---------------------------------------------------------------
+    const testPath = 'test/data/excel/acm';
+    // Get unc path 
+    const uncPath = winPathToUncPath([appRoot, testPath]);
+    if (isDebug && uncPath) console.log('FileOperations: Get file list from unc dir.uncPath:', uncPath);
+    // Get file names without pattern filter
+    fileNames = getFileListFromDir(uncPath);
+    if (isDebug && fileNames.length) inspector(`FileOperations: Get file list from unc dir (${uncPath}):`, fileNames);
+    // Get file names with pattern filter
+    filterFileNames = getFileListFromDir(uncPath, [], `${uncPath}/**/2022/**/*.xls`, { matchBase: true });
+    if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from unc dir (${uncPath}):`, filterFileNames);
+    assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from unc dir');
   });
 });

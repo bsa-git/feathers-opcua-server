@@ -13,10 +13,10 @@
   "rangeDate": "A1:A1",
   "outputFile": "acmDayReportsData${ pointID }-${ date }.json",
   "outputPath": "test/data/tmp/excel-helper",
-  "globPattern": "*.xls",
-  "globOptions": {
+  "pattern": "/**/*.xls",
+  "patternOptions": {
     "matchBase": true
   },
-  "isRemoveXlsFiles": true,
+  "isRemoveXlsFiles": false,
   "isSaveOutputFile": true
 }

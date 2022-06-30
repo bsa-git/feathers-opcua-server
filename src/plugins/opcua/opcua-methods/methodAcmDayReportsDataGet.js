@@ -18,8 +18,9 @@ const {
   isUncPath,
   isUrlExists,
   createPath,
-  removeFilesFromDirSync,
+  stripSlashes,
   removeItemsSync,
+  toPathWithPosixSep,
   httpGetFileNamesFromDir,
   httpGetFileFromUrl
 } = require('../../lib');
@@ -43,6 +44,7 @@ const loForEach = require('lodash/forEach');
 const loTemplate = require('lodash/template');
 const loOmit = require('lodash/omit');
 const loStartsWith = require('lodash/startsWith');
+const loTrimEnd = require('lodash/trimEnd');
 
 // const dataTestPath = '/test/data/tmp/excel-helper';
 let dataPath = '/src/api/app/opcua-methods/acm-reports/data';
@@ -63,7 +65,7 @@ const isDebug = false;
  */
 async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   let resultPath = '', paramsFile, baseParamsFile, params = null, paramFullsPath;
-  let pointID, dirList = [], path, dataItem, dataItems = [];
+  let pointID, dirList = [], path, dataItem, dataItems = [], pattern = '';
   //----------------------------------------------------------------------------
 
   if (isDebug && inputArguments.length) inspector('methodAcmDayReportsDataGet.inputArguments:', inputArguments);
@@ -131,7 +133,8 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
       if (isDebug && isExistsURL) logger.info(`isExistsURL('${params.acmPath}'): OK`);
 
       // Get fileNames from path for http
-      const urls = await httpGetFileNamesFromDir(params.acmPath);
+      pattern = loTrimEnd(params.acmPath, '/') + params.pattern;
+      const urls = await httpGetFileNamesFromDir(params.acmPath, [], pattern, params.patternOptions);
       if (isDebug && urls.length) console.log('httpGetFileNamesFromDir.urls:', urls);
       // Get files from urls
       for (let index = 0; index < urls.length; index++) {
@@ -151,9 +154,11 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
       }
     }
   } else {
-    path = isUncPath(params.acmPath) ? params.acmPath : join(...[appRoot, params.acmPath]);
+    path = isUncPath(params.acmPath) ? params.acmPath : toPathWithPosixSep([appRoot, params.acmPath]);
+    path = loTrimEnd(path, '\\/');
+    pattern = path + params.pattern;
     if (isDebug && path) inspector('methodAcmDayReportsDataGet.path:', path);
-    dirList = getFileListFromDir(path);
+    dirList = getFileListFromDir(path, [], pattern, params.patternOptions);
     if (isDebug && dirList.length) inspector('methodAcmDayReportsDataGet.dirList:', dirList);
   }
 

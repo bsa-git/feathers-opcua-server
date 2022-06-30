@@ -22,7 +22,9 @@ const argv = yargs(hideBin(process.argv))
   .usage('Usage: $0 -c str --opt.points num')
   .example([
     ['$0 -c "ch_m5CreateAcmYearTemplate" --opt.points 2 --opt.test --opt.period 1 "months" --opt.year 2020',
-      'Returns the file name (acmYearTemplate2-2020.xlsx) when creating a template for the reporting period.']
+      'Returns the file name (acmYearTemplate2-2020.xlsx) when creating a template for the reporting period.'],
+    ['$0 -c "ch_m5GetAcmDayReportsData" --opt.points 2 --opt.pattern "/**/*.xls"',
+      'Returns the file name (acmDayReportsData2-20220223.json) for the reporting period.']
   ])
   .option('command', {
     alias: 'c',
@@ -52,12 +54,12 @@ if (isDebug && argv) inspector('Yargs.argv:', argv);
 // Run script
 (async function runOpcuaCommand(options) {
   const checkResult = checkRunCommand(options);
-  if(!checkResult){
+  if (!checkResult) {
     // Command error
     inspector('runOpcuaCommand_ERROR.options:', options);
     throw new Error(`Command error. This command "${options.command}" does not exist or there are not enough options.`);
   }
   const result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionWrite);
-  if(isDebug && result) inspector('runOpcuaCommand.result:', result);
+  if (isDebug && result) inspector('runOpcuaCommand.result:', result);
   console.log(chalk.green(`Run session write command "${options.command}" - OK!`), 'result:', chalk.cyan(result));
 })(argv);
