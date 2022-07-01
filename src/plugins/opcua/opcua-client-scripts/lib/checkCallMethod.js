@@ -4,6 +4,7 @@ const {
 } = require('../../../lib');
 
 const ch_m5CreateAcmYearTemplate = require('./methods/ch_m5CreateAcmYearTemplate');
+const ch_m5GetAcmDayReportsData = require('./methods/ch_m5GetAcmDayReportsData');
 
 const isDebug = false;
 
@@ -23,6 +24,14 @@ function checkCallMethod(options, result) {
       checkResult = ch_m5CreateAcmYearTemplate(options);
       if (result) {
         checkResult = ch_m5CreateAcmYearTemplate(checkResult, result);
+      }
+    }
+    break;
+  case 'ch_m5GetAcmDayReportsData':
+    if (options.opt && options.opt.point) {
+      checkResult = ch_m5GetAcmDayReportsData(options);
+      if (result) {
+        checkResult = ch_m5GetAcmDayReportsData(checkResult, result);
       }
     }
     break;

@@ -84,6 +84,36 @@
         "inputArguments": "CurrentRead",
         "outputArguments": "CurrentRead"
       }
+    },
+    {
+      "browseName": "CH_M5::AcmDayReportsDataGet",
+      "displayName": "Get ACM day reports data",
+      "ownerName": "CH_M5",
+      "type": "method",
+      "bindMethod": "methodAcmDayReportsDataGet",
+      "inputArguments": [
+        {
+          "name": "methodParameters",
+          "description": {
+            "text": "Method parameters"
+          },
+          "dataType": "String"
+        }
+      ],
+      "outputArguments": [
+        {
+          "name": "methodExecutionResult",
+          "description": {
+            "text": "Method execution result"
+          },
+          "dataType": "String",
+          "valueRank": 1
+        }
+      ],
+      "userAccessLevel": {
+        "inputArguments": "CurrentRead",
+        "outputArguments": "CurrentRead"
+      }
     }
   ]
 }

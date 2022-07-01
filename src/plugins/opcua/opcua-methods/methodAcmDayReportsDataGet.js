@@ -73,6 +73,8 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   const inputArg = inputArguments[0].value;
   if (callback) {
     params = JSON.parse(inputArg);
+    // When calling a method, set the property 'params.isSaveOutputFile' to true
+    params.isSaveOutputFile = true;
     pointID = params.pointID;
   } else {
     pointID = inputArg;

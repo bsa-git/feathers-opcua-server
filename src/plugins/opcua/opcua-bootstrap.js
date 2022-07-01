@@ -136,7 +136,6 @@ module.exports = async function opcuaBootstrap(app) {
             const currentDate = moment().format('YYYYMMDD');
             outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
             dataItems = readJsonFileSync([appRoot, syncResultOutputPath, outputFile])['dataItems'];
-            // inspector('opcuaBootstrap.dataItems:', dataItems);
           } else {
             dataItems = syncResult.dataItems;
           }

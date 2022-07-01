@@ -47,11 +47,11 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
       break;
     case '#1.2':
       options = {
-        command: 'ch_m5GetAcmDayReportsData',
+        command: 'ch_m5SyncStoreAcmValues',
         opt: {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           points: [1, 2, 3],
-          pattern: '/**/*.xls'
+          pattern: '/**/2022-01/*.xls'
         }
       };
       break;
