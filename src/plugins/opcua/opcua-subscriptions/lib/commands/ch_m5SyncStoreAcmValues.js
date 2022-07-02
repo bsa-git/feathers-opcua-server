@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const logger = require('../../logger');
+// const logger = require('../../logger');
 const chalk = require('chalk');
 const moment = require('moment');
 
@@ -63,7 +63,7 @@ async function ch_m5SyncStoreAcmValues(params, value) {
   if (statusCode === 'Good') {
     outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params }
     console.log(
-      chalk.green(`runMetod.methodAcmDayReportsDataGet: ${statusCode}!`),
+      chalk.green('runMetod.methodAcmDayReportsDataGet: OK!'),
       'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath))
     );
     // Get params
@@ -85,8 +85,8 @@ async function ch_m5SyncStoreAcmValues(params, value) {
       if (isDebug && savedValues.length) inspector('runCommand.ch_m5SyncStoreAcmValues.savedValues:', savedValues);
     }
     console.log(
-      chalk.green(`runCommand.ch_m5SyncStoreAcmValues: ${statusCode}!`), 
-      `pointID(${pointID}):`, chalk.cyan(savedValuesCount)
+      chalk.green('runCommand.ch_m5SyncStoreAcmValues: OK!'), 
+      `For pointID=${pointID} syncStoreCount:`, chalk.cyan(savedValuesCount)
     );
     // Remove files from dir
     removeFilesFromDirSync([appRoot, syncResultOutputPath]);

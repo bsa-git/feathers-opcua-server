@@ -861,6 +861,7 @@ const hexToRGBA = function (color) {
 
 module.exports = {
   appRoot,
+  logger,
   sysMemUsage,
   pause,
   waitTimeout,
