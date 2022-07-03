@@ -10,6 +10,7 @@
   "inputFile": "acmYearTemplate.xlsx",
   "outputTemplateFile": "acmYearTemplate${ pointID }-${ year }.xlsx",
   "outputReportFile": "acmYearReport${ pointID }-${ year }.xlsx",
+  "syncYearReportFromStore": true,
   "startRow": 20,
   "period": [1, "years"],
   "dateColumn": "C",

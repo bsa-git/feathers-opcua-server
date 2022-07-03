@@ -12,6 +12,7 @@ const {
 
 const ch_m5CreateAcmYearTemplate = require('./commands/ch_m5CreateAcmYearTemplate');
 const ch_m5SyncStoreAcmValues = require('./commands/ch_m5SyncStoreAcmValues');
+const ch_m5SyncAcmYearReport = require('./commands/ch_m5SyncAcmYearReport');
 
 const debug = require('debug')('app:runCommand');
 const isDebug = false;
@@ -50,6 +51,15 @@ async function runCommand(params, dataValue) {
       const point = points[index];
       value.opt.point = point;
       result = await ch_m5SyncStoreAcmValues(params, value);
+      results.push(result);
+    }
+    break;
+  case 'ch_m5SyncAcmYearReport':
+    points = value.opt.points;
+    for (let index = 0; index < points.length; index++) {
+      const point = points[index];
+      value.opt.point = point;
+      result = await ch_m5SyncAcmYearReport(params, value);
       results.push(result);
     }
     break;

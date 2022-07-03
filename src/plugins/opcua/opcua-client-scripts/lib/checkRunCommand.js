@@ -31,6 +31,13 @@ function checkRunCommand(options) {
       resultOptions.opcua.nodeId = 'ns=1;s=CH_M5::RunCommand';
     }
     break;
+  case 'ch_m5SyncAcmYearReport':
+    points = options.opt.points;
+    if (points && points.length) {
+      resultOptions = Object.assign({}, options, { opcua: {} });
+      resultOptions.opcua.nodeId = 'ns=1;s=CH_M5::RunCommand';
+    }
+    break;
   default:
     break;
   }

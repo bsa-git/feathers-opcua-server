@@ -18,6 +18,7 @@ const {
 const {
   appRoot,
   inspector,
+  logger,
   doesFileExist,
   hexToARGB,
   shiftTimeByOneHour,
@@ -94,7 +95,7 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
   paramsFile = loTemplate(acmYearTemplateFileName)({ pointID });
   paramFullsPath = [appRoot, paramsPath, paramsFile];
   if (!doesFileExist(paramFullsPath)) {
-    console.log(chalk.redBright(`Run script - ERROR. File with name "${paramsFile}" not found.`));
+    logger.error(`Run script - ERROR. File with name "${chalk.cyan(paramsFile)}" not found.`);
     throw new Error(`Run script - ERROR. File with name "${paramsFile}" not found.`);
   }
 
@@ -114,7 +115,7 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
   baseParamsFile = loTemplate(acmYearTemplateFileName)({ pointID: params.baseParams });
   paramFullsPath = [appRoot, paramsPath, baseParamsFile];
   if (!doesFileExist(paramFullsPath)) {
-    console.log(chalk.redBright(`Run script - ERROR. File with name "${baseParamsFile}" not found.`));
+    logger.error(`Run script - ERROR. File with name "${chalk.cyan(baseParamsFile)}" not found.`);
     throw new Error(`Run script - ERROR. File with name "${baseParamsFile}" not found.`);
   }
   const baseParams = require(join(...paramFullsPath));

@@ -20,6 +20,7 @@ const isDebug = false;
 // Get argv
 // e.g. argv.script='#1.1' =>  command -> 'ch_m5CreateAcmYearTemplate'
 // e.g. argv.script='#1.2' =>  command -> 'ch_m5GetAcmDayReportsData'
+// e.g. argv.script='#1.3' =>  command -> 'ch_m5SyncAcmYearReport'
 const argv = yargs(hideBin(process.argv)).argv;
 if (isDebug && argv) inspector('Yargs.argv:', argv);
 const script = argv.script.split('.')[0];
@@ -48,6 +49,16 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
     case '#1.2':
       options = {
         command: 'ch_m5SyncStoreAcmValues',
+        opt: {
+          url: 'opc.tcp://localhost:26570',// (Endpoint URL)
+          points: [1, 2, 3],
+          pattern: '/**/2022-01/*.xls'
+        }
+      };
+      break;
+    case '#1.3':
+      options = {
+        command: 'ch_m5SyncAcmYearReport',
         opt: {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           points: [1, 2, 3],

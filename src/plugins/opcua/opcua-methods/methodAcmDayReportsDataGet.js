@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-const fs = require('fs');
 const Path = require('path');
 const join = Path.join;
 const chalk = require('chalk');
@@ -46,7 +45,6 @@ const loOmit = require('lodash/omit');
 const loStartsWith = require('lodash/startsWith');
 const loTrimEnd = require('lodash/trimEnd');
 
-// const dataTestPath = '/test/data/tmp/excel-helper';
 let dataPath = '/src/api/app/opcua-methods/acm-reports/data';
 let paramsPath = '/src/api/app/opcua-methods/acm-reports/params';
 
@@ -83,7 +81,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   paramsFile = loTemplate(acmDayReportFileName)({ pointID });
   paramFullsPath = [appRoot, paramsPath, paramsFile];
   if (!doesFileExist(paramFullsPath)) {
-    logger.error(chalk.redBright(`Run script - ERROR. File with name "${paramsFile}" not found.`));
+    logger.error(`Run script - ERROR. File with name "${chalk.cyan(paramsFile)}" not found.`);
     throw new Error(`Run script - ERROR. File with name "${paramsFile}" not found.`);
   }
 
@@ -104,7 +102,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   if (baseParamsFile !== paramsFile) {
     paramFullsPath = [appRoot, paramsPath, baseParamsFile];
     if (!doesFileExist(paramFullsPath)) {
-      console.log(chalk.redBright(`Run script - ERROR. File with name "${baseParamsFile}" not found.`));
+      logger.error(`Run script - ERROR. File with name "${chalk.cyan(baseParamsFile)}" not found.`);
       throw new Error(`Run script - ERROR. File with name "${baseParamsFile}" not found.`);
     }
     const baseParams = require(join(...paramFullsPath));
@@ -118,7 +116,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   const opcuaTags = getOpcuaTags();
   const acmTag = opcuaTags.find(t => t.browseName === params.acmTagBrowseName);
   if (!acmTag) {
-    logger.error(chalk.redBright(`Run script - ERROR. Tag with browseName "${params.acmTagBrowseName}" not found.`));
+    logger.error(`Run script - ERROR. Tag with browseName "${chalk.cyan(params.acmTagBrowseName)}" not found.`);
     throw new Error(`Run script - ERROR. Tag with browseName "${params.acmTagBrowseName}" not found.`);
   }
   // Get acm params
