@@ -85,13 +85,19 @@ async function ch_m5SyncStoreAcmValues(params, value) {
       if (isDebug && savedValues.length) inspector('runCommand.ch_m5SyncStoreAcmValues.savedValues:', savedValues);
     }
     console.log(
-      chalk.green('runCommand.ch_m5SyncStoreAcmValues: OK!'), 
+      chalk.green('runCommand.ch_m5SyncStoreAcmValues: OK!'),
       `For pointID=${pointID} syncStoreCount:`, chalk.cyan(savedValuesCount)
     );
     // Remove files from dir
     removeFilesFromDirSync([appRoot, syncResultOutputPath]);
   } else {
-    console.log(chalk.green('runCommand.ch_m5SyncStoreAcmValues:'), chalk.cyan(statusCode));
+    logger.error(
+      `runMetod.methodAcmDayReportsDataGet - ${chalk.red('ERROR!')} 
+      statusCode:'${chalk.cyan(statusCode)}'; 
+      browseName:'${chalk.cyan(browseName)}'`
+    );
+    inspector('runMetod.methodAcmDayReportsDataGet.ERROR.inputArguments:', inputArguments);
+    inspector('runMetod.methodAcmDayReportsDataGet.ERROR.result:', result);
   }
   return result;
 }

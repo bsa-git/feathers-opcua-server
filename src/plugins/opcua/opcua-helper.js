@@ -388,7 +388,6 @@ const formatHistoryResults = function (id, historyResults, browseNames, locale =
 const formatDataValue = function (id, dataValue, browseName, locale = '') {
   let result, option;
   //---------------------
-  // inspector('opcua-helper.formatDataValue.dataValue:', dataValue);
   const options = getOpcuaConfigOptions(id);
   if (browseName) {
     option = options.find(opt => opt.browseName === browseName);

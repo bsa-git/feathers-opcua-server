@@ -42,9 +42,9 @@ const isDebug = false;
  * @returns {void}
  */
 async function ch_m5SyncAcmYearReport(params, value) {
-  let result, inputArgument = {}, inputArguments = [];
+  let result, inputArgument = {}, inputArgument2 = {}, inputArguments = [];
   let statusCode, outputArguments, savedValuesCount = 0;
-  let dataItems;
+  let browseName, dataItems;
   //---------------------------------------------------
 
   if (isDebug && params) inspector('ch_m5SyncAcmYearReport.params:', loOmit(params, ['myOpcuaClient', 'app']));
@@ -78,12 +78,12 @@ async function ch_m5SyncAcmYearReport(params, value) {
 
   if (baseParams.syncYearReportFromStore) {
     console.log(
-      chalk.green('runCommand.ch_m5SyncAcmYearReport: OK!'), 
+      chalk.green('runCommand.ch_m5SyncAcmYearReport: OK!'),
       `For pointID=${inputArgument.pointID} syncStoreCount:`, chalk.cyan(10)
     );
   } else {
-    // Run server method
-    const browseName = 'CH_M5::AcmDayReportsDataGet';
+    // Run server method -> 'methodAcmDayReportsDataGet'
+    browseName = 'CH_M5::AcmDayReportsDataGet';
     result = await client.sessionCallMethod(browseName, inputArguments);
     if (isDebug && result) inspector('ch_m5SyncAcmYearReport.sessionCallMethod.result:', result);
 
@@ -104,9 +104,66 @@ async function ch_m5SyncAcmYearReport(params, value) {
       outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
       dataItems = readJsonFileSync([appRoot, syncResultOutputPath, outputFile])['dataItems'];
     } else {
-      console.log(chalk.green('runCommand.ch_m5SyncAcmYearReport:'), chalk.cyan(statusCode));
+      logger.error(
+        `runMetod.methodAcmDayReportsDataGet - ${chalk.red('ERROR!')} 
+        statusCode:'${chalk.cyan(statusCode)}'; 
+        browseName:'${chalk.cyan(browseName)}'`
+      );
+      inspector('runMetod.methodAcmDayReportsDataGet.ERROR.inputArguments:', inputArguments);
+      inspector('runMetod.methodAcmDayReportsDataGet.ERROR.result:', result);
     }
   }
+
+  // Sync acm year report
+  for (let index2 = 0; index2 < dataItems.length; index2++) {
+    const dataItem = dataItems[index2];
+    if (isDebug && dataItem) inspector('runCommand.ch_m5SyncStoreAcmValues.dataItem:', dataItem);
+
+    inputArgument = {};
+    inputArgument = JSON.stringify(loOmit(params, ['myOpcuaClient', 'app']));
+    inputArgument = { dataType: DataType.String, value: inputArgument };
+
+    inputArgument2 = { dataType: DataType.String, value: dataItem };
+
+    // Run server method
+    browseName = 'CH_M5::YearReportUpdate';
+    result = await client.sessionCallMethod(browseName, inputArguments);
+    if (isDebug && result) inspector('ch_m5SyncAcmYearReport.sessionCallMethod.result:', result);
+
+    statusCode = result[0].statusCode.name;
+    if (statusCode === 'Good') {
+      outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params }
+      console.log(
+        chalk.green('runMetod.methodAcmDayReportsDataGet: OK!'),
+        'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath))
+      );
+      // Get params
+      const pointID = outputArguments.params.pointID;
+      const groupBrowseName = outputArguments.params.acmTagBrowseName;
+      const syncResultOutputPath = outputArguments.params.outputPath;
+      // Get data items
+      let outputFile = outputArguments.params.outputFile;
+      const currentDate = moment().format('YYYYMMDD');
+      outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
+      dataItems = readJsonFileSync([appRoot, syncResultOutputPath, outputFile])['dataItems'];
+    } else {
+      logger.error(
+        `runMetod.methodAcmDayReportsDataGet - ${chalk.red('ERROR!')} 
+        statusCode:'${chalk.cyan(statusCode)}'; 
+        browseName:'${chalk.cyan(browseName)}'`
+      );
+      inspector('runMetod.methodAcmDayReportsDataGet.ERROR.inputArguments:', inputArguments);
+      inspector('runMetod.methodAcmDayReportsDataGet.ERROR.result:', result);
+    }
+
+    const savedValues = await saveStoreOpcuaGroupValue(params.app, groupBrowseName, dataItem, false);
+    savedValuesCount += savedValues.length;
+    if (isDebug && savedValues.length) inspector('runCommand.ch_m5SyncStoreAcmValues.savedValues:', savedValues);
+  }
+  console.log(
+    chalk.green('runCommand.ch_m5SyncStoreAcmValues: OK!'),
+    `For pointID=${pointID} syncStoreCount:`, chalk.cyan(savedValuesCount)
+  );
 }
 
 module.exports = ch_m5SyncAcmYearReport;

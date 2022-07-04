@@ -141,15 +141,19 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
 
       // Write report file
       resultPath = await exceljs.writeFile([appRoot, outputReportPath, outputReportFile]);
-      if (isDebug && resultPath) console.log(chalk.green('Update asm year report - OK!'), 'reportDate:', chalk.cyan(reportDate), 'resultFile:', chalk.cyan(outputReportFile));
+      if (isDebug && resultPath) console.log(
+        chalk.green('Update asm year report - OK!'),
+        'reportDate:', chalk.cyan(reportDate),
+        'resultFile:', chalk.cyan(outputReportFile)
+      );
 
     } catch (error) {
       reportFile = join(...reportFile);
-      logger.error(`Excel file initialization error: reportFile = ${reportFile}; error.message = ${error.message}`);
+      logger.error(`Excel file initialization error: reportFile = "${chalk.cyan(reportFile)}"; error.message = "${chalk.cyan(error.message)}"`);
       throw error;
     }
   } else {
-    logger.error(`There is no file "${reportFile[2]}" for the reporting period on the automated monitoring system.`);
+    logger.error(`There is no file "${chalk.cyan(reportFile[2])}" for the reporting period on the automated monitoring system.`);
   }
 
   // CallBack
