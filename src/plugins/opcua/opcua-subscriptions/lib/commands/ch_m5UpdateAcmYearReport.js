@@ -74,7 +74,7 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
         `Update asm year report - ${chalk.red('ERROR!')} 
         statusCode:'${chalk.cyan(statusCode)}'; 
         browseName:'${chalk.cyan(browseName)}'`
-        );
+      );
       inspector('subscription.ch_m5UpdateAcmYearReport.ERROR.inputArguments:', inputArguments);
       inspector('subscription.ch_m5UpdateAcmYearReport.ERROR.result:', result);
     }
@@ -136,7 +136,7 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
         chalk.green('Update asm year report - OK!'), 
         'reportDate:', chalk.cyan(outputArguments.reportDate), 
         'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath))
-        );
+      );
     } else {
       logger.error(
         `Update asm year report - ${chalk.red('ERROR!')} 

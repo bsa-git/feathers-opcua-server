@@ -1,6 +1,7 @@
 {
   "baseParams": 1,
   "pointID": 2,
+  "acmTagBrowseName": "CH_M52_ACM::ValueFromFile",
   "namePointID": "ТВим02",
   "emissionPointID": "ТВ17",
   "pointDescription": "Цех М-5, відділення 2, агрегати 1/2÷4/2",

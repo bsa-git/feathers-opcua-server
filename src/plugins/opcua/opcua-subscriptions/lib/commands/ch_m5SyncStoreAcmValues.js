@@ -13,6 +13,7 @@ const {
 const {
   appRoot,
   inspector,
+  logger,
   getPathBasename,
   readJsonFileSync,
   removeFilesFromDirSync,

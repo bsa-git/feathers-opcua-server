@@ -78,7 +78,7 @@ const setErrDataCells = (index, excel) => {
  * @param {Function} callback
  */
 const methodAcmYearTemplateCreate = async (inputArguments, context, callback) => {
-  let resultPath = '', paramsFile, baseParamsFile, params = null, paramFullsPath;
+  let resultPath = '', paramsFile, paramFullsPath, baseParamsFile, params = null;
   let pointID;
   //----------------------------------------------------------------------------
 
@@ -91,7 +91,7 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
   } else {
     pointID = inputArg;
   }
-  // Get params data
+  // Get params file
   paramsFile = loTemplate(acmYearTemplateFileName)({ pointID });
   paramFullsPath = [appRoot, paramsPath, paramsFile];
   if (!doesFileExist(paramFullsPath)) {
@@ -100,27 +100,22 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
   }
 
   const _params = require(join(...paramFullsPath));
-
   if (params) {
     params = Object.assign({}, _params, params);
   } else {
     params = Object.assign({}, _params);
   }
 
-
-  if (!params.baseParams) {
-    params.baseParams = 1;
+  if (params.baseParams) {
+    baseParamsFile = loTemplate(acmYearTemplateFileName)({ pointID: params.baseParams });
+    paramFullsPath = [appRoot, paramsPath, baseParamsFile];
+    if (!doesFileExist(paramFullsPath)) {
+      logger.error(`Run script - ERROR. File with name "${chalk.cyan(baseParamsFile)}" not found.`);
+      throw new Error(`Run script - ERROR. File with name "${baseParamsFile}" not found.`);
+    }
+    const baseParams = require(join(...paramFullsPath));
+    params = Object.assign({}, baseParams, params);
   }
-
-  baseParamsFile = loTemplate(acmYearTemplateFileName)({ pointID: params.baseParams });
-  paramFullsPath = [appRoot, paramsPath, baseParamsFile];
-  if (!doesFileExist(paramFullsPath)) {
-    logger.error(`Run script - ERROR. File with name "${chalk.cyan(baseParamsFile)}" not found.`);
-    throw new Error(`Run script - ERROR. File with name "${baseParamsFile}" not found.`);
-  }
-  const baseParams = require(join(...paramFullsPath));
-  params = Object.assign({}, baseParams, params);
-
 
   if (isDebug && params) inspector('methodAcmYearTemplateCreate.params:', params);
 
@@ -291,7 +286,7 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
   const outputFile = loTemplate(params.outputTemplateFile)({ pointID: params.pointID, year: startYear });
   if (params.isTest) {
     resultPath = await exceljs.writeFile([appRoot, dataTestPath, outputFile]);
-  } else{
+  } else {
     resultPath = await exceljs.writeFile([appRoot, dataPath, outputFile]);
   }
 
@@ -306,7 +301,7 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
   if (callback) {
     callback(null, callMethodResult);
   } else {
-    const statusCode = 'Good'; 
+    const statusCode = 'Good';
     return { statusCode, resultPath, params, hours, days };
   }
 };

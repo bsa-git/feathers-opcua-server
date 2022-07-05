@@ -93,20 +93,18 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
     params = Object.assign({}, _params);
   }
 
-
-  if (!params.baseParams) {
-    params.baseParams = 1;
-  }
-  // Get base params file 
-  baseParamsFile = loTemplate(acmDayReportFileName)({ pointID: params.baseParams });
-  if (baseParamsFile !== paramsFile) {
-    paramFullsPath = [appRoot, paramsPath, baseParamsFile];
-    if (!doesFileExist(paramFullsPath)) {
-      logger.error(`Run script - ERROR. File with name "${chalk.cyan(baseParamsFile)}" not found.`);
-      throw new Error(`Run script - ERROR. File with name "${baseParamsFile}" not found.`);
+  if (params.baseParams) {
+    // Get base params file 
+    baseParamsFile = loTemplate(acmDayReportFileName)({ pointID: params.baseParams });
+    if (baseParamsFile !== paramsFile) {
+      paramFullsPath = [appRoot, paramsPath, baseParamsFile];
+      if (!doesFileExist(paramFullsPath)) {
+        logger.error(`Run script - ERROR. File with name "${chalk.cyan(baseParamsFile)}" not found.`);
+        throw new Error(`Run script - ERROR. File with name "${baseParamsFile}" not found.`);
+      }
+      const baseParams = require(join(...paramFullsPath));
+      params = Object.assign({}, baseParams, params);
     }
-    const baseParams = require(join(...paramFullsPath));
-    params = Object.assign({}, baseParams, params);
   }
 
   // Create 'params.outputPath' path
@@ -201,8 +199,8 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   if (isDebug && dataItems.length) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
 
   // Remove files from dir
-  if(params.isRemoveXlsFiles){
-    removeItemsSync(`${params.outputPath}/*.xls`, { dryRun: false } );
+  if (params.isRemoveXlsFiles) {
+    removeItemsSync(`${params.outputPath}/*.xls`, { dryRun: false });
   }
 
   // Write data to resultPath
