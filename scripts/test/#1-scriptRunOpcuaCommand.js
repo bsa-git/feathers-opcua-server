@@ -52,7 +52,7 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
         opt: {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           points: [1, 2, 3],
-          pattern: '/**/2022-01/*.xls'
+          pattern: '/**/*.xls'
         }
       };
       break;
@@ -62,7 +62,7 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
         opt: {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           points: [1], // points: [1, 2, 3]
-          pattern: '/**/2022-01/*.xls'
+          pattern: '/**/*.xls'
         }
       };
       break;
