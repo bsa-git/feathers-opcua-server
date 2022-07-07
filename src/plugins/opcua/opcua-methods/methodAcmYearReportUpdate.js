@@ -44,6 +44,7 @@ const isDebug = false;
 async function methodAcmYearReportUpdate(inputArguments, context, callback) {
   let reportFile, reportParams = null, paramFullsPath, resultPath;
   let errorMessage, dateCells, dateCells4Rows, dateCells4Date, reportDates = [];
+  let beginReportDate, beginReportYear;
   //---------------------------------------------------------------
 
   if (isDebug && inputArguments.length) inspector('methodAcmYearReportUpdate.inputArguments:', inputArguments);
@@ -57,25 +58,48 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
   if (!Array.isArray(groupValues)) {
     groupValues = [groupValues];
   }
+  // Get begin group value 
+  const beginGroupValue = groupValues[0];
 
   if (isDebug && params) inspector('methodAcmYearReportUpdate.params:', params);
   if (isDebug && groupValues.length) inspector('methodAcmYearReportUpdate.groupValues:', groupValues);
-  const addressSpaceOption = params.addressSpaceOption;
-
-  // Get params for year report
-  const pointID = addressSpaceOption.getterParams.pointID;
-  const paramsFile = loTemplate(acmYearTemplateFileName)({ pointID });
-  paramFullsPath = [appRoot, paramsPath, paramsFile];
-  reportParams = require(join(...paramFullsPath));
-
-  if (reportParams.baseParams) {
-    const baseParamsFile = loTemplate(acmYearTemplateFileName)({ pointID: reportParams.baseParams });
-    paramFullsPath = [appRoot, paramsPath, baseParamsFile];
-    const baseParams = require(join(...paramFullsPath));
-    reportParams = Object.assign({}, baseParams, reportParams);
-  }
 
   try {
+
+    const addressSpaceOption = params.addressSpaceOption;
+
+    // Get params for year report
+    const pointID = addressSpaceOption.getterParams.pointID;
+    const paramsFile = loTemplate(acmYearTemplateFileName)({ pointID });
+    paramFullsPath = [appRoot, paramsPath, paramsFile];
+    reportParams = require(join(...paramFullsPath));
+
+    if (reportParams.baseParams) {
+      const baseParamsFile = loTemplate(acmYearTemplateFileName)({ pointID: reportParams.baseParams });
+      paramFullsPath = [appRoot, paramsPath, baseParamsFile];
+      const baseParams = require(join(...paramFullsPath));
+      reportParams = Object.assign({}, baseParams, reportParams);
+    }
+    // Get begin report date and year
+    beginReportDate = beginGroupValue['!value'].dateTime.split('T')[0];
+    beginReportYear = beginReportDate.split('-')[0];
+
+    // Get year report file
+    const outputReportPath = addressSpaceOption.getterParams.toPath;
+    makeDirSync([appRoot, outputReportPath]);
+    const outputReportFile = loTemplate(reportParams.outputReportFile)({ pointID, year: beginReportYear });
+    reportFile = [appRoot, outputReportPath, outputReportFile];
+    if (!doesFileExist(reportFile)) {
+      const outputTemplateFile = loTemplate(reportParams.outputTemplateFile)({ pointID, year: beginReportYear });
+      reportFile = [appRoot, dataPath, outputTemplateFile];
+    }
+
+    if (!doesFileExist(reportFile)) {
+      errorMessage = `There is no file "${chalk.cyan(reportFile[2])}" for the reporting period on the automated monitoring system.`;
+      logger.error(errorMessage);
+      new Error(errorMessage);
+    }
+
     // Create exceljs object
     const exceljs = new ExceljsHelperClass({
       excelPath: reportFile,
@@ -101,24 +125,14 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
       // Get report date and year
       const reportDate = groupValue['!value'].dateTime.split('T')[0];
       const reportYear = reportDate.split('-')[0];
+      
+      // We will work with the report only for one specific year -> beginReportYear
+      if(reportYear !== beginReportYear){
+        continue;
+      }
+      
       reportDates.push(reportDate);
-
-      // Get year report file
-      const outputReportPath = addressSpaceOption.getterParams.toPath;
-      makeDirSync([appRoot, outputReportPath]);
-      const outputReportFile = loTemplate(reportParams.outputReportFile)({ pointID, year: reportYear });
-      reportFile = [appRoot, outputReportPath, outputReportFile];
-      if (!doesFileExist(reportFile)) {
-        const outputTemplateFile = loTemplate(reportParams.outputTemplateFile)({ pointID, year: reportYear });
-        reportFile = [appRoot, dataPath, outputTemplateFile];
-      }
-
-      if (!doesFileExist(reportFile)) {
-        errorMessage = `There is no file "${chalk.cyan(reportFile[2])}" for the reporting period on the automated monitoring system.`;
-        logger.error(errorMessage);
-        new Error(errorMessage);
-      }
-
+      
       dateCells4Date = dateCells.filter(dateCell => dateCell.value === reportDate);
       // Show cells
       loForEach(dateCells4Date, function (cell) {
@@ -157,7 +171,7 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
     resultPath = await exceljs.writeFile([appRoot, outputReportPath, outputReportFile]);
     if (isDebug && resultPath) console.log(
       chalk.green('Update asm year report - OK!'),
-      // 'reportDate:', chalk.cyan(reportDate),
+      'reportDates:', chalk.cyan(reportDates.length),
       'resultFile:', chalk.cyan(outputReportFile)
     );
 
@@ -172,14 +186,14 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
     statusCode: StatusCodes.Good,
     outputArguments: [{
       dataType: DataType.String,
-      value: JSON.stringify({ resultPath, params, reportDates })
+      value: JSON.stringify({ resultPath, params, reportYear: beginReportYear, reportDates })
     }]
   };
   if (callback) {
     callback(null, callMethodResult);
   } else {
     const statusCode = 'Good';
-    return { statusCode, resultPath, params, reportDates };
+    return { statusCode, resultPath, params, reportYear: beginReportYear, reportDates };
   }
 }
 

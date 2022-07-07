@@ -61,7 +61,7 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
         command: 'ch_m5SyncAcmYearReport',
         opt: {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
-          points: [1], // points: [1, 2, 3]
+          points: [1], //[1, 2, 3],
           pattern: '/**/*.xls'
         }
       };

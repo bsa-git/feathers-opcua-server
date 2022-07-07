@@ -121,10 +121,10 @@ async function ch_m5SyncAcmYearReport(params, value) {
       const currentDate = moment().format('YYYYMMDD');
       outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
       dataItems = readJsonFileSync([appRoot, syncResultOutputPath, outputFile])['dataItems'];
-      console.log(
-        `${chalk.greenBright('runMetod.methodAcmDayReportsDataGet: OK!')}, 
-        'resultFile:' ${chalk.cyan(getPathBasename(outputArguments.resultPath))};, 
-        'dataItemsCount:' ${chalk.cyan(dataItems.length)};`
+      if (true && dataItems.length) console.log(
+        chalk.green('runMetod.methodAcmDayReportsDataGet: OK!'),
+        'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath)),
+        'dataItemsCount:', chalk.cyan(dataItems.length)
       );
     } else {
       logger.error(
@@ -138,46 +138,44 @@ async function ch_m5SyncAcmYearReport(params, value) {
   }
 
   //--- Run server method -> 'methodAcmYearReportUpdate' ---//
-  for (let index2 = 0; index2 < dataItems.length; index2++) {
-    const dataItem = dataItems[index2];
-    if (isDebug && dataItem) inspector('runCommand.ch_m5SyncAcmYearReport.dataItem:', dataItem);
 
-    // Set inputArguments
-    params.addressSpaceOption = groupTag;
-    inputArgument = JSON.stringify(loOmit(params, ['myOpcuaClient', 'app']));
-    inputArgument = { dataType: DataType.String, value: inputArgument };
-    inputArgument2 = { dataType: DataType.String, value: JSON.stringify(dataItem) };
-    inputArguments = [];
-    inputArguments.push([inputArgument, inputArgument2]);
-    if (isDebug && inputArguments.length) inspector('runCommand.ch_m5SyncAcmYearReport.inputArguments:', inputArguments);
+  // Set inputArguments
+  params.addressSpaceOption = groupTag;
+  inputArgument = JSON.stringify(loOmit(params, ['myOpcuaClient', 'app']));
+  inputArgument = { dataType: DataType.String, value: inputArgument };
+  inputArgument2 = { dataType: DataType.String, value: JSON.stringify(dataItems) };
+  inputArguments = [];
+  inputArguments.push([inputArgument, inputArgument2]);
+  if (isDebug && inputArguments.length) inspector('runCommand.ch_m5SyncAcmYearReport.inputArguments:', inputArguments);
 
-    // Run server method -> methodAcmYearReportUpdate
-    metodBrowseName = 'CH_M5::YearReportUpdate';
-    metodResult = await client.sessionCallMethod(metodBrowseName, inputArguments);
-    if (isDebug && metodResult) inspector('runMetod.methodAcmYearReportUpdate.metodResult:', metodResult);
+  // Run server method -> methodAcmYearReportUpdate
+  metodBrowseName = 'CH_M5::YearReportUpdate';
+  metodResult = await client.sessionCallMethod(metodBrowseName, inputArguments);
+  if (isDebug && metodResult) inspector('runMetod.methodAcmYearReportUpdate.metodResult:', metodResult);
 
-    statusCode = metodResult[0].statusCode.name;
-    if (statusCode === 'Good') {
-      outputArguments = JSON.parse(metodResult[0].outputArguments[0].value);// { resultPath, params, reportDates }
-      console.log(
-        chalk.green('runMetod.methodAcmYearReportUpdate: OK!'),
-        'reportDates:', chalk.cyan(outputArguments.reportDates),
-        'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath))
-      );
-    } else {
-      logger.error(
-        `runMetod.methodAcmYearReportUpdate - ${chalk.red('ERROR!')} 
+  statusCode = metodResult[0].statusCode.name;
+  if (statusCode === 'Good') {
+    outputArguments = JSON.parse(metodResult[0].outputArguments[0].value);// { resultPath, params, reportYear, reportDates }
+    if (isDebug && outputArguments) inspector('runMetod.methodAcmYearReportUpdate.reportDates:', outputArguments.reportDates);
+    if (true && outputArguments) console.log(
+      chalk.green('runMetod.methodAcmYearReportUpdate: OK!'),
+      'reportYear:', chalk.cyan(outputArguments.reportYear),
+      'reportDatesCount:', chalk.cyan(outputArguments.reportDates.length),
+      'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath))
+    );
+  } else {
+    logger.error(
+      `runMetod.methodAcmYearReportUpdate - ${chalk.red('ERROR!')} 
         statusCode:'${chalk.cyan(statusCode)}'; 
         metodBrowseName:'${chalk.cyan(metodBrowseName)}'`
-      );
-      inspector('runMetod.methodAcmDayReportsDataGet.ERROR.inputArguments:', inputArguments);
-      inspector('runMetod.methodAcmDayReportsDataGet.ERROR.metodResult:', metodResult);
-    }
+    );
+    inspector('runMetod.methodAcmDayReportsDataGet.ERROR.inputArguments:', inputArguments);
+    inspector('runMetod.methodAcmDayReportsDataGet.ERROR.metodResult:', metodResult);
   }
-  console.log(
-    chalk.green('runCommand.ch_m5SyncAcmYearReport: OK!'),
-    `For pointID=${pointID} syncAcmYearReportCount:`, chalk.cyan(100)
-  );
+  // console.log(
+  //   chalk.green('runCommand.ch_m5SyncAcmYearReport: OK!'),
+  //   `For pointID=${pointID} syncAcmYearReportCount:`, chalk.cyan(100)
+  // );
 }
 
 module.exports = ch_m5SyncAcmYearReport;

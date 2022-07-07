@@ -66,7 +66,8 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
     if (statusCode === 'Good') {
       if (true && result) console.log(
         chalk.green('Update asm year report - OK!'),
-        'reportDates:', chalk.cyan(result.reportDates),
+        'reportYear:', chalk.cyan(result.reportYear),
+        'reportDatesCount:', chalk.cyan(result.reportDates.length),
         'resultFile:', chalk.cyan(getPathBasename(result.resultPath))
       );
     } else {
@@ -93,10 +94,11 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
 
     statusCode = result[0].statusCode.name;
     if (statusCode === 'Good') {
-      outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, reportDates }
+      outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, reportYear, reportDates }
       if (true && result) console.log(
         chalk.green('Update asm year report - OK!'),
-        'reportDates:', chalk.cyan(outputArguments.reportDates),
+        'reportYear:', chalk.cyan(outputArguments.reportYear),
+        'reportDatesCount:', chalk.cyan(outputArguments.reportDates.length),
         'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath))
       );
     } else {
@@ -131,10 +133,11 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
 
     statusCode = result[0].statusCode.name;
     if (statusCode === 'Good') {
-      outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, reportDates }
+      outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, reportYear, reportDates }
       if (true && result) console.log(
         chalk.green('Update asm year report - OK!'), 
-        'reportDates:', chalk.cyan(outputArguments.reportDates), 
+        'reportYear:', chalk.cyan(outputArguments.reportYear),
+        'reportDatesCount:', chalk.cyan(outputArguments.reportDates.length), 
         'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath))
       );
     } else {
