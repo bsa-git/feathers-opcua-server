@@ -8,7 +8,8 @@ const {
   appRoot,
   inspector,
   doesFileExist,
-  makeDirSync
+  makeDirSync,
+  sortByStringField
 } = require('../../lib');
 
 const {
@@ -58,6 +59,10 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
   if (!Array.isArray(groupValues)) {
     groupValues = [groupValues];
   }
+
+  // Sort array groupValues descending
+  groupValues = sortByStringField(groupValues, '!value', false);
+
   // Get begin group value 
   const beginGroupValue = groupValues[0];
 

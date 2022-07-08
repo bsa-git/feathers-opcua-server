@@ -20,7 +20,8 @@ const isDebug = false;
 // Get argv
 // e.g. argv.script='#1.1' =>  command -> 'ch_m5CreateAcmYearTemplate'
 // e.g. argv.script='#1.2' =>  command -> 'ch_m5GetAcmDayReportsData'
-// e.g. argv.script='#1.3' =>  command -> 'ch_m5SyncAcmYearReport'
+// e.g. argv.script='#1.3.1' =>  command -> 'ch_m5SyncAcmYearReport' (Get dataItems from store)
+// e.g. argv.script='#1.3.2' =>  command -> 'ch_m5SyncAcmYearReport' (Get dataItems from day reports)
 const argv = yargs(hideBin(process.argv)).argv;
 if (isDebug && argv) inspector('Yargs.argv:', argv);
 const script = argv.script.split('.')[0];
@@ -34,40 +35,50 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
     let options = null;
     //--------------------------------------------
     switch (argv.script) {
-    case '#1.1':
-      options = {
-        command: 'ch_m5CreateAcmYearTemplate',
-        opt: {
-          url: 'opc.tcp://localhost:26570',// (Endpoint URL)
-          points: [1, 2, 3],
-          test: true,
-          period: [1, 'months'],
-          year: 2020
-        }
-      };
-      break;
-    case '#1.2':
-      options = {
-        command: 'ch_m5SyncStoreAcmValues',
-        opt: {
-          url: 'opc.tcp://localhost:26570',// (Endpoint URL)
-          points: [1, 2, 3],
-          pattern: '/**/*.xls'
-        }
-      };
-      break;
-    case '#1.3':
-      options = {
-        command: 'ch_m5SyncAcmYearReport',
-        opt: {
-          url: 'opc.tcp://localhost:26570',// (Endpoint URL)
-          points: [1, 2, 3],
-          pattern: '/**/*.xls'
-        }
-      };
-      break;
-    default:
-      break;
+      case '#1.1':
+        options = {
+          command: 'ch_m5CreateAcmYearTemplate',
+          opt: {
+            url: 'opc.tcp://localhost:26570',// (Endpoint URL)
+            points: [1, 2, 3],
+            test: true,
+            period: [1, 'months'],
+            year: 2020
+          }
+        };
+        break;
+      case '#1.2':
+        options = {
+          command: 'ch_m5SyncStoreAcmValues',
+          opt: {
+            url: 'opc.tcp://localhost:26570',// (Endpoint URL)
+            points: [1, 2, 3],
+            pattern: '/**/*.xls'// e.g. '/**/*.xls'|'/**/2022-01/*.xls'|/**/DayHist01_14F120_01022022_0000.xls
+          }
+        };
+        break;
+      case '#1.3.1':// Get dataItems from store
+        options = {
+          command: 'ch_m5SyncAcmYearReport',
+          opt: {
+            url: 'opc.tcp://localhost:26570',// (Endpoint URL)
+            points: [1, 2, 3],
+            pattern: '2022-01' // e.g. '2022'|'2022-01'|'2022-01-12'
+          }
+        };
+        break;
+      case '#1.3.2':// Get dataItems from day reports
+        options = {
+          command: 'ch_m5SyncAcmYearReport',
+          opt: {
+            url: 'opc.tcp://localhost:26570',// (Endpoint URL)
+            points: [1, 2, 3],
+            pattern: '/**/*.xls'// e.g. '/**/*.xls'|'/**/2022-01/*.xls'|/**/DayHist01_14F120_01022022_0000.xls
+          }
+        };
+        break;
+      default:
+        break;
     }
 
 

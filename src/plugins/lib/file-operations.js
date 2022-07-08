@@ -549,11 +549,11 @@ const clearDirSync = function (path) {
  * @returns {String[]} 
  * e.g. del.sync(['public/assets/**', '!public/assets', '!public/assets/goat.png']);
  */
-const removeItemsSync = async function (patterns, options = {}) {
+const removeItemsSync = function (patterns, options = {}) {
   const deletedItems = del.sync(patterns, options);
   if(isDebug && deletedItems.length) inspector('removeItemsSync.deletedItems:', deletedItems);
   if(options.dryRun){
-    inspector('removeItemsSync.Files and directories that would be deleted:', deletedItems);
+    if(isDebug && deletedItems.length) inspector('removeItemsSync.Files and directories that would be deleted:', deletedItems);
   }
   return deletedItems;
 };
@@ -572,7 +572,7 @@ const removeItems = async function (patterns, options) {
   const deletedItems = await del(patterns, options);
   if(isDebug && deletedItems.length) inspector('removeItems.deletedItems:', deletedItems);
   if(options.dryRun){
-    inspector('removeItems.Files and directories that would be deleted:', deletedItems);
+    if(isDebug && deletedItems.length) inspector('removeItems.Files and directories that would be deleted:', deletedItems);
   }
   return deletedItems;
 };

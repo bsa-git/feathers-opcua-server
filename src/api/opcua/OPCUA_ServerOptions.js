@@ -167,7 +167,7 @@ module.exports = {
     * Use a large value ( i.e 15000 ms) for slow connections or embedded devices.
     * @type {Number}
     */
-  timeout: 15000,
+  timeout: 60000,
 
   /**
     * the maximum number of simultaneous sessions allowed.

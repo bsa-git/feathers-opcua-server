@@ -23,10 +23,10 @@ const excelColumns = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
 /**
  * @method sortByStringField
  * sort array by string field
- * @param items {Array}
- * @param name {String}
- * @param isAscending {Boolean}
- * @returns {Array}
+ * @param {Object[]} items
+ * @param {String} name
+ * @param {Boolean} isAscending
+ * @returns {Object[]}
  */
 const sortByStringField = function (items, name, isAscending = true) {
   items.sort((x, y) => {
@@ -41,10 +41,10 @@ const sortByStringField = function (items, name, isAscending = true) {
 /**
  * @method sortByNumberField
  * sort array by number field
- * @param items {Array}
- * @param name {String}
- * @param isAscending {Boolean}
- * @returns {Array}
+ * @param {Object[]} items
+ * @param {String} name
+ * @param {Boolean} isAscending
+ * @returns {Object[]}
  */
 const sortByNumberField = function (items, name, isAscending = true) {
   items.sort((x, y) => {
@@ -57,9 +57,9 @@ const sortByNumberField = function (items, name, isAscending = true) {
 /**
  * @method sortByString
  * sort array by string
- * @param items {Array}
- * @param isAscending {Boolean}
- * @returns {Array}
+ * @param {String[]} items
+ * @param {Boolean} isAscending
+ * @returns {String[]}
  */
 const sortByString = function (items, isAscending = true) {
   items.sort((x, y) => {
@@ -74,9 +74,9 @@ const sortByString = function (items, isAscending = true) {
 /**
  * @method sortByNumber
  * sort array by number field
- * @param items {Array}
- * @param isAscending {Boolean}
- * @returns {Array}
+ * @param {Number[]} items
+ * @param {Boolean} isAscending
+ * @returns {Number[]}
  */
 const sortByNumber = function (items, isAscending = true) {
   items.sort((x, y) => {

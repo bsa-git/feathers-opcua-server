@@ -23,12 +23,14 @@ const {
   getOsPlatform,
   winPathToUncPath,
   getFileListFromDir,
-  toPathWithSep,
   toPathWithPosixSep,
+  removeItems,
+  removeItemsSync,
 } = require('../../src/plugins/lib/file-operations');
 
 const chalk = require('chalk');
 const papa = require('papaparse');
+const { join } = require('path');
 
 const debug = require('debug')('app:file-operations.test');
 const isDebug = false;
@@ -220,5 +222,23 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     filterFileNames = getFileListFromDir(uncPath, [], `${uncPath}/**/2022/**/*.xls`, { matchBase: true });
     if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from unc dir (${uncPath}):`, filterFileNames);
     assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from unc dir');
+  });
+
+  it('#11: FileOperations: Remove directory/files paths from dir', async () => {
+    let deletedItems, deletedItems2;
+    //---------------------------------------------------------------
+    const testPath = 'test/data/excel/acm';
+    // Get path with posix sep
+    const filePath = toPathWithPosixSep([appRoot, testPath]);
+    // Remove items sync
+    deletedItems = removeItemsSync([`${filePath}/*.*`], { dryRun: true });
+    deletedItems2 = removeItemsSync([`${filePath}/*.*`, `!${filePath}/*.xlsx`], { dryRun: true });
+    if (isDebug && deletedItems) inspector(`FileOperations: Remove directory/files paths from dir (${filePath}):`, deletedItems);
+    assert.ok(deletedItems.length > deletedItems2.length, 'FileOperations: Remove sync directory/files paths from dir');
+    // Remove items
+    deletedItems = await removeItems([`${filePath}/*.*`], { dryRun: true });
+    deletedItems2 = await removeItems([`${filePath}/*.*`, `!${filePath}/*.xlsx`], { dryRun: true });
+    if (isDebug && deletedItems) inspector(`FileOperations: Remove directory/files paths from dir (${filePath}):`, deletedItems);
+    assert.ok(deletedItems.length > deletedItems2.length, 'FileOperations: Remove directory/files paths from dir');
   });
 });
