@@ -113,8 +113,14 @@ async function ch_m5SyncAcmYearReport(params, value) {
         if (patterns.length === 1) return loStartsWith(date, patterns[0]);
         if (patterns.length === 2) return loStartsWith(date, `${patterns[0]}-${patterns[1]}`);
         if (patterns.length === 3) return loStartsWith(date, `${patterns[0]}-${patterns[1]}-${patterns[2]}`);
-      })
+      });
     }
+    if (isDebug && dataItems.length) console.log(
+      chalk.green('getTagValuesFromStores: OK!'),
+      `For pointID=${chalk.cyan(pointID)};`,
+      `pattern: '${chalk.cyan(pattern)}';`,
+      `dataItemsCount: ${chalk.cyan(dataItems.length)};`
+    );
 
   } else {
 
@@ -142,10 +148,10 @@ async function ch_m5SyncAcmYearReport(params, value) {
       const currentDate = moment().format('YYYYMMDD');
       outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
       dataItems = readJsonFileSync([appRoot, syncResultOutputPath, outputFile])['dataItems'];
-      if (true && dataItems.length) console.log(
+      if (isDebug && dataItems.length) console.log(
         chalk.green('runMetod.methodAcmDayReportsDataGet: OK!'),
-        'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath)),
-        'dataItemsCount:', chalk.cyan(dataItems.length)
+        `resultFile: '${chalk.cyan(getPathBasename(outputArguments.resultPath))}';`,
+        `dataItemsCount: ${chalk.cyan(dataItems.length)};`
       );
     } else {
       logger.error(
@@ -170,6 +176,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
   params.addressSpaceOption = groupTag;
   inputArgument = JSON.stringify(loOmit(params, ['myOpcuaClient', 'app']));
   inputArgument = { dataType: DataType.String, value: inputArgument };
+  
   inputArgument2 = { dataType: DataType.String, value: JSON.stringify(dataItems) };
   inputArguments = [];
   inputArguments.push([inputArgument, inputArgument2]);
@@ -184,12 +191,11 @@ async function ch_m5SyncAcmYearReport(params, value) {
   if (statusCode === 'Good') {
     outputArguments = JSON.parse(metodResult[0].outputArguments[0].value);// { resultPath, params, reportYear, reportDates }
     if (isDebug && outputArguments) inspector('runMetod.methodAcmYearReportUpdate.reportDates:', outputArguments.reportDates);
-    if (true && outputArguments) console.log(
+    if (isDebug && outputArguments) console.log(
       chalk.green('runMetod.methodAcmYearReportUpdate: OK!'),
-      `For pointID=${pointID}`,
-      'reportYear:', chalk.cyan(outputArguments.reportYear),
-      'reportDatesCount:', chalk.cyan(outputArguments.reportDates.length),
-      'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath))
+      `For pointID=${chalk.cyan(pointID)};`,
+      `reportDatesCount: ${chalk.cyan(outputArguments.reportDates.length)};`,
+      `resultFile: '${chalk.cyan(getPathBasename(outputArguments.resultPath))}';`
     );
 
     // Get path with posix sep
@@ -213,7 +219,8 @@ async function ch_m5SyncAcmYearReport(params, value) {
   }
   console.log(
     chalk.green('runCommand.ch_m5SyncAcmYearReport: OK!'),
-    `For pointID=${pointID} syncAcmYearReportCount:`, chalk.cyan(outputArguments.reportDates.length)
+    `For pointID=${chalk.cyan(pointID)};`, 
+    `syncAcmYearReportCount: ${chalk.cyan(outputArguments.reportDates.length)};`
   );
 }
 

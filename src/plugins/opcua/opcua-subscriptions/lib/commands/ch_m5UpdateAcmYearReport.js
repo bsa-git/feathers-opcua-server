@@ -46,6 +46,7 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
   if (isDebug && params) inspector('ch_m5UpdateAcmYearReport.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isDebug && dataValue) inspector('ch_m5UpdateAcmYearReport.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
+  const pointID = addressSpaceOption.getterParams.pointID;
 
   // Get group value
   let browseName = addressSpaceOption.browseName;
@@ -65,10 +66,9 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
     statusCode = result.statusCode;
     if (statusCode === 'Good') {
       if (true && result) console.log(
-        chalk.green('Update asm year report - OK!'),
-        'reportYear:', chalk.cyan(result.reportYear),
-        'reportDatesCount:', chalk.cyan(result.reportDates.length),
-        'resultFile:', chalk.cyan(getPathBasename(result.resultPath))
+        chalk.green('RunMetod.methodAcmYearReportUpdate - OK!'),
+        `pointID: ${chalk.cyan(pointID)};`,
+        `resultFile: '${chalk.cyan(getPathBasename(result.resultPath))}';`
       );
     } else {
       logger.error(
@@ -96,10 +96,9 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
     if (statusCode === 'Good') {
       outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, reportYear, reportDates }
       if (true && result) console.log(
-        chalk.green('Update asm year report - OK!'),
-        'reportYear:', chalk.cyan(outputArguments.reportYear),
-        'reportDatesCount:', chalk.cyan(outputArguments.reportDates.length),
-        'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath))
+        chalk.green('RunMetod.methodAcmYearReportUpdate - OK!'),
+        `pointID: ${chalk.cyan(pointID)};`,
+        `resultFile: '${chalk.cyan(getPathBasename(outputArguments.resultPath))}';`
       );
     } else {
       logger.error(
@@ -135,10 +134,9 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
     if (statusCode === 'Good') {
       outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, reportYear, reportDates }
       if (true && result) console.log(
-        chalk.green('Update asm year report - OK!'), 
-        'reportYear:', chalk.cyan(outputArguments.reportYear),
-        'reportDatesCount:', chalk.cyan(outputArguments.reportDates.length), 
-        'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath))
+        chalk.green('RunMetod.methodAcmYearReportUpdate - OK!'),
+        `pointID: ${chalk.cyan(pointID)};`,
+        `resultFile: '${chalk.cyan(getPathBasename(outputArguments.resultPath))}';`
       );
     } else {
       logger.error(

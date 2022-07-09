@@ -3,7 +3,7 @@ const loRound = require('lodash/round');
 const loForEach = require('lodash/forEach');
 const loIsFinite = require('lodash/isFinite');
 const loFindIndex = require('lodash/findIndex');
-const loCompact = require('lodash/compact');
+const loIsString = require('lodash/isString');
 
 const {
   inspector,
@@ -29,12 +29,18 @@ const excelColumns = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
  * @returns {Object[]}
  */
 const sortByStringField = function (items, name, isAscending = true) {
-  items.sort((x, y) => {
-    let textA = x[name].toLocaleUpperCase();
-    let textB = y[name].toLocaleUpperCase();
-    if (isAscending) return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-    if (!isAscending) return (textA < textB) ? 1 : (textA > textB) ? -1 : 0;
-  });
+  if (Array.isArray(items) && items.length) {
+    items.sort((x, y) => {
+      if (x[name] !== undefined && loIsString(x[name]) && y[name] !== undefined && loIsString(y[name])) {
+        let textA = x[name].toLocaleUpperCase();
+        let textB = y[name].toLocaleUpperCase();
+        if (isAscending) return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        if (!isAscending) return (textA < textB) ? 1 : (textA > textB) ? -1 : 0;
+      } else {
+        return 0;
+      }
+    });
+  }
   return items;
 };
 
@@ -47,10 +53,12 @@ const sortByStringField = function (items, name, isAscending = true) {
  * @returns {Object[]}
  */
 const sortByNumberField = function (items, name, isAscending = true) {
-  items.sort((x, y) => {
-    if (isAscending) return x[name] - y[name];
-    if (!isAscending) return y[name] - x[name];
-  });
+  if (Array.isArray(items) && items.length) {
+    items.sort((x, y) => {
+      if (isAscending) return x[name] - y[name];
+      if (!isAscending) return y[name] - x[name];
+    });
+  }
   return items;
 };
 
@@ -142,10 +150,10 @@ const convertArray2Object = function (array, keyName, valueName) {
  * 
  */
 const convertObject2Array = function (array) {
-  let rows = {} ;
+  let rows = {};
   loForEach(array, row => {
     loForEach(row, function (value, key) {
-      if(!rows[key]) rows[key] = [];
+      if (!rows[key]) rows[key] = [];
       value = loIsFinite(value) ? loRound(value, 3) : value;
       rows[key].push(value);
     });
