@@ -91,7 +91,7 @@
     },
     {
       "browseName": "CH_M52_ACM::ValueFromFile",
-      "displayName": "Значения из файла для CH_M52_ACM",
+      "displayName": "Values from file for CH_M52_ACM",
       "ownerName": "CH_M52_ACM",
       "type": "variable.simple",
       "dataType": "String",

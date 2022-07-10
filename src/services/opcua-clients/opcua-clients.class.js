@@ -20,7 +20,6 @@ const loAt = require('lodash/at');
 
 const debug = require('debug')('app:opcua-client.class');
 const isDebug = false;
-const isLog = false;
 
 /**
  * Opcua clients class
@@ -30,7 +29,6 @@ class OpcuaClients {
   setup(app, path) {
     this.app = app;
     this.opcuaClients = [];
-    // this.mixins = {};
   }
 
   async create(data, params) {

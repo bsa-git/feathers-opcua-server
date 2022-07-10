@@ -14,7 +14,6 @@ const loRound = require('lodash/round');
 
 const debug = require('debug')('app:opcua-addressspace-subscriptions');
 const isDebug = false;
-const isLog = false;
 
 /**
  * @method onChangedCH_M5Handler
@@ -23,13 +22,13 @@ const isLog = false;
  * @returns {void}
  */
 function onChangedCH_M5Handler(params, dataValue) {
-  if (isLog) inspector('subscriptions.onChangedCH_M5Handler.params:', params);
-  if (isLog) inspector('subscriptions.onChangedCH_M5Handler.dataValue:', dataValue);
+  if (isDebug) inspector('subscriptions.onChangedCH_M5Handler.params:', params);
+  if (isDebug) inspector('subscriptions.onChangedCH_M5Handler.dataValue:', dataValue);
   // inspector('subscriptions.onChangedCH_M5Handler.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
   const browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
-  if (isLog && dataValue) inspector('subscriptions.onChangedCH_M5Handler.formatDataValue:', dataValue);
+  if (isDebug && dataValue) inspector('subscriptions.onChangedCH_M5Handler.formatDataValue:', dataValue);
   // inspector('subscriptions.onChangedCH_M5Handler.formatDataValue:', dataValue);
   let value = dataValue.value.value;
   value = isNumber(value) ? loRound(value, 3) : `[${value}]`;
@@ -46,12 +45,12 @@ function onChangedCH_M5Handler(params, dataValue) {
  * @returns {void}
  */
 function onChangedRunCommand(params, dataValue) {
-  if (isLog && params) inspector('onChangedRunCommand.params:', params);
-  if (isLog && dataValue) inspector('onChangedRunCommand.dataValue:', dataValue);
+  if (isDebug && params) inspector('onChangedRunCommand.params:', params);
+  if (isDebug && dataValue) inspector('onChangedRunCommand.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
   const browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
-  if (isLog && dataValue) inspector('onChangedRunCommand.formatDataValue:', dataValue);
+  if (isDebug && dataValue) inspector('onChangedRunCommand.formatDataValue:', dataValue);
   let value = dataValue.value.value;
   
   const timestamp = dataValue.serverTimestamp;

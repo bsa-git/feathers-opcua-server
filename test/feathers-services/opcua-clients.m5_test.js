@@ -84,18 +84,18 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     removeFilesFromDirSync([appRoot, 'test/data/tmp/excel-helper']);
   });
 
-  it('#1. OPC-UA clients: registered the service', async () => {
+  it('#1: OPC-UA clients: registered the service', async () => {
     const service = await getClientService(app, id);
     assert.ok(service, 'OPC-UA clients: registered the service');
   });
 
-  it('#2. OPC-UA servers: registered the service', async () => {
+  it('#2: OPC-UA servers: registered the service', async () => {
     const service = await getServerService(app, id);
     assert.ok(service, 'OPC-UA servers: registered the service');
   });
 
   //===== SERVER CREATE/CLIENT CREATE =======//
-  it('#3. OPC-UA servers: created the service', async () => {
+  it('#3: OPC-UA servers: created the service', async () => {
     const service = await getServerService(app, id);
     // service create
     const opcuaServer = await service.create(srvData);
@@ -103,7 +103,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(opcuaServer, 'OPC-UA servers: created the service');
   });
 
-  it('#4. OPC-UA clients: created the service', async () => {
+  it('#4: OPC-UA clients: created the service', async () => {
     const service = await getClientService(app, id);
     // service create
     const opcuaClient = await service.create(clientData);
@@ -113,8 +113,9 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   //============== SESSION HISTORY VALUES ====================//
 
-  it('#5. OPC-UA clients: session history values for "CH_M51"', async () => {
+  it('#5: OPC-UA clients: session history values for "CH_M51"', async () => {
     let dataItems, readResult = null, accumulator = '', timestamp = '';
+    //----------------------------------------------------------
     const service = await getClientService(app, id);
 
     // service.getItemNodeId
@@ -161,7 +162,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     }
   });
 
-  it('#6. OPC-UA clients: session history values for "CH_M51" group', async () => {
+  it('#6: OPC-UA clients: session history values for "CH_M51" group', async () => {
     let dataItem, readResults = null;
     const service = await getClientService(app, id);
 
@@ -206,7 +207,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     }
   });
 
-  it('#7. OPC-UA clients: session history values for "CH_M52_ACM" group', async () => {
+  it('#7: OPC-UA clients: session history values for "CH_M52_ACM" group', async () => {
     let dataItem, readResults = null, engineeringUnits = '';
     //-------------------------------------------------------
     const service = await getClientService(app, id);
@@ -255,7 +256,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   //============== SESSION WRITE VALUE ====================//
 
-  it('#8. OPC-UA clients: session write single node value', async () => {
+  it('#8: OPC-UA clients: session write single node value', async () => {
     let readResult, statusCode = null;
     const service = await getClientService(app, id);
 
@@ -278,7 +279,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(readResult.length === arrayOfvalues.length, 'OPC-UA clients: session write single node value');
   });
 
-  it('#9. OPC-UA clients: session write single node value', async () => {
+  it('#9: OPC-UA clients: session write single node value', async () => {
     let readResult, statusCode = null;
     //-----------------------------------
     const service = await getClientService(app, id);
@@ -300,7 +301,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   //============== SESSION CALL METHOD ====================//
 
-  it('#10. OPC-UA clients: session call method "methodAcmYearTemplateCreate"', async () => {
+  it('#10: OPC-UA clients: session call method "methodAcmYearTemplateCreate"', async () => {
     let callResults = [];
     //------------------------------------------------
     const service = await getClientService(app, id);
@@ -334,7 +335,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   //============== START SUBSCRIPTION ====================//
 
-  it('#11. OPC-UA clients: subscription create', async () => {
+  it('#11: OPC-UA clients: subscription create', async () => {
     const service = await getClientService(app, id);
     // service.subscriptionCreate
     const result = await service.subscriptionCreate(id);
@@ -345,7 +346,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   //============== SUBSCRIPTION MONITOR ====================//
 
-  it('#12. OPC-UA clients: subscription monitor for "CH_M51::ValueFromFile" group', async () => {
+  it('#12: OPC-UA clients: subscription monitor for "CH_M51::ValueFromFile" group', async () => {
     const service = await getClientService(app, id);
     const srvCurrentState = await service.getSrvCurrentState(id);
     // Start subscriptionMonitor
@@ -363,7 +364,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(true, 'OPC-UA client subscription monitor');
   });
 
-  it('#13. OPC-UA clients: subscription monitor for "CH_M52_ACM::ValueFromFile" group', async () => {
+  it('#13: OPC-UA clients: subscription monitor for "CH_M52_ACM::ValueFromFile" group', async () => {
     const service = await getClientService(app, id);
     const srvCurrentState = await service.getSrvCurrentState(id);
     // Start subscriptionMonitor
@@ -373,7 +374,6 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     for (let index = 0; index < groups.length; index++) {
       const group = groups[index];
       const nodeIds = await service.getNodeIds(id, group);
-      // console.log('subscription monitor for "CH_M52_ACM::ValueFromFile" group.nodeIds', nodeIds);
       for (let index2 = 0; index2 < nodeIds.length; index2++) {
         const nodeId = nodeIds[index2];
         await service.subscriptionMonitor(id, 'onChangedCH_M5Handler', { nodeId });
@@ -382,7 +382,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(true, 'OPC-UA client subscription monitor');
   });
 
-  it('#14. OPC-UA clients: subscription monitor for "CH_M5::RunCommand"', async () => {
+  it('#14: OPC-UA clients: subscription monitor for "CH_M5::RunCommand"', async () => {
     const service = await getClientService(app, id);
     const srvCurrentState = await service.getSrvCurrentState(id);
     // Start subscriptionMonitor
@@ -398,7 +398,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   //============== SESSION WRITE VALUE ====================//
 
-  it('#15. OPC-UA clients: session write single node value', async () => {
+  it('#15: OPC-UA clients: session write single node value', async () => {
     let readResult, statusCode = null;
     //-----------------------------------
     const service = await getClientService(app, id);
@@ -420,7 +420,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   //============== SUBSCRIPTION TERMINATE ====================//
 
-  it('#16. OPC-UA clients: subscription terminate', async () => {
+  it('#16: OPC-UA clients: subscription terminate', async () => {
     const service = await getClientService(app, id);
     await pause(1000);
     // service.subscriptionTerminate
@@ -433,21 +433,21 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   //===== SESSION CLOSE/CLIENT DISCONNECT/SERVER SHUTDOWN =====//
 
-  it('#17. OPC-UA clients: session close the service', async () => {
+  it('#17: OPC-UA clients: session close the service', async () => {
     const service = await getClientService(app, id);
     const opcuaClient = await service.sessionClose(id);
     if (isLog) inspector('Session close the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
   });
 
-  it('#18. OPC-UA clients: disconnect the service', async () => {
+  it('#18: OPC-UA clients: disconnect the service', async () => {
     const service = await getClientService(app, id);
     const opcuaClient = await service.opcuaClientDisconnect(id);
     if (isLog) inspector('Session close the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
   });
 
-  it('#19. OPC-UA servers: shutdown the service', async () => {
+  it('#19: OPC-UA servers: shutdown the service', async () => {
     const service = await getServerService(app, id);
     // const opcuaServer = await service.opcuaServerShutdown(id, 1500);
     const opcuaServer = await service.opcuaServerShutdown(id);
