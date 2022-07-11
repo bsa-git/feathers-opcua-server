@@ -51,7 +51,6 @@ describe('<<=== ScriptOperations: (#2-scriptCallOpcuaMetod) ===>>', () => {
         opt: {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           point: 2,
-          isSaveOutputFile: true,
           pattern: '/**/*.xls'// e.g. '/**/*.xls'|'/**/2022-01/*.xls'|/**/DayHist01_14F120_01022022_0000.xls
         }
       };

@@ -29,9 +29,6 @@
       "password": "OPCUA_ADMIN_PASS"
     },
     "paths": {
-      "base-options": [
-        "/src/api/opcua/ua-cherkassy-azot-m5_prod1"
-      ],
       "options": "/src/api/opcua/ua-cherkassy-azot_test2/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",

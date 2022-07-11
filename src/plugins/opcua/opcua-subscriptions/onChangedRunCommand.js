@@ -48,7 +48,7 @@ async function onChangedRunCommand(params, dataValue) {
     if (isDebug && startTime) console.log('onChangedRunCommand.startTime:', startTime, 'browseName:', browseName);
     
     if (isDebug && params) inspector('onChangedRunCommand.params:', loOmit(params, ['myOpcuaClient', 'app']));
-    if (isDebug && dataValue) inspector('onChangedRunCommand.dataValue:', dataValue);
+    if (true && dataValue) inspector('onChangedRunCommand.dataValue:', dataValue);
     const addressSpaceOption = params.addressSpaceOption;
 
     const browseName = addressSpaceOption.browseName;

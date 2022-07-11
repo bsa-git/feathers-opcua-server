@@ -26,18 +26,20 @@ const isDebug = false;
  */
 async function ch_m5CreateAcmYearTemplate(params, value) {
   let result, inputArgument = {}, inputArguments = [];
-  let statusCode, outputArguments;
+  let pointID = 0, statusCode, outputArguments;
   //---------------------------------------------------
 
   if (isDebug && params) inspector('ch_m5CreateAcmYearTemplate.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isDebug && value) inspector('ch_m5CreateAcmYearTemplate.value:', value);
 
   const opt = value.opt;
-  const opcua = value.opcua;
 
   // Set input argument
   if (opt.test) inputArgument.isTest = opt.test;
-  if (opt.point) inputArgument.pointID = opt.point;
+  if (opt.point) {
+    pointID = opt.point;
+    inputArgument.pointID = opt.point;
+  }
   if (opt.period) inputArgument.period = opt.period;
   if (opt.year) inputArgument.startYear = opt.year;
 
@@ -54,9 +56,16 @@ async function ch_m5CreateAcmYearTemplate(params, value) {
   if (isDebug && result) inspector('ch_m5CreateAcmYearTemplate.result:', result);
 
   statusCode = result[0].statusCode.name;
-  if(statusCode === 'Good') {
+  if (statusCode === 'Good') {
     outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, hours, days }
-    if(true && result) console.log(chalk.green('runCommand.ch_m5CreateAcmYearTemplate:'), chalk.cyan(statusCode), 'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath)));
+    const resultFile = getPathBasename(outputArguments.resultPath);
+    if (true && result) console.log(
+      chalk.green('runCommand.ch_m5CreateAcmYearTemplate - OK!'),
+      `For pointID=${chalk.cyan(pointID)};`,
+      `hours: ${chalk.cyan(outputArguments.hours)};`,
+      `days: ${chalk.cyan(outputArguments.days)};`,
+      `resultFile: '${chalk.cyan(resultFile)}';`
+    );
   } else {
     console.log(chalk.green('runCommand.ch_m5CreateAcmYearTemplate:'), chalk.cyan(statusCode));
   }

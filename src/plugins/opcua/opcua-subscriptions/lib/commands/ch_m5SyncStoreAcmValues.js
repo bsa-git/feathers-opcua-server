@@ -42,7 +42,6 @@ async function ch_m5SyncStoreAcmValues(params, value) {
   if (isDebug && value) inspector('ch_m5SyncStoreAcmValues.value:', value);
 
   const opt = value.opt;
-  const opcua = value.opcua;
 
   // Set input argument
   if (opt.point) inputArgument.pointID = opt.point;

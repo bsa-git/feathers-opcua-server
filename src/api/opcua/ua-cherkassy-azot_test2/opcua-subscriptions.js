@@ -6,8 +6,8 @@ const {
 } = require('../../../plugins');
 
 const {
-  logger
-} = require('../../../logger');
+  onChangedRunCommand
+} = require('../../../plugins/opcua/opcua-subscriptions');
 
 const chalk = require('chalk');
 const loRound = require('lodash/round');
@@ -39,18 +39,18 @@ function onChangedCH_M5Handler(params, dataValue) {
 }
 
 /**
- * @method onChangedRunCommand
+ * @method onChangedRunCommandTest
  * @param {Object} params 
  * @param {Object} dataValue
  * @returns {void}
  */
-function onChangedRunCommand(params, dataValue) {
-  if (isDebug && params) inspector('onChangedRunCommand.params:', params);
-  if (isDebug && dataValue) inspector('onChangedRunCommand.dataValue:', dataValue);
+function onChangedRunCommandTest(params, dataValue) {
+  if (isDebug && params) inspector('onChangedRunCommandTest.params:', params);
+  if (isDebug && dataValue) inspector('onChangedRunCommandTest.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
   const browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
-  if (isDebug && dataValue) inspector('onChangedRunCommand.formatDataValue:', dataValue);
+  if (isDebug && dataValue) inspector('onChangedRunCommandTest.formatDataValue:', dataValue);
   let value = dataValue.value.value;
   
   const timestamp = dataValue.serverTimestamp;
@@ -59,5 +59,6 @@ function onChangedRunCommand(params, dataValue) {
 
 module.exports = {
   onChangedCH_M5Handler,
+  onChangedRunCommandTest,
   onChangedRunCommand
 };
