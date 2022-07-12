@@ -47,17 +47,9 @@ const sessionWrite = async (params, value) => {
   }];
 
   // Session write data
-  const statusCode = await client.sessionWrite(browseName, nodeToWrite);
-  if (isDebug && statusCode) console.log('sessionWrite.statusCode:', chalk.greenBright(statusCode));
-  // Session read data
-  let readValue = await client.sessionRead(browseName, attributeIds);
-  // Format simple DataValue
-  readValue = formatSimpleDataValue(readValue);
-  if (isDebug && readValue.length) inspector('sessionWrite.formatSimpleDataValue.readValue:', readValue);
-  if (nodeToWrite[0].value.value.value !== readValue[0].value.value) {
-    throw new Error(`Write error. Written value "${nodeToWrite.value.value}" does not match read value "${readValue[0].value.value}"`);
-  }
-  return readValue;
+  const statusCodes = await client.sessionWrite(browseName, nodeToWrite);
+  if (isDebug && statusCodes.length) console.log('sessionWrite.statusCode:', chalk.greenBright(statusCodes[0]['name']));
+  return statusCodes;
 };
 
 module.exports = sessionWrite;

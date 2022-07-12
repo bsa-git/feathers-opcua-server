@@ -5,9 +5,9 @@ const {
   formatDataValue
 } = require('../../../plugins');
 
-const {
-  onChangedRunCommand
-} = require('../../../plugins/opcua/opcua-subscriptions');
+// const {
+//   onChangedRunCommand
+// } = require('../../../plugins/opcua/opcua-subscriptions');
 
 const chalk = require('chalk');
 const loRound = require('lodash/round');
@@ -35,7 +35,7 @@ function onChangedCH_M5Handler(params, dataValue) {
   let engineeringUnits = dataValue.valueParams.engineeringUnits;
   engineeringUnits = engineeringUnits ? `(${engineeringUnits})` : '';
   const timestamp = dataValue.serverTimestamp;
-  console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`${value} ${engineeringUnits}`), 'Timestamp=', chalk.cyan(`${timestamp}`));
+  console.log(chalk.green(`subscriptionValue(${browseName}):`), chalk.cyan(`${value} ${engineeringUnits}`), 'Timestamp=', chalk.cyan(`${timestamp}`));
 }
 
 /**
@@ -54,11 +54,10 @@ function onChangedRunCommandTest(params, dataValue) {
   let value = dataValue.value.value;
   
   const timestamp = dataValue.serverTimestamp;
-  console.log(chalk.green(`subscriptionValue.${browseName}:`), chalk.cyan(`'${value}'`), 'Timestamp=', chalk.cyan(`${timestamp}`));
+  console.log(chalk.green(`subscriptionValue(${browseName}):`), chalk.cyan(`'${value}'`), 'Timestamp=', chalk.cyan(`${timestamp}`));
 }
 
 module.exports = {
   onChangedCH_M5Handler,
   onChangedRunCommandTest,
-  onChangedRunCommand
 };

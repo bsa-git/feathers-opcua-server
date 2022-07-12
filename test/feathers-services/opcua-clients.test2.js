@@ -9,10 +9,15 @@ const {
 
 const {
   getOpcuaTags,
+  getOpcuaConfigOptions,
   getServerService,
   getClientService,
   getTimestamp
 } = require('../../src/plugins/opcua/opcua-helper');
+
+const {
+  saveOpcuaTags,
+} = require('../../src/plugins/db-helpers');
 
 const {
   appRoot,
@@ -77,7 +82,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   after(function (done) {
     stopListenPort(done);
-
+    // Remove files
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m51']);
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m52']);
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m5acm_1']);
@@ -188,7 +193,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
               readResult.historyData.dataValues.forEach(dataValue => {
                 if (dataValue.statusCode.name === 'Good') {
                   dataItem = dataValue.value.value;
-                  console.log(chalk.green(`historyValue.${readResult.browseName}:`), chalk.cyan(`${dataItem} (${readResult.valueParams.engineeringUnits}); Timestamp=${dataValue.sourceTimestamp}`));
+                  console.log(chalk.green(`historyValue(${readResult.browseName}):`), chalk.cyan(`${dataItem} (${readResult.valueParams.engineeringUnits}); Timestamp=${dataValue.sourceTimestamp}`));
                   assert.ok(true, 'OPC-UA clients: session history values for "CH_M51" group');
                 } else {
                   assert.ok(false, 'OPC-UA clients: session history values for "CH_M51" group');
@@ -234,7 +239,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
                 if (dataValue.statusCode.name === 'Good') {
                   dataItem = dataValue.value.value;
                   engineeringUnits = readResult.valueParams.engineeringUnits ? `(${readResult.valueParams.engineeringUnits});` : '';
-                  console.log(chalk.green(`historyValue.${readResult.browseName}:`), chalk.cyan(`[${dataItem}] ${engineeringUnits} Timestamp=${dataValue.sourceTimestamp}`));
+                  console.log(chalk.green(`historyValue(${readResult.browseName}):`), chalk.cyan(`[${dataItem}] ${engineeringUnits} Timestamp=${dataValue.sourceTimestamp}`));
                   assert.ok(true, 'OPC-UA clients: session history values for "CH_M52_ACM" group');
                 } else {
                   assert.ok(false, 'OPC-UA clients: session history values for "CH_M52_ACM" group');
@@ -253,54 +258,10 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     }
   });
 
-  //============== SESSION WRITE VALUE ====================//
-
-  it('#8.1: OPC-UA clients: session write single node value', async () => {
-    let readResult, statusCode = null;
-    const service = await getClientService(app, id);
-
-    const arrayOfvalues = new Uint16Array([2, 23, 23, 12, 24, 3, 25, 3, 26, 3, 27, 3, 28, 1, 43690, 1, 1261, 0, 0, 0, 0, 0, 0, 0]);
-
-    // service.sessionWriteSingleNode
-    const dataForWrite = {
-      dataType: DataType.UInt16,
-      arrayType: VariantArrayType.Array,
-      value: arrayOfvalues,
-    };
-    statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::VariableForWrite', dataForWrite);
-    console.log(chalk.green('CH_M5::VariableForWrite.statusCode:'), chalk.cyan(statusCode.name));
-
-    // service.sessionRead
-    readResult = await service.sessionRead(id, 'CH_M5::VariableForWrite');
-    readResult = readResult[0].value.value;
-    console.log(chalk.green('CH_M5::VariableForWrite.readResult:'), chalk.cyan(`[${readResult}]`));
-
-    assert.ok(readResult.length === arrayOfvalues.length, 'OPC-UA clients: session write single node value');
-  });
-
-  it('#8.2: OPC-UA clients: session write single node value', async () => {
-    let readResult, statusCode = null;
-    //-----------------------------------
-    const service = await getClientService(app, id);
-    // service.sessionWriteSingleNode
-    const dataForWrite = {
-      dataType: DataType.String,
-      value: 'StartScript',
-    };
-    statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommand', dataForWrite);
-    console.log(chalk.green('CH_M5::RunCommand.statusCode:'), chalk.cyan(statusCode.name));
-
-    // service.sessionRead
-    readResult = await service.sessionRead(id, 'CH_M5::RunCommand');
-    readResult = readResult[0].value.value;
-    console.log(chalk.green('CH_M5::RunCommand.readResult:'), chalk.cyan(`'${readResult}'`));
-
-    assert.ok(readResult === dataForWrite.value, 'OPC-UA clients: session write single node value');
-  });
 
   //============== SESSION CALL METHOD ====================//
 
-  it('#9.1: OPC-UA clients: session call method "methodAcmYearTemplateCreate"', async () => {
+  it('#8.1: OPC-UA clients: session call method "methodAcmYearTemplateCreate"', async () => {
     let statusCode = '', outputArguments;
     //------------------------------------------------
     const service = await getClientService(app, id);
@@ -344,7 +305,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(statusCode === 'Good', 'OPC-UA clients: session call method "methodAcmYearTemplateCreate"');
   });
 
-  it('#9.2: OPC-UA clients: session call method "methodAcmDayReportsDataGet"', async () => {
+  it('#8.2: OPC-UA clients: session call method "methodAcmDayReportsDataGet"', async () => {
     let statusCode = '', outputArguments;
     //------------------------------------------------
     const service = await getClientService(app, id);
@@ -377,7 +338,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(statusCode === 'Good', 'OPC-UA clients: session call method "methodAcmDayReportsDataGet"');
   });
 
-  it('#9.3: OPC-UA clients: session call method "methodAcmYearReportUpdate"', async () => {
+  it('#8.3: OPC-UA clients: session call method "methodAcmYearReportUpdate"', async () => {
     let statusCode = '', inputArgument, inputArgument2, inputArguments, outputArguments;
     let callResults;
     //------------------------------------------------------------------------------------
@@ -442,36 +403,9 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     }
   });
 
-  //============== RUN COMMAND ====================//
-
-  it('#10.1: OPC-UA clients: Run command - ch_m5CreateAcmYearTemplate', async () => {
-    let statusCode = null;
-    //-----------------------------------
-    const service = await getClientService(app, id);
-    
-    // Get data for run command
-    const options = {
-      command: 'ch_m5CreateAcmYearTemplate',
-      opt: {
-        points: [2],
-        test: true,
-        period: [1, 'months'],
-        year: 2020
-      }
-    };
-    const dataForRunCommand = {
-      dataType: DataType.String,
-      value: JSON.stringify(options),
-    };
-    statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommand', dataForRunCommand);
-    statusCode = statusCode.name;
-    console.log(chalk.green('OPC-UA clients: RunCommand.ch_m5CreateAcmYearTemplate.statusCode:'), chalk.cyan(statusCode));
-    assert.ok(statusCode === 'Good', 'OPC-UA clients: Run command - ch_m5CreateAcmYearTemplate');
-  });
-
   //============== START SUBSCRIPTION ====================//
 
-  it('#11: OPC-UA clients: subscription create', async () => {
+  it('#9: OPC-UA clients: subscription create', async () => {
     const service = await getClientService(app, id);
     // service.subscriptionCreate
     const result = await service.subscriptionCreate(id);
@@ -482,7 +416,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   //============== SUBSCRIPTION MONITOR ====================//
 
-  it('#12: OPC-UA clients: subscription monitor for "CH_M51::ValueFromFile" group', async () => {
+  it('#10.1: OPC-UA clients: subscription monitor for "CH_M51::ValueFromFile" group', async () => {
     const service = await getClientService(app, id);
     const srvCurrentState = await service.getSrvCurrentState(id);
     // Start subscriptionMonitor
@@ -500,7 +434,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(true, 'OPC-UA client subscription monitor');
   });
 
-  it('#13: OPC-UA clients: subscription monitor for "CH_M52_ACM::ValueFromFile" group', async () => {
+  it('#10.2: OPC-UA clients: subscription monitor for "CH_M52_ACM::ValueFromFile" group', async () => {
     const service = await getClientService(app, id);
     const srvCurrentState = await service.getSrvCurrentState(id);
     // Start subscriptionMonitor
@@ -518,7 +452,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(true, 'OPC-UA client subscription monitor');
   });
 
-  it('#14: OPC-UA clients: subscription monitor for "CH_M5::RunCommandTest"', async () => {
+  it('#10.3: OPC-UA clients: subscription monitor for "CH_M5::RunCommandTest"', async () => {
     const service = await getClientService(app, id);
     const srvCurrentState = await service.getSrvCurrentState(id);
     // Start subscriptionMonitor
@@ -532,9 +466,66 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(true, 'OPC-UA client subscription monitor');
   });
 
+  it('#10.4: OPC-UA clients: subscription monitor for "CH_M5::RunCommand"', async () => {
+    const service = await getClientService(app, id);
+    const srvCurrentState = await service.getSrvCurrentState(id);
+    // Start subscriptionMonitor
+    let variables = srvCurrentState.paramsAddressSpace.variables;
+    const variable = variables.find(v => v.browseName === 'CH_M5::RunCommand');
+    if (isDebug && variable) inspector('subscription monitor for "CH_M5::RunCommand".variable:', variable);
+    if (variable) {
+      const nodeId = variable.nodeId;
+      await service.subscriptionMonitor(id, 'onChangedRunCommand', { nodeId });
+    }
+    assert.ok(true, 'OPC-UA client subscription monitor');
+  });
+
   //============== SESSION WRITE VALUE ====================//
 
-  it('#15: OPC-UA clients: session write single node value', async () => {
+  it('#11.1: OPC-UA clients: session write single node value', async () => {
+    let readResult, statusCode = null;
+    const service = await getClientService(app, id);
+
+    const arrayOfvalues = new Uint16Array([2, 23, 23, 12, 24, 3, 25, 3, 26, 3, 27, 3, 28, 1, 43690, 1, 1261, 0, 0, 0, 0, 0, 0, 0]);
+
+    // service.sessionWriteSingleNode
+    const dataForWrite = {
+      dataType: DataType.UInt16,
+      arrayType: VariantArrayType.Array,
+      value: arrayOfvalues,
+    };
+    statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::VariableForWrite', dataForWrite);
+    console.log(chalk.green('sessionWriteSingleNode(CH_M5::VariableForWrite).statusCode:'), chalk.cyan(statusCode.name));
+
+    // service.sessionRead
+    readResult = await service.sessionRead(id, 'CH_M5::VariableForWrite');
+    readResult = readResult[0].value.value;
+    console.log(chalk.green('sessionRead(CH_M5::VariableForWrite).readResult:'), chalk.cyan(`[${readResult}]`));
+
+    assert.ok(readResult.length === arrayOfvalues.length, 'OPC-UA clients: session write single node value');
+  });
+
+  it('#11.2: OPC-UA clients: session write single node value', async () => {
+    let readResult, statusCode = null;
+    //-----------------------------------
+    const service = await getClientService(app, id);
+    // service.sessionWriteSingleNode
+    const dataForWrite = {
+      dataType: DataType.String,
+      value: 'StartScript',
+    };
+    statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommandTest', dataForWrite);
+    console.log(chalk.green('sessionWriteSingleNode(CH_M5::RunCommandTest).statusCode:'), chalk.cyan(statusCode.name));
+
+    // service.sessionRead
+    readResult = await service.sessionRead(id, 'CH_M5::RunCommandTest');
+    readResult = readResult[0].value.value;
+    console.log(chalk.green('sessionRead(CH_M5::RunCommandTest).readResult:'), chalk.cyan(`'${readResult}'`));
+
+    assert.ok(readResult === dataForWrite.value, 'OPC-UA clients: session write single node value');
+  });
+
+  it('#11.3: OPC-UA clients: session write single node value', async () => {
     let readResult, statusCode = null;
     //-----------------------------------
     const service = await getClientService(app, id);
@@ -543,20 +534,106 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       dataType: DataType.String,
       value: 'StopScript',
     };
-    statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommand', dataForWrite);
-    console.log(chalk.green('CH_M5::RunCommand.statusCode:'), chalk.cyan(statusCode.name));
+    statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommandTest', dataForWrite);
+    console.log(chalk.green('sessionWriteSingleNode(CH_M5::RunCommandTest).statusCode:'), chalk.cyan(statusCode.name));
 
     // service.sessionRead
-    readResult = await service.sessionRead(id, 'CH_M5::RunCommand');
+    readResult = await service.sessionRead(id, 'CH_M5::RunCommandTest');
     readResult = readResult[0].value.value;
-    console.log(chalk.green('CH_M5::RunCommand.readResult:'), chalk.cyan(`'${readResult}'`));
+    console.log(chalk.green('sessionRead(CH_M5::RunCommandTest).readResult:'), chalk.cyan(`'${readResult}'`));
 
     assert.ok(readResult === dataForWrite.value, 'OPC-UA clients: session write single node value');
   });
 
+  //============== RUN COMMAND ====================//
+
+  it('#12.0: Data base: Save opcua tags', async () => {
+    // Get opcua tags 
+    const opcuaTags = getOpcuaConfigOptions(id);
+    // Save opcua tags to local DB
+    let saveResult = await saveOpcuaTags(app, opcuaTags, false);
+    if(true && saveResult) inspector('Data base: Save opcua tags:', saveResult);
+
+    assert.ok(saveResult.total, 'Data base: Save opcua tags');
+  });
+
+  it('#12.1: OPC-UA clients: RunCommand(ch_m5CreateAcmYearTemplate)', async () => {
+    let statusCode = null;
+    //-----------------------------------
+    const service = await getClientService(app, id);
+
+    // Get data for run command
+    const options = {
+      command: 'ch_m5CreateAcmYearTemplate',
+      opt: {
+        points: [2],
+        test: true,
+        period: [1, 'months'],
+        year: 2020
+      }
+    };
+    const dataForRunCommand = {
+      dataType: DataType.String,
+      value: JSON.stringify(options),
+    };
+    statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommand', dataForRunCommand);
+    statusCode = statusCode.name;
+    console.log(chalk.green('RunCommand(ch_m5CreateAcmYearTemplate).statusCode:'), chalk.cyan(statusCode));
+    assert.ok(statusCode === 'Good', 'OPC-UA clients: RunCommand(ch_m5CreateAcmYearTemplate)');
+    await pause(2000);
+  });
+
+  it('#12.2: OPC-UA clients: RunCommand(ch_m5SyncStoreAcmValues)', async () => {
+    let statusCode = null;
+    //-----------------------------------
+    const service = await getClientService(app, id);
+
+    // Get data for run command
+    const options = {
+      command: 'ch_m5SyncStoreAcmValues',
+      opt: {
+        points: [2],
+        pattern: '/**/*.xls'// e.g. '/**/*.xls'|'/**/2022-01/*.xls'|/**/DayHist01_14F120_01022022_0000.xls
+      }
+    };
+    const dataForRunCommand = {
+      dataType: DataType.String,
+      value: JSON.stringify(options),
+    };
+    statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommand', dataForRunCommand);
+    statusCode = statusCode.name;
+    console.log(chalk.green('RunCommand(ch_m5SyncStoreAcmValues).statusCode:'), chalk.cyan(statusCode));
+    assert.ok(statusCode === 'Good', 'OPC-UA clients: RunCommand(ch_m5SyncStoreAcmValues)');
+    await pause(2000);
+  });
+
+  it('#12.3: OPC-UA clients: RunCommand(ch_m5SyncAcmYearReport)', async () => {
+    let statusCode = null;
+    //-----------------------------------
+    const service = await getClientService(app, id);
+
+    // Get data for run command
+    const options = {
+      command: 'ch_m5SyncAcmYearReport',
+      opt: {
+        points: [2],
+        pattern: '/**/*.xls', // e.g. '/**/*.xls'|'/**/2022-01/*.xls'|/**/DayHist01_14F120_01022022_0000.xls
+        syncYearReportFromStore: false
+      }
+    };
+    const dataForRunCommand = {
+      dataType: DataType.String,
+      value: JSON.stringify(options),
+    };
+    statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommand', dataForRunCommand);
+    statusCode = statusCode.name;
+    console.log(chalk.green('RunCommand(ch_m5SyncAcmYearReport).statusCode:'), chalk.cyan(statusCode));
+    assert.ok(statusCode === 'Good', 'OPC-UA clients: RunCommand(ch_m5SyncAcmYearReport)');
+  });
+
   //============== SUBSCRIPTION TERMINATE ====================//
 
-  it('#16: OPC-UA clients: subscription terminate', async () => {
+  it('#13: OPC-UA clients: subscription terminate', async () => {
     const service = await getClientService(app, id);
     await pause(1000);
     // service.subscriptionTerminate
@@ -569,21 +646,21 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   //===== SESSION CLOSE/CLIENT DISCONNECT/SERVER SHUTDOWN =====//
 
-  it('#17: OPC-UA clients: session close the service', async () => {
+  it('#14: OPC-UA clients: session close the service', async () => {
     const service = await getClientService(app, id);
     const opcuaClient = await service.sessionClose(id);
     if (isDebug) inspector('Session close the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
   });
 
-  it('#18: OPC-UA clients: disconnect the service', async () => {
+  it('#15: OPC-UA clients: disconnect the service', async () => {
     const service = await getClientService(app, id);
     const opcuaClient = await service.opcuaClientDisconnect(id);
     if (isDebug) inspector('Session close the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: session close the service');
   });
 
-  it('#19: OPC-UA servers: shutdown the service', async () => {
+  it('#16: OPC-UA servers: shutdown the service', async () => {
     const service = await getServerService(app, id);
     // const opcuaServer = await service.opcuaServerShutdown(id, 1500);
     const opcuaServer = await service.opcuaServerShutdown(id);

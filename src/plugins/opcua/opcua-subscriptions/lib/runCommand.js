@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const loOmit = require('lodash/omit');
+const loIsString = require('lodash/isString');
 const chalk = require('chalk');
 
 const {

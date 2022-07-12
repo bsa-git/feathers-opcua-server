@@ -85,6 +85,11 @@ async function ch_m5SyncAcmYearReport(params, value) {
     const baseParams = require(join(...paramFullsPath));
     reportParams = Object.assign({}, baseParams, reportParams);
   }
+  // Set syncYearReportFromStore prop
+  if(value.opt.syncYearReportFromStore !== undefined){
+    reportParams.syncYearReportFromStore = value.opt.syncYearReportFromStore;
+  }
+
   if (isDebug && reportParams) inspector('ch_m5SyncAcmYearReport.reportParams:', reportParams);
 
 
@@ -106,7 +111,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
     const storeBrowseNames = opcuaTags.filter(t => t.ownerGroup === groupBrowseName).map(t => t.browseName);
     dataItems = await getTagValuesFromStores(app, storeBrowseNames);
     // Get filter dataItems
-    if (pattern && isValidDateTime(pattern)) {
+    if (dataItems.length && pattern && isValidDateTime(pattern)) {
       const patterns = pattern.split('-');
       dataItems = dataItems.filter(item => {
         const date = item['!value']['dateTime'];
@@ -149,7 +154,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
       outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
       dataItems = readJsonFileSync([appRoot, syncResultOutputPath, outputFile])['dataItems'];
       if (isDebug && dataItems.length) console.log(
-        chalk.green('runMetod.methodAcmDayReportsDataGet: OK!'),
+        chalk.green('sessionCallMethod(methodAcmDayReportsDataGet): OK!'),
         `resultFile: '${chalk.cyan(getPathBasename(outputArguments.resultPath))}';`,
         `dataItemsCount: ${chalk.cyan(dataItems.length)};`
       );
@@ -166,7 +171,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
   }
 
   if (!dataItems.length) {
-    logger.error(`runCommand.ch_m5SyncAcmYearReport - ${chalk.red('ERROR!')} dataItems is empty!`);
+    logger.error(`runCommand(ch_m5SyncAcmYearReport): ${chalk.red('ERROR!')} dataItems is empty!`);
     return;
   }
 
@@ -176,7 +181,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
   params.addressSpaceOption = groupTag;
   inputArgument = JSON.stringify(loOmit(params, ['myOpcuaClient', 'app']));
   inputArgument = { dataType: DataType.String, value: inputArgument };
-  
+
   inputArgument2 = { dataType: DataType.String, value: JSON.stringify(dataItems) };
   inputArguments = [];
   inputArguments.push([inputArgument, inputArgument2]);
@@ -192,7 +197,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
     outputArguments = JSON.parse(metodResult[0].outputArguments[0].value);// { resultPath, params, reportYear, reportDates }
     if (isDebug && outputArguments) inspector('runMetod.methodAcmYearReportUpdate.reportDates:', outputArguments.reportDates);
     if (isDebug && outputArguments) console.log(
-      chalk.green('runMetod.methodAcmYearReportUpdate: OK!'),
+      chalk.green('sessionCallMethod(methodAcmYearReportUpdate): OK!'),
       `For pointID=${chalk.cyan(pointID)};`,
       `reportDatesCount: ${chalk.cyan(outputArguments.reportDates.length)};`,
       `resultFile: '${chalk.cyan(getPathBasename(outputArguments.resultPath))}';`
@@ -217,9 +222,9 @@ async function ch_m5SyncAcmYearReport(params, value) {
     inspector('runMetod.methodAcmDayReportsDataGet.ERROR.metodResult:', metodResult);
     return;
   }
-  console.log(
-    chalk.green('runCommand.ch_m5SyncAcmYearReport: OK!'),
-    `For pointID=${chalk.cyan(pointID)};`, 
+  if (isDebug && outputArguments) console.log(
+    chalk.green('runCommand(ch_m5SyncAcmYearReport): OK!'),
+    `For pointID=${chalk.cyan(pointID)};`,
     `syncAcmYearReportCount: ${chalk.cyan(outputArguments.reportDates.length)};`
   );
 }

@@ -62,8 +62,8 @@ async function ch_m5SyncStoreAcmValues(params, value) {
   statusCode = result[0].statusCode.name;
   if (statusCode === 'Good') {
     outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params }
-    console.log(
-      chalk.green('runMetod.methodAcmDayReportsDataGet: OK!'),
+    if (isDebug && outputArguments) console.log(
+      chalk.green('sessionCallMethod(methodAcmDayReportsDataGet): OK!'),
       'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath))
     );
     // Get params
@@ -84,9 +84,10 @@ async function ch_m5SyncStoreAcmValues(params, value) {
       savedValuesCount += savedValues.length;
       if (isDebug && savedValues.length) inspector('runCommand.ch_m5SyncStoreAcmValues.savedValues:', savedValues);
     }
-    console.log(
-      chalk.green('runCommand.ch_m5SyncStoreAcmValues: OK!'),
-      `For pointID=${pointID} syncStoreCount:`, chalk.cyan(savedValuesCount)
+    if (isDebug && outputArguments) console.log(
+      chalk.green('runCommand(ch_m5SyncStoreAcmValues): OK!'),
+      `For pointID=${chalk.cyan(pointID)};`,
+      `syncStoreCount: ${chalk.cyan(savedValuesCount)};`
     );
     // Remove files from dir
     removeFilesFromDirSync([appRoot, syncResultOutputPath]);

@@ -455,7 +455,7 @@ const saveStoreOpcuaGroupValue = async function (app, groupBrowseName, value, ch
         savedValues.push(savedValue);
 
         // Save opcua values to remote store
-        if (isRemoteOpcuaToDB() && !changeStore) {
+        if (isRemoteOpcuaToDB() && !changeStore && !AuthServer.isTest()) {
           const remoteDbUrl = getOpcuaRemoteDbUrl();
           const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
           if (appRestClient) {

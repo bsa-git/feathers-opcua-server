@@ -24,7 +24,7 @@ const isLog = false;
  * @returns {void}
  */
 async function showInfoForHandler(params, dataValue) {
-  let valueKeys = 0;
+  let valueKeys = 0, command = '';
   //---------------------
   if (isLog && params) inspector('showInfoForHandler.params:', loOmit(params, ['myOpcuaClient', 'app']));
   if (isLog && dataValue) inspector('showInfoForHandler.dataValue:', dataValue);
@@ -42,16 +42,28 @@ async function showInfoForHandler(params, dataValue) {
     if (Object.keys(value).includes('!value')) {
       valueKeys = valueKeys - 1;
     }
+    if (Object.keys(value).includes('command')) {
+      command = value['command'];
+    }
   } catch (error) {
     value = dataValue.value.value;
   }
 
-  console.log('<=', 
-    chalk.magentaBright(`ID ="${params.id}"; `), 
-    chalk.greenBright(`Name ="${browseName}"; `), 
-    chalk.whiteBright(`Values =(${valueKeys? valueKeys : value});`), 
-    chalk.cyanBright(`TM =${timestamp}`), 
-    '=>');
+  if (command) {
+    console.log('<=',
+      chalk.magentaBright(`ID ="${params.id}"; `),
+      `browseName: '${chalk.greenBright(browseName)}';`,
+      `Command: '${chalk.greenBright(command)}';`,
+      `TM: '${chalk.cyanBright(timestamp)}';`,
+      '=>');
+  } else {
+    console.log('<=',
+      chalk.magentaBright(`ID ="${params.id}"; `),
+      `browseName: '${chalk.greenBright(browseName)}';`,
+      `Values: (${chalk.cyanBright(valueKeys ? valueKeys : value)});`,
+      `TM: '${chalk.cyanBright(timestamp)}';`,
+      '=>');
+  }
 }
 
 module.exports = showInfoForHandler;

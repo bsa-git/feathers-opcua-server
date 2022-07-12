@@ -59,15 +59,18 @@ async function ch_m5CreateAcmYearTemplate(params, value) {
   if (statusCode === 'Good') {
     outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, hours, days }
     const resultFile = getPathBasename(outputArguments.resultPath);
-    if (true && result) console.log(
-      chalk.green('runCommand.ch_m5CreateAcmYearTemplate - OK!'),
+    if (isDebug && result) console.log(
+      chalk.green('sessionCallMethod(methodAcmYearTemplateCreate) - OK!'),
       `For pointID=${chalk.cyan(pointID)};`,
       `hours: ${chalk.cyan(outputArguments.hours)};`,
       `days: ${chalk.cyan(outputArguments.days)};`,
       `resultFile: '${chalk.cyan(resultFile)}';`
     );
   } else {
-    console.log(chalk.green('runCommand.ch_m5CreateAcmYearTemplate:'), chalk.cyan(statusCode));
+    console.log(
+      chalk.green('runCommand(ch_m5CreateAcmYearTemplate): ERROR!'),
+      `statusCode: '${chalk.cyan(statusCode)}';`
+    );
   }
   return result;
 }

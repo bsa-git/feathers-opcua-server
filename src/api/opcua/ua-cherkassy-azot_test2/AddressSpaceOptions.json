@@ -28,7 +28,6 @@
       "type": "variable.simple",
       "dataType": "String",
       "hist": 1,
-      "subscription": "onChangedRunCommand",
       "description": "Executing commands on an 'CH_M5' object"
     },
     {
@@ -98,6 +97,10 @@
       "type": "variable.simple",
       "dataType": "String",
       "hist": 1,
+      "store": {
+        "numberOfValuesInDoc": [1, "years"],
+        "numberOfDocsForTag": [5, "years"]
+      },
       "group": true,
       "variableGetType": "valueFromSource",
       "getter": "getterAcmDayValueFromFile",

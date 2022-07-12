@@ -66,7 +66,7 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
     statusCode = result.statusCode;
     if (statusCode === 'Good') {
       if (true && result) console.log(
-        chalk.green('RunMetod.methodAcmYearReportUpdate - OK!'),
+        chalk.green('RunMetod(methodAcmYearReportUpdate) - OK!'),
         `pointID: ${chalk.cyan(pointID)};`,
         `resultFile: '${chalk.cyan(getPathBasename(result.resultPath))}';`
       );
@@ -96,7 +96,7 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
     if (statusCode === 'Good') {
       outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, reportYear, reportDates }
       if (true && result) console.log(
-        chalk.green('RunMetod.methodAcmYearReportUpdate - OK!'),
+        chalk.green('sessionCallMethod(methodAcmYearReportUpdate): OK!'),
         `pointID: ${chalk.cyan(pointID)};`,
         `resultFile: '${chalk.cyan(getPathBasename(outputArguments.resultPath))}';`
       );
@@ -134,7 +134,7 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
     if (statusCode === 'Good') {
       outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, reportYear, reportDates }
       if (true && result) console.log(
-        chalk.green('RunMetod.methodAcmYearReportUpdate - OK!'),
+        chalk.green('RunMetod(methodAcmYearReportUpdate): OK!'),
         `pointID: ${chalk.cyan(pointID)};`,
         `resultFile: '${chalk.cyan(getPathBasename(outputArguments.resultPath))}';`
       );
