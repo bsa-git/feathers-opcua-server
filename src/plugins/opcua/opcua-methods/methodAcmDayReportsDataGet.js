@@ -81,8 +81,8 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   paramsFile = loTemplate(acmDayReportFileName)({ pointID });
   paramFullsPath = [appRoot, paramsPath, paramsFile];
   if (!doesFileExist(paramFullsPath)) {
-    logger.error(`Run script - ERROR. File with name "${chalk.cyan(paramsFile)}" not found.`);
-    throw new Error(`Run script - ERROR. File with name "${paramsFile}" not found.`);
+    logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. File with name "${chalk.cyan(paramsFile)}" not found.`);
+    throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. File with name "${paramsFile}" not found.`);
   }
 
   const _params = require(join(...paramFullsPath));
@@ -99,8 +99,8 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
     if (baseParamsFile !== paramsFile) {
       paramFullsPath = [appRoot, paramsPath, baseParamsFile];
       if (!doesFileExist(paramFullsPath)) {
-        logger.error(`Run script - ERROR. File with name "${chalk.cyan(baseParamsFile)}" not found.`);
-        throw new Error(`Run script - ERROR. File with name "${baseParamsFile}" not found.`);
+        logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. File with name "${chalk.cyan(baseParamsFile)}" not found.`);
+        throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. File with name "${baseParamsFile}" not found.`);
       }
       const baseParams = require(join(...paramFullsPath));
       params = Object.assign({}, baseParams, params);
@@ -114,8 +114,8 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   const opcuaTags = getOpcuaTags();
   const acmTag = opcuaTags.find(t => t.browseName === params.acmTagBrowseName);
   if (!acmTag) {
-    logger.error(`Run script - ERROR. Tag with browseName "${chalk.cyan(params.acmTagBrowseName)}" not found.`);
-    throw new Error(`Run script - ERROR. Tag with browseName "${params.acmTagBrowseName}" not found.`);
+    logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. Tag with browseName "${chalk.cyan(params.acmTagBrowseName)}" not found.`);
+    throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. Tag with browseName "${params.acmTagBrowseName}" not found.`);
   }
   // Get acm params
   const acmPath = acmTag.getterParams.acmPath;
@@ -128,7 +128,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   if (isHttp) {
     const isExistsURL = await isUrlExists(params.acmPath, true);
     if (isExistsURL) {
-      if (isDebug && isExistsURL) logger.info(`isExistsURL('${params.acmPath}'): OK`);
+      if (isDebug && isExistsURL) console.log(`isExistsURL('${params.acmPath}'): OK`);
 
       // Get fileNames from path for http
       pattern = loTrimEnd(params.acmPath, '/') + params.pattern;
@@ -191,7 +191,9 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
       dataItems.push(dataItem);
 
     } catch (error) {
-      logger.error(chalk.redBright(`Run script - ERROR.  Error while creating an instance of a class 'XlsxHelperClass'. Excel path: '${xlsPath}'.`));
+      logger.error(
+        `RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}.  Error while creating an instance of a class 'XlsxHelperClass'. Excel path: '${xlsPath}'.`
+      );
       break;
     }
   }

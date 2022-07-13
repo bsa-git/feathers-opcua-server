@@ -43,7 +43,7 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
   //---------------------------------------------------------
   try {
 
-    const memUsed = sysMemUsage().percentageMemUsed;  
+    const memUsed = sysMemUsage().percentageMemUsed;
     if (isDebug && memUsed) console.log('Percentage Mem Used:', `${memUsed}%`);
 
     // Get startTime
@@ -55,7 +55,7 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     const addressSpaceOption = params.addressSpaceOption;
 
     const browseName = addressSpaceOption.browseName;
-    isQueue = !!addressSpaceOption.getterParams.isQueue;
+    isQueue = (addressSpaceOption.getterParams.isQueue !== undefined) ? addressSpaceOption.getterParams.isQueue : true;
 
     // Only for group values
     if (!addressSpaceOption.group) return;
@@ -95,7 +95,7 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     const p3 = ch_m5UpdateAcmYearReport(params, dataValue);
 
     // Show info
-    Promise.all([p1, p2, p3]).then(results => {
+    Promise.all([p1, p2, p3]).then(async results => {
 
       if (isDebug && results.length) inspector('saveOpcuaGroupValueToDB.savedValue:', results[0]);
       if (isDebug && results.length) inspector('saveStoreOpcuaGroupValueToDB.savedValue:', results[1]);
@@ -109,6 +109,8 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
       const timeDuration = getTimeDuration(startTime, endTime);
       if (isDebug && endTime) console.log('onChangedGroupHandlerForASM.endTime:', endTime, 'browseName:', browseName);
       if (isDebug && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
+
+      await pause(1000);
 
       // Drop element from the beginning of array
       if (isQueue) queueOfSubscribe = loDrop(queueOfSubscribe);

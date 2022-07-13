@@ -69,8 +69,8 @@ async function ch_m5SyncAcmYearReport(params, value) {
   paramsFile = loTemplate(acmYearTemplateFileName)({ pointID });
   paramFullsPath = [appRoot, paramsPath, paramsFile];
   if (!doesFileExist(paramFullsPath)) {
-    logger.error(`Run script - ERROR. File with name "${chalk.cyan(paramsFile)}" not found.`);
-    throw new Error(`Run script - ERROR. File with name "${paramsFile}" not found.`);
+    logger.error(`RunCommand(ch_m5SyncAcmYearReport): ${chalk.error('ERROR')}! File with name "${chalk.cyan(paramsFile)}" not found.`);
+    throw new Error(`RunCommand(ch_m5SyncAcmYearReport): ERROR. File with name "${paramsFile}" not found.`);
   }
 
   let reportParams = require(join(...paramFullsPath));
@@ -79,8 +79,8 @@ async function ch_m5SyncAcmYearReport(params, value) {
     baseParamsFile = loTemplate(acmYearTemplateFileName)({ pointID: reportParams.baseParams });
     paramFullsPath = [appRoot, paramsPath, baseParamsFile];
     if (!doesFileExist(paramFullsPath)) {
-      logger.error(`Run script - ERROR. File with name "${chalk.cyan(baseParamsFile)}" not found.`);
-      throw new Error(`Run script - ERROR. File with name "${baseParamsFile}" not found.`);
+      logger.error(`RunCommand(ch_m5SyncAcmYearReport): ${chalk.error('ERROR')}! File with name "${chalk.cyan(baseParamsFile)}" not found.`);
+      throw new Error(`RunCommand(ch_m5SyncAcmYearReport): ERROR. File with name "${baseParamsFile}" not found.`);
     }
     const baseParams = require(join(...paramFullsPath));
     reportParams = Object.assign({}, baseParams, reportParams);
@@ -89,9 +89,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
   if(value.opt.syncYearReportFromStore !== undefined){
     reportParams.syncYearReportFromStore = value.opt.syncYearReportFromStore;
   }
-
   if (isDebug && reportParams) inspector('ch_m5SyncAcmYearReport.reportParams:', reportParams);
-
 
   // Get opcua tags 
   const opcuaTags = getOpcuaTags();
@@ -99,8 +97,8 @@ async function ch_m5SyncAcmYearReport(params, value) {
   // Get acm tag
   const groupTag = opcuaTags.find(t => t.browseName === groupBrowseName);
   if (!groupTag) {
-    logger.error(`Run script - ERROR. Tag with browseName "${chalk.cyan(groupBrowseName)}" not found.`);
-    throw new Error(`Run script - ERROR. Tag with browseName "${groupBrowseName}" not found.`);
+    logger.error(`RunCommand(ch_m5SyncAcmYearReport): ${chalk.error('ERROR')}! Tag with browseName "${chalk.cyan(groupBrowseName)}" not found.`);
+    throw new Error(`RunCommand(ch_m5SyncAcmYearReport): ERROR. Tag with browseName "${groupBrowseName}" not found.`);
   }
   if (isDebug && groupTag) inspector('ch_m5SyncAcmYearReport.groupTag:', groupTag);
 
@@ -121,7 +119,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
       });
     }
     if (isDebug && dataItems.length) console.log(
-      chalk.green('getTagValuesFromStores: OK!'),
+      chalk.green('RunCommand(ch_m5SyncAcmYearReport).getTagValuesFromStores: OK!'),
       `For pointID=${chalk.cyan(pointID)};`,
       `pattern: '${chalk.cyan(pattern)}';`,
       `dataItemsCount: ${chalk.cyan(dataItems.length)};`
@@ -154,15 +152,15 @@ async function ch_m5SyncAcmYearReport(params, value) {
       outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
       dataItems = readJsonFileSync([appRoot, syncResultOutputPath, outputFile])['dataItems'];
       if (isDebug && dataItems.length) console.log(
-        chalk.green('sessionCallMethod(methodAcmDayReportsDataGet): OK!'),
+        chalk.green('RunCommand(ch_m5SyncAcmYearReport).methodAcmDayReportsDataGet: OK!'),
         `resultFile: '${chalk.cyan(getPathBasename(outputArguments.resultPath))}';`,
         `dataItemsCount: ${chalk.cyan(dataItems.length)};`
       );
     } else {
       logger.error(
-        `runMetod.methodAcmDayReportsDataGet - ${chalk.red('ERROR!')} 
+        `RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}! 
         statusCode:'${chalk.cyan(statusCode)}'; 
-        metodBrowseName:'${chalk.cyan(metodBrowseName)}'`
+        metodBrowseName:'${chalk.cyan(metodBrowseName)}';`
       );
       inspector('runMetod.methodAcmDayReportsDataGet.ERROR.inputArguments:', inputArguments);
       inspector('runMetod.methodAcmDayReportsDataGet.ERROR.metodResult:', metodResult);
@@ -171,7 +169,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
   }
 
   if (!dataItems.length) {
-    logger.error(`runCommand(ch_m5SyncAcmYearReport): ${chalk.red('ERROR!')} dataItems is empty!`);
+    logger.error(`RunCommand(ch_m5SyncAcmYearReport): ${chalk.red('ERROR')}! dataItems is empty!`);
     return;
   }
 
@@ -197,7 +195,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
     outputArguments = JSON.parse(metodResult[0].outputArguments[0].value);// { resultPath, params, reportYear, reportDates }
     if (isDebug && outputArguments) inspector('runMetod.methodAcmYearReportUpdate.reportDates:', outputArguments.reportDates);
     if (isDebug && outputArguments) console.log(
-      chalk.green('sessionCallMethod(methodAcmYearReportUpdate): OK!'),
+      chalk.green('RunCommand(ch_m5SyncAcmYearReport).methodAcmYearReportUpdate: OK!'),
       `For pointID=${chalk.cyan(pointID)};`,
       `reportDatesCount: ${chalk.cyan(outputArguments.reportDates.length)};`,
       `resultFile: '${chalk.cyan(getPathBasename(outputArguments.resultPath))}';`
@@ -214,16 +212,16 @@ async function ch_m5SyncAcmYearReport(params, value) {
     }
   } else {
     logger.error(
-      `runMetod.methodAcmYearReportUpdate - ${chalk.red('ERROR!')} 
+      `RunMetod(methodAcmYearReportUpdate): ${chalk.red('ERROR')}! 
         statusCode:'${chalk.cyan(statusCode)}'; 
-        metodBrowseName:'${chalk.cyan(metodBrowseName)}'`
+        metodBrowseName:'${chalk.cyan(metodBrowseName)}';`
     );
     inspector('runMetod.methodAcmDayReportsDataGet.ERROR.inputArguments:', inputArguments);
     inspector('runMetod.methodAcmDayReportsDataGet.ERROR.metodResult:', metodResult);
     return;
   }
   if (isDebug && outputArguments) console.log(
-    chalk.green('runCommand(ch_m5SyncAcmYearReport): OK!'),
+    chalk.green('RunCommand(ch_m5SyncAcmYearReport): OK!'),
     `For pointID=${chalk.cyan(pointID)};`,
     `syncAcmYearReportCount: ${chalk.cyan(outputArguments.reportDates.length)};`
   );

@@ -66,7 +66,7 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
     statusCode = result.statusCode;
     if (statusCode === 'Good') {
       if (true && result) console.log(
-        chalk.green('RunMetod(methodAcmYearReportUpdate) - OK!'),
+        chalk.green('RunMetod(methodAcmYearReportUpdate): OK!'),
         `pointID: ${chalk.cyan(pointID)};`,
         `resultFile: '${chalk.cyan(getPathBasename(result.resultPath))}';`
       );

@@ -95,8 +95,8 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
   paramsFile = loTemplate(acmYearTemplateFileName)({ pointID });
   paramFullsPath = [appRoot, paramsPath, paramsFile];
   if (!doesFileExist(paramFullsPath)) {
-    logger.error(`Run script - ERROR. File with name "${chalk.cyan(paramsFile)}" not found.`);
-    throw new Error(`Run script - ERROR. File with name "${paramsFile}" not found.`);
+    logger.error(`RunMetod(methodAcmYearTemplateCreate): ${chalk.error('ERROR')}. File with name "${chalk.cyan(paramsFile)}" not found.`);
+    throw new Error(`RunMetod(methodAcmYearTemplateCreate): ERROR. File with name "${paramsFile}" not found.`);
   }
 
   const _params = require(join(...paramFullsPath));
@@ -110,8 +110,8 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
     baseParamsFile = loTemplate(acmYearTemplateFileName)({ pointID: params.baseParams });
     paramFullsPath = [appRoot, paramsPath, baseParamsFile];
     if (!doesFileExist(paramFullsPath)) {
-      logger.error(`Run script - ERROR. File with name "${chalk.cyan(baseParamsFile)}" not found.`);
-      throw new Error(`Run script - ERROR. File with name "${baseParamsFile}" not found.`);
+      logger.error(`RunMetod(methodAcmYearTemplateCreate): ${chalk.error('ERROR')}. File with name "${chalk.cyan(baseParamsFile)}" not found.`);
+      throw new Error(`RunMetod(methodAcmYearTemplateCreate): ERROR. File with name "${baseParamsFile}" not found.`);
     }
     const baseParams = require(join(...paramFullsPath));
     params = Object.assign({}, baseParams, params);

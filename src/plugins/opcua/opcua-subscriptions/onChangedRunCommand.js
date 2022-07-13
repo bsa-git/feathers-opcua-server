@@ -45,25 +45,28 @@ async function onChangedRunCommand(params, dataValue) {
 
     // Get startTime
     const startTime = moment.utc().format();
-    if (isDebug && startTime) console.log('onChangedRunCommand.startTime:', startTime, 'browseName:', browseName);
-    
+        
     if (isDebug && params) inspector('onChangedRunCommand.params:', loOmit(params, ['myOpcuaClient', 'app']));
     if (isDebug && dataValue) inspector('onChangedRunCommand.dataValue:', dataValue);
     const addressSpaceOption = params.addressSpaceOption;
 
     const browseName = addressSpaceOption.browseName;
+    // Get token
+    let token = await AuthServer.getShortToken(8);
+    token = `${browseName}(${token})`;
+    if (isDebug && token) console.log('onChangedRunCommand.token:', token);
+    if (isDebug && startTime) console.log('onChangedRunCommand.startTime:', startTime, 'token:', token);
 
     // Format simple DataValue
     dataValue = formatSimpleDataValue(dataValue);
     const statusCode = dataValue.statusCode.name;
     let value = dataValue.value.value;
 
+    // Return else value is empty or (statusCode !== 'Good')
     if(statusCode !== 'Good' ||  !value) return;
+    if (isDebug && value) inspector('onChangedRunCommand.value:', value);
 
-    // Get token
-    let token = await AuthServer.getShortToken(8);
-    token = `${browseName}(${token})`;
-    if (isDebug && token) console.log('onChangedRunCommand.token:', token);
+    
 
     // Add subscribe to queue
     queueOfSubscribe.push({
@@ -102,8 +105,8 @@ async function onChangedRunCommand(params, dataValue) {
       // endTime and timeDuration
       const endTime = moment.utc().format();
       const timeDuration = getTimeDuration(startTime, endTime);
-      if (isDebug && endTime) console.log('onChangedRunCommand.endTime:', endTime, 'browseName:', browseName);
-      if (isDebug && timeDuration) console.log('onChangedRunCommand.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
+      if (isDebug && endTime) console.log('onChangedRunCommand.endTime:', endTime, 'token:', token);
+      if (isDebug && timeDuration) console.log('onChangedRunCommand.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'token:', chalk.cyan(token));
 
       // Drop element from the beginning of array
       queueOfSubscribe = loDrop(queueOfSubscribe);

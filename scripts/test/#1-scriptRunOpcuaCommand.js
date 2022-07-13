@@ -63,21 +63,11 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
         opt: {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           points: [1, 2, 3],
-          pattern: '2022-01' // e.g. '2022'|'2022-01'|'2022-01-12'
-        }
-      };
-      break;
-      case '#1.3.1':// Get dataItems from store
-      options = {
-        command: 'ch_m5SyncAcmYearReport',
-        opt: {
-          url: 'opc.tcp://localhost:26570',// (Endpoint URL)
-          points: [1, 2, 3],
           pattern: '2022-01', // e.g. '2022'|'2022-01'|'2022-01-12'
           syncYearReportFromStore: true
         }
       };
-      break;  
+      break;
     case '#1.3.2':// Get dataItems from day reports
       options = {
         command: 'ch_m5SyncAcmYearReport',

@@ -294,8 +294,8 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       outputArguments = loOmit(outputArguments, ['params']);
       outputArguments.resultPath = getPathBasename(outputArguments.resultPath);
       if (isDebug && outputArguments) inspector('methodAcmYearTemplateCreate.outputArguments:', loOmit(outputArguments, ['params']));
-      if (true && outputArguments) console.log(
-        chalk.green('runMetod.methodAcmYearTemplateCreate - OK!'),
+      if (isDebug && outputArguments) console.log(
+        chalk.green('RunMetod(methodAcmYearTemplateCreate): OK!'),
         `For pointID=${chalk.cyan(pointID)};`,
         `hours: ${chalk.cyan(outputArguments.hours)};`,
         `days: ${chalk.cyan(outputArguments.days)};`,
@@ -329,8 +329,8 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       outputArguments = loOmit(outputArguments, ['params']);
       outputArguments.resultPath = getPathBasename(outputArguments.resultPath);
       if (isDebug && outputArguments) inspector('methodAcmDayReportsDataGet.outputArguments:', outputArguments);
-      if (true && outputArguments) console.log(
-        chalk.green('runMetod.methodAcmDayReportsDataGet - OK!'),
+      if (isDebug && outputArguments) console.log(
+        chalk.green('RunMetod(methodAcmDayReportsDataGet): OK!'),
         `For pointID=${chalk.cyan(pointID)};`,
         `resultFile: '${chalk.cyan(outputArguments.resultPath)}';`
       );
@@ -392,8 +392,8 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
         outputArguments = loOmit(outputArguments, ['params']);
         outputArguments.resultPath = getPathBasename(outputArguments.resultPath);
         if (isDebug && outputArguments) inspector('methodAcmYearReportUpdate.outputArguments:', outputArguments);
-        if (true && outputArguments) console.log(
-          chalk.green('runMetod.methodAcmYearReportUpdate - OK!'),
+        if (isDebug && outputArguments) console.log(
+          chalk.green('RunMetod(methodAcmYearReportUpdate): OK!'),
           `For pointID=${chalk.cyan(pointID)};`,
           `reportDatesCount: ${chalk.cyan(outputArguments.reportDates.length)};`,
           `resultFile: '${chalk.cyan(outputArguments.resultPath)}';`
@@ -552,9 +552,9 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     const opcuaTags = getOpcuaConfigOptions(id);
     // Save opcua tags to local DB
     let saveResult = await saveOpcuaTags(app, opcuaTags, false);
-    if(true && saveResult) inspector('Data base: Save opcua tags:', saveResult);
-
+    if(isDebug && saveResult) inspector('Data base: Save opcua tags:', saveResult);
     assert.ok(saveResult.total, 'Data base: Save opcua tags');
+    // await pause(2000);
   });
 
   it('#12.1: OPC-UA clients: RunCommand(ch_m5CreateAcmYearTemplate)', async () => {
@@ -578,9 +578,9 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     };
     statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommand', dataForRunCommand);
     statusCode = statusCode.name;
-    console.log(chalk.green('RunCommand(ch_m5CreateAcmYearTemplate).statusCode:'), chalk.cyan(statusCode));
+    if(isDebug && statusCode) console.log(chalk.green('RunCommand(ch_m5CreateAcmYearTemplate).statusCode:'), chalk.cyan(statusCode));
     assert.ok(statusCode === 'Good', 'OPC-UA clients: RunCommand(ch_m5CreateAcmYearTemplate)');
-    await pause(2000);
+    await pause(1000);
   });
 
   it('#12.2: OPC-UA clients: RunCommand(ch_m5SyncStoreAcmValues)', async () => {
@@ -602,12 +602,37 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     };
     statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommand', dataForRunCommand);
     statusCode = statusCode.name;
-    console.log(chalk.green('RunCommand(ch_m5SyncStoreAcmValues).statusCode:'), chalk.cyan(statusCode));
+    if(isDebug && statusCode) console.log(chalk.green('RunCommand(ch_m5SyncStoreAcmValues).statusCode:'), chalk.cyan(statusCode));
     assert.ok(statusCode === 'Good', 'OPC-UA clients: RunCommand(ch_m5SyncStoreAcmValues)');
-    await pause(2000);
+    await pause(1000);
   });
 
-  it('#12.3: OPC-UA clients: RunCommand(ch_m5SyncAcmYearReport)', async () => {
+  it('#12.3: OPC-UA clients: RunCommand(ch_m5SyncAcmYearReport) get dataItems from store', async () => {
+    let statusCode = null;
+    //-----------------------------------
+    const service = await getClientService(app, id);
+
+    // Get data for run command
+    const options = {
+      command: 'ch_m5SyncAcmYearReport',
+      opt: {
+        points: [2],
+        pattern: '2022-01', // e.g. '/**/*.xls'|'/**/2022-01/*.xls'|/**/DayHist01_14F120_01022022_0000.xls
+        syncYearReportFromStore: true
+      }
+    };
+    const dataForRunCommand = {
+      dataType: DataType.String,
+      value: JSON.stringify(options),
+    };
+    statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommand', dataForRunCommand);
+    statusCode = statusCode.name;
+    if(isDebug && statusCode) console.log(chalk.green('RunCommand(ch_m5SyncAcmYearReport).statusCode:'), chalk.cyan(statusCode));
+    assert.ok(statusCode === 'Good', 'OPC-UA clients: RunCommand(ch_m5SyncAcmYearReport) get dataItems from store');
+    await pause(1000);
+  });
+  
+  it('#12.4: OPC-UA clients: RunCommand(ch_m5SyncAcmYearReport) get dataItems from day reports', async () => {
     let statusCode = null;
     //-----------------------------------
     const service = await getClientService(app, id);
@@ -627,8 +652,8 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     };
     statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommand', dataForRunCommand);
     statusCode = statusCode.name;
-    console.log(chalk.green('RunCommand(ch_m5SyncAcmYearReport).statusCode:'), chalk.cyan(statusCode));
-    assert.ok(statusCode === 'Good', 'OPC-UA clients: RunCommand(ch_m5SyncAcmYearReport)');
+    if(isDebug && statusCode) console.log(chalk.green('RunCommand(ch_m5SyncAcmYearReport).statusCode:'), chalk.cyan(statusCode));
+    assert.ok(statusCode === 'Good', 'OPC-UA clients: RunCommand(ch_m5SyncAcmYearReport) get dataItems from day reports');
   });
 
   //============== SUBSCRIPTION TERMINATE ====================//
@@ -648,6 +673,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   it('#14: OPC-UA clients: session close the service', async () => {
     const service = await getClientService(app, id);
+    await pause(1000);
     const opcuaClient = await service.sessionClose(id);
     if (isDebug) inspector('Session close the clients:', opcuaClient);
     assert.ok(opcuaClient, 'OPC-UA clients: session close the service');

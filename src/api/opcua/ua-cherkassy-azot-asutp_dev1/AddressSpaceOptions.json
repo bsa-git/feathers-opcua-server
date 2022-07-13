@@ -25,55 +25,55 @@
       "type": "object"
     },
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_M52_ACM",
       "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM",
       "type": "object"
     },
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_M52_ACM2",
       "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM2",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_A3",
       "displayName": "Черкассы 'АЗОТ' цех A3",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_NG-UPG2",
       "displayName": "Черкассы 'АЗОТ' узел ПГ №2",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M7-313",
       "displayName": "Черкассы 'АЗОТ' цех М7-313",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M7-357",
       "displayName": "Черкассы 'АЗОТ' цех М7-357",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M7-657",
       "displayName": "Черкассы 'АЗОТ' цех М7-657",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M9",
       "displayName": "Черкассы 'АЗОТ' цех М9",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_M2",
       "displayName": "Черкассы 'АЗОТ' цех М2",
       "type": "object"
@@ -140,7 +140,6 @@
       "getter": "getterAcmDayValueFromFile",
       "getterParams": {
         "isTest": true,
-        "isQueue": false,
         "path": "test/data/tmp/ch-m5acm_1",
         "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/acm/acmDayReport.xls",
@@ -167,13 +166,12 @@
       "getter": "getterAcmDayValueFromFile",
       "getterParams": {
         "isTest": true,
-        "isQueue": false,
         "path": "test/data/tmp/ch-m5acm_2",
         "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/acm/acmDayReport.xls",
         "acmPath": "http://192.168.3.5/www_m5/day_reports/m5-2/ACM/14AGR/",
         "pointID": 2,
-        "interval": 20000,
+        "interval": 25000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["14QN2O", "14QN2O_CORR", "14FVSG", "14FVSG_CORR", "14F105_IS"]}
       }
     },
@@ -194,13 +192,12 @@
       "getter": "getterAcmDayValueFromFile",
       "getterParams": {
         "isTest": true,
-        "isQueue": false,
         "path": "test/data/tmp/ch-m5acm_3",
         "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/acm/acmDayReport.xls",
         "acmPath": "http://192.168.3.5/www_m5/day_reports/m5-2/ACM/57AGR/",
         "pointID": 3,
-        "interval": 20000,
+        "interval": 30000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["57QN2O", "57QN2O_CORR", "57FVSG", "57FVSG_CORR", "57F105_IS"]}
       }
     },
