@@ -7,6 +7,7 @@ const logger = require('../../../../src/logger');
 const {
   appRoot,
   inspector,
+  isTest,
   doesFileExist,
   makeDirSync,
   sortByStringField
@@ -26,7 +27,6 @@ const loForEach = require('lodash/forEach');
 const loTemplate = require('lodash/template');
 const loOmit = require('lodash/omit');
 
-let dataPath = '/src/api/app/opcua-methods/acm-reports/data';
 let paramsPath = '/src/api/app/opcua-methods/acm-reports/params';
 
 const {
@@ -89,13 +89,13 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
     beginReportYear = beginReportDate.split('-')[0];
 
     // Get year report file
-    const outputReportPath = addressSpaceOption.getterParams.toPath;
+    const outputReportPath = isTest() ? reportParams.dataTestPath : reportParams.dataPath;
     makeDirSync([appRoot, outputReportPath]);
     const outputReportFile = loTemplate(reportParams.outputReportFile)({ pointID, year: beginReportYear });
     reportFile = [appRoot, outputReportPath, outputReportFile];
     if (!doesFileExist(reportFile)) {
       const outputTemplateFile = loTemplate(reportParams.outputTemplateFile)({ pointID, year: beginReportYear });
-      reportFile = [appRoot, dataPath, outputTemplateFile];
+      reportFile = [appRoot, reportParams.dataPath, outputTemplateFile];
     }
 
     if (!doesFileExist(reportFile)) {
@@ -129,14 +129,14 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
       // Get report date and year
       const reportDate = groupValue['!value'].dateTime.split('T')[0];
       const reportYear = reportDate.split('-')[0];
-      
+
       // We will work with the report only for one specific year -> beginReportYear
-      if(reportYear !== beginReportYear){
+      if (reportYear !== beginReportYear) {
         continue;
       }
-      
+
       reportDates.push(reportDate);
-      
+
       dateCells4Date = dateCells.filter(dateCell => dateCell.value === reportDate);
       // Show cells
       loForEach(dateCells4Date, function (cell) {

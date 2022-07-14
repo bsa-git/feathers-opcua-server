@@ -654,6 +654,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     statusCode = statusCode.name;
     if(isDebug && statusCode) console.log(chalk.green('RunCommand(ch_m5SyncAcmYearReport).statusCode:'), chalk.cyan(statusCode));
     assert.ok(statusCode === 'Good', 'OPC-UA clients: RunCommand(ch_m5SyncAcmYearReport) get dataItems from day reports');
+    await pause(2000);
   });
 
   //============== SUBSCRIPTION TERMINATE ====================//
@@ -664,7 +665,6 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     // service.subscriptionTerminate
     const result = await service.subscriptionTerminate(id);
     if (isDebug) inspector('OPC-UA clients: subscription terminate', result);
-
     assert.ok(true, 'OPC-UA clients: subscription terminate');
   });
 

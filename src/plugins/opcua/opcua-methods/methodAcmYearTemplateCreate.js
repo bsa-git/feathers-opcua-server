@@ -19,6 +19,7 @@ const {
   appRoot,
   inspector,
   logger,
+  isTest,
   doesFileExist,
   hexToARGB,
   shiftTimeByOneHour,
@@ -32,11 +33,7 @@ const {
   ExceljsHelperClass,
 } = require('../../excel-helpers');
 
-const dataTestPath = '/test/data/tmp/excel-helper';
-const dataPath = '/src/api/app/opcua-methods/acm-reports/data';
 const paramsPath = '/src/api/app/opcua-methods/acm-reports/params';
-
-makeDirSync([appRoot, dataTestPath]);
 
 const {
   acmYearTemplateFileName,
@@ -171,7 +168,7 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
 
   // Create exceljs object
   let exceljs = new ExceljsHelperClass({
-    excelPath: [appRoot, dataPath, params.inputFile],
+    excelPath: [appRoot, params.dataPath, params.inputFile],
     sheetName: 'Data_CNBB',
     bookOptions: {
       fullCalcOnLoad: true
@@ -284,12 +281,10 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
 
   // Write new data to xlsx file
   const outputFile = loTemplate(params.outputTemplateFile)({ pointID: params.pointID, year: startYear });
-  if (params.isTest) {
-    resultPath = await exceljs.writeFile([appRoot, dataTestPath, outputFile]);
-  } else {
-    resultPath = await exceljs.writeFile([appRoot, dataPath, outputFile]);
-  }
-
+  const outputPath = isTest() ? params.dataTestPath : params.dataPath;
+  makeDirSync([appRoot, outputPath]);
+  resultPath = await exceljs.writeFile([appRoot, outputPath, outputFile]);
+  
   // CallBack
   const callMethodResult = {
     statusCode: StatusCodes.Good,

@@ -92,10 +92,10 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     const p2 = saveStoreOpcuaGroupValueToDB(params, dataValue);
 
     // Run update acm year report
-    const p3 = ch_m5UpdateAcmYearReport(params, dataValue);
+    // const p3 = ch_m5UpdateAcmYearReport(params, dataValue);
 
     // Show info
-    Promise.all([p1, p2, p3]).then(async results => {
+    Promise.all([p1, p2, 'p3']).then(results => {
 
       if (isDebug && results.length) inspector('saveOpcuaGroupValueToDB.savedValue:', results[0]);
       if (isDebug && results.length) inspector('saveStoreOpcuaGroupValueToDB.savedValue:', results[1]);
@@ -109,8 +109,6 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
       const timeDuration = getTimeDuration(startTime, endTime);
       if (isDebug && endTime) console.log('onChangedGroupHandlerForASM.endTime:', endTime, 'browseName:', browseName);
       if (isDebug && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
-
-      await pause(1000);
 
       // Drop element from the beginning of array
       if (isQueue) queueOfSubscribe = loDrop(queueOfSubscribe);

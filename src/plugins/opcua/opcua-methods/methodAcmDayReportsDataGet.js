@@ -39,13 +39,10 @@ const {
 } = require('node-opcua');
 
 
-const loForEach = require('lodash/forEach');
 const loTemplate = require('lodash/template');
-const loOmit = require('lodash/omit');
 const loStartsWith = require('lodash/startsWith');
 const loTrimEnd = require('lodash/trimEnd');
 
-let dataPath = '/src/api/app/opcua-methods/acm-reports/data';
 let paramsPath = '/src/api/app/opcua-methods/acm-reports/params';
 
 const {

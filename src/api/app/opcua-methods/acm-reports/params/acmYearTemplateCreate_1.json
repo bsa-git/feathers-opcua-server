@@ -11,6 +11,8 @@
   "inputFile": "acmYearTemplate.xlsx",
   "outputTemplateFile": "acmYearTemplate${ pointID }-${ year }.xlsx",
   "outputReportFile": "acmYearReport${ pointID }-${ year }.xlsx",
+  "dataPath": "/src/api/app/opcua-methods/acm-reports/data",
+  "dataTestPath": "test/data/tmp/excel-helper",
   "syncYearReportFromStore": true,
   "startRow": 20,
   "period": [1, "years"],

@@ -201,12 +201,12 @@ async function ch_m5SyncAcmYearReport(params, value) {
       `resultFile: '${chalk.cyan(getPathBasename(outputArguments.resultPath))}';`
     );
 
-    // Get path with posix sep
-    if (!isUncPath(groupTag.getterParams.toPath)) {
+    // Remove files from tmp path
+    if ( !reportParams.syncYearReportFromStore && !isUncPath(reportParams.dataTestPath)) {
       let fileName = getPathBasename(outputArguments.resultPath);
       const fileNameList = fileName.split(pointID, 1);
       fileName = fileNameList[0] + '*' + fileNameList[1];
-      const filePath = toPathWithPosixSep([appRoot, groupTag.getterParams.toPath]);
+      const filePath = toPathWithPosixSep([appRoot, reportParams.dataTestPath]);
       const deletedItems = removeItemsSync([`${filePath}/*.*`, `!${filePath}/*.xlsx`], { dryRun: false });
       if (isDebug && deletedItems.length) inspector('removeItemsSync.deletedItems:', deletedItems);
     }

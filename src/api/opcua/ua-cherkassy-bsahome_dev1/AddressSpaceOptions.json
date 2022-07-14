@@ -99,10 +99,7 @@
       "variableGetType": "valueFromSource",
       "getter": "getterAcmDayValueFromFile",
       "getterParams": {
-        "isTest": true,
-        "isQueue": false,
         "path": "test/data/tmp/ch-m5acm_1",
-        "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/acm/acmDayReport.xls",
         "acmPath": "test/data/excel/acm/23agr",
         "pointID": 1,
@@ -126,10 +123,7 @@
       "variableGetType": "valueFromSource",
       "getter": "getterAcmDayValueFromFile",
       "getterParams": {
-        "isTest": true,
-        "isQueue": false,
         "path": "test/data/tmp/ch-m5acm_2",
-        "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/acm/acmDayReport.xls",
         "acmPath": "test/data/excel/acm/14agr",
         "pointID": 2,
@@ -153,10 +147,7 @@
       "variableGetType": "valueFromSource",
       "getter": "getterAcmDayValueFromFile",
       "getterParams": {
-        "isTest": true,
-        "isQueue": false,
         "path": "test/data/tmp/ch-m5acm_3",
-        "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/acm/acmDayReport.xls",
         "acmPath": "test/data/excel/acm/57agr",
         "pointID": 3,

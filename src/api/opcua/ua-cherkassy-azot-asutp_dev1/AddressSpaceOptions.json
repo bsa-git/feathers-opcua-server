@@ -139,9 +139,7 @@
       "variableGetType": "valueFromSource",
       "getter": "getterAcmDayValueFromFile",
       "getterParams": {
-        "isTest": true,
         "path": "test/data/tmp/ch-m5acm_1",
-        "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/acm/acmDayReport.xls",
         "acmPath": "http://192.168.3.5/www_m5/day_reports/m5-1/ACM/23AGR/",
         "pointID": 1,
@@ -165,9 +163,7 @@
       "variableGetType": "valueFromSource",
       "getter": "getterAcmDayValueFromFile",
       "getterParams": {
-        "isTest": true,
         "path": "test/data/tmp/ch-m5acm_2",
-        "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/acm/acmDayReport.xls",
         "acmPath": "http://192.168.3.5/www_m5/day_reports/m5-2/ACM/14AGR/",
         "pointID": 2,
@@ -191,9 +187,7 @@
       "variableGetType": "valueFromSource",
       "getter": "getterAcmDayValueFromFile",
       "getterParams": {
-        "isTest": true,
         "path": "test/data/tmp/ch-m5acm_3",
-        "toPath": "test/data/tmp/excel-helper",
         "fromFile": "test/data/excel/acm/acmDayReport.xls",
         "acmPath": "http://192.168.3.5/www_m5/day_reports/m5-2/ACM/57AGR/",
         "pointID": 3,
