@@ -53,8 +53,8 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
   if (isDebug && dataValue) inspector('ch_m5UpdateAcmYearReport.formatDataValue:', dataValue);
 
-  inputArgument = JSON.stringify(loOmit(params, ['myOpcuaClient', 'app']));
-  inputArgument = { dataType: DataType.String, value: inputArgument };
+  inputArgument = { pointID };
+  inputArgument = { dataType: DataType.String, value: JSON.stringify(inputArgument) };
 
   inputArgument2 = dataValue.value ? dataValue.value.value : dataValue;
   inputArgument2 = { dataType: DataType.String, value: inputArgument2 };

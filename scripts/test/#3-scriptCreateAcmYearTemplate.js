@@ -17,9 +17,7 @@ const debug = require('debug')('app:#6-scriptCreateAcmYearTemplated');
 const isDebug = false;
 
 // Get argv
-// e.g. argv.script='#1' =>  Update AddressSpaceOptions.json
-// e.g. argv.script='#2' =>  Converter from `Fox` excel data `.csv` file to KEPServer
-// e.g. argv.script='#3' =>  Converter from `Fox` hist data `.inp` file to KEPServer
+// e.g. argv.script='#3' =>  method -> 'methodAcmYearTemplateCreate'
 const argv = yargs(hideBin(process.argv)).argv;
 if (isDebug && argv) inspector('Yargs.argv:', argv);
 const isScript = (argv.script === '#3');

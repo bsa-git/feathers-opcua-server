@@ -49,19 +49,19 @@ async function showInfoForHandler(params, dataValue) {
     value = dataValue.value.value;
   }
 
-  if (command) {
-    console.log('<=',
-      chalk.magentaBright(`ID ="${params.id}"; `),
-      `browseName: '${chalk.greenBright(browseName)}';`,
-      `Command: '${chalk.greenBright(command)}';`,
-      `TM: '${chalk.cyanBright(timestamp)}';`,
+  if(command){
+    console.log('<=', 
+      chalk.magentaBright(`ID="${params.id}"; `), 
+      chalk.greenBright(`Name="${browseName}"; `), 
+      chalk.whiteBright(`Command=('${command}');`), 
+      chalk.cyanBright(`TM=${timestamp}`), 
       '=>');
-  } else {
-    console.log('<=',
-      chalk.magentaBright(`ID ="${params.id}"; `),
-      `browseName: '${chalk.greenBright(browseName)}';`,
-      `Values: (${chalk.cyanBright(valueKeys ? valueKeys : value)});`,
-      `TM: '${chalk.cyanBright(timestamp)}';`,
+  }else{
+    console.log('<=', 
+      chalk.magentaBright(`ID="${params.id}"; `), 
+      chalk.greenBright(`Name="${browseName}"; `), 
+      chalk.whiteBright(`Values=(${valueKeys ? valueKeys : value});`), 
+      chalk.cyanBright(`TM=${timestamp}`), 
       '=>');
   }
 }

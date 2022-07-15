@@ -33,7 +33,7 @@ const {
   ExceljsHelperClass,
 } = require('../../excel-helpers');
 
-const paramsPath = '/src/api/app/opcua-methods/acm-reports/params';
+const paramsPath = '/src/api/app/opcua-methods/acm-reports';
 
 const {
   acmYearTemplateFileName,
@@ -116,6 +116,13 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
 
   if (isDebug && params) inspector('methodAcmYearTemplateCreate.params:', params);
 
+  // Get excel template file path
+  const excelTemplateFile = join(...[appRoot, params.inputFile]);
+  if (!doesFileExist(excelTemplateFile)) {
+    logger.error(`RunMetod(methodAcmYearTemplateCreate): ${chalk.error('ERROR')}. File with name "${chalk.cyan(excelTemplateFile)}" not found.`);
+    throw new Error(`RunMetod(methodAcmYearTemplateCreate): ERROR. File with name "${excelTemplateFile}" not found.`);
+  }
+
   // Update colors for params.rulesForCells
   loForEach(params.rulesForCells, function (value, key) {
     loForEach(value, (item) => {
@@ -168,7 +175,7 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
 
   // Create exceljs object
   let exceljs = new ExceljsHelperClass({
-    excelPath: [appRoot, params.dataPath, params.inputFile],
+    excelPath: excelTemplateFile,
     sheetName: 'Data_CNBB',
     bookOptions: {
       fullCalcOnLoad: true
@@ -281,10 +288,10 @@ const methodAcmYearTemplateCreate = async (inputArguments, context, callback) =>
 
   // Write new data to xlsx file
   const outputFile = loTemplate(params.outputTemplateFile)({ pointID: params.pointID, year: startYear });
-  const outputPath = isTest() ? params.dataTestPath : params.dataPath;
+  const outputPath = isTest() ? params.dataTestPath : params.isTest ? params.dataTestPath : params.dataPath;
   makeDirSync([appRoot, outputPath]);
   resultPath = await exceljs.writeFile([appRoot, outputPath, outputFile]);
-  
+
   // CallBack
   const callMethodResult = {
     statusCode: StatusCodes.Good,

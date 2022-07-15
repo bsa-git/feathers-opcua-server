@@ -25,7 +25,7 @@ const argv = yargs(hideBin(process.argv))
       'Returns the file name (acmYearTemplate2-2020.xlsx) when creating a template for the reporting period.'],
     ['$0 -c "ch_m5SyncStoreAcmValues" --opt.points 2 --opt.pattern "/**/*.xls"',
       'Returns the file name (acmDayReportsData2-20220223.json) for the reporting period.'],
-    ['$0 -c "ch_m5SyncAcmYearReport" --opt.points 2 --opt.pattern "/**/*.xls"',
+    ['$0 -c "ch_m5SyncAcmYearReport" --opt.points 2 --opt.test --opt.pattern "/**/*.xls"',
       'Returns the file name (acmYearReport2-2022.xlsx) for the reporting period.']
   ])
   .option('command', {

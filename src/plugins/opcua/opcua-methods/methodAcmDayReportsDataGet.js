@@ -43,7 +43,7 @@ const loTemplate = require('lodash/template');
 const loStartsWith = require('lodash/startsWith');
 const loTrimEnd = require('lodash/trimEnd');
 
-let paramsPath = '/src/api/app/opcua-methods/acm-reports/params';
+let paramsPath = '/src/api/app/opcua-methods/acm-reports';
 
 const {
   acmDayReportFileName,

@@ -33,7 +33,7 @@ const {
   getOpcuaTags
 } = require('../../../../opcua/opcua-helper');
 
-let paramsPath = '/src/api/app/opcua-methods/acm-reports/params';
+let paramsPath = '/src/api/app/opcua-methods/acm-reports';
 
 const {
   acmYearTemplateFileName,
@@ -51,7 +51,7 @@ const isDebug = false;
  */
 async function ch_m5SyncAcmYearReport(params, value) {
   let metodResult, inputArgument, inputArgument2, inputArguments;
-  let statusCode, outputArguments, pointID, pattern;
+  let statusCode, outputArguments, pointID, pattern, isTest;
   let metodBrowseName, dataItems, paramsFile, paramFullsPath, baseParamsFile;
   //---------------------------------------------------
 
@@ -66,6 +66,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
   // Get params file
   pointID = value.opt.point;
   pattern = value.opt.pattern;
+  isTest = !!value.opt.test;
   paramsFile = loTemplate(acmYearTemplateFileName)({ pointID });
   paramFullsPath = [appRoot, paramsPath, paramsFile];
   if (!doesFileExist(paramFullsPath)) {
@@ -86,26 +87,18 @@ async function ch_m5SyncAcmYearReport(params, value) {
     reportParams = Object.assign({}, baseParams, reportParams);
   }
   // Set syncYearReportFromStore prop
-  if(value.opt.syncYearReportFromStore !== undefined){
+  if (value.opt.syncYearReportFromStore !== undefined) {
     reportParams.syncYearReportFromStore = value.opt.syncYearReportFromStore;
   }
   if (isDebug && reportParams) inspector('ch_m5SyncAcmYearReport.reportParams:', reportParams);
 
-  // Get opcua tags 
-  const opcuaTags = getOpcuaTags();
-  const groupBrowseName = reportParams.acmTagBrowseName;
-  // Get acm tag
-  const groupTag = opcuaTags.find(t => t.browseName === groupBrowseName);
-  if (!groupTag) {
-    logger.error(`RunCommand(ch_m5SyncAcmYearReport): ${chalk.error('ERROR')}! Tag with browseName "${chalk.cyan(groupBrowseName)}" not found.`);
-    throw new Error(`RunCommand(ch_m5SyncAcmYearReport): ERROR. Tag with browseName "${groupBrowseName}" not found.`);
-  }
-  if (isDebug && groupTag) inspector('ch_m5SyncAcmYearReport.groupTag:', groupTag);
 
   //--- Get dataItems ---//
   if (reportParams.syncYearReportFromStore) {
 
     //--- Get dataItems from store ---//
+    const opcuaTags = getOpcuaTags();
+    const groupBrowseName = reportParams.acmTagBrowseName;
     const storeBrowseNames = opcuaTags.filter(t => t.ownerGroup === groupBrowseName).map(t => t.browseName);
     dataItems = await getTagValuesFromStores(app, storeBrowseNames);
     // Get filter dataItems
@@ -128,11 +121,9 @@ async function ch_m5SyncAcmYearReport(params, value) {
   } else {
 
     //--- Run server method -> 'methodAcmDayReportsDataGet' ---//
-    const opt = value.opt;
+
     // Set input argument
-    inputArgument = {};
-    if (opt.point) inputArgument.pointID = opt.point;
-    if (opt.pattern) inputArgument.pattern = opt.pattern;
+    inputArgument = { pointID, pattern };
     inputArgument = { dataType: DataType.String, value: JSON.stringify(inputArgument) };
     inputArguments = [];
     inputArguments.push([inputArgument]);
@@ -176,9 +167,8 @@ async function ch_m5SyncAcmYearReport(params, value) {
   //--- Run server method -> 'methodAcmYearReportUpdate' ---//
 
   // Set inputArguments
-  params.addressSpaceOption = groupTag;
-  inputArgument = JSON.stringify(loOmit(params, ['myOpcuaClient', 'app']));
-  inputArgument = { dataType: DataType.String, value: inputArgument };
+  inputArgument = { pointID, isTest };
+  inputArgument = { dataType: DataType.String, value: JSON.stringify(inputArgument) };
 
   inputArgument2 = { dataType: DataType.String, value: JSON.stringify(dataItems) };
   inputArguments = [];
@@ -202,10 +192,10 @@ async function ch_m5SyncAcmYearReport(params, value) {
     );
 
     // Remove files from tmp path
-    if ( !reportParams.syncYearReportFromStore && !isUncPath(reportParams.dataTestPath)) {
-      let fileName = getPathBasename(outputArguments.resultPath);
-      const fileNameList = fileName.split(pointID, 1);
-      fileName = fileNameList[0] + '*' + fileNameList[1];
+    if (!reportParams.syncYearReportFromStore && !isUncPath(reportParams.dataTestPath)) {
+      // let fileName = getPathBasename(outputArguments.resultPath);
+      // const fileNameList = fileName.split(pointID, 1);
+      // fileName = fileNameList[0] + '*' + fileNameList[1];
       const filePath = toPathWithPosixSep([appRoot, reportParams.dataTestPath]);
       const deletedItems = removeItemsSync([`${filePath}/*.*`, `!${filePath}/*.xlsx`], { dryRun: false });
       if (isDebug && deletedItems.length) inspector('removeItemsSync.deletedItems:', deletedItems);

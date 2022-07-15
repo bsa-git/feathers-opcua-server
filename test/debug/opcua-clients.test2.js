@@ -371,14 +371,9 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
       //--- Run 'methodAcmYearReportUpdate' metod ---//
 
-      // Get opcua tags 
-      const opcuaTags = getOpcuaTags();
-      // Get acm tag
-      const groupTag = opcuaTags.find(t => t.browseName === 'CH_M52_ACM::ValueFromFile');
-
       // Set inputArguments
-      const params = { addressSpaceOption: groupTag };
-      inputArgument = { dataType: DataType.String, value: JSON.stringify(params) };
+      inputArgument = { pointID: 2 };
+      inputArgument = { dataType: DataType.String, value: JSON.stringify(inputArgument) };
       inputArgument2 = { dataType: DataType.String, value: JSON.stringify(dataItems) };
       inputArguments = [];
       inputArguments.push([inputArgument, inputArgument2]);

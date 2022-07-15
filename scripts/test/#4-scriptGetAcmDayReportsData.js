@@ -22,9 +22,7 @@ const isDebug = false;
 const dataTestPath = '/test/data/tmp/excel-helper';
 
 // Get argv
-// e.g. argv.script='#1' =>  Update AddressSpaceOptions.json
-// e.g. argv.script='#2' =>  Converter from `Fox` excel data `.csv` file to KEPServer
-// e.g. argv.script='#3' =>  Converter from `Fox` hist data `.inp` file to KEPServer
+// e.g. argv.script='#4' =>  method -> 'methodAcmDayReportsDataGet'
 const argv = yargs(hideBin(process.argv)).argv;
 if (isDebug && argv) inspector('Yargs.argv:', argv);
 const isScript = (argv.script === '#4');
@@ -46,7 +44,6 @@ describe('<<=== ScriptOperations: (#4-scriptGetAcmDayReportsData) ===>>', () => 
     //-----------------
     let options = {
       point: [1, 2, 3]
-      // point: [3]
     };
     // Run script
     if (Array.isArray(options.point)) {

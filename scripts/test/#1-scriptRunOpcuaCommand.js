@@ -42,8 +42,7 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           points: [1, 2, 3],
           test: true,
-          period: [1, 'months'],
-          year: 2020
+          period: [1, 'months']
         }
       };
       break;
@@ -63,6 +62,7 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
         opt: {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           points: [1, 2, 3],
+          test: true,
           pattern: '2022-01', // e.g. '2022'|'2022-01'|'2022-01-12'
           syncYearReportFromStore: true
         }
@@ -74,6 +74,7 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
         opt: {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           points: [1, 2, 3],
+          test: true,
           pattern: '/**/*.xls', // e.g. '/**/*.xls'|'/**/2022-01/*.xls'|/**/DayHist01_14F120_01022022_0000.xls
           syncYearReportFromStore: false
         }

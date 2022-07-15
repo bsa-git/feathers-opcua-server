@@ -1,3 +1,3 @@
 ## About
 
-This folder is for logs.
+This folder is for app logs.
