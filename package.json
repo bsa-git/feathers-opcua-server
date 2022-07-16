@@ -19,7 +19,7 @@
     "callOpcuaMethod": "./scripts/cli/callOpcuaMethod.js",
     "runOpcuaCommand": "./scripts/cli/runOpcuaCommand.js",
     "createAcmYearTemplate": "./scripts/cli/createAcmYearTemplate.js",
-    "getAcmDayReports": "./scripts/cli/getAcmDayReports.js"
+    "getAcmDayReportsData": "./scripts/cli/getAcmDayReportsData.js"
   },
   "contributors": [],
   "bugs": {},
