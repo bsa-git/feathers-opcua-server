@@ -41,7 +41,7 @@ describe('<<=== ScriptOperations: (#2-scriptCallOpcuaMetod) ===>>', () => {
           point: 2,
           test: true,
           period: [1, 'months'],
-          year: 2020
+          year: 2022
         }
       };
       break;

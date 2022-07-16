@@ -42,7 +42,8 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           points: [1, 2, 3],
           test: true,
-          period: [1, 'months']
+          period: [1, 'months'],
+          year: 2022
         }
       };
       break;

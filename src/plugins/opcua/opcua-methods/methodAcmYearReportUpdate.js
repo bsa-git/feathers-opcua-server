@@ -97,7 +97,7 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
     
     if (!doesFileExist(reportFile)) {
       const outputTemplateFile = loTemplate(reportParams.outputTemplateFile)({ pointID, year: beginReportYear });
-      reportFile = [appRoot, reportParams.dataPath, outputTemplateFile];
+      reportFile = [appRoot, outputReportPath, outputTemplateFile];
     }
     reportFile = join(...reportFile);
 
@@ -140,6 +140,11 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
       reportDates.push(reportDate);
 
       dateCells4Date = dateCells.filter(dateCell => dateCell.value === reportDate);
+      // We will work with the report only for dateCells4Date.length > 0
+      if (!dateCells4Date.length) {
+        continue;
+      }
+
       // Show cells
       loForEach(dateCells4Date, function (cell) {
         cell = loOmit(cell, ['cell', 'column', 'row']);

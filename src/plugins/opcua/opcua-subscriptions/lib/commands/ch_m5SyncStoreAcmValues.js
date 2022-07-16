@@ -14,9 +14,11 @@ const {
   appRoot,
   inspector,
   logger,
+  isUncPath,
   getPathBasename,
   readJsonFileSync,
-  removeFilesFromDirSync,
+  removeItemsSync,
+  toPathWithPosixSep
 } = require('../../../../lib');
 
 const {
@@ -89,8 +91,12 @@ async function ch_m5SyncStoreAcmValues(params, value) {
       `For pointID=${chalk.cyan(pointID)};`,
       `syncStoreCount: ${chalk.cyan(savedValuesCount)};`
     );
-    // Remove files from dir
-    removeFilesFromDirSync([appRoot, syncResultOutputPath]);
+    // Remove files from tmp path
+    if (!isUncPath(syncResultOutputPath)) {
+      const filePath = toPathWithPosixSep([appRoot, syncResultOutputPath]);
+      const deletedItems = removeItemsSync([`${filePath}/*.*`, `!${filePath}/*.xlsx`], { dryRun: false });
+      if (isDebug && deletedItems.length) inspector('removeItemsSync.deletedItems:', deletedItems);
+    }
   } else {
     logger.error(
       `runMetod.methodAcmDayReportsDataGet - ${chalk.red('ERROR!')} 

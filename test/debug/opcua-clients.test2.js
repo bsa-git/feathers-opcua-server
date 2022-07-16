@@ -88,7 +88,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m5acm_1']);
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m5acm_2']);
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m5acm_3']);
-    removeFilesFromDirSync([appRoot, 'test/data/tmp/excel-helper']);
+    // removeFilesFromDirSync([appRoot, 'test/data/tmp/excel-helper']);
   });
 
   it('#1: OPC-UA clients: registered the service', async () => {
@@ -278,7 +278,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       qal2СoncentrationAdition: 0,
       qal2VolumeAdition: 0,
       period: [1, 'months'],
-      // startYear: 2020,
+      startYear: 2022,
     };
     const inputArguments = [[
       {
