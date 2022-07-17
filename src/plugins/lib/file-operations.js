@@ -4,7 +4,8 @@ const os = require('os');
 const Path = require('path');
 const join = Path.join;
 const moment = require('moment');
-var minimatch = require('minimatch');
+const minimatch = require('minimatch');
+const Minimatch = require('minimatch').Minimatch;
 const dirTree = require('directory-tree');
 const del = require('del');
 
@@ -551,9 +552,9 @@ const clearDirSync = function (path) {
  */
 const removeItemsSync = function (patterns, options = {}) {
   const deletedItems = del.sync(patterns, options);
-  if(isDebug && deletedItems.length) inspector('removeItemsSync.deletedItems:', deletedItems);
-  if(options.dryRun){
-    if(isDebug && deletedItems.length) inspector('removeItemsSync.Files and directories that would be deleted:', deletedItems);
+  if (isDebug && deletedItems.length) inspector('removeItemsSync.deletedItems:', deletedItems);
+  if (options.dryRun) {
+    if (isDebug && deletedItems.length) inspector('removeItemsSync.Files and directories that would be deleted:', deletedItems);
   }
   return deletedItems;
 };
@@ -570,9 +571,9 @@ const removeItemsSync = function (patterns, options = {}) {
  */
 const removeItems = async function (patterns, options) {
   const deletedItems = await del(patterns, options);
-  if(isDebug && deletedItems.length) inspector('removeItems.deletedItems:', deletedItems);
-  if(options.dryRun){
-    if(isDebug && deletedItems.length) inspector('removeItems.Files and directories that would be deleted:', deletedItems);
+  if (isDebug && deletedItems.length) inspector('removeItems.deletedItems:', deletedItems);
+  if (options.dryRun) {
+    if (isDebug && deletedItems.length) inspector('removeItems.Files and directories that would be deleted:', deletedItems);
   }
   return deletedItems;
 };
@@ -607,11 +608,11 @@ const readDirSync = function (path, withFileTypes = false) {
 /**
  * @method getFileListFromDir
  * @param {String|Array} path 
- * @param {String[]} fileList 
  * @param {String} pattern 
  * e.g. '*.xls'
  * @param {Object} options
  * e.g. { matchBase: true }
+ * @param {String[]} fileList 
  * @returns {String[]}
  * e.g. [
   'c:/reports/acm/23agr/2022/2022-01/DayHist01_23F120_01022022_0000.xls',
@@ -619,7 +620,8 @@ const readDirSync = function (path, withFileTypes = false) {
   'c:/reports/acm/23agr/DayHist01_23F120_02242022_0000.xls'
 ]
  */
-const getFileListFromDir = function (path, fileList = [], pattern = '', options = {}) {
+// e.g. pattern -> '*.xls'|'/**/2022/**/*.xls'
+const getFileListFromDir = function (path, pattern = '', options = {}, fileList = []) {
   let filenames = [];
   //--------------------
   if (Array.isArray(path)) {
@@ -636,16 +638,51 @@ const getFileListFromDir = function (path, fileList = [], pattern = '', options 
         fileList.push(`${path}${Path.sep}${item}`);
         if (isDebug && fileList.length) inspector('getFileListFromDir.fileList:', fileList);
       } else {
-        getFileListFromDir(`${path}${Path.sep}${item}`, fileList, pattern, options);
+        getFileListFromDir(`${path}${Path.sep}${item}`, pattern, options, fileList);
       }
     }
   }
   if (isDebug && fileList.length) inspector('getFileListFromDir.fileList:', fileList);
-  if(pattern){
+  if (pattern) {
     fileList = minimatch.match(fileList, pattern, options);
     if (isDebug && fileList.length) inspector('getFileListFromDir.minimatch.fileList:', fileList);
   }
   return fileList;
+};
+
+/**
+ * Creates the function which checks whether a file path is matched with the given pattern or not.
+ *
+ * @param {string[]} includePatterns - The glob patterns to include files.
+ * @param {string[]} excludePatterns - The glob patterns to exclude files.
+ * @returns {function} Created predicate function.
+ */
+const createMatch = function (includePatterns, excludePatterns) {
+  const include = includePatterns.map(pattern => new Minimatch(pattern));
+  const exclude = excludePatterns.map(pattern => new Minimatch(pattern));
+
+  return filePath =>
+    include.some(m => m.match(filePath)) &&
+    !exclude.some(m => m.match(filePath));
+};
+
+/**
+ * @method makeRulesFromGlobPatterns
+ * @param {*} patterns 
+ * @param {*} dirRules 
+ * @param {*} fileRules 
+ */
+const makeRulesFromGlobPatterns = function (patterns, dirRules = [], fileRules = []) {
+  const rDir = /\/$/;
+  const toRe = pattern => minimatch.makeRe(pattern);
+  patterns && patterns.forEach(pattern => {
+    if (rDir.test(pattern)) {
+      pattern = pattern.replace(rDir, '');
+      dirRules.push(toRe(pattern));
+    } else {
+      fileRules.push(toRe(pattern));
+    }
+  });
 };
 
 
@@ -967,6 +1004,8 @@ module.exports = {
   winPathToUncPath,
   readDirSync,
   getFileListFromDir,
+  createMatch,
+  makeRulesFromGlobPatterns,
   readOnlyNewFile,
   readOnlyModifiedFile,
   readFileSync,

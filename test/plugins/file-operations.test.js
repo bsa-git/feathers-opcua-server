@@ -23,6 +23,8 @@ const {
   getOsPlatform,
   winPathToUncPath,
   getFileListFromDir,
+  createMatch,
+  makeRulesFromGlobPatterns,
   toPathWithPosixSep,
   removeItems,
   removeItemsSync,
@@ -192,39 +194,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     assert.ok(true, 'FileOperations: watchFile');
   });
 
-  it('#9: FileOperations: Get file list from dir', () => {
-    let fileNames = [], filterFileNames = [];
-    //---------------------------------------------------------------
-    const testPath = 'test/data/excel/acm';
-    // Get file names without pattern filter
-    fileNames = getFileListFromDir([appRoot, testPath]);
-    if (isDebug && fileNames.length) inspector(`FileOperations: Get file list from dir (${testPath}):`, fileNames);
-    // Get posix path for pattern  filter
-    const posixPath = toPathWithPosixSep([appRoot, testPath]);
-    if(isDebug && posixPath) console.log('toPathWithPosixSep.posixPath:', posixPath);
-    // Get file names with pattern filter
-    filterFileNames = getFileListFromDir([appRoot, testPath], [], `${posixPath}/**/2022/**/*.xls`, { matchBase: true });
-    if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from dir (${posixPath}):`, filterFileNames);
-    assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from dir');
-  });
-
-  it('#10: FileOperations: Get file list from unc dir', () => {
-    let fileNames = [], filterFileNames = [];
-    //---------------------------------------------------------------
-    const testPath = 'test/data/excel/acm';
-    // Get unc path 
-    const uncPath = winPathToUncPath([appRoot, testPath]);
-    if (isDebug && uncPath) console.log('FileOperations: Get file list from unc dir.uncPath:', uncPath);
-    // Get file names without pattern filter
-    fileNames = getFileListFromDir(uncPath);
-    if (isDebug && fileNames.length) inspector(`FileOperations: Get file list from unc dir (${uncPath}):`, fileNames);
-    // Get file names with pattern filter
-    filterFileNames = getFileListFromDir(uncPath, [], `${uncPath}/**/2022/**/*.xls`, { matchBase: true });
-    if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from unc dir (${uncPath}):`, filterFileNames);
-    assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from unc dir');
-  });
-
-  it('#11: FileOperations: Remove directory/files paths from dir', async () => {
+  it('#9: FileOperations: Remove directory/files paths from dir', async () => {
     let deletedItems, deletedItems2;
     //---------------------------------------------------------------
     const testPath = 'test/data/excel/acm';
@@ -240,5 +210,71 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     deletedItems2 = await removeItems([`${filePath}/*.*`, `!${filePath}/*.xlsx`], { dryRun: true });
     if (isDebug && deletedItems) inspector(`FileOperations: Remove directory/files paths from dir (${filePath}):`, deletedItems);
     assert.ok(deletedItems.length > deletedItems2.length, 'FileOperations: Remove directory/files paths from dir');
+  });
+
+  it('#10: FileOperations: Get file list from dir', () => {
+    let fileNames = [], filterFileNames = [];
+    //---------------------------------------------------------------
+    const testPath = 'test/data/excel/acm';
+    // Get file names without pattern filter
+    fileNames = getFileListFromDir([appRoot, testPath]);
+    if (isDebug && fileNames.length) inspector(`FileOperations: Get all file list from dir (${testPath}):`, fileNames);
+    // Get posix path for pattern  filter
+    const posixPath = toPathWithPosixSep([appRoot, testPath]);
+    if (isDebug && posixPath) console.log('toPathWithPosixSep.posixPath:', posixPath);
+    // Get file names with pattern filter
+    filterFileNames = getFileListFromDir([appRoot, testPath], `${posixPath}/**/2022/**/*.xls`, { matchBase: true });
+    if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from dir (${posixPath}):`, filterFileNames);
+    assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from dir');
+    filterFileNames = getFileListFromDir([appRoot, testPath], `${posixPath}/**/*_14F120*.xls`, { matchBase: true });
+    if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from dir (${posixPath}):`, filterFileNames);
+    assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from dir');
+  });
+
+  it('#11: FileOperations: Get file list from unc dir', () => {
+    let fileNames = [], filterFileNames = [];
+    //---------------------------------------------------------------
+    const testPath = 'test/data/excel/acm';
+    // Get unc path 
+    const uncPath = winPathToUncPath([appRoot, testPath]);
+    if (isDebug && uncPath) console.log('FileOperations: Get file list from unc dir.uncPath:', uncPath);
+    // Get file names without pattern filter
+    fileNames = getFileListFromDir(uncPath);
+    if (isDebug && fileNames.length) inspector(`FileOperations: Get file list from unc dir (${uncPath}):`, fileNames);
+    // Get file names with pattern filter
+    filterFileNames = getFileListFromDir(uncPath, `${uncPath}/**/2022/**/*.xls`, { matchBase: true });
+    if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from unc dir (${uncPath}):`, filterFileNames);
+    assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from unc dir');
+  });
+
+  it('#12: FileOperations: Get file list from dir. With glob patterns to include/exclude  files', () => {
+    let filePaths = [], filterFilePaths = [];
+    //---------------------------------------------------------------
+    const testPath = 'test/data/excel/acm';
+    // Get file paths without pattern filter
+    filePaths = getFileListFromDir([appRoot, testPath]);
+    if (isDebug && filePaths.length) inspector(`FileOperations: Get all file list from dir (${testPath}):`, filePaths);
+    // Get posix path for pattern  filter
+    const posixPath = toPathWithPosixSep([appRoot, testPath]);
+    if (isDebug && posixPath) console.log('toPathWithPosixSep.posixPath:', posixPath);
+    // Get file paths with pattern filter
+    filterFilePaths = filePaths.filter(filePath => createMatch(
+      [`${posixPath}/**/2022/**/*.xls`], // patterns to include
+      [`${posixPath}/**/*_14F120*.xls`]  // patterns to exclude
+    )(filePath));
+    if (isDebug && filterFilePaths.length) inspector(`FileOperations: Get file list from dir (${posixPath}):`, filterFilePaths);
+    assert.ok(filterFilePaths.length && filePaths.length >= filterFilePaths.length, 'FileOperations: Get file list from dir. With glob patterns to include/exclude  files');
+  });
+
+  it('#13: FileOperations: Make rules from glob patterns', () => {
+    let dirRules = [], fileRules = [];
+    //---------------------------------------------------------------
+    // Get dirRules and fileRules
+    makeRulesFromGlobPatterns(['/**/2022/2022-01/', '*_14F120*.xls'], dirRules, fileRules);
+
+    if (isDebug && dirRules.length) inspector('FileOperations: Make rules from glob patterns.dirRules:', dirRules);
+    assert.ok(dirRules.length, 'FileOperations: Make rules from glob patterns');
+    if (isDebug && fileRules.length) inspector('FileOperations: Make rules from glob patterns.fileRules:', fileRules);
+    assert.ok(fileRules.length, 'FileOperations: Make rules from glob patterns');
   });
 });

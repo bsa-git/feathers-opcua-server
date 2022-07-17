@@ -29,8 +29,10 @@ module.exports = function (app) {
       tagName: { type: String, required: true },
       storeStart: String,
       storeEnd: String,
+      store: Schema.Types.Mixed,
       values: [{
         key: String,
+        hash: String,
         value: Schema.Types.Mixed,
         items: [Schema.Types.Mixed]
       }]

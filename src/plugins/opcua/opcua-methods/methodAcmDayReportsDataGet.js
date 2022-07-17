@@ -153,7 +153,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
     path = loTrimEnd(path, '\\/');
     pattern = path + params.pattern;
     if (isDebug && path) inspector('methodAcmDayReportsDataGet.path:', path);
-    dirList = getFileListFromDir(path, [], pattern, params.patternOptions);
+    dirList = getFileListFromDir(path, pattern, params.patternOptions);
     if (isDebug && dirList.length) inspector('methodAcmDayReportsDataGet.dirList:', dirList);
   }
 
