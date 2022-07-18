@@ -7,7 +7,7 @@ const {
   saveFakesToServices
 } = require('../../src/plugins');
 
-const isLog = false;
+const isDebug = false;
 
 
 describe('<<=== Opcua-Values Service Test (opcua-values.test.js) ===>>', () => {
@@ -22,8 +22,8 @@ describe('<<=== Opcua-Values Service Test (opcua-values.test.js) ===>>', () => {
     errPath = await saveFakesToServices(app, 'opcuaValues');
     assert.ok(errPath === '', `Not save fakes to services - '${errPath}'`);
     const service = app.service('opcua-values');
-    const data = await service.find({});
-    if(isLog) inspector('Save fake data to \'opcua-values\' service.data[0]', data.data[0]);
-    assert.ok(data.data.length > 0, 'Save fake data to \'opcua-values\' service');
+    const findResults = await service.find({});
+    if(isDebug && findResults) inspector('Save fake data to \'opcua-values\' service.data[0]', findResults.data);
+    assert.ok(findResults.data.length > 0, 'Save fake data to \'opcua-values\' service');
   });
 });

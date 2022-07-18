@@ -161,6 +161,11 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   for (let index = 0; index < dirList.length; index++) {
     // if (index > 0) break;
     const xlsPath = dirList[index];
+    if (!doesFileExist(xlsPath)) {
+      logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. File with name "${chalk.cyan(xlsPath)}" not found.`);
+      throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. File with name "${xlsPath}" not found.`);
+    }
+
     try {
 
       // Create xlsx object

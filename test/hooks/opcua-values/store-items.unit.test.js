@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
+const loOmit = require('lodash/omit');
 const storeItems = require('../../../src/services/opcua-values/hooks/store-items');
 
 const {
@@ -79,7 +80,7 @@ describe('Test opcua-values/hooks/store-items.unit.test.js', () => {
     assert.ok(errPath === '', `Not save fakes to services - '${errPath}'`);
   });
 
-  
+
   it('#2: Hook exists', () => {
     assert(typeof storeItems === 'function', 'Hook is not a function.');
   });
@@ -123,7 +124,7 @@ describe('Test opcua-values/hooks/store-items.unit.test.js', () => {
         };
         // Run "storeItems" hook  
         await storeItems()(contextBefore);
-        if (isDebug && contextBefore.data) inspector('Get contextBefore.data:', contextBefore);
+        if (isDebug && contextBefore.data) inspector('Get contextBefore.data:', loOmit(contextBefore, ['app', 'service']));
         const length1 = contextBefore.data.values.length;
         const length2 = storeValue.values.length;
         assert.ok(length1 > length2, `length1 must be greater than length2  - (${length1}) > (${length2})`);

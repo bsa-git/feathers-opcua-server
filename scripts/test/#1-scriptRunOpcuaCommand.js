@@ -53,7 +53,9 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
         opt: {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           points: [1, 2, 3],
-          pattern: '/**/*.xls'// e.g. '/**/*.xls'|'/**/2022-01/*.xls'|/**/DayHist01_14F120_01022022_0000.xls
+          pattern: '/**/*.xls'
+          // e.g. '/**/*.xls'|'/**/2022-01/*.xls'|'/**/*2022_*.xls'|'/**/*_01*2022*.xls'|'/**/*_01022022*.xls'|'/**/*_14F120_01022022*.xls'
+          // e.g. '/**/DayHist01_14F120_01022022_0000.xls'
         }
       };
       break;
@@ -76,7 +78,9 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           points: [1, 2, 3],
           test: true,
-          pattern: '/**/*.xls', // e.g. '/**/*.xls'|'/**/2022-01/*.xls'|/**/DayHist01_14F120_01022022_0000.xls
+          pattern: '/**/*.xls', 
+          // e.g. '/**/*.xls'|'/**/2022-01/*.xls'|'/**/*2022_*.xls'|'/**/*_01*2022*.xls'|'/**/*_01022022*.xls'|'/**/*_14F120_01022022*.xls'
+          // e.g. '/**/DayHist01_14F120_01022022_0000.xls'
           syncYearReportFromStore: false
         }
       };

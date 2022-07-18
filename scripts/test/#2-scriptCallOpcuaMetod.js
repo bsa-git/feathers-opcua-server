@@ -51,7 +51,9 @@ describe('<<=== ScriptOperations: (#2-scriptCallOpcuaMetod) ===>>', () => {
         opt: {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           point: 2,
-          pattern: '/**/*.xls'// e.g. '/**/*.xls'|'/**/2022-01/*.xls'|/**/DayHist01_14F120_01022022_0000.xls
+          pattern: '/**/*.xls'
+          // e.g. '/**/*.xls'|'/**/2022-01/*.xls'|'/**/*2022_*.xls'|'/**/*_01*2022*.xls'|'/**/*_01022022*.xls'|'/**/*_14F120_01022022*.xls'
+          // e.g. '/**/DayHist01_14F120_01022022_0000.xls'
         }
       };
       break;

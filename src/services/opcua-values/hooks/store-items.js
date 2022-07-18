@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
 const loConcat = require('lodash/concat');
 
-const { 
+const {
   inspector,
   HookHelper,
-  sortByStringField 
+  sortByStringField,
+  objectHash
 } = require('../../../plugins');
 
 const debug = require('debug')('app:hook.store-items');
@@ -16,29 +17,49 @@ module.exports = function (options = {}) {
     const hh = new HookHelper(context);
     // Add items
     const addItems = async record => {
-      let values;
-      //----------------------
-      
-      if(!record.storeStart) return;
-      if (!record.values.length > 1) return;
-      if(isDebug && record) inspector('hook.store-items.addItems.record:', record);
-      
+      let values, valueHash = '';
+      //-----------------------------------------------
+      if (!record.storeStart) return;
+      if (!record.values.length) return;
+      if (record.values.length > 1) {
+        record.values = [record.values[0]];
+      }
+      if (isDebug && record) inspector('hook.store-items.addItems.record:', record);
+
       const contextId = hh.getContextId();
       if (contextId) {
+        // Set hash value
+        if (record.values[0].items && record.values[0].items.length) {
+          valueHash = objectHash(record.values[0].items);
+        } else {
+          valueHash = objectHash(record.values[0].value);
+        }
+        if (record.values[0].hash && record.values[0].hash !== valueHash) {
+          throw new Error(`A "opcua-values" service have not a record with record.values#value.hash === ${valueHash}`);
+        } else {
+          if (!record.values[0].hash) record.values[0].hash = valueHash;
+        }
+
         // Get store value
         const storeValue = await hh.getItem('opcua-values', contextId);
-        if(isDebug && storeValue) inspector('hook.store-items.addItems.storeValue:', storeValue);
+        if (isDebug && storeValue) inspector('hook.store-items.addItems.storeValue:', storeValue);
         // Get storeStart 
         const storeStart = record.storeStart;
         // Get values
         values = storeValue.values.filter(v => v.key !== storeStart);
         values = loConcat(values, record.values);
+        // Ascending sort by string field 
         values = sortByStringField(values, 'key', true);
         // Set range of stored values
         record.storeStart = values[0].key;
         record.storeEnd = values[values.length - 1].key;
+        // Descending sort Ascending by string field 
         record.values = sortByStringField(values, 'key', false);
-        if(isDebug && record) inspector('hook.store-items.addItems.UpdateRecord:', record);
+
+        // Set record.store.hash value
+        const valueHashes = record.values.map(v => v.hash);
+        record.store = { count: valueHashes.length, hash: objectHash(valueHashes) };
+        if (isDebug && record) inspector('hook.store-items.addItems.UpdateRecord:', record);
       }
     };
     await hh.forEachRecords(addItems);

@@ -313,14 +313,8 @@
       "dataType": "String",
       "hist": 1,
       "store": {
-        "numberOfValuesInDoc": [
-          3,
-          "days"
-        ],
-        "numberOfDocsForTag": [
-          6,
-          "days"
-        ]
+        "numberOfValuesInDoc": [3, "days"],
+        "numberOfDocsForTag": [6, "days"]
       },
       "group": true,
       "variableGetType": "valueFromSource",
@@ -395,14 +389,17 @@
       "tagName": "CH_M51::01AMIAK:01T4",
       "storeStart": "2022-01-01",
       "storeEnd": "2022-01-02",
+      "store": { "count": 2, "hash": "4991782fcf7fff0e5bb16b43de20f7b989aa9738" },
       "values": [
         {
-          "key": "2022-01-01",
-          "value": 166.128945
+          "key": "2022-01-02",
+          "hash": "5baf17d1c0d7beac7ceaabf49e67fd577c899e3c",
+          "value": 180.56
         },
         {
-          "key": "2022-01-02",
-          "value": 180.56
+          "key": "2022-01-01",
+          "hash": "b1df740247202296415822536e2aaab09cb56b26",
+          "value": 166.128945
         }
       ]
     },
@@ -412,14 +409,17 @@
       "tagName": "CH_M51::01AMIAK:01P4_1",
       "storeStart": "2022-01-01",
       "storeEnd": "2022-01-02",
+      "store": { "count": 2, "hash": "fc0963952366b0f423b3de41ef6dc917964878d0" },
       "values": [
         {
-          "key": "2022-01-01",
-          "value": 6.128945
+          "key": "2022-01-02",
+          "hash": "0e25850d69cec8081b89158d63c4c23b43ba6757",
+          "value": 8.56
         },
         {
-          "key": "2022-01-02",
-          "value": 8.56
+          "key": "2022-01-01",
+          "hash": "9c154ec649afa2b0246162df485125d61019b2df",
+          "value": 6.128945
         }
       ]
     }

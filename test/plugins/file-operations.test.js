@@ -226,6 +226,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     filterFileNames = getFileListFromDir([appRoot, testPath], `${posixPath}/**/2022/**/*.xls`, { matchBase: true });
     if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from dir (${posixPath}):`, filterFileNames);
     assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from dir');
+    
     filterFileNames = getFileListFromDir([appRoot, testPath], `${posixPath}/**/*_14F120*.xls`, { matchBase: true });
     if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from dir (${posixPath}):`, filterFileNames);
     assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from dir');

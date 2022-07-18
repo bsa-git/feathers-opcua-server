@@ -2,12 +2,18 @@
 const assert = require('assert');
 const moment = require('moment');
 
+
 const {
   inspector,
   getStartOfPeriod,
   getEndOfPeriod,
   isDeepEqual,
-  isDeepStrictEqual
+  isDeepStrictEqual,
+  objectHash,
+  objectHashKeys,
+  objectHashMD5,
+  objectHashKeysMD5,
+  objectHashWriteToStream
 } = require('../../src/plugins/lib');
 
 const {
@@ -15,6 +21,7 @@ const {
 } = require('../../src/plugins/db-helpers');
 
 const chalk = require('chalk');
+const loOmit = require('lodash/omit');
 
 const debug = require('debug')('app:util.test');
 const isDebug = false;
@@ -119,5 +126,56 @@ describe('<<=== Util: (util.test) ===>>', () => {
     const omit = [idField, 'createdAt', 'updatedAt', '__v'];
     const result = isDeepStrictEqual(object1, object2, omit);
     assert.ok(result.isDeepStrictEqual && result.isDeepEqual, 'util.isDeepStrictEqual must be a "TRUE" when comparing two objects: "object1" and "object2"');
+  });
+
+  it('util.objectHash', () => {
+    let result1 = objectHash({ foo: 'bar', a: 42 });
+    let result2 = objectHash({ a: 42, foo: 'bar' });
+    if (isDebug && result1 && result2) debug(`objectHash.result1: '${result1}'; objectHash.result2: '${result2}';`);
+    result1 = objectHash(['5baf17d1c0d7beac7ceaabf49e67fd577c899e3c', 'b1df740247202296415822536e2aaab09cb56b26']);
+    result2 = objectHash(['0e25850d69cec8081b89158d63c4c23b43ba6757', '9c154ec649afa2b0246162df485125d61019b2df']);
+    if (isDebug && result1 && result2) debug(`objectHash.result1: '${result1}'; objectHash.result2: '${result2}';`);
+    assert.ok(result1 && result2, 'util.objectHash must be a "TRUE" for two objects: "object1" and "object2"');
+  });
+
+  it('util.objectHash2', () => {
+    const idField = getIdField(object2);
+    const omits = [idField, 'createdAt', 'updatedAt', '__v'];
+    const result1 = objectHash(object1);
+    const result2 = objectHash(loOmit(object2, omits));
+    if (isDebug && result1 && result2) debug(`objectHash.result1: '${result1}'; objectHash.result2: '${result2}';`);
+    assert.ok(result1 === result2, 'util.objectHash must be a "TRUE" when comparing two objects: "object1" and "object2"');
+  });
+
+  it('util.objectHashKeys', () => {
+    const idField = getIdField(object2);
+    const omits = [idField, 'createdAt', 'updatedAt', '__v'];
+    const result1 = objectHashKeys(object1);
+    const result2 = objectHashKeys(loOmit(object2, omits));
+    if (isDebug && result1 && result2) debug(`objectHashKeys.result1: '${result1}'; objectHashKeys.result2: '${result2}';`);
+    assert.ok(result1 === result2, 'util.objectHashKeys must be a "TRUE" when comparing keys for two objects: "object1" and "object2"');
+  });
+
+  it('util.objectHashMD5', () => {
+    const idField = getIdField(object2);
+    const omits = [idField, 'createdAt', 'updatedAt', '__v'];
+    const result1 = objectHashMD5(object1);
+    const result2 = objectHashMD5(loOmit(object2, omits));
+    if (isDebug && result1 && result2) debug(`objectHashMD5.result1: '${result1}'; objectHashMD5.result2: '${result2}';`);
+    assert.ok(result1 === result2, 'util.objectHashMD5 must be a "TRUE" when comparing two objects: "object1" and "object2"');
+  });
+
+  it('util.objectHashKeysMD5', () => {
+    const idField = getIdField(object2);
+    const omits = [idField, 'createdAt', 'updatedAt', '__v'];
+    const result1 = objectHashKeysMD5(object1);
+    const result2 = objectHashKeysMD5(loOmit(object2, omits));
+    if (isDebug && result1 && result2) debug(`objectHashKeysMD5.result1: '${result1}'; objectHashKeysMD5.result2: '${result2}';`);
+    assert.ok(result1 === result2, 'util.objectHashKeysMD5 must be a "TRUE" when comparing keys for two objects: "object1" and "object2"');
+  });
+
+  it('util.objectHashWriteToStream', () => {
+    objectHashWriteToStream({ foo: 'bar', a: 42 }, process.stdout, { respectType: false });
+    assert.ok(true, 'util.objectHashWriteToStream');
   });
 });

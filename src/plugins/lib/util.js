@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const { join } = require('path');
 const moment = require('moment');
+const hash = require('object-hash');
 const os = require('os');
 const Color = require('color');
 const chalk = require('chalk');
@@ -820,6 +821,94 @@ const isDeepEqual = function (object1, object2, omit = [], isView = false) {
   return result;
 };
 
+
+/**
+ * Generate a hash from any object or type. Defaults to sha1 with hex encoding.
+ * @method objectHash
+ * @param {Object|Array|any} value 
+ * @param {Object} options 
+ * algorithm hash algo to be used: 'sha1', 'md5', 'passthrough'. default: sha1
+  This supports the algorithms returned by crypto.getHashes(). Note that the default of SHA-1 is not considered secure, 
+  and a stronger algorithm should be used if a cryptographical hash is desired.
+  This also supports the passthrough algorith, which will return the information that would otherwise have been hashed.
+ * excludeValues {true|false} hash object keys, values ignored. default: false
+ * encoding hash encoding, supports 'buffer', 'hex', 'binary', 'base64'. default: hex
+ * ignoreUnknown {true|*false} ignore unknown object types. default: false
+ * replacer optional function that replaces values before hashing. default: accept all values
+ * respectFunctionProperties {true|false} Whether properties on functions are considered when hashing. default: true
+ * respectFunctionNames {true|false} consider name property of functions for hashing. default: true
+ * respectType {true|false} Whether special type attributes (.prototype, .__proto__, .constructor) are hashed. default: true
+ * unorderedArrays {true|false} Sort all arrays before hashing. Note that this affects all collections, i.e. including typed arrays, Sets, Maps, etc. default: false
+ * unorderedSets {true|false} Sort Set and Map instances before hashing, i.e. make hash(new Set([1, 2])) == hash(new Set([2, 1])) return true. default: true
+ * unorderedObjects {true|false} Sort objects before hashing, i.e. make hash({ x: 1, y: 2 }) === hash({ y: 2, x: 1 }). default: true
+ * excludeKeys optional function for excluding specific key(s) from hashing, if true is returned then exclude from hash. default: include all keys
+ * @returns {String}
+ */
+const objectHash = function (value, options) {
+  return hash(value, options);
+};
+
+/**
+ * Hash using the sha1 algorithm.
+ * Note that SHA-1 is not considered secure, and a stronger algorithm should be used if a cryptographical hash is desired.
+ * Sugar method, equivalent to hash(value, {algorithm: 'sha1'})
+ * @method objectHashSha1
+ * @param {Object|Array|any} value 
+ * @returns {String}
+ */
+const objectHashSha1 = function (value) {
+  return hash.sha1(value);
+};
+
+/**
+ * Hash object keys using the sha1 algorithm, values ignored
+ * Sugar method, equivalent to hash(value, {excludeValues: true})
+ * @method objectHashKeys
+ * @param {Object|Array|any} value 
+ * @returns {String}
+ */
+const objectHashKeys = function (value) {
+  return hash.keys(value);
+};
+
+/**
+ * Hash using the md5 algorithm.
+ * Note that the MD5 algorithm is not considered secure, and a stronger algorithm should be used if a cryptographical hash is desired.
+ * @method objectHashMD5
+ * @param {Object|Array|any} value 
+ * @returns {String}
+ */
+const objectHashMD5 = function (value) {
+  return hash.MD5(value);
+};
+
+/**
+ * Hash object keys using the md5 algorithm, values ignored.
+ * Note that the MD5 algorithm is not considered secure, and a stronger algorithm should be used if a cryptographical hash is desired.
+ * Sugar method, equivalent to hash(value, {algorithm: 'md5', excludeValues: true})
+ * @method objectHashKeysMD5
+ * @param {Object|Array|any} value 
+ * @returns {String}
+ */
+const objectHashKeysMD5 = function (value) {
+  return hash.keysMD5(value);
+};
+
+/**
+ * Write the information that would otherwise have been hashed to a stream.
+ * Note that the MD5 algorithm is not considered secure, and a stronger algorithm should be used if a cryptographical hash is desired.
+ * @method objectHashMD5
+ * @param {Object|Array|any} value 
+ * @param {Stream} stream 
+ * @param {Object} options 
+ * @returns {String}
+ * e.g. hash.writeToStream({foo: 'bar', a: 42}, {respectType: false}, process.stdout)
+ * e.g. -> 'object:a:number:42foo:string:bar'
+ */
+const objectHashWriteToStream = function (value, stream, options = {}) {
+  return hash.writeToStream(value, options, stream);
+};
+
 //-------------- COLOR ---------------//
 
 /**
@@ -910,6 +999,12 @@ module.exports = {
   getRandomValue,
   isDeepStrictEqual,
   isDeepEqual,
+  objectHash,
+  objectHashSha1,
+  objectHashKeys,
+  objectHashMD5,
+  objectHashKeysMD5,
+  objectHashWriteToStream,
   rgbToARGB,
   hexToARGB,
   hexToRGBA
