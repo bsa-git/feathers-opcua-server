@@ -1,6 +1,7 @@
 {
   "pointID": 1,
   "acmTagBrowseName": "CH_M51_ACM::ValueFromFile",
+  "errorFilePaths": [],
   "inputFile": "DayHist01_23F120_${ date }_0000.xls",
   "headerNames": [
     "23QN2O",

@@ -129,7 +129,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
 
       // Get fileNames from path for http
       pattern = loTrimEnd(params.acmPath, '/') + params.pattern;
-      const urls = await httpGetFileNamesFromDir(params.acmPath, [], pattern, params.patternOptions);
+      const urls = await httpGetFileNamesFromDir(params.acmPath, pattern, params.patternOptions);
       if (isDebug && urls.length) console.log('httpGetFileNamesFromDir.urls:', urls);
       // Get files from urls
       for (let index = 0; index < urls.length; index++) {
@@ -167,7 +167,6 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
     }
 
     try {
-
       // Create xlsx object
       let xlsx = new XlsxHelperClass({
         excelPath: xlsPath,
@@ -178,25 +177,32 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
       dataItem = xlsx.sheetToJson('Report1', { range: params.rangeData, header: params.headerNames });
       if (isDebug && dataItem.length) inspector(`methodAcmDayReportsDataGet.dataItems(${dataItem.length}):`, dataItem);
 
-      // Sheet to json date
-      let dateTime = xlsx.sheetToJson('Report1', { range: params.rangeDate });
-      dateTime = dateTime[0]['A'].split('to:')[0].split('from:')[1].trim();
-      dateTime = moment.utc(dateTime).format('YYYY-MM-DD');
-      if (isDebug && dateTime) console.log('methodAcmDayReportsDataGet.dateTime:', dateTime);
+      if (!dataItem.length){
+        logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}.  Error - dataItem is empty . Excel path: '${xlsPath}'.`);
+        params.errorFilePaths.push(xlsPath);
+      }
+      
+      if (dataItem.length) {
+        // Sheet to json date
+        let dateTime = xlsx.sheetToJson('Report1', { range: params.rangeDate });
+        dateTime = dateTime[0]['A'].split('to:')[0].split('from:')[1].trim();
+        dateTime = moment.utc(dateTime).format('YYYY-MM-DD');
+        if (isDebug && dateTime) console.log('methodAcmDayReportsDataGet.dateTime:', dateTime);
 
-      // Convert alias list to browseName list
-      const variableList = opcuaTags.filter(t => t.ownerGroup === acmTag.browseName);
-      dataItem = convertAliasListToBrowseNameList(variableList, dataItem);
-      dataItem['!value'] = { dateTime };
-      if (isDebug && dataItem) inspector(`methodAcmDayReportsDataGet.dataItem('${acmTag.browseName}'):`, dataItem);
+        // Convert alias list to browseName list
+        const variableList = opcuaTags.filter(t => t.ownerGroup === acmTag.browseName);
+        dataItem = convertAliasListToBrowseNameList(variableList, dataItem);
+        dataItem['!value'] = { dateTime };
+        if (isDebug && dataItem) inspector(`methodAcmDayReportsDataGet.dataItem('${acmTag.browseName}'):`, dataItem);
 
-      dataItems.push(dataItem);
-
+        dataItems.push(dataItem);
+      }
     } catch (error) {
       logger.error(
         `RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}.  Error while creating an instance of a class 'XlsxHelperClass'. Excel path: '${xlsPath}'.`
       );
-      break;
+      if (true && error) console.log('ERROR.methodAcmDayReportsDataGet.message:', error.message);
+      if (isDebug && dataItems.length) inspector('ERROR.methodAcmDayReportsDataGet.dataItems:', dataItems);
     }
   }
 

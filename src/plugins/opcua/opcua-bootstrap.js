@@ -11,7 +11,7 @@ const {
   appRoot,
   inspector,
   readJsonFileSync,
-  removeFilesFromDirSync,  
+  removeFilesFromDirSync,
   isTrue,
 } = require('../lib');
 
@@ -129,9 +129,9 @@ module.exports = async function opcuaBootstrap(app) {
         syncResult = await methodAcmDayReportsDataGet([{ value: pointID }]);
         syncResultOutputPath = syncResult.params.outputPath;
         if (isDebug && syncResult) inspector('opcuaBootstrap.methodAcmDayReportsDataGet.syncResult:', syncResult);
-        if(syncResult.statusCode === 'Good'){
+        if (syncResult.statusCode === 'Good') {
           // Get dataItems
-          if(syncResult.params.isSaveOutputFile){
+          if (syncResult.params.isSaveOutputFile) {
             let outputFile = syncResult.params.outputFile;
             const currentDate = moment().format('YYYYMMDD');
             outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
@@ -179,17 +179,10 @@ module.exports = async function opcuaBootstrap(app) {
         if (bootstrapParams && bootstrapParams.clearHistoryAtStartup) {
           removeResult = await removeOpcuaStoreValues(appRestClient);
           if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.remoteDB: ${removeResult}`);
-        } else {
-          // Update remote store from local store
-          const updateStores = await updateRemoteFromLocalStore(app, appRestClient, opcuaTags);
-          // Sum results
-          const sumResults = loReduce(updateStores, function (sum, n) {
-            return sum + n;
-          }, 0);
-
-          if (true && updateStores.length) logger.info(`opcuaBootstrap.updateRemoteFromLocalStore.count: ${sumResults}`);
-          if (isDebug && updateStores.length) inspector('opcuaBootstrap.updateRemoteFromLocalStore.updateStores:', updateStores);
         }
+        // Update remote store from local store
+        const updateStores = await updateRemoteFromLocalStore(app, appRestClient, opcuaTags);
+        if (true && updateStores) logger.info(`opcuaBootstrap.updateRemoteFromLocalStore.updateStores: ${updateStores}`);
       }
     }
   }

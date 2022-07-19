@@ -879,7 +879,7 @@ const getTagValuesFromStores = async function (app, storeBrowseNames) {
  * @returns {Object[]}
  */
 const updateRemoteFromLocalStore = async function (app, appRestClient, opcuaTags) {
-  let results = [], sumResults;
+  let results = 0, createdItem, sumResults;
   //---------------------
   // Get group browseNames  
   const groupBrowseNames = opcuaTags.filter(tag => tag.group && tag.store).map(tag => tag.browseName);
@@ -901,7 +901,7 @@ const updateRemoteFromLocalStore = async function (app, appRestClient, opcuaTags
       let findedStoreValues = await findItems(app, 'opcua-values', {
         tagName: storeBrowseName,
         storeStart: { $ne: undefined },
-        $select: ['tagName', 'storeStart', 'storeEnd', 'values']
+        $select: ['tagName', 'store', 'storeStart', 'storeEnd', 'values']
       });
       findedStoreValues = findedStoreValues.map(v => {
         v = loOmit(v, [idField]);
@@ -913,31 +913,41 @@ const updateRemoteFromLocalStore = async function (app, appRestClient, opcuaTags
         return v;
       });
       if (isDebug && findedStoreValues.length) inspector('updateRemoteFromLocalStore.findedStoreValues:', findedStoreValues);
-
-      // Remove values from remote DB for storeBrowseName
-      const removedItems = await removeItems(appRestClient, 'opcua-values', {
-        tagName: storeBrowseName,
-        storeStart: { $ne: undefined },
-        $select: ['tagName', 'storeStart', 'storeEnd']
-      });
-      if (isDebug && removedItems.length) console.log('updateRemoteFromLocalStore.removedItems.length:', removedItems.length);
-      if (isDebug && removedItems.length) inspector('updateRemoteFromLocalStore.removedItems:', removedItems);
-
-      // Create values to remote DB for findedStoreValues
-      const createdItems = await createItems(appRestClient, 'opcua-values', findedStoreValues, { $select: ['tagId', 'tagName', 'storeStart', 'storeEnd'] });
-      if (isDebug && createdItems.length) console.log('updateRemoteFromLocalStore.createdItems.length:', createdItems.length);
-      if (isDebug && createdItems.length) inspector('updateRemoteFromLocalStore.createdItems:', createdItems);
-
-      results.push(createdItems.length);
+      // Check for differences in documents
+      for (let index3 = 0; index3 < findedStoreValues.length; index3++) {
+        const findedStoreValue = findedStoreValues[index3];
+        if (isDebug && findedStoreValue) inspector('updateRemoteFromLocalStore.findedStoreValue:', findedStoreValue);
+        const hash = findedStoreValue.store.hash;
+        const findedRemoteStoreValue = await findItem(appRestClient, 'opcua-values', {
+          tagName: storeBrowseName,
+          storeStart: findedStoreValue.storeStart,
+          $select: ['tagName', 'store']
+        });
+        if (isDebug && findedRemoteStoreValue) inspector('updateRemoteFromLocalStore.findedRemoteStoreValue:', findedRemoteStoreValue);
+        
+        // Create value for remote DB
+        if (!findedRemoteStoreValue) {
+          createdItem = await createItem(appRestClient, 'opcua-values', findedStoreValue, { $select: ['tagId', 'tagName', 'store', 'storeStart', 'storeEnd'] });
+          if (isDebug && createdItem) inspector('updateRemoteFromLocalStore.createdItem:', createdItem);
+          if(createdItem) results ++;
+        }
+        
+        // Remove and create value for remote DB
+        if (findedRemoteStoreValue && findedRemoteStoreValue.store.hash !== hash) {
+          const removedItems = await removeItem(appRestClient, 'opcua-values', {
+            tagName: storeBrowseName,
+            storeStart: findedStoreValue.storeStart,
+            $select: ['tagName', 'store', 'storeStart', 'storeEnd']
+          });
+          if (isDebug && removedItems.length) inspector('updateRemoteFromLocalStore.removedItems:', removedItems);    
+          createdItem = await createItem(appRestClient, 'opcua-values', findedStoreValue, { $select: ['tagId', 'tagName', 'store', 'storeStart', 'storeEnd'] });
+          if (isDebug && createdItem) inspector('updateRemoteFromLocalStore.createdItem:', createdItem);
+          if(createdItem) results ++;
+        }
+      }
     }
   }
-  if (isDebug && results.length) console.log('updateRemoteFromLocalStore.results.length:', results.length);
-  if (isDebug && results.length) inspector('updateRemoteFromLocalStore.results:', results);
-  // Sum results
-  sumResults = loReduce(results, function (sum, n) {
-    return sum + n;
-  }, 0);
-  if (isDebug && results.length) inspector('updateRemoteFromLocalStore.sumResults:', sumResults);
+  if (isDebug && results) console.log('updateRemoteFromLocalStore.results:', results);
   return results;
 };
 

@@ -121,7 +121,8 @@ const xlsxBookAppendSheet = function (workbook, worksheet, sheetName = '') {
  * @returns {Array}
  * e.g. [ { B: 1983, C: 120, D: 82583, E: 567, F: 1 },
           { B: 1223, C: 34, D: 96740, E: 234, F: 2 },
-          { B: 1884, C: 56, D: 123359, E: 678, F: 3 }]
+          { B: 1884, C: 56, D: 123359, E: 678, F: 3 }
+        ]
  */
 const xlsxSheetToJson = function (worksheet, options = {}) {
   let jsonData, convertRow, result = false;
@@ -129,7 +130,7 @@ const xlsxSheetToJson = function (worksheet, options = {}) {
   jsonData = XLSX.utils.sheet_to_json(worksheet, options);
   if (isDebug && options) inspector('xlsxSheetToJson.params:', options);
   if (isDebug && jsonData.length) inspector('xlsxSheetToJson.sheet_to_json.jsonData:', jsonData);
-  return jsonData;
+  return Array.isArray(jsonData)? jsonData : [];
 };
 
 /**

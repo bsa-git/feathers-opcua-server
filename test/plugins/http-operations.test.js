@@ -145,7 +145,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
       await urlExists(url);
       const getFiles = async (url, pattern, options) => {
         try {
-          const fileNames = await httpGetFileNamesFromDir(url, [], pattern, options);
+          const fileNames = await httpGetFileNamesFromDir(url, pattern, options);
           if (isDebug && fileNames.length) inspector(`HttpOperations: get file names from dir (${url}):`, fileNames);
           return fileNames;
         } catch (error) {

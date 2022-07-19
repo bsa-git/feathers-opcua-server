@@ -362,8 +362,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
         // Update remote store from local store
         const results = await updateRemoteFromLocalStore(app, app, opcuaTags);
-        if (isDebug && results.length) inspector('Test update remote store from local store.results:', results);
-        assert.ok(results.length, 'Results length must be greater than 0');
+        assert.ok(!results, 'Results length must be equals 0');
       }
     }
   });

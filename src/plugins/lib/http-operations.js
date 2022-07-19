@@ -120,11 +120,11 @@ const httpGetNewFileFromDir = async function (url) {
 /**
  * @method httpGetFileNamesFromDir
  * @param {String} url 
- * @param {String[]} fileList 
  * @param {String} pattern 
  * e.g. '*.xls'
  * @param {Object} options
  * e.g. { matchBase: true }
+ * @param {String[]} fileList 
  * @returns {String[]}
  * e.g. [
   'http://192.168.3.5/www_m5/day_reports/m5-1/ACM/23AGR/2022/2022-01/DayHist01_23F120_01022022_0000.xls',
@@ -132,7 +132,7 @@ const httpGetNewFileFromDir = async function (url) {
   'http://192.168.3.5/www_m5/day_reports/m5-1/ACM/23AGR/DayHist01_23F120_02242022_0000.xls'
 ]
  */
-const httpGetFileNamesFromDir = async function (url, fileList = [], pattern = '', options = {}) {
+const httpGetFileNamesFromDir = async function (url, pattern = '', options = {}, fileList = []) {
   let result = null;
   //-----------------------
   // Get fileNames from url 
@@ -157,7 +157,7 @@ const httpGetFileNamesFromDir = async function (url, fileList = [], pattern = ''
       if (extname) {
         fileList.push(`${url}/${item}`);
       } else {
-        await httpGetFileNamesFromDir(`${url}/${item}`, fileList, pattern, options);
+        await httpGetFileNamesFromDir(`${url}/${item}`, pattern, options, fileList);
       }
     }
   } catch (error) {
