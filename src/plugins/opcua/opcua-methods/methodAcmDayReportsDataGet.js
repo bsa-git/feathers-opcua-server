@@ -9,11 +9,14 @@ const {
   appRoot,
   inspector,
   pause,
+  getRangeStartEndOfPeriod,
+  orderByItems,
   doesFileExist,
   getPathBasename,
   writeFileStream,
   writeJsonFileSync,
   getFileListFromDir,
+  createMatch,
   isUncPath,
   isUrlExists,
   createPath,
@@ -42,6 +45,7 @@ const {
 const loTemplate = require('lodash/template');
 const loStartsWith = require('lodash/startsWith');
 const loTrimEnd = require('lodash/trimEnd');
+const loForEach = require('lodash/forEach');
 
 let paramsPath = '/src/api/app/opcua-methods/acm-reports';
 
@@ -60,7 +64,7 @@ const isDebug = false;
  */
 async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   let resultPath = '', paramsFile, baseParamsFile, params = null, paramFullsPath;
-  let pointID, dirList = [], path, dataItem, dataItems = [], pattern = '';
+  let pointID, dirList = [], path, dataItem, dataItems = [], dataItemHashes = [], pattern = '';
   //----------------------------------------------------------------------------
 
   if (isDebug && inputArguments.length) inspector('methodAcmDayReportsDataGet.inputArguments:', inputArguments);
@@ -120,6 +124,11 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
 
   if (isDebug && params) inspector('methodAcmDayReportsDataGet.params:', params);
 
+  // Get range years e.g. ['*/**/*2018_*.*', '*/**/*2019_*.*', '*/**/*2020_*.*', '*/**/*2021_*.*', '*/**/*2022_*.*']
+  const dateTime = moment.utc().subtract(4, 'years').format('YYYY-MM-DDTHH:mm:ss');
+  let rangeYears = getRangeStartEndOfPeriod(dateTime, [5, 'years'], 'year');
+  rangeYears = rangeYears.map(year => `*/**/*${year}_*.*`);
+
   // Get acm path  
   const isHttp = loStartsWith(params.acmPath, 'http');
   if (isHttp) {
@@ -129,8 +138,11 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
 
       // Get fileNames from path for http
       pattern = loTrimEnd(params.acmPath, '/') + params.pattern;
-      const urls = await httpGetFileNamesFromDir(params.acmPath, pattern, params.patternOptions);
+      // let urls = await httpGetFileNamesFromDir(params.acmPath, pattern, params.patternOptions);
+      let urls = await httpGetFileNamesFromDir(params.acmPath, pattern, params.patternOptions);
+      urls = urls.filter(url => createMatch(rangeYears)(url));
       if (isDebug && urls.length) console.log('httpGetFileNamesFromDir.urls:', urls);
+
       // Get files from urls
       for (let index = 0; index < urls.length; index++) {
         const fileName = getPathBasename(urls[index]);
@@ -154,6 +166,8 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
     pattern = path + params.pattern;
     if (isDebug && path) inspector('methodAcmDayReportsDataGet.path:', path);
     dirList = getFileListFromDir(path, pattern, params.patternOptions);
+    dirList = dirList.filter(url => createMatch(rangeYears)(url));
+
     if (isDebug && dirList.length) inspector('methodAcmDayReportsDataGet.dirList:', dirList);
   }
 
@@ -177,11 +191,11 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
       dataItem = xlsx.sheetToJson('Report1', { range: params.rangeData, header: params.headerNames });
       if (isDebug && dataItem.length) inspector(`methodAcmDayReportsDataGet.dataItems(${dataItem.length}):`, dataItem);
 
-      if (!dataItem.length){
+      if (!dataItem.length) {
         logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}.  Error - dataItem is empty . Excel path: '${xlsPath}'.`);
         params.errorFilePaths.push(xlsPath);
       }
-      
+
       if (dataItem.length) {
         // Sheet to json date
         let dateTime = xlsx.sheetToJson('Report1', { range: params.rangeDate });
@@ -207,6 +221,19 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   }
 
   if (isDebug && dataItems.length) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
+
+  // Set hash data for dataItemHashes
+  if (dataItems.length) {
+    // Sort dataItems
+    dataItems = orderByItems(dataItems, item => item['!value']['dateTime'], ['asc']);
+    if (isDebug && dataItems) inspector('methodAcmDayReportsDataGet.sortDataItems:', dataItems);
+    for (let index = 0; index < dataItems.length; index++) {
+      const dataItem = dataItems[index];// browseName
+      loForEach(dataItem, function (value, key) {
+
+      });
+    }
+  }
 
   // Remove files from dir
   if (params.isRemoveXlsFiles) {

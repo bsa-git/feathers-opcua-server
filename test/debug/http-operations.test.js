@@ -6,6 +6,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const chalk = require('chalk');
 const papa = require('papaparse');
+const moment = require('moment');
 
 const {
   inspector,
@@ -13,9 +14,11 @@ const {
   stopListenPort,
   httpGetNewFileFromDir,
   httpGetFileNamesFromDir,
+  createMatch,
   getFloat,
   canTestRun,
-  getPathBasename
+  getPathBasename,
+  getRangeStartEndOfPeriod
 } = require('../../src/plugins');
 
 const {
@@ -30,8 +33,8 @@ const isDebug = false;
 
 describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
 
-  const isTest =  canTestRun(getPathBasename(__filename));
-  if(!isTest) return;
+  const isTest = canTestRun(getPathBasename(__filename));
+  if (!isTest) return;
 
   before(function (done) {
     startListenPort(app, done);
@@ -143,22 +146,61 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     //---------------------------------------------------------------
     try {
       await urlExists(url);
-      const getFiles = async (url, pattern, options) => {
+      const getFileNames = async (url, pattern, options) => {
         try {
           const fileNames = await httpGetFileNamesFromDir(url, pattern, options);
-          if (isDebug && fileNames.length) inspector(`HttpOperations: get file names from dir (${url}):`, fileNames);
           return fileNames;
         } catch (error) {
           console.log(error);
           assert.ok(false, 'HttpOperations: get file names from dir');
         }
       };
-      fileNames = await getFiles(url);
-      filterFileNames = await getFiles(url, 'http://192.168.3.5/**/2022/**/*.xls', { matchBase: true });
-      assert.ok(fileNames.length >= filterFileNames.length , 'HttpOperations: get file names from dir');
+      fileNames = await getFileNames(url);
+      if (true && fileNames.length) inspector(`HttpOperations: get file names from dir (${url}):`, fileNames);
+      filterFileNames = await getFileNames(url, '*/**/2022/**/*.xls', { matchBase: true });
+      if (true && filterFileNames.length) inspector(`HttpOperations: get file names from dir (${url}):`, filterFileNames);
+      assert.ok(fileNames.length >= filterFileNames.length, 'HttpOperations: get file names from dir');
     } catch (err) {
       debug('ERROR:', err.message);
       assert.ok(false, 'HttpOperations: get file names from dir');
+    }
+  });
+
+  it('#6: HttpOperations: get file names from dir. With glob patterns to include/exclude files', async () => {
+    let host = 'http://192.168.3.5', url = `${host}/www_m5/day_reports/m5-1/ACM/23AGR/`;
+    let fileNames = [], filterFileNames = [];
+    //---------------------------------------------------------------
+    try {
+      await urlExists(url);
+      const getFileNames = async (url, pattern, options) => {
+        try {
+          const fileNames = await httpGetFileNamesFromDir(url, pattern, options);
+          return fileNames;
+        } catch (error) {
+          console.log(error);
+          assert.ok(false, 'HttpOperations: get file names from dir');
+        }
+      };
+      fileNames = await getFileNames(url);
+      if (isDebug && fileNames.length) inspector(`HttpOperations: get file names from dir (${url}):`, fileNames);
+      // Get file paths with pattern filter
+      const dateTime = moment.utc().subtract(4, 'years').format('YYYY-MM-DDTHH:mm:ss');
+      let rangeYears = getRangeStartEndOfPeriod(dateTime, [5, 'years'], 'year');
+      rangeYears = rangeYears.map(year => `*/**/*${ year }_*.*`);
+      // e.g. ['*/**/*2018_*.*', '*/**/*2019_*.*', '*/**/*2020_*.*', '*/**/*2021_*.*', '*/**/*2022_*.*']
+      if(isDebug && rangeYears) debug('getRangeStartEndOfPeriod.range:', rangeYears);
+      filterFileNames = fileNames.filter(filePath => createMatch(
+        // ['*/**/*.*'],   // patterns to include
+        rangeYears, // patterns to include
+        ['*/**/*.xlk']  // patterns to exclude
+      )(filePath));
+      if (isDebug && filterFileNames.length) inspector(`HttpOperations: get filterFileNames from dir (${url}):`, filterFileNames);
+
+      // filterFileNames = await getFileNames(url, 'http://192.168.3.5/**/2022/**/*.xls', { matchBase: true });
+      assert.ok(fileNames.length >= filterFileNames.length, 'HttpOperations: get file names from dir. With glob patterns to include/exclude files');
+    } catch (err) {
+      debug('ERROR:', err.message);
+      assert.ok(false, 'HttpOperations: get file names from dir. With glob patterns to include/exclude files');
     }
   });
 });

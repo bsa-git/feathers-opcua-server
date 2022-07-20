@@ -652,12 +652,12 @@ const getFileListFromDir = function (path, pattern = '', options = {}, fileList 
 
 /**
  * Creates the function which checks whether a file path is matched with the given pattern or not.
- *
+ * @method createMatch
  * @param {string[]} includePatterns - The glob patterns to include files.
  * @param {string[]} excludePatterns - The glob patterns to exclude files.
  * @returns {function} Created predicate function.
  */
-const createMatch = function (includePatterns, excludePatterns) {
+const createMatch = function (includePatterns = [], excludePatterns = []) {
   const include = includePatterns.map(pattern => new Minimatch(pattern));
   const exclude = excludePatterns.map(pattern => new Minimatch(pattern));
 

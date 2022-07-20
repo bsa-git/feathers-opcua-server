@@ -14,6 +14,7 @@ const loToPlainObject = require('lodash/toPlainObject');
 const loIsEqual = require('lodash/isEqual');
 const loOmit = require('lodash/omit');
 const loReplace = require('lodash/replace');
+const loRange = require('lodash/range');
 
 const debug = require('debug')('app:util');
 const isDebug = false;
@@ -212,6 +213,24 @@ const getNextDateTime = function (startDateTime, period, isUtc = true) {
 };
 
 /**
+ * @method getPreviousDateTime
+ * @param {Object|String|Array} startTime 
+ * @param {Array} period 
+ * e.g. [1, 'hours']
+ * @param {Boolean} isUtc 
+ * @returns {Number}
+ */
+const getPreviousDateTime = function (startDateTime, period, isUtc = true) {
+  startDateTime = moment.utc(startDateTime);
+  const nextDateTime = moment.utc(startDateTime).subtract(period[0], period[1]);
+  if (isUtc) {
+    return moment.utc(nextDateTime).format();
+  } else {
+    return moment(nextDateTime).format();
+  }
+};
+
+/**
  * @method getStartOfPeriod
  * @param {Object|String|Array} dateTime 
  * e.g. moment()|'2022-05-15T10:55:11'|[2022, 4, 15, 10, 55, 11]
@@ -274,18 +293,39 @@ const getEndOfPeriod = function (dateTime, period) {
 };
 
 /**
- * @method getEndOfPeriod
+ * @method getStartEndOfPeriod
  * @param {Object|String|Array} dateTime 
  * e.g. moment()|'2022-05-15T10:55:11'|[2022, 4, 15, 10, 55, 11]
  * @param {Array} period
  * e.g. [1, 'months'] 
- * @returns {String} 
+ * @returns {String[]} 
  * e.g. ['2022-05-01T00:00:00', '2022-05-31T23:59:59']
  */
 const getStartEndOfPeriod = function (dateTime, period) {
   const start = getStartOfPeriod(dateTime, period);
   const end = getEndOfPeriod(dateTime, period);
   return [start, end];
+};
+
+/**
+ * @method getRangeStartEndOfPeriod
+ * @param {Object|String|Array} dateTime 
+ * e.g. moment()|'2022-05-15T10:55:11'|[2022, 4, 15, 10, 55, 11]
+ * @param {Array} period
+ * e.g. [5, 'years'] 
+ * @param {String} unit
+ * e.g. 'year'|'month'(0..11)|'date'|'hour'|'minute'|'second'|'millisecond'
+ * @returns {Number[]} 
+ * e.g. [2018, 2019, 2020, 2021, 2022]
+ */
+const getRangeStartEndOfPeriod = function (dateTime, period, unit) {
+  let start = getStartOfPeriod(dateTime, period);
+  start = moment.utc(start).get(unit);
+  let end = getEndOfPeriod(dateTime, period);
+  end = moment.utc(end).get(unit);
+  end ++;
+  const range = loRange(start, end);
+  return range;
 };
 
 /**
@@ -518,10 +558,9 @@ const getFloat = function (value, precision = 0) {
  * @returns {String}
  */
 function formatNumber(number, precision = 0, thousands = ' ', decimal = ',') {
-
   let decimalSeparator = '.';
   let thousandSeparator = thousands;
-
+  //------------------------------------
   // Set precision
   if (precision) {
     number = loRound(number, precision);
@@ -977,9 +1016,11 @@ module.exports = {
   getDateTime,
   getTimeDuration,
   getNextDateTime,
+  getPreviousDateTime,
   getStartOfPeriod,
   getEndOfPeriod,
   getStartEndOfPeriod,
+  getRangeStartEndOfPeriod,
   shiftTimeByOneHour,
   stripSlashes,
   stripSpecific,

@@ -33,6 +33,7 @@ const {
 const chalk = require('chalk');
 const papa = require('papaparse');
 const { join } = require('path');
+const { is } = require('cheerio/lib/api/traversing');
 
 const debug = require('debug')('app:file-operations.test');
 const isDebug = false;
@@ -201,9 +202,10 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     // Get path with posix sep
     const filePath = toPathWithPosixSep([appRoot, testPath]);
     // Remove items sync
-    deletedItems = removeItemsSync([`${filePath}/*.*`], { dryRun: true });
-    deletedItems2 = removeItemsSync([`${filePath}/*.*`, `!${filePath}/*.xlsx`], { dryRun: true });
+    deletedItems = removeItemsSync([`${filePath}/**/*.*`], { dryRun: true });
     if (isDebug && deletedItems) inspector(`FileOperations: Remove directory/files paths from dir (${filePath}):`, deletedItems);
+    deletedItems2 = removeItemsSync([`${filePath}/**/*.*`, `!${filePath}/*.xlsx`], { dryRun: true });
+    if (isDebug && deletedItems2) inspector(`FileOperations: Remove directory/files paths from dir (${filePath}):`, deletedItems2);
     assert.ok(deletedItems.length > deletedItems2.length, 'FileOperations: Remove sync directory/files paths from dir');
     // Remove items
     deletedItems = await removeItems([`${filePath}/*.*`], { dryRun: true });
@@ -219,16 +221,13 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     // Get file names without pattern filter
     fileNames = getFileListFromDir([appRoot, testPath]);
     if (isDebug && fileNames.length) inspector(`FileOperations: Get all file list from dir (${testPath}):`, fileNames);
-    // Get posix path for pattern  filter
-    const posixPath = toPathWithPosixSep([appRoot, testPath]);
-    if (isDebug && posixPath) console.log('toPathWithPosixSep.posixPath:', posixPath);
     // Get file names with pattern filter
-    filterFileNames = getFileListFromDir([appRoot, testPath], `${posixPath}/**/2022/**/*.xls`, { matchBase: true });
-    if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from dir (${posixPath}):`, filterFileNames);
+    filterFileNames = getFileListFromDir([appRoot, testPath], '*/**/2022/**/*.xls', { matchBase: true });
+    if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from dir (${testPath}):`, filterFileNames);
     assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from dir');
     
-    filterFileNames = getFileListFromDir([appRoot, testPath], `${posixPath}/**/*_14F120*.xls`, { matchBase: true });
-    if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from dir (${posixPath}):`, filterFileNames);
+    filterFileNames = getFileListFromDir([appRoot, testPath], '*/**/*_14F120*.xls', { matchBase: true });
+    if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from dir (${testPath}):`, filterFileNames);
     assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from dir');
   });
 
@@ -255,15 +254,12 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     // Get file paths without pattern filter
     filePaths = getFileListFromDir([appRoot, testPath]);
     if (isDebug && filePaths.length) inspector(`FileOperations: Get all file list from dir (${testPath}):`, filePaths);
-    // Get posix path for pattern  filter
-    const posixPath = toPathWithPosixSep([appRoot, testPath]);
-    if (isDebug && posixPath) console.log('toPathWithPosixSep.posixPath:', posixPath);
     // Get file paths with pattern filter
     filterFilePaths = filePaths.filter(filePath => createMatch(
-      [`${posixPath}/**/2022/**/*.xls`], // patterns to include
-      [`${posixPath}/**/*_14F120*.xls`]  // patterns to exclude
+      ['*/**/2022/**/*.xls'], // patterns to include
+      ['*/**/*_14F120*.xls']  // patterns to exclude
     )(filePath));
-    if (isDebug && filterFilePaths.length) inspector(`FileOperations: Get file list from dir (${posixPath}):`, filterFilePaths);
+    if (isDebug && filterFilePaths.length) inspector(`FileOperations: Get file list from dir (${testPath}):`, filterFilePaths);
     assert.ok(filterFilePaths.length && filePaths.length >= filterFilePaths.length, 'FileOperations: Get file list from dir. With glob patterns to include/exclude  files');
   });
 

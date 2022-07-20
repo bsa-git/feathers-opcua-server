@@ -3,7 +3,9 @@ const loRound = require('lodash/round');
 const loForEach = require('lodash/forEach');
 const loIsFinite = require('lodash/isFinite');
 const loFindIndex = require('lodash/findIndex');
-const loIsString = require('lodash/isString');
+const loIsString = require('lodash/isString');// range
+const loRange = require('lodash/range');
+const loOrderBy = require('lodash/orderBy');
 
 const {
   inspector,
@@ -92,7 +94,30 @@ const sortByNumber = function (items, isAscending = true) {
     if (!isAscending) return y - x;
   });
   return items;
-};
+}; // loOrderBy
+
+/**
+ * This metod allows specifying the sort orders of the iteratees to sort by. 
+ * If orders is unspecified, all values are sorted in ascending order. 
+ * Otherwise, specify an order of "desc" for descending or "asc" for ascending sort order of corresponding values.
+ * @method orderByItems
+ * sort array by number field
+ * @param {Array|Object} items // The collection to iterate over.
+ * e.g var users = [
+  { 'user': 'fred',   'age': 48 },
+  { 'user': 'barney', 'age': 34 },
+  { 'user': 'fred',   'age': 40 },
+  { 'user': 'barney', 'age': 36 }
+];
+ * @param {Array[]|Function[]|Object[]|string[]} iteratees // The iteratees to sort by
+ * e.g. ['user', 'age']
+ * @param {String[]} orders // The sort orders of iteratees
+ * e.g. ['asc', 'desc']
+ * @returns {Array} // Returns the new sorted array.
+ */
+ const orderByItems = function (items, iteratees, orders) {
+  return loOrderBy(items, iteratees, orders);
+ }
 
 //---------------- ARRAY -------------//
 
@@ -231,6 +256,24 @@ const getIndex4Range = function (range) {
 };
 
 /**
+ * Creates an array of numbers (positive and/or negative) progressing from start up to, but not including, end
+ * @method getArrOfNumbers4Range
+ * @param {Number} start  // The start of the range
+ * @param {Number} end    // The end of the range
+ * @param {Number} step   // The value to increment or decrement by
+ * @returns {Number[]}
+ * e.g. _.range(4) => [0, 1, 2, 3]
+ * e.g. _.range(-4) => [0, -1, -2, -3]
+ * e.g. _.range(1, 5) => [1, 2, 3, 4]
+ * e.g. _.range(0, 20, 5) => [0, 5, 10, 15]
+ * e.g. _.range(0, -4, -1) => [0, -1, -2, -3]
+ * e.g. _.range(1, 4, 0) => [1, 1, 1]
+ */
+const getArrOfNumbers4Range = function (start = 0, end, step = 1) {
+  return loRange(start, end, step);
+}
+
+/**
  * @method removeEmptyValFromArray
  * @param {Array} initialArray 
  * e.g. -> [empty, 1, null, empty, 0]
@@ -353,6 +396,7 @@ module.exports = {
   sortByNumberField,
   sortByString,
   sortByNumber,
+  orderByItems,
   getGroupsFromArray,
   convertArray2Object,
   convertObject2Array,
