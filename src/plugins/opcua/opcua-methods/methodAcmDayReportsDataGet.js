@@ -222,7 +222,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
 
   if (isDebug && dataItems.length) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
 
-  // Set hash data for dataItemHashes
+  // Set hash data for dataItems
   if (dataItems.length) {
     // Sort dataItems
     dataItems = orderByItems(dataItems, item => item['!value']['dateTime'], ['asc']);
