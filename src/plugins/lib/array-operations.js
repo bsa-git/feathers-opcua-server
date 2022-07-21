@@ -115,9 +115,9 @@ const sortByNumber = function (items, isAscending = true) {
  * e.g. ['asc', 'desc']
  * @returns {Array} // Returns the new sorted array.
  */
- const orderByItems = function (items, iteratees, orders) {
+const orderByItems = function (items, iteratees, orders) {
   return loOrderBy(items, iteratees, orders);
- }
+};
 
 //---------------- ARRAY -------------//
 
@@ -271,7 +271,7 @@ const getIndex4Range = function (range) {
  */
 const getArrOfNumbers4Range = function (start = 0, end, step = 1) {
   return loRange(start, end, step);
-}
+};
 
 /**
  * @method removeEmptyValFromArray

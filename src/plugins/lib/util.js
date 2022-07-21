@@ -15,6 +15,7 @@ const loIsEqual = require('lodash/isEqual');
 const loOmit = require('lodash/omit');
 const loReplace = require('lodash/replace');
 const loRange = require('lodash/range');
+const loCloneDeep = require('lodash/cloneDeep');
 
 const debug = require('debug')('app:util');
 const isDebug = false;
@@ -235,23 +236,28 @@ const getPreviousDateTime = function (startDateTime, period, isUtc = true) {
  * @param {Object|String|Array} dateTime 
  * e.g. moment()|'2022-05-15T10:55:11'|[2022, 4, 15, 10, 55, 11]
  * @param {Array} period
- * e.g. [1, 'months'] 
+ * e.g. [1, 'months'] | [-1, 'months']
  * @returns {String} 
- * e.g. '2022-05-01T00:00:00'
+ * e.g. '2022-05-01T00:00:00' | '2022-04-01T00:00:00'
  */
 const getStartOfPeriod = function (dateTime, period) {
   let startList = [], startPeriod, condition;
-  //------------------------
-  if (!Array.isArray(period)) new Error('Argument error, argument "period" must be an array');
+  let _dateTime = cloneObject(dateTime), _period = cloneObject(period);
+  //-----------------------------------------
+  if (!Array.isArray(_period)) new Error('Argument error, argument "period" must be an array');
   // Get start dateTime
-  dateTime = moment.utc(dateTime);
-  dateTime = dateTime.format('YYYY-MM-DDTHH:mm:ss');
-  startPeriod = moment.utc(dateTime).startOf('year');
+  if (_period[0] < 0) {
+    _dateTime = moment.utc(_dateTime).subtract(Math.abs(_period[0]) - 1, _period[1]).format('YYYY-MM-DDTHH:mm:ss');
+    _period[0] = Math.abs(_period[0]);
+  } else {
+    _dateTime = moment.utc(_dateTime).format('YYYY-MM-DDTHH:mm:ss');
+  }
+  startPeriod = moment.utc(_dateTime).startOf('year');
   startList.push(startPeriod.format('YYYY-MM-DDTHH:mm:ss'));
 
   do {
-    startPeriod = startPeriod.add(...period);
-    condition = (dateTime >= startPeriod.format('YYYY-MM-DDTHH:mm:ss'));
+    startPeriod = startPeriod.add(..._period);
+    condition = (_dateTime >= startPeriod.format('YYYY-MM-DDTHH:mm:ss'));
     if (condition) {
       startList.push(startPeriod.format('YYYY-MM-DDTHH:mm:ss'));
     }
@@ -266,25 +272,30 @@ const getStartOfPeriod = function (dateTime, period) {
  * @param {Object|String|Array} dateTime 
  * e.g. moment()|'2022-05-15T10:55:11'|[2022, 4, 15, 10, 55, 11]
  * @param {Array} period
- * e.g. [1, 'months'] 
+ * e.g. [1, 'months'] | [-1, 'months']
  * @returns {String} 
- * e.g. '2022-05-31T23:59:59'
+ * e.g. '2022-05-31T23:59:59' | '2022-04-31T23:59:59'
  */
 const getEndOfPeriod = function (dateTime, period) {
   let startList = [], startPeriod, endPeriod, condition;
-  //------------------------
-  if (!Array.isArray(period)) new Error('Argument error, argument "period" must be an array');
+  let _dateTime = cloneObject(dateTime), _period = cloneObject(period);
+  //--------------------------------------------------------------------
+  if (!Array.isArray(_period)) new Error('Argument error, argument "period" must be an array');
   // Get start dateTime
-  dateTime = moment.utc(dateTime);
-  dateTime = dateTime.format('YYYY-MM-DDTHH:mm:ss');
-  startPeriod = moment.utc(dateTime).startOf('year');
-  startPeriod = startPeriod.add(...period).format('YYYY-MM-DDTHH:mm:ss');
+  if (_period[0] < 0) {
+    _dateTime = moment.utc(_dateTime).subtract(Math.abs(_period[0]) - 1, _period[1]).format('YYYY-MM-DDTHH:mm:ss');
+    _period[0] = Math.abs(_period[0]);
+  } else {
+    _dateTime = moment.utc(_dateTime).format('YYYY-MM-DDTHH:mm:ss');
+  }
+  startPeriod = moment.utc(_dateTime).startOf('year');
+  startPeriod = startPeriod.add(..._period).format('YYYY-MM-DDTHH:mm:ss');
   endPeriod = moment.utc(startPeriod).subtract(1, 'seconds');
 
   do {
     startList.push(endPeriod.format('YYYY-MM-DDTHH:mm:ss'));
-    condition = (dateTime > endPeriod.format('YYYY-MM-DDTHH:mm:ss'));
-    startPeriod = moment.utc(startPeriod).add(...period).format('YYYY-MM-DDTHH:mm:ss');
+    condition = (_dateTime > endPeriod.format('YYYY-MM-DDTHH:mm:ss'));
+    startPeriod = moment.utc(startPeriod).add(..._period).format('YYYY-MM-DDTHH:mm:ss');
     endPeriod = moment.utc(startPeriod).subtract(1, 'seconds');
   } while (condition);
 
@@ -312,20 +323,42 @@ const getStartEndOfPeriod = function (dateTime, period) {
  * @param {Object|String|Array} dateTime 
  * e.g. moment()|'2022-05-15T10:55:11'|[2022, 4, 15, 10, 55, 11]
  * @param {Array} period
- * e.g. [5, 'years'] 
+ * e.g. [5, 'years']|[-5, 'years']|moment()|'2022-05-15T10:55:11'|[2022, 4, 15, 10, 55, 11]
  * @param {String} unit
- * e.g. 'year'|'month'(0..11)|'date'|'hour'|'minute'|'second'|'millisecond'
+ * e.g. 'years'|'months'|'days'|'hours'|'minutes'|'seconds'
  * @returns {Number[]} 
- * e.g. [2018, 2019, 2020, 2021, 2022]
+ * e.g. ['2022', '2023', '2024', '2025', '2026'] | ['2017', '2018', '2019', '2020', '2021']
  */
-const getRangeStartEndOfPeriod = function (dateTime, period, unit) {
-  let start = getStartOfPeriod(dateTime, period);
-  start = moment.utc(start).get(unit);
-  let end = getEndOfPeriod(dateTime, period);
-  end = moment.utc(end).get(unit);
-  end ++;
-  const range = loRange(start, end);
-  return range;
+const getRangeStartEndOfPeriod = function (dateTime, period, unit = 'years') {
+  let rangeList = [], condition, unitFormat;
+  let startPeriod, endPeriod;
+  //----------------------------
+  if (Array.isArray(period) && period.length === 2) {
+    startPeriod = getStartOfPeriod(dateTime, period);
+    endPeriod = getEndOfPeriod(dateTime, period);
+  } else {
+    startPeriod = moment.utc(dateTime).format('YYYY-MM-DDTHH:mm:ss');
+    endPeriod = moment.utc(period).format('YYYY-MM-DDTHH:mm:ss');
+  }
+
+  // Get unitFormat
+  if (unit === 'years') unitFormat = 'YYYY';
+  if (unit === 'months') unitFormat = 'YYYY-MM';
+  if (unit === 'days') unitFormat = 'YYYY-MM-DD';
+  if (unit === 'hours') unitFormat = 'YYYY-MM-DDTHH';
+  if (unit === 'minutes') unitFormat = 'YYYY-MM-DDTHH:mm';
+  if (unit === 'seconds') unitFormat = 'YYYY-MM-DDTHH:mm:ss';
+
+  rangeList.push(moment.utc(startPeriod).format(unitFormat));
+
+  do {
+    startPeriod = moment.utc(startPeriod).add(...[1, unit]).format(unitFormat);
+    condition = (endPeriod >= startPeriod);
+    if (condition) {
+      rangeList.push(startPeriod);
+    }
+  } while (condition);
+  return rangeList;
 };
 
 /**
@@ -599,54 +632,54 @@ const getRegex = function (type) {
   switch (type) {
   case 'phone':
     /*
-                                                    (123) 456-7890
-                                                    +(123) 456-7890
-                                                    +(123)-456-7890
-                                                    +(123) - 456-7890
-                                                    +(123) - 456-78-90
-                                                    123-456-7890
-                                                    123.456.7890
-                                                    1234567890
-                                                    +31636363634
-                                                    +380980029669
-                                                    075-63546725
-                                                    */
+                                                        (123) 456-7890
+                                                        +(123) 456-7890
+                                                        +(123)-456-7890
+                                                        +(123) - 456-7890
+                                                        +(123) - 456-78-90
+                                                        123-456-7890
+                                                        123.456.7890
+                                                        1234567890
+                                                        +31636363634
+                                                        +380980029669
+                                                        075-63546725
+                                                        */
     return '^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\\./0-9]*$';
   case 'zip_code':
     /*
-                                                    12345
-                                                    12345-6789
-                                                    */
+                                                        12345
+                                                        12345-6789
+                                                        */
     return '^[0-9]{5}(?:-[0-9]{4})?$';
   case 'lat':
     /*
-                                                    +90.0
-                                                    45
-                                                    -90
-                                                    -90.000
-                                                    +90
-                                                    47.123123
-                                                    */
+                                                        +90.0
+                                                        45
+                                                        -90
+                                                        -90.000
+                                                        +90
+                                                        47.123123
+                                                        */
     return '^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'long':
     /*
-                                                    -127.554334
-                                                    180
-                                                    -180
-                                                    -180.0000
-                                                    +180
-                                                    179.999999
-                                                    */
+                                                        -127.554334
+                                                        180
+                                                        -180
+                                                        -180.0000
+                                                        +180
+                                                        179.999999
+                                                        */
     return '^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'lat_and_long':
     /*
-                                                    +90.0, -127.554334
-                                                    45, 180
-                                                    -90, -180
-                                                    -90.000, -180.0000
-                                                    +90, +180
-                                                    47.1231231, 179.99999999
-                                                    */
+                                                        +90.0, -127.554334
+                                                        45, 180
+                                                        -90, -180
+                                                        -90.000, -180.0000
+                                                        +90, +180
+                                                        47.1231231, 179.99999999
+                                                        */
     return '^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$';
   default:
     return '//g';
@@ -719,28 +752,13 @@ const stringify = function (obj, spacer = ' ', separator = ', ', leader = '{', t
 };
 
 /**
- * Returns new object with values cloned from the original object. Some objects
- * (like Sequelize or MongoDB model instances) contain circular references
- * and cause TypeError when trying to JSON.stringify() them. They may contain
- * custom toJSON() or toObject() method which allows to serialize them safely.
- * Object.assign() does not clone these methods, so the purpose of this method
- * is to use result of custom toJSON() or toObject() (if accessible)
- * for Object.assign(), but only in case of serialization failure.
- *
+ * The value to recursively clone
+ * @method cloneObject
  * @param {Object?} obj - Object to clone
  * @returns {Object} Cloned object
  */
 const cloneObject = function (obj) {
-  let obj1 = obj;
-  if (typeof obj.toJSON === 'function' || typeof obj.toObject === 'function') {
-    try {
-      JSON.stringify(Object.assign({}, obj1));
-    } catch (e) {
-      debug('Object is not serializable');
-      obj1 = obj1.toJSON ? obj1.toJSON() : obj1.toObject();
-    }
-  }
-  return loToPlainObject(obj1);
+  return loCloneDeep(obj);
 };
 
 /**
