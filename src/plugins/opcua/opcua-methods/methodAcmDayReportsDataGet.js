@@ -126,7 +126,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
 
   // Get range years e.g. ['*/**/*2018_*.*', '*/**/*2019_*.*', '*/**/*2020_*.*', '*/**/*2021_*.*', '*/**/*2022_*.*']
   const dateTime = moment.utc().subtract(4, 'years').format('YYYY-MM-DDTHH:mm:ss');
-  let rangeYears = getRangeStartEndOfPeriod(dateTime, [5, 'years'], 'year');
+  let rangeYears = getRangeStartEndOfPeriod(dateTime, [5, 'years'], 'years');
   rangeYears = rangeYears.map(year => `*/**/*${year}_*.*`);
 
   // Get acm path  
@@ -215,12 +215,16 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
       logger.error(
         `RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}.  Error while creating an instance of a class 'XlsxHelperClass'. Excel path: '${xlsPath}'.`
       );
-      if (true && error) console.log('ERROR.methodAcmDayReportsDataGet.message:', error.message);
+      if (isDebug && error) console.log('ERROR.methodAcmDayReportsDataGet.message:', error.message);
       if (isDebug && dataItems.length) inspector('ERROR.methodAcmDayReportsDataGet.dataItems:', dataItems);
     }
   }
 
   if (isDebug && dataItems.length) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
+
+  if (!dataItems.length) {
+    logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}! dataItems is empty!`);
+  }
 
   // Set hash data for dataItems
   /** 

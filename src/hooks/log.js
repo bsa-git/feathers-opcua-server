@@ -4,7 +4,6 @@ const {isTrue, HookHelper, inspector} = require('../plugins');
 const debug = require('debug')('app:hooks.log');
 
 const isDebug = false;
-const isLog = false;
 
 module.exports = function (isTest = false) {
   return async context => {
@@ -16,7 +15,7 @@ module.exports = function (isTest = false) {
     // Create HookHelper object
     const hh = new HookHelper(context);
     // Show debug info
-    hh.showDebugInfo('', isLog);
+    hh.showDebugInfo('', isDebug);
     hh.showDebugError();
 
     // if(hh.isMask('messages.create.before')){
@@ -31,7 +30,7 @@ module.exports = function (isTest = false) {
 
 
     // Is log msg enable
-    const isLogMsgEnable = isTest ||
+    const isDebugMsgEnable = isTest ||
         isTrue(process.env.LOGMSG_ENABLE) &&
         hh.app.get('env') !== 'test' &&
         (!!hh.contextProvider ||
@@ -39,9 +38,9 @@ module.exports = function (isTest = false) {
           !!hh.contextError
         );
 
-    if(isDebug) debug('isLogMsgEnable:', isLogMsgEnable);    
+    if(isDebug) debug('isDebugMsgEnable:', isDebugMsgEnable);    
 
-    if(isLogMsgEnable){
+    if(isDebugMsgEnable){
       // // Get log message
       // const logMsg = await getLogMessage(context);
       // // Save log message

@@ -102,7 +102,7 @@ describe('<<=== Util: (util.test) ===>>', () => {
     const period = [2, 'months'];
     const dateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
     const startOfPeriod = getStartOfPeriod(dateTime, period);
-    if (true && startOfPeriod) debug(`startOfPeriod([${period}]) to forward:`, startOfPeriod, ' for dateTime:', dateTime);
+    if (isDebug && startOfPeriod) debug(`startOfPeriod([${period}]) to forward:`, startOfPeriod, ' for dateTime:', dateTime);
     assert.ok(dateTime >= startOfPeriod, `util.getStartOfPeriod to forward: '${startOfPeriod}' for dateTime: ${dateTime}`);
   });
 
@@ -110,7 +110,7 @@ describe('<<=== Util: (util.test) ===>>', () => {
     const period = [-2, 'months'];
     const startDateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
     const startOfPeriod = getStartOfPeriod(startDateTime, period);
-    if (true && startOfPeriod) debug(`startOfPeriod([${period}])  to back:`, startOfPeriod, ' for dateTime:', startDateTime);
+    if (isDebug && startOfPeriod) debug(`startOfPeriod([${period}])  to back:`, startOfPeriod, ' for dateTime:', startDateTime);
     assert.ok(startDateTime >= startOfPeriod, `util.getStartOfPeriod  to back: '${startOfPeriod}' for dateTime: ${startDateTime}`);
   });
 
@@ -118,7 +118,7 @@ describe('<<=== Util: (util.test) ===>>', () => {
     const period = [2, 'months'];
     const dateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
     const endOfPeriod = getEndOfPeriod(dateTime, period);
-    if (true && endOfPeriod) debug(`endOfPeriod([${period}]) to forward:`, endOfPeriod, ' for dateTime:', dateTime);
+    if (isDebug && endOfPeriod) debug(`endOfPeriod([${period}]) to forward:`, endOfPeriod, ' for dateTime:', dateTime);
     assert.ok(dateTime <= endOfPeriod, `util.getEndOfPeriod to forward: '${endOfPeriod}' for dateTime: ${dateTime}`);
   });
 
@@ -126,7 +126,7 @@ describe('<<=== Util: (util.test) ===>>', () => {
     const period = [-2, 'months'];
     const startDateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
     const endOfPeriod = getEndOfPeriod(startDateTime, period);
-    if (true && endOfPeriod) debug(`endOfPeriod([${period}]) to back:`, endOfPeriod, ' for dateTime:', startDateTime);
+    if (isDebug && endOfPeriod) debug(`endOfPeriod([${period}]) to back:`, endOfPeriod, ' for dateTime:', startDateTime);
     assert.ok(startDateTime >= endOfPeriod, `util.getEndOfPeriod to back: '${endOfPeriod}' for dateTime: ${startDateTime}`);
   });
 
@@ -134,7 +134,7 @@ describe('<<=== Util: (util.test) ===>>', () => {
     const period = [3, 'days'];
     const dateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
     const startEndOfPeriod = getStartEndOfPeriod(dateTime, period);
-    if (true && startEndOfPeriod) debug(`util.getStartEndOfPeriod([${period}]) to forward:`, startEndOfPeriod, ' for dateTime:', dateTime);
+    if (isDebug && startEndOfPeriod) debug(`util.getStartEndOfPeriod([${period}]) to forward:`, startEndOfPeriod, ' for dateTime:', dateTime);
     assert.ok(dateTime <= startEndOfPeriod[1], `util.getStartEndOfPeriod to forward: '${getStartEndOfPeriod}' for dateTime: ${dateTime}`);
   });
 
@@ -142,7 +142,7 @@ describe('<<=== Util: (util.test) ===>>', () => {
     const period = [-2, 'months'];
     const startDateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
     const startEndOfPeriod = getStartEndOfPeriod(startDateTime, period);
-    if (true && startEndOfPeriod) debug(`util.getStartEndOfPeriod([${period}]) to back:`, startEndOfPeriod, ' for dateTime:', startDateTime);
+    if (isDebug && startEndOfPeriod) debug(`util.getStartEndOfPeriod([${period}]) to back:`, startEndOfPeriod, ' for dateTime:', startDateTime);
     assert.ok(startDateTime >= startEndOfPeriod[1], `util.getStartEndOfPeriod to back: '${startEndOfPeriod}' for dateTime: ${startDateTime}`);
   });
 
@@ -151,7 +151,7 @@ describe('<<=== Util: (util.test) ===>>', () => {
     const unit = 'years';
     const dateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
     const range = getRangeStartEndOfPeriod(dateTime, period, unit);
-    if (true && range) debug(`util.getRangeStartEndOfPeriod([${period}]; unit: '${unit}') to forward:`, range, ' for dateTime:', dateTime);
+    if (isDebug && range) debug(`util.getRangeStartEndOfPeriod([${period}]; unit: '${unit}') to forward:`, range, ' for dateTime:', dateTime);
     assert.ok(range.length, `util.getRangeStartEndOfPeriod to forward: '${range}' for dateTime: ${dateTime}`);
   });
 
@@ -160,7 +160,7 @@ describe('<<=== Util: (util.test) ===>>', () => {
     const unit = 'years';
     const startDateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
     const range = getRangeStartEndOfPeriod(startDateTime, period, unit);
-    if (true && range) debug(`util.getRangeStartEndOfPeriod([${period}]; unit: '${unit}') to back:`, range, ' for dateTime:', startDateTime);
+    if (isDebug && range) debug(`util.getRangeStartEndOfPeriod([${period}]; unit: '${unit}') to back:`, range, ' for dateTime:', startDateTime);
     assert.ok(range.length, `util.getRangeStartEndOfPeriod to back: '${range}' for dateTime: ${startDateTime}`);
   });
 

@@ -156,9 +156,9 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
         }
       };
       fileNames = await getFileNames(url);
-      if (true && fileNames.length) inspector(`HttpOperations: get file names from dir (${url}):`, fileNames);
+      if (isDebug && fileNames.length) inspector(`HttpOperations: get file names from dir (${url}):`, fileNames);
       filterFileNames = await getFileNames(url, '*/**/2022/**/*.xls', { matchBase: true });
-      if (true && filterFileNames.length) inspector(`HttpOperations: get file names from dir (${url}):`, filterFileNames);
+      if (isDebug && filterFileNames.length) inspector(`HttpOperations: get file names from dir (${url}):`, filterFileNames);
       assert.ok(fileNames.length >= filterFileNames.length, 'HttpOperations: get file names from dir');
     } catch (err) {
       debug('ERROR:', err.message);

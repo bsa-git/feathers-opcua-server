@@ -182,7 +182,7 @@ module.exports = async function opcuaBootstrap(app) {
         }
         // Update remote store from local store
         const updateStores = await updateRemoteFromLocalStore(app, appRestClient, opcuaTags);
-        if (true && updateStores) logger.info(`opcuaBootstrap.updateRemoteFromLocalStore.updateStores: ${updateStores}`);
+        logger.info(`opcuaBootstrap.updateRemoteFromLocalStore.updateStores: ${updateStores}`);
       }
     }
   }

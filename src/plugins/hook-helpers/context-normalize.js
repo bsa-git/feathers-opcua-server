@@ -5,7 +5,7 @@ const HookHelper = require('./hook-helper.class');
 const loToPlainObject = require('lodash/toPlainObject');
 const loAssign = require('lodash/assign');
 
-const isLog = false;
+const isDebug = false;
 
 
 /**
@@ -15,7 +15,7 @@ const isLog = false;
 const baseNormalize = async (record) => {
   if (!record) return;
   record = loToPlainObject(record);
-  if (isLog) inspector('plugins.contextNormalize::record:', record);
+  if (isDebug) inspector('plugins.contextNormalize::record:', record);
 };
 
 /**

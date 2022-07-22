@@ -21,6 +21,7 @@ const {
 
 const {
   appRoot,
+  logger,
   inspector,
   pause,
   getTime,
@@ -368,6 +369,11 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       const currentDate = moment().format('YYYYMMDD');
       outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
       const dataItems = readJsonFileSync([appRoot, syncResultOutputPath, outputFile])['dataItems'];
+      if (isDebug && outputFile) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
+
+      if (!dataItems.length) {
+        logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}! dataItems is empty!`);
+      }
 
       //--- Run 'methodAcmYearReportUpdate' metod ---//
 

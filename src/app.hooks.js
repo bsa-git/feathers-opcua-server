@@ -41,13 +41,6 @@ const loConcat = require('lodash/concat');
 // Add hooks
 moduleExports.before.all = loConcat([log(), normalize(), /*auth.authCheck(),*/ constraints()]);
 moduleExports.after.all = loConcat([normalize(), constraints(), log()]);
-// moduleExports.after.find = loConcat([normalize(), constraints(), log()]);
-// moduleExports.after.get = loConcat([normalize(), constraints(), log()]);
-// moduleExports.after.create = loConcat([normalize(), constraints(), log()]);
-// moduleExports.after.update = loConcat([normalize(), constraints(), log()]);
-// moduleExports.after.patch = loConcat([normalize(), constraints(), log()]);
-// moduleExports.after.remove = loConcat([normalize(), constraints(), log()]);
-
 moduleExports.error.all = loConcat([log()]);
 
 module.exports = moduleExports;

@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const moment = require('moment');
-const logger = require('../../logger');
 
 const {
   getOpcuaTags,
@@ -12,7 +11,9 @@ const {
 
 const {
   inspector,
+  logger,
   pause,
+  getStartEndOfPeriod,
   isDeepEqual,
   isDeepStrictEqual,
   getInt,
@@ -278,6 +279,39 @@ const getMaxValuesStorage = async function (app, tagId = '') {
     }
   }
   return result;
+};
+
+/**
+ * @method getStorePeriod
+ * @param {Object} app 
+ * @param {String} tagId 
+ * e.g. tagId -> '60af3870270f24162c049c1f'
+ * @param {String|Array|Object} dateTime
+ * e.g. dateTime -> '2022-07-22T05:06:35'
+ * @returns {Array}
+ * e.g. ['2022-07-21T00:00:00', '2022-07-23T23:59:59']
+ */
+const getStorePeriod = async function (app, tagId = '', dateTime) {
+  let servicePath = 'opcua-tags', period = [];
+  //---------------------------------
+  const storeTag = await getItem(app, servicePath, tagId);
+  if (isDebug && storeTag) inspector(`getStorePeriod.storeTag(tagId='${tagId}'):`, storeTag);
+  if (!storeTag) {
+    throw new Error(`A "opcua-tags" service must have a record with 'tagId' = '${tagId}'`);
+  }
+
+  const groupTag = await findItem(app, servicePath, { browseName: storeTag.ownerGroup });
+  if (isDebug && groupTag) inspector(`getStorePeriod.groupTag(browseName='${storeTag.ownerGroup}'):`, groupTag);
+  if (!groupTag) {
+    throw new Error(`A "opcua-tags" service must have a record with 'browseName' = '${storeTag.ownerGroup}'`);
+  }
+
+  if(!groupTag.store || !groupTag.store.numberOfValuesInDoc){
+    throw new Error('A "opcua-tag" must have a property -> "groupTag.store.numberOfValuesInDoc"');
+  }
+  period = getStartEndOfPeriod(dateTime, groupTag.store.numberOfValuesInDoc);
+  if (isDebug && period.length) debug('getStorePeriod.period:', period);
+  return period;
 };
 
 //================ Save opcua group value ==============//
@@ -1516,6 +1550,7 @@ module.exports = {
   getOpcuaRemoteDbUrl,
   getIdField,
   getMaxValuesStorage,
+  getStorePeriod,
   //------------------
   saveOpcuaGroupValue,
   saveOpcuaValues,

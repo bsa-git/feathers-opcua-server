@@ -6,7 +6,7 @@ const {
   contextNormalize
 } = require('../plugins');
  
-const isLog = false;
+const isDebug = false;
 
 // eslint-disable-next-line no-unused-vars
 module.exports = function (options = {}) {
@@ -19,10 +19,10 @@ module.exports = function (options = {}) {
     // Create HookHelper object
     const hh = new HookHelper(context);
     // Show debug info
-    hh.showDebugInfo('', isLog);
+    hh.showDebugInfo('', isDebug);
 
     records = await contextNormalize(context);
-    if(isLog) inspector('hooks.normalize::records:', records);
+    if(isDebug) inspector('hooks.normalize::records:', records);
 
     // hh.showDebugInfo('messages', true);
     

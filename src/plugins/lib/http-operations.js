@@ -205,7 +205,6 @@ const httpGetFileFromUrl = async function (params = {}) {
     // Get data
     response = await axios(params);
     result = response.data;
-    // if (true && data) inspector(`httpGetLastFileFromDir (${filenames[0]}):`, data);
   } catch (error) {
     if (error.code === 'ECONNREFUSED') {
       console.log(chalk.red('error:'), 'http-operations.httpGetNewFileFromDir.url:', chalk.cyan(`Url "${url}" does not exist!`));

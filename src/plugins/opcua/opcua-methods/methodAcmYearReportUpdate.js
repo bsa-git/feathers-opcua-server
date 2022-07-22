@@ -61,12 +61,11 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
     groupValues = [groupValues];
   }
   if (isDebug && params) inspector('methodAcmYearReportUpdate.params:', params);
-  if (isDebug && groupValues.length) inspector('methodAcmYearReportUpdate.groupValues:', groupValues);
+  if (isDebug && inputArguments) inspector('methodAcmYearReportUpdate.groupValues:', groupValues);
 
   // Sort array groupValues descending
-  // groupValues = sortByStringField(groupValues, '!value', false);
-  // Sort dataItems
   groupValues = orderByItems(groupValues, item => item['!value']['dateTime'], ['desc']);
+  if (isDebug && inputArguments) inspector('methodAcmYearReportUpdate.orderByItems.groupValues:', groupValues);
 
   // Get begin group value 
   const beginGroupValue = groupValues[0];
