@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
+const dirTree = require('directory-tree');
 const {
   appRoot,
   inspector,
   pause,
-  isValidDateTime
 } = require('../../src/plugins/lib/util');
 
 const {
@@ -13,11 +13,13 @@ const {
   makeDirSync,
   clearDirSync,
   writeFileSync,
+  getFileStatList,
   readFileSync,
   readDirSync,
   readOnlyNewFile,
   readOnlyModifiedFile,
   watchFile,
+  watchRemovedFile,
   unwatchFile,
   removeFileSync,
   getOsPlatform,
@@ -44,15 +46,12 @@ const isDebug = false;
  * @param {*} data 
  */
 function cbReadOnlyNewFile(filePath, data) {
-  console.log(chalk.green('cbReadOnlyNewFile.filePath:'), chalk.cyan(filePath));
-  console.log(chalk.green('cbReadOnlyNewFile.data:'), chalk.cyan(data));
+  debug(chalk.green('cbReadOnlyNewFile.filePath:'), chalk.cyan(filePath));
+  debug(chalk.green('cbReadOnlyNewFile.data:'), chalk.cyan(data));
 }
 
-function cbReadOnlyNewFile2(filePath, data) {
-  console.log(chalk.green('cbReadOnlyNewFile2.filePath:'), chalk.cyan(filePath));
-  console.log(chalk.green('cbReadOnlyNewFile2.data:'), chalk.cyan(data));
-  // Remove file 
-  removeFileSync(filePath);
+function cbWatchRemovedFile(filePath) {
+  debug(chalk.green('cbWatchRemovedFile.filePath:'), chalk.cyan(filePath));
 }
 
 /**
@@ -61,8 +60,8 @@ function cbReadOnlyNewFile2(filePath, data) {
  * @param {*} data 
  */
 function cbReadOnlyModifiedFile(filePath, data) {
-  console.log(chalk.green('cbReadOnlyModifiedFile.filePath:'), chalk.cyan(filePath));
-  console.log(chalk.green('cbReadOnlyModifiedFile.data:'), chalk.cyan(data));
+  debug(chalk.green('cbReadOnlyModifiedFile.filePath:'), chalk.cyan(filePath));
+  debug(chalk.green('cbReadOnlyModifiedFile.data:'), chalk.cyan(data));
 }
 
 /**
@@ -77,8 +76,6 @@ function cbWatchFile(filePath, current, previous) {
   inspector('cbWatchFile.previous:', previous);
   // UnWatch File
   unwatchFile(filePath);
-  // Remove file 
-  removeFileSync(filePath);
 }
 
 describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
@@ -195,7 +192,18 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     assert.ok(true, 'FileOperations: watchFile');
   });
 
-  it('#9: FileOperations: Remove directory/files paths from dir', async () => {
+  it('#9: FileOperations: watchRemovedFile', async () => {
+    // Watch file
+    let path = watchRemovedFile([appRoot, 'test/data/tmp/fo'], cbWatchRemovedFile);
+    if (isDebug) debug('FileOperations: watchRemovedFile.path:', path);
+    // Remove file
+    removeFileSync([appRoot, 'test/data/tmp/fo/new.json']);
+    // Pause 300Ms
+    await pause(300);
+    assert.ok(true, 'FileOperations: watchRemovedFile');
+  });
+
+  it('#10: FileOperations: Remove directory/files paths from dir', async () => {
     let deletedItems, deletedItems2;
     //---------------------------------------------------------------
     const testPath = 'test/data/excel/acm';
@@ -214,7 +222,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     assert.ok(deletedItems.length > deletedItems2.length, 'FileOperations: Remove directory/files paths from dir');
   });
 
-  it('#10: FileOperations: Get file list from dir', () => {
+  it('#11: FileOperations: Get file list from dir', () => {
     let fileNames = [], filterFileNames = [];
     //---------------------------------------------------------------
     const testPath = 'test/data/excel/acm';
@@ -231,7 +239,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from dir');
   });
 
-  it('#11: FileOperations: Get file list from unc dir', () => {
+  it('#12: FileOperations: Get file list from unc dir', () => {
     let fileNames = [], filterFileNames = [];
     //---------------------------------------------------------------
     const testPath = 'test/data/excel/acm';
@@ -247,7 +255,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from unc dir');
   });
 
-  it('#12: FileOperations: Get file list from dir. With glob patterns to include/exclude  files', () => {
+  it('#13: FileOperations: Get file list from dir. With glob patterns to include/exclude  files', () => {
     let filePaths = [], filterFilePaths = [];
     //---------------------------------------------------------------
     const testPath = 'test/data/excel/acm';
@@ -263,7 +271,25 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     assert.ok(filterFilePaths.length && filePaths.length >= filterFilePaths.length, 'FileOperations: Get file list from dir. With glob patterns to include/exclude  files');
   });
 
-  it('#13: FileOperations: Make rules from glob patterns', () => {
+  it('#14: FileOperations: Get file stat list from dir', () => {
+    let filePaths = [], filterFilePaths = [];
+    //---------------------------------------------------------------
+    const testPath = 'test/data/excel/acm';
+    // Get file paths without pattern filter
+    filePaths = getFileListFromDir([appRoot, testPath]);
+    if (isDebug && filePaths.length) inspector(`FileOperations: Get file stat list from dir (${testPath}):`, filePaths);
+    // Get file paths with pattern filter
+    filterFilePaths = filePaths.filter(filePath => createMatch(
+      ['*/**/2022/**/*.xls'], // patterns to include
+      ['*/**/*_14F120*.xls']  // patterns to exclude
+    )(filePath));
+    if (isDebug && filterFilePaths.length) inspector(`FileOperations: Get file stat list from dir (${testPath}):`, filterFilePaths);
+    const fileStatList = getFileStatList(filterFilePaths);
+    if (isDebug && fileStatList.length) inspector(`FileOperations: Get file stat list from dir (${testPath}):`, fileStatList);
+    assert.ok(fileStatList.length && fileStatList[0].stat.birthTimeFileCreation, 'FileOperations: Get file stat list from dir');
+  });
+
+  it('#15: FileOperations: Make rules from glob patterns', () => {
     let dirRules = [], fileRules = [];
     //---------------------------------------------------------------
     // Get dirRules and fileRules

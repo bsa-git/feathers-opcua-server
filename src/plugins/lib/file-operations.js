@@ -15,7 +15,8 @@ const {
   getDate,
   getTime,
   strReplace,
-  strReplaceEx
+  strReplaceEx,
+  cloneObject
 } = require('./util');
 
 const loEndsWith = require('lodash/endsWith');
@@ -651,6 +652,28 @@ const getFileListFromDir = function (path, pattern = '', options = {}, fileList 
 };
 
 /**
+ * @method getFileStatList
+ * @param {String[]} fileList 
+ * @returns {Object[]}
+ * e.g. [{ 
+ *  filePath: 'c:/tmp/test.txt',
+ *  stat: {
+ *    fileSize: stat.size,
+      accessFileDataTime: stat.atime, // Time when file data last accessed.
+      modifiedFileDataTime: stat.mtime, // Time when file data last modified.
+      changeFileStatTime: stat.ctime, // Time when file status was last changed (inode data modification).
+      birthTimeFileCreation: stat.birthtime // Time of file creation. Set once when the file is created.
+ *  }
+ * }...]
+ */
+const getFileStatList = function (fileList = []) {
+  const _fileList = cloneObject(fileList);
+  return _fileList.map(f => { 
+    return { filePath: f, stat: getFileStatSync(f) }; 
+  });
+};
+
+/**
  * Creates the function which checks whether a file path is matched with the given pattern or not.
  * @method createMatch
  * @param {string[]} includePatterns - The glob patterns to include files.
@@ -742,8 +765,7 @@ const watchFile = function (path, cb, options) {
     path = join(...path);
   }
   fs.watchFile(path, options, (current, previous) => {
-    if (isDebug) debug('watchFile.path:', path, '; current:', current, '; previous:', previous);
-    // debug('watchFile.path:', path, '; current:', current, '; previous:', previous);
+    if (isDebug && path) debug('watchFile.path:', path, '; current:', current, '; previous:', previous);
     cb(path, current, previous);
   });
   return path;
@@ -783,6 +805,30 @@ const watchNewFile = function (path, cb) {
       if (isDebug) debug('readOnlyNewFile.filePath:', filePath, '; isAccess:', isAccess);
 
       if (isAccess) cb(filePath);
+    }
+  });
+  return path;
+};
+
+/**
+ * @method watchRemovedFile
+ * @param {String|Array} path 
+ * @param {Function} cb 
+ * @returns {String}
+ */
+const watchRemovedFile = function (path, cb) {
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  fs.watch(path, (eventType, filename) => {
+    if (isDebug) debug('watchRemovedFile.eventType:', eventType, '; filename:', filename);
+    if (eventType === 'rename' && filename) {
+      let filePath = join(path, filename);
+
+      const isAccess = fsAccess(filePath, fs.constants.F_OK);
+      if (isDebug) debug('watchRemovedFile.filePath:', filePath, '; isAccess:', isAccess);
+
+      if (!isAccess) cb(filePath);
     }
   });
   return path;
@@ -875,6 +921,26 @@ const readOnlyModifiedFile = function (path, cb) {
   return path;
 };
 
+/**
+ * @method getFileState
+ * @param {String|Array} path 
+ * @returns {Object}
+ */
+const getFileStatSync = function (path) {
+  let result = null;
+  if (Array.isArray(path)) {
+    path = join(...path);
+  }
+  
+  const stat = fs.statSync(path);
+  return {
+    fileSize: stat.size,
+    accessFileDataTime: stat.atime, // Time when file data last accessed.
+    modifiedFileDataTime: stat.mtime, // Time when file data last modified.
+    changeFileStatTime: stat.ctime, // Time when file status was last changed (inode data modification).
+    birthTimeFileCreation: stat.birthtime // Time of file creation. Set once when the file is created.
+  };
+};
 
 /**
  * @method readFileSync
@@ -997,11 +1063,14 @@ module.exports = {
   watchFile,
   unwatchFile,
   watchNewFile,
+  watchRemovedFile,
   watchModifiedFile,
   makeDirSync,
   createPath,
   isUncPath,
   winPathToUncPath,
+  getFileStatSync,
+  getFileStatList,
   readDirSync,
   getFileListFromDir,
   createMatch,
