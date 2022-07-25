@@ -10,6 +10,7 @@ const {
 const {
   fsAccess,
   doesDirExist,
+  createPath,
   makeDirSync,
   clearDirSync,
   writeFileSync,
@@ -93,15 +94,17 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
 
     let result = readFileSync(path);
     result = JSON.parse(result);
-    if (isDebug) debug('FileOperations: writeFileSync/readFileSync.jsonData:', result);
-    // debug('FileOperations: writeFileSync/readFileSync.jsonData:', result);
+    if (isDebug && result) debug('FileOperations: writeFileSync/readFileSync.jsonData:', result);
     removeFileSync(path);
     assert.ok(result.value === data.value, 'FileOperations: writeFileSync/readFileSync');
   });
 
   it('#2: FileOperations: makeDirSync', () => {
-    let path = makeDirSync([appRoot, 'test/data/tmp/fo/tmp2']);
-    const isExist = doesDirExist(path);
+    let isExist = doesDirExist('/test/data/tmp/fo/tmp2');
+    if (!isExist) {
+      let path = createPath('/test/data/tmp/fo/tmp2');
+      isExist = doesDirExist(path);
+    }
     assert.ok(isExist === true, 'FileOperations: makeDirSync');
   });
 
@@ -187,8 +190,6 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     writeFileSync(path, data, true);
     // Pause 300Ms
     await pause(300);
-    // Stop watching for changes on filename
-    // unwatchFile(path);
     assert.ok(true, 'FileOperations: watchFile');
   });
 
@@ -233,7 +234,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     filterFileNames = getFileListFromDir([appRoot, testPath], '*/**/2022/**/*.xls', { matchBase: true });
     if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from dir (${testPath}):`, filterFileNames);
     assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from dir');
-    
+
     filterFileNames = getFileListFromDir([appRoot, testPath], '*/**/*_14F120*.xls', { matchBase: true });
     if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from dir (${testPath}):`, filterFileNames);
     assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from dir');
@@ -286,7 +287,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
     if (isDebug && filterFilePaths.length) inspector(`FileOperations: Get file stat list from dir (${testPath}):`, filterFilePaths);
     const fileStatList = getFileStatList(filterFilePaths);
     if (isDebug && fileStatList.length) inspector(`FileOperations: Get file stat list from dir (${testPath}):`, fileStatList);
-    assert.ok(fileStatList.length && fileStatList[0].stat.birthTimeFileCreation, 'FileOperations: Get file stat list from dir');
+    assert.ok(fileStatList.length && fileStatList[0].fileStat.createdAt, 'FileOperations: Get file stat list from dir');
   });
 
   it('#15: FileOperations: Make rules from glob patterns', () => {

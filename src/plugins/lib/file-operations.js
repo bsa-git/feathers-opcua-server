@@ -12,6 +12,7 @@ const del = require('del');
 const {
   appRoot,
   inspector,
+  logger,
   getDate,
   getTime,
   strReplace,
@@ -317,6 +318,7 @@ const fsAccess = function (path, mode = fs.constants.F_OK) {
  */
 const makeDirSync = function (path) {
   let isExist = false, joinPath = '', existingPath = '', arrPath = [];
+  //--------------------------------------------------------------------
   if (Array.isArray(path)) {
     path.forEach(item => {
       joinPath = join(joinPath, item);
@@ -370,7 +372,6 @@ const makeDirSync = function (path) {
         if (!isExist) {
           fs.mkdirSync(joinPath);
           if (isDebug) debug('Make dir for path:', joinPath);
-          debug('Make dir for path:', joinPath);
         }
       }
     }
@@ -384,6 +385,7 @@ const makeDirSync = function (path) {
  * @returns {String}
  */
 const createPath = function (path) {
+  if(Array.isArray(path)) return makeDirSync(path);
   // Make dir
   if (isUncPath(path)) {
     path = makeDirSync(path);
@@ -602,6 +604,8 @@ const readDirSync = function (path, withFileTypes = false) {
       if (isDebug) debug('readDirSync.filenames:', filenames);
       result = filenames;
     }
+  } else {
+    logger.error(`readDirSync: Access ERROR for file path - '${path}'.`);
   }
   return result;
 };
@@ -659,17 +663,17 @@ const getFileListFromDir = function (path, pattern = '', options = {}, fileList 
  *  filePath: 'c:/tmp/test.txt',
  *  stat: {
  *    fileSize: stat.size,
-      accessFileDataTime: stat.atime, // Time when file data last accessed.
-      modifiedFileDataTime: stat.mtime, // Time when file data last modified.
-      changeFileStatTime: stat.ctime, // Time when file status was last changed (inode data modification).
-      birthTimeFileCreation: stat.birthtime // Time of file creation. Set once when the file is created.
+      accessedAt: stat.atime, // Time when file data last accessed.
+      updatedAt: stat.mtime, // Time when file data last modified.
+      changedStatAt: stat.ctime, // Time when file status was last changed (inode data modification).
+      createdAt: stat.birthtime // Time of file creation. Set once when the file is created.
  *  }
  * }...]
  */
 const getFileStatList = function (fileList = []) {
   const _fileList = cloneObject(fileList);
-  return _fileList.map(f => { 
-    return { filePath: f, stat: getFileStatSync(f) }; 
+  return _fileList.map(f => {
+    return { filePath: f, fileStat: getFileStatSync(f) };
   });
 };
 
@@ -852,7 +856,7 @@ const watchModifiedFile = function (path, cb) {
       const isAccess = fsAccess(filePath, fs.constants.F_OK) && fsAccess(filePath, fs.constants.R_OK);
       if (isDebug) debug('readOnlyModifiedFile.filePath:', filePath, '; isAccess:', isAccess);
 
-      if (isAccess) cb(filePath);
+      if (isAccess) cb(filePath); 
     }
   });
   return path;
@@ -925,21 +929,34 @@ const readOnlyModifiedFile = function (path, cb) {
  * @method getFileState
  * @param {String|Array} path 
  * @returns {Object}
+ * e.g. {
+ *    fileSize: stat.size,
+      accessedAt: stat.atime, // Time when file data last accessed.
+      updatedAt: stat.mtime, // Time when file data last modified.
+      changedStatAt: stat.ctime, // Time when file status was last changed (inode data modification).
+      createdAt: stat.birthtime // Time of file creation. Set once when the file is created.
+ *  }
  */
 const getFileStatSync = function (path) {
   let result = null;
+  //-----------------
   if (Array.isArray(path)) {
     path = join(...path);
   }
-  
-  const stat = fs.statSync(path);
-  return {
-    fileSize: stat.size,
-    accessFileDataTime: stat.atime, // Time when file data last accessed.
-    modifiedFileDataTime: stat.mtime, // Time when file data last modified.
-    changeFileStatTime: stat.ctime, // Time when file status was last changed (inode data modification).
-    birthTimeFileCreation: stat.birthtime // Time of file creation. Set once when the file is created.
-  };
+  const isFileExist = doesFileExist(path);
+  if (isFileExist) {
+    const stat = fs.statSync(path);
+    result = {
+      fileSize: stat.size,
+      accessedAt: stat.atime, // Time when file data last accessed.
+      updatedAt: stat.mtime, // Time when file data last modified.
+      changedStatAt: stat.ctime, // Time when file status was last changed (inode data modification).
+      createdAt: stat.birthtime // Time of file creation. Set once when the file is created.
+    };
+  } else {
+    logger.error(`getFileStatSync: Access ERROR for file path - '${path}'.`);
+  }
+  return result;
 };
 
 /**
@@ -957,6 +974,8 @@ const readFileSync = function (path, encoding = 'utf8') {
   const isAccess = fsAccess(path, fs.constants.F_OK) && fsAccess(path, fs.constants.R_OK);
   if (isAccess) {
     result = fs.readFileSync(path, encoding);
+  } else {
+    logger.error(`readFileSync: Access ERROR for file path - '${path}'.`);
   }
   return result;
 };
@@ -976,6 +995,8 @@ const readJsonFileSync = function (path, encoding = 'utf8') {
   const isAccess = fsAccess(path, fs.constants.F_OK) && fsAccess(path, fs.constants.R_OK);
   if (isAccess) {
     result = fs.readFileSync(path, encoding);
+  } else {
+    logger.error(`readJsonFileSync: Access ERROR for file path - '${path}'.`);
   }
   return JSON.parse(result);
 };
@@ -1003,6 +1024,7 @@ const writeFileSync = function (path, data, isJson = false) {
     fs.writeFileSync(path, data); // encoding <string> | <null> Default: 'utf8'
     if (isDebug) debug('File was written for path:', path);
   } else {
+    logger.error(`writeFileSync: Access ERROR for file path - '${dir}'.`);
     throw new Error(`Access error for path: ${dir}; fs.F_OK: ${fsAccess(dir, fs.constants.F_OK)}; fs.W_OK: ${fsAccess(dir, fs.constants.W_OK)};`);
   }
   return path;
@@ -1037,6 +1059,7 @@ const writeFileStream = function (path, data) {
     data.pipe(fs.createWriteStream(path));
     if (isDebug && path) debug('File was written for path:', path);
   } else {
+    logger.error(`writeFileStream: Access ERROR for file path - '${dir}'.`);
     throw new Error(`Access error for path: ${dir}; fs.F_OK: ${fsAccess(dir, fs.constants.F_OK)}; fs.W_OK: ${fsAccess(dir, fs.constants.W_OK)};`);
   }
   return path;

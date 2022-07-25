@@ -329,10 +329,13 @@ const getStartEndOfPeriod = function (dateTime, period) {
  * @returns {Number[]} 
  * e.g. ['2022', '2023', '2024', '2025', '2026'] | ['2017', '2018', '2019', '2020', '2021']
  */
-const getRangeStartEndOfPeriod = function (dateTime, period, unit = 'years') {
+const getRangeStartEndOfPeriod = function (dateTime = '', period, unit = 'years') {
   let rangeList = [], condition, unitFormat;
   let startPeriod, endPeriod;
   //----------------------------
+  
+  if(!dateTime) dateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+  
   if (Array.isArray(period) && period.length === 2) {
     startPeriod = getStartOfPeriod(dateTime, period);
     endPeriod = getEndOfPeriod(dateTime, period);

@@ -12,6 +12,7 @@ const {
   getFileName,
   getPathBasename,
   createPath,
+  getFileStatSync
 } = require('../../lib');
 
 const {
@@ -63,6 +64,10 @@ const getterAcmDayValueFromFile = function (params = {}, addedValue) {
       `getterAcmDayValueFromFile.readOnlyModifiedFile(${getTime('', false)}).filePath:`), 
     chalk.cyan(getPathBasename(filePath))
     );
+
+    // Get updatedAt time for file
+    const updatedAt = getFileStatSync(filePath).updatedAt;
+
     // Set value from source
     dataType = formatUAVariable(addedValue).dataType[1];
 
@@ -84,7 +89,7 @@ const getterAcmDayValueFromFile = function (params = {}, addedValue) {
 
     // Set value from source
     dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
-    dataItems['!value'] = { dateTime };
+    dataItems['!value'] = { dateTime, updatedAt };
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
     if (isDebug && dataItems) inspector('getterAcmDayValueFromFile.dataItems:', dataItems);
 
@@ -156,8 +161,7 @@ const getterAcmDayValueFromFile = function (params = {}, addedValue) {
     // Write new data to xls file fromFile
     const toFile = getPathBasename(params.fromFile, '.xls');
     const fileName = getFileName(`${toFile}-`, 'xls', true);
-    xlsx.writeFile([appRoot, path, fileName]);
-
+    xlsx.writeFile([appRoot, params.path, fileName]);
   }, params.interval);
 };
 

@@ -532,6 +532,7 @@ const saveStoreOpcuaValues4Hook = async function (app, storeBrowseName, data, st
   let savedValue;
   //--------------------------------------
   const numberOfValuesInDoc = store.numberOfValuesInDoc;
+  if (isDebug && data) inspector('saveStoreOpcuaValues4Hook.data:', data);
 
   // Find store "opcua-tag" for storeBrowseName
   const storeTag = await findItem(app, 'opcua-tags', { browseName: storeBrowseName });

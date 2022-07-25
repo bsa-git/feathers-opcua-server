@@ -9,7 +9,9 @@ const {
   appRoot,
   inspector,
   pause,
+  isString,
   getRangeStartEndOfPeriod,
+  getFileStatList,
   orderByItems,
   doesFileExist,
   getPathBasename,
@@ -125,9 +127,10 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   if (isDebug && params) inspector('methodAcmDayReportsDataGet.params:', params);
 
   // Get range years e.g. ['*/**/*2018_*.*', '*/**/*2019_*.*', '*/**/*2020_*.*', '*/**/*2021_*.*', '*/**/*2022_*.*']
-  const dateTime = moment.utc().subtract(4, 'years').format('YYYY-MM-DDTHH:mm:ss');
-  let rangeYears = getRangeStartEndOfPeriod(dateTime, [5, 'years'], 'years');
+  const dateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+  let rangeYears = getRangeStartEndOfPeriod(dateTime, [-5, 'years'], 'years');
   rangeYears = rangeYears.map(year => `*/**/*${year}_*.*`);
+  if (isDebug && rangeYears.length) inspector('methodAcmDayReportsDataGet.rangeYears:', rangeYears);
 
   // Get acm path  
   const isHttp = loStartsWith(params.acmPath, 'http');
@@ -166,15 +169,16 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
     pattern = path + params.pattern;
     if (isDebug && path) inspector('methodAcmDayReportsDataGet.path:', path);
     dirList = getFileListFromDir(path, pattern, params.patternOptions);
-    dirList = dirList.filter(url => createMatch(rangeYears)(url));
-
+    dirList = dirList.filter(filePath => createMatch(rangeYears)(filePath));
+    dirList = getFileStatList(dirList);
     if (isDebug && dirList.length) inspector('methodAcmDayReportsDataGet.dirList:', dirList);
   }
 
   // Convert xls data to json data 
   for (let index = 0; index < dirList.length; index++) {
-    // if (index > 0) break;
-    const xlsPath = dirList[index];
+
+    const xlsPath = isString(dirList[index]) ? dirList[index] : dirList[index].filePath;
+    const updatedAt = isString(dirList[index]) ? '' : dirList[index].fileStat.updatedAt;
     if (!doesFileExist(xlsPath)) {
       logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. File with name "${chalk.cyan(xlsPath)}" not found.`);
       throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. File with name "${xlsPath}" not found.`);
@@ -206,7 +210,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
         // Convert alias list to browseName list
         const variableList = opcuaTags.filter(t => t.ownerGroup === acmTag.browseName);
         dataItem = convertAliasListToBrowseNameList(variableList, dataItem);
-        dataItem['!value'] = { dateTime };
+        dataItem['!value'] = updatedAt ? { dateTime, updatedAt } : { dateTime };
         if (isDebug && dataItem) inspector(`methodAcmDayReportsDataGet.dataItem('${acmTag.browseName}'):`, dataItem);
 
         dataItems.push(dataItem);
