@@ -67,6 +67,7 @@ const getterAcmDayValueFromFile = function (params = {}, addedValue) {
 
     // Get updatedAt time for file
     const updatedAt = getFileStatSync(filePath).updatedAt;
+    const fileName = getPathBasename(filePath);
 
     // Set value from source
     dataType = formatUAVariable(addedValue).dataType[1];
@@ -89,7 +90,7 @@ const getterAcmDayValueFromFile = function (params = {}, addedValue) {
 
     // Set value from source
     dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
-    dataItems['!value'] = { dateTime, updatedAt };
+    dataItems['!value'] = { dateTime, updatedAt, fileName };
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
     if (isDebug && dataItems) inspector('getterAcmDayValueFromFile.dataItems:', dataItems);
 

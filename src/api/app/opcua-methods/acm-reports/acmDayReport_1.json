@@ -14,7 +14,7 @@
   "rangeDate": "A1:A1",
   "outputFile": "acmDayReportsData${ pointID }-${ date }.json",
   "outputPath": "test/data/tmp/excel-helper",
-  "pattern": "/**/*.xls",
+  "pattern": "/**/DayHist*.xls",
   "patternOptions": {
     "matchBase": true
   },

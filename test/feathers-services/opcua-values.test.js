@@ -21,9 +21,19 @@ describe('<<=== Opcua-Values Service Test (opcua-values.test.js) ===>>', () => {
     assert.ok(errPath === '', `Not save fakes to services - '${errPath}'`);
     errPath = await saveFakesToServices(app, 'opcuaValues');
     assert.ok(errPath === '', `Not save fakes to services - '${errPath}'`);
+  });
+
+  it('#3: Find fake data from \'opcua-values\' service', async () => {
     const service = app.service('opcua-values');
     const findResults = await service.find({});
-    if(isDebug && findResults) inspector('Save fake data to \'opcua-values\' service.data[0]', findResults.data);
-    assert.ok(findResults.data.length > 0, 'Save fake data to \'opcua-values\' service');
+    if(isDebug && findResults) inspector('Find fake data from \'opcua-values\' service.data[0]', findResults.data);
+    assert.ok(findResults.data.length > 0, 'Find fake data from \'opcua-values\' service');
+  });
+
+  it('#4: Run service mixin \'getStoreSources4Data\'', async () => {
+    const service = app.service('opcua-values');
+    const mixinResults = await service.getStoreSources4Data();
+    if(true && mixinResults.length) inspector('Run service mixin \'getStoreSources4Data\'.mixinResults', mixinResults);
+    assert.ok(mixinResults.length, 'Run service mixin \'getStoreSources4Data\'');
   });
 });

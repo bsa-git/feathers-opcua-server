@@ -314,7 +314,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     const pointID = 2;
     const inputArgument = {
       pointID,
-      pattern: '/**/*.xls'
+      pattern: '/**/DayHist*.xls'
     };
     const inputArguments = [[
       {
@@ -348,7 +348,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     //--- Run 'methodAcmDayReportsDataGet' metod ---//
 
     // Set inputArguments
-    inputArgument = { pointID: 2, pattern: '/**/*.xls' };
+    inputArgument = { pointID: 2, pattern: '/**/DayHist*.xls' };
     inputArguments = [[
       {
         dataType: DataType.String,
@@ -594,7 +594,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       command: 'ch_m5SyncStoreAcmValues',
       opt: {
         points: [2],
-        pattern: '/**/*.xls'// e.g. '/**/*.xls'|'/**/2022-01/*.xls'|/**/DayHist01_14F120_01022022_0000.xls
+        pattern: '/**/DayHist*.xls'// e.g. '/**/DayHist*.xls'|'/**/2022-01/DayHist*.xls'|/**/DayHist01_14F120_01022022_0000.xls
       }
     };
     const dataForRunCommand = {
@@ -618,7 +618,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       command: 'ch_m5SyncAcmYearReport',
       opt: {
         points: [2],
-        pattern: '2022-01', // e.g. '/**/*.xls'|'/**/2022-01/*.xls'|/**/DayHist01_14F120_01022022_0000.xls
+        pattern: '2022-01', // e.g. '/**/DayHist*.xls'|'/**/2022-01/DayHist*.xls'|/**/DayHist01_14F120_01022022_0000.xls
         syncYearReportFromStore: true
       }
     };
@@ -643,7 +643,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       command: 'ch_m5SyncAcmYearReport',
       opt: {
         points: [2],
-        pattern: '/**/*.xls', // e.g. '/**/*.xls'|'/**/2022-01/*.xls'|/**/DayHist01_14F120_01022022_0000.xls
+        pattern: '/**/DayHist*.xls', // e.g. '/**/*.xls'|'/**/2022-01/*.xls'|/**/DayHist01_14F120_01022022_0000.xls
         syncYearReportFromStore: false
       }
     };

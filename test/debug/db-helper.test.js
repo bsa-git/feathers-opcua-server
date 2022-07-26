@@ -19,6 +19,7 @@ const {
   saveOpcuaTags,
   integrityCheckOpcua,
   updateRemoteFromLocalStore,
+  getStoreSources4Data,
   getCountItems,
   createItem,
   createItems,
@@ -365,5 +366,25 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
         assert.ok(!results, 'Results length must be equals 0');
       }
     }
+  });
+
+  it('#10: Get store sources for data', async () => {
+
+    //--------------------------------------
+    
+    const fakes = loCloneDeep(fakeNormalize());
+    // Get opcua tags 
+    const opcuaTags = fakes['opcuaTags'];
+    if (isDebug && opcuaTags.length) inspector('fakes.opcuaTags.length', opcuaTags.length);
+    
+    // Save fakes to services
+    await saveFakesToServices(app, 'opcuaTags');
+    await saveFakesToServices(app, 'opcuaValues');
+
+    // Get store sources for data
+    const storeSources = await getStoreSources4Data(app, ['CH_M51::ValueFromFile'], opcuaTags);
+    if(true && storeSources.length) inspector('Get store sources for data.storeSources:', storeSources);
+    
+    assert.ok(storeSources.length, 'Get store sources for data');
   });
 });

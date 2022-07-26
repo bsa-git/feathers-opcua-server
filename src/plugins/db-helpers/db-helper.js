@@ -49,6 +49,8 @@ const chalk = require('chalk');
 const debug = require('debug')('app:db-helper');
 const isDebug = false;
 
+//================ Mssql DB operations  ==============//
+
 /**
  * @method getMssqlDatasetForProvider
  * @param {MssqlTedious} db 
@@ -117,6 +119,8 @@ const getMssqlConfigFromEnv = (config, prefix) => {
   if (isDebug) inspector('getMssqlConfigFromEnv._config:', _config);
   return _config;
 };
+
+//================ Tools for DB  ==============//
 
 /**
  * Get dbNullIdValue
@@ -218,6 +222,8 @@ const getIdField = function (items) {
   return idField ? idField : new Error('Items argument is not an array or object');
 };
 
+//================ DB operations  for storage ==============//
+
 /**
  * @method getMaxValuesStorage
  * @param {Object} app 
@@ -306,12 +312,43 @@ const getStorePeriod = async function (app, tagId = '', dateTime) {
     throw new Error(`A "opcua-tags" service must have a record with 'browseName' = '${storeTag.ownerGroup}'`);
   }
 
-  if(!groupTag.store || !groupTag.store.numberOfValuesInDoc){
+  if (!groupTag.store || !groupTag.store.numberOfValuesInDoc) {
     throw new Error('A "opcua-tag" must have a property -> "groupTag.store.numberOfValuesInDoc"');
   }
   period = getStartEndOfPeriod(dateTime, groupTag.store.numberOfValuesInDoc);
   if (isDebug && period.length) debug('getStorePeriod.period:', period);
   return period;
+};
+
+/**
+ * @method getStoreSources4Data
+ * @async
+ * 
+ * @param {String[]} groupBrowseNames 
+ * e.g. ['CH_M51_ACM::ValueFromFile', 'CH_M52_ACM::ValueFromFile', 'CH_M52_ACM2::ValueFromFile']
+ * @param {Object[]} opcuaTags
+ * @returns {Object[]}
+ * e.g. [
+ *  { fileName: 'DayHist01_23F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:42.827Z' },
+ *  { fileName: 'DayHist01_14F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:50.727Z' },
+ *  ...
+ *  { fileName: 'DayHist01_57F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:55.927Z' }
+ * ]
+ */
+const getStoreSources4Data = async function (app, groupBrowseNames, opcuaTags) {
+  let storeSources = [];
+  //----------------------------
+  // Get store data
+  for (let index = 0; index < groupBrowseNames.length; index++) {
+    const groupBrowseName = groupBrowseNames[index];
+    const storeBrowseNames = opcuaTags.filter(tag => tag.ownerGroup && tag.ownerGroup === groupBrowseName).map(tag => tag.browseName);
+    // Get tag values from stores
+    const resultStoreTagList = await getTagValuesFromStores(app, storeBrowseNames);
+    if (isDebug && resultStoreTagList.length) console.log('saveStoreParameterChanges.resultStoreTagList.length:', resultStoreTagList.length);
+    if (isDebug && resultStoreTagList.length) inspector('saveStoreParameterChanges.resultStoreTagList:', resultStoreTagList);
+    storeSources = loConcat(storeSources, resultStoreTagList);
+  }
+  return storeSources;
 };
 
 //================ Save opcua group value ==============//
@@ -887,7 +924,7 @@ const getTagValuesFromStores = async function (app, storeBrowseNames) {
         if (!dateTimeList.includes(dateTime)) dateTimeList.push(dateTime);
 
         const storeTagValue = {};
-        storeTagValue['!value'] = { dateTime };
+        storeTagValue['!value'] = (itemStore4TagName.items && itemStore4TagName.items.length) ? itemStore4TagName.value : { dateTime };
         storeTagValue[tagName] = value;
         storeTagList.push(storeTagValue);
       }
@@ -959,14 +996,14 @@ const updateRemoteFromLocalStore = async function (app, appRestClient, opcuaTags
           $select: ['tagName', 'store']
         });
         if (isDebug && findedRemoteStoreValue) inspector('updateRemoteFromLocalStore.findedRemoteStoreValue:', findedRemoteStoreValue);
-        
+
         // Create value for remote DB
         if (!findedRemoteStoreValue) {
           createdItem = await createItem(appRestClient, 'opcua-values', findedStoreValue, { $select: ['tagId', 'tagName', 'store', 'storeStart', 'storeEnd'] });
           if (isDebug && createdItem) inspector('updateRemoteFromLocalStore.createdItem:', createdItem);
-          if(createdItem) results ++;
+          if (createdItem) results++;
         }
-        
+
         // Remove and create value for remote DB
         if (findedRemoteStoreValue && findedRemoteStoreValue.store.hash !== hash) {
           const removedItems = await removeItem(appRestClient, 'opcua-values', {
@@ -974,10 +1011,10 @@ const updateRemoteFromLocalStore = async function (app, appRestClient, opcuaTags
             storeStart: findedStoreValue.storeStart,
             $select: ['tagName', 'store', 'storeStart', 'storeEnd']
           });
-          if (isDebug && removedItems.length) inspector('updateRemoteFromLocalStore.removedItems:', removedItems);    
+          if (isDebug && removedItems.length) inspector('updateRemoteFromLocalStore.removedItems:', removedItems);
           createdItem = await createItem(appRestClient, 'opcua-values', findedStoreValue, { $select: ['tagId', 'tagName', 'store', 'storeStart', 'storeEnd'] });
           if (isDebug && createdItem) inspector('updateRemoteFromLocalStore.createdItem:', createdItem);
-          if(createdItem) results ++;
+          if (createdItem) results++;
         }
       }
     }
@@ -1552,6 +1589,7 @@ module.exports = {
   getIdField,
   getMaxValuesStorage,
   getStorePeriod,
+  getStoreSources4Data,
   //------------------
   saveOpcuaGroupValue,
   saveOpcuaValues,

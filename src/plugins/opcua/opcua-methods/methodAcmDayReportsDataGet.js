@@ -178,7 +178,9 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   for (let index = 0; index < dirList.length; index++) {
 
     const xlsPath = isString(dirList[index]) ? dirList[index] : dirList[index].filePath;
-    const updatedAt = isString(dirList[index]) ? '' : dirList[index].fileStat.updatedAt;
+    const updatedAt = isString(dirList[index]) ? '' : dirList[index].fileStat.updatedAt;// getPathBasename
+    const fileName = isString(dirList[index]) ? getPathBasename(dirList[index]) : getPathBasename(dirList[index].filePath);
+
     if (!doesFileExist(xlsPath)) {
       logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. File with name "${chalk.cyan(xlsPath)}" not found.`);
       throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. File with name "${xlsPath}" not found.`);
@@ -210,7 +212,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
         // Convert alias list to browseName list
         const variableList = opcuaTags.filter(t => t.ownerGroup === acmTag.browseName);
         dataItem = convertAliasListToBrowseNameList(variableList, dataItem);
-        dataItem['!value'] = updatedAt ? { dateTime, updatedAt } : { dateTime };
+        dataItem['!value'] = updatedAt ? { dateTime, updatedAt, fileName } : { dateTime, fileName };
         if (isDebug && dataItem) inspector(`methodAcmDayReportsDataGet.dataItem('${acmTag.browseName}'):`, dataItem);
 
         dataItems.push(dataItem);
