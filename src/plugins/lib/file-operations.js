@@ -948,10 +948,10 @@ const getFileStatSync = function (path) {
     const stat = fs.statSync(path);
     result = {
       fileSize: stat.size,
-      accessedAt: stat.atime, // Time when file data last accessed.
-      updatedAt: stat.mtime, // Time when file data last modified.
-      changedStatAt: stat.ctime, // Time when file status was last changed (inode data modification).
-      createdAt: stat.birthtime // Time of file creation. Set once when the file is created.
+      accessedAt: moment.utc(stat.atime).format(), // Time when file data last accessed.
+      updatedAt: moment.utc(stat.mtime).format(), // Time when file data last modified.
+      changedStatAt: moment.utc(stat.ctime).format(), // Time when file status was last changed (inode data modification).
+      createdAt: moment.utc(stat.birthtime).format() // Time of file creation. Set once when the file is created.
     };
   } else {
     logger.error(`getFileStatSync: Access ERROR for file path - '${path}'.`);

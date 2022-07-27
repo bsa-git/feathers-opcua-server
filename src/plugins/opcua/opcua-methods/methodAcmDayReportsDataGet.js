@@ -66,7 +66,7 @@ const isDebug = false;
  */
 async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   let resultPath = '', paramsFile, baseParamsFile, params = null, paramFullsPath;
-  let pointID, dirList = [], path, dataItem, dataItems = [], dataItemHashes = [], pattern = '';
+  let pointID, dirList = [], path, dataItem, dataItems = [], pattern = '';
   //----------------------------------------------------------------------------
 
   if (isDebug && inputArguments.length) inspector('methodAcmDayReportsDataGet.inputArguments:', inputArguments);
@@ -79,6 +79,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
     pointID = params.pointID;
   } else {
     pointID = inputArg;
+    if(context.isSaveOutputFile !== undefined) params = { isSaveOutputFile: context.isSaveOutputFile };
   }
   // Get params data
   paramsFile = loTemplate(acmDayReportFileName)({ pointID });
@@ -170,8 +171,24 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
     if (isDebug && path) inspector('methodAcmDayReportsDataGet.path:', path);
     dirList = getFileListFromDir(path, pattern, params.patternOptions);
     dirList = dirList.filter(filePath => createMatch(rangeYears)(filePath));
-    dirList = getFileStatList(dirList);
-    if (isDebug && dirList.length) inspector('methodAcmDayReportsDataGet.dirList:', dirList);
+    dirList = getFileStatList(dirList);// e.g. [{ filePath: 'c:/tmp/test.txt', fileStat: { ... updatedAt: '2022-07-26T05:46:42.827Z' ... } }]
+    if (isDebug && dirList) console.log('methodAcmDayReportsDataGet.dirList.length:', dirList.length);
+
+    if (!callback) {
+      const service = context.app.service('opcua-values');
+      // Get storeParams e.g. -> [{ dateTime: '2022-02-22', fileName: 'DayHist01_23F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:42.827Z' }... ] 
+      const storeParams = await service.getStoreParams4Data([params.acmTagBrowseName], opcuaTags);
+      // Filter the dirList with storeParams
+      dirList = dirList.filter(item => {
+        const fileName = getPathBasename(item.filePath);
+        const findedStoreParam = storeParams.find(param => param.fileName === fileName);
+        if (isDebug && findedStoreParam) inspector('methodAcmDayReportsDataGet.findedStoreParam:', findedStoreParam);
+        if(!findedStoreParam) return true;
+        if(findedStoreParam.updatedAt !== item.fileStat.updatedAt) return true;
+        return false;
+      });
+      if (isDebug && dirList) console.log('methodAcmDayReportsDataGet.filterDirList.length:', dirList.length);
+    }
   }
 
   // Convert xls data to json data 
@@ -227,25 +244,6 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   }
 
   if (isDebug && dataItems.length) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
-
-  if (!dataItems.length) {
-    logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}! dataItems is empty!`);
-  }
-
-  // Set hash data for dataItems
-  /** 
-  if (dataItems.length) {
-    // Sort dataItems
-    dataItems = orderByItems(dataItems, item => item['!value']['dateTime'], ['asc']);
-    if (isDebug && dataItems) inspector('methodAcmDayReportsDataGet.sortDataItems:', dataItems);
-    for (let index = 0; index < dataItems.length; index++) {
-      const dataItem = dataItems[index];// browseName
-      loForEach(dataItem, function (value, key) {
-
-      });
-    }
-  }
-  */
 
   // Remove files from dir
   if (params.isRemoveXlsFiles) {

@@ -7,16 +7,16 @@ const {
 } = require('../../plugins/lib');
 
 const {
-  getStoreSources4Data,
+  getStoreParams4Data,
 } = require('../../plugins/db-helpers');
 
 const debug = require('debug')('app:opcua-values.mixins');
-const isDebug = true;
+const isDebug = false;
 
 module.exports = function opcuaValuesMixins(service, path) {
 
   /**
-  * @method getStoreSources4Data
+  * @method getStoreParams4Data
   * @async
   * 
   * @param {String[]} groupBrowseNames 
@@ -24,17 +24,15 @@ module.exports = function opcuaValuesMixins(service, path) {
   * @param {Object[]} opcuaTags
   * @returns {Object[]}
   * e.g. [
-  *  { fileName: 'DayHist01_23F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:42.827Z' },
-  *  { fileName: 'DayHist01_14F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:50.727Z' },
+  *  { dateTime: '2022-02-22', fileName: 'DayHist01_23F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:42.827Z' },
+  *  { dateTime: '2022-02-22', fileName: 'DayHist01_14F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:50.727Z' },
   *  ...
-  *  { fileName: 'DayHist01_57F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:55.927Z' }
+  *  { dateTime: '2022-02-22', fileName: 'DayHist01_57F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:55.927Z' }
   * ]
   */
-  service.getStoreSources4Data = async function (groupBrowseNames, opcuaTags) {
-    let storeSources = [];
-    //-------------------------
-    storeSources = await getStoreSources4Data(service.app, groupBrowseNames, opcuaTags);
-    if(isDebug && storeSources.length) inspector('getStoreSources4Data.storeSources:', storeSources);
-    return storeSources;
+  service.getStoreParams4Data = async function (groupBrowseNames, opcuaTags) {
+    const storeParams = await getStoreParams4Data(service.app, groupBrowseNames, opcuaTags);
+    if(isDebug && storeParams.length) inspector('service.mixin.getStoreParams4Data.storeParams:', storeParams);
+    return storeParams;
   };
 };

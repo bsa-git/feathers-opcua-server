@@ -14,9 +14,7 @@ const {
 const fakes = fakeNormalize();
 
 const debug = require('debug')('app:opcua-tags.test');
-
 const isDebug = true;
-const isLog = false;
 
 describe('<<=== Opcua-Tags Service Test (opcua-tags.test.js) ===>>', () => {
   
@@ -29,7 +27,7 @@ describe('<<=== Opcua-Tags Service Test (opcua-tags.test.js) ===>>', () => {
     const errPath = await saveFakesToServices(app, 'opcuaTags');
     const service = app.service('opcua-tags');
     const data = await service.find({});
-    if (isLog) inspector('Save fake data to \'opcua-tags\' service.data[0]', data.data[0]);
+    if (isDebug) inspector('Save fake data to \'opcua-tags\' service.data[0]', data.data[0]);
     assert.ok(errPath === '' && data.data.length, `Not save fakes to services - '${errPath}'`);
   });
 
@@ -45,7 +43,7 @@ describe('<<=== Opcua-Tags Service Test (opcua-tags.test.js) ===>>', () => {
       });
       assert.ok(false, 'Error on unique `browseName`');
     } catch (error) {
-      if (isLog) inspector('Error on unique `browseName`.error', error.message);
+      if (isDebug) inspector('Error on unique `browseName`.error', error.message);
       assert.ok(true, 'Error on unique `browseName`');
     }
   });

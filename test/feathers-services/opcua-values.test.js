@@ -3,14 +3,30 @@ const assert = require('assert');
 const app = require('../../src/app');
 const {
   inspector, 
+  startListenPort,
+  stopListenPort,
   checkServicesRegistered, 
-  saveFakesToServices
+  saveFakesToServices,
+  fakeNormalize,
+  cloneObject
 } = require('../../src/plugins');
 
+const debug = require('debug')('app:opcua-values.test');
 const isDebug = false;
 
+// Get generated fake data
+const fakes = fakeNormalize();
 
 describe('<<=== Opcua-Values Service Test (opcua-values.test.js) ===>>', () => {
+  
+  before(function (done) {
+    startListenPort(app, done);
+  });
+
+  after(function (done) {
+    stopListenPort(done);
+  });
+  
   it('#1: Registered the service', () => {
     const errPath = checkServicesRegistered(app, 'opcua-values');
     assert.ok(errPath === '', `Service '${errPath}' not registered`);
@@ -30,10 +46,12 @@ describe('<<=== Opcua-Values Service Test (opcua-values.test.js) ===>>', () => {
     assert.ok(findResults.data.length > 0, 'Find fake data from \'opcua-values\' service');
   });
 
-  it('#4: Run service mixin \'getStoreSources4Data\'', async () => {
+  it('#4: Run service mixin \'getStoreParams4Data\'', async () => {
+    // Get opcua tags 
+    const opcuaTags = fakes['opcuaTags'];
     const service = app.service('opcua-values');
-    const mixinResults = await service.getStoreSources4Data();
-    if(true && mixinResults.length) inspector('Run service mixin \'getStoreSources4Data\'.mixinResults', mixinResults);
-    assert.ok(mixinResults.length, 'Run service mixin \'getStoreSources4Data\'');
+    const mixinResults = await service.getStoreParams4Data(['CH_M51::ValueFromFile'], opcuaTags);
+    if(isDebug && mixinResults.length) inspector('Run service mixin \'getStoreParams4Data\'.mixinResults', mixinResults);
+    assert.ok(mixinResults.length, 'Run service mixin \'getStoreParams4Data\'');
   });
 });

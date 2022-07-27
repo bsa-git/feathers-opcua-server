@@ -126,7 +126,7 @@ module.exports = async function opcuaBootstrap(app) {
         const pointID = opcuaGroupTag.getterParams.pointID;
         const groupBrowseName = opcuaGroupTag.browseName;
         // Run metod
-        syncResult = await methodAcmDayReportsDataGet([{ value: pointID }]);
+        syncResult = await methodAcmDayReportsDataGet([{ value: pointID }], { app });
         syncResultOutputPath = syncResult.params.outputPath;
         if (isDebug && syncResult) inspector('opcuaBootstrap.methodAcmDayReportsDataGet.syncResult:', syncResult);
         if (syncResult.statusCode === 'Good') {

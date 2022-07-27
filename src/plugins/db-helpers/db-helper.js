@@ -321,34 +321,37 @@ const getStorePeriod = async function (app, tagId = '', dateTime) {
 };
 
 /**
- * @method getStoreSources4Data
+ * @method getStoreParams4Data
  * @async
  * 
+ * @param {Object} app 
  * @param {String[]} groupBrowseNames 
  * e.g. ['CH_M51_ACM::ValueFromFile', 'CH_M52_ACM::ValueFromFile', 'CH_M52_ACM2::ValueFromFile']
  * @param {Object[]} opcuaTags
  * @returns {Object[]}
  * e.g. [
- *  { fileName: 'DayHist01_23F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:42.827Z' },
- *  { fileName: 'DayHist01_14F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:50.727Z' },
+ *  { dateTime: '2022-02-22', fileName: 'DayHist01_23F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:42.827Z' },
+ *  { dateTime: '2022-02-22', fileName: 'DayHist01_14F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:50.727Z' },
  *  ...
- *  { fileName: 'DayHist01_57F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:55.927Z' }
+ *  { dateTime: '2022-02-22', fileName: 'DayHist01_57F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:55.927Z' }
  * ]
  */
-const getStoreSources4Data = async function (app, groupBrowseNames, opcuaTags) {
-  let storeSources = [];
+const getStoreParams4Data = async function (app, groupBrowseNames, opcuaTags) {
+  let storeParams = [], resultStoreTagList;
   //----------------------------
+  const _opcuaTags = loCloneDeep(opcuaTags);
   // Get store data
   for (let index = 0; index < groupBrowseNames.length; index++) {
     const groupBrowseName = groupBrowseNames[index];
-    const storeBrowseNames = opcuaTags.filter(tag => tag.ownerGroup && tag.ownerGroup === groupBrowseName).map(tag => tag.browseName);
-    // Get tag values from stores
-    const resultStoreTagList = await getTagValuesFromStores(app, storeBrowseNames);
+    const storeBrowseNames = _opcuaTags.filter(tag => tag.ownerGroup && tag.ownerGroup === groupBrowseName).map(tag => tag.browseName);
+    // Get tag values for one store
+    resultStoreTagList = await getTagValuesFromStores(app, [storeBrowseNames[0]]);
+    resultStoreTagList = resultStoreTagList.map(item => item['!value']);
     if (isDebug && resultStoreTagList.length) console.log('saveStoreParameterChanges.resultStoreTagList.length:', resultStoreTagList.length);
     if (isDebug && resultStoreTagList.length) inspector('saveStoreParameterChanges.resultStoreTagList:', resultStoreTagList);
-    storeSources = loConcat(storeSources, resultStoreTagList);
+    storeParams = loConcat(storeParams, resultStoreTagList);
   }
-  return storeSources;
+  return storeParams;
 };
 
 //================ Save opcua group value ==============//
@@ -1589,7 +1592,7 @@ module.exports = {
   getIdField,
   getMaxValuesStorage,
   getStorePeriod,
-  getStoreSources4Data,
+  getStoreParams4Data,
   //------------------
   saveOpcuaGroupValue,
   saveOpcuaValues,

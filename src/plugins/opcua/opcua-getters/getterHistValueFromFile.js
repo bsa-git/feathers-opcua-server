@@ -45,7 +45,7 @@ const getterHistValueFromFile = function (params = {}, addedValue) {
   // Watch read only new file
   readOnlyNewFile(path, (filePath, data) => {
     // Show filePath, data
-    if (true && filePath) console.log(chalk.green('getterHistValueFromFile.file:'), chalk.cyan(filePath));
+    if (isDebug && filePath) console.log(chalk.green('getterHistValueFromFile.file:'), chalk.cyan(filePath));
     if (isDebug && filePath) console.log(chalk.green('getterHistValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
     if (isDebug && data) console.log(chalk.green('getterHistValueFromFile.data:'), chalk.cyan(data));
     // Set value from source

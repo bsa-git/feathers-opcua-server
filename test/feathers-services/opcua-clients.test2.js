@@ -8,7 +8,6 @@ const {
 } = require('node-opcua');
 
 const {
-  getOpcuaTags,
   getOpcuaConfigOptions,
   getServerService,
   getClientService,
@@ -16,7 +15,12 @@ const {
 } = require('../../src/plugins/opcua/opcua-helper');
 
 const {
+  methodAcmDayReportsDataGet
+} = require('../../src/plugins/opcua/opcua-methods');
+
+const {
   saveOpcuaTags,
+  removeOpcuaStoreValues
 } = require('../../src/plugins/db-helpers');
 
 const {
@@ -339,7 +343,77 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     assert.ok(statusCode === 'Good', 'OPC-UA clients: session call method "methodAcmDayReportsDataGet"');
   });
 
-  it('#8.3: OPC-UA clients: session call method "methodAcmYearReportUpdate"', async () => {
+  it('#8.3: OPC-UA clients: run method "methodAcmDayReportsDataGet" with not clear store', async () => {
+    let statusCode = '', dataItems;
+    //------------------------------------------------
+    
+    // Get opcua tags
+    const opcuaTags = getOpcuaConfigOptions(id);
+    // Get opcua group store tags 
+    const opcuaGroupTags = opcuaTags.filter(t => t.group && t.store);
+    if (isDebug && opcuaGroupTags.length) inspector('opcuaBootstrap.opcuaGroupTags:', opcuaGroupTags);
+    for (let index = 0; index < opcuaGroupTags.length; index++) {
+      const opcuaGroupTag = opcuaGroupTags[index];
+      const pointID = opcuaGroupTag.getterParams.pointID;
+      // Run metod
+      const methodResult = await methodAcmDayReportsDataGet([{ value: pointID }], { app, isSaveOutputFile: true });
+      const methodResultOutputPath = methodResult.params.outputPath;
+      if (isDebug && methodResult) inspector('methodAcmDayReportsDataGet.methodResult:', methodResult);
+      statusCode = methodResult.statusCode;
+      if (statusCode === 'Good') {
+        // Get dataItems
+        if (methodResult.params.isSaveOutputFile) {
+          let outputFile = methodResult.params.outputFile;
+          const currentDate = moment().format('YYYYMMDD');
+          outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
+          dataItems = readJsonFileSync([appRoot, methodResultOutputPath, outputFile])['dataItems'];
+        } else {
+          dataItems = methodResult.dataItems;
+        }
+        if (isDebug && dataItems) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
+      }
+      assert.ok(statusCode === 'Good' && !dataItems.length, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store');  
+    }
+  });
+
+  it('#8.4: OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store', async () => {
+    let statusCode = '', dataItems;
+    //------------------------------------------------
+    
+    // Remove opcua store values
+    const removeResult = await removeOpcuaStoreValues(app);
+    if (isDebug && removeResult) inspector('removeOpcuaStoreValues.removeResult:', removeResult);
+    
+    // Get opcua tags
+    const opcuaTags = getOpcuaConfigOptions(id);
+    // Get opcua group store tags 
+    const opcuaGroupTags = opcuaTags.filter(t => t.group && t.store);
+    if (isDebug && opcuaGroupTags.length) inspector('opcuaBootstrap.opcuaGroupTags:', opcuaGroupTags);
+    for (let index = 0; index < opcuaGroupTags.length; index++) {
+      const opcuaGroupTag = opcuaGroupTags[index];
+      const pointID = opcuaGroupTag.getterParams.pointID;
+      // Run metod
+      const methodResult = await methodAcmDayReportsDataGet([{ value: pointID }], { app, isSaveOutputFile: false });
+      const methodResultOutputPath = methodResult.params.outputPath;
+      if (isDebug && methodResult) inspector('methodAcmDayReportsDataGet.methodResult:', methodResult);
+      statusCode = methodResult.statusCode;
+      if (statusCode === 'Good') {
+        // Get dataItems
+        if (methodResult.params.isSaveOutputFile) {
+          let outputFile = methodResult.params.outputFile;
+          const currentDate = moment().format('YYYYMMDD');
+          outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
+          dataItems = readJsonFileSync([appRoot, methodResultOutputPath, outputFile])['dataItems'];
+        } else {
+          dataItems = methodResult.dataItems;
+        }
+        if (isDebug && dataItems) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
+      }
+      assert.ok(statusCode === 'Good' && dataItems.length, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with not clear store');  
+    }
+  });
+
+  it('#8.5: OPC-UA clients: session call method "methodAcmYearReportUpdate"', async () => {
     let statusCode = '', inputArgument, inputArgument2, inputArguments, outputArguments;
     let callResults;
     //------------------------------------------------------------------------------------
@@ -553,7 +627,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     const opcuaTags = getOpcuaConfigOptions(id);
     // Save opcua tags to local DB
     let saveResult = await saveOpcuaTags(app, opcuaTags, false);
-    if(isDebug && saveResult) inspector('Data base: Save opcua tags:', saveResult);
+    if (isDebug && saveResult) inspector('Data base: Save opcua tags:', saveResult);
     assert.ok(saveResult.total, 'Data base: Save opcua tags');
     // await pause(2000);
   });
@@ -579,7 +653,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     };
     statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommand', dataForRunCommand);
     statusCode = statusCode.name;
-    if(isDebug && statusCode) console.log(chalk.green('RunCommand(ch_m5CreateAcmYearTemplate).statusCode:'), chalk.cyan(statusCode));
+    if (isDebug && statusCode) console.log(chalk.green('RunCommand(ch_m5CreateAcmYearTemplate).statusCode:'), chalk.cyan(statusCode));
     assert.ok(statusCode === 'Good', 'OPC-UA clients: RunCommand(ch_m5CreateAcmYearTemplate)');
     await pause(1000);
   });
@@ -603,7 +677,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     };
     statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommand', dataForRunCommand);
     statusCode = statusCode.name;
-    if(isDebug && statusCode) console.log(chalk.green('RunCommand(ch_m5SyncStoreAcmValues).statusCode:'), chalk.cyan(statusCode));
+    if (isDebug && statusCode) console.log(chalk.green('RunCommand(ch_m5SyncStoreAcmValues).statusCode:'), chalk.cyan(statusCode));
     assert.ok(statusCode === 'Good', 'OPC-UA clients: RunCommand(ch_m5SyncStoreAcmValues)');
     await pause(1000);
   });
@@ -628,11 +702,11 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     };
     statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommand', dataForRunCommand);
     statusCode = statusCode.name;
-    if(isDebug && statusCode) console.log(chalk.green('RunCommand(ch_m5SyncAcmYearReport).statusCode:'), chalk.cyan(statusCode));
+    if (isDebug && statusCode) console.log(chalk.green('RunCommand(ch_m5SyncAcmYearReport).statusCode:'), chalk.cyan(statusCode));
     assert.ok(statusCode === 'Good', 'OPC-UA clients: RunCommand(ch_m5SyncAcmYearReport) get dataItems from store');
     await pause(1000);
   });
-  
+
   it('#12.4: OPC-UA clients: RunCommand(ch_m5SyncAcmYearReport) get dataItems from day reports', async () => {
     let statusCode = null;
     //-----------------------------------
@@ -643,7 +717,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       command: 'ch_m5SyncAcmYearReport',
       opt: {
         points: [2],
-        pattern: '/**/DayHist*.xls', // e.g. '/**/*.xls'|'/**/2022-01/*.xls'|/**/DayHist01_14F120_01022022_0000.xls
+        pattern: '/**/DayHist*.xls', // e.g. '/**/DayHist*.xls'|'/**/2022-01/DayHist*.xls'|/**/DayHist01_14F120_01022022_0000.xls
         syncYearReportFromStore: false
       }
     };
@@ -653,7 +727,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     };
     statusCode = await service.sessionWriteSingleNode(id, 'CH_M5::RunCommand', dataForRunCommand);
     statusCode = statusCode.name;
-    if(isDebug && statusCode) console.log(chalk.green('RunCommand(ch_m5SyncAcmYearReport).statusCode:'), chalk.cyan(statusCode));
+    if (isDebug && statusCode) console.log(chalk.green('RunCommand(ch_m5SyncAcmYearReport).statusCode:'), chalk.cyan(statusCode));
     assert.ok(statusCode === 'Good', 'OPC-UA clients: RunCommand(ch_m5SyncAcmYearReport) get dataItems from day reports');
     await pause(2000);
   });
