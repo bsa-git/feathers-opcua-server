@@ -47,10 +47,8 @@ describe('<<=== Opcua-Values Service Test (opcua-values.test.js) ===>>', () => {
   });
 
   it('#4: Run service mixin \'getStoreParams4Data\'', async () => {
-    // Get opcua tags 
-    const opcuaTags = fakes['opcuaTags'];
     const service = app.service('opcua-values');
-    const mixinResults = await service.getStoreParams4Data(['CH_M51::ValueFromFile'], opcuaTags);
+    const mixinResults = await service.getStoreParams4Data(['CH_M51::ValueFromFile']);
     if(isDebug && mixinResults.length) inspector('Run service mixin \'getStoreParams4Data\'.mixinResults', mixinResults);
     assert.ok(mixinResults.length, 'Run service mixin \'getStoreParams4Data\'');
   });

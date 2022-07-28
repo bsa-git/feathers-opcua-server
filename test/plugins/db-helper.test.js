@@ -370,20 +370,13 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
   it('#10: Get store params for data', async () => {
 
-    //--------------------------------------
-    
-    const fakes = loCloneDeep(fakeNormalize());
-    // Get opcua tags 
-    const opcuaTags = fakes['opcuaTags'];
-    if (isDebug && opcuaTags.length) inspector('fakes.opcuaTags.length', opcuaTags.length);
-    
     // Save fakes to services
     await saveFakesToServices(app, 'opcuaTags');
     await saveFakesToServices(app, 'opcuaValues');
 
     // Get store sources for data
-    const storeParams = await getStoreParams4Data(app, ['CH_M51::ValueFromFile'], opcuaTags);
-    if(true && storeParams.length) inspector('Get store params for data.storeParams:', storeParams);
+    const storeParams = await getStoreParams4Data(app, ['CH_M51::ValueFromFile']);
+    if(isDebug && storeParams.length) inspector('Get store params for data.storeParams:', storeParams);
     
     assert.ok(storeParams.length, 'Get store params for data');
   });

@@ -20,7 +20,8 @@ const {
 
 const {
   saveOpcuaTags,
-  removeOpcuaStoreValues
+  removeOpcuaStoreValues,
+  getStoreParams4Data
 } = require('../../src/plugins/db-helpers');
 
 const {
@@ -266,6 +267,16 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   //============== SESSION CALL METHOD ====================//
 
+  it('#8.0: Data base: Save opcua tags', async () => {
+    // Get opcua tags 
+    const opcuaTags = getOpcuaConfigOptions(id);
+    // Save opcua tags to local DB
+    let saveResult = await saveOpcuaTags(app, opcuaTags, false);
+    if (isDebug && saveResult) inspector('Data base: Save opcua tags:', saveResult);
+    assert.ok(saveResult.total, 'Data base: Save opcua tags');
+    await pause(2000);
+  });
+
   it('#8.1: OPC-UA clients: session call method "methodAcmYearTemplateCreate"', async () => {
     let statusCode = '', outputArguments;
     //------------------------------------------------
@@ -346,7 +357,6 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
   it('#8.3: OPC-UA clients: run method "methodAcmDayReportsDataGet" with not clear store', async () => {
     let statusCode = '', dataItems;
     //------------------------------------------------
-    
     // Get opcua tags
     const opcuaTags = getOpcuaConfigOptions(id);
     // Get opcua group store tags 
@@ -354,9 +364,12 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     if (isDebug && opcuaGroupTags.length) inspector('opcuaBootstrap.opcuaGroupTags:', opcuaGroupTags);
     for (let index = 0; index < opcuaGroupTags.length; index++) {
       const opcuaGroupTag = opcuaGroupTags[index];
+      const groupBrowseName = opcuaGroupTag.browseName;
       const pointID = opcuaGroupTag.getterParams.pointID;
       // Run metod
-      const methodResult = await methodAcmDayReportsDataGet([{ value: pointID }], { app, isSaveOutputFile: true });
+      const storeParams = await getStoreParams4Data(app, [groupBrowseName]);
+      const params = { isSaveOutputFile: true };
+      const methodResult = await methodAcmDayReportsDataGet([{ value: pointID }], { storeParams, params });
       const methodResultOutputPath = methodResult.params.outputPath;
       if (isDebug && methodResult) inspector('methodAcmDayReportsDataGet.methodResult:', methodResult);
       statusCode = methodResult.statusCode;
@@ -372,7 +385,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
         }
         if (isDebug && dataItems) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
       }
-      assert.ok(statusCode === 'Good' && !dataItems.length, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store');  
+      assert.ok(statusCode === 'Good' && dataItems.length === 0, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with not clear store');  
     }
   });
 
@@ -391,9 +404,12 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     if (isDebug && opcuaGroupTags.length) inspector('opcuaBootstrap.opcuaGroupTags:', opcuaGroupTags);
     for (let index = 0; index < opcuaGroupTags.length; index++) {
       const opcuaGroupTag = opcuaGroupTags[index];
+      const groupBrowseName = opcuaGroupTag.browseName;
       const pointID = opcuaGroupTag.getterParams.pointID;
       // Run metod
-      const methodResult = await methodAcmDayReportsDataGet([{ value: pointID }], { app, isSaveOutputFile: false });
+      const storeParams = await getStoreParams4Data(app, [groupBrowseName]);
+      const params = { isSaveOutputFile: false };
+      const methodResult = await methodAcmDayReportsDataGet([{ value: pointID }], { storeParams, params });
       const methodResultOutputPath = methodResult.params.outputPath;
       if (isDebug && methodResult) inspector('methodAcmDayReportsDataGet.methodResult:', methodResult);
       statusCode = methodResult.statusCode;
@@ -621,16 +637,6 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
   });
 
   //============== RUN COMMAND ====================//
-
-  it('#12.0: Data base: Save opcua tags', async () => {
-    // Get opcua tags 
-    const opcuaTags = getOpcuaConfigOptions(id);
-    // Save opcua tags to local DB
-    let saveResult = await saveOpcuaTags(app, opcuaTags, false);
-    if (isDebug && saveResult) inspector('Data base: Save opcua tags:', saveResult);
-    assert.ok(saveResult.total, 'Data base: Save opcua tags');
-    // await pause(2000);
-  });
 
   it('#12.1: OPC-UA clients: RunCommand(ch_m5CreateAcmYearTemplate)', async () => {
     let statusCode = null;

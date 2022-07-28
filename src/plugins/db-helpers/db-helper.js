@@ -327,7 +327,6 @@ const getStorePeriod = async function (app, tagId = '', dateTime) {
  * @param {Object} app 
  * @param {String[]} groupBrowseNames 
  * e.g. ['CH_M51_ACM::ValueFromFile', 'CH_M52_ACM::ValueFromFile', 'CH_M52_ACM2::ValueFromFile']
- * @param {Object[]} opcuaTags
  * @returns {Object[]}
  * e.g. [
  *  { dateTime: '2022-02-22', fileName: 'DayHist01_23F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:42.827Z' },
@@ -336,14 +335,15 @@ const getStorePeriod = async function (app, tagId = '', dateTime) {
  *  { dateTime: '2022-02-22', fileName: 'DayHist01_57F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:55.927Z' }
  * ]
  */
-const getStoreParams4Data = async function (app, groupBrowseNames, opcuaTags) {
+const getStoreParams4Data = async function (app, groupBrowseNames) {
   let storeParams = [], resultStoreTagList;
   //----------------------------
-  const _opcuaTags = loCloneDeep(opcuaTags);
   // Get store data
   for (let index = 0; index < groupBrowseNames.length; index++) {
     const groupBrowseName = groupBrowseNames[index];
-    const storeBrowseNames = _opcuaTags.filter(tag => tag.ownerGroup && tag.ownerGroup === groupBrowseName).map(tag => tag.browseName);
+    // Get store items
+    const storeTagItems = await findItems(app, 'opcua-tags', { ownerGroup: groupBrowseName });
+    const storeBrowseNames = storeTagItems.map(tag => tag.browseName);
     // Get tag values for one store
     resultStoreTagList = await getTagValuesFromStores(app, [storeBrowseNames[0]]);
     resultStoreTagList = resultStoreTagList.map(item => item['!value']);
@@ -765,7 +765,7 @@ const removeOpcuaStoreValues = async function (app) {
   //-------------------------
   // Get opcua tags 
   let opcuaTags = getOpcuaTags();
-  const groupBrowseNames = opcuaTags.filter(tag => !!tag.group && tag.store).map(tag => tag.browseName);
+  const groupBrowseNames = opcuaTags.filter(tag => tag.group && tag.store).map(tag => tag.browseName);
   if (isDebug && groupBrowseNames.length) inspector('db-helper.removeOpcuaStoreValues.groupBrowseNames:', groupBrowseNames);
   for (let index = 0; index < groupBrowseNames.length; index++) {
     const groupBrowseName = groupBrowseNames[index];

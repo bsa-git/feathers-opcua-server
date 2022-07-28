@@ -21,7 +21,6 @@ module.exports = function opcuaValuesMixins(service, path) {
   * 
   * @param {String[]} groupBrowseNames 
   * e.g. ['CH_M51_ACM::ValueFromFile', 'CH_M52_ACM::ValueFromFile', 'CH_M52_ACM2::ValueFromFile']
-  * @param {Object[]} opcuaTags
   * @returns {Object[]}
   * e.g. [
   *  { dateTime: '2022-02-22', fileName: 'DayHist01_23F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:42.827Z' },
@@ -30,8 +29,8 @@ module.exports = function opcuaValuesMixins(service, path) {
   *  { dateTime: '2022-02-22', fileName: 'DayHist01_57F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:55.927Z' }
   * ]
   */
-  service.getStoreParams4Data = async function (groupBrowseNames, opcuaTags) {
-    const storeParams = await getStoreParams4Data(service.app, groupBrowseNames, opcuaTags);
+  service.getStoreParams4Data = async function (groupBrowseNames) {
+    const storeParams = await getStoreParams4Data(service.app, groupBrowseNames);
     if(isDebug && storeParams.length) inspector('service.mixin.getStoreParams4Data.storeParams:', storeParams);
     return storeParams;
   };
