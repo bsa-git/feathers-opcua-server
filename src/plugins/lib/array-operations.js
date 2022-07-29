@@ -257,9 +257,9 @@ const getIndex4Range = function (range) {
 
 /**
  * Creates an array of numbers (positive and/or negative) progressing from start up to, but not including, end
- * @method getArrOfNumbers4Range
- * @param {Number} start  // The start of the range
+ * @method getRangeArray
  * @param {Number} end    // The end of the range
+ * @param {Number} start  // The start of the range
  * @param {Number} step   // The value to increment or decrement by
  * @returns {Number[]}
  * e.g. _.range(4) => [0, 1, 2, 3]
@@ -269,7 +269,7 @@ const getIndex4Range = function (range) {
  * e.g. _.range(0, -4, -1) => [0, -1, -2, -3]
  * e.g. _.range(1, 4, 0) => [1, 1, 1]
  */
-const getArrOfNumbers4Range = function (start = 0, end, step = 1) {
+const getRangeArray = function (end, start = 0, step = 1) {
   return loRange(start, end, step);
 };
 
@@ -397,6 +397,7 @@ module.exports = {
   sortByString,
   sortByNumber,
   orderByItems,
+  getRangeArray,
   getGroupsFromArray,
   convertArray2Object,
   convertObject2Array,

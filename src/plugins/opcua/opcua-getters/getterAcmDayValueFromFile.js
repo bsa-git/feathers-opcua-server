@@ -84,9 +84,11 @@ const getterAcmDayValueFromFile = function (params = {}, addedValue) {
 
     // Sheet to json date
     let dateTime = xlsx.sheetToJson('Report1', { range: rangeDate });
-    dateTime = dateTime[0]['A'].split('to:')[0].split('from:')[1].trim();
+    if (isDebug && dateTime) console.log('getterAcmDayValueFromFile.sheetDateTime:', dateTime);
+    // dateTime = dateTime[0]['A'].split('to:')[0].split('from:')[1].trim();
+    dateTime = dateTime[0]['A'].split('to:')[1].trim();
     dateTime = moment.utc(dateTime).format('YYYY-MM-DD');
-    if (isDebug && dateTime) inspector('getterAcmDayValueFromFile.dateTime:', dateTime);
+    if (isDebug && dateTime) console.log('getterAcmDayValueFromFile.dateTime:', dateTime);
 
     // Set value from source
     dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);

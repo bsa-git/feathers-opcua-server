@@ -10,6 +10,7 @@ const {
 } = require('../opcua/opcua-helper');
 
 const {
+  appRoot,
   inspector,
   logger,
   pause,
@@ -19,13 +20,17 @@ const {
   getInt,
   getStartOfPeriod,
   getEndOfPeriod,
-  sortByStringField
+  sortByStringField,
+  readJsonFileSync,
+  removeFilesFromDirSync,
 } = require('../lib');
 
 const {
   feathersClient,
   AuthServer
 } = require('../auth');
+
+const opcuaMethods = require('../opcua/opcua-methods');
 
 const loMerge = require('lodash/merge');
 const loConcat = require('lodash/concat');
@@ -36,6 +41,8 @@ const loForEach = require('lodash/forEach');
 const loOrderBy = require('lodash/orderBy');
 const loReduce = require('lodash/reduce');
 const loCloneDeep = require('lodash/cloneDeep');
+const loTemplate = require('lodash/template');
+const loSize = require('lodash/size');
 
 // Get max rows for opcua-values service
 let maxOpcuaValuesRows = process.env.OPCUA_VALUES_MAXROWS;
@@ -1192,6 +1199,90 @@ const integrityCheckOpcua = async function (app, isRemote = false) {
   return result;
 };
 
+/**
+ * @method syncHistoryAtStartup
+ * @param {Object} app 
+ * @param {Object[]} opcuaTags 
+ * @param {String} methodName
+ * e.g. -> 'methodAcmDayReportsDataGet'
+ * @returns {Object}
+ * e.g. {"saved": 30, "removed": 5}
+ */
+const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
+  let methodResult = null, dataItems = [], savedValues = [], savedValuesCount = 0;
+  let removedValuesCount = 0, methodResultOutputPath;
+  //-------------------------------------------------------------
+  // Get opcua array valid group store tags 
+  methodResult = await opcuaMethods[methodName]([{ value: 0 }]);
+  if (methodResult.statusCode !== 'Good') {
+    logger.error(`syncHistoryAtStartup('${methodName}') - ${chalk.red('ERROR')}.`);
+    return { savedValuesCount, removedValuesCount };
+  }
+  const arrayOfValidTags = methodResult.params.arrayOfValidTags;
+  if (isDebug && arrayOfValidTags.length) inspector('syncHistoryAtStartup.arrayOfValidTags:', arrayOfValidTags);
+  const opcuaGroupTags = opcuaTags.filter(t => t.group && t.store && arrayOfValidTags.includes(t.browseName));
+  if (isDebug && opcuaGroupTags.length) inspector('syncHistoryAtStartup.opcuaGroupTags:', opcuaGroupTags);
+  for (let index = 0; index < opcuaGroupTags.length; index++) {
+    const opcuaGroupTag = opcuaGroupTags[index];
+    const pointID = opcuaGroupTag.getterParams.pointID;
+    const groupBrowseName = opcuaGroupTag.browseName;
+    const storeBrowseNames = opcuaTags.filter(tag => tag.ownerGroup === groupBrowseName).map(tag => tag.browseName);
+    // Set dataItemBrowseNames e.g. { "CH_M51::01AMIAK:01T4": [], "CH_M51::01AMIAK:01P4_1": [] }
+    // This is needed for remove dataItem from store
+    const dataItemBrowseNames = {};
+    storeBrowseNames.forEach(browseName => {
+      dataItemBrowseNames[browseName] = [];
+    });
+    // Run metod
+    const storeParams = await getStoreParams4Data(app, [groupBrowseName]);
+    methodResult = await opcuaMethods[methodName]([{ value: pointID }], { storeParams });
+    methodResultOutputPath = methodResult.params.outputPath;
+    if (isDebug && methodResult) inspector('syncHistoryAtStartup.methodAcmDayReportsDataGet.methodResult:', methodResult);
+    if (methodResult.statusCode === 'Good') {
+      // Get dataItems
+      if (methodResult.params.isSaveOutputFile) {
+        let outputFile = methodResult.params.outputFile;
+        const currentDate = moment().format('YYYYMMDD');
+        outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
+        dataItems = readJsonFileSync([appRoot, methodResultOutputPath, outputFile])['dataItems'];
+      } else {
+        dataItems = methodResult.dataItems;
+      }
+
+      // Add dataItems for storeParams4Remove
+      const storeParams4Remove = methodResult.storeParams4Remove;
+      for (let index2 = 0; index2 < storeParams4Remove.length; index2++) {
+        const storeParam4Remove = storeParams4Remove[index2];
+        storeParam4Remove.actions = ['remove'];
+        const dataItem = {};
+        dataItem['!value'] = storeParam4Remove;
+        Object.assign(dataItem, dataItemBrowseNames);
+        if (true && dataItem) inspector('syncHistoryAtStartup.methodAcmDayReportsDataGet.dataItem:', dataItem);
+        dataItems.push(dataItem);
+      }
+
+      // Save store opcua group value
+      for (let index2 = 0; index2 < dataItems.length; index2++) {
+        const dataItem = dataItems[index2];
+        if (isDebug && dataItem) inspector('syncHistoryAtStartup.dataItem:', dataItem);
+        savedValues = await saveStoreOpcuaGroupValue(app, groupBrowseName, dataItem, true);
+        const isRemoveAction = dataItem['!value'].actions && dataItem['!value'].actions.includes('remove');
+        if (isRemoveAction) {
+          removedValuesCount += loSize(dataItem) - 1;
+        } else {
+          savedValuesCount += savedValues.length;
+        }
+        if (isDebug && savedValues.length) inspector('syncHistoryAtStartup.saveStoreOpcuaGroupValue.savedValues:', savedValues);
+      }
+    }
+  }
+  const syncResult = { savedValuesCount, removedValuesCount };
+  if (isDebug && dataItems) console.log(`syncHistoryAtStartup.syncResult: ${syncResult}`);
+  // Remove files from dir
+  removeFilesFromDirSync([appRoot, methodResultOutputPath]);
+  return syncResult;
+};
+
 //================================================================================
 
 /**
@@ -1607,6 +1698,7 @@ module.exports = {
   saveStoreParameterChanges,
   updateRemoteFromLocalStore,
   integrityCheckOpcua,
+  syncHistoryAtStartup,
   //-------------------
   getCountItems,
   getItem,

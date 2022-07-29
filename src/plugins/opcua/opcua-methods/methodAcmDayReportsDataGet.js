@@ -10,9 +10,10 @@ const {
   inspector,
   pause,
   isString,
+  getRangeArray,
   getRangeStartEndOfPeriod,
   getFileStatList,
-  orderByItems,
+  cloneObject,
   doesFileExist,
   getPathBasename,
   writeFileStream,
@@ -47,7 +48,7 @@ const {
 const loTemplate = require('lodash/template');
 const loStartsWith = require('lodash/startsWith');
 const loTrimEnd = require('lodash/trimEnd');
-const loForEach = require('lodash/forEach');
+const loDrop = require('lodash/drop');
 
 let paramsPath = '/src/api/app/opcua-methods/acm-reports';
 
@@ -58,30 +59,16 @@ const {
 const isDebug = false;
 
 /**
- * @method methodAcmDayReportsDataGet
- * @param {Object[]} inputArguments 
- * @param {Object} context
- * @param {Function} callback
- * @returns {void|Object}
+ * @method getParams4PointID
+ * @param {Number} pointID 
+ * @param {Object} argParams 
+ * @returns {Object}
  */
-async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
-  let resultPath = '', paramsFile, baseParamsFile, params = null, paramFullsPath;
-  let pointID, dirList = [], path, dataItem, dataItems = [], pattern = '', storeParams4Remove = [];
-  //----------------------------------------------------------------------------
-
-  if (isDebug && inputArguments.length) inspector('methodAcmDayReportsDataGet.inputArguments:', inputArguments);
-  // Get params
-  const inputArg = inputArguments[0].value;
-  if (callback) {
-    params = JSON.parse(inputArg);
-    // When calling a method, set the property 'params.isSaveOutputFile' to true
-    params.isSaveOutputFile = true;
-    pointID = params.pointID;
-  } else {
-    pointID = inputArg;
-    if (context.params !== undefined) params = context.params;
-  }
+const getParams4PointID = (pointID, argParams = null) => {
+  let paramsFile, baseParamsFile, params = null, paramFullsPath;
+  //---------------------------------
   // Get params data
+  if (argParams) params = cloneObject(argParams);
   paramsFile = loTemplate(acmDayReportFileName)({ pointID });
   paramFullsPath = [appRoot, paramsPath, paramsFile];
   if (!doesFileExist(paramFullsPath)) {
@@ -109,6 +96,56 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
       const baseParams = require(join(...paramFullsPath));
       params = Object.assign({}, baseParams, params);
     }
+  }
+  return params;
+};
+
+/**
+ * @method methodAcmDayReportsDataGet
+ * @param {Object[]} inputArguments 
+ * @param {Object} context
+ * @param {Function} callback
+ * @returns {void|Object}
+ */
+async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
+  let resultPath = '', pointID, params, argParams = null, storeParams4Remove = [];
+  let dirList = [], path, dataItem, dataItems = [], pattern = '';
+  //----------------------------------------------------------------------------
+
+  let callMethodResult = {
+    statusCode: StatusCodes.Good,
+    outputArguments: [{
+      dataType: DataType.String,
+      value: ''
+    }]
+  };
+
+  if (isDebug && inputArguments.length) inspector('methodAcmDayReportsDataGet.inputArguments:', inputArguments);
+  // Get params
+  const inputArg = inputArguments[0].value;
+  if (callback) {
+    argParams = JSON.parse(inputArg);
+    // When calling a method, set the property 'params.isSaveOutputFile' to true
+    argParams.isSaveOutputFile = true;
+    pointID = argParams.pointID;
+  } else {
+    pointID = inputArg;
+    if (context && context.params !== undefined) argParams = context.params;
+  }
+
+  // Get params from config file
+  if (pointID === 0) {
+    const arrayOfValidTags = getRangeArray(4, 1).map(pointID => getParams4PointID(pointID).acmTagBrowseName);
+    // CallBack
+    if (callback) {
+      callMethodResult.outputArguments[0].value = JSON.stringify({ params: { arrayOfValidTags } });
+      callback(null, callMethodResult);
+    } else {
+      const statusCode = 'Good';
+      return { statusCode, params: { arrayOfValidTags } };
+    }
+  } else {
+    params = getParams4PointID(pointID, argParams);
   }
 
   // Create 'params.outputPath' path
@@ -175,15 +212,21 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
     if (isDebug && dirList) console.log('methodAcmDayReportsDataGet.dirList.length:', dirList.length);
 
     // Get store params for remove
-    if (!callback && context.storeParams) {
+    if (!callback && context && context.storeParams) {
+      // Drop begin item from array
+      if (context.test4Remove) {
+        dirList = loDrop(dirList);
+      }
       storeParams4Remove = context.storeParams.filter(param => {
         const findedStoreParam = dirList.find(item => getPathBasename(item.filePath) === param.fileName);
+        if (!findedStoreParam) return true;
         return false;
       });
+      if (isDebug && storeParams4Remove.length) inspector('methodAcmDayReportsDataGet.storeParams4Remove:', storeParams4Remove);
     }
 
     // context.storeParams e.g. -> [{ dateTime: '2022-02-22', fileName: 'DayHist01_23F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:42.827Z' }... ] 
-    if (!callback && context.storeParams) {
+    if (!callback && context && context.storeParams) {
       // Filter the dirList with storeParams
       dirList = dirList.filter(item => {
         const fileName = getPathBasename(item.filePath);
@@ -228,7 +271,9 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
       if (dataItem.length) {
         // Sheet to json date
         let dateTime = xlsx.sheetToJson('Report1', { range: params.rangeDate });
-        dateTime = dateTime[0]['A'].split('to:')[0].split('from:')[1].trim();
+        if (isDebug && dateTime) console.log('methodAcmDayReportsDataGet.sheetDateTime:', dateTime);
+        // dateTime = dateTime[0]['A'].split('to:')[0].split('from:')[1].trim();
+        dateTime = dateTime[0]['A'].split('to:')[1].trim();
         dateTime = moment.utc(dateTime).format('YYYY-MM-DD');
         if (isDebug && dateTime) console.log('methodAcmDayReportsDataGet.dateTime:', dateTime);
 
@@ -267,14 +312,8 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   }
 
   // CallBack
-  const callMethodResult = {
-    statusCode: StatusCodes.Good,
-    outputArguments: [{
-      dataType: DataType.String,
-      value: params.isSaveOutputFile ? JSON.stringify({ resultPath, params }) : JSON.stringify({ params, dataItems })
-    }]
-  };
   if (callback) {
+    callMethodResult.outputArguments[0].value = params.isSaveOutputFile ? JSON.stringify({ resultPath, params }) : JSON.stringify({ params, dataItems });
     callback(null, callMethodResult);
   } else {
     const statusCode = 'Good';

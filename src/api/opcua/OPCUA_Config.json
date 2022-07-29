@@ -50,7 +50,7 @@
     "opcuaSaveModeToDB": "localUpdate",
     "opcuaRemoteDbUrl": "http://localhost:3131",
     "opcuaBootstrapParams": {
-      "clearHistoryAtStartup": false,
+      "clearHistoryAtStartup": true,
       "syncHistoryAtStartup": true
     },
     "security": {

@@ -369,7 +369,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       // Run metod
       const storeParams = await getStoreParams4Data(app, [groupBrowseName]);
       const params = { isSaveOutputFile: true };
-      const methodResult = await methodAcmDayReportsDataGet([{ value: pointID }], { storeParams, params });
+      const methodResult = await methodAcmDayReportsDataGet([{ value: pointID }], { storeParams, params, test4Remove: true });
       const methodResultOutputPath = methodResult.params.outputPath;
       if (isDebug && methodResult) inspector('methodAcmDayReportsDataGet.methodResult:', methodResult);
       statusCode = methodResult.statusCode;
@@ -385,7 +385,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
         }
         if (isDebug && dataItems) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
       }
-      assert.ok(statusCode === 'Good' && dataItems.length === 0, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with not clear store');  
+      assert.ok(statusCode === 'Good' && dataItems.length === 0 && methodResult.storeParams4Remove.length, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with not clear store');  
     }
   });
 

@@ -47,8 +47,7 @@ module.exports = function (options = {}) {
         const storeStart = record.storeStart;
         // Get values
         values = storeValue.values.filter(v => v.key !== storeStart);
-        // if(record.values.items )
-        // values = loConcat(values, record.values);
+        // if record.values.items -> empty [] then -> not loConcat(values, record.values)
         values = (record.values.items && record.values.items.length === 0)? values : loConcat(values, record.values);
         // Ascending sort by string field 
         values = sortByStringField(values, 'key', true);
