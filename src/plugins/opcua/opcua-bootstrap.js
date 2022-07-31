@@ -120,6 +120,8 @@ module.exports = async function opcuaBootstrap(app) {
     if (bootstrapParams && bootstrapParams.syncHistoryAtStartup) {
       const syncResult = await syncHistoryAtStartup(app, opcuaTags, 'methodAcmDayReportsDataGet');
       logger.info(`opcuaBootstrap.syncHistoryAtStartup.localDB: {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
+      // Remove files from dir
+      removeFilesFromDirSync([appRoot, syncResult.methodResultOutputPath]);
     }
 
     const isRemote = isRemoteOpcuaToDB();

@@ -1276,10 +1276,8 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
       }
     }
   }
-  const syncResult = { savedValuesCount, removedValuesCount };
+  const syncResult = { savedValuesCount, removedValuesCount, methodResultOutputPath };
   if (isDebug && dataItems) console.log(`syncHistoryAtStartup.syncResult: ${syncResult}`);
-  // Remove files from dir
-  removeFilesFromDirSync([appRoot, methodResultOutputPath]);
   return syncResult;
 };
 
