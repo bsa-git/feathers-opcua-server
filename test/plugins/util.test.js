@@ -98,87 +98,87 @@ const object2 = {
 
 describe('<<=== Util: (util.test) ===>>', () => {
 
-  it('util.getStartOfPeriod to forward', () => {
+  it('#1: util.getStartOfPeriod to forward', () => {
     const period = [2, 'months'];
-    const dateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+    const dateTime = moment.utc().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss');// .subtract(1, days)
     const startOfPeriod = getStartOfPeriod(dateTime, period);
-    if (isDebug && startOfPeriod) debug(`startOfPeriod([${period}]) to forward:`, startOfPeriod, ' for dateTime:', dateTime);
+    if (true && startOfPeriod) debug(`startOfPeriod([${period}]) to forward:`, startOfPeriod, ' for dateTime:', dateTime);
     assert.ok(dateTime >= startOfPeriod, `util.getStartOfPeriod to forward: '${startOfPeriod}' for dateTime: ${dateTime}`);
   });
 
-  it('util.getStartOfPeriod to back', () => {
+  it('#2: util.getStartOfPeriod to back', () => {
     const period = [-2, 'months'];
-    const startDateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+    const startDateTime = moment.utc().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss');
     const startOfPeriod = getStartOfPeriod(startDateTime, period);
-    if (isDebug && startOfPeriod) debug(`startOfPeriod([${period}])  to back:`, startOfPeriod, ' for dateTime:', startDateTime);
+    if (true && startOfPeriod) debug(`startOfPeriod([${period}])  to back:`, startOfPeriod, ' for dateTime:', startDateTime);
     assert.ok(startDateTime >= startOfPeriod, `util.getStartOfPeriod  to back: '${startOfPeriod}' for dateTime: ${startDateTime}`);
   });
 
-  it('util.getEndOfPeriod to forward', () => {
+  it('#3: util.getEndOfPeriod to forward', () => {
     const period = [2, 'months'];
-    const dateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+    const dateTime = moment.utc().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss');
     const endOfPeriod = getEndOfPeriod(dateTime, period);
-    if (isDebug && endOfPeriod) debug(`endOfPeriod([${period}]) to forward:`, endOfPeriod, ' for dateTime:', dateTime);
+    if (true && endOfPeriod) debug(`endOfPeriod([${period}]) to forward:`, endOfPeriod, ' for dateTime:', dateTime);
     assert.ok(dateTime <= endOfPeriod, `util.getEndOfPeriod to forward: '${endOfPeriod}' for dateTime: ${dateTime}`);
   });
 
-  it('util.getEndOfPeriod to back', () => {
+  it('#4: util.getEndOfPeriod to back', () => {
     const period = [-2, 'months'];
-    const startDateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+    const startDateTime = moment.utc().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss');
     const endOfPeriod = getEndOfPeriod(startDateTime, period);
-    if (isDebug && endOfPeriod) debug(`endOfPeriod([${period}]) to back:`, endOfPeriod, ' for dateTime:', startDateTime);
+    if (true && endOfPeriod) debug(`endOfPeriod([${period}]) to back:`, endOfPeriod, ' for dateTime:', startDateTime);
     assert.ok(startDateTime >= endOfPeriod, `util.getEndOfPeriod to back: '${endOfPeriod}' for dateTime: ${startDateTime}`);
   });
 
-  it('util.getStartEndOfPeriod to forward', () => {
-    const period = [3, 'days'];
-    const dateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+  it('#5: util.getStartEndOfPeriod to forward', () => {
+    const period = [2, 'months'];
+    const dateTime = moment.utc().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss');
     const startEndOfPeriod = getStartEndOfPeriod(dateTime, period);
-    if (isDebug && startEndOfPeriod) debug(`util.getStartEndOfPeriod([${period}]) to forward:`, startEndOfPeriod, ' for dateTime:', dateTime);
+    if (true && startEndOfPeriod) debug(`util.getStartEndOfPeriod([${period}]) to forward:`, startEndOfPeriod, ' for dateTime:', dateTime);
     assert.ok(dateTime <= startEndOfPeriod[1], `util.getStartEndOfPeriod to forward: '${getStartEndOfPeriod}' for dateTime: ${dateTime}`);
   });
 
-  it('util.getStartEndOfPeriod to back', () => {
+  it('#6: util.getStartEndOfPeriod to back', () => {
     const period = [-2, 'months'];
-    const startDateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+    const startDateTime = moment.utc().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss');
     const startEndOfPeriod = getStartEndOfPeriod(startDateTime, period);
-    if (isDebug && startEndOfPeriod) debug(`util.getStartEndOfPeriod([${period}]) to back:`, startEndOfPeriod, ' for dateTime:', startDateTime);
+    if (true && startEndOfPeriod) debug(`util.getStartEndOfPeriod([${period}]) to back:`, startEndOfPeriod, ' for dateTime:', startDateTime);
     assert.ok(startDateTime >= startEndOfPeriod[1], `util.getStartEndOfPeriod to back: '${startEndOfPeriod}' for dateTime: ${startDateTime}`);
   });
 
-  it('util.getRangeStartEndOfPeriod to forward', () => {
+  it('#7: util.getRangeStartEndOfPeriod to forward', () => {
     const period = [5, 'years'];
     const unit = 'years';
-    const dateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+    const dateTime = moment.utc().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss');
     const range = getRangeStartEndOfPeriod(dateTime, period, unit);
-    if (isDebug && range) debug(`util.getRangeStartEndOfPeriod([${period}]; unit: '${unit}') to forward:`, range, ' for dateTime:', dateTime);
+    if (true && range) debug(`util.getRangeStartEndOfPeriod([${period}]; unit: '${unit}') to forward:`, range, ' for dateTime:', dateTime);
     assert.ok(range.length, `util.getRangeStartEndOfPeriod to forward: '${range}' for dateTime: ${dateTime}`);
   });
 
-  it('util.getRangeStartEndOfPeriod to back', () => {
+  it('#8: util.getRangeStartEndOfPeriod to back', () => {
     const period = [-5, 'years'];
     const unit = 'years';
-    const startDateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+    const startDateTime = moment.utc().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss');
     const range = getRangeStartEndOfPeriod(startDateTime, period, unit);
-    if (isDebug && range) debug(`util.getRangeStartEndOfPeriod([${period}]; unit: '${unit}') to back:`, range, ' for dateTime:', startDateTime);
+    if (true && range) debug(`util.getRangeStartEndOfPeriod([${period}]; unit: '${unit}') to back:`, range, ' for dateTime:', startDateTime);
     assert.ok(range.length, `util.getRangeStartEndOfPeriod to back: '${range}' for dateTime: ${startDateTime}`);
   });
 
-  it('util.isDeepEqual', () => {
+  it('#9: util.isDeepEqual', () => {
     const idField = getIdField(object2);
     const omit = [idField, 'createdAt', 'updatedAt', '__v'];
     let equalTags = isDeepEqual(object1, object2, omit);
     assert.ok(equalTags, 'util.isDeepEqual must be a "TRUE" when comparing two objects: "object1" and "object2"');
   });
 
-  it('util.isDeepStrictEqual', () => {
+  it('#10: util.isDeepStrictEqual', () => {
     const idField = getIdField(object2);
     const omit = [idField, 'createdAt', 'updatedAt', '__v'];
     const result = isDeepStrictEqual(object1, object2, omit);
     assert.ok(result.isDeepStrictEqual && result.isDeepEqual, 'util.isDeepStrictEqual must be a "TRUE" when comparing two objects: "object1" and "object2"');
   });
 
-  it('util.objectHash', () => {
+  it('#11: util.objectHash', () => {
     let result1 = objectHash({ foo: 'bar', a: 42 });
     let result2 = objectHash({ a: 42, foo: 'bar' });
     if (isDebug && result1 && result2) debug(`objectHash.result1: '${result1}'; objectHash.result2: '${result2}';`);
@@ -188,7 +188,7 @@ describe('<<=== Util: (util.test) ===>>', () => {
     assert.ok(result1 && result2, 'util.objectHash must be a "TRUE" for two objects: "object1" and "object2"');
   });
 
-  it('util.objectHash2', () => {
+  it('#12: util.objectHash2', () => {
     const idField = getIdField(object2);
     const omits = [idField, 'createdAt', 'updatedAt', '__v'];
     const result1 = objectHash(object1);
@@ -197,7 +197,7 @@ describe('<<=== Util: (util.test) ===>>', () => {
     assert.ok(result1 === result2, 'util.objectHash must be a "TRUE" when comparing two objects: "object1" and "object2"');
   });
 
-  it('util.objectHashKeys', () => {
+  it('#13: util.objectHashKeys', () => {
     const idField = getIdField(object2);
     const omits = [idField, 'createdAt', 'updatedAt', '__v'];
     const result1 = objectHashKeys(object1);
@@ -206,7 +206,7 @@ describe('<<=== Util: (util.test) ===>>', () => {
     assert.ok(result1 === result2, 'util.objectHashKeys must be a "TRUE" when comparing keys for two objects: "object1" and "object2"');
   });
 
-  it('util.objectHashMD5', () => {
+  it('#14: util.objectHashMD5', () => {
     const idField = getIdField(object2);
     const omits = [idField, 'createdAt', 'updatedAt', '__v'];
     const result1 = objectHashMD5(object1);
@@ -215,7 +215,7 @@ describe('<<=== Util: (util.test) ===>>', () => {
     assert.ok(result1 === result2, 'util.objectHashMD5 must be a "TRUE" when comparing two objects: "object1" and "object2"');
   });
 
-  it('util.objectHashKeysMD5', () => {
+  it('#15: util.objectHashKeysMD5', () => {
     const idField = getIdField(object2);
     const omits = [idField, 'createdAt', 'updatedAt', '__v'];
     const result1 = objectHashKeysMD5(object1);
@@ -224,7 +224,7 @@ describe('<<=== Util: (util.test) ===>>', () => {
     assert.ok(result1 === result2, 'util.objectHashKeysMD5 must be a "TRUE" when comparing keys for two objects: "object1" and "object2"');
   });
 
-  it('util.objectHashWriteToStream', () => {
+  it('#16: util.objectHashWriteToStream', () => {
     objectHashWriteToStream({ foo: 'bar', a: 42 }, process.stdout, { respectType: false });
     assert.ok(true, 'util.objectHashWriteToStream');
   });

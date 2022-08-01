@@ -1212,7 +1212,7 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
   let methodResult = null, dataItems = [], savedValues = [], savedValuesCount = 0;
   let removedValuesCount = 0, methodResultOutputPath;
   //-------------------------------------------------------------
-  // Get opcua array valid group store tags 
+  // Get opcua array valid group store tags for [{ value: 0 }]
   methodResult = await opcuaMethods[methodName]([{ value: 0 }]);
   if (methodResult.statusCode !== 'Good') {
     logger.error(`syncHistoryAtStartup('${methodName}') - ${chalk.red('ERROR')}.`);
@@ -1279,6 +1279,37 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
   const syncResult = { savedValuesCount, removedValuesCount, methodResultOutputPath };
   if (isDebug && dataItems) console.log(`syncHistoryAtStartup.syncResult: ${syncResult}`);
   return syncResult;
+};
+
+/**
+ * @method syncReportAtStartup
+ * @param {Object} app 
+ * @param {Object[]} opcuaTags 
+ * @param {String} methodName
+ * e.g. -> 'methodAcmYearReportUpdate'
+ * @returns {Object}
+ * e.g. {"saved": 30, "removed": 5}
+ */
+const syncReportAtStartup = async function (app, opcuaTags, methodName) {
+  let methodResult = null, dataItems = [], savedValues = [], savedValuesCount = 0;
+  let removedValuesCount = 0, methodResultOutputPath;
+  //-------------------------------------------------------------
+  // Get opcua array valid group store tags for [{ value: 0 }]
+  methodResult = await opcuaMethods[methodName]([{ value: 0 }]);
+  if (methodResult.statusCode !== 'Good') {
+    logger.error(`syncHistoryAtStartup('${methodName}') - ${chalk.red('ERROR')}.`);
+    return { savedValuesCount, removedValuesCount };
+  }
+  const arrayOfValidTags = methodResult.params.arrayOfValidTags;
+  if (isDebug && arrayOfValidTags.length) inspector('syncHistoryAtStartup.arrayOfValidTags:', arrayOfValidTags);
+  const opcuaGroupTags = opcuaTags.filter(t => t.group && t.store && arrayOfValidTags.includes(t.browseName));
+  if (isDebug && opcuaGroupTags.length) inspector('syncHistoryAtStartup.opcuaGroupTags:', opcuaGroupTags);
+  for (let index = 0; index < opcuaGroupTags.length; index++) {
+    const opcuaGroupTag = opcuaGroupTags[index];
+    const pointID = opcuaGroupTag.getterParams.pointID;
+    const groupBrowseName = opcuaGroupTag.browseName;
+    const storeBrowseNames = opcuaTags.filter(tag => tag.ownerGroup === groupBrowseName).map(tag => tag.browseName);
+  }
 };
 
 //================================================================================

@@ -9,6 +9,7 @@ const {
   appRoot,
   inspector,
   pause,
+  isTest,
   isString,
   getRangeArray,
   getRangeStartEndOfPeriod,
@@ -160,12 +161,14 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   }
   // Get acm params
   const acmPath = acmTag.getterParams.acmPath;
-  params = Object.assign(params, { acmPath });
+  const _isTest = isTest() || acmTag.getterParams.isTest;
+
+  params = Object.assign(params, { acmPath, isTest: _isTest });
 
   if (isDebug && params) inspector('methodAcmDayReportsDataGet.params:', params);
 
   // Get range years e.g. ['*/**/*2018_*.*', '*/**/*2019_*.*', '*/**/*2020_*.*', '*/**/*2021_*.*', '*/**/*2022_*.*']
-  const dateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+  const dateTime = moment.utc().add(1, 'years').format('YYYY-MM-DDTHH:mm:ss');
   let rangeYears = getRangeStartEndOfPeriod(dateTime, [-5, 'years'], 'years');
   rangeYears = rangeYears.map(year => `*/**/*${year}_*.*`);
   if (isDebug && rangeYears.length) inspector('methodAcmDayReportsDataGet.rangeYears:', rangeYears);
@@ -179,9 +182,10 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
 
       // Get fileNames from path for http
       pattern = loTrimEnd(params.acmPath, '/') + params.pattern;
-      // let urls = await httpGetFileNamesFromDir(params.acmPath, pattern, params.patternOptions);
       let urls = await httpGetFileNamesFromDir(params.acmPath, pattern, params.patternOptions);
-      urls = urls.filter(url => createMatch(rangeYears)(url));
+      if(!params.isTest) {
+        urls = urls.filter(url => createMatch(rangeYears)(url));
+      }
       if (isDebug && urls.length) console.log('httpGetFileNamesFromDir.urls:', urls);
 
       // Get files from urls
@@ -207,7 +211,9 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
     pattern = path + params.pattern;
     if (isDebug && path) inspector('methodAcmDayReportsDataGet.path:', path);
     dirList = getFileListFromDir(path, pattern, params.patternOptions);
-    dirList = dirList.filter(filePath => createMatch(rangeYears)(filePath));
+    if(!params.isTest) {
+      dirList = dirList.filter(filePath => createMatch(rangeYears)(filePath));
+    }
     dirList = getFileStatList(dirList);// e.g. [{ filePath: 'c:/tmp/test.txt', fileStat: { ... updatedAt: '2022-07-26T05:46:42.827Z' ... } }]
     if (isDebug && dirList) console.log('methodAcmDayReportsDataGet.dirList.length:', dirList.length);
 

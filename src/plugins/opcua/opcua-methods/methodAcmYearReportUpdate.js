@@ -11,7 +11,8 @@ const {
   doesFileExist,
   makeDirSync,
   sortByStringField,
-  orderByItems
+  orderByItems,
+  cloneObject
 } = require('../../lib');
 
 const {
@@ -35,6 +36,48 @@ const {
 } = require(join(...[appRoot, paramsPath]));
 
 const isDebug = false;
+
+/**
+ * @method getParams4PointID
+ * @param {Number} pointID 
+ * @param {Object} argParams 
+ * @returns {Object}
+ */
+const getParams4PointID = (pointID, argParams = null) => {
+  let paramsFile, baseParamsFile, params = null, paramFullsPath;
+  //---------------------------------
+  // Get params data
+  if (argParams) params = cloneObject(argParams);
+  paramsFile = loTemplate(acmYearTemplateFileName)({ pointID });
+  paramFullsPath = [appRoot, paramsPath, paramsFile];
+  if (!doesFileExist(paramFullsPath)) {
+    logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. File with name "${chalk.cyan(paramsFile)}" not found.`);
+    throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. File with name "${paramsFile}" not found.`);
+  }
+
+  const _params = require(join(...paramFullsPath));
+
+  if (params) {
+    params = Object.assign({}, _params, params);
+  } else {
+    params = Object.assign({}, _params);
+  }
+
+  if (params.baseParams) {
+    // Get base params file 
+    baseParamsFile = loTemplate(acmYearTemplateFileName)({ pointID: params.baseParams });
+    if (baseParamsFile !== paramsFile) {
+      paramFullsPath = [appRoot, paramsPath, baseParamsFile];
+      if (!doesFileExist(paramFullsPath)) {
+        logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. File with name "${chalk.cyan(baseParamsFile)}" not found.`);
+        throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. File with name "${baseParamsFile}" not found.`);
+      }
+      const baseParams = require(join(...paramFullsPath));
+      params = Object.assign({}, baseParams, params);
+    }
+  }
+  return params;
+};
 
 /**
  * Update acm year report

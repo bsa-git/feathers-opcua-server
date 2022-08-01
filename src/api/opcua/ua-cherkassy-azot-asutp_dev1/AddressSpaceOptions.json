@@ -143,6 +143,7 @@
         "fromFile": "test/data/excel/acm/acmDayReport.xls",
         "acmPath": "test/data/excel/acm/23agr",
         "pointID": 1,
+        "isTest": true,
         "interval": 20000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["23QN2O", "23QN2O_CORR", "23FVSG", "23FVSG_CORR", "23F105_IS"]}
       }
@@ -167,6 +168,7 @@
         "fromFile": "test/data/excel/acm/acmDayReport.xls",
         "acmPath": "test/data/excel/acm/14agr",
         "pointID": 2,
+        "isTest": true,
         "interval": 25000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["14QN2O", "14QN2O_CORR", "14FVSG", "14FVSG_CORR", "14F105_IS"]}
       }
@@ -191,6 +193,7 @@
         "fromFile": "test/data/excel/acm/acmDayReport.xls",
         "acmPath": "test/data/excel/acm/57agr",
         "pointID": 3,
+        "isTest": true,
         "interval": 30000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["57QN2O", "57QN2O_CORR", "57FVSG", "57FVSG_CORR", "57F105_IS"]}
       }
