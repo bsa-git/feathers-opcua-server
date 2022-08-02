@@ -14,6 +14,7 @@ const {
   getRangeArray,
   getRangeStartEndOfPeriod,
   getFileStatList,
+  getParams4PointID,
   cloneObject,
   doesFileExist,
   getPathBasename,
@@ -33,6 +34,7 @@ const {
 
 const {
   getOpcuaTags,
+  getOpcuaConfigOptions,
   convertAliasListToBrowseNameList
 } = require('../../opcua/opcua-helper');
 
@@ -51,6 +53,7 @@ const loStartsWith = require('lodash/startsWith');
 const loTrimEnd = require('lodash/trimEnd');
 const loDrop = require('lodash/drop');
 
+// Get params path
 let paramsPath = '/src/api/app/opcua-methods/acm-reports';
 
 const {
@@ -59,47 +62,8 @@ const {
 
 const isDebug = false;
 
-/**
- * @method getParams4PointID
- * @param {Number} pointID 
- * @param {Object} argParams 
- * @returns {Object}
- */
-const getParams4PointID = (pointID, argParams = null) => {
-  let paramsFile, baseParamsFile, params = null, paramFullsPath;
-  //---------------------------------
-  // Get params data
-  if (argParams) params = cloneObject(argParams);
-  paramsFile = loTemplate(acmDayReportFileName)({ pointID });
-  paramFullsPath = [appRoot, paramsPath, paramsFile];
-  if (!doesFileExist(paramFullsPath)) {
-    logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. File with name "${chalk.cyan(paramsFile)}" not found.`);
-    throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. File with name "${paramsFile}" not found.`);
-  }
-
-  const _params = require(join(...paramFullsPath));
-
-  if (params) {
-    params = Object.assign({}, _params, params);
-  } else {
-    params = Object.assign({}, _params);
-  }
-
-  if (params.baseParams) {
-    // Get base params file 
-    baseParamsFile = loTemplate(acmDayReportFileName)({ pointID: params.baseParams });
-    if (baseParamsFile !== paramsFile) {
-      paramFullsPath = [appRoot, paramsPath, baseParamsFile];
-      if (!doesFileExist(paramFullsPath)) {
-        logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. File with name "${chalk.cyan(baseParamsFile)}" not found.`);
-        throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. File with name "${baseParamsFile}" not found.`);
-      }
-      const baseParams = require(join(...paramFullsPath));
-      params = Object.assign({}, baseParams, params);
-    }
-  }
-  return params;
-};
+// Get test ID
+const id = 'ua-cherkassy-azot_test2';
 
 /**
  * @method methodAcmDayReportsDataGet
@@ -136,7 +100,8 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
 
   // Get params from config file
   if (pointID === 0) {
-    const arrayOfValidTags = getRangeArray(4, 1).map(pointID => getParams4PointID(pointID).acmTagBrowseName);
+    // Get array of valid tags 
+    const arrayOfValidTags = getRangeArray(4, 1).map(pointID => getParams4PointID(pointID, acmDayReportFileName, paramsPath).acmTagBrowseName);
     // CallBack
     if (callback) {
       callMethodResult.outputArguments[0].value = JSON.stringify({ params: { arrayOfValidTags } });
@@ -146,14 +111,14 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
       return { statusCode, params: { arrayOfValidTags } };
     }
   } else {
-    params = getParams4PointID(pointID, argParams);
+    params = getParams4PointID(pointID,  acmDayReportFileName, paramsPath, argParams);
   }
 
   // Create 'params.outputPath' path
   createPath(params.outputPath);
 
   // Get opcua tags 
-  const opcuaTags = getOpcuaTags();
+  const opcuaTags = isTest() ? getOpcuaConfigOptions(id) : getOpcuaTags();
   const acmTag = opcuaTags.find(t => t.browseName === params.acmTagBrowseName);
   if (!acmTag) {
     logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. Tag with browseName "${chalk.cyan(params.acmTagBrowseName)}" not found.`);
@@ -161,7 +126,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
   }
   // Get acm params
   const acmPath = acmTag.getterParams.acmPath;
-  const _isTest = isTest() || acmTag.getterParams.isTest;
+  const _isTest = params.isTest || isTest() || acmTag.getterParams.isTest;
 
   params = Object.assign(params, { acmPath, isTest: _isTest });
 

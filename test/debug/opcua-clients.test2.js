@@ -23,7 +23,8 @@ const {
   removeOpcuaGroupValues,
   removeOpcuaStoreValues,
   getStoreParams4Data,
-  syncHistoryAtStartup
+  syncHistoryAtStartup,
+  syncReportAtStartup
 } = require('../../src/plugins/db-helpers');
 
 const {
@@ -509,11 +510,19 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     // Get opcua tags
     const opcuaTags = getOpcuaConfigOptions(id);
     const syncResult = await syncHistoryAtStartup(app, opcuaTags, 'methodAcmDayReportsDataGet');
-    if(true && syncResult) console.log(`Run method "syncHistoryAtStartup".syncResult: {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
+    if(isDebug && syncResult) debug(`Run method "syncHistoryAtStartup".syncResult: {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
     assert.ok(syncResult.savedValuesCount, 'OPC-UA clients: run method "syncHistoryAtStartup"');
   });
 
-  it('#12.4: OPC-UA clients: run method "methodAcmDayReportsDataGet" with not clear store', async () => {
+  it('#12.4: OPC-UA clients: run method "syncReportAtStartup"', async () => {
+    // Get opcua tags
+    const opcuaTags = getOpcuaConfigOptions(id);
+    const syncResult = await syncReportAtStartup(app, opcuaTags, 'methodAcmYearReportUpdate');
+    if(isDebug && syncResult) debug(`Run method "syncReportAtStartup".syncResult: ${syncResult}`);
+    assert.ok(syncResult.statusCode === 'Good', 'OPC-UA clients: run method "syncReportAtStartup"');
+  });
+
+  it('#12.5: OPC-UA clients: run method "methodAcmDayReportsDataGet" with not clear store', async () => {
     let statusCode = '', dataItems;
     //------------------------------------------------
     // Get opcua tags
@@ -550,7 +559,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     }
   });
 
-  it('#12.5: OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store', async () => {
+  it('#12.6: OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store', async () => {
     let statusCode = '', dataItems;
     //------------------------------------------------
 
@@ -590,7 +599,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     }
   });
 
-  it('#12.6: OPC-UA clients: session call method "methodAcmYearReportUpdate"', async () => {
+  it('#12.7: OPC-UA clients: session call method "methodAcmYearReportUpdate"', async () => {
     let statusCode = '', inputArgument, inputArgument2, inputArguments, outputArguments;
     let callResults;
     //------------------------------------------------------------------------------------

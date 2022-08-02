@@ -8,6 +8,7 @@ const minimatch = require('minimatch');
 const Minimatch = require('minimatch').Minimatch;
 const dirTree = require('directory-tree');
 const del = require('del');
+const chalk = require('chalk');
 
 const {
   appRoot,
@@ -22,6 +23,7 @@ const {
 
 const loEndsWith = require('lodash/endsWith');
 const loStartsWith = require('lodash/startsWith');
+const loTemplate = require('lodash/template');
 const loIsString = require('lodash/isString');
 const loReplace = require('lodash/replace');
 
@@ -385,7 +387,7 @@ const makeDirSync = function (path) {
  * @returns {String}
  */
 const createPath = function (path) {
-  if(Array.isArray(path)) return makeDirSync(path);
+  if (Array.isArray(path)) return makeDirSync(path);
   // Make dir
   if (isUncPath(path)) {
     path = makeDirSync(path);
@@ -856,7 +858,7 @@ const watchModifiedFile = function (path, cb) {
       const isAccess = fsAccess(filePath, fs.constants.F_OK) && fsAccess(filePath, fs.constants.R_OK);
       if (isDebug) debug('readOnlyModifiedFile.filePath:', filePath, '; isAccess:', isAccess);
 
-      if (isAccess) cb(filePath); 
+      if (isAccess) cb(filePath);
     }
   });
   return path;
@@ -1065,6 +1067,53 @@ const writeFileStream = function (path, data) {
   return path;
 };
 
+/**
+ * @method getParams4PointID
+ * @param {Number} pointID 
+ * e.g. pointID -> 1..3
+ * @param {String} tmplFileName 
+ * e.g. tmplFileName -> 'acmDayReport_${ pointID }.json'
+ * @param {String} paramsPath 
+ * e.g. paramsPath -> '/src/api/app/opcua-methods/acm-reports'
+ * @param {Object} argParams 
+ * @returns {Object}
+ */
+const getParams4PointID = function (pointID, tmplFileName, paramsPath, argParams) {
+  let paramsFile, baseParamsFile, params = null, paramFullsPath;
+  //---------------------------------
+  // Get params data
+  if (argParams) params = cloneObject(argParams);
+  paramsFile = loTemplate(tmplFileName)({ pointID });
+  paramFullsPath = [appRoot, paramsPath, paramsFile];
+  if (!doesFileExist(paramFullsPath)) {
+    logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. File with name "${chalk.cyan(paramsFile)}" not found.`);
+    throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. File with name "${paramsFile}" not found.`);
+  }
+
+  const _params = require(join(...paramFullsPath));
+
+  if (params) {
+    params = Object.assign({}, _params, params);
+  } else {
+    params = Object.assign({}, _params);
+  }
+
+  if (params.baseParams) {
+    // Get base params file 
+    baseParamsFile = loTemplate(tmplFileName)({ pointID: params.baseParams });
+    if (baseParamsFile !== paramsFile) {
+      paramFullsPath = [appRoot, paramsPath, baseParamsFile];
+      if (!doesFileExist(paramFullsPath)) {
+        logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. File with name "${chalk.cyan(baseParamsFile)}" not found.`);
+        throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. File with name "${baseParamsFile}" not found.`);
+      }
+      const baseParams = require(join(...paramFullsPath));
+      params = Object.assign({}, baseParams, params);
+    }
+  }
+  return params;
+};
+
 module.exports = {
   getOsPlatform,
   getOsArchitecture,
@@ -1110,5 +1159,6 @@ module.exports = {
   removeDirFromDirSync,
   clearDirSync,
   removeItemsSync,
-  removeItems
+  removeItems,
+  getParams4PointID
 };

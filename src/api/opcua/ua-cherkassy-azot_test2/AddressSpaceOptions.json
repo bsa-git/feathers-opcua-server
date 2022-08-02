@@ -107,6 +107,7 @@
       "getterParams": {
         "path": "test/data/tmp/ch-m5acm_2",
         "fromFile": "test/data/excel/acm/acmDayReport.xls",
+        "acmPath": "test/data/excel/acm/14agr",
         "pointID": 2,
         "isTest": true,
         "interval": 500,

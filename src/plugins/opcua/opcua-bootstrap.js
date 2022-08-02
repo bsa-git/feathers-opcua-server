@@ -119,9 +119,14 @@ module.exports = async function opcuaBootstrap(app) {
     // Sync opcua store values
     if (bootstrapParams && bootstrapParams.syncHistoryAtStartup) {
       const syncResult = await syncHistoryAtStartup(app, opcuaTags, 'methodAcmDayReportsDataGet');
-      logger.info(`opcuaBootstrap.syncHistoryAtStartup.localDB: {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
-      // Remove files from dir
-      removeFilesFromDirSync([appRoot, syncResult.methodResultOutputPath]);
+      const statusCode = syncResult.statusCode;
+      if(statusCode === 'Good'){
+        logger.info(`opcuaBootstrap.syncHistoryAtStartup.localDB: {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
+        // Remove files from dir
+        removeFilesFromDirSync([appRoot, syncResult.methodResultOutputPath]);
+      } else {
+        logger.error(`opcuaBootstrap.syncHistoryAtStartup.localDB - ERROR. StatusCode: '${statusCode}'.`);
+      }
     }
 
     const isRemote = isRemoteOpcuaToDB();
