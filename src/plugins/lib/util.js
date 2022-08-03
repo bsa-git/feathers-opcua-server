@@ -196,6 +196,27 @@ const getTimeDuration = function (startTime, endTime, unit) {
 };
 
 /**
+ * @method getTimeDurations
+ * @param {String[]} timeList 
+ * @param {String} unit 
+ * @returns {Object}
+ * e.g. { TimeDuration_1x2(ms): 12, ..., TimeDuration_10x11(ms): 5, TimeDuration_all(ms): 50  }
+ */
+const getTimeDurations = function (timeList, unit) {
+  let resultList = {}, prevTime = '';
+  //------------------------------------------------
+  for (let index = 0; index < timeList.length; index++) {
+    const currentTime = timeList[index];
+    if(prevTime){
+      resultList[`TimeDuration_${index}x${index + 1}(${unit ? unit : 'ms'})`] = getTimeDuration(prevTime, currentTime, unit);
+    }
+    prevTime = currentTime;
+  }
+  resultList[`TimeDuration_all(${unit ? unit : 'ms'})`] = getTimeDuration(timeList[0], timeList[timeList.length - 1], unit);
+  return resultList;
+};
+
+/**
  * @method getNextDateTime
  * @param {Object|String|Array} startTime 
  * @param {Array} period 
@@ -365,6 +386,7 @@ const getRangeStartEndOfPeriod = function (dateTime = '', period, unit = 'years'
   } while (condition);
   return rangeList;
 };
+
 
 /**
  * Shift time by one hour
@@ -1038,6 +1060,7 @@ module.exports = {
   getTime,
   getDateTime,
   getTimeDuration,
+  getTimeDurations,
   getNextDateTime,
   getPreviousDateTime,
   getStartOfPeriod,

@@ -121,10 +121,10 @@ const getterAcmDayValueFromFile = function (params = {}, addedValue) {
       currentDate = moment.utc(currentDate).add(1, 'days').format('YYYY-MM-DD');
       const currentYear = currentDate.split('-')[0];
       if((currentYear !== startYear) && params.isTest){
-        currentDate = moment.utc([startYear, 0, 1]).format('YYYY-MM-DD');
+        currentDate = moment.utc([startYear, 0, 1]).subtract(1, 'days').format('YYYY-MM-DD');
       }
     } else {
-      currentDate = moment.utc([startYear, 0, 1]).format('YYYY-MM-DD');
+      currentDate = moment.utc([startYear, 0, 1]).subtract(1, 'days').format('YYYY-MM-DD');
     }
     const nextDate = moment.utc(currentDate).add(1, 'days').format('YYYY-MM-DD');
     const templateDate = `data period - from: ${currentDate} 00:00 to: ${nextDate} 00:00`;

@@ -42,7 +42,7 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           points: [1, 2, 3],
           test: true,
-          period: [1, 'months'],
+          period: [1, 'years'],
           year: 2022
         }
       };
@@ -66,7 +66,7 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           points: [1, 2, 3],
           test: true,
-          pattern: '2022-01', // e.g. '2022'|'2022-01'|'2022-01-12'
+          pattern: '', // e.g. '2022'|'2022-01'|'2022-01-12'
           syncYearReportFromStore: true
         }
       };

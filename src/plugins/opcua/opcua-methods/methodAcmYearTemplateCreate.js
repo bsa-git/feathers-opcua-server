@@ -24,7 +24,7 @@ const {
   hexToARGB,
   shiftTimeByOneHour,
   makeDirSync,
-  getPathBasename
+  getParams4PointID
 } = require('../../lib');
 
 const colors = require('../../lib/colors');
@@ -76,43 +76,22 @@ const setErrDataCells = (index, excel) => {
  */
 const methodAcmYearTemplateCreate = async (inputArguments, context, callback) => {
   let resultPath = '', paramsFile, paramFullsPath, baseParamsFile, params = null;
-  let pointID;
+  let pointID, argParams = {};
   //----------------------------------------------------------------------------
 
   if (isDebug && inputArguments.length) inspector('methodAcmYearTemplateCreate.inputArguments:', inputArguments);
+  
   // Get params
   const inputArg = inputArguments[0].value;
   if (callback) {
-    params = JSON.parse(inputArg);
-    pointID = params.pointID;
+    argParams = JSON.parse(inputArg);
+    pointID = argParams.pointID;
   } else {
     pointID = inputArg;
   }
-  // Get params file
-  paramsFile = loTemplate(acmYearTemplateFileName)({ pointID });
-  paramFullsPath = [appRoot, paramsPath, paramsFile];
-  if (!doesFileExist(paramFullsPath)) {
-    logger.error(`RunMetod(methodAcmYearTemplateCreate): ${chalk.error('ERROR')}. File with name "${chalk.cyan(paramsFile)}" not found.`);
-    throw new Error(`RunMetod(methodAcmYearTemplateCreate): ERROR. File with name "${paramsFile}" not found.`);
-  }
 
-  const _params = require(join(...paramFullsPath));
-  if (params) {
-    params = Object.assign({}, _params, params);
-  } else {
-    params = Object.assign({}, _params);
-  }
-
-  if (params.baseParams) {
-    baseParamsFile = loTemplate(acmYearTemplateFileName)({ pointID: params.baseParams });
-    paramFullsPath = [appRoot, paramsPath, baseParamsFile];
-    if (!doesFileExist(paramFullsPath)) {
-      logger.error(`RunMetod(methodAcmYearTemplateCreate): ${chalk.error('ERROR')}. File with name "${chalk.cyan(baseParamsFile)}" not found.`);
-      throw new Error(`RunMetod(methodAcmYearTemplateCreate): ERROR. File with name "${baseParamsFile}" not found.`);
-    }
-    const baseParams = require(join(...paramFullsPath));
-    params = Object.assign({}, baseParams, params);
-  }
+  // Get report params
+  params = getParams4PointID(pointID, acmYearTemplateFileName, paramsPath, argParams);
 
   if (isDebug && params) inspector('methodAcmYearTemplateCreate.params:', params);
 

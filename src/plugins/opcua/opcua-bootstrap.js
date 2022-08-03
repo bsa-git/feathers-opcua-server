@@ -39,7 +39,8 @@ const {
   isUpdateOpcuaToDB,
   getOpcuaRemoteDbUrl,
   getCountItems,
-  syncHistoryAtStartup
+  syncHistoryAtStartup,
+  syncReportAtStartup
 } = require('../db-helpers');
 
 const {
@@ -116,17 +117,20 @@ module.exports = async function opcuaBootstrap(app) {
       if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.localDB: ${removeResult}`);
     }
 
-    // Sync opcua store values
+    // Sync opcua store at startup
     if (bootstrapParams && bootstrapParams.syncHistoryAtStartup) {
       const syncResult = await syncHistoryAtStartup(app, opcuaTags, 'methodAcmDayReportsDataGet');
-      const statusCode = syncResult.statusCode;
-      if(statusCode === 'Good'){
-        logger.info(`opcuaBootstrap.syncHistoryAtStartup.localDB: {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
-        // Remove files from dir
-        removeFilesFromDirSync([appRoot, syncResult.methodResultOutputPath]);
-      } else {
-        logger.error(`opcuaBootstrap.syncHistoryAtStartup.localDB - ERROR. StatusCode: '${statusCode}'.`);
-      }
+      // Remove files from dir
+      removeFilesFromDirSync([appRoot, syncResult.methodResultOutputPath]);
+      logger.info(`opcuaBootstrap.syncHistoryAtStartup.localDB: {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
+    }// syncReportAtStartup
+
+    // Sync opcua store values
+    if (bootstrapParams && bootstrapParams.syncReportAtStartup) {
+      const syncResult = await syncReportAtStartup(app, opcuaTags, 'methodAcmYearReportUpdate');
+      // Remove files from dir
+      // removeFilesFromDirSync([appRoot, syncResult.methodResultOutputPath]);
+      logger.info('opcuaBootstrap.syncReportAtStartup.localDB: OK');
     }
 
     const isRemote = isRemoteOpcuaToDB();

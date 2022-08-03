@@ -12,11 +12,17 @@ const {
 } = require('../../src/plugins');
 
 const {
+  getOpcuaConfigOptions,
+} = require('../../src/plugins/opcua/opcua-helper');
+
+const {
   dbNullIdValue,
   getIdField,
   checkStoreParameterChanges,
   saveStoreParameterChanges,
   saveOpcuaTags,
+  removeOpcuaGroupValues,
+  removeOpcuaStoreValues,
   integrityCheckOpcua,
   updateRemoteFromLocalStore,
   getStoreParams4Data,
@@ -28,17 +34,21 @@ const {
   findItem,
   findItems,
   handleFoundItems,
-  removeItems
+  removeItems,
+  syncReportAtStartup,
+  syncHistoryAtStartup
 } = require('../../src/plugins/db-helpers');
 
 
-const debug = require('debug')('app:opcua-tags.test');
-
+const debug = require('debug')('app:db-helper.test');
 const isDebug = false;
+
+// Get test ID
+const id = 'ua-cherkassy-azot_test2';
 
 describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
-  it('#1: Registered the service', () => {
+  it('#1: DB-Helper -> Registered the service', () => {
     let errPath = checkServicesRegistered(app, 'opcua-tags');
     assert.ok(errPath === '', `Service '${errPath}' not registered`);
 
@@ -46,7 +56,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     assert.ok(errPath === '', `Service '${errPath}' not registered`);
   });
 
-  it('#2: Save tags and find tags', async () => {
+  it('#2: DB-Helper -> Save tags and find tags', async () => {
 
     // Get generated fake data
     const fakes = loCloneDeep(fakeNormalize());
@@ -78,7 +88,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     assert.ok(findedItems.length === opcuaTags.length, 'Error for test: `Save tags and find tags`');
   });
 
-  it('#3: Save fake data to \'opcua-tags\' service', async () => {
+  it('#3: DB-Helper -> Save fake data to \'opcua-tags\' service', async () => {
     const errPath = await saveFakesToServices(app, 'opcuaTags');
     const service = app.service('opcua-tags');
     const data = await service.find({});
@@ -86,7 +96,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     assert.ok(errPath === '' && data.data.length, `Not save fakes to services - '${errPath}'`);
   });
 
-  it('#4: Save fake data to \'opcua-values\' service', async () => {
+  it('#4: DB-Helper -> Save fake data to \'opcua-values\' service', async () => {
     const errPath = await saveFakesToServices(app, 'opcuaValues');
     const service = app.service('opcua-values');
     const data = await service.find({});
@@ -94,7 +104,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     assert.ok(errPath === '' && data.data.length, `Not save fakes to services - '${errPath}'`);
   });
 
-  it('#5: Test handle found values', async () => {
+  it('#5: DB-Helper -> Test handle found values', async () => {
 
     // Save fakes to services
     await saveFakesToServices(app, 'opcuaTags');
@@ -118,7 +128,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     assert.ok(processedData.length, 'Error for test: `Handle found values`');
   });
 
-  it('#6: Test integrity check opcua', async () => {
+  it('#6: DB-Helper -> Test integrity check opcua', async () => {
     let createdItem, findedItem;
     //-------------------------------------------------
 
@@ -200,7 +210,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     }
   });
 
-  it('#7: Save store values when store parameter changes', async () => {
+  it('#7: DB-Helper -> Save store values when store parameter changes', async () => {
 
     //--------------------------------------
     
@@ -241,7 +251,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     assert.ok(valuesFromDB.length === 4, `valuesFromDB array must not be empty and is equal to (4) - '${valuesFromDB.length}'`);
   });
 
-  it('#8: Save store values for test "store-items" hook', async () => {
+  it('#8: DB-Helper -> Save store values for test "store-items" hook', async () => {
 
     const fakes = loCloneDeep(fakeNormalize());
     // Get opcua values 
@@ -299,7 +309,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     }
   });
 
-  it('#9: Test update remote store from local store', async () => {
+  it('#9: DB-Helper -> Test update remote store from local store', async () => {
 
     const fakes = loCloneDeep(fakeNormalize());
     // Get opcua values 
@@ -368,7 +378,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     }
   });
 
-  it('#10: Get store params for data', async () => {
+  it('#10: DB-Helper -> Get store params for data', async () => {
 
     // Save fakes to services
     await saveFakesToServices(app, 'opcuaTags');
@@ -379,5 +389,37 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     if(isDebug && storeParams.length) inspector('Get store params for data.storeParams:', storeParams);
     
     assert.ok(storeParams.length, 'Get store params for data');
+  });
+
+  it('#11: Data base: Save opcua tags', async () => {
+    // Get opcua tags 
+    const opcuaTags = getOpcuaConfigOptions(id);
+    // Save opcua tags to local DB
+    let saveResult = await saveOpcuaTags(app, opcuaTags, false);
+    if (isDebug && saveResult) inspector('Data base: Save opcua tags:', saveResult);
+    assert.ok(saveResult.total, 'Data base: Save opcua tags');
+    
+    // Remove opcua store values
+    let removeResult = await removeOpcuaGroupValues(app);
+    if (isDebug && removeResult) inspector('removeOpcuaGroupValues.removeResult:', removeResult);
+    // Remove opcua store values
+    removeResult = await removeOpcuaStoreValues(app);
+    if (isDebug && removeResult) inspector('removeOpcuaStoreValues.removeResult:', removeResult);
+  });
+
+  it('#12: DB-Helper -> Run method "syncHistoryAtStartup" for sync history at startup', async () => {
+    // Get opcua tags
+    const opcuaTags = getOpcuaConfigOptions(id);
+    const syncResult = await syncHistoryAtStartup(app, opcuaTags, 'methodAcmDayReportsDataGet');
+    if(true && syncResult) debug(`Run method "syncHistoryAtStartup".syncResult: {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
+    assert.ok(syncResult.savedValuesCount, 'OPC-UA clients: run method "syncHistoryAtStartup"');
+  });
+
+  it('#13: DB-Helper -> Run method "syncReportAtStartup" for sync report at startup', async () => {
+    // Get opcua tags
+    const opcuaTags = getOpcuaConfigOptions(id);
+    const syncResult = await syncReportAtStartup(app, opcuaTags, 'methodAcmYearReportUpdate');
+    if(true && syncResult) debug('Run method "syncReportAtStartup".syncResult:', syncResult);
+    assert.ok(syncResult.length, 'OPC-UA clients: run method "syncReportAtStartup"');
   });
 });

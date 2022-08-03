@@ -518,8 +518,8 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     // Get opcua tags
     const opcuaTags = getOpcuaConfigOptions(id);
     const syncResult = await syncReportAtStartup(app, opcuaTags, 'methodAcmYearReportUpdate');
-    if(isDebug && syncResult) debug(`Run method "syncReportAtStartup".syncResult: ${syncResult}`);
-    assert.ok(syncResult.statusCode === 'Good', 'OPC-UA clients: run method "syncReportAtStartup"');
+    if(isDebug && syncResult) inspector('Run method "syncReportAtStartup".syncResult:', syncResult);
+    assert.ok(syncResult.length, 'OPC-UA clients: run method "syncReportAtStartup"');
   });
 
   it('#12.5: OPC-UA clients: run method "methodAcmDayReportsDataGet" with not clear store', async () => {
@@ -650,15 +650,15 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       if (callResults.length) {
         statusCode = callResults[0].statusCode.name;
         outputArguments = JSON.parse(callResults[0].outputArguments[0].value);
-        outputArguments = loOmit(outputArguments, ['params']);
-        outputArguments.resultPath = getPathBasename(outputArguments.resultPath);
+        // outputArguments = loOmit(outputArguments, ['params']);
+        // outputArguments.resultPath = getPathBasename(outputArguments.resultPath);
         if (isDebug && outputArguments) inspector('methodAcmYearReportUpdate.outputArguments:', outputArguments);
-        if (isDebug && outputArguments) console.log(
-          chalk.green('RunMetod(methodAcmYearReportUpdate): OK!'),
-          `For pointID=${chalk.cyan(pointID)};`,
-          `reportDatesCount: ${chalk.cyan(outputArguments.reportDates.length)};`,
-          `resultFile: '${chalk.cyan(outputArguments.resultPath)}';`
-        );
+        // if (isDebug && outputArguments) console.log(
+        //   chalk.green('RunMetod(methodAcmYearReportUpdate): OK!'),
+        //   `For pointID=${chalk.cyan(pointID)};`,
+        //   `reportDatesCount: ${chalk.cyan(outputArguments.reportDates.length)};`,
+        //   `resultFile: '${chalk.cyan(outputArguments.resultPath)}';`
+        // );
       }
       assert.ok(statusCode === 'Good', 'OPC-UA clients: session call method "methodAcmDayReportsDataGet"');
     }

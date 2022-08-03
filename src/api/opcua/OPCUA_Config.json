@@ -51,7 +51,8 @@
     "opcuaRemoteDbUrl": "http://localhost:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": true,
-      "syncHistoryAtStartup": true
+      "syncHistoryAtStartup": true,
+      "syncReportAtStartup": true
     },
     "security": {
       "mode": "SignAndEncrypt",

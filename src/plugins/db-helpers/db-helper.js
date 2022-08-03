@@ -26,7 +26,6 @@ const {
   getEndOfPeriod,
   sortByStringField,
   readJsonFileSync,
-  removeFilesFromDirSync,
 } = require('../lib');
 
 const {
@@ -1216,17 +1215,13 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
   let methodResult = null, dataItems = [], savedValues = [], savedValuesCount = 0;
   let removedValuesCount = 0, methodResultOutputPath = '', statusCode;
   //-------------------------------------------------------------
-  // Get opcua array valid group store tags for [{ value: 0 }]
+  // Get opcua array valid group store tags for pointID = 0;
   methodResult = await opcuaMethods[methodName]([{ value: 0 }]);
-  statusCode = methodResult.statusCode;
-  if (statusCode !== 'Good') {
-    logger.error(`syncHistoryAtStartup('${methodName}') - ${chalk.red('ERROR')}.`);
-    return { statusCode, savedValuesCount, removedValuesCount };
-  }
   const arrayOfValidTags = methodResult.params.arrayOfValidTags;
   if (isDebug && arrayOfValidTags.length) inspector('syncHistoryAtStartup.arrayOfValidTags:', arrayOfValidTags);
   const opcuaGroupTags = opcuaTags.filter(t => t.group && t.store && arrayOfValidTags.includes(t.browseName));
   if (isDebug && opcuaGroupTags.length) inspector('syncHistoryAtStartup.opcuaGroupTags:', opcuaGroupTags);
+
   // Run method for opcuaGroupTags
   for (let index = 0; index < opcuaGroupTags.length; index++) {
     const opcuaGroupTag = opcuaGroupTags[index];
@@ -1239,55 +1234,53 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
     storeBrowseNames.forEach(browseName => {
       dataItemBrowseNames[browseName] = [];
     });
+
     // Run metod
     const storeParams = await getStoreParams4Data(app, [groupBrowseName]);
     methodResult = await opcuaMethods[methodName]([{ value: pointID }], { storeParams });
     if (isDebug && methodResult) inspector('syncHistoryAtStartup.methodAcmDayReportsDataGet.methodResult:', methodResult);
     statusCode = methodResult.statusCode;
-    if (statusCode === 'Good') {
-      // Get dataItems
-      if (methodResult.params.isSaveOutputFile) {
-        let outputFile = methodResult.params.outputFile;
-        const currentDate = moment().format('YYYYMMDD');
-        outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
-        methodResultOutputPath = methodResult.params.outputPath;
-        dataItems = readJsonFileSync([appRoot, methodResultOutputPath, outputFile])['dataItems'];
-      } else {
-        dataItems = methodResult.dataItems;
-      }
-
-      // Add dataItems for storeParams4Remove
-      const storeParams4Remove = methodResult.storeParams4Remove;
-      for (let index2 = 0; index2 < storeParams4Remove.length; index2++) {
-        const storeParam4Remove = storeParams4Remove[index2];
-        storeParam4Remove.actions = ['remove'];
-        const dataItem = {};
-        dataItem['!value'] = storeParam4Remove;
-        Object.assign(dataItem, dataItemBrowseNames);
-        if (true && dataItem) inspector('syncHistoryAtStartup.methodAcmDayReportsDataGet.dataItem:', dataItem);
-        dataItems.push(dataItem);
-      }
-
-      // Save store opcua group value
-      for (let index2 = 0; index2 < dataItems.length; index2++) {
-        const dataItem = dataItems[index2];
-        if (isDebug && dataItem) inspector('syncHistoryAtStartup.dataItem:', dataItem);
-        savedValues = await saveStoreOpcuaGroupValue(app, groupBrowseName, dataItem, true);
-        const isRemoveAction = dataItem['!value'].actions && dataItem['!value'].actions.includes('remove');
-        if (isRemoveAction) {
-          removedValuesCount += loSize(dataItem) - 1;
-        } else {
-          savedValuesCount += savedValues.length;
-        }
-        if (isDebug && savedValues.length) inspector('syncHistoryAtStartup.saveStoreOpcuaGroupValue.savedValues:', savedValues);
-      }
+    
+    // Get dataItems
+    if (methodResult.params.isSaveOutputFile) {
+      let outputFile = methodResult.params.outputFile;
+      const currentDate = moment().format('YYYYMMDD');
+      outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
+      methodResultOutputPath = methodResult.params.outputPath;
+      dataItems = readJsonFileSync([appRoot, methodResultOutputPath, outputFile])['dataItems'];
     } else {
-      logger.error(`syncHistoryAtStartup('${methodName}')(${groupBrowseName}) - ${chalk.red('ERROR')}.`);
-      return;
+      dataItems = methodResult.dataItems;
     }
+
+    // Add dataItems for storeParams4Remove
+    const storeParams4Remove = methodResult.storeParams4Remove;
+    for (let index2 = 0; index2 < storeParams4Remove.length; index2++) {
+      const storeParam4Remove = storeParams4Remove[index2];
+      storeParam4Remove.actions = ['remove'];
+      const dataItem = {};
+      dataItem['!value'] = storeParam4Remove;
+      Object.assign(dataItem, dataItemBrowseNames);
+      if (true && dataItem) inspector('syncHistoryAtStartup.methodAcmDayReportsDataGet.dataItem:', dataItem);
+      dataItems.push(dataItem);
+    }
+
+    // Save store opcua group value
+    for (let index2 = 0; index2 < dataItems.length; index2++) {
+      const dataItem = dataItems[index2];
+      if (isDebug && dataItem) inspector('syncHistoryAtStartup.dataItem:', dataItem);
+      savedValues = await saveStoreOpcuaGroupValue(app, groupBrowseName, dataItem, true);
+      const isRemoveAction = dataItem['!value'].actions && dataItem['!value'].actions.includes('remove');
+      if (isRemoveAction) {
+        removedValuesCount += loSize(dataItem) - 1;
+      } else {
+        savedValuesCount += savedValues.length;
+      }
+      if (isDebug && savedValues.length) inspector('syncHistoryAtStartup.saveStoreOpcuaGroupValue.savedValues:', savedValues);
+    }
+
   }
   // Get sync result
-  const syncResult = { statusCode, savedValuesCount, removedValuesCount, methodResultOutputPath };
+  const syncResult = { savedValuesCount, removedValuesCount, methodResultOutputPath };
   if (isDebug && dataItems) console.log(`syncHistoryAtStartup.syncResult: ${syncResult}`);
   return syncResult;
 };
@@ -1302,11 +1295,11 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
  * e.g. {"statusCode": "Good", "outputArguments": { "reportYear": 2022, ... }}
  */
 const syncReportAtStartup = async function (app, opcuaTags, methodName) {
-  let methodResult = null, dataItems = [], statusCode;
-  let outputArguments = null, inputArgument, inputArgument2, inputArguments;
+  let methodResult = null, dataItems = [];
+  let methodResults = [], inputArgument, inputArgument2, inputArguments;
   //-------------------------------------------------------------
-  // Get opcua array valid group store tags for [{ value: 0 }]
 
+  // Get opcua array valid group store tags for pointID = 0;
   inputArgument = { pointID: 0 };
   inputArgument = { dataType: DataType.String, value: JSON.stringify(inputArgument) };
 
@@ -1315,15 +1308,11 @@ const syncReportAtStartup = async function (app, opcuaTags, methodName) {
   inputArguments.push([inputArgument, inputArgument2]);
 
   methodResult = await opcuaMethods[methodName](inputArguments);
-  statusCode = methodResult.statusCode;
-  if (statusCode !== 'Good') {
-    logger.error(`syncReportAtStartup('${methodName}') - ${chalk.red('ERROR')}.`);
-    return { statusCode };
-  }
   const arrayOfValidTags = methodResult.params.arrayOfValidTags;
   if (isDebug && arrayOfValidTags.length) inspector('syncReportAtStartup.arrayOfValidTags:', arrayOfValidTags);
   const opcuaGroupTags = opcuaTags.filter(t => t.group && t.store && arrayOfValidTags.includes(t.browseName));
   if (isDebug && opcuaGroupTags.length) inspector('syncReportAtStartup.opcuaGroupTags:', opcuaGroupTags);
+
   // Run method for opcuaGroupTags
   for (let index = 0; index < opcuaGroupTags.length; index++) {
     const opcuaGroupTag = opcuaGroupTags[index];
@@ -1344,16 +1333,10 @@ const syncReportAtStartup = async function (app, opcuaTags, methodName) {
 
     // Run opcua method
     methodResult = await opcuaMethods[methodName](inputArguments);
-    statusCode = methodResult.statusCode;// { resultPath, params, reportYear, reportDates }
-    if (statusCode !== 'Good') {
-      logger.error(`RunMetod(${methodName}): ${chalk.red('ERROR')}. StatusCode:'${chalk.cyan(statusCode)}';`);
-      return;
-    }
+    methodResults.push(methodResult);
   }
-  // Get sync result
-  const syncResult = { statusCode };
-  if (isDebug && dataItems) console.log(`syncReportAtStartup.syncResult: ${syncResult}`);
-  return syncResult;
+  if (isDebug && methodResults.length) inspector('syncReportAtStartup.methodResults:', methodResults);
+  return methodResults;
 };
 
 //================================================================================

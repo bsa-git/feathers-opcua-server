@@ -73,7 +73,7 @@ const id = 'ua-cherkassy-azot_test2';
  * @returns {void|Object}
  */
 async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
-  let resultPath = '', pointID, params, argParams = null, storeParams4Remove = [];
+  let resultPath = '', pointID, params, argParams = {}, storeParams4Remove = [];
   let dirList = [], path, dataItem, dataItems = [], pattern = '';
   //----------------------------------------------------------------------------
 
@@ -98,132 +98,119 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
     if (context && context.params !== undefined) argParams = context.params;
   }
 
-  // Get params from config file
-  if (pointID === 0) {
-    // Get array of valid tags 
-    const arrayOfValidTags = getRangeArray(4, 1).map(pointID => getParams4PointID(pointID, acmDayReportFileName, paramsPath).acmTagBrowseName);
-    // CallBack
-    if (callback) {
-      callMethodResult.outputArguments[0].value = JSON.stringify({ params: { arrayOfValidTags } });
-      callback(null, callMethodResult);
-    } else {
-      const statusCode = 'Good';
-      return { statusCode, params: { arrayOfValidTags } };
+  if (pointID > 0) {
+    // Get params for pointID
+    params = getParams4PointID(pointID, acmDayReportFileName, paramsPath, argParams);
+
+    // Create 'params.outputPath' path
+    createPath(params.outputPath);
+
+    // Get opcua tags 
+    const opcuaTags = isTest() ? getOpcuaConfigOptions(id) : getOpcuaTags();
+    const acmTag = opcuaTags.find(t => t.browseName === params.acmTagBrowseName);
+    if (!acmTag) {
+      logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. Tag with browseName "${chalk.cyan(params.acmTagBrowseName)}" not found.`);
+      throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. Tag with browseName "${params.acmTagBrowseName}" not found.`);
     }
-  } else {
-    params = getParams4PointID(pointID,  acmDayReportFileName, paramsPath, argParams);
-  }
+    // Get acm params
+    const acmPath = acmTag.getterParams.acmPath;
+    const _isTest = params.isTest || isTest() || acmTag.getterParams.isTest;
 
-  // Create 'params.outputPath' path
-  createPath(params.outputPath);
+    params = Object.assign(params, { acmPath, isTest: _isTest });
 
-  // Get opcua tags 
-  const opcuaTags = isTest() ? getOpcuaConfigOptions(id) : getOpcuaTags();
-  const acmTag = opcuaTags.find(t => t.browseName === params.acmTagBrowseName);
-  if (!acmTag) {
-    logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. Tag with browseName "${chalk.cyan(params.acmTagBrowseName)}" not found.`);
-    throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. Tag with browseName "${params.acmTagBrowseName}" not found.`);
-  }
-  // Get acm params
-  const acmPath = acmTag.getterParams.acmPath;
-  const _isTest = params.isTest || isTest() || acmTag.getterParams.isTest;
+    if (isDebug && params) inspector('methodAcmDayReportsDataGet.params:', params);
 
-  params = Object.assign(params, { acmPath, isTest: _isTest });
+    // Get range years e.g. ['*/**/*2018_*.*', '*/**/*2019_*.*', '*/**/*2020_*.*', '*/**/*2021_*.*', '*/**/*2022_*.*']
+    const dateTime = moment.utc().add(1, 'years').format('YYYY-MM-DDTHH:mm:ss');
+    let rangeYears = getRangeStartEndOfPeriod(dateTime, [-5, 'years'], 'years');
+    rangeYears = rangeYears.map(year => `*/**/*${year}_*.*`);
+    if (isDebug && rangeYears.length) inspector('methodAcmDayReportsDataGet.rangeYears:', rangeYears);
 
-  if (isDebug && params) inspector('methodAcmDayReportsDataGet.params:', params);
+    // Get acm path  
+    const isHttp = loStartsWith(params.acmPath, 'http');
+    if (isHttp) {
+      const isExistsURL = await isUrlExists(params.acmPath, true);
+      if (isExistsURL) {
+        if (isDebug && isExistsURL) console.log(`isExistsURL('${params.acmPath}'): OK`);
 
-  // Get range years e.g. ['*/**/*2018_*.*', '*/**/*2019_*.*', '*/**/*2020_*.*', '*/**/*2021_*.*', '*/**/*2022_*.*']
-  const dateTime = moment.utc().add(1, 'years').format('YYYY-MM-DDTHH:mm:ss');
-  let rangeYears = getRangeStartEndOfPeriod(dateTime, [-5, 'years'], 'years');
-  rangeYears = rangeYears.map(year => `*/**/*${year}_*.*`);
-  if (isDebug && rangeYears.length) inspector('methodAcmDayReportsDataGet.rangeYears:', rangeYears);
+        // Get fileNames from path for http
+        pattern = loTrimEnd(params.acmPath, '/') + params.pattern;
+        let urls = await httpGetFileNamesFromDir(params.acmPath, pattern, params.patternOptions);
+        if (!params.isTest) {
+          urls = urls.filter(url => createMatch(rangeYears)(url));
+        }
+        if (isDebug && urls.length) console.log('httpGetFileNamesFromDir.urls:', urls);
 
-  // Get acm path  
-  const isHttp = loStartsWith(params.acmPath, 'http');
-  if (isHttp) {
-    const isExistsURL = await isUrlExists(params.acmPath, true);
-    if (isExistsURL) {
-      if (isDebug && isExistsURL) console.log(`isExistsURL('${params.acmPath}'): OK`);
-
-      // Get fileNames from path for http
-      pattern = loTrimEnd(params.acmPath, '/') + params.pattern;
-      let urls = await httpGetFileNamesFromDir(params.acmPath, pattern, params.patternOptions);
-      if(!params.isTest) {
-        urls = urls.filter(url => createMatch(rangeYears)(url));
-      }
-      if (isDebug && urls.length) console.log('httpGetFileNamesFromDir.urls:', urls);
-
-      // Get files from urls
-      for (let index = 0; index < urls.length; index++) {
-        const fileName = getPathBasename(urls[index]);
-        if (fileName) {
-          const resultData = await httpGetFileFromUrl({
-            url: urls[index],
-            method: 'get',
-            responseType: 'stream'
-          });
-          // Write file stream
-          resultPath = join(...[appRoot, params.outputPath, fileName]);
-          resultPath = writeFileStream(resultPath, resultData);
-          dirList.push(resultPath);
-          await pause(100);
+        // Get files from urls
+        for (let index = 0; index < urls.length; index++) {
+          const fileName = getPathBasename(urls[index]);
+          if (fileName) {
+            const resultData = await httpGetFileFromUrl({
+              url: urls[index],
+              method: 'get',
+              responseType: 'stream'
+            });
+            // Write file stream
+            resultPath = join(...[appRoot, params.outputPath, fileName]);
+            resultPath = writeFileStream(resultPath, resultData);
+            dirList.push(resultPath);
+            await pause(100);
+          }
         }
       }
-    }
-  } else {
-    path = isUncPath(params.acmPath) ? params.acmPath : toPathWithPosixSep([appRoot, params.acmPath]);
-    path = loTrimEnd(path, '\\/');
-    pattern = path + params.pattern;
-    if (isDebug && path) inspector('methodAcmDayReportsDataGet.path:', path);
-    dirList = getFileListFromDir(path, pattern, params.patternOptions);
-    if(!params.isTest) {
-      dirList = dirList.filter(filePath => createMatch(rangeYears)(filePath));
-    }
-    dirList = getFileStatList(dirList);// e.g. [{ filePath: 'c:/tmp/test.txt', fileStat: { ... updatedAt: '2022-07-26T05:46:42.827Z' ... } }]
-    if (isDebug && dirList) console.log('methodAcmDayReportsDataGet.dirList.length:', dirList.length);
-
-    // Get store params for remove
-    if (!callback && context && context.storeParams) {
-      // Drop begin item from array
-      if (context.test4Remove) {
-        dirList = loDrop(dirList);
+    } else {
+      path = isUncPath(params.acmPath) ? params.acmPath : toPathWithPosixSep([appRoot, params.acmPath]);
+      path = loTrimEnd(path, '\\/');
+      pattern = path + params.pattern;
+      if (isDebug && path) inspector('methodAcmDayReportsDataGet.path:', path);
+      dirList = getFileListFromDir(path, pattern, params.patternOptions);
+      if (!params.isTest) {
+        dirList = dirList.filter(filePath => createMatch(rangeYears)(filePath));
       }
-      storeParams4Remove = context.storeParams.filter(param => {
-        const findedStoreParam = dirList.find(item => getPathBasename(item.filePath) === param.fileName);
-        if (!findedStoreParam) return true;
-        return false;
-      });
-      if (isDebug && storeParams4Remove.length) inspector('methodAcmDayReportsDataGet.storeParams4Remove:', storeParams4Remove);
+      dirList = getFileStatList(dirList);// e.g. [{ filePath: 'c:/tmp/test.txt', fileStat: { ... updatedAt: '2022-07-26T05:46:42.827Z' ... } }]
+      if (isDebug && dirList) console.log('methodAcmDayReportsDataGet.dirList.length:', dirList.length);
+
+      // Get store params for remove
+      if (!callback && context && context.storeParams) {
+        // Drop begin item from array
+        if (context.test4Remove) {
+          dirList = loDrop(dirList);
+        }
+        storeParams4Remove = context.storeParams.filter(param => {
+          const findedStoreParam = dirList.find(item => getPathBasename(item.filePath) === param.fileName);
+          if (!findedStoreParam) return true;
+          return false;
+        });
+        if (isDebug && storeParams4Remove.length) inspector('methodAcmDayReportsDataGet.storeParams4Remove:', storeParams4Remove);
+      }
+
+      // context.storeParams e.g. -> [{ dateTime: '2022-02-22', fileName: 'DayHist01_23F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:42.827Z' }... ] 
+      if (!callback && context && context.storeParams) {
+        // Filter the dirList with storeParams
+        dirList = dirList.filter(item => {
+          const fileName = getPathBasename(item.filePath);
+          const findedStoreParam = context.storeParams.find(param => param.fileName === fileName);
+          if (isDebug && findedStoreParam) inspector('methodAcmDayReportsDataGet.findedStoreParam:', findedStoreParam);
+          if (!findedStoreParam) return true;
+          if (findedStoreParam.updatedAt !== item.fileStat.updatedAt) return true;
+          return false;
+        });
+        if (isDebug && dirList) console.log('methodAcmDayReportsDataGet.filterDirList.length:', dirList.length);
+      }
     }
 
-    // context.storeParams e.g. -> [{ dateTime: '2022-02-22', fileName: 'DayHist01_23F120_02232022_0000.xls', updatedAt: '2022-07-26T05:46:42.827Z' }... ] 
-    if (!callback && context && context.storeParams) {
-      // Filter the dirList with storeParams
-      dirList = dirList.filter(item => {
-        const fileName = getPathBasename(item.filePath);
-        const findedStoreParam = context.storeParams.find(param => param.fileName === fileName);
-        if (isDebug && findedStoreParam) inspector('methodAcmDayReportsDataGet.findedStoreParam:', findedStoreParam);
-        if (!findedStoreParam) return true;
-        if (findedStoreParam.updatedAt !== item.fileStat.updatedAt) return true;
-        return false;
-      });
-      if (isDebug && dirList) console.log('methodAcmDayReportsDataGet.filterDirList.length:', dirList.length);
-    }
-  }
+    // Convert xls data to json data 
+    for (let index = 0; index < dirList.length; index++) {
 
-  // Convert xls data to json data 
-  for (let index = 0; index < dirList.length; index++) {
+      const xlsPath = isString(dirList[index]) ? dirList[index] : dirList[index].filePath;
+      const updatedAt = isString(dirList[index]) ? '' : dirList[index].fileStat.updatedAt;// getPathBasename
+      const fileName = isString(dirList[index]) ? getPathBasename(dirList[index]) : getPathBasename(dirList[index].filePath);
 
-    const xlsPath = isString(dirList[index]) ? dirList[index] : dirList[index].filePath;
-    const updatedAt = isString(dirList[index]) ? '' : dirList[index].fileStat.updatedAt;// getPathBasename
-    const fileName = isString(dirList[index]) ? getPathBasename(dirList[index]) : getPathBasename(dirList[index].filePath);
+      if (!doesFileExist(xlsPath)) {
+        logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. File with name "${chalk.cyan(xlsPath)}" not found.`);
+        throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. File with name "${xlsPath}" not found.`);
+      }
 
-    if (!doesFileExist(xlsPath)) {
-      logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}. File with name "${chalk.cyan(xlsPath)}" not found.`);
-      throw new Error(`RunMetod(methodAcmDayReportsDataGet): ERROR. File with name "${xlsPath}" not found.`);
-    }
-
-    try {
       // Create xlsx object
       let xlsx = new XlsxHelperClass({
         excelPath: xlsPath,
@@ -256,39 +243,44 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
 
         dataItems.push(dataItem);
       }
-    } catch (error) {
-      logger.error(
-        `RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}.  Error while creating an instance of a class 'XlsxHelperClass'. Excel path: '${xlsPath}'.`
-      );
-      if (isDebug && error) console.log('ERROR.methodAcmDayReportsDataGet.message:', error.message);
-      if (isDebug && dataItems.length) inspector('ERROR.methodAcmDayReportsDataGet.dataItems:', dataItems);
     }
-  }
 
-  if (isDebug && dataItems.length) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
+    if (isDebug && dataItems.length) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
 
-  // Remove files from dir
-  if (params.isRemoveXlsFiles) {
-    removeItemsSync(`${params.outputPath}/*.xls`, { dryRun: false });
-  }
+    // Remove files from dir
+    if (params.isRemoveXlsFiles) {
+      removeItemsSync(`${params.outputPath}/*.xls`, { dryRun: false });
+    }
 
-  // Write data to resultPath
-  if (params.isSaveOutputFile) {
-    const currentDate = moment().format('YYYYMMDD');
-    const outputFile = loTemplate(params.outputFile)({ pointID: params.pointID, date: currentDate });
-    // Get result path 
-    resultPath = join(...[appRoot, params.outputPath, outputFile]);
-    // Write json file
-    writeJsonFileSync(resultPath, { statusCode: 'Good', resultPath, params, dataItems });
-  }
+    // Write data to resultPath
+    if (params.isSaveOutputFile) {
+      const currentDate = moment().format('YYYYMMDD');
+      const outputFile = loTemplate(params.outputFile)({ pointID: params.pointID, date: currentDate });
+      // Get result path 
+      resultPath = join(...[appRoot, params.outputPath, outputFile]);
+      // Write json file
+      writeJsonFileSync(resultPath, { statusCode: 'Good', resultPath, params, dataItems });
+    }
 
-  // CallBack
-  if (callback) {
-    callMethodResult.outputArguments[0].value = params.isSaveOutputFile ? JSON.stringify({ resultPath, params }) : JSON.stringify({ params, dataItems });
-    callback(null, callMethodResult);
+    // CallBack
+    if (callback) {
+      callMethodResult.outputArguments[0].value = params.isSaveOutputFile ? JSON.stringify({ resultPath, params }) : JSON.stringify({ params, dataItems });
+      callback(null, callMethodResult);
+    } else {
+      const statusCode = 'Good';
+      return params.isSaveOutputFile ? { statusCode, resultPath, params, storeParams4Remove } : { statusCode, params, dataItems, storeParams4Remove };
+    }
   } else {
-    const statusCode = 'Good';
-    return params.isSaveOutputFile ? { statusCode, resultPath, params, storeParams4Remove } : { statusCode, params, dataItems, storeParams4Remove };
+    // Get array of valid tags 
+    const arrayOfValidTags = getRangeArray(4, 1).map(pointID => getParams4PointID(pointID, acmDayReportFileName, paramsPath).acmTagBrowseName);
+    // CallBack
+    if (callback) {
+      callMethodResult.outputArguments[0].value = JSON.stringify({ params: { arrayOfValidTags } });
+      callback(null, callMethodResult);
+    } else {
+      const statusCode = 'Good';
+      return { statusCode, params: { arrayOfValidTags } };
+    }
   }
 }
 
