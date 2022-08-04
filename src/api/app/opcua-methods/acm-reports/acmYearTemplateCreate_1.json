@@ -17,6 +17,7 @@
   "startRow": 20,
   "period": [1, "years"],
   "dateColumn": "C",
+  "dataEndColumn": "K",
   "dataColumns": {"23QN2O": "E", "23QN2O_CORR": "F", "23FVSG": "G", "23FVSG_CORR": "H", "23F105_IS": "K", "23CHBB": "I"},
   "isSetData": false,
   "rulesForCells": {

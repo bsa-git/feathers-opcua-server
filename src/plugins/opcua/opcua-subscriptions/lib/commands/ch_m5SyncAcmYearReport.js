@@ -182,15 +182,8 @@ async function ch_m5SyncAcmYearReport(params, value) {
 
   statusCode = metodResult[0].statusCode.name;
   if (statusCode === 'Good') {
-    outputArguments = JSON.parse(metodResult[0].outputArguments[0].value);// { resultPath, params, reportYear, reportDates }
+    outputArguments = JSON.parse(metodResult[0].outputArguments[0].value);// [{ statusCode, resultPath, params, reportYear, reportDates }, ...]
     if (isDebug && outputArguments) inspector('runMetod.methodAcmYearReportUpdate.reportDates:', outputArguments);
-    // if (isDebug && outputArguments) inspector('runMetod.methodAcmYearReportUpdate.reportDates:', outputArguments.reportDates);
-    // if (isDebug && outputArguments) console.log(
-    //   chalk.green('RunCommand(ch_m5SyncAcmYearReport).methodAcmYearReportUpdate: OK!'),
-    //   `For pointID=${chalk.cyan(pointID)};`,
-    //   `reportDatesCount: ${chalk.cyan(outputArguments.reportDates.length)};`,
-    //   `resultFile: '${chalk.cyan(getPathBasename(outputArguments.resultPath))}';`
-    // );
 
     // Remove files from tmp path
     if (!reportParams.syncYearReportFromStore && !isUncPath(reportParams.dataTestPath)) {

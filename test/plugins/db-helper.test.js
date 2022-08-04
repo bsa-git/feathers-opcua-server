@@ -411,7 +411,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     // Get opcua tags
     const opcuaTags = getOpcuaConfigOptions(id);
     const syncResult = await syncHistoryAtStartup(app, opcuaTags, 'methodAcmDayReportsDataGet');
-    if(true && syncResult) debug(`Run method "syncHistoryAtStartup".syncResult: {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
+    if(isDebug && syncResult) debug(`Run method "syncHistoryAtStartup".syncResult: {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
     assert.ok(syncResult.savedValuesCount, 'OPC-UA clients: run method "syncHistoryAtStartup"');
   });
 
@@ -419,7 +419,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     // Get opcua tags
     const opcuaTags = getOpcuaConfigOptions(id);
     const syncResult = await syncReportAtStartup(app, opcuaTags, 'methodAcmYearReportUpdate');
-    if(true && syncResult) debug('Run method "syncReportAtStartup".syncResult:', syncResult);
+    if(isDebug && syncResult) debug('Run method "syncReportAtStartup".syncResult:', syncResult);
     assert.ok(syncResult.length, 'OPC-UA clients: run method "syncReportAtStartup"');
   });
 });

@@ -30,6 +30,14 @@ const {
   ExceljsHelperClass,
 } = require('../../src/plugins/excel-helpers');
 
+const {
+  methodAcmYearReportUpdate
+} = require('../../src/plugins/opcua/opcua-methods');
+
+const {
+  DataType,
+} = require('node-opcua');
+
 const chalk = require('chalk');
 const moment = require('moment');
 const Color = require('color');
@@ -42,6 +50,51 @@ const xlsFile = '/test/data/excel/acm/acmDayReport.xls';
 const xlsxFile = '/test/data/excel/acm/acmDayReport.xlsx';
 const xlsxFile2 = '/test/data/excel/acm/acmYearTemplate.xlsx';
 const csvFile = '/test/data/csv/data-CH_M51.csv';
+
+const dataItems = [
+  {
+    '!value': {
+      dateTime: '2022-01-02',
+      updatedAt: '2022-06-27T04:21:28Z',
+      fileName: 'DayHist01_14F120_01022022_0000.xls'
+    },
+    'CH_M52_ACM::14N2O:14QN2O': [
+      1953.694, 1963.948, 1963.348,
+      1963.894, 1963.456, 1963.349,
+      1963.675, 1963.839, 1963.785,
+      1963.458, 1963.728, 1963.676,
+      1963.62, 1963.676, 1963.674,
+      1963.73, 1963.622, 1963.674,
+      1963.511, 1963.841, 1963.181,
+      1963.733, 1963.837, 1963.294
+    ],
+    'CH_M52_ACM::14N2O:14QN2O_CORR': [
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0
+    ],
+    'CH_M52_ACM::14VSG:14FVSG': [
+      72507.187, 73282.776, 73674.225,
+      73883.438, 73722.931, 73823.792,
+      73716.553, 73783.875, 73784.485,
+      73617.493, 73577.332, 73361.328,
+      73097.9, 72699.036, 72573.608,
+      72332.275, 72352.295, 72497.681,
+      72768.677, 72996.094, 73467.407,
+      73512.573, 73966.675, 74350.586
+    ],
+    'CH_M52_ACM::14VSG:14FVSG_CORR': [
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0
+    ],
+    'CH_M52_ACM::14HNO3:14F105_IS': [
+      1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1
+    ]
+  }
+];
 
 describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
 
@@ -456,5 +509,23 @@ describe('<<=== ExcelOperations: (excel-helpers.test) ===>>', () => {
     sheetName = exceljs.getSheet().name;
     const resultItems = exceljs.getColumnValues(sheetName, { range: 'C12:C35', header: 1 });
     assert.ok(items.length === resultItems.length, `Write data to xlsx file: ${items.length} = ${resultItems.length}`);
+  });
+
+  it('#11: Run method "methodAcmYearReportUpdate"', async () => {
+    let inputArgument, inputArgument2, inputArguments;
+    //------------------------------------------------
+
+    // Set inputArguments
+    inputArgument = { pointID: 2 };
+    inputArgument = { dataType: DataType.String, value: JSON.stringify(inputArgument) };
+
+    inputArgument2 = { dataType: DataType.String, value: JSON.stringify(dataItems) };
+    inputArguments = [];
+    inputArguments.push([inputArgument, inputArgument2]);
+
+    // Run method
+    const methodResult = await methodAcmYearReportUpdate(inputArguments);
+    if (isDebug && methodResult.length) inspector('Run method "methodAcmYearReportUpdate".methodResult:', methodResult);
+    assert.ok(methodResult.length, 'Run method "methodAcmYearReportUpdate"');
   });
 });

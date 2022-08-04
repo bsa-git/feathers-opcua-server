@@ -445,7 +445,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       qal2VolumeMultiplier: 1.1951,
       qal2СoncentrationAdition: 0,
       qal2VolumeAdition: 0,
-      period: [1, 'months'],
+      period: [1, 'years'],
       startYear: 2022,
     };
     const inputArguments = [[
@@ -650,15 +650,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       if (callResults.length) {
         statusCode = callResults[0].statusCode.name;
         outputArguments = JSON.parse(callResults[0].outputArguments[0].value);
-        // outputArguments = loOmit(outputArguments, ['params']);
-        // outputArguments.resultPath = getPathBasename(outputArguments.resultPath);
         if (isDebug && outputArguments) inspector('methodAcmYearReportUpdate.outputArguments:', outputArguments);
-        // if (isDebug && outputArguments) console.log(
-        //   chalk.green('RunMetod(methodAcmYearReportUpdate): OK!'),
-        //   `For pointID=${chalk.cyan(pointID)};`,
-        //   `reportDatesCount: ${chalk.cyan(outputArguments.reportDates.length)};`,
-        //   `resultFile: '${chalk.cyan(outputArguments.resultPath)}';`
-        // );
       }
       assert.ok(statusCode === 'Good', 'OPC-UA clients: session call method "methodAcmDayReportsDataGet"');
     }
@@ -678,7 +670,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       opt: {
         points: [2],
         test: true,
-        period: [1, 'months'],
+        period: [1, 'years'],
         year: 2022
       }
     };
@@ -727,7 +719,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       command: 'ch_m5SyncAcmYearReport',
       opt: {
         points: [2],
-        pattern: '2022-01', // e.g. '/**/DayHist*.xls'|'/**/2022-01/DayHist*.xls'|/**/DayHist01_14F120_01022022_0000.xls
+        pattern: '', // e.g. '/**/DayHist*.xls'|'/**/2022-01/DayHist*.xls'|/**/DayHist01_14F120_01022022_0000.xls
         syncYearReportFromStore: true
       }
     };

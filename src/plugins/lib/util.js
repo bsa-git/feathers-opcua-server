@@ -200,7 +200,7 @@ const getTimeDuration = function (startTime, endTime, unit) {
  * @param {String[]} timeList 
  * @param {String} unit 
  * @returns {Object}
- * e.g. { TimeDuration_1x2(ms): 12, ..., TimeDuration_10x11(ms): 5, TimeDuration_all(ms): 50  }
+ * e.g. { TimeDuration_1(ms): 12, ..., TimeDuration_10(ms): 5, TimeDuration_1x10(ms): 50  }
  */
 const getTimeDurations = function (timeList, unit) {
   let resultList = {}, prevTime = '';
@@ -208,11 +208,13 @@ const getTimeDurations = function (timeList, unit) {
   for (let index = 0; index < timeList.length; index++) {
     const currentTime = timeList[index];
     if(prevTime){
-      resultList[`TimeDuration_${index}x${index + 1}(${unit ? unit : 'ms'})`] = getTimeDuration(prevTime, currentTime, unit);
+      resultList[`TimeDuration_${index}(${unit ? unit : 'ms'})`] = getTimeDuration(prevTime, currentTime, unit);
     }
     prevTime = currentTime;
   }
-  resultList[`TimeDuration_all(${unit ? unit : 'ms'})`] = getTimeDuration(timeList[0], timeList[timeList.length - 1], unit);
+  if(timeList.length > 1){
+    resultList[`TimeDuration_1x${timeList.length}(${unit ? unit : 'ms'})`] = getTimeDuration(timeList[0], timeList[timeList.length - 1], unit);
+  }
   return resultList;
 };
 

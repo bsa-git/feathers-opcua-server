@@ -1296,7 +1296,7 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
  */
 const syncReportAtStartup = async function (app, opcuaTags, methodName) {
   let methodResult = null, dataItems = [];
-  let methodResults = [], inputArgument, inputArgument2, inputArguments;
+  let inputArgument, inputArgument2, inputArguments;
   //-------------------------------------------------------------
 
   // Get opcua array valid group store tags for pointID = 0;
@@ -1322,6 +1322,7 @@ const syncReportAtStartup = async function (app, opcuaTags, methodName) {
     const storeBrowseNames = opcuaTags.filter(tag => tag.ownerGroup === groupBrowseName).map(tag => tag.browseName);
     // Get tag values from stores
     dataItems = await getTagValuesFromStores(app, storeBrowseNames);
+    if (isDebug && dataItems.length) inspector('syncReportAtStartup.dataItems:', dataItems);
 
     // Set inputArguments
     inputArgument = { pointID };
@@ -1333,10 +1334,9 @@ const syncReportAtStartup = async function (app, opcuaTags, methodName) {
 
     // Run opcua method
     methodResult = await opcuaMethods[methodName](inputArguments);
-    methodResults.push(methodResult);
   }
-  if (isDebug && methodResults.length) inspector('syncReportAtStartup.methodResults:', methodResults);
-  return methodResults;
+  if (isDebug && methodResult.length) inspector('syncReportAtStartup.methodResult:', methodResult);
+  return methodResult;
 };
 
 //================================================================================
