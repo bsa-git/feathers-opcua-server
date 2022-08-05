@@ -48,13 +48,21 @@ module.exports = function (options = {}) {
         // Get values
         values = storeValue.values.filter(v => v.key !== storeStart);
         // if record.values.items -> empty [] then -> not loConcat(values, record.values)
-        values = (record.values.items && record.values.items.length === 0)? values : loConcat(values, record.values);
+        
+        // if(record.values.items && record.values.items.length > 0){
+        //   values = loConcat(values, record.values);
+        // } else {
+        //   if (isDebug && record.values) console.log('hook.store-items.addItems.recordValues:', storeValue.values.length);
+        // }
+
+        values = loConcat(values, record.values);
+
         // Ascending sort by string field 
         values = sortByStringField(values, 'key', true);
         // Set range of stored values
         record.storeStart = values[0].key;
         record.storeEnd = values[values.length - 1].key;
-        // Descending sort Ascending by string field 
+        // Descending sort values by string field 'key'
         record.values = sortByStringField(values, 'key', false);
 
         // Set record.store.hash value

@@ -15,7 +15,10 @@ const {
   getRangeArray,
   orderByItems,
   getRangeStartEndOfPeriod,
-  getTimeDurations
+  getTimeDurations,
+  isUncPath,
+  toPathWithPosixSep,
+  removeItemsSync
 } = require('../../lib');
 
 const {
@@ -62,7 +65,7 @@ const updateYearReport = async function (pointID, reportParams, groupValues) {
   let reportFile, reportDates = [], timeList = [], methodResult = {};
   let dateCells, dataCells, dataCells4Rows, dateCells4Date;
   //-------------------------------------------------------------------
-  
+
   // Get begin group value 
   const beginGroupValue = groupValues[0];
   // Get begin report date and year
@@ -70,8 +73,7 @@ const updateYearReport = async function (pointID, reportParams, groupValues) {
   const beginReportYear = beginReportDate.split('-')[0];
 
   // Get output report path
-  const outputReportPath = isTest() ? reportParams.dataTestPath : reportParams.isTest ? reportParams.dataTestPath : reportParams.dataPath;
-  makeDirSync([appRoot, outputReportPath]);
+  const outputReportPath = reportParams.isTest ? reportParams.dataTestPath : reportParams.dataPath;
 
   // Get report file
   const outputReportFile = loTemplate(reportParams.outputReportFile)({ pointID, year: beginReportYear });
@@ -122,7 +124,7 @@ const updateYearReport = async function (pointID, reportParams, groupValues) {
 
   // TimeDuration_2
   timeList.push(moment.utc().format());
-   
+
   for (let index = 0; index < groupValues.length; index++) {
     const groupValue = groupValues[index];
     // Get report date and year
@@ -136,7 +138,7 @@ const updateYearReport = async function (pointID, reportParams, groupValues) {
       if (isDebug && cell) inspector(`methodAcmYearReportUpdate.cell(${cell.address}):`, cell);
     });
 
-    if(!dateCells4Date.length) break;
+    if (!dateCells4Date.length) break;
 
     // Get start/end row for report date  
     const startRow4Date = dateCells4Date[0]['address2'].row;
@@ -146,7 +148,7 @@ const updateYearReport = async function (pointID, reportParams, groupValues) {
     loForEach(reportParams.dataColumns, function (column, alias) {
       // Get data cells for rows
       dataCells4Rows = dataCells.filter(cell => cell.address2.col === column && (cell.address2.row >= startRow4Date && cell.address2.row <= endRow4Date));
-      
+
       // Set values to cells
       loForEach(groupValue, function (items, tag) {
         let tagAlias = tag.split(':');
@@ -197,7 +199,7 @@ const updateYearReport = async function (pointID, reportParams, groupValues) {
  * @returns {void|Object}
  */
 async function methodAcmYearReportUpdate(inputArguments, context, callback) {
-  let reportParams = null, timeList = [];
+  let reportParams = null, timeList = [], deletedItems = [];
   let beginReportDate, methodResult = null, methodResults = [];
   //---------------------------------------------------------------
 
@@ -226,6 +228,7 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
   // Get pointID 
   const pointID = params.pointID;
 
+  //--- Run method for (pointID > 0) -> Update year report
   if (pointID > 0) {
 
     // Get report params
@@ -244,6 +247,10 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
     // Get is test
     const _isTest = reportParams.isTest || isTest() || acmTag.getterParams.isTest;
     reportParams.isTest = _isTest;
+
+    // Get output report path
+    const outputReportPath = reportParams.isTest ? reportParams.dataTestPath : reportParams.dataPath;
+    makeDirSync([appRoot, outputReportPath]);
 
     //---------------------------------------------
     // Get begin group value 
@@ -286,7 +293,10 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
       if (isDebug && methodResults.length) inspector('methodAcmYearReportUpdate.methodResults:', methodResults);
       return methodResults;
     }
-  } else {
+  }
+
+  //--- Run method for (pointID = 0) -> Get array of valid tags 
+  if (pointID === 0) {
     // Get array of valid tags 
     const arrayOfValidTags = getRangeArray(4, 1).map(pointID => getParams4PointID(pointID, acmYearTemplateFileName, paramsPath).acmTagBrowseName);
     // CallBack
@@ -297,6 +307,43 @@ async function methodAcmYearReportUpdate(inputArguments, context, callback) {
     } else {
       const statusCode = 'Good';
       return { statusCode, params: { arrayOfValidTags } };
+    }
+  }
+
+  //--- Run method for (pointID = -1) -> remove report files
+  if (pointID === -1) {
+    // Get report params
+    reportParams = getParams4PointID(Math.abs(pointID), acmYearTemplateFileName, paramsPath);
+
+    // Get opcua tags 
+    const arrayOfValidTags = getRangeArray(4, 1).map(pointID => getParams4PointID(pointID, acmYearTemplateFileName, paramsPath).acmTagBrowseName);
+    const opcuaTags = isTest() ? getOpcuaConfigOptions(id) : getOpcuaTags();
+    const acmTag = opcuaTags.find(t =>  arrayOfValidTags.includes(t.browseName));
+    if (!acmTag) {
+      logger.error(`RunMetod(methodAcmYearReportUpdate): ${chalk.red('ERROR')}. Tag with browseName "${chalk.cyan(reportParams.acmTagBrowseName)}" not found.`);
+      throw new Error(`RunMetod(methodAcmYearReportUpdate): ERROR. Tag with browseName "${reportParams.acmTagBrowseName}" not found.`);
+    }
+    // Get is test
+    const _isTest = reportParams.isTest || isTest() || acmTag.getterParams.isTest;
+    reportParams.isTest = _isTest;
+
+    // Get output report path
+    const outputReportPath = reportParams.isTest ? reportParams.dataTestPath : reportParams.dataPath;
+    // Remove files from report path
+    if (!isUncPath(outputReportPath)) {
+      const filePath = toPathWithPosixSep([appRoot, outputReportPath]);
+      deletedItems = removeItemsSync([`${filePath}/acmYearReport*.xlsx`], { dryRun: false });
+      if (isDebug && deletedItems.length) inspector('removeItemsSync.deletedItems:', deletedItems);
+    }
+
+    // CallBack
+    if (callback) {
+      callMethodResult.outputArguments[0].value = JSON.stringify({ params: { deletedItems } });
+      callback(null, callMethodResult);
+
+    } else {
+      const statusCode = 'Good';
+      return { statusCode, params: { deletedItems } };
     }
   }
 }

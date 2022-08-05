@@ -92,10 +92,10 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     const p2 = saveStoreOpcuaGroupValueToDB(params, dataValue);
 
     // Run update acm year report
-    const p3 = ch_m5UpdateAcmYearReport(params, dataValue);
+    // const p3 = ch_m5UpdateAcmYearReport(params, dataValue);
 
     // Show info
-    Promise.all([p1, p2, p3]).then(results => {
+    Promise.all([p1, p2, 'p3']).then(results => {
 
       if (isDebug && results.length) inspector('saveOpcuaGroupValueToDB.savedValue:', results[0]);
       if (isDebug && results.length) inspector('saveStoreOpcuaGroupValueToDB.savedValue:', results[1]);

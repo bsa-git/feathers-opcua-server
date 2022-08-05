@@ -425,8 +425,6 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
     // Remove opcua store values
     removeResult = await removeOpcuaStoreValues(app);
     if (isDebug && removeResult) inspector('removeOpcuaStoreValues.removeResult:', removeResult);
-
-    // await pause(2000);
   });
 
   it('#12.1: OPC-UA clients: session call method "methodAcmYearTemplateCreate"', async () => {
@@ -654,7 +652,7 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
       }
       assert.ok(statusCode === 'Good', 'OPC-UA clients: session call method "methodAcmDayReportsDataGet"');
     }
-    await pause(1000);
+    // await pause(1000);
   });
 
   //============== RUN COMMAND ====================//

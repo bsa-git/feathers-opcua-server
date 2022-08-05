@@ -551,16 +551,28 @@ const clearDirSync = function (path) {
  * @method removeItemsSync
  * 
  * @param {String | String[]} patterns 
+ * The glob pattern ** matches all children and the parent.
+ * e.g. So this won't work: deleteSync(['public/assets/**', '!public/assets/goat.png']);
+ * e.g. You have to explicitly ignore the parent directories too: deleteSync(['public/assets/**', '!public/assets', '!public/assets/goat.png']);
  * @param {Object} options
+ * e.g. { force: false, dryRun: false, concurrency: Infinity, onProgress: progress => { ... } }
+ * where: 
+ *  - force -> Allow deleting the current working directory and outside.
+ *  - dryRun -> See what would be deleted.
+ *  - concurrency -> Concurrency limit. (1...Infinity)
+ *  - onProgress -> Called after each file or directory is deleted. e.g. Type: (progress: ProgressData) => void 
+ *  ProgressData {totalCount: number, deletedCount: number,	percent: number}
  * @returns {String[]} 
  * e.g. del.sync(['public/assets/**', '!public/assets', '!public/assets/goat.png']);
  */
+// e.g. To delete all subdirectories inside public/, you can do: deleteSync(['public/*/']);
 const removeItemsSync = function (patterns, options = {}) {
   const deletedItems = del.sync(patterns, options);
   if (isDebug && deletedItems.length) inspector('removeItemsSync.deletedItems:', deletedItems);
   if (options.dryRun) {
     if (isDebug && deletedItems.length) inspector('removeItemsSync.Files and directories that would be deleted:', deletedItems);
   }
+  
   return deletedItems;
 };
 
@@ -569,11 +581,22 @@ const removeItemsSync = function (patterns, options = {}) {
  * @async
  * 
  * @param {String | String[]} patterns 
+ * The glob pattern ** matches all children and the parent.
+ * e.g. So this won't work: deleteSync(['public/assets/**', '!public/assets/goat.png']);
+ * e.g. You have to explicitly ignore the parent directories too: deleteSync(['public/assets/**', '!public/assets', '!public/assets/goat.png']);
  * @param {Object} options
+ * e.g. { force: false, dryRun: false, concurrency: Infinity, onProgress: progress => { ... } }
+ * where: 
+ *  - force -> Allow deleting the current working directory and outside.
+ *  - dryRun -> See what would be deleted.
+ *  - concurrency -> Concurrency limit. (1...Infinity)
+ *  - onProgress -> Called after each file or directory is deleted. e.g. Type: (progress: ProgressData) => void 
+ *  ProgressData {totalCount: number, deletedCount: number,	percent: number}
  * @returns {Promise<String[]>} 
  * e.g. const deletedFilePaths = await del(['temp/*.js', '!temp/unicorn.js']);
    e.g. const deletedDirectoryPaths = await del(['temp', 'public']);
  */
+// e.g. To delete all subdirectories inside public/, you can do: await del(['public/*/']);
 const removeItems = async function (patterns, options) {
   const deletedItems = await del(patterns, options);
   if (isDebug && deletedItems.length) inspector('removeItems.deletedItems:', deletedItems);

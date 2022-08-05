@@ -26,6 +26,9 @@ const {
   getEndOfPeriod,
   sortByStringField,
   readJsonFileSync,
+  removeItemsSync,
+  toPathWithPosixSep,
+  isUncPath
 } = require('../lib');
 
 const {
@@ -1260,7 +1263,7 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
       const dataItem = {};
       dataItem['!value'] = storeParam4Remove;
       Object.assign(dataItem, dataItemBrowseNames);
-      if (true && dataItem) inspector('syncHistoryAtStartup.methodAcmDayReportsDataGet.dataItem:', dataItem);
+      if (isDebug && dataItem) inspector('syncHistoryAtStartup.methodAcmDayReportsDataGet.dataItem:', dataItem);
       dataItems.push(dataItem);
     }
 
@@ -1279,8 +1282,14 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
     }
 
   }
+  // Remove files from tmp path
+  if (!isUncPath(methodResultOutputPath)) {
+    const filePath = toPathWithPosixSep([appRoot, methodResultOutputPath]);
+    const deletedItems = removeItemsSync([`${filePath}/*.*`, `!${filePath}/*.xlsx`], { dryRun: false });
+    if (isDebug && deletedItems.length) inspector('removeItemsSync.deletedItems:', deletedItems);
+  }
   // Get sync result
-  const syncResult = { savedValuesCount, removedValuesCount, methodResultOutputPath };
+  const syncResult = { savedValuesCount, removedValuesCount };
   if (isDebug && dataItems) console.log(`syncHistoryAtStartup.syncResult: ${syncResult}`);
   return syncResult;
 };
@@ -1295,11 +1304,23 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
  * e.g. {"statusCode": "Good", "outputArguments": { "reportYear": 2022, ... }}
  */
 const syncReportAtStartup = async function (app, opcuaTags, methodName) {
-  let methodResult = null, dataItems = [];
+  let methodResult = null, dataItems = [], deletedReports;
   let inputArgument, inputArgument2, inputArguments;
   //-------------------------------------------------------------
 
-  // Get opcua array valid group store tags for pointID = 0;
+  // Remove report files for (pointID = -1)
+  inputArgument = { pointID: -1 };
+  inputArgument = { dataType: DataType.String, value: JSON.stringify(inputArgument) };
+
+  inputArgument2 = { dataType: DataType.String, value: JSON.stringify(dataItems) };
+  inputArguments = [];
+  inputArguments.push([inputArgument, inputArgument2]);
+
+  methodResult = await opcuaMethods[methodName](inputArguments);
+  deletedReports = methodResult.params.deletedItems;
+  if (isDebug && deletedReports.length) inspector('syncReportAtStartup.Remove report files for (pointID = -1).deletedItems:', deletedReports);
+  
+  // Get opcua array valid group store tags for (pointID = 0)
   inputArgument = { pointID: 0 };
   inputArgument = { dataType: DataType.String, value: JSON.stringify(inputArgument) };
 
@@ -1310,6 +1331,8 @@ const syncReportAtStartup = async function (app, opcuaTags, methodName) {
   methodResult = await opcuaMethods[methodName](inputArguments);
   const arrayOfValidTags = methodResult.params.arrayOfValidTags;
   if (isDebug && arrayOfValidTags.length) inspector('syncReportAtStartup.arrayOfValidTags:', arrayOfValidTags);
+  
+  // Get valid opcua group tags
   const opcuaGroupTags = opcuaTags.filter(t => t.group && t.store && arrayOfValidTags.includes(t.browseName));
   if (isDebug && opcuaGroupTags.length) inspector('syncReportAtStartup.opcuaGroupTags:', opcuaGroupTags);
 

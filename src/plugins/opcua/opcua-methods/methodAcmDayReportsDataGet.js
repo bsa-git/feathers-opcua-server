@@ -98,6 +98,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
     if (context && context.params !== undefined) argParams = context.params;
   }
 
+  // Run method for pointID > 0
   if (pointID > 0) {
     // Get params for pointID
     params = getParams4PointID(pointID, acmDayReportFileName, paramsPath, argParams);
@@ -270,7 +271,9 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
       const statusCode = 'Good';
       return params.isSaveOutputFile ? { statusCode, resultPath, params, storeParams4Remove } : { statusCode, params, dataItems, storeParams4Remove };
     }
-  } else {
+  } 
+  // Run method for pointID = 0
+  if (pointID === 0) {
     // Get array of valid tags 
     const arrayOfValidTags = getRangeArray(4, 1).map(pointID => getParams4PointID(pointID, acmDayReportFileName, paramsPath).acmTagBrowseName);
     // CallBack

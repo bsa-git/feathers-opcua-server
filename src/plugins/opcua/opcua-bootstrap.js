@@ -65,8 +65,7 @@ const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) 
 module.exports = async function opcuaBootstrap(app) {
   let service = null, opcuaServer = null, opcuaClient = null;
   let integrityResult, removeResult, bootstrapParams = null;
-  // let methodResult = null, dataItems = [], savedValues = [], savedValuesCount = 0;
-  // let methodResultOutputPath;
+  let methodName;
   //--------------------------------------------------------
 
   // Determine if command line argument exists for seeding data
@@ -92,45 +91,45 @@ module.exports = async function opcuaBootstrap(app) {
 
     // Save opcua tags to local DB
     let saveResult = await saveOpcuaTags(app, opcuaTags, false);
-    logger.info('opcuaBootstrap.saveOpcuaTags.localDB:', saveResult);
+    logger.info('opcuaBootstrap.saveOpcuaTags.localDB: OK.', saveResult);
     // Integrity check opcua data
     integrityResult = await integrityCheckOpcua(app, false);
     if (integrityResult) {
-      logger.info('Result integrity check opcua.localDB: OK');
+      logger.info('Result integrity check opcua.localDB: OK.');
     } else {
-      logger.error('Result integrity check opcua.localDB: ERR');
+      logger.error('Result integrity check opcua.localDB: ERR.');
     }
     if (isUpdateOpcuaToDB()) {
       removeResult = await removeOpcuaGroupValues(app);
-      if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: ${removeResult}`);
+      if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: OK. ${removeResult}`);
     }
 
     if (storeChangesBrowseNames.length) {
       const saveStoreResults = await saveStoreParameterChanges(app, storeChangesBrowseNames, opcuaTags);
       if (isDebug && saveStoreResults.length) inspector('saveStoreParameterChanges.saveStoreResults:', saveStoreResults);
-      logger.info(`opcuaBootstrap.saveStoreParameterChanges.localDB: ${saveStoreResults.length}`);
+      logger.info(`opcuaBootstrap.saveStoreParameterChanges.localDB: OK. ${saveStoreResults.length}`);
     }
 
     // Remove opcua store values
     if (bootstrapParams && bootstrapParams.clearHistoryAtStartup) {
       removeResult = await removeOpcuaStoreValues(app);
-      if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.localDB: ${removeResult}`);
+      if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.localDB: OK. ${removeResult}`);
     }
 
     // Sync opcua store at startup
     if (bootstrapParams && bootstrapParams.syncHistoryAtStartup) {
-      const syncResult = await syncHistoryAtStartup(app, opcuaTags, 'methodAcmDayReportsDataGet');
-      // Remove files from dir
-      removeFilesFromDirSync([appRoot, syncResult.methodResultOutputPath]);
-      logger.info(`opcuaBootstrap.syncHistoryAtStartup.localDB: {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
-    }// syncReportAtStartup
+      methodName = bootstrapParams.syncHistoryAtStartup;
+      const syncResult = await syncHistoryAtStartup(app, opcuaTags, methodName);
+      if (isDebug && syncResult) inspector('opcuaBootstrap.syncHistoryAtStartup.syncResult:', syncResult);
+      logger.info(`opcuaBootstrap.syncHistoryAtStartup.localDB: OK. {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
+    }
 
     // Sync opcua store values
     if (bootstrapParams && bootstrapParams.syncReportAtStartup) {
-      const syncResult = await syncReportAtStartup(app, opcuaTags, 'methodAcmYearReportUpdate');
-      // Remove files from dir
-      // removeFilesFromDirSync([appRoot, syncResult.methodResultOutputPath]);
-      logger.info('opcuaBootstrap.syncReportAtStartup.localDB: OK');
+      methodName = bootstrapParams.syncReportAtStartup;
+      const syncResult = await syncReportAtStartup(app, opcuaTags, methodName);
+      if (isDebug && syncResult) inspector('opcuaBootstrap.syncReportAtStartup.syncResult:', syncResult);
+      logger.info('opcuaBootstrap.syncReportAtStartup.localDB: OK.');
     }
 
     const isRemote = isRemoteOpcuaToDB();
@@ -140,28 +139,28 @@ module.exports = async function opcuaBootstrap(app) {
       if (appRestClient) {
         // Save opcua tags to remote DB
         saveResult = await saveOpcuaTags(appRestClient, opcuaTags, isRemote);
-        logger.info('opcuaBootstrap.saveOpcuaTags.remoteDB:', saveResult);
+        logger.info('opcuaBootstrap.saveOpcuaTags.remoteDB: OK.', saveResult);
         // Integrity check opcua data
         integrityResult = await integrityCheckOpcua(appRestClient, isRemote);
         if (integrityResult) {
-          logger.info('Result integrity check opcua.remoteDB: OK');
+          logger.info('Result integrity check opcua.remoteDB: OK.');
         } else {
-          logger.error('Result integrity check opcua.remoteDB: ERR');
+          logger.error('Result integrity check opcua.remoteDB: ERR.');
         }
         // Remove opcua group values
         if (isUpdateOpcuaToDB()) {
           removeResult = await removeOpcuaGroupValues(appRestClient);
-          if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: ${removeResult}`);
+          if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.remoteDB: OK. ${removeResult}`);
         }
 
         // Remove opcua remote store values
         if (bootstrapParams && bootstrapParams.clearHistoryAtStartup) {
           removeResult = await removeOpcuaStoreValues(appRestClient);
-          if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.remoteDB: ${removeResult}`);
+          if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.remoteDB: OK. ${removeResult}`);
         }
         // Update remote store from local store
         const updateStores = await updateRemoteFromLocalStore(app, appRestClient, opcuaTags);
-        logger.info(`opcuaBootstrap.updateRemoteFromLocalStore.updateStores: ${updateStores}`);
+        logger.info(`opcuaBootstrap.updateRemoteFromLocalStore.remoteDB: OK. ${updateStores}`);
       }
     }
   }
