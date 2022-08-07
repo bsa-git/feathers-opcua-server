@@ -318,6 +318,8 @@ const getEndOfPeriod = function (dateTime, period) {
   endPeriod = moment.utc(startPeriod).subtract(1, 'seconds');
 
   do {
+    const _endPeriod = endPeriod.format('YYYY-MM-DDTHH:mm:ss');
+    if (isDebug && _endPeriod) console.log('util.getEndOfPeriod._endPeriod:', _endPeriod);
     startList.push(endPeriod.format('YYYY-MM-DDTHH:mm:ss'));
     condition = (_dateTime > endPeriod.format('YYYY-MM-DDTHH:mm:ss'));
     startPeriod = moment.utc(startPeriod).add(..._period).format('YYYY-MM-DDTHH:mm:ss');
