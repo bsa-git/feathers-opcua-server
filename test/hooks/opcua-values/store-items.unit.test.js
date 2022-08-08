@@ -6,6 +6,7 @@ const storeItems = require('../../../src/services/opcua-values/hooks/store-items
 const {
   inspector,
   appRoot,
+  cloneObject,
   checkServicesRegistered,
   saveFakesToServices,
   fakeNormalize
@@ -17,7 +18,7 @@ const debug = require('debug')('app:store-items.unit.test');
 const isDebug = false;
 
 // Get generated fake data
-const fakes = fakeNormalize();
+const fakes = cloneObject(fakeNormalize());
 const opcuaTags = fakes['opcuaTags'];
 const opcuaValues = fakes['opcuaValues'];
 
@@ -85,14 +86,14 @@ describe('Test opcua-values/hooks/store-items.unit.test.js', () => {
     assert(typeof storeItems === 'function', 'Hook is not a function.');
   });
 
-  it('#3: Test "store-items" hook', async () => {
+  it('#3: Test "store-items" hook. Add new item.', async () => {
     // Get store tag 
-    const storeTag = opcuaTags.find(t => !!t.store);
-    if (isDebug && storeTag) inspector('Test "store-items" hook.storeTag:', storeTag);
-    if (storeTag) {
-      const browseName = storeTag.browseName;
+    const groupTag = opcuaTags.find(t => !!t.store && t.group);
+    if (isDebug && groupTag) inspector('Test "store-items" hook.groupTag:', groupTag);
+    if (groupTag) {
+      const groupBrowseName = groupTag.browseName;
       // Find group store tags
-      const storeTags = opcuaTags.filter(t => t.ownerGroup === browseName);
+      const storeTags = opcuaTags.filter(t => t.ownerGroup === groupBrowseName);
       if (isDebug && storeTags.length) inspector('Test "store-items" hook.storeTags:', storeTags);
       for (let index = 0; index < storeTags.length; index++) {
         const storeTag = storeTags[index];
@@ -127,8 +128,62 @@ describe('Test opcua-values/hooks/store-items.unit.test.js', () => {
         if (isDebug && contextBefore.data) inspector('Get contextBefore.data:', loOmit(contextBefore, ['app', 'service']));
         const length1 = contextBefore.data.values.length;
         const length2 = storeValue.values.length;
-        assert.ok(length1 > length2, `length1 must be greater than length2  - (${length1}) > (${length2})`);
+        assert.ok(length1 > length2, `Test "store-items" hook. Add new item. Length1 must be greater than length2  - (${length1}) > (${length2})`);
       }
+    } else {
+      assert(false, 'Test "store-items" hook. Add new item.');
+    }
+  });
+
+  it('#4: Test "store-items" hook. Update existing item.', async () => {
+    // Get store tag 
+    const groupTag = opcuaTags.find(t => !!t.store && t.group);
+    if (isDebug && groupTag) inspector('Test "store-items" hook.groupTag:', groupTag);
+    if (groupTag) {
+      const groupBrowseName = groupTag.browseName;
+      // Find group store tags
+      const storeTags = opcuaTags.filter(t => t.ownerGroup === groupBrowseName);
+      if (isDebug && storeTags.length) inspector('Test "store-items" hook.storeTags:', storeTags);
+      for (let index = 0; index < storeTags.length; index++) {
+        const storeTag = storeTags[index];
+        const idField = 'id' in storeTag ? 'id' : '_id';
+        const tagId = storeTag[idField];
+        const unitsRange = storeTag.valueParams.engineeringUnitsRange;
+        const storeTagValue = (unitsRange.high - unitsRange.low) / 2;
+        // Get store value 
+        const storeOpcuaValue = opcuaValues.find(v => (v.tagId === storeTag[idField]) && (v.storeStart !== undefined));
+        if (isDebug && storeOpcuaValue) inspector('Test "store-items" hook.storeValue:', storeOpcuaValue);
+        const storeLastValue = storeOpcuaValue.values[0];
+        // Set contextBefore properties 
+        const service = app.service('opcua-values');
+        contextBefore.app = app;
+        contextBefore.path = 'opcua-values';
+        contextBefore.method = 'patch';
+        contextBefore.service = service;
+        contextBefore.id = storeOpcuaValue[idField];
+        contextBefore.data = {
+          tagId,
+          tagName: storeTag.browseName,
+          storeStart: storeLastValue.key,
+          storeEnd: storeLastValue.key,
+          values: [
+            {
+              key: storeLastValue.key,
+              value: storeTagValue
+            }
+          ]
+        };
+        // Run "storeItems" hook  
+        await storeItems()(contextBefore);
+        if (isDebug && contextBefore.data) inspector('Get contextBefore.data:', loOmit(contextBefore, ['app', 'service']));
+        const length1 = contextBefore.data.values.length;
+        const length2 = storeOpcuaValue.values.length;
+        const contextBeforeValue = contextBefore.data.values[0].value;
+        const storeOpcuaLastValue = storeOpcuaValue.values[0].value;
+        assert.ok(length1 === length2 && contextBeforeValue !== storeOpcuaLastValue, `Test "store-items" hook. Update existing item. Length1 must be greater than length2  - (${length1}) > (${length2})`);
+      }
+    } else {
+      assert(false, 'Test "store-items" hook. Update existing item.');
     }
   });
 });

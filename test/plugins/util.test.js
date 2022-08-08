@@ -139,7 +139,7 @@ describe('<<=== Util: (util.test) ===>>', () => {
     const dateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
     const startEndOfPeriod = getStartEndOfPeriod(dateTime, period);
     if (true && startEndOfPeriod) debug(`util.getStartEndOfPeriod([${period}]) to forward:`, startEndOfPeriod, ' for dateTime:', dateTime);
-    assert.ok(dateTime <= startEndOfPeriod[1], `util.getStartEndOfPeriod to forward: '${getStartEndOfPeriod}' for dateTime: ${dateTime}`);
+    assert.ok(dateTime <= startEndOfPeriod[1], `util.getStartEndOfPeriod to forward: '${startEndOfPeriod}' for dateTime: ${dateTime}`);
   });
 
   it('#6: util.getStartEndOfPeriod to back', () => {
@@ -153,7 +153,7 @@ describe('<<=== Util: (util.test) ===>>', () => {
   it('#7: util.getRangeStartEndOfPeriod to forward', () => {
     const period = [5, 'years'];
     const unit = 'years';
-    const dateTime = moment.utc().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss');
+    const dateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
     const range = getRangeStartEndOfPeriod(dateTime, period, unit);
     if (true && range) debug(`util.getRangeStartEndOfPeriod([${period}]; unit: '${unit}') to forward:`, range, ' for dateTime:', dateTime);
     assert.ok(range.length, `util.getRangeStartEndOfPeriod to forward: '${range}' for dateTime: ${dateTime}`);
@@ -162,10 +162,10 @@ describe('<<=== Util: (util.test) ===>>', () => {
   it('#8: util.getRangeStartEndOfPeriod to back', () => {
     const period = [-5, 'years'];
     const unit = 'years';
-    const startDateTime = moment.utc().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss');
-    const range = getRangeStartEndOfPeriod(startDateTime, period, unit);
-    if (true && range) debug(`util.getRangeStartEndOfPeriod([${period}]; unit: '${unit}') to back:`, range, ' for dateTime:', startDateTime);
-    assert.ok(range.length, `util.getRangeStartEndOfPeriod to back: '${range}' for dateTime: ${startDateTime}`);
+    const dateTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+    const range = getRangeStartEndOfPeriod(dateTime, period, unit);
+    if (true && range) debug(`util.getRangeStartEndOfPeriod([${period}]; unit: '${unit}') to back:`, range, ' for dateTime:', dateTime);
+    assert.ok(range.length, `util.getRangeStartEndOfPeriod to back: '${range}' for dateTime: ${dateTime}`);
   });
 
   it('#9: util.isDeepEqual', () => {
