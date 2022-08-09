@@ -1273,7 +1273,7 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
     const storeParams4Remove = methodResult.storeParams4Remove;
     for (let index2 = 0; index2 < storeParams4Remove.length; index2++) {
       const storeParam4Remove = storeParams4Remove[index2];
-      storeParam4Remove.actions = ['remove'];
+      storeParam4Remove.action = 'remove';
       const dataItem = {};
       dataItem['!value'] = storeParam4Remove;
       Object.assign(dataItem, dataItemBrowseNames);
@@ -1286,7 +1286,8 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
       const dataItem = dataItems[index2];
       if (isDebug && dataItem) inspector('syncHistoryAtStartup.dataItem:', dataItem);
       savedValues = await saveStoreOpcuaGroupValue(app, groupBrowseName, dataItem, true);
-      const isRemoveAction = dataItem['!value'].actions && dataItem['!value'].actions.includes('remove');
+      await pause(10);
+      const isRemoveAction = dataItem['!value'].action ==='remove';
       if (isRemoveAction) {
         removedValuesCount += loSize(dataItem) - 1;
       } else {

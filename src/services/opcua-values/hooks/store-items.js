@@ -29,10 +29,10 @@ module.exports = function (options = {}) {
       const contextId = hh.getContextId();
       if (contextId) {
         // Set hash value
-        if (record.opcuaData[0].values && record.opcuaData[0].values.length) {
-          valueHash = objectHash(record.opcuaData[0].values);
-        } else {
+        if (record.opcuaData[0].value !== undefined) {
           valueHash = objectHash(record.opcuaData[0].value);
+        } else {
+          valueHash = objectHash(record.opcuaData[0].values);          
         }
         if (record.opcuaData[0].hash && record.opcuaData[0].hash !== valueHash) {
           throw new Error(`A "opcua-values" service have not a record with record.values#value.hash === ${valueHash}`);
@@ -47,18 +47,17 @@ module.exports = function (options = {}) {
         const storeStart = record.storeStart;
         // Get values
         values = storeValue.opcuaData.filter(v => v.key !== storeStart);
-        // if record.values.items -> empty [] then -> not loConcat(values, record.values)
-        
-        // if(record.values.items && record.values.items.length > 0){
-        //   values = loConcat(values, record.values);
-        // } else {
-        //   if (isDebug && record.values) console.log('hook.store-items.addItems.recordValues:', storeValue.values.length);
-        // }
-
-        values = loConcat(values, record.opcuaData);
+        const isRemove = record.opcuaData[0].params && record.opcuaData[0].params.action === 'remove';
+        if(!isRemove){
+          values = loConcat(values, record.opcuaData);
+        } else {
+          if (isDebug && isRemove) console.log('hook.store-items.addItems.opcuaData.params:', record.opcuaData[0].params);
+        }
 
         // Ascending sort by string field 
         values = sortByStringField(values, 'key', true);
+        if (isDebug && values.length) console.log('hook.store-items.addItems.values.length:', values.length);
+        
         // Set range of stored values
         record.storeStart = values[0].key;
         record.storeEnd = values[values.length - 1].key;
