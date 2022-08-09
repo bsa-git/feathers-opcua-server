@@ -112,8 +112,8 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     const cb = function (data) {
       const result = {};
       //-----------------------
-      if (data.length && data[0].values.length) {
-        const values = data[0].values;
+      if (data.length && data[0].opcuaData.length) {
+        const values = data[0].opcuaData;
         values.forEach(value => {
           result[value.key] = value.value;
         });
@@ -194,7 +194,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     createdItem = await createItem(app, 'opcua-values', {
       tagId: dbNullIdValue(),
       tagName: 'NoTagName',
-      values: [
+      opcuaData: [
         {
           key: 'NoTagName',
           value: 6.123245
@@ -283,7 +283,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
           tagName: storeValue.tagName,
           storeStart: '2022-01-03',
           storeEnd: '2022-01-03',
-          values: [
+          opcuaData: [
             {
               key: '2022-01-03',
               value: storeTagValue
@@ -302,8 +302,8 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
         const opcuaValue = opcuaValues.find(v => v[idField] === id);
 
-        const length1 = storeValue.values.length;
-        const length2 = opcuaValue.values.length;
+        const length1 = storeValue.opcuaData.length;
+        const length2 = opcuaValue.opcuaData.length;
         assert.ok(length1 > length2, `length1 must be greater than length2  - (${length1}) > (${length2})`);
       }
     }
@@ -347,7 +347,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
           tagName: storeValue.tagName,
           storeStart: '2022-01-03',
           storeEnd: '2022-01-03',
-          values: [
+          opcuaData: [
             {
               key: '2022-01-03',
               value: storeTagValue
@@ -367,8 +367,8 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
         const opcuaValue = opcuaValues.find(v => (v.tagName === storeTag.browseName) && (v.storeStart !== undefined));
         if (isDebug && opcuaValue) inspector('Test update remote store from local store.opcuaValue:', opcuaValue);
         
-        const length1 = storeValue.values.length;
-        const length2 = opcuaValue.values.length;
+        const length1 = storeValue.opcuaData.length;
+        const length2 = opcuaValue.opcuaData.length;
         assert.ok(length1 > length2, `length1 must be greater than length2  - (${length1}) > (${length2})`);
 
         // Update remote store from local store

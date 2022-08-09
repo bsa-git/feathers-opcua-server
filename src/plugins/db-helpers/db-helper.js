@@ -386,7 +386,7 @@ const getStoreParams4Data = async function (app, groupBrowseNames) {
  * @returns {Object}
  */
 const saveOpcuaGroupValue = async function (app, groupBrowseName, value) {
-  let opcuaValue = null, opcuaValues = [];
+  let opcuaValue = null, opcuaValueItem, opcuaValues = [];
   let savedValue = null;
   //----------------------------------------------------------
 
@@ -412,12 +412,19 @@ const saveOpcuaGroupValue = async function (app, groupBrowseName, value) {
         if (value === null) {
           value = getInt(value);
         }
-        opcuaValues.push(Array.isArray(value) ? opcuaValue['!value'] ? { key, items: value, value: opcuaValue['!value'] } : { key, items: value } : { key, value });
+        opcuaValueItem = { key };
+        if (opcuaValue['!value']) opcuaValueItem.params = opcuaValue['!value'];
+        if (Array.isArray(value)) {
+          opcuaValueItem.values = value;
+        } else {
+          opcuaValueItem.value = value;
+        }
+        opcuaValues.push(opcuaValueItem);
       }
     });
     const data = {
       tagName: groupTag.browseName,
-      values: opcuaValues
+      opcuaData: opcuaValues
     };
 
     if (isDebug && data) inspector('db-helper.saveOpcuaGroupValue.data:', data);
@@ -490,7 +497,7 @@ const saveOpcuaValues = async function (app, browseName, data) {
  * @returns {Object[]}
  */
 const saveStoreOpcuaGroupValue = async function (app, groupBrowseName, value, changeStore = false) {
-  let opcuaValue = null, savedValues = [];
+  let opcuaValue = null, opcuaValueItem, savedValues = [];
   let savedValue = null;
   //----------------------------------------------------------
 
@@ -525,7 +532,14 @@ const saveStoreOpcuaGroupValue = async function (app, groupBrowseName, value, ch
           storeValue = getInt(storeValue);
         }
         // Get values
-        opcuaValues.push(Array.isArray(storeValue) ? { key, items: storeValue, value: opcuaValue['!value'] } : { key, value: storeValue });
+        opcuaValueItem = { key };
+        opcuaValueItem.params = opcuaValue['!value'];
+        if (Array.isArray(storeValue)) {
+          opcuaValueItem.values = storeValue;
+        } else {
+          opcuaValueItem.value = storeValue;
+        }
+        opcuaValues.push(opcuaValueItem);
 
         // Get data
         const data = {
@@ -533,7 +547,7 @@ const saveStoreOpcuaGroupValue = async function (app, groupBrowseName, value, ch
           tagName: storeBrowseName,
           storeStart: key,
           storeEnd: key,
-          values: opcuaValues
+          opcuaData: opcuaValues
         };
 
         // Save opcua values to local store
@@ -932,15 +946,15 @@ const getTagValuesFromStores = async function (app, storeBrowseNames) {
     }));
     stores4TagName = sortByStringField(stores4TagName, 'storeStart', true);
     for (let index2 = 0; index2 < stores4TagName.length; index2++) {
-      const store4TagName = stores4TagName[index2].values;
+      const store4TagName = stores4TagName[index2].opcuaData;
       for (let index3 = 0; index3 < store4TagName.length; index3++) {
         const itemStore4TagName = store4TagName[index3];
-        const value = (itemStore4TagName.items && itemStore4TagName.items.length) ? itemStore4TagName.items : itemStore4TagName.value;
+        const value = (itemStore4TagName.values && itemStore4TagName.values.length) ? itemStore4TagName.values : itemStore4TagName.value;
         const dateTime = itemStore4TagName.key;
         if (!dateTimeList.includes(dateTime)) dateTimeList.push(dateTime);
 
         const storeTagValue = {};
-        storeTagValue['!value'] = (itemStore4TagName.items && itemStore4TagName.items.length) ? itemStore4TagName.value : { dateTime };
+        storeTagValue['!value'] = itemStore4TagName.params;
         storeTagValue[tagName] = value;
         storeTagList.push(storeTagValue);
       }
@@ -989,12 +1003,12 @@ const updateRemoteFromLocalStore = async function (app, appRestClient, opcuaTags
       let findedStoreValues = await findItems(app, 'opcua-values', {
         tagName: storeBrowseName,
         storeStart: { $ne: undefined },
-        $select: ['tagName', 'store', 'storeStart', 'storeEnd', 'values']
+        $select: ['tagName', 'store', 'storeStart', 'storeEnd', 'opcuaData']
       });
       findedStoreValues = findedStoreValues.map(v => {
         v = loOmit(v, [idField]);
         v.tagId = tagId;
-        v.values = v.values.map(item => {
+        v.opcuaData = v.opcuaData.map(item => {
           item = loOmit(item, [idField]);
           return item;
         });
@@ -1243,7 +1257,7 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
     methodResult = await opcuaMethods[methodName]([{ value: pointID }], { storeParams });
     if (isDebug && methodResult) inspector('syncHistoryAtStartup.methodAcmDayReportsDataGet.methodResult:', methodResult);
     statusCode = methodResult.statusCode;
-    
+
     // Get dataItems
     if (methodResult.params.isSaveOutputFile) {
       let outputFile = methodResult.params.outputFile;
@@ -1319,7 +1333,7 @@ const syncReportAtStartup = async function (app, opcuaTags, methodName) {
   methodResult = await opcuaMethods[methodName](inputArguments);
   deletedReports = methodResult.params.deletedItems;
   if (isDebug && deletedReports.length) inspector('syncReportAtStartup.Remove report files for (pointID = -1).deletedItems:', deletedReports);
-  
+
   // Get opcua array valid group store tags for (pointID = 0)
   inputArgument = { pointID: 0 };
   inputArgument = { dataType: DataType.String, value: JSON.stringify(inputArgument) };
@@ -1331,7 +1345,7 @@ const syncReportAtStartup = async function (app, opcuaTags, methodName) {
   methodResult = await opcuaMethods[methodName](inputArguments);
   const arrayOfValidTags = methodResult.params.arrayOfValidTags;
   if (isDebug && arrayOfValidTags.length) inspector('syncReportAtStartup.arrayOfValidTags:', arrayOfValidTags);
-  
+
   // Get valid opcua group tags
   const opcuaGroupTags = opcuaTags.filter(t => t.group && t.store && arrayOfValidTags.includes(t.browseName));
   if (isDebug && opcuaGroupTags.length) inspector('syncReportAtStartup.opcuaGroupTags:', opcuaGroupTags);

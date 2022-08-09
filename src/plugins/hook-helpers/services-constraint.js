@@ -150,11 +150,11 @@ module.exports = async function servicesConstraint(context) {
       // Set hashes for store
       if (record.storeStart) {
         let valueHashes = [], period;
-        for (let index = 0; index < record.values.length; index++) {
-          const value = record.values[index];
+        for (let index = 0; index < record.opcuaData.length; index++) {
+          const value = record.opcuaData[index];
           let valueHash = '';
-          if (value.items && value.items.length) {
-            valueHash = objectHash(value.items);
+          if (value.values && value.values.length) {
+            valueHash = objectHash(value.values);
           } else {
             valueHash = objectHash(value.value);
           }
@@ -186,6 +186,7 @@ module.exports = async function servicesConstraint(context) {
             }
           }
         }
+        if (isDebug && record) inspector('"hook."opcua-values.create.before".record:', record);  
       }
       if (isDebug && record) inspector('"hook."opcua-values.create.before".record:', record);
     };
@@ -301,6 +302,7 @@ module.exports = async function servicesConstraint(context) {
         tagName: record.tagName,
         storeStart: record.storeStart,
         storeEnd: record.storeEnd,
+        store: record.store,
         maxValuesStorage
       });
       await hookHelper.restrictMaxRows('opcua-values', maxValuesStorage, { tagId });

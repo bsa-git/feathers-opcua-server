@@ -20,7 +20,7 @@ let base = merge({},
       storeStart: { type: 'string' },
       storeEnd: { type: 'string' },
       store: { type: 'object' },
-      values: {
+      opcuaData: {
         type: 'array',
         items: {
           type: 'object',
@@ -28,7 +28,8 @@ let base = merge({},
             key: {type: 'string'},
             hash: {type: 'string'},
             value: {type: ['string', 'number', 'integer', 'boolean', 'object']},
-            items: { type: 'array', items: { type: ['string', 'number', 'integer', 'boolean', 'object', 'array'] } }
+            values: { type: 'array', items: { type: ['string', 'number', 'integer', 'boolean', 'object', 'array'] } },
+            params: { type: 'object' }
           }
         }
       }

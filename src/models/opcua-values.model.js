@@ -30,11 +30,12 @@ module.exports = function (app) {
       storeStart: String,
       storeEnd: String,
       store: Schema.Types.Mixed,
-      values: [{
+      opcuaData: [{
         key: String,
         hash: String,
         value: Schema.Types.Mixed,
-        items: [Schema.Types.Mixed]
+        values: [Schema.Types.Mixed],
+        params: Schema.Types.Mixed
       }]
     }, {
       timestamps: true

@@ -17,8 +17,8 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
     }
 
     // Throw an error if we didn't get a value
-    if (!data.values || data.values.length === 0) {
-      throw new Error('A `opcua-value` must have a values');
+    if (!data.opcuaData || data.opcuaData.length === 0) {
+      throw new Error('A `opcua-value` must have a opcuaData');
     }
 
     // Update the original data (so that people can't submit additional stuff)
