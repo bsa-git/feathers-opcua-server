@@ -134,66 +134,9 @@ module.exports = async function servicesConstraint(context) {
     await hookHelper.forEachRecords(validate);
     break;
   case 'opcua-values.create.before':
-    normalize = async (record) => {
-      if (isDebug && record) inspector('"hook."opcua-values.create.before".record:', record);
-      // Set tagId
-      if (!record.tagId) {
-        const servicePath = 'opcua-tags';
-        const tags = await hookHelper.findItems(servicePath, { browseName: record.tagName });
-        if (tags.length) {
-          const tag = tags[0];
-          const idField = HookHelper.getIdField(tag);
-          const tagId = tag[idField].toString();
-          record.tagId = tagId;
-        }
-      }
-      // Set hashes for store
-      if (record.storeStart) {
-        let valueHashes = [], period;
-        for (let index = 0; index < record.opcuaData.length; index++) {
-          const value = record.opcuaData[index];
-          let valueHash = '';
-          if (value.values && value.values.length) {
-            valueHash = objectHash(value.values);
-          } else {
-            valueHash = objectHash(value.value);
-          }
-          if (value.hash && value.hash !== valueHash) {
-            throw new errors.BadRequest(`A "opcua-values" service have record.values[0].hash('${value.hash}') !== '${valueHash}'`);
-          } else {
-            if (!value.hash) value.hash = valueHash;
-            valueHashes.push(value.hash);
-          }
-        }
-
-        if (record.store && record.store.hash !== objectHash(valueHashes)) {
-          throw new errors.BadRequest(`A "opcua-values" service have record.store.hash('${record.store.hash}') !== '${objectHash(valueHashes)}'`);
-        } else {
-          if ((record.store && !record.store.period) || !record.store) {
-            period = await getStorePeriod(hookHelper.app, record.tagId, record.storeStart);
-            if (!record.store) {
-              record.store = { count: valueHashes.length, period, hash: objectHash(valueHashes) };
-            } else {
-              record.store.period = period;
-            }
-          }
-
-          if (record.store && record.store.period) {
-            period = await getStorePeriod(hookHelper.app, record.tagId, record.storeStart);
-            const periodHash = objectHash(period);
-            if (objectHash(record.store.period) !== periodHash) {
-              throw new errors.BadRequest(`A "opcua-values" service have record.store.period([${record.store.period}]) !== [${period}]`);
-            }
-          }
-        }
-        if (isDebug && record) inspector('"hook."opcua-values.create.before".record:', record);  
-      }
-      if (isDebug && record) inspector('"hook."opcua-values.create.before".record:', record);
-    };
     validate = async (record) => {
       if (record.tagId && record.tagId !== dbNullIdValue()) await hookHelper.validateRelationship('opcua-tags', record.tagId);
     };
-    await hookHelper.forEachRecords(normalize);
     await hookHelper.forEachRecords(validate);
     break;
   case 'users.create.after':

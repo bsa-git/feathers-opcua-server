@@ -407,7 +407,6 @@ const saveOpcuaGroupValue = async function (app, groupBrowseName, value) {
     loForEach(opcuaValue, (value, key) => {
       const findedKey = groupTagItems.find(item => (item.browseName === key) || (item.aliasName === key));
       if (findedKey) {
-        const tagDataType = findedKey.dataType;
         key = findedKey.browseName;
         if (value === null) {
           value = getInt(value);
@@ -543,7 +542,6 @@ const saveStoreOpcuaGroupValue = async function (app, groupBrowseName, value, ch
 
         // Get data
         const data = {
-          // tagId: tagId.toString(),
           tagName: storeBrowseName,
           storeStart: key,
           storeEnd: key,
@@ -583,15 +581,14 @@ const saveStoreOpcuaGroupValue = async function (app, groupBrowseName, value, ch
           tagName: 'CH_M51_ACM::23N2O:23QN2O',
           storeStart: '2022-01-01',
           storeEnd: '2022-01-01',
-          values: [
+          opcuaData: [
             { key: '2022-01-01', items: [334,...,1997], value: { dateTime: '2022-01-01' } }
           ]
         };
   @param {Object} store 
  * e.g. store: {
         numberOfValuesInDoc: [1, 'years'],
-        numberOfDocsForTag: [5, 'years'],
-        idField: '_id'
+        numberOfDocsForTag: [5, 'years']
       }      
  * @returns {Object}
  */

@@ -204,7 +204,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
     for (let index = 0; index < dirList.length; index++) {
 
       const xlsPath = isString(dirList[index]) ? dirList[index] : dirList[index].filePath;
-      const updatedAt = isString(dirList[index]) ? '' : dirList[index].fileStat.updatedAt;// getPathBasename
+      const updatedAt = isString(dirList[index]) ? '' : dirList[index].fileStat.updatedAt;
       const fileName = isString(dirList[index]) ? getPathBasename(dirList[index]) : getPathBasename(dirList[index].filePath);
 
       if (!doesFileExist(xlsPath)) {

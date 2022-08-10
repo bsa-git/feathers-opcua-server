@@ -49,7 +49,7 @@ let moduleExports = {
 
 moduleExports.before.find = loConcat(moduleExports.before.find, authorizeNormalize, authorizeHook);
 moduleExports.before.get = loConcat(moduleExports.before.get, authorizeNormalize, authorizeHook);
-moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create, authorizeNormalize, authorizeHook);
+moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create, authorizeNormalize, authorizeHook, storeItems());
 moduleExports.before.update = loConcat([validateUpdate()], moduleExports.before.update, authorizeNormalize, authorizeHook);
 moduleExports.before.patch = loConcat([validatePatch()], moduleExports.before.patch, authorizeNormalize, authorizeHook, storeItems());
 moduleExports.before.remove = loConcat(moduleExports.before.remove, authorizeNormalize, authorizeHook);
