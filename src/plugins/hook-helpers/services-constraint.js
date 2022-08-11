@@ -134,9 +134,25 @@ module.exports = async function servicesConstraint(context) {
     await hookHelper.forEachRecords(validate);
     break;
   case 'opcua-values.create.before':
+    normalize = async (record) => {
+      if (isDebug && record) inspector('"hook."opcua-values.create.before".record:', record);
+      // Set tagId
+      if (!record.tagId) {
+        const servicePath = 'opcua-tags';
+        const tags = await hookHelper.findItems(servicePath, { browseName: record.tagName });
+        if (tags.length) {
+          const tag = tags[0];
+          const idField = HookHelper.getIdField(tag);
+          const tagId = tag[idField].toString();
+          record.tagId = tagId;
+        }
+        if (isDebug && record) inspector('"hook."opcua-values.create.before".record:', record);
+      }
+    };
     validate = async (record) => {
       if (record.tagId && record.tagId !== dbNullIdValue()) await hookHelper.validateRelationship('opcua-tags', record.tagId);
     };
+    await hookHelper.forEachRecords(normalize);
     await hookHelper.forEachRecords(validate);
     break;
   case 'users.create.after':
