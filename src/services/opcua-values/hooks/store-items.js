@@ -42,7 +42,7 @@ module.exports = function (options = {}) {
       if (isDebug && record) inspector('hook.store-items.addItems.record:', record);
 
       const contextId = hh.getContextId();
-      if (contextId) {
+      if (contextId) {// Patch service
 
         // Get store value
         const storeValue = await hh.getItem('opcua-values', contextId);
@@ -90,20 +90,8 @@ module.exports = function (options = {}) {
         valueHashes = record.opcuaData.map(v => v.hash);
         record.store = Object.assign(storeValue.store, { count: valueHashes.length, hash: objectHash(valueHashes) });
         if (isDebug && record) inspector('hook.store-items.addItems.UpdateRecord:', record);
-      } else {
-
-        // Set tagId
-        if (!record.tagId) {
-          const servicePath = 'opcua-tags';
-          const tags = await hh.findItems(servicePath, { browseName: record.tagName });
-          if (tags.length) {
-            const tag = tags[0];
-            const idField = hh.getIdField(tag);
-            const tagId = tag[idField].toString();
-            record.tagId = tagId;
-          }
-          if (isDebug && record) inspector('"hook."opcua-values.create.before".record:', record);
-        }
+      
+      } else {// Create service
 
         // Set hash, record.store, record.store.count, record.store.period, record.store.hash
         for (let index = 0; index < record.opcuaData.length; index++) {
@@ -125,20 +113,21 @@ module.exports = function (options = {}) {
         if (record.store && record.store.hash !== objectHash(valueHashes)) {
           throw new errors.BadRequest(`A "opcua-values" service have record.store.hash('${record.store.hash}') !== '${objectHash(valueHashes)}'`);
         } else {
+          
+          if (record.store && record.store.period) {
+            period = await getStorePeriod(hh.app, record.tagId, record.storeStart);
+            const periodHash = objectHash(period);
+            if (objectHash(record.store.period) !== periodHash) {
+              throw new errors.BadRequest(`A "opcua-values" service have record.store.period([${record.store.period}]) !== [${period}]`);
+            }
+          }
+          
           if ((record.store && !record.store.period) || !record.store) {
             period = await getStorePeriod(hh.app, record.tagId, record.storeStart);
             if (!record.store) {
               record.store = { count: valueHashes.length, period, hash: objectHash(valueHashes) };
             } else {
               record.store.period = period;
-            }
-          }
-
-          if (record.store && record.store.period) {
-            period = await getStorePeriod(hh.app, record.tagId, record.storeStart);
-            const periodHash = objectHash(period);
-            if (objectHash(record.store.period) !== periodHash) {
-              throw new errors.BadRequest(`A "opcua-values" service have record.store.period([${record.store.period}]) !== [${period}]`);
             }
           }
         }

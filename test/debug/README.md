@@ -1,3 +1,3 @@
 ## About
 
-This folder is intended for debugging any tests.
+This folder is intended for debugging individual files.
