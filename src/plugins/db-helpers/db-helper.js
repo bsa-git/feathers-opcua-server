@@ -521,13 +521,15 @@ const saveStoreOpcuaGroupValue = async function (app, groupBrowseName, value, ch
     const keys = Object.keys(opcuaValue);
     for (let index = 0; index < keys.length; index++) {
       const storeBrowseName = keys[index];
-      let storeValue = opcuaValue[storeBrowseName];
       // Get groupTag
       const findedStoreTag = storeTags.find(tag => (tag.browseName === storeBrowseName));
       if (findedStoreTag) {
         const opcuaValues = [];
         // Set key to dateTime
         const key = opcuaValue['!value'].dateTime;
+        
+        // Get store value 
+        let storeValue = opcuaValue[storeBrowseName];        
         if (storeValue === null) {
           storeValue = getInt(storeValue);
         }
@@ -581,9 +583,11 @@ const saveStoreOpcuaGroupValue = async function (app, groupBrowseName, value, ch
  * e.g. const data = {
           tagName: 'CH_M51_ACM::23N2O:23QN2O',
           storeStart: '2022-01-01',
-          storeEnd: '2022-01-01',
+          storeEnd: '2022-12-31',
           opcuaData: [
-            { key: '2022-01-01', items: [334,...,1997], value: { dateTime: '2022-01-01' } }
+            { key: '2022-01-01', values: [334,...,1997], params: { dateTime: '2022-01-01' } },
+            ...
+            { key: '2022-12-31', values: [554,...,1333], params: { dateTime: '2022-12-31' } }
           ]
         };
   @param {Object} store 
@@ -883,29 +887,29 @@ const saveStoreParameterChanges = async function (app, groupBrowseNames, opcuaTa
  * @param {String[]} storeBrowseNames 
  * e.g ['CH_M51_ACM::23N2O:23QN2O',...,'CH_M51_ACM::23VSG:23FVSG']
  * @returns {Object[]}
- * * e.g. [{
+ * * e.g. FROM -> [{
  * "_id":{"$oid":"6290757fee64c60fd813a884"},
  * "tagId":{"$oid":"628f3829cc82902158526b01"},
  * "tagName":"CH_M51_ACM::23N2O:23QN2O",
  * "storeStart":"2022-01-01",
  * "storeEnd":"2022-01-31",
- * "values":[{
- * "items":[525,...,1133],
+ * "opcuaData":[{
+ * "values":[525,...,1133],
  * "_id":{"$oid":"629077d8ee64c60fd813dd59"},
  * "key":"2022-01-31",
- * "value":{"dateTime":"2022-01-31"}
+ * "params":{"dateTime":"2022-01-31"}
  * },
  * ...
  * ,{
- * "items":[1812,...,720],
+ * "values":[1812,...,720],
  * "_id":{"$oid":"629077c4ee64c60fd813daa7"},
  * "key":"2022-01-01",
- * "value":{"dateTime":"2022-01-01"}
+ * "params":{"dateTime":"2022-01-01"}
  * }],
  * "createdAt":{"$date":"2022-05-27T06:53:51.675Z"},
  * "updatedAt":{"$date":"2022-05-27T07:03:52.120Z"},
  * "__v":0
- * }, ..., {...}] ->
+ * }, ..., {...}] TO ->
  * e.g. [
  * {
  * '!value': { dateTime: '2022-01-01' },
@@ -931,9 +935,9 @@ const getTagValuesFromStores = async function (app, storeBrowseNames) {
 
   // Get store tag list
   for (let index = 0; index < storeBrowseNames.length; index++) {
-    const tagName = storeBrowseNames[index];
+    const storeTagName = storeBrowseNames[index];
     // Find store values from DB 
-    let stores4TagName = await findItems(app, 'opcua-values', { tagName, storeStart: { $ne: undefined } });
+    let stores4TagName = await findItems(app, 'opcua-values', { tagName: storeTagName, storeStart: { $ne: undefined } });
     if (isDebug && stores4TagName.length) console.log('getTagValuesFromStores.storesFromDB.length:', stores4TagName.length);
     if (isDebug && stores4TagName.length) inspector('getTagValuesFromStores.storesFromDB:', stores4TagName.map(item => {
       return {
@@ -953,7 +957,7 @@ const getTagValuesFromStores = async function (app, storeBrowseNames) {
 
         const storeTagValue = {};
         storeTagValue['!value'] = itemStore4TagName.params;
-        storeTagValue[tagName] = value;
+        storeTagValue[storeTagName] = value;
         storeTagList.push(storeTagValue);
       }
     }
@@ -968,6 +972,77 @@ const getTagValuesFromStores = async function (app, storeBrowseNames) {
   // Sort result store tag list
   resultStoreTagList = loOrderBy(resultStoreTagList, item => item['!value']['dateTime'], ['asc']);
   if (isDebug && resultStoreTagList.length) inspector('saveStoreParameterChanges.resultStoreTagList:', resultStoreTagList);
+  return resultStoreTagList;
+};
+
+/**
+ * @method getStoresFromTagValues
+ * @param {Object} app 
+ * @param {Object[]} tagValues 
+ * e.g [
+ * {
+ * '!value': { dateTime: '2022-01-01' },
+ * 'CH_M51_ACM::23N2O:23QN2O': [791,...,310],
+ * 'CH_M51_ACM::23VSG:23FVSG': [276495,...,297635],
+ * 'CH_M51_ACM::23N2O:23QN2O_CORR': [0,...,1],
+   'CH_M51_ACM::23VSG:23FVSG_CORR': [1,...,0],
+   'CH_M51_ACM::23HNO3:23F105_IS': [1,...,1]
+ * }, ... ,
+   {
+ * '!value': { dateTime: '2022-01-10' },
+ * 'CH_M51_ACM::23N2O:23QN2O': [231,...,311],
+ * 'CH_M51_ACM::23VSG:23FVSG': [116495,...,557635],
+ * 'CH_M51_ACM::23N2O:23QN2O_CORR': [1,...,1],
+   'CH_M51_ACM::23VSG:23FVSG_CORR': [0,...,0],
+   'CH_M51_ACM::23HNO3:23F105_IS': [0,...,1]
+ * }
+ * ]
+ * @returns {Object[]}
+ * * e.g. {
+ * "CH_M51_ACM::23N2O:23QN2O": [
+ * {
+ * "tagName":"CH_M51_ACM::23N2O:23QN2O",
+ * "storeStart":"2022-01-01",
+ * "storeEnd":"2022-01-10",
+ * "opcuaData":[
+ * {
+ * "values":[525,...,1133],
+ * "key":"2022-01-10",
+ * "params":{"dateTime":"2022-01-10"}
+ * },
+ * ...
+ * ,{
+ * "values":[1812,...,720],
+ * "key":"2022-01-01",
+ * "params":{"dateTime":"2022-01-01"}
+ * }]
+ * }, ... {
+ * "tagName":"CH_M51_ACM::23N2O:23QN2O",
+ * "storeStart":"2023-01-01",
+ * "storeEnd":"2023-01-10",
+ * "opcuaData":[
+ * {
+ * "values":[525,...,1133],
+ * "key":"2023-01-10",
+ * "params":{"dateTime":"2023-01-10"}
+ * },
+ * ...
+ * ,{
+ * "values":[1812,...,720],
+ * "key":"2023-01-01",
+ * "params":{"dateTime":"2023-01-01"}
+ * }]
+ * }
+ * ],
+ * ... "CH_M51_ACM::23VSG:23FVSG": [{...}, ..., {...}]
+ * }
+ */
+const getStoresFromTagValues = async function (app, tagValues) {
+  let storeTagList = [], dateTimeList = [], resultStoreTagList = [];
+  //---------------------------------------------------------------------------
+  
+    
+  if (isDebug && resultStoreTagList.length) inspector('getStoresFromTagValues.resultStoreTagList:', resultStoreTagList);
   return resultStoreTagList;
 };
 
@@ -1231,6 +1306,9 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
   let removedValuesCount = 0, methodResultOutputPath = '', statusCode;
   //-------------------------------------------------------------
   // Get opcua array valid group store tags for pointID = 0;
+  if(!opcuaMethods[methodName]) {
+    throw new errors.GeneralError(`There is no opcua method for method name - '${methodName}'`);
+  }
   methodResult = await opcuaMethods[methodName]([{ value: 0 }]);
   const arrayOfValidTags = methodResult.params.arrayOfValidTags;
   if (isDebug && arrayOfValidTags.length) inspector('syncHistoryAtStartup.arrayOfValidTags:', arrayOfValidTags);
@@ -1320,6 +1398,10 @@ const syncReportAtStartup = async function (app, opcuaTags, methodName) {
   let methodResult = null, dataItems = [], deletedReports;
   let inputArgument, inputArgument2, inputArguments;
   //-------------------------------------------------------------
+
+  if(!opcuaMethods[methodName]) {
+    throw new errors.GeneralError(`There is no opcua method for method name - '${methodName}'`);
+  }
 
   // Remove report files for (pointID = -1)
   inputArgument = { pointID: -1 };
@@ -1791,6 +1873,7 @@ module.exports = {
   removeOpcuaGroupValues,
   removeOpcuaStoreValues,
   getTagValuesFromStores,
+  getStoresFromTagValues,
   saveStoreParameterChanges,
   updateRemoteFromLocalStore,
   integrityCheckOpcua,

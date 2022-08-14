@@ -245,7 +245,8 @@
     "opcuaRemoteDbUrl": "http://localhost:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": true,
-      "syncHistoryAtStartup": true
+      "syncHistoryAtStartup": "methodAcmDayReportsDataGet",
+      "syncReportAtStartup": "methodAcmYearReportUpdate"
     },
     "security": {
       "mode": "SignAndEncrypt",
