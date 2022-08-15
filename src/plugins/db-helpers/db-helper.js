@@ -26,6 +26,7 @@ const {
   getStartOfPeriod,
   getEndOfPeriod,
   sortByStringField,
+  orderByItems,
   readJsonFileSync,
   removeItemsSync,
   toPathWithPosixSep,
@@ -45,7 +46,6 @@ const loOmit = require('lodash/omit');
 const loIsObject = require('lodash/isObject');
 const loIsString = require('lodash/isString');
 const loForEach = require('lodash/forEach');
-const loOrderBy = require('lodash/orderBy');
 const loReduce = require('lodash/reduce');
 const loCloneDeep = require('lodash/cloneDeep');
 const loTemplate = require('lodash/template');
@@ -208,14 +208,14 @@ const getEnvAdapterDB = function () {
   let envAdapterDB = 'feathers-nedb';
   const envTypeDB = getEnvTypeDB();
   switch (envTypeDB) {
-  case 'nedb':
-    envAdapterDB = 'feathers-nedb';
-    break;
-  case 'mongodb':
-    envAdapterDB = 'feathers-mongoose';
-    break;
-  default:
-    break;
+    case 'nedb':
+      envAdapterDB = 'feathers-nedb';
+      break;
+    case 'mongodb':
+      envAdapterDB = 'feathers-mongoose';
+      break;
+    default:
+      break;
   }
   return envAdapterDB;
 };
@@ -275,7 +275,7 @@ const getMaxValuesStorage = async function (app, tagId = '') {
       storeStart: { $ne: undefined },
       $select: ['tagName', 'storeStart', 'storeEnd']
     });
-    // Sort by string field for isAscending = true
+    // Ascending sort by string field
     storeValues = sortByStringField(storeValues, 'storeStart', true);
     if (isDebug && storeValues.length) debug(`getMaxValuesStorage.storeValues.length('${tagBrowseName}'):`, storeValues.length);
     if (storeValues.length) {
@@ -527,9 +527,9 @@ const saveStoreOpcuaGroupValue = async function (app, groupBrowseName, value, ch
         const opcuaValues = [];
         // Set key to dateTime
         const key = opcuaValue['!value'].dateTime;
-        
+
         // Get store value 
-        let storeValue = opcuaValue[storeBrowseName];        
+        let storeValue = opcuaValue[storeBrowseName];
         if (storeValue === null) {
           storeValue = getInt(storeValue);
         }
@@ -970,7 +970,7 @@ const getTagValuesFromStores = async function (app, storeBrowseNames) {
     resultStoreTagList.push(storeTagValues4DateTime);
   }
   // Sort result store tag list
-  resultStoreTagList = loOrderBy(resultStoreTagList, item => item['!value']['dateTime'], ['asc']);
+  resultStoreTagList = orderByItems(resultStoreTagList, item => item['!value']['dateTime'], ['asc']);
   if (isDebug && resultStoreTagList.length) inspector('saveStoreParameterChanges.resultStoreTagList:', resultStoreTagList);
   return resultStoreTagList;
 };
@@ -978,7 +978,8 @@ const getTagValuesFromStores = async function (app, storeBrowseNames) {
 /**
  * @method getStoresFromTagValues
  * @param {Object} app 
- * @param {Object[]} tagValues 
+ * @param {Object[]} opcuaTags
+ * @param {Object[]} opcuaValues 
  * e.g [
  * {
  * '!value': { dateTime: '2022-01-01' },
@@ -1037,13 +1038,89 @@ const getTagValuesFromStores = async function (app, storeBrowseNames) {
  * ... "CH_M51_ACM::23VSG:23FVSG": [{...}, ..., {...}]
  * }
  */
-const getStoresFromTagValues = async function (app, tagValues) {
-  let storeTagList = [], dateTimeList = [], resultStoreTagList = [];
+const getStoresFromTagValues = async function (app, opcuaTags, opcuaValues) {
+  let storeValue, storeItems = {};
   //---------------------------------------------------------------------------
-  
-    
-  if (isDebug && resultStoreTagList.length) inspector('getStoresFromTagValues.resultStoreTagList:', resultStoreTagList);
-  return resultStoreTagList;
+
+  let _opcuaValues = cloneObject(opcuaValues);
+
+  // Asc sort opcuaValues list
+  _opcuaValues = orderByItems(_opcuaValues, item => item['!value']['dateTime'], ['asc']);
+  if (isDebug && _opcuaValues.length) inspector('getStoresFromTagValues._opcuaValues:', _opcuaValues);
+
+  for (let index = 0; index < _opcuaValues.length; index++) {
+    const opcuaValue = _opcuaValues[index];
+    const keys = Object.keys(opcuaValue);
+    for (let index2 = 0; index2 < keys.length; index2++) {
+      const storeBrowseName = keys[index2];
+      // Find storeTag for storeBrowseName
+      const storeTag = await opcuaTags.find(t => t.browseName === storeBrowseName);
+      if (isDebug && storeTag) inspector('getStoresFromTagValues.storeTag:', storeTag);
+      if (storeTag) {
+        // Find groupTag for storeTag
+        const groupTag = await opcuaTags.find(t => t.browseName === storeTag.ownerGroup);
+        if (isDebug && groupTag) inspector('getStoresFromTagValues.groupTag:', groupTag);
+        if (groupTag && groupTag.store) {
+          // Get store
+          const store = Object.assign({}, groupTag.store);
+          const numberOfValuesInDoc = store.numberOfValuesInDoc;
+          
+          const opcuaData = [];
+          // Get dateTime
+          const dateTime = opcuaValue['!value'].dateTime;
+
+          // Get store value 
+          storeValue = opcuaValue[storeBrowseName];
+          if (storeValue === null) {
+            storeValue = getInt(storeValue);
+          }
+          // Get opcua value item
+          opcuaValueItem = { key: dateTime };
+          opcuaValueItem.params = opcuaValue['!value'];
+          if (Array.isArray(storeValue)) {
+            opcuaValueItem.values = storeValue;
+          } else {
+            opcuaValueItem.value = storeValue;
+          }
+          opcuaData.push(opcuaValueItem);
+
+          // Get data
+          const data = {
+            tagName: storeBrowseName,
+            storeStart: dateTime,
+            storeEnd: dateTime,
+            opcuaData
+          }
+
+          // Create || Update storeItems
+          if (!storeItems[storeBrowseName]) {
+            storeItems[storeBrowseName] = [data];
+          } else {
+            // Get range of stored values
+            const storeStart = data.storeStart;
+            const startOfPeriod = getStartOfPeriod(storeStart, numberOfValuesInDoc);
+            const endOfPeriod = getEndOfPeriod(storeStart, numberOfValuesInDoc);
+            if (isDebug && startOfPeriod) console.log('getStoresFromTagValues.startAndEndPeriod:', startOfPeriod, endOfPeriod);
+            // Find store item for store period
+            const findedStoreItem = storeItems[storeBrowseName].find(item => {
+              const storeStart = moment.utc(item.storeStart).format('YYYY-MM-DDTHH:mm:ss');
+              const storeEnd = moment.utc(item.storeEnd).format('YYYY-MM-DDTHH:mm:ss');
+              return (storeStart >= startOfPeriod && storeEnd <= endOfPeriod);
+            });
+
+            if(findedStoreItem){// Update store item
+              findedStoreItem.storeEnd = data.storeEnd;
+              findedStoreItem.opcuaData = loConcat(findedStoreItem.opcuaData, data.opcuaData);
+            } else {// Create new store item
+              storeItems[storeBrowseName].push(data);
+            }
+          }
+        }
+      }
+    }
+  }
+  if (isDebug && storeItems) inspector('getStoresFromTagValues.storeItems:', storeItems);
+  return storeItems;
 };
 
 /**
@@ -1306,7 +1383,7 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
   let removedValuesCount = 0, methodResultOutputPath = '', statusCode;
   //-------------------------------------------------------------
   // Get opcua array valid group store tags for pointID = 0;
-  if(!opcuaMethods[methodName]) {
+  if (!opcuaMethods[methodName]) {
     throw new errors.GeneralError(`There is no opcua method for method name - '${methodName}'`);
   }
   methodResult = await opcuaMethods[methodName]([{ value: 0 }]);
@@ -1363,7 +1440,7 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
       if (isDebug && dataItem) inspector('syncHistoryAtStartup.dataItem:', dataItem);
       savedValues = await saveStoreOpcuaGroupValue(app, groupBrowseName, dataItem, true);
       await pause(10);
-      const isRemoveAction = dataItem['!value'].action ==='remove';
+      const isRemoveAction = dataItem['!value'].action === 'remove';
       if (isRemoveAction) {
         removedValuesCount += loSize(dataItem) - 1;
       } else {
@@ -1399,7 +1476,7 @@ const syncReportAtStartup = async function (app, opcuaTags, methodName) {
   let inputArgument, inputArgument2, inputArguments;
   //-------------------------------------------------------------
 
-  if(!opcuaMethods[methodName]) {
+  if (!opcuaMethods[methodName]) {
     throw new errors.GeneralError(`There is no opcua method for method name - '${methodName}'`);
   }
 
