@@ -3,6 +3,7 @@ const assert = require('assert');
 const app = require('../../src/app');
 
 const loCloneDeep = require('lodash/cloneDeep');
+const loSize = require('lodash/size');
 
 const {
   inspector,
@@ -26,6 +27,8 @@ const {
   integrityCheckOpcua,
   updateRemoteFromLocalStore,
   getStoreParams4Data,
+  getOpcuaTagValuesFromStores,
+  getStoresFromOpcuaTagValues,
   getCountItems,
   createItem,
   createItems,
@@ -251,7 +254,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     assert.ok(valuesFromDB.length === 4, `valuesFromDB array must not be empty and is equal to (4) - '${valuesFromDB.length}'`);
   });
 
-  it('#8: DB-Helper -> Save store values for test "store-items" hook', async () => {
+  it('#8.1: DB-Helper -> Save store values for test "store-items" hook', async () => {
 
     const fakes = loCloneDeep(fakeNormalize());
     // Get opcua values 
@@ -306,6 +309,37 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
         const length2 = opcuaValue.opcuaData.length;
         assert.ok(length1 > length2, `length1 must be greater than length2  - (${length1}) > (${length2})`);
       }
+    }
+  });
+
+  it('#8.2: DB-Helper -> Get stores from opcua tag values', async () => {
+
+    const fakes = loCloneDeep(fakeNormalize());
+    // Get opcua values 
+    const opcuaTags = fakes['opcuaTags'];
+    if (isDebug && opcuaTags.length) inspector('fakes.opcuaTags.length', opcuaTags.length);
+
+    // Save fakes to services
+    await saveFakesToServices(app, 'opcuaTags');
+    await saveFakesToServices(app, 'opcuaValues');
+
+    // Get group tag
+    const groupTag = await findItem(app, 'opcua-tags', { group: true, store: { $ne: undefined } });
+    if (isDebug && groupTag) inspector('Get stores from opcua tag values.storeTag:', groupTag);
+    if (groupTag) {
+      const groupBrowseName = groupTag.browseName;
+      // Get store tags
+      const storeTags = await findItems(app, 'opcua-tags', { ownerGroup: groupBrowseName });
+      if (isDebug && storeTags.length) inspector('Get stores from opcua tag values.storeTags:', storeTags);
+      // Get opcua tag values from store 
+      const opcuaTagValues = await getOpcuaTagValuesFromStores(app, storeTags.map(t => t.browseName));
+      if (isDebug && opcuaTagValues.length) inspector('Get stores from opcua tag values.opcuaTagValues:', opcuaTagValues);
+      // Get store items from opcua tag values
+      const storeItems = getStoresFromOpcuaTagValues(opcuaTags, opcuaTagValues);
+      if (isDebug && storeItems) inspector('Get stores from opcua tag values.storeItems:', storeItems);
+      const length1 = loSize(storeItems);
+      const length2 = storeTags.length;
+      assert.ok(length1 === length2, `length1 must be equal to length2  - (${length1}) === (${length2})`);
     }
   });
 

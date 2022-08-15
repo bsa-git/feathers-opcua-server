@@ -19,6 +19,7 @@ const {
   logger,
   pause,
   cloneObject,
+  isTest,
   getStartEndOfPeriod,
   isDeepEqual,
   isDeepStrictEqual,
@@ -34,8 +35,7 @@ const {
 } = require('../lib');
 
 const {
-  feathersClient,
-  AuthServer
+  feathersClient
 } = require('../auth');
 
 const opcuaMethods = require('../opcua/opcua-methods');
@@ -54,7 +54,7 @@ const loSize = require('lodash/size');
 // Get max rows for opcua-values service
 let maxOpcuaValuesRows = process.env.OPCUA_VALUES_MAXROWS;
 maxOpcuaValuesRows = Number.isInteger(maxOpcuaValuesRows) ? maxOpcuaValuesRows : Number.parseInt(maxOpcuaValuesRows);
-if (AuthServer.isTest()) {
+if (isTest()) {
   maxOpcuaValuesRows = 10;
 }
 
@@ -359,7 +359,7 @@ const getStoreParams4Data = async function (app, groupBrowseNames) {
     const storeTagItems = await findItems(app, 'opcua-tags', { ownerGroup: groupBrowseName });
     const storeBrowseNames = storeTagItems.map(tag => tag.browseName);
     // Get tag values for one store
-    resultStoreTagList = await getTagValuesFromStores(app, [storeBrowseNames[0]]);
+    resultStoreTagList = await getOpcuaTagValuesFromStores(app, [storeBrowseNames[0]]);
     resultStoreTagList = resultStoreTagList.map(item => item['!value']);
     if (isDebug && resultStoreTagList.length) console.log('saveStoreParameterChanges.resultStoreTagList.length:', resultStoreTagList.length);
     if (isDebug && resultStoreTagList.length) inspector('saveStoreParameterChanges.resultStoreTagList:', resultStoreTagList);
@@ -557,7 +557,7 @@ const saveStoreOpcuaGroupValue = async function (app, groupBrowseName, value, ch
         savedValues.push(savedValue);
 
         // Save opcua values to remote store
-        if (isRemoteOpcuaToDB() && !changeStore && !AuthServer.isTest()) {
+        if (isRemoteOpcuaToDB() && !changeStore && !isTest()) {
           const remoteDbUrl = getOpcuaRemoteDbUrl();
           const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
           if (appRestClient) {
@@ -570,6 +570,79 @@ const saveStoreOpcuaGroupValue = async function (app, groupBrowseName, value, ch
     }
   }
   if (isDebug && savedValues.length) inspector('saveStoreOpcuaGroupValue.savedValues:', savedValues);
+  return savedValues;
+}
+
+/**
+ * @method saveStoreOpcuaGroupValues
+ * @async
+ * 
+ * @param {Object} app
+ * @param {String} groupBrowseName 
+ * e.g. 'CH_M51_ACM::ValueFromFile'
+ * @param {Object[]} values 
+ * e.g. [
+ * {
+    '!value': { dateTime: '2022-01-01' },
+    'CH_M51_ACM::23N2O:23QN2O': [334,...,1997],
+    'CH_M51_ACM::23VSG:23FVSG': [262644,...,90642],
+    'CH_M51_ACM::23N2O:23QN2O_CORR': [0,...,1],
+    'CH_M51_ACM::23VSG:23FVSG_CORR': [1,...,0],
+    'CH_M51_ACM::23HNO3:23F105_IS': [1,...,1]
+  },
+  ...,
+  {
+    '!value': { dateTime: '2022-01-10' },
+    'CH_M51_ACM::23N2O:23QN2O': [222,...,997],
+    'CH_M51_ACM::23VSG:23FVSG': [262555,...,55642],
+    'CH_M51_ACM::23N2O:23QN2O_CORR': [0,...,1],
+    'CH_M51_ACM::23VSG:23FVSG_CORR': [1,...,0],
+    'CH_M51_ACM::23HNO3:23F105_IS': [0,...,1]
+  }
+]
+ * @param {Boolean} changeStore 
+ * @returns {Object[]}
+ */
+const saveStoreOpcuaGroupValues = async function (app, groupBrowseName, values, changeStore = false) {
+  let savedValue = null, savedValues = [];
+  //----------------------------------------------------------
+
+  // Find groupTag for browseName
+  const groupTag = await findItem(app, 'opcua-tags', { browseName: groupBrowseName });
+  if (groupTag && groupTag.store) {
+    const store = Object.assign({}, groupTag.store);
+    // Get store tags
+    const storeTags = await findItems(app, 'opcua-tags', { ownerGroup: groupBrowseName });
+    if (storeTags.length) {
+      // Get store items from opcua tag values
+      const storeItems = getStoresFromOpcuaTagValues(storeTags.push(groupTag), values);
+      // Save store opcua values for hook
+      const keys = Object.keys(storeItems);
+      for (let index = 0; index < keys.length; index++) {
+        const storeBrowseName = keys[index];
+        for (let index2 = 0; index2 < storeItems[storeBrowseName].length; index2++) {
+          const storeItem4Tag = storeItems[storeBrowseName][index2];
+          // Save opcua values to local store
+          savedValue = await saveStoreOpcuaValues4Hook(app, storeBrowseName, loCloneDeep(storeItem4Tag), store);
+          if (isDebug && savedValue) inspector('saveStoreOpcuaGroupValues.local.savedValue:', savedValue);
+          savedValues.push(savedValue);
+
+          // Save opcua values to remote store
+          if (isRemoteOpcuaToDB() && !changeStore && !isTest()) {
+            const remoteDbUrl = getOpcuaRemoteDbUrl();
+            const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
+            if (appRestClient) {
+              savedValue = await saveStoreOpcuaValues4Hook(appRestClient, storeBrowseName, loCloneDeep(storeItem4Tag), store);
+              if (isDebug && savedValue) inspector('saveStoreOpcuaGroupValues.remote.savedValue:', savedValue);
+              savedValues.push(savedValue);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  if (isDebug && savedValues.length) inspector('saveStoreOpcuaGroupValues.savedValues:', savedValues);
   return savedValues;
 };
 
@@ -850,7 +923,7 @@ const saveStoreParameterChanges = async function (app, groupBrowseNames, opcuaTa
     const storeBrowseNames = opcuaTags.filter(tag => tag.ownerGroup && tag.ownerGroup === groupBrowseName).map(tag => tag.browseName);
     if (isDebug && storeBrowseNames.length) inspector('saveStoreParameterChanges.storeBrowseNames:', storeBrowseNames);
     // Get tag values from stores
-    const resultStoreTagList = await getTagValuesFromStores(app, storeBrowseNames);
+    const resultStoreTagList = await getOpcuaTagValuesFromStores(app, storeBrowseNames);
     if (isDebug && resultStoreTagList.length) console.log('saveStoreParameterChanges.resultStoreTagList.length:', resultStoreTagList.length);
     if (isDebug && resultStoreTagList.length) inspector('saveStoreParameterChanges.resultStoreTagList:', resultStoreTagList);
 
@@ -882,7 +955,7 @@ const saveStoreParameterChanges = async function (app, groupBrowseNames, opcuaTa
 };
 
 /**
- * @method getTagValuesFromStores
+ * @method getOpcuaTagValuesFromStores
  * @param {Object} app 
  * @param {String[]} storeBrowseNames 
  * e.g ['CH_M51_ACM::23N2O:23QN2O',...,'CH_M51_ACM::23VSG:23FVSG']
@@ -929,7 +1002,7 @@ const saveStoreParameterChanges = async function (app, groupBrowseNames, opcuaTa
  * } 
  * ]
  */
-const getTagValuesFromStores = async function (app, storeBrowseNames) {
+const getOpcuaTagValuesFromStores = async function (app, storeBrowseNames) {
   let storeTagList = [], dateTimeList = [], resultStoreTagList = [];
   //---------------------------------------------------------------------------
 
@@ -938,8 +1011,8 @@ const getTagValuesFromStores = async function (app, storeBrowseNames) {
     const storeTagName = storeBrowseNames[index];
     // Find store values from DB 
     let stores4TagName = await findItems(app, 'opcua-values', { tagName: storeTagName, storeStart: { $ne: undefined } });
-    if (isDebug && stores4TagName.length) console.log('getTagValuesFromStores.storesFromDB.length:', stores4TagName.length);
-    if (isDebug && stores4TagName.length) inspector('getTagValuesFromStores.storesFromDB:', stores4TagName.map(item => {
+    if (isDebug && stores4TagName.length) console.log('getOpcuaTagValuesFromStores.storesFromDB.length:', stores4TagName.length);
+    if (isDebug && stores4TagName.length) inspector('getOpcuaTagValuesFromStores.storesFromDB:', stores4TagName.map(item => {
       return {
         tagName: item.tagName,
         storeStart: item.storeStart,
@@ -976,8 +1049,7 @@ const getTagValuesFromStores = async function (app, storeBrowseNames) {
 };
 
 /**
- * @method getStoresFromTagValues
- * @param {Object} app 
+ * @method getStoresFromOpcuaTagValues
  * @param {Object[]} opcuaTags
  * @param {Object[]} opcuaValues 
  * e.g [
@@ -1038,7 +1110,7 @@ const getTagValuesFromStores = async function (app, storeBrowseNames) {
  * ... "CH_M51_ACM::23VSG:23FVSG": [{...}, ..., {...}]
  * }
  */
-const getStoresFromTagValues = async function (app, opcuaTags, opcuaValues) {
+const getStoresFromOpcuaTagValues = function (opcuaTags, opcuaValues) {
   let storeValue, storeItems = {};
   //---------------------------------------------------------------------------
 
@@ -1054,17 +1126,17 @@ const getStoresFromTagValues = async function (app, opcuaTags, opcuaValues) {
     for (let index2 = 0; index2 < keys.length; index2++) {
       const storeBrowseName = keys[index2];
       // Find storeTag for storeBrowseName
-      const storeTag = await opcuaTags.find(t => t.browseName === storeBrowseName);
+      const storeTag = opcuaTags.find(t => t.browseName === storeBrowseName);
       if (isDebug && storeTag) inspector('getStoresFromTagValues.storeTag:', storeTag);
       if (storeTag) {
         // Find groupTag for storeTag
-        const groupTag = await opcuaTags.find(t => t.browseName === storeTag.ownerGroup);
+        const groupTag = opcuaTags.find(t => t.browseName === storeTag.ownerGroup);
         if (isDebug && groupTag) inspector('getStoresFromTagValues.groupTag:', groupTag);
         if (groupTag && groupTag.store) {
           // Get store
           const store = Object.assign({}, groupTag.store);
           const numberOfValuesInDoc = store.numberOfValuesInDoc;
-          
+
           const opcuaData = [];
           // Get dateTime
           const dateTime = opcuaValue['!value'].dateTime;
@@ -1075,7 +1147,7 @@ const getStoresFromTagValues = async function (app, opcuaTags, opcuaValues) {
             storeValue = getInt(storeValue);
           }
           // Get opcua value item
-          opcuaValueItem = { key: dateTime };
+          const opcuaValueItem = { key: dateTime };
           opcuaValueItem.params = opcuaValue['!value'];
           if (Array.isArray(storeValue)) {
             opcuaValueItem.values = storeValue;
@@ -1090,7 +1162,7 @@ const getStoresFromTagValues = async function (app, opcuaTags, opcuaValues) {
             storeStart: dateTime,
             storeEnd: dateTime,
             opcuaData
-          }
+          };
 
           // Create || Update storeItems
           if (!storeItems[storeBrowseName]) {
@@ -1108,7 +1180,7 @@ const getStoresFromTagValues = async function (app, opcuaTags, opcuaValues) {
               return (storeStart >= startOfPeriod && storeEnd <= endOfPeriod);
             });
 
-            if(findedStoreItem){// Update store item
+            if (findedStoreItem) {// Update store item
               findedStoreItem.storeEnd = data.storeEnd;
               findedStoreItem.opcuaData = loConcat(findedStoreItem.opcuaData, data.opcuaData);
             } else {// Create new store item
@@ -1516,7 +1588,7 @@ const syncReportAtStartup = async function (app, opcuaTags, methodName) {
     // Get store browse names 
     const storeBrowseNames = opcuaTags.filter(tag => tag.ownerGroup === groupBrowseName).map(tag => tag.browseName);
     // Get tag values from stores
-    dataItems = await getTagValuesFromStores(app, storeBrowseNames);
+    dataItems = await getOpcuaTagValuesFromStores(app, storeBrowseNames);
     if (isDebug && dataItems.length) inspector('syncReportAtStartup.dataItems:', dataItems);
 
     // Set inputArguments
@@ -1949,8 +2021,8 @@ module.exports = {
   saveOpcuaTags,
   removeOpcuaGroupValues,
   removeOpcuaStoreValues,
-  getTagValuesFromStores,
-  getStoresFromTagValues,
+  getOpcuaTagValuesFromStores,
+  getStoresFromOpcuaTagValues,
   saveStoreParameterChanges,
   updateRemoteFromLocalStore,
   integrityCheckOpcua,

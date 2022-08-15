@@ -26,7 +26,7 @@ const {
 } = require('../../../../lib');
 
 const {
-  getTagValuesFromStores
+  getOpcuaTagValuesFromStores
 } = require('../../../../db-helpers');
 
 const {
@@ -100,7 +100,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
     const opcuaTags = getOpcuaTags();
     const groupBrowseName = reportParams.acmTagBrowseName;
     const storeBrowseNames = opcuaTags.filter(t => t.ownerGroup === groupBrowseName).map(t => t.browseName);
-    dataItems = await getTagValuesFromStores(app, storeBrowseNames);
+    dataItems = await getOpcuaTagValuesFromStores(app, storeBrowseNames);
     // Get filter dataItems
     if (dataItems.length && pattern && isValidDateTime(pattern)) {
       const patterns = pattern.split('-');
@@ -112,7 +112,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
       });
     }
     if (isDebug && dataItems.length) console.log(
-      chalk.green('RunCommand(ch_m5SyncAcmYearReport).getTagValuesFromStores: OK!'),
+      chalk.green('RunCommand(ch_m5SyncAcmYearReport).getOpcuaTagValuesFromStores: OK!'),
       `For pointID=${chalk.cyan(pointID)};`,
       `pattern: '${chalk.cyan(pattern)}';`,
       `dataItemsCount: ${chalk.cyan(dataItems.length)};`
