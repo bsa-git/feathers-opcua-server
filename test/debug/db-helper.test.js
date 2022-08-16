@@ -38,6 +38,7 @@ const {
   findItems,
   handleFoundItems,
   removeItems,
+  saveStoreOpcuaGroupValues,
   syncReportAtStartup,
   syncHistoryAtStartup
 } = require('../../src/plugins/db-helpers');
@@ -216,12 +217,12 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
   it('#7: DB-Helper -> Save store values when store parameter changes', async () => {
 
     //--------------------------------------
-    
+
     const fakes = loCloneDeep(fakeNormalize());
     // Get opcua tags 
     const opcuaTags = fakes['opcuaTags'];
     if (isDebug && opcuaTags.length) inspector('fakes.opcuaTags.length', opcuaTags.length);
-    
+
     // Save fakes to services
     await saveFakesToServices(app, 'opcuaTags');
     await saveFakesToServices(app, 'opcuaValues');
@@ -236,7 +237,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     const groupBrowseNames = await checkStoreParameterChanges(app, opcuaTags);
     if (isDebug && groupBrowseNames.length) inspector('Save store values when store parameter changes.groupBrowseNames:', groupBrowseNames);
     assert.ok(groupBrowseNames.length, `groupBrowseNames array must not be empty - '${groupBrowseNames.length}'`);
-    
+
     // Save opcua tags to local test DB
     let saveOpcuaTagsResult = await saveOpcuaTags(app, opcuaTags, false);
     if (isDebug && saveOpcuaTagsResult) inspector('Save store values when store parameter changes.saveOpcuaTagsResult:', saveOpcuaTagsResult);
@@ -246,11 +247,11 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     // Save store parameter changes
     const saveStoreResults = await saveStoreParameterChanges(app, groupBrowseNames, opcuaTags);
     if (isDebug && saveStoreResults.length) inspector('Save store values when store parameter changes.saveStoreResults:', saveStoreResults.length);
-    
+
     // Get opcua values 
     const valuesFromDB = await findItems(app, 'opcua-values', { storeStart: { $ne: undefined } });
     if (isDebug && valuesFromDB.length) inspector('Save store values when store parameter changes.valuesFromDB:', valuesFromDB.length);
-    
+
     assert.ok(valuesFromDB.length === 4, `valuesFromDB array must not be empty and is equal to (4) - '${valuesFromDB.length}'`);
   });
 
@@ -331,15 +332,34 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
       // Get store tags
       const storeTags = await findItems(app, 'opcua-tags', { ownerGroup: groupBrowseName });
       if (isDebug && storeTags.length) inspector('Get stores from opcua tag values.storeTags:', storeTags);
-      // Get opcua tag values from store 
-      const opcuaTagValues = await getOpcuaTagValuesFromStores(app, storeTags.map(t => t.browseName));
-      if (isDebug && opcuaTagValues.length) inspector('Get stores from opcua tag values.opcuaTagValues:', opcuaTagValues);
-      // Get store items from opcua tag values
-      const storeItems = getStoresFromOpcuaTagValues(opcuaTags, opcuaTagValues);
-      if (isDebug && storeItems) inspector('Get stores from opcua tag values.storeItems:', storeItems);
-      const length1 = loSize(storeItems);
-      const length2 = storeTags.length;
-      assert.ok(length1 === length2, `length1 must be equal to length2  - (${length1}) === (${length2})`);
+      if (storeTags.length) {
+        // Get opcua tag values from store 
+        const opcuaTagValues = await getOpcuaTagValuesFromStores(app, storeTags.map(t => t.browseName));
+        if (isDebug && opcuaTagValues.length) inspector('Get stores from opcua tag values.opcuaTagValues:', opcuaTagValues);
+        // Get store items from opcua tag values
+        let storeItems = getStoresFromOpcuaTagValues(opcuaTags, opcuaTagValues);
+        if (isDebug && storeItems) inspector('Get stores from opcua tag values.storeItems:', storeItems);
+        let length1 = loSize(storeItems);
+        let length2 = storeTags.length;
+        assert.ok(length1 === length2, `length1 must be equal to length2  - (${length1}) === (${length2})`);
+
+        // Get new opcua tag value 
+        const opcuaTagValue = { ['!value']: { dateTime: '2022-01-04' } };
+        for (let index = 0; index < storeTags.length; index++) {
+          const storeTag = storeTags[index];
+          const storeBrowseName = storeTag.browseName;
+          const unitsRange = storeTag.valueParams.engineeringUnitsRange;
+          const storeTagValue = (unitsRange.high - unitsRange.low) / 2;
+          opcuaTagValue[storeBrowseName] = storeTagValue;
+        }
+
+        // Get store items from opcua tag values
+        opcuaTagValues.push(opcuaTagValue);
+        storeItems = getStoresFromOpcuaTagValues(opcuaTags, opcuaTagValues);
+        if (isDebug && storeItems) inspector('Get stores from opcua tag values.storeItems:', storeItems);
+        length1 = storeItems[Object.keys(storeItems)[0]].length;
+        assert.ok(length1 === 2, `length1 must be equal to 2  - (${length1}) === 2`);
+      }
     }
   });
 
@@ -366,7 +386,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
       // Get store tags
       const storeTags = await findItems(app, 'opcua-tags', { ownerGroup: browseName });
       if (isDebug && storeTags.length) inspector('Test update remote store from local store.storeTags:', storeTags);
-      
+
       // Update remote store from local store
       for (let index = 0; index < storeTags.length; index++) {
         const storeTag = storeTags[index];
@@ -400,7 +420,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
         const opcuaValue = opcuaValues.find(v => (v.tagName === storeTag.browseName) && (v.storeStart !== undefined));
         if (isDebug && opcuaValue) inspector('Test update remote store from local store.opcuaValue:', opcuaValue);
-        
+
         const length1 = storeValue.opcuaData.length;
         const length2 = opcuaValue.opcuaData.length;
         assert.ok(length1 > length2, `length1 must be greater than length2  - (${length1}) > (${length2})`);
@@ -420,8 +440,8 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
 
     // Get store sources for data
     const storeParams = await getStoreParams4Data(app, ['CH_M51::ValueFromFile']);
-    if(isDebug && storeParams.length) inspector('Get store params for data.storeParams:', storeParams);
-    
+    if (isDebug && storeParams.length) inspector('Get store params for data.storeParams:', storeParams);
+
     assert.ok(storeParams.length, 'Get store params for data');
   });
 
@@ -432,7 +452,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     let saveResult = await saveOpcuaTags(app, opcuaTags, false);
     if (isDebug && saveResult) inspector('Data base: Save opcua tags:', saveResult);
     assert.ok(saveResult.total, 'Data base: Save opcua tags');
-    
+
     // Remove opcua store values
     let removeResult = await removeOpcuaGroupValues(app);
     if (isDebug && removeResult) inspector('removeOpcuaGroupValues.removeResult:', removeResult);
@@ -440,12 +460,12 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     removeResult = await removeOpcuaStoreValues(app);
     if (isDebug && removeResult) inspector('removeOpcuaStoreValues.removeResult:', removeResult);
   });
-
+  
   it('#12: DB-Helper -> Run method "syncHistoryAtStartup" for sync history at startup', async () => {
     // Get opcua tags
     const opcuaTags = getOpcuaConfigOptions(id);
     const syncResult = await syncHistoryAtStartup(app, opcuaTags, 'methodAcmDayReportsDataGet');
-    if(isDebug && syncResult) debug(`Run method "syncHistoryAtStartup".syncResult: {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
+    if (isDebug && syncResult) debug(`Run method "syncHistoryAtStartup".syncResult: {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
     assert.ok(syncResult.savedValuesCount, 'OPC-UA clients: run method "syncHistoryAtStartup"');
   });
 
@@ -453,7 +473,51 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     // Get opcua tags
     const opcuaTags = getOpcuaConfigOptions(id);
     const syncResult = await syncReportAtStartup(app, opcuaTags, 'methodAcmYearReportUpdate');
-    if(isDebug && syncResult) debug('Run method "syncReportAtStartup".syncResult:', syncResult);
+    if (isDebug && syncResult) debug('Run method "syncReportAtStartup".syncResult:', syncResult);
     assert.ok(syncResult.length, 'OPC-UA clients: run method "syncReportAtStartup"');
+  });
+
+  it('#14: DB-Helper -> Save store opcua group values', async () => {
+
+    const fakes = loCloneDeep(fakeNormalize());
+    // Get opcua values 
+    const opcuaTags = fakes['opcuaTags'];
+    if (isDebug && opcuaTags.length) inspector('fakes.opcuaTags.length', opcuaTags.length);
+
+    // Save fakes to services
+    await saveFakesToServices(app, 'opcuaTags');
+    await saveFakesToServices(app, 'opcuaValues');
+
+    // Get group tag
+    const groupTag = await findItem(app, 'opcua-tags', { group: true, store: { $ne: undefined } });
+    if (isDebug && groupTag) inspector('Save store opcua group values.storeTag:', groupTag);
+    if (groupTag) {
+      const groupBrowseName = groupTag.browseName;
+      // Get store tags
+      const storeTags = await findItems(app, 'opcua-tags', { ownerGroup: groupBrowseName });
+      if (isDebug && storeTags.length) inspector('Save store opcua group values.storeTags:', storeTags);
+      if (storeTags.length) {
+        // Get opcua tag values from store 
+        const opcuaTagValues = await getOpcuaTagValuesFromStores(app, storeTags.map(t => t.browseName));
+        if (isDebug && opcuaTagValues.length) inspector('Save store opcua group values.opcuaTagValues:', opcuaTagValues);
+        
+        // Get new opcua tag value 
+        const opcuaTagValue = { ['!value']: { dateTime: '2022-01-04' } };
+        for (let index = 0; index < storeTags.length; index++) {
+          const storeTag = storeTags[index];
+          const storeBrowseName = storeTag.browseName;
+          const unitsRange = storeTag.valueParams.engineeringUnitsRange;
+          const storeTagValue = (unitsRange.high - unitsRange.low) / 2;
+          opcuaTagValue[storeBrowseName] = storeTagValue;
+        }
+
+        // Get store items from opcua tag values
+        opcuaTagValues.push(opcuaTagValue);
+        const savedValues = await saveStoreOpcuaGroupValues(app, groupBrowseName, opcuaTagValues);
+        if (isDebug && savedValues) inspector('Save store opcua group values.savedValues:', savedValues);
+        const length1 = savedValues.length;
+        assert.ok(length1, `length1 must be equal to 2  - (${length1}) === 2`);
+      }
+    }
   });
 });

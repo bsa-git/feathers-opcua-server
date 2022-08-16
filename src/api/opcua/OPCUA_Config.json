@@ -244,7 +244,7 @@
     "opcuaSaveModeToDB": "localUpdate",
     "opcuaRemoteDbUrl": "http://localhost:3131",
     "opcuaBootstrapParams": {
-      "clearHistoryAtStartup": true,
+      "clearHistoryAtStartup": false,
       "syncHistoryAtStartup": "methodAcmDayReportsDataGet",
       "syncReportAtStartup": "methodAcmYearReportUpdate"
     },

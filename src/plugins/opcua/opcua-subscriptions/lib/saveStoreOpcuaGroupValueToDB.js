@@ -11,7 +11,7 @@ const {
 
 const {
   isSaveOpcuaToDB,
-  saveStoreOpcuaGroupValue
+  saveStoreOpcuaGroupValues
 } = require('../../../db-helpers');
 
 const debug = require('debug')('app:saveOpcuaGroupValueToDB');
@@ -41,7 +41,7 @@ async function saveStoreOpcuaGroupValueToDB(params, dataValue) {
 
   // Save data to DB
   if (isSaveOpcuaToDB()) {
-    savedValue = await saveStoreOpcuaGroupValue(params.app, browseName, value);
+    savedValue = await saveStoreOpcuaGroupValues(params.app, browseName, value, true);
     if (isDebug && savedValue) inspector('saveStoreOpcuaGroupValueToDB.savedValue:', savedValue);
   } 
   return savedValue;

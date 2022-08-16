@@ -33,7 +33,6 @@ const {
   integrityCheckOpcua,
   checkStoreParameterChanges,
   saveStoreParameterChanges,
-  saveStoreOpcuaGroupValue,
   isSaveOpcuaToDB,
   isRemoteOpcuaToDB,
   isUpdateOpcuaToDB,

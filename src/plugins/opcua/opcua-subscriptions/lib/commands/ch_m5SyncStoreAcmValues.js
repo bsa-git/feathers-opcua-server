@@ -22,7 +22,7 @@ const {
 } = require('../../../../lib');
 
 const {
-  saveStoreOpcuaGroupValue
+  saveStoreOpcuaGroupValues
 } = require('../../../../db-helpers');
 
 const debug = require('debug')('app:command.ch_m5SyncStoreAcmValues');
@@ -79,13 +79,10 @@ async function ch_m5SyncStoreAcmValues(params, value) {
     const dataItems = readJsonFileSync([appRoot, syncResultOutputPath, outputFile])['dataItems'];
 
     // Save store opcua group value
-    for (let index2 = 0; index2 < dataItems.length; index2++) {
-      const dataItem = dataItems[index2];
-      if (isDebug && dataItem) inspector('runCommand.ch_m5SyncStoreAcmValues.dataItem:', dataItem);
-      const savedValues = await saveStoreOpcuaGroupValue(params.app, groupBrowseName, dataItem, false);
-      savedValuesCount += savedValues.length;
-      if (isDebug && savedValues.length) inspector('runCommand.ch_m5SyncStoreAcmValues.savedValues:', savedValues);
-    }
+    const savedValues = await saveStoreOpcuaGroupValues(params.app, groupBrowseName, dataItems, true);
+    if (isDebug && savedValues.length) inspector('runCommand.ch_m5SyncStoreAcmValues.savedValues:', savedValues);
+    savedValuesCount += savedValues.length;
+
     if (isDebug && outputArguments) console.log(
       chalk.green('runCommand(ch_m5SyncStoreAcmValues): OK!'),
       `For pointID=${chalk.cyan(pointID)};`,
