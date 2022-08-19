@@ -29,8 +29,8 @@
     "config": "config/"
   },
   "engines": {
-    "node": "= 12.x",
-    "npm": "= 6.x"
+    "node": "=> 12.x",
+    "npm": "=> 6.x"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=production node src/",
