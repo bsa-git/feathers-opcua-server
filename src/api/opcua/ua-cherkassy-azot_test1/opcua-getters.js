@@ -91,7 +91,10 @@ function histValueFromSource(params = {}, addedValue) {
   const _interval = 200;
   let t = params.t ? params.t : _t;
   let interval = params.interval ? params.interval : _interval;
-  setInterval(function () {
+  let countInterval = 0;
+  const intervId = setInterval(function () {
+    countInterval ++;
+    if(countInterval === 5) clearInterval(intervId);
     let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
     if (isDebug) debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime());
     // debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime()); 
