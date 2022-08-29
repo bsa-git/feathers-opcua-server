@@ -309,7 +309,6 @@ const fsAccess = function (path, mode = fs.constants.F_OK) {
     fs.accessSync(path, mode);
     return true;
   } catch (err) {
-    if (err.code !== 'ENOENT') throw err;
     return false;
   }
 };

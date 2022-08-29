@@ -82,7 +82,8 @@ const updateYearReport = async function (pointID, reportParams, groupValues) {
     const outputTemplateFile = loTemplate(reportParams.outputTemplateFile)({ pointID, year: beginReportYear });
     reportFile = [appRoot, outputReportPath, outputTemplateFile];
     if (!doesFileExist(reportFile)) {
-      reportFile = [appRoot, reportParams.dataPath, outputTemplateFile];
+      reportFile = reportParams.isTest ? [appRoot, reportParams.inputPath, outputTemplateFile] : [appRoot, reportParams.dataPath, outputTemplateFile];
+
     }
   }
   reportFile = join(...reportFile);

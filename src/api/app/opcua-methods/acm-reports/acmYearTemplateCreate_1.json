@@ -8,6 +8,7 @@
   "qal2VolumeMultiplier": 1.1951,
   "qal2СoncentrationAdition": 0,
   "qal2VolumeAdition": 0,
+  "inputPath": "test/data/excel/acm",
   "inputFile": "test/data/excel/acm/acmYearTemplate.xlsx",
   "outputTemplateFile": "acmYearTemplate${ pointID }-${ year }.xlsx",
   "outputReportFile": "acmYearReport${ pointID }-${ year }.xlsx",
