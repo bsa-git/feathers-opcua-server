@@ -2,8 +2,10 @@
 const {
   appRoot,
   inspector,
-  inspectorToLog,
+  getIntervalIds,
+  clearIntervalIds,
 } = require('../lib');
+
 const {
   getOpcuaConfig,
   getEngineeringUnit,
@@ -30,6 +32,11 @@ const chalk = require('chalk');
 
 const debug = require('debug')('app:opcua-server.class');
 const isDebug = false;
+//----------------------------------------------------
+
+//====================//
+//=== OPCUA SERVER ===//
+//====================//
 
 class OpcuaServer {
   /**
@@ -121,6 +128,7 @@ class OpcuaServer {
 
     if (this.isOnSignInt) {
       process.on('SIGINT', async () => {
+        // Opcua server shutdown
         await this.opcuaServer.shutdown();
         console.log(chalk.yellow('Server terminated'));
       });

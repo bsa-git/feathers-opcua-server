@@ -12,6 +12,7 @@ const {
   appRoot,
   getTime,
   inspector,
+  addIntervalId
 } = require('../../../plugins/lib/util');
 
 const {
@@ -34,7 +35,6 @@ const loRound = require('lodash/round');
 
 const debug = require('debug')('app:opcua-addressspace-getters');
 const isDebug = false;
-const isLog = false;
 
 /**
  * @method getTValue
@@ -91,17 +91,18 @@ function histValueFromSource(params = {}, addedValue) {
   const _interval = 200;
   let t = params.t ? params.t : _t;
   let interval = params.interval ? params.interval : _interval;
-  let countInterval = 0;
-  const intervId = setInterval(function () {
-    countInterval ++;
-    if(countInterval === 5) clearInterval(intervId);
+  // Set interval
+  const intervalId = setInterval(function () {
     let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
     if (isDebug) debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime());
     // debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime()); 
     addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
-    if (isLog) inspector('histValueFromSource.addedValue:', formatUAVariable(addedValue));
+    if (isDebug) inspector('histValueFromSource.addedValue:', formatUAVariable(addedValue));
     t = t + 1;
   }, interval);
+  
+  // Add interval Id to list
+  addIntervalId(intervalId);
 }
 
 /**
@@ -115,7 +116,8 @@ function histArrayValue(params = {}, addedValue) {
   const _interval = 200;
   let t = params.t ? params.t : _t;
   let interval = params.interval ? params.interval : _interval;
-  setInterval(function () {
+  // SEt interval
+  const intervalId = setInterval(function () {
     let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
     value = params.value.map(v => loRound(v + value, 3));
     if (isDebug) debug('histArrayValue.value:', value, '; time:', getTime());
@@ -127,9 +129,12 @@ function histArrayValue(params = {}, addedValue) {
 
     // addedValue.setValueFromSource(valueFromSourceParams);
     setOpcuaValueFromSource(addedValue, valueFromSourceParams);
-    if (isLog) inspector('histArrayValue.addedValue:', formatUAVariable(addedValue));
+    if (isDebug) inspector('histArrayValue.addedValue:', formatUAVariable(addedValue));
     t = t + 1;
   }, interval);
+  
+  // Add interval Id to list
+  addIntervalId(intervalId);
 }
 
 function getterHistValueFromFile(params = {}, addedValue) {
@@ -150,7 +155,7 @@ function getterHistValueFromFile(params = {}, addedValue) {
     dataType = formatUAVariable(addedValue).dataType[1];
     addedValue.setValueFromSource({ dataType, value: data });
 
-    if (isLog) inspector('getterHistValueFromFile.addedValue:', formatUAVariable(addedValue));
+    if (isDebug) inspector('getterHistValueFromFile.addedValue:', formatUAVariable(addedValue));
 
     // Remove file 
     removeFileSync(filePath);
@@ -168,8 +173,8 @@ function getterHistValueFromFile(params = {}, addedValue) {
       setValueFromSourceForGroup(params, dataItem, module.exports);
     }
   });
-  // Write file
-  setInterval(function () {
+  // Set interval
+  const intervalId = setInterval(function () {
     const data = [
       {
         name: '02NG_F5',
@@ -184,6 +189,9 @@ function getterHistValueFromFile(params = {}, addedValue) {
     writeFileSync([appRoot, path, fileName], data, true);
     t = t + 1;
   }, interval);
+  
+  // Add interval Id to list
+  addIntervalId(intervalId);
 }
 
 

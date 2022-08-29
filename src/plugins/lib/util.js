@@ -22,6 +22,8 @@ const isDebug = false;
 
 // Get feathers-specs
 const feathersSpecs = require(`${appRoot}/config/feathers-specs.json`) || {};
+// List of interval Ids
+const timerIntervalIds = [];
 
 //--------------------- SYSTEM INFO -------------------//
 
@@ -109,6 +111,55 @@ const waitTill = (fn, args = [], thenDo, args2 = []) => {
     return;
   }
   setTimeout(() => { waitTill(fn, args = [], thenDo, args2 = []); }, 1000);
+};
+
+/**
+ * @method clearMyInterval
+ * @param {Number} id 
+ * @param {Number} count 
+ * @param {Number} maxCount 
+ * @returns {Number}
+ */
+const clearMyInterval = (id, count, maxCount = 0) => {
+  if (!maxCount) {
+    clearInterval(id);
+    return 0;
+  }
+  count++;
+  if (count === maxCount) clearInterval(id);
+  return count;
+};
+
+/**
+ * @method clearIntervalIds
+ */
+const clearIntervalIds = () => {
+  let length = timerIntervalIds.length;
+
+  while (length) {
+    const firstId = timerIntervalIds.shift();
+    clearInterval(firstId);
+    length = timerIntervalIds.length;
+  }
+  return timerIntervalIds;
+};
+
+/**
+ * @method addIntervalId
+ * @param {Object} id 
+ * @returns {Object[]}
+ */
+const addIntervalId = (id) => {
+  timerIntervalIds.push(id);
+  return timerIntervalIds;
+};
+
+/**
+ * @method getIntervalIds
+ * @returns {Number[]}
+ */
+const getIntervalIds = () => {
+  return timerIntervalIds;
 };
 
 /**
@@ -207,12 +258,12 @@ const getTimeDurations = function (timeList, unit) {
   //------------------------------------------------
   for (let index = 0; index < timeList.length; index++) {
     const currentTime = timeList[index];
-    if(prevTime){
+    if (prevTime) {
       resultList[`TimeDuration_${index}(${unit ? unit : 'ms'})`] = getTimeDuration(prevTime, currentTime, unit);
     }
     prevTime = currentTime;
   }
-  if(timeList.length > 1){
+  if (timeList.length > 1) {
     resultList[`TimeDuration_1x${timeList.length}(${unit ? unit : 'ms'})`] = getTimeDuration(timeList[0], timeList[timeList.length - 1], unit);
   }
   return resultList;
@@ -663,54 +714,54 @@ const getRegex = function (type) {
   switch (type) {
   case 'phone':
     /*
-                                                          (123) 456-7890
-                                                          +(123) 456-7890
-                                                          +(123)-456-7890
-                                                          +(123) - 456-7890
-                                                          +(123) - 456-78-90
-                                                          123-456-7890
-                                                          123.456.7890
-                                                          1234567890
-                                                          +31636363634
-                                                          +380980029669
-                                                          075-63546725
-                                                          */
+                                                            (123) 456-7890
+                                                            +(123) 456-7890
+                                                            +(123)-456-7890
+                                                            +(123) - 456-7890
+                                                            +(123) - 456-78-90
+                                                            123-456-7890
+                                                            123.456.7890
+                                                            1234567890
+                                                            +31636363634
+                                                            +380980029669
+                                                            075-63546725
+                                                            */
     return '^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\\./0-9]*$';
   case 'zip_code':
     /*
-                                                          12345
-                                                          12345-6789
-                                                          */
+                                                            12345
+                                                            12345-6789
+                                                            */
     return '^[0-9]{5}(?:-[0-9]{4})?$';
   case 'lat':
     /*
-                                                          +90.0
-                                                          45
-                                                          -90
-                                                          -90.000
-                                                          +90
-                                                          47.123123
-                                                          */
+                                                            +90.0
+                                                            45
+                                                            -90
+                                                            -90.000
+                                                            +90
+                                                            47.123123
+                                                            */
     return '^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'long':
     /*
-                                                          -127.554334
-                                                          180
-                                                          -180
-                                                          -180.0000
-                                                          +180
-                                                          179.999999
-                                                          */
+                                                            -127.554334
+                                                            180
+                                                            -180
+                                                            -180.0000
+                                                            +180
+                                                            179.999999
+                                                            */
     return '^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'lat_and_long':
     /*
-                                                          +90.0, -127.554334
-                                                          45, 180
-                                                          -90, -180
-                                                          -90.000, -180.0000
-                                                          +90, +180
-                                                          47.1231231, 179.99999999
-                                                          */
+                                                            +90.0, -127.554334
+                                                            45, 180
+                                                            -90, -180
+                                                            -90.000, -180.0000
+                                                            +90, +180
+                                                            47.1231231, 179.99999999
+                                                            */
     return '^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$';
   default:
     return '//g';
@@ -1058,6 +1109,10 @@ module.exports = {
   pause,
   waitTimeout,
   waitTill,
+  clearMyInterval,
+  clearIntervalIds,
+  addIntervalId,
+  getIntervalIds,
   isValidDateTime,
   dtToObject,
   getDate,

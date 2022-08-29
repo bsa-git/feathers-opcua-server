@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 const {
   inspector,
-  convertArray2Object
+  convertArray2Object,
+  addIntervalId
 } = require('../../lib');
 
 const {
@@ -79,7 +80,8 @@ function getterHistValuesFromDB(params = {}, addedValue) {
   };
 
   // Gey data from DB
-  setInterval(async function () {
+  // Set interval
+  const intervalId = setInterval(async function () {
     let rows;
     const db = new MssqlTedious(config);
     await db.connect();
@@ -96,6 +98,9 @@ function getterHistValuesFromDB(params = {}, addedValue) {
     }
     await db.disconnect();
   }, params.interval);
+
+  // Add interval Id to list
+  addIntervalId(intervalId);
 }
 
 module.exports = getterHistValuesFromDB;

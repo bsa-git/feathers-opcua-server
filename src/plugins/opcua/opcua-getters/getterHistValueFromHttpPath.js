@@ -6,7 +6,8 @@ const moment = require('moment');
 const {
   inspector,
   httpGetNewFileFromDir,
-  getDateTimeFromFileName
+  getDateTimeFromFileName,
+  addIntervalId
 } = require('../../lib');
 
 const {
@@ -56,13 +57,17 @@ const getterHistValueFromHttpPath = function (params = {}, addedValue) {
       setValueFromSourceForGroup(params, dataItems);
     }
   };
-  // Write file
-  setInterval(async function () {
+
+  // Set interval
+  const intervalId = setInterval(async function () {
     const file = await httpGetNewFileFromDir(params.path);
     if(file){
       setValueFromSource(file.name, file.data);
     }
   }, params.interval);
+
+  // Add interval Id to list
+  addIntervalId(intervalId);
 };
 
 module.exports = getterHistValueFromHttpPath;

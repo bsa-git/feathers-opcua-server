@@ -15,7 +15,9 @@ const {
   OpcuaServer, 
   OpcuaClient, 
   pause, 
-  isObject 
+  isObject,
+  getIntervalIds,
+  clearIntervalIds 
 } = require('../../src/plugins');
 
 const chalk = require('chalk');
@@ -72,6 +74,8 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
     if (opcuaServer !== null) opcuaServer = null;
     if (server !== null) server = null;
 
+    if (isDebug && getIntervalIds().length) inspector('opcua-clients.getIntervalIds.before:', getIntervalIds());
+    clearIntervalIds();
     removeFilesFromDirSync([appRoot, 'test/data/tmp/test1']);
   });
 

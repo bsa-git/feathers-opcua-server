@@ -12,16 +12,14 @@ const {
   getFileName,
   getPathBasename,
   createPath,
-  getFileStatSync
+  getFileStatSync,
+  addIntervalId
 } = require('../../lib');
 
 const {
   XlsxHelperClass,
 } = require('../../excel-helpers');
 
-const loForEach = require('lodash/forEach');
-const loOmit = require('lodash/omit');
-const loStartsWith = require('lodash/startsWith');
 const loRandom = require('lodash/random');
 
 const {
@@ -32,8 +30,6 @@ const {
 
 const debug = require('debug')('app:getterAcmDayValueFromFile');
 const isDebug = false;
-const isLog = false;
-
 
 //=============================================================================
 
@@ -105,9 +101,8 @@ const getterAcmDayValueFromFile = function (params = {}, addedValue) {
     removeFileSync(filePath);
   });
 
-
-  // Write file
-  setInterval(function () {
+  // Set interval
+  const intervalId = setInterval(function () {
     let jsonData;
     //------------------------
     // Skip the first cycle to desynchronize the cycles
@@ -166,6 +161,9 @@ const getterAcmDayValueFromFile = function (params = {}, addedValue) {
     const fileName = getFileName(`${toFile}-`, 'xls', true);
     xlsx.writeFile([appRoot, params.path, fileName]);
   }, params.interval);
+  
+  // Add interval Id to list
+  addIntervalId(intervalId);
 };
 
 

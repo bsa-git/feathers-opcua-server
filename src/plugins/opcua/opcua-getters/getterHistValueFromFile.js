@@ -13,7 +13,8 @@ const {
   getDateTimeFromFileName,
   getPathBasename,
   createPath,
-  getRandomValue
+  getRandomValue,
+  addIntervalId
 } = require('../../lib');
 
 const loForEach = require('lodash/forEach');
@@ -73,8 +74,9 @@ const getterHistValueFromFile = function (params = {}, addedValue) {
       setValueFromSourceForGroup(params, dataItems);
     }
   });
-  // Write file
-  setInterval(function () {
+
+  // Set interval
+  const intervalId = setInterval(function () {
     let csv = readFileSync([appRoot, params.fromFile]);
     if (csv) {
       results = papa.parse(csv, { delimiter: ';', header: true });
@@ -87,6 +89,9 @@ const getterHistValueFromFile = function (params = {}, addedValue) {
     const fileName = getFileName('data-', 'csv', true);
     writeFileSync([path, fileName], csv);
   }, params.interval);
+
+  // Add interval Id to list
+  addIntervalId(intervalId);
 };
 
 

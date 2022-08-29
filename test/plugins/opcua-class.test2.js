@@ -8,23 +8,14 @@ const {
   makeDirSync, 
   removeFilesFromDirSync,
   inspector, 
-  // getOpcuaConfig 
+  getIntervalIds,
+  clearIntervalIds 
 } = require('../../src/plugins');
-const chalk = require('chalk');
-const moment = require('moment');
 
-const {
-  // Variant,
-  DataType,
-  // VariantArrayType,
-  AttributeIds,
-  StatusCodes,
-  makeBrowsePath
-} = require('node-opcua');
+const chalk = require('chalk');
 
 const debug = require('debug')('app:opcua-class.test2');
 const isDebug = false;
-const isLog = false;
 
 // Options
 const srvParams = {
@@ -57,6 +48,8 @@ describe('<<=== OPC-UA: Test (opcua-class.test2) ===>>', () => {
     if (opcuaServer !== null) opcuaServer = null;
     if (server !== null) server = null;
 
+    if (isDebug && getIntervalIds().length) inspector('opcua-clients.getIntervalIds.before:', getIntervalIds());
+    clearIntervalIds();
     removeFilesFromDirSync([appRoot, 'test/data/tmp/test1']);
   });
 
