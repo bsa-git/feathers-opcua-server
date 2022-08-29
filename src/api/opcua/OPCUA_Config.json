@@ -139,43 +139,6 @@
     }
   },
   {
-    "isEnable": true,
-    "id": "ua-cherkassy-azot-vmwin10.2_dev1",
-    "name": "380-472-00203826-vmwin10.2_dev1",
-    "description": "Opcua client for `azot-m5`, `azot-ogmtmztp` tags from `opc.tcp://OGMT-MZTP.OSTCHEM.COM.UA:26570`",
-    "endpointUrl": "opc.tcp://OGMT-MZTP.OSTCHEM.COM.UA:26570",
-    "endpointPort": 26570,
-    "srvServiceUrl": "",
-    "clientServiceUrl": "http://DESKTOP-R0J95L7:3030",
-    "clientScript": "startSubscriptionMonitor",
-    "subscription": "onChangedGroupHandlerForDB",
-    "hostTypeDB": "mongodb",
-    "opcuaSaveModeToDB": "remoteUpdate",
-    "opcuaRemoteDbUrl": "http://DESKTOP-R0J95L7:3131",
-    "security": {
-      "mode": "SignAndEncrypt",
-      "policy": "Basic256Sha256",
-      "userName": "",
-      "password": ""
-    },
-    "include": {
-      "tests": [
-        "http-operations.test.js"
-      ]
-    },
-    "paths": {
-      "base-options": [
-        "/src/api/opcua/ua-cherkassy-azot-m5_prod1",
-        "/src/api/opcua/ua-cherkassy-azot-ogmtmztp_prod1"
-      ],
-      "options": "/src/api/opcua/ua-cherkassy-azot-vmwin10.2_dev1/AddressSpaceOptions.json",
-      "getters": "",
-      "methods": "",
-      "subscriptions": "",
-      "client-scripts": ""
-    }
-  },
-  {
     "id": "ua-cherkassy-azot-m5_prod1",
     "name": "380-472-00203826-m5_prod1",
     "description": "Opcua server and client for `azot-m5` tags from `http://192.168.3.5:3030`",
@@ -233,7 +196,7 @@
   {
     "id": "ua-cherkassy-bsahome_dev1",
     "name": "380-472-bsahome_dev1",
-    "description": "Opcua server and client for `azot-m5` tags from `opc.tcp://BSA-HOME:26570`",
+    "description": "Opcua server and client for `bsahome` tags from `opc.tcp://BSA-HOME:26570`",
     "endpointUrl": "opc.tcp://BSA-HOME:26570",
     "endpointPort": 26570,
     "srvServiceUrl": "http://BSA-HOME:3030",
@@ -241,7 +204,7 @@
     "clientScript": "startSubscriptionMonitor",
     "executeMethodsFrom": "client",
     "hostTypeDB": "mongodb",
-    "opcuaSaveModeToDB": "localUpdate",
+    "opcuaSaveModeToDB": "remoteUpdate",
     "opcuaRemoteDbUrl": "http://localhost:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": false,
@@ -264,6 +227,45 @@
         "/src/api/opcua/ua-cherkassy-azot-m5_prod1"
       ],
       "options": "/src/api/opcua/ua-cherkassy-bsahome_dev1/AddressSpaceOptions.json",
+      "getters": "",
+      "methods": "",
+      "subscriptions": "",
+      "client-scripts": ""
+    }
+  },
+  {
+    "isEnable": true,
+    "id": "ua-cherkassy-bsahome-vmwin10-64_dev1",
+    "name": "380-472-bsahome-vmwin10-64_dev1",
+    "description": "Opcua server and client for `bsahome-vmwin10-64` tags from `opc.tcp://DESKTOP-GRDNCH5:26570`",
+    "endpointUrl": "opc.tcp://DESKTOP-GRDNCH5:26570",
+    "endpointPort": 26570,
+    "srvServiceUrl": "http://DESKTOP-GRDNCH5:3030",
+    "clientServiceUrl": "http://DESKTOP-GRDNCH5:3030",
+    "clientScript": "startSubscriptionMonitor",
+    "executeMethodsFrom": "client",
+    "hostTypeDB": "mongodb",
+    "opcuaSaveModeToDB": "localUpdate",
+    "opcuaRemoteDbUrl": "http://localhost:3131",
+    "opcuaBootstrapParams": {
+      "clearHistoryAtStartup": true,
+      "syncHistoryAtStartup": "methodAcmDayReportsDataGet",
+      "syncReportAtStartup": "methodAcmYearReportUpdate"
+    },
+    "security": {
+      "mode": "SignAndEncrypt",
+      "policy": "Basic256Sha256",
+      "userName": "OPCUA_ADMIN_NAME",
+      "password": "OPCUA_ADMIN_PASS"
+    },
+    "include": {
+      "tests": []
+    },
+    "paths": {
+      "base-options": [
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1"
+      ],
+      "options": "/src/api/opcua/ua-cherkassy-bsahome-vmwin10-64_dev1/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
       "subscriptions": "",
