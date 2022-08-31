@@ -93,8 +93,6 @@ describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
 
   after(function (done) {
     stopListenPort(done);
-
-    if (isDebug && getIntervalIds().length) inspector('opcua-clients.getIntervalIds.before:', getIntervalIds());
     clearIntervalIds();
     // Remove files
     removeFilesFromDirSync([appRoot, 'test/data/tmp/ch-m51']);

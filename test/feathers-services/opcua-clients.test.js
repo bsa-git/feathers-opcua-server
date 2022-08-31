@@ -76,7 +76,6 @@ describe('<<=== OPC-UA: Test (opcua-clients.test) ===>>', () => {
 
   after(function (done) {
     stopListenPort(done);
-    if (isDebug && getIntervalIds().length) inspector('opcua-clients.getIntervalIds.before:', getIntervalIds());
     clearIntervalIds();
     removeFilesFromDirSync([appRoot, 'test/data/tmp/test1']);
   });

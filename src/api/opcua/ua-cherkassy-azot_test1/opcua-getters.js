@@ -93,6 +93,8 @@ function histValueFromSource(params = {}, addedValue) {
   let interval = params.interval ? params.interval : _interval;
   // Set interval
   const intervalId = setInterval(function () {
+    if(isDebug && intervalId) console.log(chalk.white('<--- GETTER(histValueFromSource): Test (opcua-class.test) --->'));
+
     let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
     if (isDebug) debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime());
     // debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime()); 
@@ -118,6 +120,8 @@ function histArrayValue(params = {}, addedValue) {
   let interval = params.interval ? params.interval : _interval;
   // SEt interval
   const intervalId = setInterval(function () {
+    if(isDebug && intervalId) console.log(chalk.white('<--- GETTER(histArrayValue): Test (opcua-class.test) --->'));
+
     let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
     value = params.value.map(v => loRound(v + value, 3));
     if (isDebug) debug('histArrayValue.value:', value, '; time:', getTime());
@@ -175,6 +179,8 @@ function getterHistValueFromFile(params = {}, addedValue) {
   });
   // Set interval
   const intervalId = setInterval(function () {
+    if(isDebug && intervalId) console.log(chalk.white('<--- GETTER(getterHistValueFromFile): Test (opcua-class.test) --->'));
+    
     const data = [
       {
         name: '02NG_F5',
