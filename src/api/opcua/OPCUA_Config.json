@@ -204,51 +204,10 @@
     "clientScript": "startSubscriptionMonitor",
     "executeMethodsFrom": "client",
     "hostTypeDB": "mongodb",
-    "opcuaSaveModeToDB": "remoteUpdate",
-    "opcuaRemoteDbUrl": "http://localhost:3131",
-    "opcuaBootstrapParams": {
-      "clearHistoryAtStartup": false,
-      "syncHistoryAtStartup": "methodAcmDayReportsDataGet",
-      "syncReportAtStartup": "methodAcmYearReportUpdate"
-    },
-    "security": {
-      "mode": "SignAndEncrypt",
-      "policy": "Basic256Sha256",
-      "userName": "OPCUA_ADMIN_NAME",
-      "password": "OPCUA_ADMIN_PASS"
-    },
-    "include": {
-      "tests": [
-        "mssql-tedious.test2.js"
-      ]
-    },
-    "paths": {
-      "base-options": [
-        "/src/api/opcua/ua-cherkassy-azot-m5_prod1"
-      ],
-      "options": "/src/api/opcua/ua-cherkassy-bsahome_dev1/AddressSpaceOptions.json",
-      "getters": "",
-      "methods": "",
-      "subscriptions": "",
-      "client-scripts": ""
-    }
-  },
-  {
-    "isEnable": true,
-    "id": "ua-cherkassy-bsahome-vmwin10-64_dev1",
-    "name": "380-472-bsahome-vmwin10-64_dev1",
-    "description": "Opcua server and client for `bsahome-vmwin10-64` tags from `opc.tcp://DESKTOP-GRDNCH5:26570`",
-    "endpointUrl": "opc.tcp://DESKTOP-GRDNCH5:26570",
-    "endpointPort": 26570,
-    "srvServiceUrl": "http://DESKTOP-GRDNCH5:3030",
-    "clientServiceUrl": "http://DESKTOP-GRDNCH5:3030",
-    "clientScript": "startSubscriptionMonitor",
-    "executeMethodsFrom": "client",
-    "hostTypeDB": "mongodb",
     "opcuaSaveModeToDB": "localUpdate",
     "opcuaRemoteDbUrl": "http://localhost:3131",
     "opcuaBootstrapParams": {
-      "clearHistoryAtStartup": true,
+      "clearHistoryAtStartup": false,
       "syncHistoryAtStartup": "methodAcmDayReportsDataGet",
       "syncReportAtStartup": "methodAcmYearReportUpdate"
     },
@@ -265,7 +224,7 @@
       "base-options": [
         "/src/api/opcua/ua-cherkassy-azot-m5_prod1"
       ],
-      "options": "/src/api/opcua/ua-cherkassy-bsahome-vmwin10-64_dev1/AddressSpaceOptions.json",
+      "options": "/src/api/opcua/ua-cherkassy-bsahome_dev1/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
       "subscriptions": "",

@@ -172,8 +172,10 @@ module.exports = {
   /**
     * the maximum number of simultaneous sessions allowed.
     * @type {Number}
+    * @deprecated
+    * [NODE-OPCUA-W21] maxAllowedSessionNumber property is now deprecated , please use serverCapabilities.maxSessions instead
     */
-  maxAllowedSessionNumber: 100,
+  // maxAllowedSessionNumber: 100,
 
   /**
     * the maximum number authorized simultaneous connections per endpoint
@@ -241,6 +243,7 @@ module.exports = {
     * @type {ServerCapabilitiesOptions}
     */
   serverCapabilities: null,
+  // serverCapabilities.maxSessions
 
   /**
     * if server shall raise AuditingEvent

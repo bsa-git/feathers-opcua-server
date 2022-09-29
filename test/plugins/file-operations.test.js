@@ -35,8 +35,6 @@ const {
 
 const chalk = require('chalk');
 const papa = require('papaparse');
-const { join } = require('path');
-const { is } = require('cheerio/lib/api/traversing');
 
 const debug = require('debug')('app:file-operations.test');
 const isDebug = false;
