@@ -19,7 +19,6 @@ const {
 } = require('./file-operations');
 
 const chalk = require('chalk');
-const { data } = require('cheerio/lib/api/attributes');
 
 const debug = require('debug')('app:http-operations');
 const isDebug = false;
