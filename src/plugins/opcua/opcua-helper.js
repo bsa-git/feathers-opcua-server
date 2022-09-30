@@ -1288,7 +1288,7 @@ const convertArrayToTypedArray = function (valueWithParams) {
     break;
   case 'float':
   case 'double':
-    result = (bitDepthOS === 64) ? new Float64Array(value) : new Float32Array(value);
+    result = new Float64Array(value); //(bitDepthOS === 64) ? new Float64Array(value) : new Float32Array(value);
     break;
   default:
     break;
