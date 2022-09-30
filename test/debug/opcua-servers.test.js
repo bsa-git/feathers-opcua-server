@@ -64,6 +64,8 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
     assert.ok(opcuaServer, 'OPC-UA servers: created the service');
   });
 
+  /** 
+
   it('#3: OPC-UA servers: Error in creating an existing service', async () => {
     const service = await getServerService(app, id);
     try {
@@ -147,6 +149,8 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
     assert.ok(opcuaServer, 'OPC-UA servers: shutdown the service');
   });
 
+  
+
   it('#11: OPC-UA servers: create/constructAddressSpace/start the service', async () => {
     const service = await getServerService(app, id);
     let port = await service.getCurrentState(id).port + 1;
@@ -158,6 +162,8 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
     if (isLog) inspector('Create the server:', opcuaServer);
     assert.ok(opcuaServer, 'OPC-UA servers: create/constructAddressSpace/start the service');
   });
+
+  */
 
   it('#12: OPC-UA servers: properties of service', async () => {
     const service = await getServerService(app, id);
