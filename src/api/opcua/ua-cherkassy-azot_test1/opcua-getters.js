@@ -81,11 +81,24 @@ function valueFromSource2(params = {}) {
 }
 
 /**
+ * Get percentage memory used
+ * @returns {Variant}
+ */
+function percentageMemUsed() {
+  const percentageMemUsed = 1.0 - (os.freemem() / os.totalmem());
+  const value = percentageMemUsed * 100;
+  return new Variant({ dataType: DataType.Double, value: value });
+}
+
+/**
  * Get hist value from source
  * @param {Object} params 
  * @param {Object} addedValue 
  */
 function histValueFromSource(params = {}, addedValue) {
+
+  if (true && addedValue) console.log(chalk.white('<--- GETTER(histValueFromSource): Test (opcua-class.test) --->'));
+
   // simulate pressure change
   const _t = 0;
   const _interval = 200;
@@ -93,16 +106,15 @@ function histValueFromSource(params = {}, addedValue) {
   let interval = params.interval ? params.interval : _interval;
   // Set interval
   const intervalId = setInterval(function () {
-    if(isDebug && intervalId) console.log(chalk.white('<--- GETTER(histValueFromSource): Test (opcua-class.test) --->'));
-
     let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
     if (isDebug) debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime());
     // debug('histValueFromSource.value:', loRound(value, 3), '; time:', getTime()); 
     addedValue.setValueFromSource({ dataType: DataType.Double, value: value });
-    if (isDebug) inspector('histValueFromSource.addedValue:', formatUAVariable(addedValue));
+    if (isDebug && addedValue) inspector('histValueFromSource.addedValue:', formatUAVariable(addedValue));
+
     t = t + 1;
   }, interval);
-  
+
   // Add interval Id to list
   addIntervalId(intervalId);
 }
@@ -113,6 +125,9 @@ function histValueFromSource(params = {}, addedValue) {
  * @param {Object} addedValue 
  */
 function histArrayValue(params = {}, addedValue) {
+  
+  if (true && addedValue) console.log(chalk.white('<--- GETTER(histArrayValue): Test (opcua-class.test) --->'));
+
   // simulate pressure change
   const _t = 0;
   const _interval = 200;
@@ -120,8 +135,6 @@ function histArrayValue(params = {}, addedValue) {
   let interval = params.interval ? params.interval : _interval;
   // SEt interval
   const intervalId = setInterval(function () {
-    if(isDebug && intervalId) console.log(chalk.white('<--- GETTER(histArrayValue): Test (opcua-class.test) --->'));
-
     let value = (Math.sin(t / 50) * 0.70 + Math.random() * 0.20) * 5.0 + 5.0;
     value = params.value.map(v => loRound(v + value, 3));
     if (isDebug) debug('histArrayValue.value:', value, '; time:', getTime());
@@ -133,15 +146,18 @@ function histArrayValue(params = {}, addedValue) {
 
     // addedValue.setValueFromSource(valueFromSourceParams);
     setOpcuaValueFromSource(addedValue, valueFromSourceParams);
-    if (isDebug) inspector('histArrayValue.addedValue:', formatUAVariable(addedValue));
+    if (isDebug && addedValue) inspector('histArrayValue.addedValue:', formatUAVariable(addedValue));
     t = t + 1;
   }, interval);
-  
+
   // Add interval Id to list
   addIntervalId(intervalId);
 }
 
 function getterHistValueFromFile(params = {}, addedValue) {
+
+  if (true && addedValue) console.log(chalk.white('<--- GETTER(getterHistValueFromFile): Test (opcua-class.test) --->'));
+
   const _t = 0;
   const _interval = 200;
   const _path = 'test/data/tmp';
@@ -179,8 +195,8 @@ function getterHistValueFromFile(params = {}, addedValue) {
   });
   // Set interval
   const intervalId = setInterval(function () {
-    if(isDebug && intervalId) console.log(chalk.white('<--- GETTER(getterHistValueFromFile): Test (opcua-class.test) --->'));
-    
+    if (isDebug && intervalId) console.log(chalk.white('<--- GETTER(getterHistValueFromFile): Test (opcua-class.test) --->'));
+
     const data = [
       {
         name: '02NG_F5',
@@ -195,21 +211,9 @@ function getterHistValueFromFile(params = {}, addedValue) {
     writeFileSync([appRoot, path, fileName], data, true);
     t = t + 1;
   }, interval);
-  
+
   // Add interval Id to list
   addIntervalId(intervalId);
-}
-
-
-
-/**
- * Get percentage memory used
- * @returns {Variant}
- */
-function percentageMemUsed() {
-  const percentageMemUsed = 1.0 - (os.freemem() / os.totalmem());
-  const value = percentageMemUsed * 100;
-  return new Variant({ dataType: DataType.Double, value: value });
 }
 
 module.exports = Object.assign({}, opcuaDefaultGetters, {

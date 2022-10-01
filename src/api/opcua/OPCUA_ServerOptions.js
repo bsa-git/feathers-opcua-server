@@ -242,7 +242,7 @@ module.exports = {
     * server capabilities
     * @type {ServerCapabilitiesOptions}
     */
-  serverCapabilities: null,
+  serverCapabilities: { maxSessions: 100 },
   // serverCapabilities.maxSessions
 
   /**

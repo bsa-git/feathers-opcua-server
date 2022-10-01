@@ -1,11 +1,13 @@
 {
   "objects": [
     {
+      "isEnable": true,
       "browseName": "Device1",
       "displayName": "Device1",
       "type": "object"
     },
     {
+      "isEnable": true,
       "browseName": "Device2",
       "displayName": "Device2",
       "type": "object"
@@ -118,6 +120,7 @@
       "dataType": "String"
     },
     {
+      "isEnable": true,
       "browseName": "Device2.PressureVesselDevice",
       "displayName": "Pressure Vessel Device",
       "ownerName": "Device2",
@@ -139,6 +142,7 @@
       }
     },
     {
+      "isEnable": true,
       "browseName": "Device2.ArrayValue",
       "displayName": "Array value",
       "ownerName": "Device2",
@@ -177,6 +181,7 @@
       }
     },
     {
+      "isEnable": true,
       "browseName": "Device2.ValueFromFile",
       "displayName": "Value From File",
       "ownerName": "Device2",

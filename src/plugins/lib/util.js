@@ -134,14 +134,7 @@ const clearMyInterval = (id, count, maxCount = 0) => {
  * @method clearIntervalIds
  */
 const clearIntervalIds = () => {
-  // let length = timerIntervalIds.length;
-
-  // while (length) {
-  //   const firstId = timerIntervalIds.shift();
-  //   clearInterval(firstId);
-  //   length = timerIntervalIds.length;
-  // }
-
+  // clearIntervalIds
   for (let index = 0; index < timerIntervalIds.length; index++) {
     const intervalId = timerIntervalIds[index];
     if(!intervalId['_destroyed']){

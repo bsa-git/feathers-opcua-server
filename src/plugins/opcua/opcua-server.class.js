@@ -121,10 +121,12 @@ class OpcuaServer {
     this.opcuaServer = new OPCUAServer(this.params);
     // this.params.port of the listening socket of the server
     await this.opcuaServer.initialize();
-    if (isDebug && this.opcuaServer) debug('certificateFile = ', this.opcuaServer.certificateFile);
-    if (isDebug && this.opcuaServer) debug('privateKeyFile  = ', this.opcuaServer.privateKeyFile);
-    if (isDebug && this.opcuaServer) debug('rejected folder = ', this.opcuaServer.serverCertificateManager.rejectedFolder);
-    if (isDebug && this.opcuaServer) debug('trusted  folder = ', this.opcuaServer.serverCertificateManager.trustedFolder);
+    if (isDebug && this.opcuaServer) inspector('opcuaServer.certificateFile = ', this.opcuaServer.certificateFile);
+    if (isDebug && this.opcuaServer) inspector('opcuaServer.privateKeyFile  = ', this.opcuaServer.privateKeyFile);
+    if (isDebug && this.opcuaServer) inspector('opcuaServer.rejectedFolder = ', this.opcuaServer.serverCertificateManager.rejectedFolder);
+    if (isDebug && this.opcuaServer) inspector('opcuaServer.trustedFolder = ', this.opcuaServer.serverCertificateManager.trustedFolder);
+    if (isDebug && this.opcuaServer) inspector('opcuaServer.serverCapabilities = ', this.opcuaServer.options.serverCapabilities);
+    if (isDebug && this.opcuaServer) inspector('opcuaServer.options = ', this.opcuaServer.options);
 
     if (this.isOnSignInt) {
       process.on('SIGINT', async () => {
@@ -219,7 +221,8 @@ class OpcuaServer {
 
   /**
    * Get added item list
-   * @method getAddedItemList
+   * @method getAddedItemList{
+   * @param {String} type
    * @returns {Array}
    */
   getAddedItemList(type = '') {

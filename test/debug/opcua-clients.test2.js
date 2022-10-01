@@ -55,7 +55,7 @@ const loOmit = require('lodash/omit');
 const loTemplate = require('lodash/template');
 
 
-const debug = require('debug')('app:test.opcua-clients');
+const debug = require('debug')('app:opcua-clients.test2');
 const isDebug = false;
 
 // Server options
@@ -78,7 +78,7 @@ const clientData = {
 // Get ID
 const id = srvData.params.serverInfo.applicationName;
 
-describe('<<=== OPC-UA: M5-Test (opcua-clients.m5_test) ===>>', () => {
+describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
 
   before(function (done) {
     startListenPort(app, done);

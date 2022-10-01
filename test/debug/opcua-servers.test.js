@@ -8,16 +8,17 @@ const {
   startListenPort, 
   stopListenPort,
   makeDirSync,
-  removeFilesFromDirSync
+  removeFilesFromDirSync,
+  clearIntervalIds,
 } = require('../../src/plugins');
 const { getServerService } = require('../../src/plugins/opcua');
 
 const loMerge = require('lodash/merge');
 const chalk = require('chalk');
+const { pause } = require('../../src/plugins/lib/util');
 
 const debug = require('debug')('app:test.opcua-servers');
 const isDebug = false;
-const isLog = false;
 
 // Options
 let srvData = {
@@ -46,7 +47,7 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
 
   after(function (done) {
     stopListenPort(done);
-
+    clearIntervalIds();
     removeFilesFromDirSync([appRoot, 'test/data/tmp/test1']);
   });
 
@@ -58,13 +59,10 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
   it('#2: OPC-UA servers: created the service', async () => {
     const service = await getServerService(app, id);
     // service create
-    const params = { user: opcuaUser, provider: 'rest', authenticated: true };
-    const opcuaServer = await service.create(srvData, params);
-    if (isLog) inspector('created the service:', opcuaServer);
+    const opcuaServer = await service.create(srvData);
+    if (isDebug) inspector('created the service:', opcuaServer);
     assert.ok(opcuaServer, 'OPC-UA servers: created the service');
   });
-
-  /** 
 
   it('#3: OPC-UA servers: Error in creating an existing service', async () => {
     const service = await getServerService(app, id);
@@ -80,90 +78,17 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
   it('#4: OPC-UA servers: get the service', async () => {
     const service = await getServerService(app, id);
     const opcuaServer = await service.get(id);
-    if (isLog) inspector('get the service.currentState:', opcuaServer.server.getCurrentState());
+    if (isDebug) inspector('get the service.currentState:', opcuaServer.server.getCurrentState());
     assert.ok(opcuaServer, 'OPC-UA servers: get the service');
   });
 
   it('#5: OPC-UA servers: find services', async () => {
     const service = await getServerService(app, id);
     const opcuaServers = await service.find();
-    if (isLog) inspector('find services.ids:', opcuaServers.map(srv => srv.id));
+    if (isDebug) inspector('find services.ids:', opcuaServers.map(srv => srv.id));
     assert.ok(opcuaServers.length, 'OPC-UA servers: find services');
   });
 
-  it('#6: OPC-UA servers: remove the service', async () => {
-    try {
-      // service remove
-      const service = await getServerService(app, id);
-      const opcuaServer = await service.remove(id);
-      if (isLog) inspector('Remove the service:', opcuaServer);
-      assert.ok(opcuaServer, 'OPC-UA servers: remove the service');
-      await service.get(id);
-      assert.ok(false, 'OPC-UA servers: remove the service');
-    } catch (error) {
-      assert.ok(true, 'OPC-UA servers: remove the service');
-    }
-  });
-
-  it('#7: OPC-UA servers: created the service', async () => {
-    let opcuaServer;
-    // service create
-    const service = await getServerService(app, id);
-    const port = srvData.params.port + 1;
-    const data = loMerge(srvData, { params: { port } });
-    opcuaServer = await service.create(data);
-    if (isLog) inspector('created the service:', opcuaServer);
-    // Get opcuaServer
-    opcuaServer = await service.get(id);
-    if (isLog) inspector('created the service.getCurrentState:', opcuaServer.server.getCurrentState());
-    assert.ok(opcuaServer, 'OPC-UA servers: created the service');
-  });
-
-  it('#8: OPC-UA servers: update the service', async () => {
-    const service = await getServerService(app, id);
-    // get opcuaServer port
-    let opcuaServer = await service.get(id);
-    let port = opcuaServer.server.getCurrentState().port + 1;
-    const data = loMerge(srvData, { params: { port } });
-    opcuaServer = await service.update(id, data);
-    if (isLog) inspector('Update the service.port:', opcuaServer.server.getCurrentState());
-    assert.ok(opcuaServer, 'OPC-UA servers: update the service');
-  });
-
-  it('#9: OPC-UA servers: patch the service', async () => {
-    const service = await getServerService(app, id);
-    // get opcuaServer port
-    let opcuaServer = await service.get(id);
-    let port = opcuaServer.server.getCurrentState().port + 1;
-    const data = loMerge(srvData, { params: { port } });
-    opcuaServer = await service.patch(id, data);
-    if (isLog) inspector('Patch the service.port:', opcuaServer.server.getCurrentState());
-    assert.ok(opcuaServer, 'OPC-UA servers: patch the service');
-  });
-
-  it('#10: OPC-UA servers: shutdown the service', async () => {
-    const service = await getServerService(app, id);
-    let opcuaServer = await service.get(id);
-    opcuaServer = await service.opcuaServerShutdown(id, 1500);
-    if (isLog) inspector('Shutdown the server:', opcuaServer);
-    assert.ok(opcuaServer, 'OPC-UA servers: shutdown the service');
-  });
-
-  
-
-  it('#11: OPC-UA servers: create/constructAddressSpace/start the service', async () => {
-    const service = await getServerService(app, id);
-    let port = await service.getCurrentState(id).port + 1;
-    let opcuaServer = await service.get(id);
-    opcuaServer.server.params.port = port;
-    opcuaServer = await service.opcuaServerCreate(id);
-    opcuaServer = await service.constructAddressSpace(id);
-    opcuaServer = await service.opcuaServerStart(id);
-    if (isLog) inspector('Create the server:', opcuaServer);
-    assert.ok(opcuaServer, 'OPC-UA servers: create/constructAddressSpace/start the service');
-  });
-
-  */
 
   it('#12: OPC-UA servers: properties of service', async () => {
     const service = await getServerService(app, id);
@@ -197,18 +122,16 @@ describe('<<=== OPC-UA: Test (opcua-servers.test) ===>>', () => {
     result = await service.getBuildInfo(id);
     inspector('server.getBuildInfo:', result);
     result = await service.getCurrentState(id);
-    if (isLog) inspector('server.getCurrentState:', result);
+    if (isDebug) inspector('server.getCurrentState:', result);
 
     assert.ok(true, 'OPC-UA servers: properties of server');
   });
 
-  //===== SESSION CLOSE/CLIENT DISCONNECT/SERVER SHUTDOWN =====//
-
-  it('#13: OPC-UA servers: shutdown the service', async () => {
+  it('#13: OPC-UA servers: remove the service', async () => {
     const service = await getServerService(app, id);
-    let opcuaServer = await service.get(id);
-    opcuaServer = await service.opcuaServerShutdown(id, 1500);
-    if (isLog) inspector('Shutdown the server:', opcuaServer);
+    let opcuaServer = await service.remove(id);
+
+    if (isDebug) inspector('Shutdown the server:', opcuaServer);
     assert.ok(opcuaServer, 'OPC-UA servers: shutdown the service');
   });
 
