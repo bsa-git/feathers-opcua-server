@@ -142,7 +142,7 @@ const clearIntervalIds = () => {
     }
   }
 
-  return timerIntervalIds;
+  return getIntervalIds();
 };
 
 /**

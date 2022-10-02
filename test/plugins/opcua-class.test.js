@@ -82,9 +82,11 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
   it('#1: Server object created', async () => {
     assert.ok(server, 'OPCUA server not created');
   });
+  
   it('#2: Client object created', async () => {
     assert.ok(client, 'OPCUA client not created');
   });
+
   it('#3: OPC-UA server start', async () => {
     await server.opcuaServerCreate();
     server.constructAddressSpace();
