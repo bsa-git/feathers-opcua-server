@@ -20,7 +20,7 @@ const {
 const loDrop = require('lodash/drop');
 
 const fs = require('fs');
-const packageFile = `${appRoot}/node_modules/node-opcua-server/package.json`;
+const packageFile = `${appRoot}/node_modules/node-opcua/package.json`;
 const packageInfo = require(packageFile);
 const default_build_info = {
   manufacturerName: 'Node-OPCUA : MIT Licence ( see http://node-opcua.github.io/)',
