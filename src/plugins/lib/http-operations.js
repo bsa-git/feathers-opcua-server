@@ -28,9 +28,10 @@ const isDebug = false;
  * @async
  * 
  * @param {String} target 
+ * @param {Boolean} showMsg
  * @returns {Boolean|Error}
  */
-const urlExists = async function (target) {
+const urlExists = async function (target, showMsg = true) {
   let uri;
   try {
     uri = url.parse(target);
@@ -43,7 +44,7 @@ const urlExists = async function (target) {
     await axios.get(uri);
     return true;
   } catch (error) {
-    logger.error(`This URL "${target}" does not exist`);
+    if (showMsg) logger.error(`This URL "${target}" does not exist`);
     if (isDebug && error.code) console.log('http-operations.checkExistUrl.error.code:', error.code);
     if (isDebug && error.config) inspector('http-operations.checkExistUrl.error.config:', error.config);
     if (isDebug && error.headers) inspector('http-operations.checkExistUrl.error.headers:', error.headers);
@@ -65,12 +66,11 @@ const urlExists = async function (target) {
  * @param {Boolean} showMsg 
  * @returns {Boolean}
  */
-const isUrlExists = async function (url, showMsg = false) {
+const isUrlExists = async function (url, showMsg = true) {
   try {
-    await urlExists(url);
+    await urlExists(url, showMsg = true);
     return true;
   } catch (error) {
-    if (showMsg) logger.error(`This URL "${url}" does not exist`);
     return false;
   }
 };
@@ -213,18 +213,6 @@ const httpGetFileFromUrl = async function (params = {}) {
   }
   return result;
 };
-
-/**
- // GET request for remote image
-axios({
-  method: 'get',
-  url: 'http://bit.ly/2mTM3nY',
-  responseType: 'stream'
-})
-  .then(function(response) {
-  response.data.pipe(fs.createWriteStream('ada_lovelace.jpg'))
-}); 
- */
 
 module.exports = {
   urlExists,

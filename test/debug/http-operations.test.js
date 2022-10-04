@@ -3,7 +3,6 @@ const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port') || 3030;
 const axios = require('axios');
-const cheerio = require('cheerio');
 const chalk = require('chalk');
 const papa = require('papaparse');
 const moment = require('moment');
@@ -23,7 +22,7 @@ const {
 
 const {
   urlExists,
-  checkStatusFetch
+  isUrlExists
 } = require('../../src/plugins/lib/http-operations');
 
 const loForEach = require('lodash/forEach');
@@ -48,8 +47,9 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
   it('#1: HttpOperations: https.get', async () => {
     const https = require('https');
     const url = 'https://jsonplaceholder.typicode.com/posts/1';
+    // await isUrlExists(`http://localhost:${port}`);
+    if(! await isUrlExists(url)) return;
     try {
-      await urlExists(url);
       https.get(url, res => {
         res.setEncoding('utf8');
         let body = '';
@@ -70,8 +70,8 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
 
   it('#2: HttpOperations: axios.get', async () => {
     const url = 'https://jsonplaceholder.typicode.com/posts/2';
+    if(! await isUrlExists(url)) return;
     try {
-      await urlExists(url);
       const getData = async url => {
         try {
           const response = await axios.get(url);
@@ -93,8 +93,8 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
   it('#3: HttpOperations: fetch.get', async () => {
     const fetch = require('node-fetch');
     const url = 'https://jsonplaceholder.typicode.com/users';
+    if(! await isUrlExists(url)) return;
     try {
-      await urlExists(url);
       fetch(url)
         .then(res => res.json())
         .then(json => {
@@ -113,8 +113,9 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
   it('#4: HttpOperations: get data from new file', async () => {
     let url = 'http://192.168.3.5/www_m5/m5_data2/';
     let dataItems = null;
+    //------------------------
+    if(! await isUrlExists(url)) return;
     try {
-      await urlExists(url);
       const getData = async url => {
         try {
           const file = await httpGetNewFileFromDir(url);
@@ -144,8 +145,8 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     let url = 'http://192.168.3.5/www_m5/day_reports/m5-1/ACM/23AGR/';
     let fileNames = [], filterFileNames = [];
     //---------------------------------------------------------------
+    if(! await isUrlExists(url)) return;
     try {
-      await urlExists(url);
       const getFileNames = async (url, pattern, options) => {
         try {
           const fileNames = await httpGetFileNamesFromDir(url, pattern, options);
@@ -170,8 +171,8 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     let host = 'http://192.168.3.5', url = `${host}/www_m5/day_reports/m5-1/ACM/23AGR/`;
     let fileNames = [], filterFileNames = [];
     //---------------------------------------------------------------
+    if(! await isUrlExists(url)) return;
     try {
-      await urlExists(url);
       const getFileNames = async (url, pattern, options) => {
         try {
           const fileNames = await httpGetFileNamesFromDir(url, pattern, options);

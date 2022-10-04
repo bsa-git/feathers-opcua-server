@@ -166,6 +166,45 @@
     }
   },
   {
+    "isEnable": true,
+    "id": "ua-cherkassy-azot-ogmt0088846_dev1",
+    "name": "380-472-00203826-ogmt0088846_dev1",
+    "description": "Opcua server and client for `azot-m5`, `azot-ogmtmztp` tags from `opc.tcp://OGMT-0088846.OSTCHEM.COM.UA:26570`",
+    "endpointUrl": "opc.tcp://OGMT-0088846.OSTCHEM.COM.UA:26570",
+    "endpointPort": 26570,
+    "srvServiceUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3030",
+    "clientServiceUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3030",
+    "clientScript": "startSubscriptionMonitor",
+    "executeMethodsFrom": "client",
+    "hostTypeDB": "mongodb",
+    "opcuaSaveModeToDB": "localUpdate",
+    "opcuaRemoteDbUrl": "http://localhost:3131",
+    "opcuaBootstrapParams": {
+      "clearHistoryAtStartup": false,
+      "syncHistoryAtStartup": "methodAcmDayReportsDataGet",
+      "syncReportAtStartup": "methodAcmYearReportUpdate"
+    },
+    "security": {
+      "mode": "SignAndEncrypt",
+      "policy": "Basic256Sha256",
+      "userName": "OPCUA_ADMIN_NAME",
+      "password": "OPCUA_ADMIN_PASS"
+    },
+    "include": {
+      "tests": ["http-operations.test.js"]
+    },
+    "paths": {
+      "base-options": [
+        "/src/api/opcua/ua-cherkassy-azot-m5_prod1"
+      ],
+      "options": "/src/api/opcua/ua-cherkassy-azot-ogmt0088846_dev1/AddressSpaceOptions.json",
+      "getters": "",
+      "methods": "",
+      "subscriptions": "",
+      "client-scripts": ""
+    }
+  },
+  {
     "id": "ua-cherkassy-azot-ogmtmztp_prod1",
     "name": "380-472-00203826-ogmtmztp_prod1",
     "description": "Opcua server and client for `azot-m5`, `azot-ogmtmztp` tags from `opc.tcp://OGMT-MZTP.OSTCHEM.COM.UA:26570`",
