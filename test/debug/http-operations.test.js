@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-
 const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port') || 3030;
