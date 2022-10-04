@@ -47,7 +47,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
   it('#1: HttpOperations: https.get', async () => {
     const https = require('https');
     const url = 'https://jsonplaceholder.typicode.com/posts/1';
-    // await isUrlExists(`http://localhost:${port}`);
+    await isUrlExists(`http://localhost:${port}`);
     if(! await isUrlExists(url)) return;
     try {
       https.get(url, res => {
