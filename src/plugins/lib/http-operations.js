@@ -41,7 +41,14 @@ const urlExists = async function (target, showMsg = true) {
   }
 
   try {
-    await axios.get(uri);
+    // await axios.get(uri);
+
+    await axios({
+      method: 'get',
+      url: uri,
+      timeout: 2000 // only wait for 2s
+    });
+
     return true;
   } catch (error) {
     if (showMsg) logger.error(`This URL "${target}" does not exist`);
@@ -167,7 +174,7 @@ const httpGetFileNamesFromDir = async function (url, pattern = '', options = {},
     }
   }
   if (isDebug && fileList.length) inspector('httpGetFileNamesFromDir.fileList:', fileList);
-  if(pattern){
+  if (pattern) {
     fileList = minimatch.match(fileList, pattern, options);
     if (isDebug && fileList.length) inspector('httpGetFileNamesFromDir.minimatch.fileList:', fileList);
   }

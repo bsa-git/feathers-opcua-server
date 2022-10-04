@@ -3,6 +3,9 @@ const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port') || 3030;
 const axios = require('axios');
+const fetch = require('node-fetch');
+const https = require('https');
+const { curly } = require('node-libcurl');
 const chalk = require('chalk');
 const papa = require('papaparse');
 const moment = require('moment');
@@ -45,163 +48,132 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
 
 
   it('#1: HttpOperations: https.get', async () => {
-    const https = require('https');
+
     const url = 'https://jsonplaceholder.typicode.com/posts/1';
-    await isUrlExists(`http://localhost:${port}`);
-    if(! await isUrlExists(url)) return;
-    try {
-      https.get(url, res => {
-        res.setEncoding('utf8');
-        let body = '';
-        res.on('data', data => {
-          body += data;
-        });
-        res.on('end', () => {
-          body = JSON.parse(body);
-          console.log(body);
-        });
+    if (! await isUrlExists(url)) return;
+
+    https.get(url, res => {
+      res.setEncoding('utf8');
+      let body = '';
+
+      res.on('data', data => {
+        body += data;
       });
-      assert.ok(true, 'HttpOperations: https.get');
-    } catch (err) {
-      debug('ERROR:', err.message);
-      assert.ok(false, 'HttpOperations: https.get');
-    }
+
+      res.on('end', () => {
+        body = JSON.parse(body);
+        if (true && body) inspector(`https.get(${url})`, body);
+      });
+    });
+    assert.ok(true, 'HttpOperations: https.get');
   });
 
   it('#2: HttpOperations: axios.get', async () => {
     const url = 'https://jsonplaceholder.typicode.com/posts/2';
-    if(! await isUrlExists(url)) return;
-    try {
-      const getData = async url => {
-        try {
-          const response = await axios.get(url);
-          const data = response.data;
-          console.log(data);
-        } catch (error) {
-          console.log(error);
-        }
-      };
+    if (! await isUrlExists(url)) return;
 
-      await getData(url);
-      assert.ok(true, 'HttpOperations: axios.get');
-    } catch (err) {
-      debug('ERROR:', err.message);
-      assert.ok(false, 'HttpOperations: axios.get');
-    }
+    const response = await axios.get(url);
+    const data = response.data;
+    if (true && data) inspector(`axios.get(${url})`, data);
+    assert.ok(data, 'HttpOperations: axios.get');
   });
 
   it('#3: HttpOperations: fetch.get', async () => {
-    const fetch = require('node-fetch');
+
     const url = 'https://jsonplaceholder.typicode.com/users';
-    if(! await isUrlExists(url)) return;
-    try {
-      fetch(url)
-        .then(res => res.json())
-        .then(json => {
-          console.log('First user in the array:');
-          console.log(json[0]);
-          console.log('Name of the first user in the array:');
-          console.log(json[0].name);
-        });
-      assert.ok(true, 'HttpOperations: fetch.get');
-    } catch (err) {
-      debug('ERROR:', err.message);
-      assert.ok(false, 'HttpOperations: fetch.get');
-    }
+    if (! await isUrlExists(url)) return;
+
+    const response = await fetch(url);
+    const data = await response.json();
+    if (true && data) inspector(`fetch.get(${url})`, data[0]);
+    assert.ok(data, 'HttpOperations: fetch.get');
   });
 
-  it('#4: HttpOperations: get data from new file', async () => {
+  it('#4: HttpOperations: curly.get', async () => {
+    const url = 'http://www.google.com';
+    if (! await isUrlExists(url)) return;
+
+    const { statusCode, data, headers } = await curly.get(url);
+    if (isDebug && statusCode) console.log(`curly.get(${url}).statusCode:`, statusCode);
+    assert.ok(statusCode === 200, 'HttpOperations: curly.get');
+  });
+
+
+  it('#5: HttpOperations: get data from new file', async () => {
     let url = 'http://192.168.3.5/www_m5/m5_data2/';
     let dataItems = null;
     //------------------------
-    if(! await isUrlExists(url)) return;
+    if (! await isUrlExists(url)) return;
+
     try {
-      const getData = async url => {
-        try {
-          const file = await httpGetNewFileFromDir(url);
-          let result = papa.parse(file.data, { delimiter: ';', header: true });
-          result = result.data[0];
-          dataItems = {};
-          loForEach(result, (value, key) => {
-            dataItems[key] = getFloat(value);
-          });
-          if (isDebug) inspector(`HttpOperations: get data from new file (${file.name}):`, dataItems);
-          // inspector(`HttpOperations: get data from file (${file.name}):`, dataItems);
-          return dataItems;
-        } catch (error) {
-          console.log(error);
-          assert.ok(false, 'HttpOperations: get data from new file');
-        }
-      };
-      await getData(url);
-      assert.ok(true, 'HttpOperations: get data from new file');
-    } catch (err) {
-      debug('ERROR:', err.message);
+      const file = await httpGetNewFileFromDir(url);
+      let result = papa.parse(file.data, { delimiter: ';', header: true });
+      result = result.data[0];
+      dataItems = {};
+      loForEach(result, (value, key) => {
+        dataItems[key] = getFloat(value);
+      });
+      if (isDebug && dataItems) inspector(`HttpOperations: get data from new file (${file.name}):`, dataItems);
+      assert.ok(dataItems, 'HttpOperations: get data from new file');
+    } catch (error) {
+      console.log(error);
       assert.ok(false, 'HttpOperations: get data from new file');
     }
   });
 
-  it('#5: HttpOperations: get file names from dir', async () => {
+  it('#6: HttpOperations: get file names from dir', async () => {
     let url = 'http://192.168.3.5/www_m5/day_reports/m5-1/ACM/23AGR/';
     let fileNames = [], filterFileNames = [];
     //---------------------------------------------------------------
-    if(! await isUrlExists(url)) return;
-    try {
-      const getFileNames = async (url, pattern, options) => {
-        try {
-          const fileNames = await httpGetFileNamesFromDir(url, pattern, options);
-          return fileNames;
-        } catch (error) {
-          console.log(error);
-          assert.ok(false, 'HttpOperations: get file names from dir');
-        }
-      };
-      fileNames = await getFileNames(url);
-      if (isDebug && fileNames.length) inspector(`HttpOperations: get file names from dir (${url}):`, fileNames);
-      filterFileNames = await getFileNames(url, '*/**/2022/**/*.xls', { matchBase: true });
-      if (isDebug && filterFileNames.length) inspector(`HttpOperations: get file names from dir (${url}):`, filterFileNames);
-      assert.ok(fileNames.length >= filterFileNames.length, 'HttpOperations: get file names from dir');
-    } catch (err) {
-      debug('ERROR:', err.message);
-      assert.ok(false, 'HttpOperations: get file names from dir');
-    }
+    if (! await isUrlExists(url)) return;
+
+    const getFileNames = async (url, pattern, options) => {
+      try {
+        const fileNames = await httpGetFileNamesFromDir(url, pattern, options);
+        return fileNames;
+      } catch (error) {
+        console.log(error);
+        assert.ok(false, 'HttpOperations: get file names from dir');
+      }
+    };
+    fileNames = await getFileNames(url);
+    if (isDebug && fileNames.length) inspector(`HttpOperations: get file names from dir (${url}):`, fileNames);
+    filterFileNames = await getFileNames(url, '*/**/2022/**/*.xls', { matchBase: true });
+    if (isDebug && filterFileNames.length) inspector(`HttpOperations: get file names from dir (${url}):`, filterFileNames);
+    assert.ok(fileNames.length >= filterFileNames.length, 'HttpOperations: get file names from dir');
   });
 
   it('#6: HttpOperations: get file names from dir. With glob patterns to include/exclude files', async () => {
     let host = 'http://192.168.3.5', url = `${host}/www_m5/day_reports/m5-1/ACM/23AGR/`;
     let fileNames = [], filterFileNames = [];
     //---------------------------------------------------------------
-    if(! await isUrlExists(url)) return;
-    try {
-      const getFileNames = async (url, pattern, options) => {
-        try {
-          const fileNames = await httpGetFileNamesFromDir(url, pattern, options);
-          return fileNames;
-        } catch (error) {
-          console.log(error);
-          assert.ok(false, 'HttpOperations: get file names from dir');
-        }
-      };
-      fileNames = await getFileNames(url);
-      if (isDebug && fileNames.length) inspector(`HttpOperations: get file names from dir (${url}):`, fileNames);
-      // Get file paths with pattern filter
-      const dateTime = moment.utc().subtract(4, 'years').format('YYYY-MM-DDTHH:mm:ss');
-      let rangeYears = getRangeStartEndOfPeriod(dateTime, [5, 'years'], 'year');
-      rangeYears = rangeYears.map(year => `*/**/*${ year }_*.*`);
-      // e.g. ['*/**/*2018_*.*', '*/**/*2019_*.*', '*/**/*2020_*.*', '*/**/*2021_*.*', '*/**/*2022_*.*']
-      if(isDebug && rangeYears) debug('getRangeStartEndOfPeriod.range:', rangeYears);
-      filterFileNames = fileNames.filter(filePath => createMatch(
-        // ['*/**/*.*'],   // patterns to include
-        rangeYears, // patterns to include
-        ['*/**/*.xlk']  // patterns to exclude
-      )(filePath));
-      if (isDebug && filterFileNames.length) inspector(`HttpOperations: get filterFileNames from dir (${url}):`, filterFileNames);
+    if (! await isUrlExists(url)) return;
+    
+    const getFileNames = async (url, pattern, options) => {
+      try {
+        const fileNames = await httpGetFileNamesFromDir(url, pattern, options);
+        return fileNames;
+      } catch (error) {
+        console.log(error);
+        assert.ok(false, 'HttpOperations: get file names from dir');
+      }
+    };
+    fileNames = await getFileNames(url);
+    if (isDebug && fileNames.length) inspector(`HttpOperations: get file names from dir (${url}):`, fileNames);
+    // Get file paths with pattern filter
+    const dateTime = moment.utc().subtract(4, 'years').format('YYYY-MM-DDTHH:mm:ss');
+    let rangeYears = getRangeStartEndOfPeriod(dateTime, [5, 'years'], 'year');
+    rangeYears = rangeYears.map(year => `*/**/*${year}_*.*`);
+    // e.g. ['*/**/*2018_*.*', '*/**/*2019_*.*', '*/**/*2020_*.*', '*/**/*2021_*.*', '*/**/*2022_*.*']
+    if (isDebug && rangeYears) debug('getRangeStartEndOfPeriod.range:', rangeYears);
+    filterFileNames = fileNames.filter(filePath => createMatch(
+      // ['*/**/*.*'],   // patterns to include
+      rangeYears, // patterns to include
+      ['*/**/*.xlk']  // patterns to exclude
+    )(filePath));
+    if (isDebug && filterFileNames.length) inspector(`HttpOperations: get filterFileNames from dir (${url}):`, filterFileNames);
 
-      // filterFileNames = await getFileNames(url, 'http://192.168.3.5/**/2022/**/*.xls', { matchBase: true });
-      assert.ok(fileNames.length >= filterFileNames.length, 'HttpOperations: get file names from dir. With glob patterns to include/exclude files');
-    } catch (err) {
-      debug('ERROR:', err.message);
-      assert.ok(false, 'HttpOperations: get file names from dir. With glob patterns to include/exclude files');
-    }
+    // filterFileNames = await getFileNames(url, 'http://192.168.3.5/**/2022/**/*.xls', { matchBase: true });
+    assert.ok(fileNames.length >= filterFileNames.length, 'HttpOperations: get file names from dir. With glob patterns to include/exclude files');
   });
 });

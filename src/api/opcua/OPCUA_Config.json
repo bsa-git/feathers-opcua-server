@@ -257,7 +257,7 @@
       "password": "OPCUA_ADMIN_PASS"
     },
     "include": {
-      "tests": []
+      "tests": ["http-operations.test.js"]
     },
     "paths": {
       "base-options": [
