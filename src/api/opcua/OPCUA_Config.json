@@ -175,6 +175,7 @@
     "srvServiceUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3030",
     "clientServiceUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3030",
     "clientScript": "startSubscriptionMonitor",
+    "isMyLocalhostToIP": true,
     "executeMethodsFrom": "client",
     "hostTypeDB": "mongodb",
     "opcuaSaveModeToDB": "localUpdate",

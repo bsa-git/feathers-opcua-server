@@ -553,6 +553,17 @@ const getOpcuaSaveModeToDB = function () {
 };
 
 /**
+ * @method isMyLocalhostToIP
+ * @returns {Boolean}
+ * e.g. "localhost" -> "10.60.5.128"
+ */
+const isMyLocalhostToIP = function () {
+  const myConfigs = getOpcuaConfigsForMe();
+  const myConfig = myConfigs.find(item => item.isMyLocalhostToIP !== undefined);
+  return myConfig ? myConfig.isMyLocalhostToIP : isTrue(process.env.MY_LOCALHOST_TO_IP);
+};
+
+/**
  * @method getOpcuaBootstrapParams
  * @returns {Object|null}
  * e.g. { clearHistoryAtStartup: true }
@@ -1506,6 +1517,7 @@ module.exports = {
   getOpcuaClientScript,
   getMyHostInfo,
   isMyServiceHost,
+  isMyLocalhostToIP,
   getServerService,
   getClientService,
   getSrvCurrentState,

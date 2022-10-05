@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
 const app = require('../../src/app');
-const port = app.get('port') || 3030;
+const host = app.get('host');
+const port = app.get('port');
 const axios = require('axios');
 const fetch = require('node-fetch');
 const https = require('https');
@@ -20,7 +21,8 @@ const {
   getFloat,
   canTestRun,
   getPathBasename,
-  getRangeStartEndOfPeriod
+  getRangeStartEndOfPeriod,
+  getMyIp
 } = require('../../src/plugins');
 
 const {
@@ -47,7 +49,18 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
   });
 
 
-  it('#1: HttpOperations: https.get', async () => {
+  it('#1: HttpOperations: curly.get("localhost")', async () => {
+    const url = `http://${host}:${port}`;
+
+    const { statusCode, data, headers } = await curly.get(`http://${host}:${port}`);
+
+    // if (! await isUrlExists(url)) return;
+    if (true && statusCode) console.log(`curly.get(${url}).statusCode:`, statusCode);
+    if (isDebug && data) inspector(`curly.get(${url})`, data);
+    assert.ok(statusCode === 200, 'HttpOperations: curly.get("localhost")');
+  });
+
+  it('#2: HttpOperations: https.get', async () => {
 
     const url = 'https://jsonplaceholder.typicode.com/posts/1';
     if (! await isUrlExists(url)) return;
@@ -68,7 +81,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     assert.ok(true, 'HttpOperations: https.get');
   });
 
-  it('#2: HttpOperations: axios.get', async () => {
+  it('#3: HttpOperations: axios.get', async () => {
     const url = 'https://jsonplaceholder.typicode.com/posts/2';
     if (! await isUrlExists(url)) return;
 
@@ -78,7 +91,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     assert.ok(data, 'HttpOperations: axios.get');
   });
 
-  it('#3: HttpOperations: fetch.get', async () => {
+  it('#4: HttpOperations: fetch.get', async () => {
 
     const url = 'https://jsonplaceholder.typicode.com/users';
     if (! await isUrlExists(url)) return;
@@ -89,7 +102,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     assert.ok(data, 'HttpOperations: fetch.get');
   });
 
-  it('#4: HttpOperations: curly.get', async () => {
+  it('#5: HttpOperations: curly.get', async () => {
     const url = 'http://www.google.com';
     if (! await isUrlExists(url)) return;
 
@@ -99,7 +112,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
   });
 
 
-  it('#5: HttpOperations: get data from new file', async () => {
+  it('#6: HttpOperations: get data from new file', async () => {
     let url = 'http://192.168.3.5/www_m5/m5_data2/';
     let dataItems = null;
     //------------------------
@@ -121,7 +134,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     }
   });
 
-  it('#6: HttpOperations: get file names from dir', async () => {
+  it('#7: HttpOperations: get file names from dir', async () => {
     let url = 'http://192.168.3.5/www_m5/day_reports/m5-1/ACM/23AGR/';
     let fileNames = [], filterFileNames = [];
     //---------------------------------------------------------------
@@ -143,7 +156,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     assert.ok(fileNames.length >= filterFileNames.length, 'HttpOperations: get file names from dir');
   });
 
-  it('#6: HttpOperations: get file names from dir. With glob patterns to include/exclude files', async () => {
+  it('#8: HttpOperations: get file names from dir. With glob patterns to include/exclude files', async () => {
     let host = 'http://192.168.3.5', url = `${host}/www_m5/day_reports/m5-1/ACM/23AGR/`;
     let fileNames = [], filterFileNames = [];
     //---------------------------------------------------------------
