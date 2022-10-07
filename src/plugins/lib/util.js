@@ -63,6 +63,32 @@ const sysMemUsage = function () {// sysMemUsage
   return result;
 };
 
+/**
+ * Set my "localhost" to my IP
+ * @method setLocalhostToIP
+ * e.g. "localhost" -> "10.60.5.128"
+ * e.g. "http://localhost:3030" -> "http://10.60.5.128:3030"
+ */
+const setLocalhostToIP = function () {
+  const { getMyIp } = require('./net-operations');
+  const { isMyLocalhostToIP } = require('../opcua/opcua-helper');
+
+  // Loads environment variables from .env file.
+  const result = require('dotenv').config();
+  if (result.error) {
+    throw result.error;
+  }
+
+  const isLocalhost = process.env.HOST === 'localhost';
+  if (isMyLocalhostToIP() && isLocalhost && getMyIp()) {
+    process.env.HOST = getMyIp();
+    process.env.BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`;
+    if (true && process.env.HOST) {
+      console.log('process.env.HOST', process.env.HOST);
+      console.log('process.env.BASE_URL', process.env.BASE_URL);
+    }
+  }
+};
 
 //--------------------- DATE TIME -------------------//
 /**
@@ -137,7 +163,7 @@ const clearIntervalIds = () => {
   // clearIntervalIds
   for (let index = 0; index < timerIntervalIds.length; index++) {
     const intervalId = timerIntervalIds[index];
-    if(!intervalId['_destroyed']){
+    if (!intervalId['_destroyed']) {
       clearInterval(intervalId);
     }
   }
@@ -715,54 +741,54 @@ const getRegex = function (type) {
   switch (type) {
   case 'phone':
     /*
-                                                              (123) 456-7890
-                                                              +(123) 456-7890
-                                                              +(123)-456-7890
-                                                              +(123) - 456-7890
-                                                              +(123) - 456-78-90
-                                                              123-456-7890
-                                                              123.456.7890
-                                                              1234567890
-                                                              +31636363634
-                                                              +380980029669
-                                                              075-63546725
-                                                              */
+                                                                (123) 456-7890
+                                                                +(123) 456-7890
+                                                                +(123)-456-7890
+                                                                +(123) - 456-7890
+                                                                +(123) - 456-78-90
+                                                                123-456-7890
+                                                                123.456.7890
+                                                                1234567890
+                                                                +31636363634
+                                                                +380980029669
+                                                                075-63546725
+                                                                */
     return '^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\\./0-9]*$';
   case 'zip_code':
     /*
-                                                              12345
-                                                              12345-6789
-                                                              */
+                                                                12345
+                                                                12345-6789
+                                                                */
     return '^[0-9]{5}(?:-[0-9]{4})?$';
   case 'lat':
     /*
-                                                              +90.0
-                                                              45
-                                                              -90
-                                                              -90.000
-                                                              +90
-                                                              47.123123
-                                                              */
+                                                                +90.0
+                                                                45
+                                                                -90
+                                                                -90.000
+                                                                +90
+                                                                47.123123
+                                                                */
     return '^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'long':
     /*
-                                                              -127.554334
-                                                              180
-                                                              -180
-                                                              -180.0000
-                                                              +180
-                                                              179.999999
-                                                              */
+                                                                -127.554334
+                                                                180
+                                                                -180
+                                                                -180.0000
+                                                                +180
+                                                                179.999999
+                                                                */
     return '^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$';
   case 'lat_and_long':
     /*
-                                                              +90.0, -127.554334
-                                                              45, 180
-                                                              -90, -180
-                                                              -90.000, -180.0000
-                                                              +90, +180
-                                                              47.1231231, 179.99999999
-                                                              */
+                                                                +90.0, -127.554334
+                                                                45, 180
+                                                                -90, -180
+                                                                -90.000, -180.0000
+                                                                +90, +180
+                                                                47.1231231, 179.99999999
+                                                                */
     return '^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$';
   default:
     return '//g';
@@ -1104,6 +1130,7 @@ const hexToRGBA = function (color) {
 module.exports = {
   appRoot,
   logger,
+  setLocalhostToIP,
   isTest,
   feathersSpecs,
   sysMemUsage,

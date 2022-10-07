@@ -84,7 +84,6 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
   it('#3: HttpOperations: axios.get', async () => {
     const url = 'https://jsonplaceholder.typicode.com/posts/2';
     if (! await isUrlExists(url)) return;
-
     const response = await axios.get(url);
     const data = response.data;
     if (true && data) inspector(`axios.get(${url})`, data);

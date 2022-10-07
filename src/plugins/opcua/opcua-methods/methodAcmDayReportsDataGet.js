@@ -130,7 +130,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
     // Get acm path  
     const isHttp = loStartsWith(params.acmPath, 'http');
     if (isHttp) {
-      const isExistsURL = await isUrlExists(params.acmPath, true);
+      const isExistsURL = await isUrlExists(params.acmPath);
       if (isExistsURL) {
         if (isDebug && isExistsURL) console.log(`isExistsURL('${params.acmPath}'): OK`);
 

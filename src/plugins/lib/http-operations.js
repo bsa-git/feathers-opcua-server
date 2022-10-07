@@ -28,10 +28,22 @@ const isDebug = false;
  * @async
  * 
  * @param {String} target 
- * @param {Boolean} showMsg
+ * @param {Object} params
+ * e.g. {
+ * showMsg: true,
+ * proxy: {
+    protocol: 'http',
+    host: 'proxy.azot.local',
+    port: 3128,
+    auth: {
+      username: '20518',
+      password: 'bS%4018ogMT'
+    }
+  }
+ * }
  * @returns {Boolean|Error}
  */
-const urlExists = async function (target, showMsg = true) {
+const urlExists = async function (target, params = { showMsg: true }) {
   let uri;
   try {
     uri = url.parse(target);
@@ -41,17 +53,18 @@ const urlExists = async function (target, showMsg = true) {
   }
 
   try {
-    // await axios.get(uri);
 
+    // await axios.get(uri);
     await axios({
       method: 'get',
       url: uri,
-      timeout: 2000 // only wait for 2s
+      timeout: 2000, // only wait for 2s
+      proxy: params.proxy? params.proxy : null
     });
 
     return true;
   } catch (error) {
-    if (showMsg) logger.error(`This URL "${target}" does not exist`);
+    if (params.showMsg) logger.error(`This URL "${target}" does not exist`);
     if (isDebug && error.code) console.log('http-operations.checkExistUrl.error.code:', error.code);
     if (isDebug && error.config) inspector('http-operations.checkExistUrl.error.config:', error.config);
     if (isDebug && error.headers) inspector('http-operations.checkExistUrl.error.headers:', error.headers);
@@ -73,9 +86,9 @@ const urlExists = async function (target, showMsg = true) {
  * @param {Boolean} showMsg 
  * @returns {Boolean}
  */
-const isUrlExists = async function (url, showMsg = true) {
+const isUrlExists = async function (url, params = { showMsg: true }) {
   try {
-    await urlExists(url, showMsg = true);
+    await urlExists(url, params);
     return true;
   } catch (error) {
     return false;

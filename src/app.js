@@ -1,28 +1,13 @@
 /* eslint-disable no-unused-vars */
-const {
-  inspector,
-  getMyIp,
-  isMyLocalhostToIP
-} = require('./plugins');
-
 const isDebug = false;
 
 // Loads environment variables from .env file.
-const result = require('dotenv').config();
-if (result.error) {
-  throw result.error;
-}
+// e.g. const result = require('dotenv').config();
 // Set my "localhost" to my IP
 // e.g. "localhost" -> "10.60.5.128"
 // e.g. "http://localhost:3030" -> "http://10.60.5.128:3030"
-if (isMyLocalhostToIP() && process.env.HOST === 'localhost' && getMyIp()) {
-  process.env.HOST = getMyIp();
-  process.env.BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`;
-  if (true && process.env.HOST) {
-    console.log('process.env.HOST', process.env.HOST);
-    console.log('process.env.BASE_URL', process.env.BASE_URL);
-  }
-}
+const { setLocalhostToIP } = require('./plugins');
+setLocalhostToIP();
 
 const path = require('path');
 const favicon = require('serve-favicon');
