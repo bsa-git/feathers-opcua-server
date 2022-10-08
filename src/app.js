@@ -1,8 +1,11 @@
 /* eslint-disable no-unused-vars */
-const isDebug = false;
 
 // Loads environment variables from .env file.
-// e.g. const result = require('dotenv').config();
+const result = require('dotenv').config();
+if (result.error) {
+  throw result.error;
+}
+
 // Set my "localhost" to my IP
 // e.g. "localhost" -> "10.60.5.128"
 // e.g. "http://localhost:3030" -> "http://10.60.5.128:3030"

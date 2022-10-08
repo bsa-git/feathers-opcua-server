@@ -63,33 +63,6 @@ const sysMemUsage = function () {// sysMemUsage
   return result;
 };
 
-/**
- * Set my "localhost" to my IP
- * @method setLocalhostToIP
- * e.g. "localhost" -> "10.60.5.128"
- * e.g. "http://localhost:3030" -> "http://10.60.5.128:3030"
- */
-const setLocalhostToIP = function () {
-  const { getMyIp } = require('./net-operations');
-  const { isMyLocalhostToIP } = require('../opcua/opcua-helper');
-
-  // Loads environment variables from .env file.
-  const result = require('dotenv').config();
-  if (result.error) {
-    throw result.error;
-  }
-
-  const isLocalhost = process.env.HOST === 'localhost';
-  if (isMyLocalhostToIP() && isLocalhost && getMyIp()) {
-    process.env.HOST = getMyIp();
-    process.env.BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`;
-    if (true && process.env.HOST) {
-      console.log('process.env.HOST', process.env.HOST);
-      console.log('process.env.BASE_URL', process.env.BASE_URL);
-    }
-  }
-};
-
 //--------------------- DATE TIME -------------------//
 /**
 * Pause
@@ -1130,7 +1103,6 @@ const hexToRGBA = function (color) {
 module.exports = {
   appRoot,
   logger,
-  setLocalhostToIP,
   isTest,
   feathersSpecs,
   sysMemUsage,
