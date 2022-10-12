@@ -132,6 +132,7 @@ const setLocalhostToIP = function () {
       console.log('process.env.BASE_URL', process.env.BASE_URL);
     }
   }
+  return process.env.BASE_URL;
 };
 
 //---------------- DNS -------------//
