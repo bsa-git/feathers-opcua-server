@@ -1168,7 +1168,8 @@ const updateRemoteFromLocalStore = async function (app, appRestClient, opcuaTags
 
         // Remove and create value for remote DB
         if (findedRemoteStoreValue && findedRemoteStoreValue.store.hash !== hash) {
-          const removedItems = await removeItem(appRestClient, 'opcua-values', {
+          // const removedItems = await removeItem(appRestClient, 'opcua-values', {
+          const removedItems = await removeItems(appRestClient, 'opcua-values', {  
             tagName: storeBrowseName,
             storeStart: findedStoreValue.storeStart,
             $select: ['tagName', 'store', 'storeStart', 'storeEnd']
