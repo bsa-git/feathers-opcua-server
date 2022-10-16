@@ -22,7 +22,7 @@ const isLog = false;
 module.exports = async function feathersClient(options) {
   let { transport, timeout, serverUrl, ioOptions, storage, ifNoAuth } = options;
   transport = transport || 'socketio';
-  timeout = timeout || 45000;
+  timeout = timeout || 5000;
   serverUrl = serverUrl || 'http://localhost:3030';
   ioOptions = ioOptions || {};
   storage = storage ? storage : localStorage;
@@ -51,9 +51,8 @@ module.exports = async function feathersClient(options) {
     }
     if (isDebug) debug('makeFeathersClient: OK');
   } catch (error) {
-    if (error.code !== 'ECONNREFUSED') {
-      console.log(chalk.red('error:'), 'feathers-client.serverUrl:', chalk.cyan(`${error.message}!`));
-    }
+    console.log(chalk.red('error:'), 'feathers-client.serverUrl:', chalk.cyan(`${error.message}!`));
+    throw new Error(`Error: "${error.message}" while creating the FeathersClient for transport: ${transport}.`);
   }
   return appClient;
 };
