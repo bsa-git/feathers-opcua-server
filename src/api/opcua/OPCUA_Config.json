@@ -178,7 +178,7 @@
     "isMyLocalhostToIP": true,
     "executeMethodsFrom": "client",
     "hostTypeDB": "mongodb",
-    "opcuaSaveModeToDB": "remoteUpdate",
+    "opcuaSaveModeToDB": "localUpdate",
     "opcuaRemoteDbUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": false,
