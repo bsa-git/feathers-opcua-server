@@ -4,6 +4,7 @@ const localStorage = require('./local-storage');
 const loginJwt = require('./login-jwt');
 const loginLocal = require('./login-local');
 const feathersClient = require('./feathers-client');
+const feathersClient2 = require('./feathers-client2');
 module.exports = {
   AuthServer,
   Channel,
@@ -11,4 +12,5 @@ module.exports = {
   loginJwt,
   loginLocal,
   feathersClient,
+  feathersClient2
 };

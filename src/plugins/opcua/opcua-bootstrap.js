@@ -116,16 +116,16 @@ module.exports = async function opcuaBootstrap(app) {
     }
 
     // Sync opcua store at startup
-    if (bootstrapParams && bootstrapParams.syncHistoryAtStartup) {
-      methodName = bootstrapParams.syncHistoryAtStartup;
+    if (bootstrapParams && bootstrapParams.syncHistoryAtStartup && bootstrapParams.syncHistoryAtStartup.active) {
+      methodName = bootstrapParams.syncHistoryAtStartup.methodName;
       const syncResult = await syncHistoryAtStartup(app, opcuaTags, methodName);
       if (isDebug && syncResult) inspector('opcuaBootstrap.syncHistoryAtStartup.syncResult:', syncResult);
       logger.info(`opcuaBootstrap.syncHistoryAtStartup.localDB: OK. {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
     }
 
     // Sync opcua store values
-    if (bootstrapParams && bootstrapParams.syncReportAtStartup) {
-      methodName = bootstrapParams.syncReportAtStartup;
+    if (bootstrapParams && bootstrapParams.syncReportAtStartup && bootstrapParams.syncReportAtStartup.active) {
+      methodName = bootstrapParams.syncReportAtStartup.methodName;
       const syncResult = await syncReportAtStartup(app, opcuaTags, methodName);
       if (isDebug && syncResult) inspector('opcuaBootstrap.syncReportAtStartup.syncResult:', syncResult);
       logger.info('opcuaBootstrap.syncReportAtStartup.localDB: OK.');

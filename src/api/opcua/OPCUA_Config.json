@@ -51,8 +51,14 @@
     "opcuaRemoteDbUrl": "http://M5-0095488.OSTCHEM.COM.UA:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": false,
-      "syncHistoryAtStartup": "methodAcmDayReportsDataGet",
-      "syncReportAtStartup": "methodAcmYearReportUpdate"
+      "syncHistoryAtStartup": { 
+        "active": true,
+        "methodName": "methodAcmDayReportsDataGet"
+      },
+      "syncReportAtStartup": {
+        "active": true,
+        "methodName": "methodAcmYearReportUpdate"
+      }
     },
     "security": {
       "mode": "SignAndEncrypt",
@@ -178,12 +184,18 @@
     "isMyLocalhostToIP": true,
     "executeMethodsFrom": "client",
     "hostTypeDB": "mongodb",
-    "opcuaSaveModeToDB": "remoteUpdate",
+    "opcuaSaveModeToDB": "localUpdate",
     "opcuaRemoteDbUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": false,
-      "syncHistoryAtStartup": "methodAcmDayReportsDataGet",
-      "syncReportAtStartup": "methodAcmYearReportUpdate"
+      "syncHistoryAtStartup": { 
+        "active": false,
+        "methodName": "methodAcmDayReportsDataGet"
+      },
+      "syncReportAtStartup": {
+        "active": false,
+        "methodName": "methodAcmYearReportUpdate"
+      }
     },
     "security": {
       "mode": "SignAndEncrypt",
@@ -249,8 +261,14 @@
     "opcuaRemoteDbUrl": "http://BSA-HOME:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": false,
-      "syncHistoryAtStartup": "methodAcmDayReportsDataGet",
-      "syncReportAtStartup": "methodAcmYearReportUpdate"
+      "syncHistoryAtStartup": { 
+        "active": true,
+        "methodName": "methodAcmDayReportsDataGet"
+      },
+      "syncReportAtStartup": {
+        "active": true,
+        "methodName": "methodAcmYearReportUpdate"
+      }
     },
     "security": {
       "mode": "SignAndEncrypt",

@@ -13,7 +13,7 @@ const {
 const {
   localStorage,
   loginLocal,
-  feathersClient,
+  feathersClient2,
   AuthServer
 } = require('../../src/plugins/auth');
 
@@ -82,8 +82,8 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
         setTimeout(async () => {
           localStorage.clear();
           await saveFakesToServices(app, 'users');
-          appSocketioClient = await feathersClient({ transport: 'socketio', serverUrl: baseUrl });
-          appRestClient = await feathersClient({ transport: 'rest', serverUrl: baseUrl });
+          appSocketioClient = await feathersClient2({ transport: 'socketio', serverUrl: baseUrl });
+          appRestClient = await feathersClient2({ transport: 'rest', serverUrl: baseUrl });
           if (isDebug) debug('Done before StartTest!');
           done();
         }, 500);
