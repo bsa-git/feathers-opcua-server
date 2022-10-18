@@ -121,7 +121,7 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
 
     if (getOsPlatform() === 'win32') {
 
-      let path = winPathToUncPath([appRoot, 'src/api/opcua']);
+      let path = winPathToUncPath([appRoot, 'src/api/opcua/config']);
       let fileName = 'UNECE_to_OPCUA.csv';
       // Does UNC dir exist
       let isExist = doesDirExist(path);
