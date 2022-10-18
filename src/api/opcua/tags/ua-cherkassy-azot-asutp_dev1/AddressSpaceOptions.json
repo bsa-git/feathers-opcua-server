@@ -1,0 +1,342 @@
+{
+  "objects": [
+    {
+      "isEnable": true,
+      "browseName": "CH_M5",
+      "displayName": "Черкассы 'АЗОТ' цех M5",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_M51",
+      "displayName": "Черкассы 'АЗОТ' цех M5/1",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_M52",
+      "displayName": "Черкассы 'АЗОТ' цех M5/2",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_M51_ACM",
+      "displayName": "Черкассы 'АЗОТ' цех M5/1 ACM",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_M52_ACM",
+      "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_M52_ACM2",
+      "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM2",
+      "type": "object"
+    },
+    {
+      "isEnable": false,
+      "browseName": "CH_A3",
+      "displayName": "Черкассы 'АЗОТ' цех A3",
+      "type": "object"
+    },
+    {
+      "isEnable": false,
+      "browseName": "CH_NG-UPG2",
+      "displayName": "Черкассы 'АЗОТ' узел ПГ №2",
+      "type": "object"
+    },
+    {
+      "isEnable": false,
+      "browseName": "CH_M7-313",
+      "displayName": "Черкассы 'АЗОТ' цех М7-313",
+      "type": "object"
+    },
+    {
+      "isEnable": false,
+      "browseName": "CH_M7-357",
+      "displayName": "Черкассы 'АЗОТ' цех М7-357",
+      "type": "object"
+    },
+    {
+      "isEnable": false,
+      "browseName": "CH_M7-657",
+      "displayName": "Черкассы 'АЗОТ' цех М7-657",
+      "type": "object"
+    },
+    {
+      "isEnable": false,
+      "browseName": "CH_M9",
+      "displayName": "Черкассы 'АЗОТ' цех М9",
+      "type": "object"
+    },
+    {
+      "isEnable": false,
+      "browseName": "CH_M2",
+      "displayName": "Черкассы 'АЗОТ' цех М2",
+      "type": "object"
+    }
+  ],
+  "variables": [
+    {
+      "browseName": "CH_M5::RunCommand",
+      "aliasName": "RunCommand",
+      "displayName": "Variable For RunCommand",
+      "ownerName": "CH_M5",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "subscription": "onChangedRunCommand",
+      "description": "Executing commands on an 'CH_M5' object"
+    },
+    {
+      "browseName": "CH_M51::ValueFromFile",
+      "displayName": "Значения из файла для CH_M51",
+      "ownerName": "CH_M51",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValueFromHttpPath",
+      "getterParams": {
+        "path": "http://192.168.3.5/www_m5/m5_data2/",
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M52::ValueFromFile",
+      "displayName": "Значения из файла для CH_M52",
+      "ownerName": "CH_M52",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValueFromHttpPath",
+      "getterParams": {
+        "path": "http://192.168.3.5/www_m5/m5_data/",
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M51_ACM::ValueFromFile",
+      "displayName": "Значения из файла для CH_M51_ACM",
+      "ownerName": "CH_M51_ACM",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "store": {
+        "numberOfValuesInDoc": [1, "years"],
+        "numberOfDocsForTag": [5, "years"]
+      },
+      "group": true,
+      "subscription": "onChangedGroupHandlerForASM",
+      "variableGetType": "valueFromSource",
+      "getter": "getterAcmDayValueFromFile",
+      "getterParams": {
+        "path": "test/data/tmp/ch-m5acm_1",
+        "fromFile": "test/data/excel/acm/acmDayReport.xls",
+        "acmPath": "test/data/excel/acm/23agr",
+        "pointID": 1,
+        "isTest": true,
+        "interval": 20000,
+        "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["23QN2O", "23QN2O_CORR", "23FVSG", "23FVSG_CORR", "23F105_IS"]}
+      }
+    },
+    {
+      "browseName": "CH_M52_ACM::ValueFromFile",
+      "displayName": "Значения из файла для CH_M52_ACM",
+      "ownerName": "CH_M52_ACM",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "store": {
+        "numberOfValuesInDoc": [1, "years"],
+        "numberOfDocsForTag": [5, "years"]
+      },
+      "group": true,
+      "subscription": "onChangedGroupHandlerForASM",
+      "variableGetType": "valueFromSource",
+      "getter": "getterAcmDayValueFromFile",
+      "getterParams": {
+        "path": "test/data/tmp/ch-m5acm_2",
+        "fromFile": "test/data/excel/acm/acmDayReport.xls",
+        "acmPath": "test/data/excel/acm/14agr",
+        "pointID": 2,
+        "isTest": true,
+        "interval": 25000,
+        "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["14QN2O", "14QN2O_CORR", "14FVSG", "14FVSG_CORR", "14F105_IS"]}
+      }
+    },
+    {
+      "browseName": "CH_M52_ACM2::ValueFromFile",
+      "displayName": "Значения из файла для CH_M52_ACM2",
+      "ownerName": "CH_M52_ACM2",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "store": {
+        "numberOfValuesInDoc": [1, "years"],
+        "numberOfDocsForTag": [5, "years"]
+      },
+      "group": true,
+      "subscription": "onChangedGroupHandlerForASM",
+      "variableGetType": "valueFromSource",
+      "getter": "getterAcmDayValueFromFile",
+      "getterParams": {
+        "path": "test/data/tmp/ch-m5acm_3",
+        "fromFile": "test/data/excel/acm/acmDayReport.xls",
+        "acmPath": "test/data/excel/acm/57agr",
+        "pointID": 3,
+        "isTest": true,
+        "interval": 30000,
+        "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["57QN2O", "57QN2O_CORR", "57FVSG", "57FVSG_CORR", "57F105_IS"]}
+      }
+    },
+    {
+      "browseName": "CH_A3::ValuesFromDB",
+      "displayName": "Значения из DB для CH_A3",
+      "ownerName": "CH_A3",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(A3)"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_NG-UPG2::ValuesFromDB",
+      "displayName": "Значения из DB для CH_NG-UPG2",
+      "ownerName": "CH_NG-UPG2",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "opcUPG2"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M7-313::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M7-313",
+      "ownerName": "CH_M7-313",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M7-313)"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M7-357::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M7-357",
+      "ownerName": "CH_M7-357",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M7-357)"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M7-657::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M7-657",
+      "ownerName": "CH_M7-657",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M7-657)"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M9::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M9",
+      "ownerName": "CH_M9",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M9)"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M2::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M2",
+      "ownerName": "CH_M2",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M2)"
+        },
+        "interval": 20000
+      }
+    }
+  ]
+}

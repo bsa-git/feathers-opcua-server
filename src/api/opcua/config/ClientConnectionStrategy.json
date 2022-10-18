@@ -1,0 +1,5 @@
+{
+  "maxRetry": 100,
+  "initialDelay": 10,
+  "maxDelay": 10000
+}

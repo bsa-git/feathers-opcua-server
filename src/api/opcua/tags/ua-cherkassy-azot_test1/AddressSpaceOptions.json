@@ -1,0 +1,280 @@
+{
+  "objects": [
+    {
+      "isEnable": true,
+      "browseName": "Device1",
+      "displayName": "Device1",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "Device2",
+      "displayName": "Device2",
+      "type": "object"
+    }
+  ],
+  "variables": [
+    {
+      "browseName": "Device1.Temperature",
+      "displayName": "Temperature",
+      "ownerName": "Device1",
+      "type": "variable.simple",
+      "dataType": "Double",
+      "variableGetType": "get",
+      "getter": "valueSimulate1",
+      "getterParams": {
+        "value": 100
+      },
+      "subscription": "onChangedValueHandler"
+    },
+    {
+      "browseName": "Device1.Variable2",
+      "displayName": "Variable2",
+      "ownerName": "Device1",
+      "type": "variable.simple",
+      "dataType": "String",
+      "variableGetType": "valueFromSource",
+      "valueFromSourceParams": {
+        "dataType": "String"
+      },
+      "getter": "valueFromSource1",
+      "getterParams": {
+        "value": "https://leanpub.com/b/nodejsbundle"
+      }
+    },
+    {
+      "browseName": "Device1.Variable3",
+      "displayName": "Variable3",
+      "ownerName": "Device1",
+      "type": "variable.array",
+      "dataType": "Double",
+      "variableGetType": "valueFromSource",
+      "valueFromSourceParams": {
+        "dataType": "Double",
+        "arrayType": "Array"
+      },
+      "getter": "valueFromSource2",
+      "getterParams": {
+        "value": [
+          10.12345,
+          20.12345,
+          30.12345
+        ]
+      },
+      "valueParams": {
+        "arrayDimensions": [
+          3
+        ],
+        "accessLevel": "CurrentRead | CurrentWrite",
+        "userAccessLevel": "CurrentRead | CurrentWrite",
+        "valueRank": 1
+      }
+    },
+    {
+      "browseName": "Device1.Variable4",
+      "displayName": "Variable4",
+      "ownerName": "Device1",
+      "type": "variable.array",
+      "dataType": "Double",
+      "variableGetType": "valueFromSource",
+      "valueFromSourceParams": {
+        "dataType": "Double",
+        "arrayType": "Array"
+      },
+      "getter": "valueFromSource2",
+      "getterParams": {
+        "value": [
+          10.12359,
+          20.125675,
+          30.12345
+        ]
+      },
+      "valueParams": {
+        "arrayDimensions": [
+          3
+        ],
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 40
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      }
+    },
+    {
+      "browseName": "Device1.PercentageMemoryUsed",
+      "displayName": "Percentage Memory Used",
+      "ownerName": "Device1",
+      "type": "variable.simple",
+      "dataType": "Double",
+      "variableGetType": "get",
+      "getter": "percentageMemUsed",
+      "valueParams": {
+        "minimumSamplingInterval": 1000
+      }
+    },
+    {
+      "browseName": "Device1.VariableForWrite",
+      "displayName": "Variable For Write",
+      "ownerName": "Device1",
+      "type": "variable.simple",
+      "dataType": "String"
+    },
+    {
+      "isEnable": true,
+      "browseName": "Device2.PressureVesselDevice",
+      "displayName": "Pressure Vessel Device",
+      "ownerName": "Device2",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "histValueFromSource",
+      "getterParams": {
+        "t": 50,
+        "interval": 200
+      },
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10.0
+        },
+        "engineeringUnits": "bar"
+      }
+    },
+    {
+      "isEnable": true,
+      "browseName": "Device2.ArrayValue",
+      "displayName": "Array value",
+      "ownerName": "Device2",
+      "type": "variable.array",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "valueFromSourceParams": {
+        "dataType": "Double",
+        "arrayType": "Array"
+      },
+      "getter": "histArrayValue",
+      "getterParams": {
+        "t": 50,
+        "interval": 200,
+        "value": [
+          1.694, 2.948, 2.348,
+          3.894, 4.456, 5.349,
+          1.675, 2.839, 3.785,
+          6.458, 1.728, 5.676,
+          4.62, 3.676, 1.674,
+          4.73, 7.622, 2.674,
+          8.511, 9.841, 5.181,
+          1.733, 3.837, 5.294
+        ]
+      },
+      "valueParams": {
+        "arrayDimensions": [
+          3
+        ],
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10.0
+        },
+        "engineeringUnits": "bar"
+      }
+    },
+    {
+      "isEnable": true,
+      "browseName": "Device2.ValueFromFile",
+      "displayName": "Value From File",
+      "ownerName": "Device2",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValueFromFile",
+      "getterParams": {
+        "path": "test/data/tmp/test1",
+        "t": 50,
+        "interval": 500
+      }
+    }
+  ],
+  "groups": [
+    {
+      "browseName": "Device2.02F5",
+      "aliasName": "02NG_F5",
+      "displayName": "Natural gas consumption",
+      "ownerName": "Device2",
+      "ownerGroup": "Device2.ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10.0
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      }
+    },
+    {
+      "browseName": "Device2.02P5",
+      "aliasName": "02NG_P5",
+      "displayName": "Natural gas pressure",
+      "ownerName": "Device2",
+      "ownerGroup": "Device2.ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 15.0
+        },
+        "engineeringUnits": "bar"
+      }
+    }
+  ],
+  "methods": [
+    {
+      "browseName": "Device1.SumMethod",
+      "displayName": "Sum Method",
+      "ownerName": "Device1",
+      "type": "method",
+      "bindMethod": "sumMethod",
+      "inputArguments": [
+        {
+          "name": "number1",
+          "description": {
+            "text": "first item"
+          },
+          "dataType": "UInt32"
+        },
+        {
+          "name": "number2",
+          "description": {
+            "text": "second item"
+          },
+          "dataType": "UInt32"
+        }
+      ],
+      "outputArguments": [
+        {
+          "name": "SumResult",
+          "description": {
+            "text": "sum of numbers"
+          },
+          "dataType": "UInt32",
+          "valueRank": 1
+        }
+      ],
+      "userAccessLevel": {
+        "inputArguments": "CurrentRead",
+        "outputArguments": "CurrentRead"
+      }
+    }
+  ]
+}

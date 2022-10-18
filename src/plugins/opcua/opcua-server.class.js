@@ -20,8 +20,8 @@ const {
   VariantArrayType,
   makeAccessLevelFlag,
 } = require('node-opcua');
-const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/OPCUA_ServerOptions`);
-const opcuaDefaultVariableHistorianOptions = require(`${appRoot}/src/api/opcua/ServerVariableHistorianOptions`);
+const opcuaDefaultServerOptions = require(`${appRoot}/src/api/opcua/config/OPCUA_ServerOptions`);
+const opcuaDefaultVariableHistorianOptions = require(`${appRoot}/src/api/opcua/config/ServerVariableHistorianOptions`);
 const opcuaDefaultGetters = require('./opcua-getters');
 const opcuaDefaultMethods = require('./opcua-methods');
 

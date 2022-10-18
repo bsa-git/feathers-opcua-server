@@ -13,13 +13,13 @@ const {
   getTime,
   inspector,
   addIntervalId
-} = require('../../../plugins/lib/util');
+} = require('../../../../plugins/lib/util');
 
 const {
   formatUAVariable,
   setValueFromSourceForGroup,
   setOpcuaValueFromSource
-} = require('../../../plugins/opcua/opcua-helper');
+} = require('../../../../plugins/opcua/opcua-helper');
 
 const {
   readOnlyNewFile,
@@ -27,9 +27,9 @@ const {
   removeFileSync,
   getFileName,
   getPathBasename
-} = require('../../../plugins/lib/file-operations');
+} = require('../../../../plugins/lib/file-operations');
 
-const opcuaDefaultGetters = require('../../../plugins/opcua/opcua-getters');
+const opcuaDefaultGetters = require('../../../../plugins/opcua/opcua-getters');
 
 const loRound = require('lodash/round');
 

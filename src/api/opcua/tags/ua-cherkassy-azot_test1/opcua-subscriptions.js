@@ -3,7 +3,7 @@ const {
   inspector, 
   getValueFromNodeId,
   formatDataValue 
-} = require('../../../plugins');
+} = require('../../../../plugins');
 const chalk = require('chalk');
 const loRound = require('lodash/round');
 

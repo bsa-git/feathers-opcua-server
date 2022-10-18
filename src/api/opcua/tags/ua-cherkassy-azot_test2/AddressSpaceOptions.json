@@ -1,0 +1,399 @@
+{
+  "objects": [
+    {
+      "isEnable": true,
+      "browseName": "CH_M5",
+      "displayName": "Cherkassy 'AZOT' workshop M5",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_M51",
+      "displayName": "Cherkassy 'AZOT' workshop M5/1",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_M52_ACM",
+      "displayName": "Cherkassy 'AZOT' workshop M5/2 ACM Agr(1..4)",
+      "type": "object"
+    }
+  ],
+  "variables": [
+    {
+      "browseName": "CH_M5::RunCommand",
+      "aliasName": "RunCommand",
+      "displayName": "Variable For RunCommand",
+      "ownerName": "CH_M5",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "description": "Executing commands on an 'CH_M5' object"
+    },
+    {
+      "browseName": "CH_M5::RunCommandTest",
+      "displayName": "Variable For RunCommandTest",
+      "ownerName": "CH_M5",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "description": "Executing commands on an 'CH_M5' object"
+    },
+    {
+      "browseName": "CH_M5::VariableForWrite",
+      "aliasName": "VariableForWrite",
+      "displayName": "Variable For Write",
+      "ownerName": "CH_M5",
+      "type": "variable.simple",
+      "dataType": "UInt16",
+      "valueParams": {
+        "arrayDimensions": [
+          24
+        ],
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 50000
+        },
+        "engineeringUnits": "milligram_per_cubic_metre"
+      },
+      "description": "Concentration of N2O (Q N2O)"
+    },
+    {
+      "browseName": "CH_M51::ValueFromFile",
+      "displayName": "Values from file for CH_M51",
+      "ownerName": "CH_M51",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValueFromFile",
+      "getterParams": {
+        "path": "test/data/tmp/ch-m51",
+        "fromFile": "test/data/csv/data-CH_M51.csv",
+        "interval": 500
+      }
+    },
+    {
+      "browseName": "CH_M52::ValueFromFile",
+      "displayName": "Values from file for CH_M52",
+      "ownerName": "CH_M52",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": false,
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValueFromFile",
+      "getterParams": {
+        "path": "test/data/tmp/ch-m52",
+        "fromFile": "test/data/csv/data-CH_M52.csv",
+        "interval": 500
+      }
+    },
+    {
+      "browseName": "CH_M52_ACM::ValueFromFile",
+      "displayName": "Values from file for CH_M52_ACM",
+      "ownerName": "CH_M52_ACM",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "store": {
+        "numberOfValuesInDoc": [1, "years"],
+        "numberOfDocsForTag": [5, "years"]
+      },
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "getterAcmDayValueFromFile",
+      "getterParams": {
+        "path": "test/data/tmp/ch-m5acm_2",
+        "fromFile": "test/data/excel/acm/acmDayReport.xls",
+        "acmPath": "test/data/excel/acm/14agr",
+        "pointID": 2,
+        "isTest": true,
+        "interval": 500,
+        "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["14QN2O", "14QN2O_CORR", "14FVSG", "14FVSG_CORR", "14F105_IS"]}
+      }
+    }
+  ],
+  "groups": [
+    {
+      "browseName": "CH_M51::01AMIAK:01T4",
+      "aliasName": "01NH3_T4",
+      "displayName": "01NH3_T4",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 200
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "T of GA NH3(T4)"
+    },
+    {
+      "browseName": "CH_M51::01AMIAK:01P4_1",
+      "aliasName": "01NH3_P4",
+      "displayName": "01NH3_P4",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10
+        },
+        "engineeringUnits": "kilogram_force_per_square_centimetre"
+      },
+      "description": "Р of GA NH3(P4_1)"
+    },
+    {
+      "browseName": "CH_M51::01AMIAK:01F4",
+      "aliasName": "01NH3_F4",
+      "displayName": "01NH3_F4",
+      "ownerName": "CH_M51",
+      "ownerGroup": "CH_M51::ValueFromFile",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 1600
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "F of GA NH3(F4)"
+    },
+    {
+      "browseName": "CH_M52_ACM::14N2O:14QN2O",
+      "aliasName": "14QN2O",
+      "displayName": "14QN2O",
+      "ownerName": "CH_M52_ACM",
+      "ownerGroup": "CH_M52_ACM::ValueFromFile",
+      "type": "variable.array",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "valueFromSourceParams": {
+        "dataType": "Double",
+        "arrayType": "Array"
+      },
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "arrayDimensions": [
+          24
+        ],
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 2000
+        },
+        "engineeringUnits": "milligram_per_cubic_metre"
+      },
+      "description": "Concentration N2O (Q N2O)"
+    },
+    {
+      "browseName": "CH_M52_ACM::14N2O:14QN2O_CORR",
+      "aliasName": "14QN2O_CORR",
+      "displayName": "14QN2O_CORR",
+      "ownerName": "CH_M52_ACM",
+      "ownerGroup": "CH_M52_ACM::ValueFromFile",
+      "type": "variable.array",
+      "dataType": "Byte",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "valueFromSourceParams": {
+        "dataType": "Byte",
+        "arrayType": "Array"
+      },
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "arrayDimensions": [
+          24
+        ]
+      },
+      "description": "Concentration correction N2O (Q N2O)"
+    },
+    {
+      "browseName": "CH_M52_ACM::14VSG:14FVSG",
+      "aliasName": "14FVSG",
+      "displayName": "14FVSG",
+      "ownerName": "CH_M52_ACM",
+      "ownerGroup": "CH_M52_ACM::ValueFromFile",
+      "type": "variable.array",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "valueFromSourceParams": {
+        "dataType": "Double",
+        "arrayType": "Array"
+      },
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "arrayDimensions": [
+          24
+        ],
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 900000
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Exhaust gas consumption (F VSG)"
+    },
+    {
+      "browseName": "CH_M52_ACM::14VSG:14FVSG_CORR",
+      "aliasName": "14FVSG_CORR",
+      "displayName": "14FVSG_CORR",
+      "ownerName": "CH_M52_ACM",
+      "ownerGroup": "CH_M52_ACM::ValueFromFile",
+      "type": "variable.array",
+      "dataType": "Byte",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "valueFromSourceParams": {
+        "dataType": "Byte",
+        "arrayType": "Array"
+      },
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "arrayDimensions": [
+          24
+        ]
+      },
+      "description": "Exhaust flow correction (F VSG)"
+    },
+    {
+      "browseName": "CH_M52_ACM::14HNO3:14F105_IS",
+      "aliasName": "14F105_IS",
+      "displayName": "14F105_IS",
+      "ownerName": "CH_M52_ACM",
+      "ownerGroup": "CH_M52_ACM::ValueFromFile",
+      "type": "variable.array",
+      "dataType": "Byte",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "valueFromSourceParams": {
+        "dataType": "Byte",
+        "arrayType": "Array"
+      },
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "arrayDimensions": [
+          24
+        ]
+      },
+      "description": "Availability of expenses of HNO3 (Is F105)"
+    }
+  ],
+  "methods": [
+    {
+      "browseName": "CH_M5::YearTemplateCreate",
+      "displayName": "Create an annual report template",
+      "ownerName": "CH_M5",
+      "type": "method",
+      "bindMethod": "methodAcmYearTemplateCreate",
+      "inputArguments": [
+        {
+          "name": "methodParameters",
+          "description": {
+            "text": "Method parameters"
+          },
+          "dataType": "String"
+        }
+      ],
+      "outputArguments": [
+        {
+          "name": "methodExecutionResult",
+          "description": {
+            "text": "Method execution result"
+          },
+          "dataType": "String",
+          "valueRank": 1
+        }
+      ],
+      "userAccessLevel": {
+        "inputArguments": "CurrentRead",
+        "outputArguments": "CurrentRead"
+      }
+    },
+    {
+      "browseName": "CH_M5::YearReportUpdate",
+      "displayName": "Update an annual report",
+      "ownerName": "CH_M5",
+      "type": "method",
+      "bindMethod": "methodAcmYearReportUpdate",
+      "inputArguments": [
+        {
+          "name": "methodParameters",
+          "description": {
+            "text": "Method parameters"
+          },
+          "dataType": "String"
+        },
+        {
+          "name": "methodDataValue",
+          "description": {
+            "text": "Method dataValue"
+          },
+          "dataType": "String"
+        }
+      ],
+      "outputArguments": [
+        {
+          "name": "methodExecutionResult",
+          "description": {
+            "text": "Method execution result"
+          },
+          "dataType": "String",
+          "valueRank": 1
+        }
+      ],
+      "userAccessLevel": {
+        "inputArguments": "CurrentRead",
+        "outputArguments": "CurrentRead"
+      }
+    },
+    {
+      "browseName": "CH_M5::AcmDayReportsDataGet",
+      "displayName": "Get ACM day reports data",
+      "ownerName": "CH_M5",
+      "type": "method",
+      "bindMethod": "methodAcmDayReportsDataGet",
+      "inputArguments": [
+        {
+          "name": "methodParameters",
+          "description": {
+            "text": "Method parameters"
+          },
+          "dataType": "String"
+        }
+      ],
+      "outputArguments": [
+        {
+          "name": "methodExecutionResult",
+          "description": {
+            "text": "Method execution result"
+          },
+          "dataType": "String",
+          "valueRank": 1
+        }
+      ],
+      "userAccessLevel": {
+        "inputArguments": "CurrentRead",
+        "outputArguments": "CurrentRead"
+      }
+    }
+  ]
+}

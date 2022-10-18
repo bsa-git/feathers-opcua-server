@@ -1,11 +1,10 @@
-
 /* eslint-disable no-unused-vars */
 const {
   appRoot
-} = require('../../plugins/lib');
+} = require('../../../plugins/lib');
 const {
   isValidUser,
-} = require('../../plugins/opcua/opcua-user-manager');
+} = require('../../../plugins/opcua/opcua-user-manager');
 const {
   SecurityPolicy,
   MessageSecurityMode,

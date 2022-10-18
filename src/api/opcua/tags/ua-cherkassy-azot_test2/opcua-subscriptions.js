@@ -3,11 +3,7 @@ const {
   inspector,
   isNumber,
   formatDataValue
-} = require('../../../plugins');
-
-// const {
-//   onChangedRunCommand
-// } = require('../../../plugins/opcua/opcua-subscriptions');
+} = require('../../../../plugins');
 
 const chalk = require('chalk');
 const loRound = require('lodash/round');

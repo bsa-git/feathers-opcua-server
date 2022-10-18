@@ -457,7 +457,7 @@ const formatSimpleDataValue = function (dataValue) {
  */
 const getOpcuaConfig = function (id = '') {
   let opcuaOption = null;
-  const opcuaOptions = require(`${appRoot}/src/api/opcua/OPCUA_Config.json`);
+  const opcuaOptions = require(`${appRoot}/src/api/opcua/config/OPCUA_Config.json`);
   if (id) {
     opcuaOption = opcuaOptions.find(opt => opt.id === id);
     if (!opcuaOption) {
@@ -474,7 +474,7 @@ const getOpcuaConfig = function (id = '') {
  */
 const getOpcuaConfigForIp = function (ip = '') {
   let opcuaOption = null;
-  const opcuaOptions = require(`${appRoot}/src/api/opcua/OPCUA_Config.json`);
+  const opcuaOptions = require(`${appRoot}/src/api/opcua/config/OPCUA_Config.json`);
   opcuaOption = opcuaOptions.find(opt => {
     const url = opt.srvServiceUrl ? opt.srvServiceUrl : opt.clientServiceUrl;
     const parts = getParseUrl(url);
@@ -493,7 +493,7 @@ const getOpcuaConfigForMe = function () {
   const myIp = getMyIp();
   if (isDebug) debug('getOpcuaConfigForMe.myHostname, myIp:', myHostname, myIp);
   // debug('getOpcuaConfigForMe.myHostname, myIp:', myHostname, myIp);
-  const opcuaOptions = require(`${appRoot}/src/api/opcua/OPCUA_Config.json`);
+  const opcuaOptions = require(`${appRoot}/src/api/opcua/config/OPCUA_Config.json`);
   opcuaOption = opcuaOptions.find(opt => {
     const url = opt.clientServiceUrl ? opt.clientServiceUrl : opt.srvServiceUrl;
     const parts = getParseUrl(url);
@@ -513,8 +513,7 @@ const getOpcuaConfigsForMe = function () {
   const myHostname = getHostname().toLowerCase();
   const myIp = getMyIp();
   if (isDebug) debug('getOpcuaConfigForMe.myHostname, myIp:', myHostname, myIp);
-  // debug('getOpcuaConfigForMe.myHostname, myIp:', myHostname, myIp);
-  const opcuaConfig = require(`${appRoot}/src/api/opcua/OPCUA_Config.json`);
+  const opcuaConfig = require(`${appRoot}/src/api/opcua/config/OPCUA_Config.json`);
   opcuaOptions = opcuaConfig.filter(opt => {
     const url = opt.clientServiceUrl ? opt.clientServiceUrl : opt.srvServiceUrl;
     const parts = getParseUrl(url);

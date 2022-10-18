@@ -24,11 +24,11 @@ const {
 
 const moment = require('moment');
 
-const defaultClientOptions = require(`${appRoot}/src/api/opcua/OPCUA_ClientOptions`);
-const defaultSubscriptionOptions = require(`${appRoot}/src/api/opcua/ClientSubscriptionOptions.json`);
-const { defaultItemToMonitor, defaultRequestedParameters } = require(`${appRoot}/src/api/opcua/ClientSubscriptionMonitorOptions`);
-const defaultBrowseDescriptionLike = require(`${appRoot}/src/api/opcua/ClientBrowseDescriptionLike`);
-const defaultReadValueIdOptions = require(`${appRoot}/src/api/opcua/ReadValueIdOptions`);
+const defaultClientOptions = require(`${appRoot}/src/api/opcua/config/OPCUA_ClientOptions`);
+const defaultSubscriptionOptions = require(`${appRoot}/src/api/opcua/config/ClientSubscriptionOptions.json`);
+const { defaultItemToMonitor, defaultRequestedParameters } = require(`${appRoot}/src/api/opcua/config/ClientSubscriptionMonitorOptions`);
+const defaultBrowseDescriptionLike = require(`${appRoot}/src/api/opcua/config/ClientBrowseDescriptionLike`);
+const defaultReadValueIdOptions = require(`${appRoot}/src/api/opcua/config/ReadValueIdOptions`);
 
 const chalk = require('chalk');
 const loMerge = require('lodash/merge');

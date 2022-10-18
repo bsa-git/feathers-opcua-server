@@ -15,8 +15,6 @@ const {
   readFileSync
 } = require('../../src/plugins');
 
-// const data = require('../../src/api/opcua/ua-cherkassy-azot-asutp_dev1/');
-
 const { TYPES } = require('tedious');
 const loRound = require('lodash/round');
 const loForEach = require('lodash/forEach');
