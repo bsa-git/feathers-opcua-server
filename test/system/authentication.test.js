@@ -3,7 +3,12 @@ const assert = require('assert');
 const app = require('../../src/app');
 const port = app.get('port');
 const {  inspector, } = require('../../src/plugins/lib');
-const { localStorage, loginLocal, feathersClient, AuthServer } = require('../../src/plugins/auth');
+const { 
+  localStorage, 
+  loginLocal, 
+  feathersClient, 
+  AuthServer 
+} = require('../../src/plugins/auth');
 const {
   saveFakesToServices,
   fakeNormalize,
@@ -25,11 +30,6 @@ const baseUrl = process.env.BASE_URL;
 const baseUrl2 = 'http://localhost:3131';
 
 describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
-
-  it('#1: Registered the authentication service', () => {
-    assert.ok(app.service('authentication'));
-  });
-
   describe('<<--- Local strategy --->>', () => {
     let appSocketioClient, appRestClient, server;
     //----------------------------------------------
@@ -56,6 +56,12 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
       }, 500);
     });
 
+    it('#1: Registered the authentication service', () => {
+      assert.ok(app.service('authentication'));
+      assert.ok(appRestClient.service('authentication'));
+      assert.ok(appSocketioClient.service('authentication'));
+    });
+
     it('#2: Authenticates user and creates accessToken', async () => {
       const { user, accessToken } = await app.service('authentication').create({
         strategy: 'local',
@@ -66,9 +72,18 @@ describe('<<=== Authentication Tests (authentication.test.js) ===>>', () => {
       assert.ok(user, 'Includes user in authentication data');
     });
 
-    it('#4: Authenticates from rest client user and creates accessToken', async () => {
+    it('#3: Authenticates from rest client user and creates accessToken', async () => {
       const { accessToken } = await loginLocal(appRestClient, fakeUser.email, fakeUser.password);
       assert.ok(accessToken, 'Created access token for user');
+      // Logout
+      await appRestClient.logout();
+    });
+
+    it('#4: Authenticates from socketio client user and creates accessToken', async () => {
+      const { accessToken } = await loginLocal(appSocketioClient, fakeUser.email, fakeUser.password);
+      assert.ok(accessToken, 'Created access token for user');
+      // Logout
+      await appSocketioClient.logout();
     });
 
     

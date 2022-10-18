@@ -63,7 +63,7 @@ const fakeUser = fakeUsers[0];
 const idField = AuthServer.getIdField(fakeUser);
 
 const baseUrl = process.env.BASE_URL;
-const baseUrl2 = 'http://localhost:3131';
+const serverUrl = 'http://localhost:3131';
 
 describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
 
