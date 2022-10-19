@@ -19,21 +19,63 @@
       "type": "object"
     },
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_M51_ACM",
       "displayName": "Черкассы 'АЗОТ' цех M5/1 ACM",
       "type": "object"
     },
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_M52_ACM",
       "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM",
       "type": "object"
     },
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_M52_ACM2",
       "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM2",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_A3",
+      "displayName": "Черкассы 'АЗОТ' цех A3",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_NG-UPG2",
+      "displayName": "Черкассы 'АЗОТ' узел ПГ №2",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_M7-313",
+      "displayName": "Черкассы 'АЗОТ' цех М7-313",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_M7-357",
+      "displayName": "Черкассы 'АЗОТ' цех М7-357",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_M7-657",
+      "displayName": "Черкассы 'АЗОТ' цех М7-657",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_M9",
+      "displayName": "Черкассы 'АЗОТ' цех М9",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_M2",
+      "displayName": "Черкассы 'АЗОТ' цех М2",
       "type": "object"
     }
   ],
@@ -154,6 +196,146 @@
         "isTest": true,
         "interval": 30000,
         "excelMappingFrom": {"rangeData": "B6:F29", "rangeDate": "A1:A1", "headerNames": ["57QN2O", "57QN2O_CORR", "57FVSG", "57FVSG_CORR", "57F105_IS"]}
+      }
+    },
+    {
+      "browseName": "CH_A3::ValuesFromDB",
+      "displayName": "Значения из DB для CH_A3",
+      "ownerName": "CH_A3",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(A3)"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_NG-UPG2::ValuesFromDB",
+      "displayName": "Значения из DB для CH_NG-UPG2",
+      "ownerName": "CH_NG-UPG2",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "opcUPG2"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M7-313::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M7-313",
+      "ownerName": "CH_M7-313",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M7-313)"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M7-357::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M7-357",
+      "ownerName": "CH_M7-357",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M7-357)"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M7-657::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M7-657",
+      "ownerName": "CH_M7-657",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M7-657)"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M9::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M9",
+      "ownerName": "CH_M9",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M9)"
+        },
+        "interval": 20000
+      }
+    },
+    {
+      "browseName": "CH_M2::ValuesFromDB",
+      "displayName": "Значения из DB для CH_M2",
+      "ownerName": "CH_M2",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterHistValuesFromDB",
+      "getterParams": {
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "getValuesFromChAsoduDB",
+        "queryParams": {
+          "scanerName": "xlsxGA10(M2)"
+        },
+        "interval": 20000
       }
     }
   ]

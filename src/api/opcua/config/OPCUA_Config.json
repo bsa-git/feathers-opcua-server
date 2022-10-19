@@ -208,7 +208,8 @@
     },
     "paths": {
       "base-options": [
-        "/src/api/opcua/tags/ua-cherkassy-azot-m5_prod1"
+        "/src/api/opcua/tags/ua-cherkassy-azot-m5_prod1",
+        "/src/api/opcua/tags/ua-cherkassy-azot-ogmtmztp_prod1"
       ],
       "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmt0088846_dev1/AddressSpaceOptions.json",
       "getters": "",
