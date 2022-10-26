@@ -52,11 +52,11 @@
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": false,
       "syncHistoryAtStartup": { 
-        "active": true,
+        "active": false,
         "methodName": "methodAcmDayReportsDataGet"
       },
       "syncReportAtStartup": {
-        "active": true,
+        "active": false,
         "methodName": "methodAcmYearReportUpdate"
       }
     },
