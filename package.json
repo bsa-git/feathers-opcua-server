@@ -6,10 +6,12 @@
   "main": "src",
   "keywords": [
     "feathers",
+    "OPCUA",
     "opcua",
+    "m2m",
+    "iot",
     "opc ua",
-    "opc-ua",
-    "OPCUA"
+    "internet of things"
   ],
   "author": {
     "name": "BSA Lab.",

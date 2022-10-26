@@ -119,3 +119,14 @@ see ```cert.cnf``` configuration file
 
 
      $ node -e "console.log(require('crypto').getHashes().join(' '))"
+
+### refs: Win paths to certificates for different applications
+  * C:\Users\userName\AppData\Roaming
+  * C:\ProgramData
+#### For "node-opcua" 
+  * C:\Users\userName\AppData\Roaming\node-opcua-default-nodejs\Config\PKI\trusted\certs
+#### For "UaExpert" 
+  * C:\Users\userName\AppData\Roaming\unifiedautomation\uaexpert\PKI\trusted  
+#### For "KepServer" 
+  * C:\ProgramData\Kepware\KEPServerEnterprise\V6\UA\Server\cert
+  * C:\ProgramData\Kepware\KEPServerEnterprise\V6\UA\Client Driver\cert

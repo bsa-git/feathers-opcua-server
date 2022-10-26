@@ -247,6 +247,37 @@
     }
   },
   {
+    "isEnable": false,
+    "id": "ua-cherkassy-azot-ogmt0088846_dev2",
+    "name": "380-472-00203826-ogmt0088846_dev2",
+    "description": "Opcua client for `azot-m5`, tags from `opc.tcp://localhost:49370` (KEPServer)",
+    "endpointUrl": "opc.tcp://localhost:49370",
+    "srvServiceUrl": "",
+    "clientServiceUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3030",
+    "clientScript": "startSubscriptionMonitor",
+    "subscription": "onChangedGroupHandler",
+    "security": {
+      "mode": "SignAndEncrypt",
+      "policy": "Basic256Sha256",
+      "userName": "",
+      "password": ""
+    },
+    "NodeId": {
+      "namespaceIndex": 2,
+      "identifierType": "displayName",
+      "identifierPrefix": "Channel1.Device1",
+      "addObjectItem": true
+    },
+    "paths": {
+      "base-options": [],
+      "options": "/src/api/opcua/tags/ua-cherkassy-azot-asutp_dev2/AddressSpaceOptions.json",
+      "getters": "",
+      "methods": "",
+      "subscriptions": "",
+      "client-scripts": ""
+    }
+  },
+  {
     "id": "ua-cherkassy-bsahome_dev1",
     "name": "380-472-bsahome_dev1",
     "description": "Opcua server and client for `bsahome` tags from `opc.tcp://BSA-HOME:26570`",
