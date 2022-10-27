@@ -7,8 +7,6 @@ const {
 
 const debug = require('debug')('app:opcua-client-scripts');
 const isDebug = false;
-const isLog = false;
-
 
 /**
  * @method startSubscriptionMonitor
@@ -23,7 +21,7 @@ async function startSubscriptionMonitor(id, service) {
   await service.subscriptionCreate(id);
   // Get server current state 
   const srvCurrentState = await service.getSrvCurrentState(id);
-  if (isLog && srvCurrentState) inspector('subscriptionMonitor.srvCurrentState:', srvCurrentState);
+  if (isDebug && srvCurrentState) inspector('subscriptionMonitor.srvCurrentState:', srvCurrentState);
   // Start subscriptionMonitor
   const allVariables = srvCurrentState.paramsAddressSpace.variables;
   //---- Group owners  ---//

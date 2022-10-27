@@ -1,3 +1,19 @@
+### refs: Win paths to certificates for different applications
+  * C:\Users\userName\AppData\Roaming
+  * C:\ProgramData
+#### For "node-opcua" 
+  * C:\Users\userName\AppData\Roaming\node-opcua-default-nodejs\Config\PKI\trusted\certs
+#### For "UaExpert" 
+  * C:\Users\userName\AppData\Roaming\unifiedautomation\uaexpert\PKI\trusted  
+#### For "KepServer" 
+  * C:\ProgramData\Kepware\KEPServerEnterprise\V6\UA\Server\cert
+  * C:\ProgramData\Kepware\KEPServerEnterprise\V6\UA\Client Driver\cert
+
+===============================================================================================
+Contents of the packed folder "openssl-1.0.2u-x64_86-win64.zip" or "openssl-1.0.2u-i386-win32.zip"
+need to write along the way: for Win -> "c:\Users\CH17545\AppData\Local\Programs\openssl\"
+===============================================================================================
+
 path to bat file -> c:\OpenSSL-Win64\opcuaSSL_Commands.bat
 ----------------------------------------------------------
 ----------------------------------------------------------
@@ -18,10 +34,14 @@ verify PEM certificate
 
     $ openssl x509 -in certificate.pem  -text -noout
 
+    e.g. openssl x509 -in ./pki_certs/NodeOPCUA-Client@ogmt-0088846.pem  -text -noout
+
 verify DER certificate (display information about a DER certificate)
 --------------------------------------------------------------------
 
     $ openssl x509 -in my_certificate.der -inform DER -text
+
+    e.g. openssl x509 -in ./pki_certs/kepserverenterprise_ua_client_driver.der -inform DER -text
 
 generate public key from private.key
 ------------------------------------
@@ -39,6 +59,8 @@ converting pem to der files:
 
     $ openssl x509 -inform PEM -outform DER  -in pem-certificate-file -out der-certificate-file
     $ openssl rsa -inform PEM -outform DER   -in  pem-rsa-key-file    -out der-rsa-key-file
+
+    e.g. openssl x509 -inform PEM -outform DER  -in ./pki_certs/NodeOPCUA-Client@ogmt-0088846.pem -out ./pki_certs/NodeOPCUA-Client@ogmt-0088846.der
 
 converting .pfx certificates to .pem
 ------------------------------------
@@ -120,13 +142,4 @@ see ```cert.cnf``` configuration file
 
      $ node -e "console.log(require('crypto').getHashes().join(' '))"
 
-### refs: Win paths to certificates for different applications
-  * C:\Users\userName\AppData\Roaming
-  * C:\ProgramData
-#### For "node-opcua" 
-  * C:\Users\userName\AppData\Roaming\node-opcua-default-nodejs\Config\PKI\trusted\certs
-#### For "UaExpert" 
-  * C:\Users\userName\AppData\Roaming\unifiedautomation\uaexpert\PKI\trusted  
-#### For "KepServer" 
-  * C:\ProgramData\Kepware\KEPServerEnterprise\V6\UA\Server\cert
-  * C:\ProgramData\Kepware\KEPServerEnterprise\V6\UA\Client Driver\cert
+
