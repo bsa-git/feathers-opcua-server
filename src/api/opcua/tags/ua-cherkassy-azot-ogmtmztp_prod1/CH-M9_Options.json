@@ -9,7 +9,7 @@
   "variables": [
     {
       "browseName": "CH_M9::ValuesFromDB",
-      "displayName": "Значения из DB для CH_M9",
+      "displayName": "Values from DB for CH_M9",
       "ownerName": "CH_M9",
       "type": "variable.simple",
       "dataType": "String",

@@ -41,7 +41,7 @@
   "variables": [
     {
       "browseName": "CH_M2::ValuesFromDB",
-      "displayName": "Значения из DB для CH_M2",
+      "displayName": "Values from DB for CH_M2",
       "ownerName": "CH_M2",
       "type": "variable.simple",
       "dataType": "String",

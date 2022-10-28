@@ -75,7 +75,7 @@
   "variables": [
     {
       "browseName": "CH_M7-313::ValuesFromDB",
-      "displayName": "Значения из DB для CH_M7-313",
+      "displayName": "Values from DB for CH_M7-313",
       "ownerName": "CH_M7-313",
       "type": "variable.simple",
       "dataType": "String",
@@ -94,7 +94,7 @@
     },
     {
       "browseName": "CH_M7-357::ValuesFromDB",
-      "displayName": "Значения из DB для CH_M7-357",
+      "displayName": "Values from DB for CH_M7-357",
       "ownerName": "CH_M7-357",
       "type": "variable.simple",
       "dataType": "String",
@@ -113,7 +113,7 @@
     },
     {
       "browseName": "CH_M7-657::ValuesFromDB",
-      "displayName": "Значения из DB для CH_M7-657",
+      "displayName": "Values from DB for CH_M7-657",
       "ownerName": "CH_M7-657",
       "type": "variable.simple",
       "dataType": "String",

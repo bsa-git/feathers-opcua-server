@@ -93,7 +93,7 @@
     },
     {
       "browseName": "CH_M51::ValueFromFile",
-      "displayName": "Значения из файла для CH_M51",
+      "displayName": "Values from file for CH_M51",
       "ownerName": "CH_M51",
       "type": "variable.simple",
       "dataType": "String",
@@ -109,7 +109,7 @@
     },
     {
       "browseName": "CH_M52::ValueFromFile",
-      "displayName": "Значения из файла для CH_M52",
+      "displayName": "Values from file for CH_M52",
       "ownerName": "CH_M52",
       "type": "variable.simple",
       "dataType": "String",
@@ -125,7 +125,7 @@
     },
     {
       "browseName": "CH_M51_ACM::ValueFromFile",
-      "displayName": "Значения из файла для CH_M51_ACM",
+      "displayName": "Values from file for CH_M51_ACM",
       "ownerName": "CH_M51_ACM",
       "type": "variable.simple",
       "dataType": "String",
@@ -150,7 +150,7 @@
     },
     {
       "browseName": "CH_M52_ACM::ValueFromFile",
-      "displayName": "Значения из файла для CH_M52_ACM",
+      "displayName": "Values from file for CH_M52_ACM",
       "ownerName": "CH_M52_ACM",
       "type": "variable.simple",
       "dataType": "String",
@@ -175,7 +175,7 @@
     },
     {
       "browseName": "CH_M52_ACM2::ValueFromFile",
-      "displayName": "Значения из файла для CH_M52_ACM2",
+      "displayName": "Values from file for CH_M52_ACM2",
       "ownerName": "CH_M52_ACM2",
       "type": "variable.simple",
       "dataType": "String",
@@ -200,7 +200,7 @@
     },
     {
       "browseName": "CH_A3::ValuesFromDB",
-      "displayName": "Значения из DB для CH_A3",
+      "displayName": "Values from DB for CH_A3",
       "ownerName": "CH_A3",
       "type": "variable.simple",
       "dataType": "String",
@@ -220,7 +220,7 @@
     },
     {
       "browseName": "CH_NG-UPG2::ValuesFromDB",
-      "displayName": "Значения из DB для CH_NG-UPG2",
+      "displayName": "Values from DB for CH_NG-UPG2",
       "ownerName": "CH_NG-UPG2",
       "type": "variable.simple",
       "dataType": "String",
@@ -240,7 +240,7 @@
     },
     {
       "browseName": "CH_M7-313::ValuesFromDB",
-      "displayName": "Значения из DB для CH_M7-313",
+      "displayName": "Values from DB for CH_M7-313",
       "ownerName": "CH_M7-313",
       "type": "variable.simple",
       "dataType": "String",
@@ -260,7 +260,7 @@
     },
     {
       "browseName": "CH_M7-357::ValuesFromDB",
-      "displayName": "Значения из DB для CH_M7-357",
+      "displayName": "Values from DB for CH_M7-357",
       "ownerName": "CH_M7-357",
       "type": "variable.simple",
       "dataType": "String",
@@ -280,7 +280,7 @@
     },
     {
       "browseName": "CH_M7-657::ValuesFromDB",
-      "displayName": "Значения из DB для CH_M7-657",
+      "displayName": "Values from DB for CH_M7-657",
       "ownerName": "CH_M7-657",
       "type": "variable.simple",
       "dataType": "String",
@@ -300,7 +300,7 @@
     },
     {
       "browseName": "CH_M9::ValuesFromDB",
-      "displayName": "Значения из DB для CH_M9",
+      "displayName": "Values from DB for CH_M9",
       "ownerName": "CH_M9",
       "type": "variable.simple",
       "dataType": "String",
@@ -320,7 +320,7 @@
     },
     {
       "browseName": "CH_M2::ValuesFromDB",
-      "displayName": "Значения из DB для CH_M2",
+      "displayName": "Values from DB for CH_M2",
       "ownerName": "CH_M2",
       "type": "variable.simple",
       "dataType": "String",

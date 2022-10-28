@@ -21,7 +21,7 @@
   "variables": [
     {
       "browseName": "CH_NG-UPG2::ValuesFromDB",
-      "displayName": "Значения из DB для CH_NG-UPG2",
+      "displayName": "Values from DB for CH_NG-UPG2",
       "ownerName": "CH_NG-UPG2",
       "type": "variable.simple",
       "dataType": "String",

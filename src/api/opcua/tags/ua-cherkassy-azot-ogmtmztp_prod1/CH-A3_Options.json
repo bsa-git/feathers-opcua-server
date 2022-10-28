@@ -49,7 +49,7 @@
   "variables": [
     {
       "browseName": "CH_A3::ValuesFromDB",
-      "displayName": "Значения из DB для CH_A3",
+      "displayName": "Values from DB for CH_A3",
       "ownerName": "CH_A3",
       "type": "variable.simple",
       "dataType": "String",

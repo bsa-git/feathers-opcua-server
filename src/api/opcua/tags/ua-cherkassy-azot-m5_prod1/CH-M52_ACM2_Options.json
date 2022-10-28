@@ -18,7 +18,7 @@
   "variables": [
     {
       "browseName": "CH_M52_ACM2::ValueFromFile",
-      "displayName": "Значения из файла для CH_M52_ACM2",
+      "displayName": "Values from file for CH_M52_ACM2",
       "ownerName": "CH_M52_ACM2",
       "type": "variable.simple",
       "dataType": "String",

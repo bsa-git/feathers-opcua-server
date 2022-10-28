@@ -25,7 +25,7 @@
   "variables": [
     {
       "browseName": "CH_M51::ValueFromFile",
-      "displayName": "Значения из файла для CH_M51",
+      "displayName": "Values from file for CH_M51",
       "ownerName": "CH_M51",
       "type": "variable.simple",
       "dataType": "String",
