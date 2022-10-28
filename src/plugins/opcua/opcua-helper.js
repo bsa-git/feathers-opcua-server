@@ -547,7 +547,7 @@ const getOpcuaConfigOptions = function (id, browseName = '') {
  */
 const getOpcuaSaveModeToDB = function () {
   const myConfigs = getOpcuaConfigsForMe();
-  const myConfig = myConfigs.find(item => item.opcuaSaveModeToDB);
+  const myConfig = myConfigs.find(item => (item.isEnable || item.isEnable === undefined) && item.opcuaSaveModeToDB);
   return myConfig ? myConfig.opcuaSaveModeToDB : process.env.DEFAULT_OPCUA_SAVEMODE_TODB;
 };
 

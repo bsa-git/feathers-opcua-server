@@ -259,7 +259,7 @@
     "isMyLocalhostToIP": true,
     "executeMethodsFrom": "client",
     "hostTypeDB": "mongodb",
-    "opcuaSaveModeToDB": "localUpdate",
+    "opcuaSaveModeToDB": "no",
     "opcuaRemoteDbUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": false,
@@ -291,7 +291,7 @@
     }
   },
   {
-    "isEnable": false,
+    "isEnable": true,
     "id": "ua-cherkassy-azot-ogmt0088846_dev3",
     "name": "380-472-00203826-ogmt0088846_dev3",
     "description": "Opcua client for `azot-m5`, tags from `opc.tcp://localhost:49370` (KEPServer)",
