@@ -607,7 +607,7 @@
     },
     {
       "browseName": "CH_M52::02M9:02F20_2",
-      "aliasName": "02HNO3_F20_2_FV",
+      "aliasName": "02HNO3_F20_2",
       "displayName": "02HNO3_F20_2",
       "ownerName": "CH_M52",
       "ownerGroup": "CH_M52::ValueFromFile",
