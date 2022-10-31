@@ -15,7 +15,6 @@ const loRound = require('lodash/round');
 
 const debug = require('debug')('app:opcua-subscriptions/onChangedGroupHandler');
 const isDebug = false;
-const isLog = false;
 
 /**
  * @method onChangedGroupHandler
@@ -24,13 +23,13 @@ const isLog = false;
  * @returns {void}
  */
 function onChangedGroupHandler(params, dataValue) {
-  if (isLog) inspector('subscriptions.onChangedGroupHandler.params:', loOmit(params, ['myOpcuaClient', 'app']));
-  if (isLog) inspector('subscriptions.onChangedGroupHandler.dataValue:', dataValue);
+  if (isDebug) inspector('subscriptions.onChangedGroupHandler.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && dataValue) inspector('subscriptions.onChangedGroupHandler.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
   const browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
   let value = dataValue.value.value;
-  if (isLog) inspector('subscriptions.onChangedGroupHandler.formatDataValue:', dataValue);
+  if (isDebug) inspector('subscriptions.onChangedGroupHandler.formatDataValue:', dataValue);
   // value = (addressSpaceOption.dataType === 'Double')? loRound(value, 3) : value;
   let engineeringUnits = (dataValue.valueParams && dataValue.valueParams.engineeringUnits)? dataValue.valueParams.engineeringUnits : '';
   const timestamp = dataValue.serverTimestamp;
@@ -39,7 +38,12 @@ function onChangedGroupHandler(params, dataValue) {
   if(addressSpaceOption.group){
     value = JSON.parse(value);
     const valueKeys = Object.keys(value).length;
-    console.log('<<===', chalk.magentaBright(`ID="${params.id}"; `), chalk.greenBright(`Name="${browseName}"; `), chalk.whiteBright(`Number of values=(${valueKeys});`), chalk.cyanBright(`Timestamp=${timestamp}`), '===>>');
+    console.log('<=', 
+      chalk.magentaBright(`ID="${params.id}"; `), 
+      chalk.greenBright(`Name="${browseName}"; `), 
+      chalk.whiteBright(`Values=(${valueKeys});`), 
+      chalk.cyanBright(`TM=${timestamp}`), 
+      '=>');
   }
 }
 

@@ -385,6 +385,7 @@ class OpcuaServer {
     if (isDebug && params) inspector('constructAddressSpace.params:', params);
 
     if (Array.isArray(params.objects) && params.objects.length) {
+      if(isDebug && params.objects.length) inspector('params.objects:', params.objects);
       params.objects = params.objects.filter(item => item.isEnable || item.isEnable === undefined);
     } else {
       params.objects = [];

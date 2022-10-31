@@ -46,7 +46,7 @@
       "dataType": "String",
       "hist": 1,
       "group": true,
-      "subscription": "onChangedGroupHandlerForDB",
+      "subscription": "onChangedGroupHandler",
       "variableGetType": "valueFromSource",
       "getter": "getterHistValueFromHttpPath",
       "getterParams": {

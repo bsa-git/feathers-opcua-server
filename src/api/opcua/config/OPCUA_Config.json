@@ -228,8 +228,8 @@
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
-      "userName": "OPCUA_ADMIN_NAME",
-      "password": "OPCUA_ADMIN_PASS"
+      "userName": "OPCUA_KEP_NAME",
+      "password": "OPCUA_KEP_PASS"
     },
     "include": {
       "tests": ["http-operations.test.js"]
@@ -255,7 +255,6 @@
     "endpointPort": 26570,
     "srvServiceUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3030",
     "clientServiceUrl": "",
-    "clientScript": "startSubscriptionMonitor",
     "isMyLocalhostToIP": true,
     "executeMethodsFrom": "client",
     "hostTypeDB": "mongodb",
@@ -275,8 +274,8 @@
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
-      "userName": "OPCUA_ADMIN_NAME",
-      "password": "OPCUA_ADMIN_PASS"
+      "userName": "OPCUA_KEP_NAME",
+      "password": "OPCUA_KEP_PASS"
     },
     "include": {
       "tests": ["http-operations.test.js"]
@@ -299,12 +298,11 @@
     "srvServiceUrl": "",
     "clientServiceUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3030",
     "clientScript": "startSubscriptionMonitor",
-    "subscription": "onChangedGroupHandler",
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
-      "userName": "",
-      "password": ""
+      "userName": "OPCUA_KEP_NAME",
+      "password": "OPCUA_KEP_PASS"
     },
     "NodeId": {
       "namespaceIndex": 2,
@@ -314,7 +312,7 @@
     },
     "paths": {
       "base-options": ["/src/api/opcua/tags/ua-cherkassy-azot-m5_prod1"],
-      "options": "/src/api/opcua/tags/ua-cherkassy-azot-asutp_dev2/AddressSpaceOptions.json",
+      "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmt0088846_dev2/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
       "subscriptions": "",

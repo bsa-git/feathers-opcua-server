@@ -14,7 +14,8 @@ const isValidUser = ( userName, password ) => {
   //---------------------
   // Check user credentials
   result = (process.env.OPCUA_USER_NAME === userName && process.env.OPCUA_USER_PASS === password) || 
-  (process.env.OPCUA_ADMIN_NAME === userName && process.env.OPCUA_ADMIN_PASS === password);
+  (process.env.OPCUA_ADMIN_NAME === userName && process.env.OPCUA_ADMIN_PASS === password) || 
+  (process.env.OPCUA_KEP_NAME === userName && process.env.OPCUA_KEP_PASS === password);
   if(isDebug) console.log(chalk.green(`Server userManager.isValidUser: ${result? 'OK' : 'ERR'} `), 'userName:', chalk.cyan(userName), 'password:', chalk.cyan(password));
   return result;
 };
