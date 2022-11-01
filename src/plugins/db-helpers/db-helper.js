@@ -272,7 +272,7 @@ const getMaxValuesStorage = async function (app, tagId = '') {
     // Find store values
     let storeValues = await findItems(app, 'opcua-values', {
       tagId,
-      storeStart: { $ne: undefined },
+      storeStart: { $gt: '' },
       $select: ['tagName', 'storeStart', 'storeEnd']
     });
     // Ascending sort by string field
@@ -849,7 +849,7 @@ const saveStoreParameterChanges = async function (app, groupBrowseNames, opcuaTa
     // Remove values from DB
     const removedItems = await removeItems(app, 'opcua-values', {
       tagName: { $in: storeBrowseNames },
-      storeStart: { $ne: undefined },
+      storeStart: { $gt: '' },
       $select: ['tagName', 'storeStart', 'storeEnd']
     });
 
@@ -920,7 +920,7 @@ const getOpcuaTagValuesFromStores = async function (app, storeBrowseNames) {
   for (let index = 0; index < storeBrowseNames.length; index++) {
     const storeTagName = storeBrowseNames[index];
     // Find store values from DB 
-    let stores4TagName = await findItems(app, 'opcua-values', { tagName: storeTagName, storeStart: { $ne: undefined } });
+    let stores4TagName = await findItems(app, 'opcua-values', { tagName: storeTagName, storeStart: { $gt: '' } });
     if (isDebug && stores4TagName.length) console.log('getOpcuaTagValuesFromStores.storesFromDB.length:', stores4TagName.length);
     if (isDebug && stores4TagName.length) inspector('getOpcuaTagValuesFromStores.storesFromDB:', stores4TagName.map(item => {
       return {
@@ -1134,7 +1134,7 @@ const updateRemoteFromLocalStore = async function (app, appRestClient, opcuaTags
       // Find store "opcua-values" for storeBrowseName
       let findedStoreValues = await findItems(app, 'opcua-values', {
         tagName: storeBrowseName,
-        storeStart: { $ne: undefined },
+        storeStart: { $gt: '' },
         $select: ['tagName', 'store', 'storeStart', 'storeEnd', 'opcuaData']
       });
       findedStoreValues = findedStoreValues.map(v => {

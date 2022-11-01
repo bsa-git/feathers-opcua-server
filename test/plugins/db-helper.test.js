@@ -249,7 +249,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
     if (isDebug && saveStoreResults.length) inspector('Save store values when store parameter changes.saveStoreResults:', saveStoreResults.length);
 
     // Get opcua values 
-    const valuesFromDB = await findItems(app, 'opcua-values', { storeStart: { $ne: undefined } });
+    const valuesFromDB = await findItems(app, 'opcua-values', { storeStart: { $gt: '' } });
     if (isDebug && valuesFromDB.length) inspector('Save store values when store parameter changes.valuesFromDB:', valuesFromDB.length);
 
     assert.ok(valuesFromDB.length === 4, `valuesFromDB array must not be empty and is equal to (4) - '${valuesFromDB.length}'`);
@@ -277,7 +277,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
       for (let index = 0; index < storeTags.length; index++) {
         const storeTag = storeTags[index];
         const idField = getIdField(storeTag);
-        let storeValue = await findItem(app, 'opcua-values', { tagId: storeTag[idField], storeStart: { $ne: undefined } });
+        let storeValue = await findItem(app, 'opcua-values', { tagId: storeTag[idField], storeStart: { $gt: '' } });
         if (isDebug && storeValue) inspector('Save store values for test "store-items" hook.storeValue:', storeValue);
 
         const unitsRange = storeTag.valueParams.engineeringUnitsRange;
@@ -391,7 +391,7 @@ describe('<<=== DB-Helper Plugin Test (db-helper.test.js) ===>>', () => {
       for (let index = 0; index < storeTags.length; index++) {
         const storeTag = storeTags[index];
         const idField = getIdField(storeTag);
-        let storeValue = await findItem(app, 'opcua-values', { tagName: storeTag.browseName, storeStart: { $ne: undefined } });
+        let storeValue = await findItem(app, 'opcua-values', { tagName: storeTag.browseName, storeStart: { $gt: '' } });
         if (isDebug && storeValue) inspector('Test update remote store from local store.storeValue:', storeValue);
 
         const unitsRange = storeTag.valueParams.engineeringUnitsRange;

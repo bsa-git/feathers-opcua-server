@@ -10,6 +10,7 @@ const loTemplate = require('lodash/template');
 const {
   appRoot,
   inspector,
+  pause,
   readJsonFileSync,
   removeFilesFromDirSync,
   isTrue,
@@ -183,6 +184,9 @@ module.exports = async function opcuaBootstrap(app) {
       opcuaServer = await service.create(srvData);
       if (isDebug && opcuaServer) inspector('opcuaBootstrap.opcuaServer:', opcuaServer.server.getCurrentState());
     }
+
+    // await pause(3000);
+
     // Create service for OPC-UA client
     service = await getClientService(app, id);
     if (service) {
