@@ -185,8 +185,6 @@ module.exports = async function opcuaBootstrap(app) {
       if (isDebug && opcuaServer) inspector('opcuaBootstrap.opcuaServer:', opcuaServer.server.getCurrentState());
     }
 
-    // await pause(3000);
-
     // Create service for OPC-UA client
     service = await getClientService(app, id);
     if (service) {

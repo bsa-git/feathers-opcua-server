@@ -35,7 +35,6 @@ const loMerge = require('lodash/merge');
 const loConcat = require('lodash/concat');
 
 const debug = require('debug')('app:opcua-client.class');
-const isLog = false;
 const isDebug = false;
 
 class OpcuaClient {
@@ -198,7 +197,7 @@ class OpcuaClient {
       this.currentState.isSessionCreated = true;
       const msg = userIdentityInfo.type === UserTokenType.UserName ? `user: "${userIdentityInfo.userName}" is authenticated` : '';
       console.log(chalk.yellow('Client session is created.'), chalk.cyan(msg));
-      if (isLog) inspector('opcua-client.class::sessionCreate.sessionToString:', this.sessionToString());
+      if (isDebug) inspector('opcua-client.class::sessionCreate.sessionToString:', this.sessionToString());
     } catch (error) {
       if (error.message.includes('End point must exist') && process.env.NODE_ENV === 'production') {
         console.log(chalk.red('In production mode, the client must be authenticated, and must also encrypt and digitally sign the transmitted messages!'));
@@ -391,7 +390,7 @@ class OpcuaClient {
   async sessionReadNamespaceArray() {
     this.sessionNotCreated();
     const result = await this.session.readNamespaceArray();
-    if (isLog) inspector('plugin.opcua-client.class::sessionReadNamespaceArray.result:', result);
+    if (isDebug) inspector('plugin.opcua-client.class::sessionReadNamespaceArray.result:', result);
     return result;
   }
 
@@ -478,7 +477,7 @@ class OpcuaClient {
       // inspector('sessionBrowse.itemNodeIds:', itemNodeIds);
       result = await this.session.browse(itemNodeIds);
     }
-    if (isLog) inspector('plugins.opcua-client.class::sessionBrowse.result:', result);
+    if (isDebug) inspector('plugins.opcua-client.class::sessionBrowse.result:', result);
     return result;
   }
 
@@ -497,7 +496,7 @@ class OpcuaClient {
     if (browsePaths.length) {
       result = await this.session.translateBrowsePath(browsePaths);
     }
-    if (isLog) inspector('plugins.opcua-client.class::sessionTranslateBrowsePath.result:', result);
+    if (isDebug) inspector('plugins.opcua-client.class::sessionTranslateBrowsePath.result:', result);
     // inspector('plugins.opcua-client.class::sessionTranslateBrowsePath.result:', result);
     return result;
   }
@@ -560,7 +559,7 @@ class OpcuaClient {
       }
       result = dataValues;
     }
-    if (isLog) inspector('plugins.opcua-client.class::sessionRead.result:', result);
+    if (isDebug) inspector('plugins.opcua-client.class::sessionRead.result:', result);
     return result;
   }
 
@@ -640,7 +639,7 @@ class OpcuaClient {
     if (itemNodeIds.length) {
       result = await this.session.readVariableValue(itemNodeIds);
     }
-    if (isLog) inspector('opcua-client.class::sessionReadVariableValue:', result);
+    if (isDebug) inspector('opcua-client.class::sessionReadVariableValue:', result);
     return result;
   }
 
@@ -695,7 +694,7 @@ class OpcuaClient {
       dataValues = await this.session.readHistoryValue(itemNodeIds, start, end);
       result = dataValues;
     }
-    if (isLog) inspector('plugins.opcua-client.class::sessionReadHistoryValue.result:', result);
+    if (isDebug) inspector('plugins.opcua-client.class::sessionReadHistoryValue.result:', result);
     return result;
   }
 
@@ -753,7 +752,7 @@ class OpcuaClient {
       dataValues = formatHistoryResults(this.id, dataValues, itemNodeIds, this.locale);
       result = dataValues;
     }
-    if (isLog) inspector('plugins.opcua-client.class::sessionReadHistoryValuesEx.result:', result);
+    if (isDebug) inspector('plugins.opcua-client.class::sessionReadHistoryValuesEx.result:', result);
     // inspector('plugins.opcua-client.class::sessionReadHistoryValuesEx.result:', result);
     return result;
   }
@@ -768,7 +767,7 @@ class OpcuaClient {
   async sessionGetMonitoredItems(subscriptionId) {
     this.sessionNotCreated();
     const monitoredItems = await this.session.getMonitoredItems(subscriptionId);
-    if (isLog) inspector('plugins.opcua-client.class::subscriptionGetMonitoredItems.monitoredItems:', monitoredItems);
+    if (isDebug) inspector('plugins.opcua-client.class::subscriptionGetMonitoredItems.monitoredItems:', monitoredItems);
     return monitoredItems;
   }
 
@@ -787,7 +786,7 @@ class OpcuaClient {
     if(isDebug && nodeId) console.log('sessionWriteSingleNode.nodeId:', nodeId);
     nodeId = nodeId[0];
     const statusCode = await this.session.writeSingleNode(nodeId, variantValue);
-    if (isLog) inspector('plugins.opcua-client.class::sessionWriteSingleNode.statusCode:', statusCode);
+    if (isDebug) inspector('plugins.opcua-client.class::sessionWriteSingleNode.statusCode:', statusCode);
     return statusCode;
   }
 
@@ -851,7 +850,7 @@ class OpcuaClient {
     if (itemNodeIds.length) {
       statusCodes = await this.session.write(itemNodeIds);
     }
-    if (isLog) inspector('plugins.opcua-client.class::sessionWrite.statusCodes:', statusCodes);
+    if (isDebug) inspector('plugins.opcua-client.class::sessionWrite.statusCodes:', statusCodes);
     return statusCodes;
   }
 
@@ -918,7 +917,7 @@ class OpcuaClient {
       if(isDebug && itemNodeIds) inspector('sessionCallMethod.itemNodeIds:', itemNodeIds);
       result = await this.session.call(itemNodeIds);
     }
-    if (isLog) inspector('plugins.opcua-client.class::sessionCallMethod.result:', result);
+    if (isDebug) inspector('plugins.opcua-client.class::sessionCallMethod.result:', result);
     return result;
   }
 
@@ -933,7 +932,7 @@ class OpcuaClient {
     this.sessionNotCreated();
     const methodId = this.getItemNodeId(nameNodeId).nodeId;
     const argumentsDefinition = await this.session.getArgumentDefinition(methodId);
-    if (isLog) inspector('plugins.opcua-client.class::sessionGetArgumentDefinition.argumentsDefinition:', argumentsDefinition);
+    if (isDebug) inspector('plugins.opcua-client.class::sessionGetArgumentDefinition.argumentsDefinition:', argumentsDefinition);
     // inspector('plugins.opcua-client.class::sessionGetArgumentDefinition.argumentsDefinition:', argumentsDefinition);
     return argumentsDefinition;
   }
@@ -1150,19 +1149,19 @@ class OpcuaClient {
       const mergeItemToMonitor = loMerge({}, defaultItemToMonitor, itemToMonitor);
       const mergeRequestedParameters = loMerge({}, defaultRequestedParameters, requestedParameters);
 
-      if (isLog) inspector('opcua-client.class::subscriptionMonitor.mergeItemToMonitor:', mergeItemToMonitor);
-      if (isLog) inspector('opcua-client.class::subscriptionMonitor.mergeRequestedParameters:', mergeRequestedParameters);
+      if (isDebug) inspector('opcua-client.class::subscriptionMonitor.mergeItemToMonitor:', mergeItemToMonitor);
+      if (isDebug) inspector('opcua-client.class::subscriptionMonitor.mergeRequestedParameters:', mergeRequestedParameters);
 
       const monitoredItem = await this.subscription.monitor(
         mergeItemToMonitor,
         mergeRequestedParameters,
         timestampsToReturn
       );
-      if (isLog) inspector('opcua-client.class::subscriptionMonitor.monitoredItem:', `nodeId="${monitoredItem.itemToMonitor.nodeId.value}" statusCode="${monitoredItem.statusCode.name}"`);
+      if (isDebug) inspector('opcua-client.class::subscriptionMonitor.monitoredItem:', `nodeId="${monitoredItem.itemToMonitor.nodeId.value}" statusCode="${monitoredItem.statusCode.name}"`);
 
       // Run subscriptionHandler
       monitoredItem.on('changed', (dataValue) => {
-        if (isLog && dataValue) inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
+        if (isDebug && dataValue) inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
         const value = dataValue.value.value;
         if (value === null) return;
         itemToMonitor.id = this.id;
@@ -1217,7 +1216,7 @@ class OpcuaClient {
         itemNodeIds.push(nameNodeIds);
       }
     }
-    if (isLog) inspector('getNodeIds.result:', itemNodeIds);
+    if (isDebug) inspector('getNodeIds.result:', itemNodeIds);
     return itemNodeIds;
   }
 

@@ -31,6 +31,7 @@ async function opcuaClientSessionAsync(endpointUrl, params, callback) {
   await client.withSessionAsync(endpointUrl, async (session) => {
     result = await callback(session, params);
     if (isDebug && result) inspector('opcuaClientSessionAsync.result:', result);
+    session.close();
   });
   return result;
 }
