@@ -2,12 +2,9 @@
 const assert = require('assert');
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
+const app = require('../../src/app');
+
 const {
-  OPCUAClient,
-  ClientSubscription,
-  AttributeIds,
-  TimestampsToReturn,
-  Variant,
   UserTokenType
 } = require('node-opcua');
 
@@ -18,22 +15,19 @@ const {
 } = require('../../src/plugins/lib');
 
 const {
-  opcuaClientSessionAsync
+  opcuaClientSessionAsync,
+  callbackSubscriptionCreate
 } = require('../../src/plugins/opcua/opcua-client-scripts/lib');
 
 const chalk = require('chalk');
-const loMerge = require('lodash/merge');
 
-const defaultSubscriptionOptions = require(`${appRoot}/src/api/opcua/config/ClientSubscriptionOptions.json`);
 
-const debug = require('debug')('app:#4-scriptRunOpcuaCommand');
+const debug = require('debug')('app:#5-scriptRunSessionOperation');
 const isDebug = false;
 
 // Get argv
-// e.g. argv.script='#1.1' =>  command -> 'ch_m5CreateAcmYearTemplate'
-// e.g. argv.script='#1.2' =>  command -> 'ch_m5GetAcmDayReportsData'
-// e.g. argv.script='#1.3.1' =>  command -> 'ch_m5SyncAcmYearReport' (Get dataItems from store)
-// e.g. argv.script='#1.3.2' =>  command -> 'ch_m5SyncAcmYearReport' (Get dataItems from day reports)
+// e.g. argv.script='#5.1' =>  command -> 'ch_m5CreateSubscription'
+
 const argv = yargs(hideBin(process.argv)).argv;
 if (isDebug && argv) inspector('Yargs.argv:', argv);
 const script = argv.script.split('.')[0];
@@ -45,35 +39,29 @@ describe('<<=== ScriptOperations: (#5-scriptRunSessionOperation) ===>>', () => {
   if (!isScript) return;
   // Run opcua command
   it('#5: SessionOperations: Run session operation', async () => {
-    let options = null;
+    let options = {
+      userIdentityInfo: { 
+        type: UserTokenType.UserName, // UserTokenType.Anonymous, 
+        userName: process.env.OPCUA_ADMIN_NAME, 
+        password: process.env.OPCUA_ADMIN_PASS 
+      },
+      clientParams: {},
+      subscriptionOptions: {}
+    };
+
     //--------------------------------------------
     switch (argv.script) {
     case '#5.1':
-      options = {
-        command: 'ch_m5CreateSubscription',
-        opt: {
-          url: 'opc.tcp://localhost:26570',// (Endpoint URL)
-          subscriptionOptions: {}
-        }
+      options.command = 'ch_m5CreateSubscription';
+      options.opt = {
+        url: 'opc.tcp://localhost:26570',// (Endpoint URL)
       };
-      callback = async function (session, params) {
-        let subscriptionId;
-        //-------------------------------
-        const mergeOptions = loMerge({}, defaultSubscriptionOptions, params.opt.subscriptionOptions);
-        const subscription = await Promise.resolve(ClientSubscription.create(session, mergeOptions));
 
-        subscription
-          .on('started', () => {
-            subscriptionId = subscription.subscriptionId;
-            console.log(chalk.yellow('Client subscription started.') + ' SubscriptionId=', subscription.subscriptionId);
-          })
-          .on('keepalive', () => console.log(chalk.yellow('Client subscription keepalive')))
-          .on('terminated', () => console.log(chalk.yellow('Client subscription terminated')));
-        
-          
+      callback = async function (session, params) {
+        const result = callbackSubscriptionCreate(session, params);
         await pause(3000);
-        subscription.terminate();
-        return { statusCode: 'Good', subscriptionId };
+        result.subscription.terminate();
+        return result;
       };
       break;
     default:
@@ -81,7 +69,7 @@ describe('<<=== ScriptOperations: (#5-scriptRunSessionOperation) ===>>', () => {
     }
 
     const result = await opcuaClientSessionAsync(options.opt.url, options, callback);
-    if (true && result) inspector('runOpcuaCommand.result:', result);
+    // if (true && result) inspector('runOpcuaCommand.result:', result);
     console.log(chalk.green(`Run session write command "${options.command}" - OK!`), 'result:', chalk.cyan(result.statusCode));
     assert.ok(result.statusCode === 'Good', 'Run opcua command');
   });

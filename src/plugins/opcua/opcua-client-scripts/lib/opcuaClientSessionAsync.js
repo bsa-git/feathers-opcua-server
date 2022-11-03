@@ -2,12 +2,31 @@
 const url = require('url');
 
 const {
+  appRoot,
+  logger,
   inspector,
 } = require('../../../lib');
 
-const logger = require('../../../../logger');
+const {
+  getSecurityMode,
+  getSecurityPolicy
+} = require('../../../opcua');
 
-const { OPCUAClient } = require('node-opcua');
+const {
+  OPCUAClient,
+  MessageSecurityMode,
+  SecurityPolicy,
+  UserTokenType
+} = require('node-opcua');
+
+const loMerge = require('lodash/merge');
+const chalk = require('chalk');
+
+const defaultClientOptions = require(`${appRoot}/src/api/opcua/config/OPCUA_ClientOptions`);
+const clientEndpointWithUserIdentity = require(`${appRoot}/src/api/opcua/config/ClientEndpointWithUserIdentity`);
+defaultClientOptions.securityMode = MessageSecurityMode.SignAndEncrypt;
+defaultClientOptions.securityPolicy = SecurityPolicy.Basic256Sha256;
+
 
 const isDebug = false;
 
@@ -25,10 +44,25 @@ async function opcuaClientSessionAsync(endpointUrl, params, callback) {
   // Check endpointUrl
   url.parse(endpointUrl);
 
-  // Run script
-  const client = OPCUAClient.create({ endpointMustExist: false });
-  client.on('backoff', () => logger.error(`Backoff: trying to connect to ${endpointUrl}`));
-  await client.withSessionAsync(endpointUrl, async (session) => {
+  // OPCUAClient create
+  const clientParams = loMerge({}, defaultClientOptions, params.clientParams ? params.clientParams : {});
+  const opcuaClient = OPCUAClient.create(clientParams);
+  const applicationUri = opcuaClient._applicationUri;
+  opcuaClient.on('backoff', () => logger.error(`Backoff: trying to connect to ${endpointUrl}`));
+  console.log(chalk.yellow('Client connected to:'), chalk.cyan(endpointUrl));
+  console.log(chalk.yellow('Client applicationUri:'), chalk.cyan(applicationUri));
+  console.log(chalk.yellow('Client securityMode:'), chalk.cyan(getSecurityMode(clientParams.securityMode)));
+  console.log(chalk.yellow('Client securityPolicy:'), chalk.cyan(getSecurityPolicy(clientParams.securityPolicy)));
+  
+  // Get sessParams 
+  const userIdentityType = (params.userIdentityInfo && params.userIdentityInfo.type) ? params.userIdentityInfo.type : UserTokenType.Anonymous;
+  const sessParams = (userIdentityType === UserTokenType.Anonymous) ? endpointUrl : { endpointUrl, userIdentity: params.userIdentityInfo };
+  if(isDebug && sessParams) console.log('opcuaClient.withSessionAsync.sessParams:', sessParams);
+  
+  // Create sessionAsync
+  await opcuaClient.withSessionAsync(sessParams, async (session) => {
+    
+    // Run callback
     result = await callback(session, params);
     if (isDebug && result) inspector('opcuaClientSessionAsync.result:', result);
     session.close();
