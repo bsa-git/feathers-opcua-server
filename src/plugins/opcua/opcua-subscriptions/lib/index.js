@@ -1,4 +1,5 @@
 const showInfoForHandler = require('./showInfoForHandler');
+const showInfoForHandler2 = require('./showInfoForHandler2');
 const showInfoForGroupHandler = require('./showInfoForGroupHandler');
 const saveOpcuaGroupValueToDB = require('./saveOpcuaGroupValueToDB');
 const saveStoreOpcuaGroupValueToDB = require('./saveStoreOpcuaGroupValueToDB');
@@ -9,6 +10,7 @@ const sessionReadHistoryValues = require('./sessionReadHistoryValues');
 
 module.exports = {
   showInfoForHandler,
+  showInfoForHandler2,
   showInfoForGroupHandler,
   saveOpcuaGroupValueToDB,
   saveStoreOpcuaGroupValueToDB,

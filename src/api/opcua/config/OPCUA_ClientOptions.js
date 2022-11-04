@@ -36,7 +36,7 @@ module.exports = {
   /**
    * default secure token lifetime in ms
    */
-  defaultSecureTokenLifetime: 600000,
+  defaultSecureTokenLifetime: 60000,
 
   /**
    * the security mode
@@ -78,7 +78,7 @@ module.exports = {
   /**
    * the requested session timeout in CreateSession (ms)
    */
-  requestedSessionTimeout: 600000,
+  requestedSessionTimeout: 60000,
 
   /**
    * set to false if the client should accept server endpoint mismatch

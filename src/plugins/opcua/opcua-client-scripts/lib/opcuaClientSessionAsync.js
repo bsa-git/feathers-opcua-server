@@ -5,6 +5,7 @@ const {
   appRoot,
   logger,
   inspector,
+  isString
 } = require('../../../lib');
 
 const {
@@ -39,7 +40,7 @@ const isDebug = false;
  * @returns {Object|Object[]}
  */
 async function opcuaClientSessionAsync(endpointUrl, params, callback) {
-  let result = null;
+  let result = null, msg = '';
   //----------------
   // Check endpointUrl
   url.parse(endpointUrl);
@@ -49,6 +50,7 @@ async function opcuaClientSessionAsync(endpointUrl, params, callback) {
   const opcuaClient = OPCUAClient.create(clientParams);
   const applicationUri = opcuaClient._applicationUri;
   opcuaClient.on('backoff', () => logger.error(`Backoff: trying to connect to ${endpointUrl}`));
+  // Show messages
   console.log(chalk.yellow('Client connected to:'), chalk.cyan(endpointUrl));
   console.log(chalk.yellow('Client applicationUri:'), chalk.cyan(applicationUri));
   console.log(chalk.yellow('Client securityMode:'), chalk.cyan(getSecurityMode(clientParams.securityMode)));
@@ -61,6 +63,14 @@ async function opcuaClientSessionAsync(endpointUrl, params, callback) {
   
   // Create sessionAsync
   await opcuaClient.withSessionAsync(sessParams, async (session) => {
+    
+    // Show mesage
+    if(!isString(sessParams) && params.userIdentityInfo.type === UserTokenType.UserName){
+      msg = `user: "${params.userIdentityInfo.userName}" is authenticated`;
+    } else {
+      msg = 'user: "Anonymous"';
+    }
+    console.log(chalk.yellow('Client session is created.'), chalk.cyan(msg));
     
     // Run callback
     result = await callback(session, params);

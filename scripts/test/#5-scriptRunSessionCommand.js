@@ -5,7 +5,9 @@ const { hideBin } = require('yargs/helpers');
 const app = require('../../src/app');
 
 const {
-  UserTokenType
+  UserTokenType,
+  TimestampsToReturn,
+  AttributeIds
 } = require('node-opcua');
 
 const {
@@ -16,8 +18,13 @@ const {
 
 const {
   opcuaClientSessionAsync,
-  callbackSubscriptionCreate
+  callbackSubscriptionCreate,
+  callbackSubscriptionMonitor
 } = require('../../src/plugins/opcua/opcua-client-scripts/lib');
+
+const {
+  showInfoForHandler2
+} = require('../../src/plugins/opcua/opcua-subscriptions/lib');
 
 const chalk = require('chalk');
 
@@ -40,27 +47,42 @@ describe('<<=== ScriptOperations: (#5-scriptRunSessionOperation) ===>>', () => {
   // Run opcua command
   it('#5: SessionOperations: Run session operation', async () => {
     let options = {
-      userIdentityInfo: { 
+      app,
+      userIdentityInfo: {
         type: UserTokenType.UserName, // UserTokenType.Anonymous, 
-        userName: process.env.OPCUA_ADMIN_NAME, 
-        password: process.env.OPCUA_ADMIN_PASS 
+        userName: process.env.OPCUA_KEP_NAME,
+        password: process.env.OPCUA_KEP_PASS
       },
       clientParams: {},
-      subscriptionOptions: {}
+      subscriptionOptions: {},
+      // Subscription monitor options
+      subscrMonOpts: {
+        itemToMonitor: {},
+        requestedParameters: {},
+        timestampsToReturn: TimestampsToReturn.Neither,
+        callBack: showInfoForHandler2
+      }
     };
 
     //--------------------------------------------
     switch (argv.script) {
     case '#5.1':
-      options.command = 'ch_m5CreateSubscription';
+      options.command = 'ch_m5SubscriptionMonitor';
       options.opt = {
-        url: 'opc.tcp://localhost:26570',// (Endpoint URL)
+        url: 'opc.tcp://localhost:26570',// (Endpoint URL) ports: 26570, 49370
+      };
+      options.subscrMonOpts.itemToMonitor = { 
+        nodeId: 'ns=1;s=CH_M52::ValueFromFile', 
+        attributeId: AttributeIds.Value 
       };
 
       callback = async function (session, params) {
-        const result = callbackSubscriptionCreate(session, params);
-        await pause(3000);
-        result.subscription.terminate();
+        let result = callbackSubscriptionCreate(session, params);
+        const subscription = result.subscription;
+        if(result.statusCode === 'Good'){
+          result = await callbackSubscriptionMonitor(subscription, params);
+        }
+        await pause(1000);
         return result;
       };
       break;

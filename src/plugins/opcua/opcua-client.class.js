@@ -1149,8 +1149,8 @@ class OpcuaClient {
       const mergeItemToMonitor = loMerge({}, defaultItemToMonitor, itemToMonitor);
       const mergeRequestedParameters = loMerge({}, defaultRequestedParameters, requestedParameters);
 
-      if (isDebug) inspector('opcua-client.class::subscriptionMonitor.mergeItemToMonitor:', mergeItemToMonitor);
-      if (isDebug) inspector('opcua-client.class::subscriptionMonitor.mergeRequestedParameters:', mergeRequestedParameters);
+      if (isDebug && mergeItemToMonitor) inspector('opcua-client.class::subscriptionMonitor.mergeItemToMonitor:', mergeItemToMonitor);
+      if (isDebug && mergeRequestedParameters) inspector('opcua-client.class::subscriptionMonitor.mergeRequestedParameters:', mergeRequestedParameters);
 
       const monitoredItem = await this.subscription.monitor(
         mergeItemToMonitor,
