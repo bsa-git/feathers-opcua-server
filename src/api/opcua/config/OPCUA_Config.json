@@ -330,7 +330,7 @@
     "clientScript": "startSubscriptionMonitor",
     "isMyLocalhostToIP": false,
     "executeMethodsFrom": "client",
-    "hostTypeDB": "mongodb",
+    "hostTypeDB": "nedb",
     "opcuaSaveModeToDB": "localUpdate",
     "opcuaRemoteDbUrl": "http://BSA-HOME:3131",
     "opcuaBootstrapParams": {

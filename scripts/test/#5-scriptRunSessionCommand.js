@@ -69,10 +69,11 @@ describe('<<=== ScriptOperations: (#5-scriptRunSessionOperation) ===>>', () => {
     case '#5.1':
       options.command = 'ch_m5SubscriptionMonitor';
       options.opt = {
-        url: 'opc.tcp://localhost:26570',// (Endpoint URL) ports: 26570, 49370
+        url: 'opc.tcp://localhost:49370',// (Endpoint URL) ports: OpcuaSrv(26570), KepSrv(49370)
       };
       options.subscrMonOpts.itemToMonitor = { 
-        nodeId: 'ns=1;s=CH_M52::ValueFromFile', 
+        // OpcuaSrv(ns=1;s=CH_M52::ValueFromFile), KepSrv(ns=2;s=Channel1.Device1.Черкассы 'АЗОТ' цех M5-2.Values from file for CH_M52)
+        nodeId: 'ns=2;s=Channel1.Device1.Черкассы \'АЗОТ\' цех M5-2.Values from file for CH_M52', 
         attributeId: AttributeIds.Value 
       };
 
