@@ -51,15 +51,7 @@
               <ul class="current">
                   <li class="toctree-l1 current"><a class="reference internal current" href="./">Part1. Getting started</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#download-and-install-docker">Download and install Docker</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#start-the-tutorial">Start the tutorial</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#the-docker-dashboard">The Docker Dashboard</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#what-is-a-container">What is a container?</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#what-is-a-container-image">What is a container image?</a>
+    <li class="toctree-l2"><a class="reference internal" href="#why-do-you-need-a-framework-feathersjs">Why do you need a framework "FeathersJS".</a>
     </li>
     </ul>
                   </li>
@@ -79,7 +71,7 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../image-building-best-practices/">Part9. Image-building best practices</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../what-next/">Part10. What next?</a>
+                  <li class="toctree-l1"><a class="" href="../what-next/index.md">Part10. What next?</a>
                   </li>
               </ul>
               <p class="caption"><span class="caption-text">About</span></p>
@@ -111,64 +103,22 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="orientation-and-setup">Orientation and setup</h1>
-<p>Welcome! We are excited that you want to learn Docker.</p>
-<p>This page contains step-by-step instructions on how to get started with Docker. In this tutorial, you’ll learn how to:</p>
+                <h1 id="introduction">Introduction.</h1>
+<p>The application <strong>"FEATHERS-OPCUA-SERVER"</strong> is designed to implement the use of the library
+<a href="https://node-opcua.github.io/">NodeOPCUA</a>.  </p>
+<p>NodeOPCUA is a <a href="https://opcfoundation.org/faq/what-is-opc-ua/">OPC UA</a> stack fully written in <a href="https://www.typescriptlang.org/">TypeScript</a> for <a href="http://nodejs.org/">NodeJS</a>. Basic properties:</p>
 <ul>
-<li>Build and run an image as a container</li>
-<li>Share images using Docker Hub</li>
-<li>Deploy Docker applications using multiple containers with a database</li>
-<li>Run applications using Docker Compose</li>
+<li>NodeOPCUA takes advantage of the asynchronous nature of node.js, creating highly responsive applications.</li>
+<li>NodeOPCUA has been developed using <a href="https://en.wikipedia.org/wiki/Test_Driven_Development">TDD</a> and benefits from more than 2500 unit tests and 90% code coverage.</li>
+<li>NodeOPCUA can be use in Javascript as well as in Typescript.</li>
+<li>NodeOPCUA is free for commercial use. Check out the <a href="https://raw.githubusercontent.com/node-opcua/node-opcua/master/LICENSE">license</a>.</li>
+<li>NodeOPCUA is available on GitHub . Check out the <a href="https://github.com/node-opcua/node-opcua">source code</a>.</li>
+<li>NodeOPCUA runs on all the platforms that nodeJS supports.</li>
+<li>NodeOPCUA will benefit from a <a href="https://node-opcua.github.io/api_doc/index.html">comprehensive SDK API documentation</a>, numerous end-to-end functional tests, and a set of practical examples to help you learn how to use it.</li>
 </ul>
-<h2 id="download-and-install-docker">Download and install Docker</h2>
-<p>This tutorial assumes you have a current version of Docker installed on your machine. If you do not have Docker installed, choose your preferred operating system below to download Docker:</p>
-<ul>
-<li><a href="https://desktop.docker.com/mac/main/amd64/Docker.dmg?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=docs-driven-download-mac-amd64">Mac with Intel chip</a></li>
-<li><a href="https://desktop.docker.com/mac/main/arm64/Docker.dmg?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=docs-driven-download-mac-arm64">Mac with Apple chip</a></li>
-<li><a href="https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=docs-driven-download-win-amd64">Windows</a></li>
-</ul>
-<p>For Docker Desktop installation instructions, see:</p>
-<ul>
-<li><a href="https://docs.docker.com/desktop/install/mac-install/">Install Docker Desktop on Mac</a></li>
-<li><a href="https://docs.docker.com/desktop/install/windows-install/">Install Docker Desktop on Windows</a></li>
-<li><a href="https://docs.docker.com/desktop/install/linux-install/">Install Docker Desktop on Linux</a></li>
-</ul>
-<h2 id="start-the-tutorial">Start the tutorial</h2>
-<p>If you’ve already run the command to get started with the tutorial, congratulations! If not, open a command prompt or bash window, and run the command:</p>
-<pre><code class="language-cli">docker run -d -p 80:80 docker/getting-started
-</code></pre>
-<p>You'll notice a few flags being used. Here's some more info on them:</p>
-<ul>
-<li><code>-d</code> - run the container in detached mode (in the background)</li>
-<li><code>-p 80:80</code> - map port 80 of the host to port 80 in the container</li>
-<li><code>docker/getting-started</code> - the image to use</li>
-</ul>
-<blockquote>
-<p>You can combine single character flags to shorten the full command. 
-As an example, the command above could be written as:</p>
-</blockquote>
-<pre><code class="language-cli">docker run -dp 80:80 docker/getting-started
-</code></pre>
-<h2 id="the-docker-dashboard">The Docker Dashboard</h2>
-<p>Before going too far, we want to highlight the Docker Dashboard, which gives
-you a quick view of the containers running on your machine. It gives you quick
-access to container logs, lets you get a shell inside the container, and lets you
-easily manage container lifecycle (stop, remove, etc.). </p>
-<p>To access the dashboard, follow the instructions in the 
-<a href="https://docs.docker.com/desktop/">Docker Desktop manual</a>. If you open the dashboard
-now, you will see this tutorial running! The container name (<code>jolly_bouman</code> below) is a
-randomly created name. So, you'll most likely have a different name.</p>
+<h2 id="why-do-you-need-a-framework-feathersjs">Why do you need a framework <a href="https://docs.feathersjs.com/">"FeathersJS"</a>.</h2>
+<p>Servers and clients created on the basis of the library <strong>"NodeOPCUA"</strong> are built into <strong>"FeathersJS"</strong> and are services of this framework. This makes it possible to store the data received by the protocol <strong>"OPC UA"</strong> in different databases. And also have access to <strong>"OPC UA"</strong> data through <strong>"REST"</strong> </p>
 <p><img alt="Tutorial container running in Docker Dashboard" src="tutorial-in-dashboard.png" style="width:60%;"></p>
-<h2 id="what-is-a-container">What is a container?</h2>
-<p>Now that you've run a container, what <em>is</em> a container? Simply put, a container is
-simply another process on your machine that has been isolated from all other processes
-on the host machine. That isolation leverages <a href="https://medium.com/@saschagrunert/demystifying-containers-part-i-kernel-space-2c53d6979504">kernel namespaces and cgroups</a>, features that have been in Linux for a long time. Docker has worked to make these capabilities approachable and easy to use.</p>
-<h2 id="what-is-a-container-image">What is a container image?</h2>
-<p>When running a container, it uses an isolated filesystem. This custom filesystem is provided 
-by a <strong>container image</strong>. Since the image contains the container's filesystem, it must contain everything 
-needed to run an application - all dependencies, configuration, scripts, binaries, etc. The 
-image also contains other configuration for the container, such as environment variables,
-a default command to run, and other metadata.</p>
               
             </div>
           </div><footer>
