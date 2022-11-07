@@ -1,0 +1,105 @@
+.text-center {
+    text-align: center;
+}
+
+article img {
+    border: 1px solid #eee;
+    box-shadow: 0 0 1em #ccc;
+    margin: 30px auto 10px;
+}
+
+article img.emojione {
+    border: none;
+    box-shadow: none;
+    margin: 0;
+}
+
+.md-footer-nav {
+    background-color: rgba(0, 0, 0, .57);
+}
+
+
+/* Docker Branding */
+.md-header {
+    background-color: #0d9cec !important;
+}
+
+@font-face {
+    font-family: "Geomanist";
+    src: url("../fonts/hinted-Geomanist-Book.ttf")
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+    font-size: 15px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    color: #577482;
+}
+
+h1,
+h2,
+h3,
+h4,
+.md-footer-nav__inner,
+.md-header-nav__title,
+footer.md-footer {
+    font-family: Geomanist;
+}
+
+.document a:visited {
+    color: #0C77FF;
+}
+
+.document a {
+    color: #0C77FF;
+    text-decoration: underline;
+    background-color: transparent;
+}
+
+footer a:visited {
+    color: #0C77FF;
+}
+
+footer a {
+    color: #0C77FF;
+    text-decoration: underline;
+    background-color: transparent;
+}
+
+.rst-content pre code {
+    color: #24292f;
+    background-color: #f6f8fa;
+    border: 1px solid #dadddd;
+    border-radius: 6px;
+    font-size: 85%;
+    line-height: 1.45;
+}
+
+.rst-content code {
+    color: #24292f;
+    background-color: #f6f8fa;
+    border: 1px solid #dadddd;
+    border-radius: 3px;
+    font-size: 85%;
+}
+
+.rst-content blockquote {
+    padding: 0 1em;
+    border-left: .25em solid #d0d7de;
+}
+
+.md-header-nav__title {
+    line-height: 2.9rem;
+}
+
+.md-header-nav__button img {
+    width: 145px;
+}
+
+.wy-nav-content {
+    max-width: 100%;
+}

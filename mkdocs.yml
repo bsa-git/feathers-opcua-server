@@ -1,0 +1,35 @@
+# Commands for mkdocs: mkdocs new, mkdocs serve, mkdocs build, mkdocs gh-deploy, mkdocs --help
+# Commands for app: 
+#   - docker build -t node-todo .         -> "Build the container image"
+#   - docker run -dp 3000:3000 node-todo  -> "Start the container"
+#   - docker login -u YOUR-USER-NAME      -> "Login to the Docker Hub (https://hub.docker.com). Play with Docker(https://labs.play-with-docker.com/)"
+#   - docker tag node-todo YOUR-USER-NAME/node-todo -> "Use the `docker tag` command to give the `node-todo` image a new name"
+#   - docker push YOUR-USER-NAME/node-todo  -> "Running the `push command`"
+
+site_name: FeathersJS OPC UA application
+site_url: https://bsa-git.github.io/feathers-opcua-server/
+
+# Configuration
+theme:
+  name: readthedocs
+
+extra_css:
+  - css/styles.css
+  - css/dark-mode.css
+
+# Navigation
+nav:
+  - Home: 
+    - 'What is OPC UA?': 'README.md'
+  - 'Get started':
+    - 'Part1. Getting started': 'tutorial\getting-started\index.md'
+    - 'Part2. Sample application': 'tutorial\our-application\index.md'
+    - 'Part3. Update the application': 'tutorial\updating-our-app\index.md'
+    - 'Part4. Share the application': 'tutorial\sharing-our-app\index.md'
+    - 'Part5. Persist the DB': 'tutorial\persisting-our-data\index.md'
+    - 'Part6. Use bind mounts': 'tutorial\using-bind-mounts\index.md'
+    - 'Part7. Multi-container apps': 'tutorial\multi-container-apps\index.md'
+    - 'Part8. Use Docker Compose': 'tutorial\using-docker-compose\index.md'
+    - 'Part9. Image-building best practices': 'tutorial\image-building-best-practices\index.md'
+  - About:
+    - 'License': 'LICENSE.md'

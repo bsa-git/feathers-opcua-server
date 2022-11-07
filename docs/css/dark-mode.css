@@ -1,0 +1,58 @@
+@media (prefers-color-scheme: dark) {
+
+  .wy-nav-content {
+    color: rgba(255, 255, 255, 0.75) !important;
+    background-color: #36393e !important;
+  }
+
+  .rst-content pre code {
+    color: #c9d1d9;
+    background-color: #161b22;
+    border: 1px solid #161b22;
+  }
+
+  .rst-content code {
+    color: #c9d1d9;
+    background-color: #161b22;
+    border: 1px solid #161b22;
+  }
+
+  .hljs-doctag,
+  .hljs-string {
+    color: #a5d6ff;
+  }
+
+  .rst-content blockquote {
+    color: rgba(255, 255, 255, 0.75) !important;
+  }
+
+  .document a:hover {
+    text-decoration: underline;
+  }
+
+  .document a:visited {
+    color: #58a6ff;
+}
+
+  .document a {
+    color: #58a6ff;
+    text-decoration: none;
+    background-color: transparent;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
+
+  footer a:visited {
+    color: #58a6ff;
+}
+
+footer a {
+    color: #58a6ff;
+    text-decoration: none;
+    background-color: transparent;
+  }
+
+
+}
