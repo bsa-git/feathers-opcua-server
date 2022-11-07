@@ -24,7 +24,7 @@ const isDebug = false;
 
 /**
  * @name callbackSubscriptionMonitor
- * @param {Object} session 
+ * @param {Object} subscription 
  * @param {Object} params 
  * @returns {Object}
  */

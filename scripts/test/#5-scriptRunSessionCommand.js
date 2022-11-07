@@ -19,7 +19,8 @@ const {
 const {
   opcuaClientSessionAsync,
   callbackSubscriptionCreate,
-  callbackSubscriptionMonitor
+  callbackSubscriptionMonitor,
+  callbackSessionEndpoint
 } = require('../../src/plugins/opcua/opcua-client-scripts/lib');
 
 const {
@@ -48,6 +49,9 @@ describe('<<=== ScriptOperations: (#5-scriptRunSessionOperation) ===>>', () => {
   it('#5: SessionOperations: Run session operation', async () => {
     let options = {
       app,
+      opt: {
+        url: 'opc.tcp://localhost:49370',// (Endpoint URL) ports: OpcuaSrv(26570), KepSrv(49370)
+      },
       userIdentityInfo: {
         type: UserTokenType.UserName, // UserTokenType.Anonymous, 
         userName: process.env.OPCUA_KEP_NAME,
@@ -68,9 +72,6 @@ describe('<<=== ScriptOperations: (#5-scriptRunSessionOperation) ===>>', () => {
     switch (argv.script) {
     case '#5.1':
       options.command = 'ch_m5SubscriptionMonitor';
-      options.opt = {
-        url: 'opc.tcp://localhost:49370',// (Endpoint URL) ports: OpcuaSrv(26570), KepSrv(49370)
-      };
       options.subscrMonOpts.itemToMonitor = { 
         // OpcuaSrv(ns=1;s=CH_M52::ValueFromFile), KepSrv(ns=2;s=Channel1.Device1.Черкассы 'АЗОТ' цех M5-2.Values from file for CH_M52)
         nodeId: 'ns=2;s=Channel1.Device1.Черкассы \'АЗОТ\' цех M5-2.Values from file for CH_M52', 
@@ -87,13 +88,27 @@ describe('<<=== ScriptOperations: (#5-scriptRunSessionOperation) ===>>', () => {
         return result;
       };
       break;
+    case '#5.2':
+      options.command = 'ch_m5SessionEndpoint';
+       
+      callback = async function (session, params) {
+        let result = callbackSessionEndpoint(session, params);
+        await pause(1000);
+        return result;
+      };
+      break;  
     default:
       break;
     }
 
+    // Run session command
     const result = await opcuaClientSessionAsync(options.opt.url, options, callback);
-    // if (true && result) inspector('runOpcuaCommand.result:', result);
-    console.log(chalk.green(`Run session write command "${options.command}" - OK!`), 'result:', chalk.cyan(result.statusCode));
+    if(result.statusCode === 'Good'){
+      console.log(chalk.green(`Run session command "${options.command}" - OK!`), 'result:', chalk.cyan(result.statusCode));
+      if(true && result) inspector(`Run session command "${options.command}":`, result);
+    } else {
+      console.log(chalk.green(`Run session command "${options.command}" - ERROR!`), 'result:', chalk.cyan(result.statusCode));
+    }
     assert.ok(result.statusCode === 'Good', 'Run opcua command');
   });
 });
