@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://example.com/tutorial/using-bind-mounts/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Part6. Use bind mounts - Docker for node-todo</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../css/styles.css" rel="stylesheet" />
+        <link href="../../css/dark-mode.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Part6. Use bind mounts";
+        var mkdocs_page_input_path = "tutorial\\using-bind-mounts\\index.md";
+        var mkdocs_page_url = "/tutorial/using-bind-mounts/";
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Docker for node-todo
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../..">Docker overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Get started</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Part1. Getting started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../our-application/">Part2. Sample application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../updating-our-app/">Part3. Update the application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../sharing-our-app/">Part4. Share the application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../persisting-our-data/">Part5. Persist the DB</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Part6. Use bind mounts</a>
+    <ul class="current">
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../multi-container-apps/">Part7. Multi-container apps</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-docker-compose/">Part8. Use Docker Compose</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../image-building-best-practices/">Part9. Image-building best practices</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../what-next/">Part10. What next?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../LICENSE/">License</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Docker for node-todo</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Get started &raquo;</li>
+      <li>Part6. Use bind mounts</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p>In the previous chapter, we talked about and used a <strong>named volume</strong> to persist the data in our database.
+Named volumes are great if we simply want to store data, as we don't have to worry about <em>where</em> the data
+is stored.</p>
+<p>With <strong>bind mounts</strong>, we control the exact mountpoint on the host. We can use this to persist data, but is often
+used to provide additional data into containers. When working on an application, we can use a bind mount to
+mount our source code into the container to let it see code changes, respond, and let us see the changes right
+away.</p>
+<p>For Node-based applications, <a href="https://npmjs.com/package/nodemon">nodemon</a> is a great tool to watch for file
+changes and then restart the application. There are equivalent tools in most other languages and frameworks.</p>
+<h2 id="quick-volume-type-comparisons">Quick Volume Type Comparisons</h2>
+<p>Bind mounts and named volumes are the two main types of volumes that come with the Docker engine. However, additional
+volume drivers are available to support other use cases (<a href="https://github.com/vieux/docker-volume-sshfs">SFTP</a>, <a href="https://ceph.com/geen-categorie/getting-started-with-the-docker-rbd-volume-plugin/">Ceph</a>, <a href="https://netappdvp.readthedocs.io/en/stable/">NetApp</a>, <a href="https://github.com/elementar/docker-s3-volume">S3</a>, and more).</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Named Volumes</th>
+<th>Bind Mounts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Host Location</td>
+<td>Docker chooses</td>
+<td>You control</td>
+</tr>
+<tr>
+<td>Mount Example (using <code>-v</code>)</td>
+<td>my-volume:/usr/local/data</td>
+<td>/path/to/data:/usr/local/data</td>
+</tr>
+<tr>
+<td>Populates new volume with container contents</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Supports Volume Drivers</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h2 id="starting-a-dev-mode-container">Starting a Dev-Mode Container</h2>
+<p>To run our container to support a development workflow, we will do the following:</p>
+<ul>
+<li>Mount our source code into the container</li>
+<li>Install all dependencies, including the "dev" dependencies</li>
+<li>Start nodemon to watch for filesystem changes</li>
+</ul>
+<p>So, let's do it!</p>
+<ol>
+<li>
+<p>Make sure you don't have any previous <code>getting-started</code> containers running.</p>
+</li>
+<li>
+<p>Also make sure you are in app source code directory, i.e. <code>/path/to/getting-started/app</code>. If you aren't, you can <code>cd</code> into it, .e.g:</p>
+<p><code>bash
+cd /path/to/getting-started/app</code></p>
+</li>
+<li>
+<p>Now that you are in the <code>getting-started/app</code> directory, run the following command. We'll explain what's going on afterwards:</p>
+<p><code>bash
+docker run -dp 3000:3000 \
+    -w /app -v "$(pwd):/app" \
+    node:12-alpine \
+    sh -c "yarn install &amp;&amp; yarn run dev"</code></p>
+<p>If you are using PowerShell then use this command.</p>
+<p><code>powershell
+docker run -dp 3000:3000 `
+    -w /app -v "$(pwd):/app" `
+    node:12-alpine `
+    sh -c "yarn install &amp;&amp; yarn run dev"</code></p>
+<p>If you are using an Apple Silicon Mac or another ARM64 device then use this command.</p>
+<p><code>bash
+docker run -dp 3000:3000 \
+    -w /app -v "$(pwd):/app" \
+    node:12-alpine \
+    sh -c "apk add --no-cache python2 g++ make &amp;&amp; yarn install &amp;&amp; yarn run dev"</code></p>
+<ul>
+<li><code>-dp 3000:3000</code> - same as before. Run in detached (background) mode and create a port mapping</li>
+<li><code>-w /app</code> - sets the container's present working directory where the command will run from</li>
+<li><code>-v "$(pwd):/app"</code> - bind mount (link) the host's present <code>getting-started/app</code> directory to the container's <code>/app</code> directory. Note: Docker requires absolute paths for binding mounts, so in this example we use <code>pwd</code> for printing the absolute path of the working directory, i.e. the <code>app</code> directory, instead of typing it manually</li>
+<li><code>node:12-alpine</code> - the image to use. Note that this is the base image for our app from the Dockerfile</li>
+<li><code>sh -c "yarn install &amp;&amp; yarn run dev"</code> - the command. We're starting a shell using <code>sh</code> (alpine doesn't have <code>bash</code>) and
+  running <code>yarn install</code> to install <em>all</em> dependencies and then running <code>yarn run dev</code>. If we look in the <code>package.json</code>,
+  we'll see that the <code>dev</code> script is starting <code>nodemon</code>.</li>
+</ul>
+</li>
+<li>
+<p>You can watch the logs using <code>docker logs -f &lt;container-id&gt;</code>. You'll know you're ready to go when you see this...</p>
+<p><code>bash
+docker logs -f &lt;container-id&gt;
+$ nodemon src/index.js
+[nodemon] 1.19.2
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching dir(s): *.*
+[nodemon] starting `node src/index.js`
+Using sqlite database at /etc/todos/todo.db
+Listening on port 3000</code></p>
+<p>When you're done watching the logs, exit out by hitting <code>Ctrl</code>+<code>C</code>.</p>
+</li>
+<li>
+<p>Now, let's make a change to the app. In the <code>src/static/js/app.js</code> file, let's change the "Add Item" button to simply say
+   "Add". This change will be on line 109 - remember to save the file.</p>
+<p><code>diff
+-                         {submitting ? 'Adding...' : 'Add Item'}
++                         {submitting ? 'Adding...' : 'Add'}</code></p>
+</li>
+<li>
+<p>Simply refresh the page (or open it) and you should see the change reflected in the browser almost immediately. It might
+   take a few seconds for the Node server to restart, so if you get an error, just try refreshing after a few seconds.</p>
+<p><img alt="Screenshot of updated label for Add button" src="updated-add-button.png" />{: style="width:75%;"}
+{: .text-center }</p>
+</li>
+<li>
+<p>Feel free to make any other changes you'd like to make. When you're done, stop the container and build your new image
+   using <code>docker build -t getting-started .</code>.</p>
+</li>
+</ol>
+<p>Using bind mounts is <em>very</em> common for local development setups. The advantage is that the dev machine doesn't need to have
+all of the build tools and environments installed. With a single <code>docker run</code> command, the dev environment is pulled and ready
+to go. We'll talk about Docker Compose in a future step, as this will help simplify our commands (we're already getting a lot
+of flags).</p>
+<h2 id="recap">Recap</h2>
+<p>At this point, we can persist our database and respond rapidly to the needs and demands of our investors and founders. Hooray!
+But, guess what? We received great news!</p>
+<p><strong>Your project has been selected for future development!</strong> </p>
+<p>In order to prepare for production, we need to migrate our database from working in SQLite to something that can scale a
+little better. For simplicity, we'll keep with a relational database and switch our application to use MySQL. But, how 
+should we run MySQL? How do we allow the containers to talk to each other? We'll talk about that next!</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../persisting-our-data/" class="btn btn-neutral float-left" title="Part5. Persist the DB"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../multi-container-apps/" class="btn btn-neutral float-right" title="Part7. Multi-container apps">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../persisting-our-data/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../multi-container-apps/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

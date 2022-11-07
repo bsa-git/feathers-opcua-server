@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://example.com/tutorial/what-next/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Part10. What next? - Docker for node-todo</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../css/styles.css" rel="stylesheet" />
+        <link href="../../css/dark-mode.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Part10. What next?";
+        var mkdocs_page_input_path = "tutorial\\what-next\\index.md";
+        var mkdocs_page_url = "/tutorial/what-next/";
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Docker for node-todo
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../..">Docker overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Get started</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Part1. Getting started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../our-application/">Part2. Sample application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../updating-our-app/">Part3. Update the application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../sharing-our-app/">Part4. Share the application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../persisting-our-data/">Part5. Persist the DB</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-bind-mounts/">Part6. Use bind mounts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../multi-container-apps/">Part7. Multi-container apps</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-docker-compose/">Part8. Use Docker Compose</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../image-building-best-practices/">Part9. Image-building best practices</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Part10. What next?</a>
+    <ul class="current">
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../LICENSE/">License</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Docker for node-todo</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Get started &raquo;</li>
+      <li>Part10. What next?</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p>Although we're done with our workshop, there's still a LOT more to learn about containers!
+We're not going to go deep-dive here, but here are a few other areas to look at next!</p>
+<h2 id="container-orchestration">Container Orchestration</h2>
+<p>Running containers in production is tough. You don't want to log into a machine and simply run a
+<code>docker run</code> or <code>docker-compose up</code>. Why not? Well, what happens if the containers die? How do you
+scale across several machines? Container orchestration solves this problem. Tools like Kubernetes,
+Swarm, Nomad, and ECS all help solve this problem, all in slightly different ways.</p>
+<p>The general idea is that you have "managers" who receive <strong>expected state</strong>. This state might be
+"I want to run two instances of my web app and expose port 80." The managers then look at all of the
+machines in the cluster and delegate work to "worker" nodes. The managers watch for changes (such as
+a container quitting) and then work to make <strong>actual state</strong> reflect the expected state.</p>
+<h2 id="cloud-native-computing-foundation-projects">Cloud Native Computing Foundation Projects</h2>
+<p>The CNCF is a vendor-neutral home for various open-source projects, including Kubernetes, Prometheus, 
+Envoy, Linkerd, NATS, and more! You can view the <a href="https://www.cncf.io/projects/">graduated and incubated projects here</a>
+and the entire <a href="https://landscape.cncf.io/">CNCF Landscape here</a>. There are a LOT of projects to help
+solve problems around monitoring, logging, security, image registries, messaging, and more!</p>
+<p>So, if you're new to the container landscape and cloud-native application development, welcome! Please
+connect to the community, ask questions, and keep learning! We're excited to have you!</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../image-building-best-practices/" class="btn btn-neutral float-left" title="Part9. Image-building best practices"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../LICENSE/" class="btn btn-neutral float-right" title="License">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../image-building-best-practices/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../LICENSE/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

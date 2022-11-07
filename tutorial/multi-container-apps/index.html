@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://example.com/tutorial/multi-container-apps/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Part7. Multi-container apps - Docker for node-todo</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../css/styles.css" rel="stylesheet" />
+        <link href="../../css/dark-mode.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Part7. Multi-container apps";
+        var mkdocs_page_input_path = "tutorial\\multi-container-apps\\index.md";
+        var mkdocs_page_url = "/tutorial/multi-container-apps/";
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Docker for node-todo
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../..">Docker overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Get started</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Part1. Getting started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../our-application/">Part2. Sample application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../updating-our-app/">Part3. Update the application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../sharing-our-app/">Part4. Share the application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../persisting-our-data/">Part5. Persist the DB</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-bind-mounts/">Part6. Use bind mounts</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Part7. Multi-container apps</a>
+    <ul class="current">
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-docker-compose/">Part8. Use Docker Compose</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../image-building-best-practices/">Part9. Image-building best practices</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../what-next/">Part10. What next?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../LICENSE/">License</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Docker for node-todo</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Get started &raquo;</li>
+      <li>Part7. Multi-container apps</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p>Up to this point, we have been working with single container apps. But, we now want to add MySQL to the
+application stack. The following question often arises - "Where will MySQL run? Install it in the same
+container or run it separately?" In general, <strong>each container should do one thing and do it well.</strong> A few
+reasons:</p>
+<ul>
+<li>There's a good chance you'd have to scale APIs and front-ends differently than databases.</li>
+<li>Separate containers let you version and update versions in isolation.</li>
+<li>While you may use a container for the database locally, you may want to use a managed service
+  for the database in production. You don't want to ship your database engine with your app then.</li>
+<li>Running multiple processes will require a process manager (the container only starts one process),
+  which adds complexity to container startup/shutdown.</li>
+</ul>
+<p>And there are more reasons. So, we will update our application to work like this:</p>
+<p><img alt="Todo App connected to MySQL container" src="multi-app-architecture.png" />
+{: .text-center }</p>
+<h2 id="container-networking">Container Networking</h2>
+<p>Remember that containers, by default, run in isolation and don't know anything about other processes
+or containers on the same machine. So, how do we allow one container to talk to another? The answer is
+<strong>networking</strong>. Now, you don't have to be a network engineer (hooray!). Simply remember this rule...</p>
+<blockquote>
+<p>If two containers are on the same network, they can talk to each other. If they aren't, they can't.</p>
+</blockquote>
+<h2 id="starting-mysql">Starting MySQL</h2>
+<p>There are two ways to put a container on a network: 1) Assign it at start or 2) connect an existing container.
+For now, we will create the network first and attach the MySQL container at startup.</p>
+<ol>
+<li>
+<p>Create the network.</p>
+<p><code>bash
+docker network create todo-app</code></p>
+</li>
+<li>
+<p>Start a MySQL container and attach it to the network. We're also going to define a few environment variables that the
+  database will use to initialize the database (see the "Environment Variables" section in the <a href="https://hub.docker.com/_/mysql/">MySQL Docker Hub listing</a>).</p>
+<p><code>bash
+docker run -d \
+    --network todo-app --network-alias mysql \
+    -v todo-mysql-data:/var/lib/mysql \
+    -e MYSQL_ROOT_PASSWORD=secret \
+    -e MYSQL_DATABASE=todos \
+    mysql:5.7</code></p>
+<p>If you are using PowerShell then use this command.</p>
+<p><code>powershell
+docker run -d `
+    --network todo-app --network-alias mysql `
+    -v todo-mysql-data:/var/lib/mysql `
+    -e MYSQL_ROOT_PASSWORD=secret `
+    -e MYSQL_DATABASE=todos `
+    mysql:5.7</code></p>
+<p>You'll also see we specified the <code>--network-alias</code> flag. We'll come back to that in just a moment.</p>
+<p>!!! info "Pro-tip"
+    You'll notice we're using a volume named <code>todo-mysql-data</code> here and mounting it at <code>/var/lib/mysql</code>, which is
+    where MySQL stores its data. However, we never ran a <code>docker volume create</code> command. Docker recognizes we want
+    to use a named volume and creates one automatically for us.</p>
+<p>!!! info "Troubleshooting"
+    If you see a <code>docker: no matching manifest</code> error, it's because you're trying to run the container in a different
+    architecture than amd64, which is the only supported architecture for the mysql image at the moment. To solve this
+    add the flag <code>--platform linux/amd64</code> in the previous command. So your new command should look like this:</p>
+<p><code>bash
+docker run -d \
+    --network todo-app --network-alias mysql --platform linux/amd64 \
+    -v todo-mysql-data:/var/lib/mysql \
+    -e MYSQL_ROOT_PASSWORD=secret \
+    -e MYSQL_DATABASE=todos \
+    mysql:5.7</code></p>
+</li>
+<li>
+<p>To confirm we have the database up and running, connect to the database and verify it connects.</p>
+<p><code>bash
+docker exec -it &lt;mysql-container-id&gt; mysql -p</code></p>
+<p>When the password prompt comes up, type in <strong>secret</strong>. In the MySQL shell, list the databases and verify
+you see the <code>todos</code> database.</p>
+<p><code>cli
+mysql&gt; SHOW DATABASES;</code></p>
+<p>You should see output that looks like this:</p>
+<p><code>plaintext
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| todos              |
++--------------------+
+5 rows in set (0.00 sec)</code></p>
+<p>Hooray! We have our <code>todos</code> database and it's ready for us to use!</p>
+<p>To exit the sql terminal type <code>exit</code> in the terminal.</p>
+</li>
+</ol>
+<h2 id="connecting-to-mysql">Connecting to MySQL</h2>
+<p>Now that we know MySQL is up and running, let's use it! But, the question is... how? If we run
+another container on the same network, how do we find the container (remember each container has its own IP
+address)?</p>
+<p>To figure it out, we're going to make use of the <a href="https://github.com/nicolaka/netshoot">nicolaka/netshoot</a> container,
+which ships with a <em>lot</em> of tools that are useful for troubleshooting or debugging networking issues.</p>
+<ol>
+<li>
+<p>Start a new container using the nicolaka/netshoot image. Make sure to connect it to the same network.</p>
+<p><code>bash
+docker run -it --network todo-app nicolaka/netshoot</code></p>
+</li>
+<li>
+<p>Inside the container, we're going to use the <code>dig</code> command, which is a useful DNS tool. We're going to look up
+   the IP address for the hostname <code>mysql</code>.</p>
+<p><code>bash
+dig mysql</code></p>
+<p>And you'll get an output like this...</p>
+<p>```text
+; &lt;&lt;&gt;&gt; DiG 9.14.1 &lt;&lt;&gt;&gt; mysql
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 32162
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0</p>
+<p>;; QUESTION SECTION:
+;mysql.             IN  A</p>
+<p>;; ANSWER SECTION:
+mysql.          600 IN  A   172.23.0.2</p>
+<p>;; Query time: 0 msec
+;; SERVER: 127.0.0.11#53(127.0.0.11)
+;; WHEN: Tue Oct 01 23:47:24 UTC 2019
+;; MSG SIZE  rcvd: 44
+```</p>
+<p>In the "ANSWER SECTION", you will see an <code>A</code> record for <code>mysql</code> that resolves to <code>172.23.0.2</code>
+(your IP address will most likely have a different value). While <code>mysql</code> isn't normally a valid hostname,
+Docker was able to resolve it to the IP address of the container that had that network alias (remember the
+<code>--network-alias</code> flag we used earlier?).</p>
+<p>What this means is... our app only simply needs to connect to a host named <code>mysql</code> and it'll talk to the
+database! It doesn't get much simpler than that!</p>
+</li>
+</ol>
+<h2 id="running-our-app-with-mysql">Running our App with MySQL</h2>
+<p>The todo app supports the setting of a few environment variables to specify MySQL connection settings. They are:</p>
+<ul>
+<li><code>MYSQL_HOST</code> - the hostname for the running MySQL server</li>
+<li><code>MYSQL_USER</code> - the username to use for the connection</li>
+<li><code>MYSQL_PASSWORD</code> - the password to use for the connection</li>
+<li><code>MYSQL_DB</code> - the database to use once connected</li>
+</ul>
+<p>!!! warning Setting Connection Settings via Env Vars
+    While using env vars to set connection settings is generally ok for development, it is <strong>HIGHLY DISCOURAGED</strong>
+    when running applications in production. Diogo Monica, the former lead of security at Docker,
+    <a href="https://diogomonica.com/2017/03/27/why-you-shouldnt-use-env-variables-for-secret-data/">wrote a fantastic blog post</a>
+    explaining why.</p>
+<pre><code>A more secure mechanism is to use the secret support provided by your container orchestration framework. In most cases,
+these secrets are mounted as files in the running container. You'll see many apps (including the MySQL image and the todo app)
+also support env vars with a `_FILE` suffix to point to a file containing the variable.
+
+As an example, setting the `MYSQL_PASSWORD_FILE` var will cause the app to use the contents of the referenced file
+as the connection password. Docker doesn't do anything to support these env vars. Your app will need to know to look for
+the variable and get the file contents.
+</code></pre>
+<p>With all of that explained, let's start our dev-ready container!</p>
+<ol>
+<li>
+<p>We'll specify each of the environment variables above, as well as connect the container to our app network.</p>
+<p><code>bash hl_lines="3 4 5 6 7"
+docker run -dp 3000:3000 \
+  -w /app -v "$(pwd):/app" \
+  --network todo-app \
+  -e MYSQL_HOST=mysql \
+  -e MYSQL_USER=root \
+  -e MYSQL_PASSWORD=secret \
+  -e MYSQL_DB=todos \
+  node:12-alpine \
+  sh -c "yarn install &amp;&amp; yarn run dev"</code></p>
+<p>If you updated your docker file in the Bind Mount section of the tutorial use the updated command:</p>
+<p><code>bash hl_lines="3 4 5 6 7"
+docker run -dp 3000:3000 \
+  -w /app -v "$(pwd):/app" \
+  --network todo-app \
+  -e MYSQL_HOST=mysql \
+  -e MYSQL_USER=root \
+  -e MYSQL_PASSWORD=secret \
+  -e MYSQL_DB=todos \
+  node:12-alpine \
+  sh -c "apk --no-cache --virtual build-dependencies add python2 make g++ &amp;&amp; yarn install &amp;&amp; yarn run dev"</code></p>
+<p>If you are using PowerShell then use this command.</p>
+<p><code>powershell hl_lines="3 4 5 6 7"
+docker run -dp 3000:3000 `
+  -w /app -v "$(pwd):/app" `
+  --network todo-app `
+  -e MYSQL_HOST=mysql `
+  -e MYSQL_USER=root `
+  -e MYSQL_PASSWORD=secret `
+  -e MYSQL_DB=todos `
+  node:12-alpine `
+  sh -c "yarn install &amp;&amp; yarn run dev"</code></p>
+</li>
+<li>
+<p>If we look at the logs for the container (<code>docker logs &lt;container-id&gt;</code>), we should see a message indicating it's
+   using the mysql database.</p>
+<p>```plaintext hl_lines="7"</p>
+<h1 id="previous-log-messages-omitted">Previous log messages omitted</h1>
+<p>$ nodemon src/index.js
+[nodemon] 1.19.2
+[nodemon] to restart at any time, enter <code>rs</code>
+[nodemon] watching dir(s): <em>.</em>
+[nodemon] starting <code>node src/index.js</code>
+Connected to mysql db at host mysql
+Listening on port 3000
+```</p>
+</li>
+<li>
+<p>Open the app in your browser and add a few items to your todo list.</p>
+</li>
+<li>
+<p>Connect to the mysql database and prove that the items are being written to the database. Remember, the password
+   is <strong>secret</strong>.</p>
+<p><code>bash
+docker exec -it &lt;mysql-container-id&gt; mysql -p todos</code></p>
+<p>And in the mysql shell, run the following:</p>
+<p><code>plaintext
+mysql&gt; select * from todo_items;
++--------------------------------------+--------------------+-----------+
+| id                                   | name               | completed |
++--------------------------------------+--------------------+-----------+
+| c906ff08-60e6-44e6-8f49-ed56a0853e85 | Do amazing things! |         0 |
+| 2912a79e-8486-4bc3-a4c5-460793a575ab | Be awesome!        |         0 |
++--------------------------------------+--------------------+-----------+</code></p>
+<p>Obviously, your table will look different because it has your items. But, you should see them stored there!</p>
+</li>
+</ol>
+<p>If you take a quick look at the Docker Dashboard, you'll see that we have two app containers running. But, there's
+no real indication that they are grouped together in a single app. We'll see how to make that better shortly!</p>
+<p><img alt="Docker Dashboard showing two ungrouped app containers" src="dashboard-multi-container-app.png" /></p>
+<h2 id="recap">Recap</h2>
+<p>At this point, we have an application that now stores its data in an external database running in a separate
+container. We learned a little bit about container networking and saw how service discovery can be performed
+using DNS.</p>
+<p>But, there's a good chance you are starting to feel a little overwhelmed with everything you need to do to start up
+this application. We have to create a network, start containers, specify all of the environment variables, expose
+ports, and more! That's a lot to remember and it's certainly making things harder to pass along to someone else.</p>
+<p>In the next section, we'll talk about Docker Compose. With Docker Compose, we can share our application stacks in a
+much easier way and let others spin them up with a single (and simple) command!</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../using-bind-mounts/" class="btn btn-neutral float-left" title="Part6. Use bind mounts"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../using-docker-compose/" class="btn btn-neutral float-right" title="Part8. Use Docker Compose">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../using-bind-mounts/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../using-docker-compose/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://example.com/tutorial/getting-started/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Part1. Getting started - Docker for node-todo</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../css/styles.css" rel="stylesheet" />
+        <link href="../../css/dark-mode.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Part1. Getting started";
+        var mkdocs_page_input_path = "tutorial\\getting-started\\index.md";
+        var mkdocs_page_url = "/tutorial/getting-started/";
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Docker for node-todo
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../..">Docker overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Get started</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Part1. Getting started</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#download-and-install-docker">Download and install Docker</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#start-the-tutorial">Start the tutorial</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#the-docker-dashboard">The Docker Dashboard</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-is-a-container">What is a container?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-is-a-container-image">What is a container image?</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../our-application/">Part2. Sample application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../updating-our-app/">Part3. Update the application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../sharing-our-app/">Part4. Share the application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../persisting-our-data/">Part5. Persist the DB</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-bind-mounts/">Part6. Use bind mounts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../multi-container-apps/">Part7. Multi-container apps</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-docker-compose/">Part8. Use Docker Compose</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../image-building-best-practices/">Part9. Image-building best practices</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../what-next/">Part10. What next?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../LICENSE/">License</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Docker for node-todo</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Get started &raquo;</li>
+      <li>Part1. Getting started</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="orientation-and-setup">Orientation and setup</h1>
+<p>Welcome! We are excited that you want to learn Docker.</p>
+<p>This page contains step-by-step instructions on how to get started with Docker. In this tutorial, you’ll learn how to:</p>
+<ul>
+<li>Build and run an image as a container</li>
+<li>Share images using Docker Hub</li>
+<li>Deploy Docker applications using multiple containers with a database</li>
+<li>Run applications using Docker Compose</li>
+</ul>
+<h2 id="download-and-install-docker">Download and install Docker</h2>
+<p>This tutorial assumes you have a current version of Docker installed on your machine. If you do not have Docker installed, choose your preferred operating system below to download Docker:</p>
+<ul>
+<li><a href="https://desktop.docker.com/mac/main/amd64/Docker.dmg?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=docs-driven-download-mac-amd64">Mac with Intel chip</a></li>
+<li><a href="https://desktop.docker.com/mac/main/arm64/Docker.dmg?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=docs-driven-download-mac-arm64">Mac with Apple chip</a></li>
+<li><a href="https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=docs-driven-download-win-amd64">Windows</a></li>
+</ul>
+<p>For Docker Desktop installation instructions, see:</p>
+<ul>
+<li><a href="https://docs.docker.com/desktop/install/mac-install/">Install Docker Desktop on Mac</a></li>
+<li><a href="https://docs.docker.com/desktop/install/windows-install/">Install Docker Desktop on Windows</a></li>
+<li><a href="https://docs.docker.com/desktop/install/linux-install/">Install Docker Desktop on Linux</a></li>
+</ul>
+<h2 id="start-the-tutorial">Start the tutorial</h2>
+<p>If you’ve already run the command to get started with the tutorial, congratulations! If not, open a command prompt or bash window, and run the command:</p>
+<pre><code class="language-cli">docker run -d -p 80:80 docker/getting-started
+</code></pre>
+<p>You'll notice a few flags being used. Here's some more info on them:</p>
+<ul>
+<li><code>-d</code> - run the container in detached mode (in the background)</li>
+<li><code>-p 80:80</code> - map port 80 of the host to port 80 in the container</li>
+<li><code>docker/getting-started</code> - the image to use</li>
+</ul>
+<blockquote>
+<p>You can combine single character flags to shorten the full command. 
+As an example, the command above could be written as:</p>
+</blockquote>
+<pre><code class="language-cli">docker run -dp 80:80 docker/getting-started
+</code></pre>
+<h2 id="the-docker-dashboard">The Docker Dashboard</h2>
+<p>Before going too far, we want to highlight the Docker Dashboard, which gives
+you a quick view of the containers running on your machine. It gives you quick
+access to container logs, lets you get a shell inside the container, and lets you
+easily manage container lifecycle (stop, remove, etc.). </p>
+<p>To access the dashboard, follow the instructions in the 
+<a href="https://docs.docker.com/desktop/">Docker Desktop manual</a>. If you open the dashboard
+now, you will see this tutorial running! The container name (<code>jolly_bouman</code> below) is a
+randomly created name. So, you'll most likely have a different name.</p>
+<p><img alt="Tutorial container running in Docker Dashboard" src="tutorial-in-dashboard.png" style="width:60%;"></p>
+<h2 id="what-is-a-container">What is a container?</h2>
+<p>Now that you've run a container, what <em>is</em> a container? Simply put, a container is
+simply another process on your machine that has been isolated from all other processes
+on the host machine. That isolation leverages <a href="https://medium.com/@saschagrunert/demystifying-containers-part-i-kernel-space-2c53d6979504">kernel namespaces and cgroups</a>, features that have been in Linux for a long time. Docker has worked to make these capabilities approachable and easy to use.</p>
+<h2 id="what-is-a-container-image">What is a container image?</h2>
+<p>When running a container, it uses an isolated filesystem. This custom filesystem is provided 
+by a <strong>container image</strong>. Since the image contains the container's filesystem, it must contain everything 
+needed to run an application - all dependencies, configuration, scripts, binaries, etc. The 
+image also contains other configuration for the container, such as environment variables,
+a default command to run, and other metadata.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../.." class="btn btn-neutral float-left" title="Docker overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../our-application/" class="btn btn-neutral float-right" title="Part2. Sample application">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../.." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../our-application/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

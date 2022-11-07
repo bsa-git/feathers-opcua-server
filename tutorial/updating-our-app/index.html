@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://example.com/tutorial/updating-our-app/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Part3. Update the application - Docker for node-todo</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../css/styles.css" rel="stylesheet" />
+        <link href="../../css/dark-mode.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Part3. Update the application";
+        var mkdocs_page_input_path = "tutorial\\updating-our-app\\index.md";
+        var mkdocs_page_url = "/tutorial/updating-our-app/";
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Docker for node-todo
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../..">Docker overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Get started</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Part1. Getting started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../our-application/">Part2. Sample application</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Part3. Update the application</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#update-the-source-code">Update the source code</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#replacing-our-old-container">Replacing our Old Container</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#removing-a-container-using-the-cli">Removing a container using the CLI</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#removing-a-container-using-the-docker-dashboard">Removing a container using the Docker Dashboard</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#starting-our-updated-app-container">Starting our updated app container</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#recap">Recap</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../sharing-our-app/">Part4. Share the application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../persisting-our-data/">Part5. Persist the DB</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-bind-mounts/">Part6. Use bind mounts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../multi-container-apps/">Part7. Multi-container apps</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-docker-compose/">Part8. Use Docker Compose</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../image-building-best-practices/">Part9. Image-building best practices</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../what-next/">Part10. What next?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../LICENSE/">License</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Docker for node-todo</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Get started &raquo;</li>
+      <li>Part3. Update the application</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="update-the-application">Update the application</h1>
+<p>As a small feature request, we've been asked by the product team to
+change the "empty text" when we don't have any todo list items. They
+would like to transition it to the following:</p>
+<blockquote>
+<p>You have no todo items yet! Add one above!</p>
+</blockquote>
+<p>Pretty simple, right? Let's make the change.</p>
+<h2 id="update-the-source-code">Update the source code</h2>
+<p>1.In the <code>src/static/js/app.js</code> file, update line <strong>56</strong> to use the new empty text.</p>
+<pre><code class="language-html">-                &lt;p className=&quot;text-center&quot;&gt;No items yet! Add one above!&lt;/p&gt;
++                &lt;p className=&quot;text-center&quot;&gt;You have no todo items yet! Add one above!&lt;/p&gt;
+</code></pre>
+<p>2.Let's build our updated version of the image, using the same command we used before.</p>
+<pre><code class="language-bash">docker build -t node-todo .
+</code></pre>
+<p>3.Let's start a new container using the updated code.</p>
+<pre><code class="language-bash">docker run -dp 3000:3000 node-todo
+</code></pre>
+<p><strong>Uh oh!</strong> You probably saw an error like this (the IDs will be different):</p>
+<pre><code class="language-bash">docker: Error response from daemon: driver failed programming external connectivity on endpoint laughing_burnell 
+(bb242b2ca4d67eba76e79474fb36bb5125708ebdabd7f45c8eaf16caaabde9dd): Bind for 0.0.0.0:3000 failed: port is already allocated.
+</code></pre>
+<p>So, what happened? We aren't able to start the new container because our old container is still
+running. The reason this is a problem is because that container is using the host's <code>port 3000</code> and
+only one process on the machine (containers included) can listen to a specific port. To fix this, 
+we need to remove the old container.</p>
+<h2 id="replacing-our-old-container">Replacing our Old Container</h2>
+<p>To remove a container, it first needs to be stopped. Once it has stopped, it can be removed. We have two
+ways that we can remove the old container. Feel free to choose the path that you're most comfortable with.</p>
+<h3 id="removing-a-container-using-the-cli">Removing a container using the CLI</h3>
+<p>1.Get the ID of the container by using the <code>docker ps</code> command.</p>
+<pre><code class="language-bash">docker ps
+</code></pre>
+<p>2.Use the <code>docker stop</code> command to stop the container.</p>
+<pre><code class="language-bash"># Swap out &lt;the-container-id&gt; with the ID from docker ps
+docker stop &lt;the-container-id&gt;
+</code></pre>
+<p>3.Once the container has stopped, you can remove it by using the <code>docker rm</code> command.</p>
+<pre><code class="language-bash">docker rm &lt;the-container-id&gt;
+</code></pre>
+<blockquote>
+<p>You can stop and remove a container in a single command by adding the "force" flag
+to the <code>docker rm</code> command. For example: <code>docker rm -f &lt;the-container-id&gt;</code></p>
+</blockquote>
+<h3 id="removing-a-container-using-the-docker-dashboard">Removing a container using the Docker Dashboard</h3>
+<p>If you open the Docker dashboard, you can remove a container with two clicks! It's certainly
+much easier than having to look up the container ID and remove it.</p>
+<ol>
+<li>
+<p>With the dashboard opened, hover over the app container and you'll see a collection of action
+    buttons appear on the right.</p>
+</li>
+<li>
+<p>Click on the trash can icon to delete the container. </p>
+</li>
+<li>
+<p>Confirm the removal and you're done!</p>
+</li>
+</ol>
+<p><img alt="Docker Dashboard - removing a container" src="dashboard-removing-container.png" style="width:75%;"></p>
+<h3 id="starting-our-updated-app-container">Starting our updated app container</h3>
+<p>1.Now, start your updated app.</p>
+<pre><code class="language-bash">docker run -dp 3000:3000 node-todo
+</code></pre>
+<p>2.Refresh your browser on <a href="http://localhost:3000">http://localhost:3000</a> and you should see your updated help text!</p>
+<p><img alt="Updated application with updated empty text" src="todo-list-updated-empty-text.png" style="width:55%;"></p>
+<h2 id="recap">Recap</h2>
+<p>While we were able to build an update, there were two things you might have noticed:</p>
+<ul>
+<li>All of the existing items in our todo list are gone! That's not a very good app! We'll talk about that shortly.</li>
+<li>There were <em>a lot</em> of steps involved for such a small change. In an upcoming section, we'll talk about how to see code updates without needing to rebuild and start a new container very time we make a change.</li>
+</ul>
+<p>Before talking about persistence, we'll quickly see how to share these images with others.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../our-application/" class="btn btn-neutral float-left" title="Part2. Sample application"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../sharing-our-app/" class="btn btn-neutral float-right" title="Part4. Share the application">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../our-application/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../sharing-our-app/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

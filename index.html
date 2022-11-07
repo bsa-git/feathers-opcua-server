@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://example.com/" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Docker overview - Docker for node-todo</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <link href="css/dark-mode.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Docker overview";
+        var mkdocs_page_input_path = "README.md";
+        var mkdocs_page_url = "/";
+      </script>
+    
+    <script src="js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> Docker for node-todo
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href=".">Docker overview</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#the-docker-platform">The Docker platform</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-can-i-use-docker-for">What can I use Docker for?</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#responsive-deployment-and-scaling">Responsive deployment and scaling</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#running-more-workloads-on-the-same-hardware">Running more workloads on the same hardware</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#docker-architecture">Docker architecture</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#the-docker-daemon">The Docker daemon</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#the-docker-client">The Docker client</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#docker-desktop">Docker Desktop</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#docker-registries">Docker registries</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#docker-objects">Docker objects</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#images">Images</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#containers">Containers</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#the-underlying-technology">The underlying technology</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Get started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="tutorial/getting-started/">Part1. Getting started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="tutorial/our-application/">Part2. Sample application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="tutorial/updating-our-app/">Part3. Update the application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="tutorial/sharing-our-app/">Part4. Share the application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="tutorial/persisting-our-data/">Part5. Persist the DB</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="tutorial/using-bind-mounts/">Part6. Use bind mounts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="tutorial/multi-container-apps/">Part7. Multi-container apps</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="tutorial/using-docker-compose/">Part8. Use Docker Compose</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="tutorial/image-building-best-practices/">Part9. Image-building best practices</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="tutorial/what-next/">Part10. What next?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="LICENSE/">License</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">Docker for node-todo</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Home &raquo;</li>
+      <li>Docker overview</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="docker-overview">Docker overview</h1>
+<p>Docker is an open platform for developing, shipping, and running applications. Docker enables you to separate your applications from your infrastructure so you can deliver software quickly. With Docker, you can manage your infrastructure in the same ways you manage your applications. By taking advantage of Docker’s methodologies for shipping, testing, and deploying code quickly, you can significantly reduce the delay between writing code and running it in production.</p>
+<h2 id="the-docker-platform">The Docker platform</h2>
+<p>Docker provides the ability to package and run an application in a loosely isolated environment called a container. The isolation and security allows you to run many containers simultaneously on a given host. Containers are lightweight and contain everything needed to run the application, so you do not need to rely on what is currently installed on the host. You can easily share containers while you work, and be sure that everyone you share with gets the same container that works in the same way.</p>
+<p>Docker provides tooling and a platform to manage the lifecycle of your containers:</p>
+<ul>
+<li>Develop your application and its supporting components using containers.</li>
+<li>The container becomes the unit for distributing and testing your application.</li>
+<li>When you’re ready, deploy your application into your production environment, as a container or an orchestrated service. This works the same whether your production environment is a local data center, a cloud provider, or a hybrid of the two.</li>
+</ul>
+<h2 id="what-can-i-use-docker-for">What can I use Docker for?</h2>
+<p>Fast, consistent delivery of your applications</p>
+<p>Docker streamlines the development lifecycle by allowing developers to work in standardized environments using local containers which provide your applications and services. Containers are great for continuous integration and continuous delivery (CI/CD) workflows.</p>
+<p>Consider the following example scenario:</p>
+<ul>
+<li>Your developers write code locally and share their work with their colleagues using Docker containers.</li>
+<li>They use Docker to push their applications into a test environment and execute automated and manual tests.</li>
+<li>When developers find bugs, they can fix them in the development environment and redeploy them to the test environment for testing and validation.</li>
+<li>When testing is complete, getting the fix to the customer is as simple as pushing the updated image to the production environment.</li>
+</ul>
+<h3 id="responsive-deployment-and-scaling">Responsive deployment and scaling</h3>
+<p>Docker’s container-based platform allows for highly portable workloads. Docker containers can run on a developer’s local laptop, on physical or virtual machines in a data center, on cloud providers, or in a mixture of environments.</p>
+<p>Docker’s portability and lightweight nature also make it easy to dynamically manage workloads, scaling up or tearing down applications and services as business needs dictate, in near real time.</p>
+<h3 id="running-more-workloads-on-the-same-hardware">Running more workloads on the same hardware</h3>
+<p>Docker is lightweight and fast. It provides a viable, cost-effective alternative to hypervisor-based virtual machines, so you can use more of your compute capacity to achieve your business goals. Docker is perfect for high density environments and for small and medium deployments where you need to do more with fewer resources.</p>
+<h2 id="docker-architecture">Docker architecture</h2>
+<p>Docker uses a client-server architecture. The Docker client talks to the Docker daemon, which does the heavy lifting of building, running, and distributing your Docker containers. The Docker client and daemon can run on the same system, or you can connect a Docker client to a remote Docker daemon. The Docker client and daemon communicate using a REST API, over UNIX sockets or a network interface. Another Docker client is Docker Compose, that lets you work with applications consisting of a set of containers.</p>
+<p><img alt="Docker architecture" src="https://docs.docker.com/engine/images/architecture.svg" style="width:75%;"></p>
+<h3 id="the-docker-daemon">The Docker daemon</h3>
+<p>The Docker daemon (<code>dockerd</code>) listens for Docker API requests and manages Docker objects such as images, containers, networks, and volumes. A daemon can also communicate with other daemons to manage Docker services.</p>
+<h3 id="the-docker-client">The Docker client</h3>
+<p>The Docker client (<code>docker</code>) is the primary way that many Docker users interact with Docker. When you use commands such as <code>docker run</code>, the client sends these commands to dockerd, which carries them out. The <code>docker</code> command uses the Docker API. The <code>Docker client</code> can communicate with more than one daemon.</p>
+<h3 id="docker-desktop">Docker Desktop</h3>
+<p>Docker Desktop is an easy-to-install application for your Mac, Windows or Linux environment that enables you to build and share containerized applications and microservices. Docker Desktop includes the Docker daemon (<code>dockerd</code>), the Docker client (<code>docker</code>), Docker Compose, Docker Content Trust, Kubernetes, and Credential Helper. For more information, see <a href="https://docs.docker.com/desktop/">Docker Desktop</a>.</p>
+<h3 id="docker-registries">Docker registries</h3>
+<p>A Docker registry stores Docker images. Docker Hub is a public registry that anyone can use, and Docker is configured to look for images on Docker Hub by default. You can even run your own private registry.</p>
+<p>When you use the <code>docker pull</code> or <code>docker run</code> commands, the required images are pulled from your configured registry. When you use the <code>docker push</code> command, your image is pushed to your configured registry.</p>
+<h3 id="docker-objects">Docker objects</h3>
+<p>When you use Docker, you are creating and using images, containers, networks, volumes, plugins, and other objects. This section is a brief overview of some of those objects.</p>
+<h3 id="images">Images</h3>
+<p>An image is a read-only template with instructions for creating a Docker container. Often, an image is based on another image, with some additional customization. For example, you may build an image which is based on the <code>ubuntu</code> image, but installs the Apache web server and your application, as well as the configuration details needed to make your application run.</p>
+<p>You might create your own images or you might only use those created by others and published in a registry. To build your own image, you create a Dockerfile with a simple syntax for defining the steps needed to create the image and run it. Each instruction in a Dockerfile creates a layer in the image. When you change the Dockerfile and rebuild the image, only those layers which have changed are rebuilt. This is part of what makes images so lightweight, small, and fast, when compared to other virtualization technologies.</p>
+<h3 id="containers">Containers</h3>
+<p>A container is a runnable instance of an image. You can create, start, stop, move, or delete a container using the Docker API or CLI. You can connect a container to one or more networks, attach storage to it, or even create a new image based on its current state.</p>
+<p>By default, a container is relatively well isolated from other containers and its host machine. You can control how isolated a container’s network, storage, or other underlying subsystems are from other containers or from the host machine.</p>
+<p>A container is defined by its image as well as any configuration options you provide to it when you create or start it. When a container is removed, any changes to its state that are not stored in persistent storage disappear.</p>
+<p><strong>Example</strong> <code>docker run</code> <strong>command</strong>
+The following command runs an <code>ubuntu</code> container, attaches interactively to your local command-line session, and runs <code>/bin/bash</code>.</p>
+<pre><code class="language-bash"> docker run -i -t ubuntu /bin/bash
+</code></pre>
+<p>When you run this command, the following happens (assuming you are using the default registry configuration):</p>
+<ol>
+<li>
+<p>If you do not have the <code>ubuntu</code> image locally, Docker pulls it from your configured registry, as though you had run docker pull <code>ubuntu</code> manually.</p>
+</li>
+<li>
+<p>Docker creates a new container, as though you had run a docker container <code>create command manually</code>.</p>
+</li>
+<li>
+<p>Docker allocates a read-write filesystem to the container, as its final layer. This allows a running container to create or modify files and directories in its local filesystem.</p>
+</li>
+<li>
+<p>Docker creates a network interface to connect the container to the default network, since you did not specify any networking options. This includes assigning an IP address to the container. By default, containers can connect to external networks using the host machine’s network connection.</p>
+</li>
+<li>
+<p>Docker starts the container and executes <code>/bin/bash</code>. Because the container is running interactively and attached to your terminal (due to the <code>-i</code> and <code>-t</code> flags), you can provide input using your keyboard while the output is logged to your terminal.</p>
+</li>
+<li>
+<p>When you type exit to terminate the <code>/bin/bash</code> command, the container stops but is not removed. You can start it again or remove it.</p>
+</li>
+</ol>
+<h2 id="the-underlying-technology">The underlying technology</h2>
+<p>Docker is written in the <a href="https://golang.org/">Go programming language</a> and takes advantage of several features of the Linux kernel to deliver its functionality. Docker uses a technology called <code>namespaces</code> to provide the isolated workspace called the container. When you run a container, Docker creates a set of namespaces for that container.</p>
+<p>These namespaces provide a layer of isolation. Each aspect of a container runs in a separate namespace and its access is limited to that namespace.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="tutorial/getting-started/" class="btn btn-neutral float-right" title="Part1. Getting started">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+      <span><a href="tutorial/getting-started/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="js/theme_extra.js" defer></script>
+    <script src="js/theme.js" defer></script>
+      <script src="search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

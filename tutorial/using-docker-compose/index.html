@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://example.com/tutorial/using-docker-compose/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Part8. Use Docker Compose - Docker for node-todo</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../css/styles.css" rel="stylesheet" />
+        <link href="../../css/dark-mode.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Part8. Use Docker Compose";
+        var mkdocs_page_input_path = "tutorial\\using-docker-compose\\index.md";
+        var mkdocs_page_url = "/tutorial/using-docker-compose/";
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Docker for node-todo
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../..">Docker overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Get started</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Part1. Getting started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../our-application/">Part2. Sample application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../updating-our-app/">Part3. Update the application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../sharing-our-app/">Part4. Share the application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../persisting-our-data/">Part5. Persist the DB</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-bind-mounts/">Part6. Use bind mounts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../multi-container-apps/">Part7. Multi-container apps</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Part8. Use Docker Compose</a>
+    <ul class="current">
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../image-building-best-practices/">Part9. Image-building best practices</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../what-next/">Part10. What next?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../LICENSE/">License</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Docker for node-todo</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Get started &raquo;</li>
+      <li>Part8. Use Docker Compose</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p><a href="https://docs.docker.com/compose/">Docker Compose</a> is a tool that was developed to help define and
+share multi-container applications. With Compose, we can create a YAML file to define the services
+and with a single command, can spin everything up or tear it all down. </p>
+<p>The <em>big</em> advantage of using Compose is you can define your application stack in a file, keep it at the root of
+your project repo (it's now version controlled), and easily enable someone else to contribute to your project. 
+Someone would only need to clone your repo and start the compose app. In fact, you might see quite a few projects
+on GitHub/GitLab doing exactly this now.</p>
+<p>So, how do we get started?</p>
+<h2 id="installing-docker-compose">Installing Docker Compose</h2>
+<p>If you installed Docker Desktop/Toolbox for either Windows or Mac, you already have Docker Compose!
+Play-with-Docker instances already have Docker Compose installed as well. If you are on 
+a Linux machine, you will need to install Docker Compose using 
+<a href="https://docs.docker.com/compose/install/">the instructions here</a>. </p>
+<p>After installation, you should be able to run the following and see version information.</p>
+<pre><code class="language-bash">docker-compose version
+</code></pre>
+<h2 id="creating-our-compose-file">Creating our Compose File</h2>
+<ol>
+<li>
+<p>At the root of the app project, create a file named <code>docker-compose.yml</code>.</p>
+</li>
+<li>
+<p>In the compose file, we'll start off by defining the schema version. In most cases, it's best to use 
+   the latest supported version. You can look at the <a href="https://docs.docker.com/compose/compose-file/">Compose file reference</a>
+   for the current schema versions and the compatibility matrix.</p>
+<p><code>yaml
+version: "3.8"</code></p>
+</li>
+<li>
+<p>Next, we'll define the list of services (or containers) we want to run as part of our application.</p>
+<p>```yaml hl_lines="3"
+version: "3.8"</p>
+<p>services:
+```</p>
+</li>
+</ol>
+<p>And now, we'll start migrating a service at a time into the compose file.</p>
+<h2 id="defining-the-app-service">Defining the App Service</h2>
+<p>To remember, this was the command we were using to define our app container.</p>
+<pre><code class="language-bash">docker run -dp 3000:3000 \
+  -w /app -v &quot;$(pwd):/app&quot; \
+  --network todo-app \
+  -e MYSQL_HOST=mysql \
+  -e MYSQL_USER=root \
+  -e MYSQL_PASSWORD=secret \
+  -e MYSQL_DB=todos \
+  node:12-alpine \
+  sh -c &quot;yarn install &amp;&amp; yarn run dev&quot;
+</code></pre>
+<p>If you are using PowerShell then use this command.</p>
+<pre><code class="language-powershell">docker run -dp 3000:3000 `
+  -w /app -v &quot;$(pwd):/app&quot; `
+  --network todo-app `
+  -e MYSQL_HOST=mysql `
+  -e MYSQL_USER=root `
+  -e MYSQL_PASSWORD=secret `
+  -e MYSQL_DB=todos `
+  node:12-alpine `
+  sh -c &quot;yarn install &amp;&amp; yarn run dev&quot;
+</code></pre>
+<ol>
+<li>
+<p>First, let's define the service entry and the image for the container. We can pick any name for the service. 
+   The name will automatically become a network alias, which will be useful when defining our MySQL service.</p>
+<p>```yaml hl_lines="4 5"
+version: "3.8"</p>
+<p>services:
+  app:
+    image: node:12-alpine
+```</p>
+</li>
+<li>
+<p>Typically, you will see the command close to the <code>image</code> definition, although there is no requirement on ordering.
+   So, let's go ahead and move that into our file.</p>
+<p>```yaml hl_lines="6"
+version: "3.8"</p>
+<p>services:
+  app:
+    image: node:12-alpine
+    command: sh -c "yarn install &amp;&amp; yarn run dev"
+```</p>
+</li>
+<li>
+<p>Let's migrate the <code>-p 3000:3000</code> part of the command by defining the <code>ports</code> for the service. We will use the
+   <a href="https://docs.docker.com/compose/compose-file/compose-file-v3/#short-syntax-1">short syntax</a> here, but there is also a more verbose 
+   <a href="https://docs.docker.com/compose/compose-file/compose-file-v3/#long-syntax-1">long syntax</a> available as well.</p>
+<p>```yaml hl_lines="7 8"
+version: "3.8"</p>
+<p>services:
+  app:
+    image: node:12-alpine
+    command: sh -c "yarn install &amp;&amp; yarn run dev"
+    ports:
+      - 3000:3000
+```</p>
+</li>
+<li>
+<p>Next, we'll migrate both the working directory (<code>-w /app</code>) and the volume mapping (<code>-v "$(pwd):/app"</code>) by using
+   the <code>working_dir</code> and <code>volumes</code> definitions. Volumes also has a <a href="https://docs.docker.com/compose/compose-file/compose-file-v3/#short-syntax-3">short</a> and <a href="https://docs.docker.com/compose/compose-file/compose-file-v3/#long-syntax-3">long</a> syntax.</p>
+<p>One advantage of Docker Compose volume definitions is we can use relative paths from the current directory.</p>
+<p>```yaml hl_lines="9 10 11"
+version: "3.8"</p>
+<p>services:
+  app:
+    image: node:12-alpine
+    command: sh -c "yarn install &amp;&amp; yarn run dev"
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - ./:/app
+```</p>
+</li>
+<li>
+<p>Finally, we need to migrate the environment variable definitions using the <code>environment</code> key.</p>
+<p>```yaml hl_lines="12 13 14 15 16"
+version: "3.8"</p>
+<p>services:
+  app:
+    image: node:12-alpine
+    command: sh -c "yarn install &amp;&amp; yarn run dev"
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: todos
+```</p>
+</li>
+</ol>
+<h3 id="defining-the-mysql-service">Defining the MySQL Service</h3>
+<p>Now, it's time to define the MySQL service. The command that we used for that container was the following:</p>
+<pre><code class="language-bash">docker run -d \
+  --network todo-app --network-alias mysql \
+  -v todo-mysql-data:/var/lib/mysql \
+  -e MYSQL_ROOT_PASSWORD=secret \
+  -e MYSQL_DATABASE=todos \
+  mysql:5.7
+</code></pre>
+<p>If you are using PowerShell then use this command.</p>
+<pre><code class="language-powershell">docker run -d `
+  --network todo-app --network-alias mysql `
+  -v todo-mysql-data:/var/lib/mysql `
+  -e MYSQL_ROOT_PASSWORD=secret `
+  -e MYSQL_DATABASE=todos `
+  mysql:5.7
+</code></pre>
+<ol>
+<li>
+<p>We will first define the new service and name it <code>mysql</code> so it automatically gets the network alias. We'll
+   go ahead and specify the image to use as well.</p>
+<p>```yaml hl_lines="6 7"
+version: "3.8"</p>
+<p>services:
+  app:
+    # The app service definition
+  mysql:
+    image: mysql:5.7
+```</p>
+</li>
+<li>
+<p>Next, we'll define the volume mapping. When we ran the container with <code>docker run</code>, the named volume was created
+   automatically. However, that doesn't happen when running with Compose. We need to define the volume in the top-level
+   <code>volumes:</code> section and then specify the mountpoint in the service config. By simply providing only the volume name,
+   the default options are used. There are <a href="https://docs.docker.com/compose/compose-file/compose-file-v3/#volume-configuration-reference">many more options available</a> though.</p>
+<p>```yaml hl_lines="8 9 10 11 12"
+version: "3.8"</p>
+<p>services:
+  app:
+    # The app service definition
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - todo-mysql-data:/var/lib/mysql</p>
+<p>volumes:
+  todo-mysql-data:
+```</p>
+</li>
+<li>
+<p>Finally, we only need to specify the environment variables.</p>
+<p>```yaml hl_lines="10 11 12"
+version: "3.8"</p>
+<p>services:
+  app:
+    # The app service definition
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - todo-mysql-data:/var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: todos</p>
+<p>volumes:
+  todo-mysql-data:
+```</p>
+</li>
+</ol>
+<p>At this point, our complete <code>docker-compose.yml</code> should look like this:</p>
+<pre><code class="language-yaml">version: &quot;3.8&quot;
+
+services:
+  app:
+    image: node:12-alpine
+    command: sh -c &quot;yarn install &amp;&amp; yarn run dev&quot;
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: todos
+
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - todo-mysql-data:/var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: todos
+
+volumes:
+  todo-mysql-data:
+</code></pre>
+<h2 id="running-our-application-stack">Running our Application Stack</h2>
+<p>Now that we have our <code>docker-compose.yml</code> file, we can start it up!</p>
+<ol>
+<li>
+<p>Make sure no other copies of the app/db are running first (<code>docker ps</code> and <code>docker rm -f &lt;ids&gt;</code>).</p>
+</li>
+<li>
+<p>Start up the application stack using the <code>docker-compose up</code> command. We'll add the <code>-d</code> flag to run everything in the
+   background.</p>
+<p><code>bash
+docker-compose up -d</code></p>
+<p>When we run this, we should see output like this:</p>
+<p><code>plaintext
+Creating network "app_default" with the default driver
+Creating volume "app_todo-mysql-data" with default driver
+Creating app_app_1   ... done
+Creating app_mysql_1 ... done</code></p>
+<p>You'll notice that the volume was created as well as a network! By default, Docker Compose automatically creates a 
+network specifically for the application stack (which is why we didn't define one in the compose file).</p>
+</li>
+<li>
+<p>Let's look at the logs using the <code>docker-compose logs -f</code> command. You'll see the logs from each of the services interleaved
+    into a single stream. This is incredibly useful when you want to watch for timing-related issues. The <code>-f</code> flag "follows" the
+    log, so will give you live output as it's generated.</p>
+<p>If you don't already, you'll see output that looks like this...</p>
+<p><code>plaintext
+mysql_1  | 2019-10-03T03:07:16.083639Z 0 [Note] mysqld: ready for connections.
+mysql_1  | Version: '5.7.27'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server (GPL)
+app_1    | Connected to mysql db at host mysql
+app_1    | Listening on port 3000</code></p>
+<p>The service name is displayed at the beginning of the line (often colored) to help distinguish messages. If you want to
+view the logs for a specific service, you can add the service name to the end of the logs command (for example,
+<code>docker-compose logs -f app</code>).</p>
+<p>!!! info "Pro tip - Waiting for the DB before starting the app"
+    When the app is starting up, it actually sits and waits for MySQL to be up and ready before trying to connect to it.
+    Docker doesn't have any built-in support to wait for another container to be fully up, running, and ready
+    before starting another container. For Node-based projects, you can use the 
+    <a href="https://github.com/dwmkerr/wait-port">wait-port</a> dependency. Similar projects exist for other languages/frameworks.</p>
+</li>
+<li>
+<p>At this point, you should be able to open your app and see it running. And hey! We're down to a single command!</p>
+</li>
+</ol>
+<h2 id="seeing-our-app-stack-in-docker-dashboard">Seeing our App Stack in Docker Dashboard</h2>
+<p>If we look at the Docker Dashboard, we'll see that there is a group named <strong>app</strong>. This is the "project name" from Docker
+Compose and used to group the containers together. By default, the project name is simply the name of the directory that the
+<code>docker-compose.yml</code> was located in.</p>
+<p><img alt="Docker Dashboard with app project" src="dashboard-app-project-collapsed.png" /></p>
+<p>If you twirl down the app, you will see the two containers we defined in the compose file. The names are also a little
+more descriptive, as they follow the pattern of <code>&lt;project-name&gt;_&lt;service-name&gt;_&lt;replica-number&gt;</code>. So, it's very easy to
+quickly see what container is our app and which container is the mysql database.</p>
+<p><img alt="Docker Dashboard with app project expanded" src="dashboard-app-project-expanded.png" /></p>
+<h2 id="tearing-it-all-down">Tearing it All Down</h2>
+<p>When you're ready to tear it all down, simply run <code>docker-compose down</code> or hit the trash can on the Docker Dashboard 
+for the entire app. The containers will stop and the network will be removed.</p>
+<p>!!! warning "Removing Volumes"
+    By default, named volumes in your compose file are NOT removed when running <code>docker-compose down</code>. If you want to
+    remove the volumes, you will need to add the <code>--volumes</code> flag.</p>
+<pre><code>The Docker Dashboard does _not_ remove volumes when you delete the app stack.
+</code></pre>
+<p>Once torn down, you can switch to another project, run <code>docker-compose up</code> and be ready to contribute to that project! It really
+doesn't get much simpler than that!</p>
+<h2 id="recap">Recap</h2>
+<p>In this section, we learned about Docker Compose and how it helps us dramatically simplify the defining and
+sharing of multi-service applications. We created a Compose file by translating the commands we were
+using into the appropriate compose format.</p>
+<p>At this point, we're starting to wrap up the tutorial. However, there are a few best practices about
+image building we want to cover, as there is a big issue with the Dockerfile we've been using. So,
+let's take a look!</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../multi-container-apps/" class="btn btn-neutral float-left" title="Part7. Multi-container apps"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../image-building-best-practices/" class="btn btn-neutral float-right" title="Part9. Image-building best practices">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../multi-container-apps/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../image-building-best-practices/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

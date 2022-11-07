@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://example.com/tutorial/sharing-our-app/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Part4. Share the application - Docker for node-todo</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../css/styles.css" rel="stylesheet" />
+        <link href="../../css/dark-mode.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Part4. Share the application";
+        var mkdocs_page_input_path = "tutorial\\sharing-our-app\\index.md";
+        var mkdocs_page_url = "/tutorial/sharing-our-app/";
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Docker for node-todo
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../..">Docker overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Get started</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Part1. Getting started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../our-application/">Part2. Sample application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../updating-our-app/">Part3. Update the application</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Part4. Share the application</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#create-a-repo">Create a Repo</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pushing-our-image">Pushing our Image</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#running-our-image-on-a-new-instance">Running our Image on a New Instance</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#recap">Recap</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../persisting-our-data/">Part5. Persist the DB</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-bind-mounts/">Part6. Use bind mounts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../multi-container-apps/">Part7. Multi-container apps</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-docker-compose/">Part8. Use Docker Compose</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../image-building-best-practices/">Part9. Image-building best practices</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../what-next/">Part10. What next?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../LICENSE/">License</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Docker for node-todo</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Get started &raquo;</li>
+      <li>Part4. Share the application</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="share-the-application">Share the application</h1>
+<p>Now that we've built an image, let's share it! To share Docker images, you have to use a Docker
+registry. The default registry is <code>Docker Hub</code> and is where all of the images we've used have come from.</p>
+<blockquote>
+<p><strong>Docker ID</strong></p>
+<p>A Docker ID allows you to access Docker Hub which is the world’s largest library and community for container images. Create a <a href="https://hub.docker.com/signup">Docker ID</a> for free if you don’t have one.</p>
+</blockquote>
+<h2 id="create-a-repo">Create a Repo</h2>
+<p>To push an image, we first need to create a <code>repo</code> on <code>Docker Hub</code>.</p>
+<ol>
+<li>
+<p><a href="https://www.docker.com/pricing?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=docs_driven_upgrade">Sign up</a> or Sign in to <a href="https://hub.docker.com">Docker Hub</a>. </p>
+</li>
+<li>
+<p>Click the <strong>Create Repository</strong> button.</p>
+</li>
+<li>
+<p>For the repo name, use <code>node-todo</code>. Make sure the Visibility is <code>Public</code>.</p>
+</li>
+<li>
+<p>Click the <strong>Create</strong> button!</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>Private repositories</strong></p>
+<p>Did you know that Docker offers private repositories which allows you to restrict content to specific users or teams? Check out the details on the <a href="https://www.docker.com/pricing?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=docs_driven_upgrade">Docker pricing</a> page.</p>
+</blockquote>
+<p>If you look on the right-side of the page, you'll see a section named <strong>Docker commands</strong>. This gives
+an example command that you will need to run to push to this repo.</p>
+<p><img alt="Docker command with push example" src="push-command.png" style="width:50%;"></p>
+<h2 id="pushing-our-image">Pushing our Image</h2>
+<p>1.In the command line, try running the <code>push command</code> you see on Docker Hub. Note that your command will be using your <strong>namespace</strong> -&gt; <strong>YOUR-USER-NAME</strong>.</p>
+<pre><code class="language-plaintext">$ docker push YOUR-USER-NAME/node-todo
+The push refers to repository [docker.io/YOUR-USER-NAME/node-todo]
+An image does not exist locally with the tag: YOUR-USER-NAME/node-todo
+</code></pre>
+<p>Why did it fail? The push command was looking for an image named YOUR-USER-NAME/node-todo, but didn't find one. If you run <code>docker image ls</code>, you won't see one either.
+To fix this, we need to "tag" our existing image we've built to give it another name.</p>
+<p>2.Login to the Docker Hub using the command <code>docker login -u YOUR-USER-NAME</code>.</p>
+<p>3.Use the <code>docker tag</code> command to give the <code>node-todo</code> image a new name. Be sure to swap out <code>YOUR-USER-NAME</code> with your Docker ID.</p>
+<pre><code class="language-bash">docker tag node-todo YOUR-USER-NAME/node-todo
+</code></pre>
+<p>4.Now try your push command again. If you're copying the value from Docker Hub, you can drop the <code>tagname</code> portion, as we didn't add a tag to the image name. If you don't specify a tag, Docker will use a tag called <code>latest</code>.</p>
+<pre><code class="language-bash">docker push YOUR-USER-NAME/node-todo
+</code></pre>
+<h2 id="running-our-image-on-a-new-instance">Running our Image on a New Instance</h2>
+<p>Now that our image has been built and pushed into a registry, let's try running our app on a brand new instance that has never seen this container image! To do this, we will use Play with Docker.</p>
+<ol>
+<li>
+<p>Open your browser to <a href="https://labs.play-with-docker.com/">Play with Docker</a>.</p>
+</li>
+<li>
+<p>Log in with your Docker Hub account.</p>
+</li>
+<li>
+<p>Once you're logged in, click on the "+ ADD NEW INSTANCE" link in the left side bar. (If you don't see it, make your browser a little wider.) After a few seconds, a terminal window will be opened in your browser.</p>
+</li>
+</ol>
+<p><img alt="Play with Docker add new instance" src="pwd-add-new-instance.png" style="width:75%;"></p>
+<p>1.In the terminal, start your freshly pushed app.</p>
+<pre><code class="language-bash">docker run -dp 3000:3000 YOUR-USER-NAME/node-todo
+</code></pre>
+<p>You should see the image get pulled down and eventually start up!</p>
+<p>2.Click on the <code>3000</code> badge when it comes up and you should see the app with your modifications! Hooray! If the <code>3000</code> badge doesn't show up, you can click on the <strong>"Open Port"</strong> button and type in <code>3000</code>.</p>
+<h2 id="recap">Recap</h2>
+<p>In this section, we learned how to share our images by pushing them to a registry. We then went to a
+brand new instance and were able to run the freshly pushed image. This is quite common in CI pipelines,
+where the pipeline will create the image and push it to a registry and then the production environment
+can use the latest version of the image.</p>
+<p>Now that we have that figured out, let's circle back around to what we noticed at the end of the last
+section. As a reminder, we noticed that when we restarted the app, we lost all of our todo list items.
+That's obviously not a great user experience, so let's learn how we can persist the data across 
+restarts!</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../updating-our-app/" class="btn btn-neutral float-left" title="Part3. Update the application"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../persisting-our-data/" class="btn btn-neutral float-right" title="Part5. Persist the DB">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../updating-our-app/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../persisting-our-data/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

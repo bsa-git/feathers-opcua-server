@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://example.com/tutorial/persisting-our-data/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Part5. Persist the DB - Docker for node-todo</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../css/styles.css" rel="stylesheet" />
+        <link href="../../css/dark-mode.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Part5. Persist the DB";
+        var mkdocs_page_input_path = "tutorial\\persisting-our-data\\index.md";
+        var mkdocs_page_url = "/tutorial/persisting-our-data/";
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Docker for node-todo
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../..">Docker overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Get started</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Part1. Getting started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../our-application/">Part2. Sample application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../updating-our-app/">Part3. Update the application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../sharing-our-app/">Part4. Share the application</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Part5. Persist the DB</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#seeing-this-in-practice">Seeing this in Practice</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-bind-mounts/">Part6. Use bind mounts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../multi-container-apps/">Part7. Multi-container apps</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-docker-compose/">Part8. Use Docker Compose</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../image-building-best-practices/">Part9. Image-building best practices</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../what-next/">Part10. What next?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../LICENSE/">License</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Docker for node-todo</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Get started &raquo;</li>
+      <li>Part5. Persist the DB</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p>In case you didn't notice, our todo list is being wiped clean every single time
+we launch the container. Why is this? Let's dive into how the container is working.</p>
+<h2 id="the-containers-filesystem">The Container's Filesystem</h2>
+<p>When a container runs, it uses the various layers from an image for its filesystem.
+Each container also gets its own "scratch space" to create/update/remove files. Any
+changes won't be seen in another container, <em>even if</em> they are using the same image.</p>
+<h3 id="seeing-this-in-practice">Seeing this in Practice</h3>
+<p>To see this in action, we're going to start two containers and create a file in each.
+What you'll see is that the files created in one container aren't available in another.</p>
+<ol>
+<li>
+<p>Start a <code>ubuntu</code> container that will create a file named <code>/data.txt</code> with a random number
+   between 1 and 10000.</p>
+<p><code>bash
+docker run -d ubuntu bash -c "shuf -i 1-10000 -n 1 -o /data.txt &amp;&amp; tail -f /dev/null"</code></p>
+<p>In case you're curious about the command, we're starting a bash shell and invoking two
+commands (why we have the <code>&amp;&amp;</code>). The first portion picks a single random number and writes
+it to <code>/data.txt</code>. The second command is simply watching a file to keep the container running.</p>
+</li>
+<li>
+<p>Validate we can see the output by <code>exec</code>'ing into the container. To do so, open the Dashboard and click the first action of the container that is running the <code>ubuntu</code> image.</p>
+<p><img alt="Dashboard open CLI into ubuntu container" src="dashboard-open-cli-ubuntu.png" />{: style=width:75% }
+{: .text-center }</p>
+<p>You will see a terminal that is running a shell in the ubuntu container. Run the following command to see the content of the <code>/data.txt</code> file. Close this terminal afterwards again.</p>
+<p><code>bash
+cat /data.txt</code></p>
+<p>If you prefer the command line you can use the <code>docker exec</code> command to do the same. You need to get the
+   container's ID (use <code>docker ps</code> to get it) and get the content with the following command.</p>
+<p><code>bash
+docker exec &lt;container-id&gt; cat /data.txt</code></p>
+<p>You should see a random number!</p>
+</li>
+<li>
+<p>Now, let's start another <code>ubuntu</code> container (the same image) and we'll see we don't have the same
+   file.</p>
+<p><code>bash
+docker run -it ubuntu ls /</code></p>
+<p>And look! There's no <code>data.txt</code> file there! That's because it was written to the scratch space for
+only the first container.</p>
+</li>
+<li>
+<p>Go ahead and remove the first container using the <code>docker rm -f &lt;container-id&gt;</code> command.
+    <code>bash
+    docker rm -f &lt;container-id&gt;</code></p>
+</li>
+</ol>
+<h2 id="container-volumes">Container Volumes</h2>
+<p>With the previous experiment, we saw that each container starts from the image definition each time it starts. 
+While containers can create, update, and delete files, those changes are lost when the container is removed 
+and all changes are isolated to that container. With volumes, we can change all of this.</p>
+<p><a href="https://docs.docker.com/storage/volumes/">Volumes</a> provide the ability to connect specific filesystem paths of 
+the container back to the host machine. If a directory in the container is mounted, changes in that
+directory are also seen on the host machine. If we mount that same directory across container restarts, we'd see
+the same files.</p>
+<p>There are two main types of volumes. We will eventually use both, but we will start with <strong>named volumes</strong>.</p>
+<h2 id="persisting-our-todo-data">Persisting our Todo Data</h2>
+<p>By default, the todo app stores its data in a <a href="https://www.sqlite.org/index.html">SQLite Database</a> at
+<code>/etc/todos/todo.db</code>. If you're not familiar with SQLite, no worries! It's simply a relational database in 
+which all of the data is stored in a single file. While this isn't the best for large-scale applications,
+it works for small demos. We'll talk about switching this to a different database engine later.</p>
+<p>With the database being a single file, if we can persist that file on the host and make it available to the
+next container, it should be able to pick up where the last one left off. By creating a volume and attaching
+(often called "mounting") it to the directory the data is stored in, we can persist the data. As our container 
+writes to the <code>todo.db</code> file, it will be persisted to the host in the volume.</p>
+<p>As mentioned, we are going to use a <strong>named volume</strong>. Think of a named volume as simply a bucket of data. 
+Docker maintains the physical location on the disk and you only need to remember the name of the volume. 
+Every time you use the volume, Docker will make sure the correct data is provided.</p>
+<ol>
+<li>
+<p>Create a volume by using the <code>docker volume create</code> command.</p>
+<p><code>bash
+docker volume create todo-db</code></p>
+</li>
+<li>
+<p>Stop the todo app container once again in the Dashboard (or with <code>docker rm -f &lt;container-id&gt;</code>), as it is still running without using the persistent volume.</p>
+</li>
+<li>
+<p>Start the todo app container, but add the <code>-v</code> flag to specify a volume mount. We will use the named volume and mount
+   it to <code>/etc/todos</code>, which will capture all files created at the path.</p>
+<p><code>bash
+docker run -dp 3000:3000 -v todo-db:/etc/todos getting-started</code></p>
+</li>
+<li>
+<p>Once the container starts up, open the app and add a few items to your todo list.</p>
+<p><img alt="Items added to todo list" src="items-added.png" />{: style="width: 55%; " }
+{: .text-center }</p>
+</li>
+<li>
+<p>Remove the container for the todo app. Use the Dashboard or <code>docker ps</code> to get the ID and then <code>docker rm -f &lt;container-id&gt;</code> to remove it.</p>
+</li>
+<li>
+<p>Start a new container using the same command from above.</p>
+</li>
+<li>
+<p>Open the app. You should see your items still in your list!</p>
+</li>
+<li>
+<p>Go ahead and remove the container when you're done checking out your list.</p>
+</li>
+</ol>
+<p>Hooray! You've now learned how to persist data!</p>
+<p>!!! info "Pro-tip"
+    While named volumes and bind mounts (which we'll talk about in a minute) are the two main types of volumes supported
+    by a default Docker engine installation, there are many volume driver plugins available to support NFS, SFTP, NetApp, 
+    and more! This will be especially important once you start running containers on multiple hosts in a clustered
+    environment with Swarm, Kubernetes, etc.</p>
+<h2 id="diving-into-our-volume">Diving into our Volume</h2>
+<p>A lot of people frequently ask "Where is Docker <em>actually</em> storing my data when I use a named volume?" If you want to know, 
+you can use the <code>docker volume inspect</code> command.</p>
+<pre><code class="language-bash">docker volume inspect todo-db
+[
+    {
+        &quot;CreatedAt&quot;: &quot;2019-09-26T02:18:36Z&quot;,
+        &quot;Driver&quot;: &quot;local&quot;,
+        &quot;Labels&quot;: {},
+        &quot;Mountpoint&quot;: &quot;/var/lib/docker/volumes/todo-db/_data&quot;,
+        &quot;Name&quot;: &quot;todo-db&quot;,
+        &quot;Options&quot;: {},
+        &quot;Scope&quot;: &quot;local&quot;
+    }
+]
+</code></pre>
+<p>The <code>Mountpoint</code> is the actual location on the disk where the data is stored. Note that on most machines, you will
+need to have root access to access this directory from the host. But, that's where it is!</p>
+<p>!!! info "Accessing Volume data directly on Docker Desktop"
+    While running in Docker Desktop, the Docker commands are actually running inside a small VM on your machine.
+    If you wanted to look at the actual contents of the Mountpoint directory, you would need to first get inside
+    of the VM.</p>
+<h2 id="recap">Recap</h2>
+<p>At this point, we have a functioning application that can survive restarts! We can show it off to our investors and
+hope they can catch our vision!</p>
+<p>However, we saw earlier that rebuilding images for every change takes quite a bit of time. There's got to be a better
+way to make changes, right? With bind mounts (which we hinted at earlier), there is a better way! Let's take a look at that now!</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../sharing-our-app/" class="btn btn-neutral float-left" title="Part4. Share the application"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../using-bind-mounts/" class="btn btn-neutral float-right" title="Part6. Use bind mounts">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../sharing-our-app/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../using-bind-mounts/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
