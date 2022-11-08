@@ -16,7 +16,7 @@ The application **FEATHERS-OPCUA-SERVER** is designed to implement the use of th
 
 ### Why do you need a framework.
 
-There was an idea to embed the implementation of the protocol **NodeOPCUA** in the framework in order to use the features of this framework, such as:
+There was an idea to embed the implementation of the library **NodeOPCUA** in the framework in order to use the features of this framework, such as:
 
 * Working with databases.
 * Access to data through protocols **REST API** and **Websockets**.
