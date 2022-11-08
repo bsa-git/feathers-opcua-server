@@ -1,63 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://example.com/</loc>
-         <lastmod>2022-11-07</lastmod>
+         <loc>https://bsa-git.github.io/feathers-opcua-server/</loc>
+         <lastmod>2022-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://example.com/LICENSE/</loc>
-         <lastmod>2022-11-07</lastmod>
+         <loc>https://bsa-git.github.io/feathers-opcua-server/LICENSE/</loc>
+         <lastmod>2022-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://example.com/tutorial/getting-started/</loc>
-         <lastmod>2022-11-07</lastmod>
+         <loc>https://bsa-git.github.io/feathers-opcua-server/tutorial/image-building-best-practices/</loc>
+         <lastmod>2022-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://example.com/tutorial/image-building-best-practices/</loc>
-         <lastmod>2022-11-07</lastmod>
+         <loc>https://bsa-git.github.io/feathers-opcua-server/tutorial/multi-container-apps/</loc>
+         <lastmod>2022-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://example.com/tutorial/multi-container-apps/</loc>
-         <lastmod>2022-11-07</lastmod>
+         <loc>https://bsa-git.github.io/feathers-opcua-server/tutorial/part1_getting-started/</loc>
+         <lastmod>2022-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://example.com/tutorial/our-application/</loc>
-         <lastmod>2022-11-07</lastmod>
+         <loc>https://bsa-git.github.io/feathers-opcua-server/tutorial/part2_framework-overview/</loc>
+         <lastmod>2022-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://example.com/tutorial/persisting-our-data/</loc>
-         <lastmod>2022-11-07</lastmod>
+         <loc>https://bsa-git.github.io/feathers-opcua-server/tutorial/part3_app-features/</loc>
+         <lastmod>2022-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://example.com/tutorial/sharing-our-app/</loc>
-         <lastmod>2022-11-07</lastmod>
+         <loc>https://bsa-git.github.io/feathers-opcua-server/tutorial/persisting-our-data/</loc>
+         <lastmod>2022-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://example.com/tutorial/updating-our-app/</loc>
-         <lastmod>2022-11-07</lastmod>
+         <loc>https://bsa-git.github.io/feathers-opcua-server/tutorial/sharing-our-app/</loc>
+         <lastmod>2022-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://example.com/tutorial/using-bind-mounts/</loc>
-         <lastmod>2022-11-07</lastmod>
+         <loc>https://bsa-git.github.io/feathers-opcua-server/tutorial/using-bind-mounts/</loc>
+         <lastmod>2022-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://example.com/tutorial/using-docker-compose/</loc>
-         <lastmod>2022-11-07</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://example.com/what-next/</loc>
-         <lastmod>2022-11-07</lastmod>
+         <loc>https://bsa-git.github.io/feathers-opcua-server/tutorial/using-docker-compose/</loc>
+         <lastmod>2022-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://bsa-git.github.io/feathers-opcua-server/tutorial/part2_framework-overview/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Part2. FeathersJS framework overview - FeathersJS OPC UA application</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../css/styles.css" rel="stylesheet" />
+        <link href="../../css/dark-mode.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Part2. FeathersJS framework overview";
+        var mkdocs_page_input_path = "tutorial\\part2_framework-overview\\index.md";
+        var mkdocs_page_url = "/feathers-opcua-server/tutorial/part2_framework-overview/";
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> FeathersJS OPC UA application
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../..">What is OPC UA?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Get started</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../part1_getting-started/">Part1. Getting started</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Part2. FeathersJS framework overview</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#modern-solid-and-100-javascript">Modern, solid, and 100% JavaScript</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#universal">Universal</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#framework-friendly">Framework Friendly</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#service-oriented">Service Oriented</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#instant-real-time-rest-apis">Instant Real-time REST APIs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#datastore-agnostic">Datastore Agnostic</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#incredibly-pluggable">Incredibly Pluggable</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../part3_app-features/">Part3. Application Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../sharing-our-app/">Part4. Share the application</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../persisting-our-data/">Part5. Persist the DB</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-bind-mounts/">Part6. Use bind mounts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../multi-container-apps/">Part7. Multi-container apps</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../using-docker-compose/">Part8. Use Docker Compose</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../image-building-best-practices/">Part9. Image-building best practices</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../LICENSE/">License</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">FeathersJS OPC UA application</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Get started &raquo;</li>
+      <li>Part2. FeathersJS framework overview</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="introducing-feathersjs">Introducing FeathersJS</h1>
+<p>FeathersJS a flexible, real-time JavaScript framework built on top of Express for the server and as a standalone client for the browser and React Native.</p>
+<p>FeathersJS isn’t just another Rails clone. Instead of the typical <strong>MVC</strong> pattern it encourages a Service Oriented Architecture paired with Cross-cutting Concerns allowing you to build complex real-time apps and scalable <strong>REST APIs</strong> very quickly and with very little code. Sounds too good to be true? Once you try it you’ll see that you can build prototypes in minutes and flexible, scalable, production-ready apps in days. Not weeks or months.</p>
+<h3 id="modern-solid-and-100-javascript">Modern, solid, and 100% JavaScript</h3>
+<p>Feathers is built using promises and <strong>ES6</strong> so you can build your apps with the latest JavaScript features and write terse, elegant code. Feathers itself is only a few hundred lines of code and is a fully compatible wrapper over top of <a href="http://expressjs.org/">Express</a>, <a href="http://socket.io/">Socket.io</a> and <a href="https://github.com/primus/primus">Primus</a>, all of which have been used in production by thousands of companies.</p>
+<h3 id="universal">Universal</h3>
+<p>Feathers can be used in the browser, React Native and server side and provides everything you need to structure your application and communicate with a Feathers server while still letting you pick your favourite view engine. Using the <a href="http://docs.feathersjs.com/clients/feathers.html">Feathers client</a> you can quickly add authentication, share validation and business logic code between your server and client, and easily make your apps real-time.</p>
+<h3 id="framework-friendly">Framework Friendly</h3>
+<p>Feathers is completely client agnostic and easily integrates with any client side framework. It plays especially well with React, Angular and React Native. They’re practically BFFs. <a href="http://docs.feathersjs.com/guides/readme.html">We have guides</a> for some of the most popular JS frameworks and are adding new ones every week.</p>
+<h3 id="service-oriented">Service Oriented</h3>
+<p><a href="https://docs.feathersjs.com/api/services.html">Services</a> are the core of Feathers. They provide instant <strong>CRUD</strong> functionality for a resource through a series of familiar methods; find, get, create, update, patch, and remove. Almost any resource can be mapped to these actions; external APIs, database resources, file uploads, you name it. This consistent interface makes it easy to “hook” into these <strong>CRUD</strong> actions to provide custom functionality. For example, if you have a socket transport like Socket.io enabled, Feathers will automatically emit created, updated, patched, and removed events for you.</p>
+<p>Feathers gives you the structure to build service oriented apps from day one by keeping services discrete. If you eventually need to split up your app into microservices it’s an easy transition and your Feathers apps can scale painlessly.</p>
+<h3 id="instant-real-time-rest-apis">Instant Real-time REST APIs</h3>
+<p>Since Feathers provides instant CRUD functionality via <a href="https://docs.feathersjs.com/api/services.html">Services</a>, it also exposes both a <strong>RESTful</strong> and <strong>real-time API</strong> automatically through <strong>HTTP/HTTPS</strong> and over websockets. Feathers allows you to send and receive data over sockets similar to Meteor’s DDP so you can use Primus or Socket.io for your sole app communication… or not. Feathers gives you the flexibility to choose how you want to expose your <strong>REST API</strong>; over <strong>HTTP(S)</strong>, <strong>websockets</strong> or <strong>both</strong> — and it does this with just a few lines of code.</p>
+<h3 id="datastore-agnostic">Datastore Agnostic</h3>
+<p>Feathers has adapters for <a href="https://docs.feathersjs.com/api/databases/adapters.html">15+ data sources</a> and <strong>4 different ORMs</strong> out of the box. More than any other real-time framework! This gives you the ability to access data in <strong>MongoDB</strong>, <strong>Postgres</strong>, <strong>MySQL</strong>, <strong>Sequel Server</strong>, <strong>S3</strong> and more! You can have multiple datastores in a single app and swap them out painlessly due to our <a href="https://docs.feathersjs.com/api/databases/querying.html">consistent query interface</a>.</p>
+<h3 id="incredibly-pluggable">Incredibly Pluggable</h3>
+<p>We like to consider Feathers as a “batteries included but easily swappable framework”. We have entirely optional plugins that provide <a href="https://github.com/feathersjs/feathers-authentication">authentication</a>, <a href="https://github.com/feathersjs/feathers-twilio">SMS</a>, or <a href="https://github.com/feathersjs/feathers-mailer">email</a> messaging out of the box. You can include exactly what you need, typically in just a couple lines of code. No more, no less.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../part1_getting-started/" class="btn btn-neutral float-left" title="Part1. Getting started"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../part3_app-features/" class="btn btn-neutral float-right" title="Part3. Application Features">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../part1_getting-started/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../part3_app-features/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
