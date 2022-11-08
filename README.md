@@ -8,6 +8,8 @@ This project uses [Feathers](http://feathersjs.com), a framework for real-time a
 
 > __Important:__ This project requires NodeJS 10 or later.
 
+### [Learn more...](https://bsa-git.github.io/feathers-opcua-server/)
+
 ## Getting Started
 
 Getting up and running is as easy as 1, 2, 3.

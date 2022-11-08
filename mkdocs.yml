@@ -22,9 +22,9 @@ nav:
   - Home: 
     - 'What is OPC UA?': 'README.md'
   - 'Get started':
-    - 'Part1. Getting started': 'tutorial\getting-started\index.md'
-    - 'Part2. Sample application': 'tutorial\our-application\index.md'
-    - 'Part3. Update the application': 'tutorial\updating-our-app\index.md'
+    - 'Part1. Getting started': 'tutorial\part1_getting-started\index.md'
+    - 'Part2. FeathersJS framework overview': 'tutorial\part2_framework-overview\index.md'
+    - 'Part3. Application Features': 'tutorial\part3_app-features\index.md'
     - 'Part4. Share the application': 'tutorial\sharing-our-app\index.md'
     - 'Part5. Persist the DB': 'tutorial\persisting-our-data\index.md'
     - 'Part6. Use bind mounts': 'tutorial\using-bind-mounts\index.md'
