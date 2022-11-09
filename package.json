@@ -53,7 +53,7 @@
     "eslint": "eslint --fix src/. test/. scripts/. --config .eslintrc.json",
     "eslint:debug": "eslint --fix src/. test/debug/.  --config .eslintrc.json",
     "eslint:script": "eslint --fix src/. scripts/test/.  --config .eslintrc.json",
-    "update-dependencies": "ncu -u",
+    "clone:cli-scripts": "npm link",
     "nedb-delete": "shx rm -rf data/nedb/test/*.db",
     "nedb-find-users": "nedb ./data/nedb/dev/users.db"
   },

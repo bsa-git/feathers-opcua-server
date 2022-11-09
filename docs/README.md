@@ -58,7 +58,7 @@ One of the most important considerations in choosing a technology is security. O
 
 The multi-layered architecture of OPC UA provides a “future proof” framework. Innovative technologies and methodologies such as new transport protocols, security algorithms, encoding standards, or application-services can be incorporated into OPC UA while maintaining backwards compatibility for existing products. UA products built today will work with the products of tomorrow.
 
-<img alt="Tutorial container running in Docker Dashboard" src="./images/UA-Architecture.png" style="width:100%;">
+<img alt="Tutorial container running in Docker Dashboard" src="./images/UA-Architecture.png" style="width:90%;">
 
 ## Information Modeling and Access
 
