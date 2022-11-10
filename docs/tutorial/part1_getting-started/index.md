@@ -14,6 +14,10 @@ The application **FEATHERS-OPCUA-SERVER** is designed to implement the use of th
 * **NodeOPCUA** runs on all the platforms that nodeJS supports.
 * **NodeOPCUA** will benefit from a [comprehensive SDK API documentation](https://node-opcua.github.io/api_doc/index.html), numerous end-to-end functional tests, and a set of practical examples to help you learn how to use it.
 
+### Distributed data collection system
+
+An application is configured for its host on which it is installed using a configuration file `src\api\opcua\config\OPCUA_Config.json`. In doing so, you can define separate configurations for this host. Each configuration has its own unique number, for example `ua-cherkassy-azot-asutp_dev1` , you can also define the server and client and what tags they will work with. Also in the configuration, you can determine which database to work with and in which mode, which data transfer protection mode to use, and how to authenticate the user. Details can be found [here](/feathers-opcua-server/tutorial/part6_configuration/#opcua_config).
+
 ### Why do you need a framework.
 
 There was an idea to embed the implementation of the library **NodeOPCUA** in the framework in order to use the features of this framework, such as:

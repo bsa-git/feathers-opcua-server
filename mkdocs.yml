@@ -6,7 +6,7 @@
 #   - docker tag node-todo YOUR-USER-NAME/node-todo -> "Use the `docker tag` command to give the `node-todo` image a new name"
 #   - docker push YOUR-USER-NAME/node-todo  -> "Running the `push command`"
 
-site_name: FeathersJS OPC UA application
+site_name: Feathers OPC UA application
 site_url: https://bsa-git.github.io/feathers-opcua-server/
 
 # Configuration
@@ -27,7 +27,7 @@ nav:
     - 'Part3. Application Features': 'tutorial\part3_app-features\index.md'
     - 'Part4. Resources info': 'tutorial\part4_resources-info\index.md'
     - 'Part5. Installation': 'tutorial\part5_installation\index.md'
-    - 'Part6. Use bind mounts': 'tutorial\using-bind-mounts\index.md'
+    - 'Part6. Configuration': 'tutorial\part6_configuration\index.md'
     - 'Part7. Multi-container apps': 'tutorial\multi-container-apps\index.md'
     - 'Part8. Use Docker Compose': 'tutorial\using-docker-compose\index.md'
     - 'Part9. Image-building best practices': 'tutorial\image-building-best-practices\index.md'

@@ -6,7 +6,6 @@
       "test"
     ],
     "envAllowingOpcuaBootstrap": [
-      "development",
       "production"
     ],
     "seedData": true,
