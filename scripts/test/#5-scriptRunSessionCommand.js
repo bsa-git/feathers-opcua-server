@@ -12,6 +12,7 @@ const {
 
 const {
   appRoot,
+  logger,
   inspector,
   pause
 } = require('../../src/plugins/lib');
@@ -27,8 +28,8 @@ const {
   showInfoForHandler2
 } = require('../../src/plugins/opcua/opcua-subscriptions/lib');
 
+const loOmit = require('lodash/omit');
 const chalk = require('chalk');
-
 
 const debug = require('debug')('app:#5-scriptRunSessionOperation');
 const isDebug = false;
@@ -71,44 +72,64 @@ describe('<<=== ScriptOperations: (#5-scriptRunSessionOperation) ===>>', () => {
     //--------------------------------------------
     switch (argv.script) {
     case '#5.1':
+      options.command = 'ch_m5SubscriptionCreate';
+      options.opt = {
+        url: 'opc.tcp://10.60.147.29:49370',// (Endpoint URL) ports: OpcuaSrv(26570), KepSrv(49370)
+      };
+      options.userIdentityInfo.userName = process.env.OPCUA_A5_NAME;
+      options.userIdentityInfo.password = process.env.OPCUA_A5_PASS;
+
+      callback = async function (session, params) {
+        let result = callbackSubscriptionCreate(session, params);
+        await pause(1000);
+        return result;
+      };
+      break;
+    case '#5.2':
       options.command = 'ch_m5SubscriptionMonitor';
-      options.subscrMonOpts.itemToMonitor = { 
+      options.subscrMonOpts.itemToMonitor = {
         // OpcuaSrv(ns=1;s=CH_M52::ValueFromFile), KepSrv(ns=2;s=Channel1.Device1.Черкассы 'АЗОТ' цех M5-2.Values from file for CH_M52)
-        nodeId: 'ns=2;s=Channel1.Device1.Черкассы \'АЗОТ\' цех M5-2.Values from file for CH_M52', 
-        attributeId: AttributeIds.Value 
+        nodeId: 'ns=2;s=Channel1.Device1.Черкассы \'АЗОТ\' цех M5-2.Values from file for CH_M52',
+        attributeId: AttributeIds.Value
       };
 
       callback = async function (session, params) {
         let result = callbackSubscriptionCreate(session, params);
         const subscription = result.subscription;
-        if(result.statusCode === 'Good'){
+        if (result.statusCode === 'Good') {
           result = await callbackSubscriptionMonitor(subscription, params);
         }
         await pause(1000);
         return result;
       };
       break;
-    case '#5.2':
+    case '#5.3':
       options.command = 'ch_m5SessionEndpoint';
-       
+
       callback = async function (session, params) {
         let result = callbackSessionEndpoint(session, params);
         await pause(1000);
         return result;
       };
-      break;  
+      break;
     default:
       break;
     }
 
     // Run session command
-    const result = await opcuaClientSessionAsync(options.opt.url, options, callback);
-    if(result.statusCode === 'Good'){
-      console.log(chalk.green(`Run session command "${options.command}" - OK!`), 'result:', chalk.cyan(result.statusCode));
-      if(true && result) inspector(`Run session command "${options.command}":`, result);
-    } else {
-      console.log(chalk.green(`Run session command "${options.command}" - ERROR!`), 'result:', chalk.cyan(result.statusCode));
+    try {
+      if (isDebug && options) inspector('#5-scriptRunSessionOperation.options:', loOmit(options, ['app']));
+      const result = await opcuaClientSessionAsync(options.opt.url, options, callback);
+      if (result.statusCode === 'Good') {
+        console.log(chalk.green(`Run session command "${options.command}" - OK!`), 'result:', chalk.cyan(result.statusCode));
+        if (true && result) inspector(`Run session command "${options.command}":`, result);
+      } else {
+        console.log(chalk.green(`Run session command "${options.command}" - ERROR!`), 'result:', chalk.cyan(result.statusCode));
+      }
+      assert.ok(result.statusCode === 'Good', 'Run opcua command');
+    } catch (error) {
+      logger.error(`Error message: "${error.message}"!`);
+      assert.ok(false, 'Run opcua command');
     }
-    assert.ok(result.statusCode === 'Good', 'Run opcua command');
   });
 });

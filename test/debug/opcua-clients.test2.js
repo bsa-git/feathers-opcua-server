@@ -131,7 +131,7 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   });
 
   //============== SESSION HISTORY VALUES ====================//
-
+  /** 
   it('#5: OPC-UA clients: session history values for "CH_M51"', async () => {
     let dataItems, readResult = null, accumulator = '', timestamp = '';
     //----------------------------------------------------------
@@ -270,6 +270,8 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
     }
   });
 
+  */
+
   //============== START SUBSCRIPTION ====================//
 
   it('#9: OPC-UA clients: subscription create', async () => {
@@ -283,6 +285,7 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
 
   //============== SUBSCRIPTION MONITOR ====================//
 
+  /** 
   it('#10.1: OPC-UA clients: subscription monitor for "CH_M51::ValueFromFile" group', async () => {
     const service = await getClientService(app, id);
     const srvCurrentState = await service.getSrvCurrentState(id);
@@ -474,39 +477,42 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
     assert.ok(statusCode === 'Good', 'OPC-UA clients: session call method "methodAcmYearTemplateCreate"');
   });
 
-  it('#12.2: OPC-UA clients: session call method "methodAcmDayReportsDataGet"', async () => {
-    let statusCode = '', outputArguments;
-    //------------------------------------------------
-    const service = await getClientService(app, id);
-    // Set input argument
-    const pointID = 2;
-    const inputArgument = {
-      pointID,
-      pattern: '/**/DayHist*.xls'
-    };
-    const inputArguments = [[
-      {
-        dataType: DataType.String,
-        value: JSON.stringify(inputArgument),
-      }
-    ]];
-    const callResults = await service.sessionCallMethod(id, 'CH_M5::AcmDayReportsDataGet', inputArguments);
-    if (isDebug && callResults.length) inspector('methodAcmDayReportsDataGet.callResults:', callResults);
-    if (callResults.length) {
-      statusCode = callResults[0].statusCode.name;
-      outputArguments = JSON.parse(callResults[0].outputArguments[0].value);
-      outputArguments = loOmit(outputArguments, ['params']);
-      outputArguments.resultPath = getPathBasename(outputArguments.resultPath);
-      if (isDebug && outputArguments) inspector('methodAcmDayReportsDataGet.outputArguments:', outputArguments);
-      if (isDebug && outputArguments) console.log(
-        chalk.green('RunMetod(methodAcmDayReportsDataGet): OK!'),
-        `For pointID=${chalk.cyan(pointID)};`,
-        `resultFile: '${chalk.cyan(outputArguments.resultPath)}';`
-      );
-    }
-    assert.ok(statusCode === 'Good', 'OPC-UA clients: run method "methodAcmDayReportsDataGet"');
-  });
+  */
+  
+  // it('#12.2: OPC-UA clients: session call method "methodAcmDayReportsDataGet"', async () => {
+  //   let statusCode = '', outputArguments;
+  //   //------------------------------------------------
+  //   const service = await getClientService(app, id);
+  //   // Set input argument
+  //   const pointID = 2;
+  //   const inputArgument = {
+  //     pointID,
+  //     pattern: '/**/DayHist*.xls'
+  //   };
+  //   const inputArguments = [[
+  //     {
+  //       dataType: DataType.String,
+  //       value: JSON.stringify(inputArgument),
+  //     }
+  //   ]];
+  //   const callResults = await service.sessionCallMethod(id, 'CH_M5::AcmDayReportsDataGet', inputArguments);
+  //   if (isDebug && callResults.length) inspector('methodAcmDayReportsDataGet.callResults:', callResults);
+  //   if (callResults.length) {
+  //     statusCode = callResults[0].statusCode.name;
+  //     outputArguments = JSON.parse(callResults[0].outputArguments[0].value);
+  //     outputArguments = loOmit(outputArguments, ['params']);
+  //     outputArguments.resultPath = getPathBasename(outputArguments.resultPath);
+  //     if (isDebug && outputArguments) inspector('methodAcmDayReportsDataGet.outputArguments:', outputArguments);
+  //     if (isDebug && outputArguments) console.log(
+  //       chalk.green('RunMetod(methodAcmDayReportsDataGet): OK!'),
+  //       `For pointID=${chalk.cyan(pointID)};`,
+  //       `resultFile: '${chalk.cyan(outputArguments.resultPath)}';`
+  //     );
+  //   }
+  //   assert.ok(statusCode === 'Good', 'OPC-UA clients: run method "methodAcmDayReportsDataGet"');
+  // });
 
+  /** 
   it('#12.3: OPC-UA clients: run method "syncHistoryAtStartup"', async () => {
     // Get opcua tags
     const opcuaTags = getOpcuaConfigOptions(id);
@@ -560,19 +566,21 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
     }
   });
 
+  */
+
   it('#12.6: OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store', async () => {
     let statusCode = '', dataItems;
     //------------------------------------------------
 
     // Remove opcua store values
     const removeResult = await removeOpcuaStoreValues(app);
-    if (isDebug && removeResult) inspector('removeOpcuaStoreValues.removeResult:', removeResult);
+    if (true && removeResult) inspector('removeOpcuaStoreValues.removeResult:', removeResult);
 
     // Get opcua tags
     const opcuaTags = getOpcuaConfigOptions(id);
     // Get opcua group store tags 
     const opcuaGroupTags = opcuaTags.filter(t => t.group && t.store);
-    if (isDebug && opcuaGroupTags.length) inspector('opcuaBootstrap.opcuaGroupTags:', opcuaGroupTags);
+    if (true && opcuaGroupTags.length) inspector('opcuaBootstrap.opcuaGroupTags:', opcuaGroupTags);
     for (let index = 0; index < opcuaGroupTags.length; index++) {
       const opcuaGroupTag = opcuaGroupTags[index];
       const groupBrowseName = opcuaGroupTag.browseName;
@@ -582,7 +590,7 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
       const params = { isSaveOutputFile: false };
       const methodResult = await methodAcmDayReportsDataGet([{ value: pointID }], { storeParams, params });
       const methodResultOutputPath = methodResult.params.outputPath;
-      if (isDebug && methodResult) inspector('methodAcmDayReportsDataGet.methodResult:', methodResult);
+      if (true && methodResult) inspector('methodAcmDayReportsDataGet.methodResult:', methodResult);
       statusCode = methodResult.statusCode;
       if (statusCode === 'Good') {
         // Get dataItems
@@ -600,66 +608,68 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
     }
   });
 
-  it('#12.7: OPC-UA clients: session call method "methodAcmYearReportUpdate"', async () => {
-    let statusCode = '', inputArgument, inputArgument2, inputArguments, outputArguments;
-    let callResults;
-    //------------------------------------------------------------------------------------
-    const service = await getClientService(app, id);
+  
+  // it('#12.7: OPC-UA clients: session call method "methodAcmYearReportUpdate"', async () => {
+  //   let statusCode = '', inputArgument, inputArgument2, inputArguments, outputArguments;
+  //   let callResults;
+  //   //------------------------------------------------------------------------------------
+  //   const service = await getClientService(app, id);
 
-    //--- Run 'methodAcmDayReportsDataGet' metod ---//
+  //   //--- Run 'methodAcmDayReportsDataGet' metod ---//
 
-    // Set inputArguments
-    inputArgument = { pointID: 2, pattern: '/**/DayHist*.xls' };
-    inputArguments = [[
-      {
-        dataType: DataType.String,
-        value: JSON.stringify(inputArgument),
-      }
-    ]];
-    callResults = await service.sessionCallMethod(id, 'CH_M5::AcmDayReportsDataGet', inputArguments);
-    statusCode = callResults[0].statusCode.name;
-    assert.ok(statusCode === 'Good', 'OPC-UA clients: session call method "methodAcmDayReportsDataGet"');
-    if (statusCode === 'Good') {
-      statusCode = '';
-      outputArguments = JSON.parse(callResults[0].outputArguments[0].value);
-      // Get params
-      const pointID = outputArguments.params.pointID;
-      const syncResultOutputPath = outputArguments.params.outputPath;
-      // Get data items
-      let outputFile = outputArguments.params.outputFile;
-      const currentDate = moment().format('YYYYMMDD');
-      outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
-      const dataItems = readJsonFileSync([appRoot, syncResultOutputPath, outputFile])['dataItems'];
-      if (isDebug && outputFile) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
+  //   // Set inputArguments
+  //   inputArgument = { pointID: 2, pattern: '/**/DayHist*.xls' };
+  //   inputArguments = [[
+  //     {
+  //       dataType: DataType.String,
+  //       value: JSON.stringify(inputArgument),
+  //     }
+  //   ]];
+  //   callResults = await service.sessionCallMethod(id, 'CH_M5::AcmDayReportsDataGet', inputArguments);
+  //   statusCode = callResults[0].statusCode.name;
+  //   assert.ok(statusCode === 'Good', 'OPC-UA clients: session call method "methodAcmDayReportsDataGet"');
+  //   if (statusCode === 'Good') {
+  //     statusCode = '';
+  //     outputArguments = JSON.parse(callResults[0].outputArguments[0].value);
+  //     // Get params
+  //     const pointID = outputArguments.params.pointID;
+  //     const syncResultOutputPath = outputArguments.params.outputPath;
+  //     // Get data items
+  //     let outputFile = outputArguments.params.outputFile;
+  //     const currentDate = moment().format('YYYYMMDD');
+  //     outputFile = loTemplate(outputFile)({ pointID, date: currentDate });
+  //     const dataItems = readJsonFileSync([appRoot, syncResultOutputPath, outputFile])['dataItems'];
+  //     if (isDebug && outputFile) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
 
-      if (!dataItems.length) {
-        logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}! dataItems is empty!`);
-      }
+  //     if (!dataItems.length) {
+  //       logger.error(`RunMetod(methodAcmDayReportsDataGet): ${chalk.red('ERROR')}! dataItems is empty!`);
+  //     }
 
-      //--- Run 'methodAcmYearReportUpdate' metod ---//
+  //     //--- Run 'methodAcmYearReportUpdate' metod ---//
 
-      // Set inputArguments
-      inputArgument = { pointID: 2 };
-      inputArgument = { dataType: DataType.String, value: JSON.stringify(inputArgument) };
-      inputArgument2 = { dataType: DataType.String, value: JSON.stringify(dataItems) };
-      inputArguments = [];
-      inputArguments.push([inputArgument, inputArgument2]);
-      if (isDebug && inputArguments.length) inspector('methodAcmYearReportUpdate.inputArguments:', inputArguments);
+  //     // Set inputArguments
+  //     inputArgument = { pointID: 2 };
+  //     inputArgument = { dataType: DataType.String, value: JSON.stringify(inputArgument) };
+  //     inputArgument2 = { dataType: DataType.String, value: JSON.stringify(dataItems) };
+  //     inputArguments = [];
+  //     inputArguments.push([inputArgument, inputArgument2]);
+  //     if (isDebug && inputArguments.length) inspector('methodAcmYearReportUpdate.inputArguments:', inputArguments);
 
-      callResults = await service.sessionCallMethod(id, 'CH_M5::YearReportUpdate', inputArguments);
-      if (isDebug && callResults.length) inspector('methodAcmYearReportUpdate.callResults:', callResults);
-      if (callResults.length) {
-        statusCode = callResults[0].statusCode.name;
-        outputArguments = JSON.parse(callResults[0].outputArguments[0].value);
-        if (isDebug && outputArguments) inspector('methodAcmYearReportUpdate.outputArguments:', outputArguments);
-      }
-      assert.ok(statusCode === 'Good', 'OPC-UA clients: session call method "methodAcmDayReportsDataGet"');
-    }
-    // await pause(1000);
-  });
+  //     callResults = await service.sessionCallMethod(id, 'CH_M5::YearReportUpdate', inputArguments);
+  //     if (isDebug && callResults.length) inspector('methodAcmYearReportUpdate.callResults:', callResults);
+  //     if (callResults.length) {
+  //       statusCode = callResults[0].statusCode.name;
+  //       outputArguments = JSON.parse(callResults[0].outputArguments[0].value);
+  //       if (isDebug && outputArguments) inspector('methodAcmYearReportUpdate.outputArguments:', outputArguments);
+  //     }
+  //     assert.ok(statusCode === 'Good', 'OPC-UA clients: session call method "methodAcmDayReportsDataGet"');
+  //   }
+  //   // await pause(1000);
+  // });
 
   //============== RUN COMMAND ====================//
 
+  /** 
   it('#13.1: OPC-UA clients: RunCommand(ch_m5CreateAcmYearTemplate)', async () => {
     let statusCode = null;
     //-----------------------------------
@@ -685,6 +695,8 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
     assert.ok(statusCode === 'Good', 'OPC-UA clients: RunCommand(ch_m5CreateAcmYearTemplate)');
     await pause(1000);
   });
+
+  */
 
   it('#13.2: OPC-UA clients: RunCommand(ch_m5SyncStoreAcmValues)', async () => {
     let statusCode = null;
