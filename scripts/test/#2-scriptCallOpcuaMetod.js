@@ -4,6 +4,7 @@ const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const {
   inspector,
+  logger
 } = require('../../src/plugins/lib');
 
 const {
@@ -61,16 +62,23 @@ describe('<<=== ScriptOperations: (#2-scriptCallOpcuaMetod) ===>>', () => {
       break;
     }
 
-    // Check call method options
-    const checkResult = checkCallMethod(options);
-    if (!checkResult) {
-      // Method error
-      inspector('callOpcuaMethod_ERROR.options:', options);
-      throw new Error(`Method error. This method "${options.method}" does not exist or there are not enough options.`);
+    try {
+      if (isDebug && options) inspector('#2-scriptCallOpcuaMetod.options:', options);
+      // Check call method options
+      const checkResult = checkCallMethod(options);
+      if (!checkResult) {
+        // Method error
+        inspector('callOpcuaMethod_ERROR.options:', options);
+        throw new Error(`Method error. This method "${options.method}" does not exist or there are not enough options.`);
+      }
+      let result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionCallMethod);
+      // Check call method result
+      result = checkCallMethod(options, result);
+      assert.ok(result === 'Good', '#2-scriptCallOpcuaMetod');
+    } catch (error) {
+      logger.error(`${chalk.red('Error message:')} "${error.message}"`);
+      assert.ok(false, '#2-scriptCallOpcuaMetod');
     }
-    let result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionCallMethod);
-    // Check call method result
-    result = checkCallMethod(options, result);
-    assert.ok(result === 'Good', 'Run opcua command');
+
   });
 });

@@ -2,8 +2,10 @@
 const assert = require('assert');
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
+
 const {
   inspector,
+  logger
 } = require('../../src/plugins/lib');
 
 const {
@@ -78,7 +80,7 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
           url: 'opc.tcp://localhost:26570',// (Endpoint URL)
           points: [1, 2, 3],
           test: true,
-          pattern: '/**/DayHist*.xls', 
+          pattern: '/**/DayHist*.xls',
           // e.g. '/**/DayHist*.xls'|'/**/2022-01/DayHist*.xls'|'/**/DayHist*2022_*.xls'|'/**/DayHist*_01*2022*.xls'|'/**/DayHist*_01022022*.xls'|'/**/DayHist*_14F120_01022022*.xls'
           // e.g. '/**/DayHist01_14F120_01022022_0000.xls'
           syncYearReportFromStore: false
@@ -90,15 +92,22 @@ describe('<<=== ScriptOperations: (#1-scriptRunOpcuaCommand) ===>>', () => {
     }
 
 
-    const checkResult = checkRunCommand(options);
-    if (!checkResult) {
-      // Command error
-      inspector('runOpcuaCommand_ERROR.options:', options);
-      throw new Error(`Command error. This command "${options.command}" does not exist or there are not enough options.`);
+    try {
+      if (isDebug && options) inspector('#1-scriptRunOpcuaCommand.options:', options);
+      const checkResult = checkRunCommand(options);
+      if (!checkResult) {
+        // Command error
+        inspector('runOpcuaCommand_ERROR.options:', options);
+        throw new Error(`Command error. This command "${options.command}" does not exist or there are not enough options.`);
+      }
+      const result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionWrite);
+      if (isDebug && result) inspector('runOpcuaCommand.result:', result);
+      console.log(chalk.green(`Run session write command "${options.command}" - OK!`), 'result:', chalk.cyan(result));
+      assert.ok(result === 'Good', '#1-scriptRunOpcuaCommand');
+    } catch (error) {
+      logger.error(`${chalk.red('Error message:')} "${error.message}"`);
+      assert.ok(false, '#1-scriptRunOpcuaCommand');
     }
-    const result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionWrite);
-    if (isDebug && result) inspector('runOpcuaCommand.result:', result);
-    console.log(chalk.green(`Run session write command "${options.command}" - OK!`), 'result:', chalk.cyan(result));
-    assert.ok(result === 'Good', 'Run opcua command');
+
   });
 });

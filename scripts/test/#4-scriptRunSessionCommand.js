@@ -40,14 +40,14 @@ const isDebug = false;
 const argv = yargs(hideBin(process.argv)).argv;
 if (isDebug && argv) inspector('Yargs.argv:', argv);
 const script = argv.script.split('.')[0];
-const isScript = (script === '#5');
+const isScript = (script === '#4');
 
-describe('<<=== ScriptOperations: (#5-scriptRunSessionOperation) ===>>', () => {
+describe('<<=== ScriptOperations: (#4-scriptRunSessionOperation) ===>>', () => {
   let callback;
   //-----------------------
   if (!isScript) return;
   // Run opcua command
-  it('#5: SessionOperations: Run session operation', async () => {
+  it('#4: SessionOperations: Run session operation', async () => {
     let options = {
       app,
       opt: {
@@ -71,7 +71,7 @@ describe('<<=== ScriptOperations: (#5-scriptRunSessionOperation) ===>>', () => {
 
     //--------------------------------------------
     switch (argv.script) {
-    case '#5.1':
+    case '#4.1':
       options.command = 'ch_m5SubscriptionCreate';
       options.opt = {
         url: 'opc.tcp://10.60.147.29:49370',// (Endpoint URL) ports: OpcuaSrv(26570), KepSrv(49370)
@@ -85,7 +85,7 @@ describe('<<=== ScriptOperations: (#5-scriptRunSessionOperation) ===>>', () => {
         return result;
       };
       break;
-    case '#5.2':
+    case '#4.2':
       options.command = 'ch_m5SubscriptionMonitor';
       options.subscrMonOpts.itemToMonitor = {
         // OpcuaSrv(ns=1;s=CH_M52::ValueFromFile), KepSrv(ns=2;s=Channel1.Device1.Черкассы 'АЗОТ' цех M5-2.Values from file for CH_M52)
@@ -103,7 +103,7 @@ describe('<<=== ScriptOperations: (#5-scriptRunSessionOperation) ===>>', () => {
         return result;
       };
       break;
-    case '#5.3':
+    case '#4.3':
       options.command = 'ch_m5SessionEndpoint';
 
       callback = async function (session, params) {
@@ -118,7 +118,7 @@ describe('<<=== ScriptOperations: (#5-scriptRunSessionOperation) ===>>', () => {
 
     // Run session command
     try {
-      if (isDebug && options) inspector('#5-scriptRunSessionOperation.options:', loOmit(options, ['app']));
+      if (isDebug && options) inspector('#4-scriptRunSessionOperation.options:', loOmit(options, ['app']));
       const result = await opcuaClientSessionAsync(options.opt.url, options, callback);
       if (result.statusCode === 'Good') {
         console.log(chalk.green(`Run session command "${options.command}" - OK!`), 'result:', chalk.cyan(result.statusCode));
@@ -126,10 +126,10 @@ describe('<<=== ScriptOperations: (#5-scriptRunSessionOperation) ===>>', () => {
       } else {
         console.log(chalk.green(`Run session command "${options.command}" - ERROR!`), 'result:', chalk.cyan(result.statusCode));
       }
-      assert.ok(result.statusCode === 'Good', 'Run opcua command');
+      assert.ok(result.statusCode === 'Good', '#4-scriptRunSessionOperation');
     } catch (error) {
-      logger.error(`Error message: "${error.message}"!`);
-      assert.ok(false, 'Run opcua command');
+      logger.error(`${chalk.red('Error message:')} "${error.message}"`);
+      assert.ok(false, '#4-scriptRunSessionOperation');
     }
   });
 });

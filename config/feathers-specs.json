@@ -2,10 +2,10 @@
   "app": {
     "envTestModeName": "test",
     "envAllowingSeedData": [
-      "development",
       "test"
     ],
     "envAllowingOpcuaBootstrap": [
+      "development",
       "production"
     ],
     "seedData": true,

@@ -200,7 +200,7 @@
     }
   },
   {
-    "isEnable": false,
+    "isEnable": true,
     "id": "ua-cherkassy-azot-ogmt0088846_dev1",
     "name": "380-472-00203826-ogmt0088846_dev1",
     "description": "Opcua server and client for `azot-m5`, `azot-ogmtmztp` tags from `opc.tcp://OGMT-0088846.OSTCHEM.COM.UA:26570`",
@@ -247,7 +247,7 @@
     }
   },
   {
-    "isEnable": true,
+    "isEnable": false,
     "id": "ua-cherkassy-azot-ogmt0088846_dev2",
     "name": "380-472-00203826-ogmt0088846_dev2",
     "description": "Opcua server and client for `azot-m5`, `azot-ogmtmztp` tags from `opc.tcp://OGMT-0088846.OSTCHEM.COM.UA:26570`",
