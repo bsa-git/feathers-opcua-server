@@ -24,6 +24,8 @@ const isDebug = false;
 const dataTestPath = '/test/data/tmp/excel-helper';
 
 // Get argv
+// e.g. argv.script='#all' =>  commands -> 'all'
+// e.g. argv.script='#3' =>  commands -> 'all'
 // e.g. argv.script='#3.1' =>  method -> 'methodAcmYearTemplateCreate'
 // e.g. argv.script='#3.2' =>  method -> 'methodAcmDayReportsDataGet'
 const argv = yargs(hideBin(process.argv)).argv;

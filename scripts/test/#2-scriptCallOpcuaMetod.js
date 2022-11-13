@@ -19,6 +19,8 @@ const debug = require('debug')('app:#5-scriptCallOpcuaMetod');
 const isDebug = false;
 
 // Get argv
+// e.g. argv.script='#all' =>  commands -> 'all'
+// e.g. argv.script='#2' =>  commands -> 'all'
 // e.g. argv.script='#2.1' =>  method -> 'ch_m5CreateAcmYearTemplate'
 // e.g. argv.script='#2.2' =>  method -> 'ch_m5GetAcmDayReportsData'
 const argv = yargs(hideBin(process.argv)).argv;

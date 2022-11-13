@@ -35,7 +35,11 @@ const debug = require('debug')('app:#5-scriptRunSessionOperation');
 const isDebug = false;
 
 // Get argv
-// e.g. argv.script='#5.1' =>  command -> 'ch_m5CreateSubscription'
+// e.g. argv.script='#all' =>  commands -> 'all'
+// e.g. argv.script='#4' =>  commands -> 'all'
+// e.g. argv.script='#4.1' =>  command -> 'ch_m5SubscriptionCreate'
+// e.g. argv.script='#4.2' =>  command -> 'ch_m5SubscriptionMonitor'
+// e.g. argv.script='#4.3' =>  command -> 'ch_m5SessionEndpoint'
 
 const argv = yargs(hideBin(process.argv)).argv;
 if (isDebug && argv) inspector('Yargs.argv:', argv);

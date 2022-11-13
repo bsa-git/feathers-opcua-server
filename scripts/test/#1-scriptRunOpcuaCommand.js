@@ -20,10 +20,12 @@ const debug = require('debug')('app:#4-scriptRunOpcuaCommand');
 const isDebug = false;
 
 // Get argv
+// e.g. argv.script='#all' =>  commands -> 'all'
+// e.g. argv.script='#1' =>  commands -> 'all'
 // e.g. argv.script='#1.1' =>  command -> 'ch_m5CreateAcmYearTemplate'
 // e.g. argv.script='#1.2' =>  command -> 'ch_m5GetAcmDayReportsData'
-// e.g. argv.script='#1.3.1' =>  command -> 'ch_m5SyncAcmYearReport' (Get dataItems from store)
-// e.g. argv.script='#1.3.2' =>  command -> 'ch_m5SyncAcmYearReport' (Get dataItems from day reports)
+// e.g. argv.script='#1.3' =>  command -> 'ch_m5SyncAcmYearReport' (Get dataItems from store)
+// e.g. argv.script='#1.4' =>  command -> 'ch_m5SyncAcmYearReport' (Get dataItems from day reports)
 const argv = yargs(hideBin(process.argv)).argv;
 if (isDebug && argv) inspector('Yargs.argv:', argv);
 const scripts = argv.script.split('.');
