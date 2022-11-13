@@ -1,8 +1,6 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
-const app = require('../../src/app');
-const port = app.get('port');
-const { inspector, } = require('../../src/plugins/lib');
+const { inspector, clearCacheApp } = require('../../src/plugins');
 const { localStorage, loginLocal, feathersClient } = require('../../src/plugins/auth');
 const {
   saveFakesToServices,
@@ -39,15 +37,15 @@ const baseUrl = process.env.BASE_URL;
 
 describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
 
-  it('#1: Registered the authentication service', () => {
-    assert.ok(app.service('authentication'));
-  });
-
   describe('<<--- Local strategy --->>', () => {
-    let appSocketioClient, appRestClient, server;
+    let app, appRestClient, server;
     //----------------------------------------------
 
     before(function (done) {
+      // Clear cache app
+      app = clearCacheApp();
+      const port = app.get('port') || 3030;
+      
       server = app.listen(port);
       server.once('listening', () => {
         setTimeout(async () => {
@@ -69,6 +67,9 @@ describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
       }, 500);
     });
 
+    it('#1: Registered the authentication service', () => {
+      assert.ok(app.service('authentication'));
+    });
     
     it('#2: Create new user for not authenticates user', async () => {
       const params = { provider: 'rest' };

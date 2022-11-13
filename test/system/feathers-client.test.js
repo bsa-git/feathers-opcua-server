@@ -1,8 +1,5 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
-const app = require('../../src/app');
-const port = app.get('port') || 3030;
-const host = app.get('host') || 'localhost';
 
 const {
   inspector,
@@ -20,6 +17,7 @@ const {
 const {
   saveFakesToServices,
   fakeNormalize,
+  clearCacheApp
 } = require('../../src/plugins/test-helpers');
 
 const {
@@ -67,16 +65,16 @@ const serverUrl = 'http://localhost:3131';
 
 describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
 
-  it('#1: Registered the authentication service', () => {
-    assert.ok(app.service('authentication'));
-  });
-
   describe('<<--- Local strategy --->>', () => {
-    let appSocketioClient, appRestClient, server;
+    let app, appSocketioClient, appRestClient, server;
     //----------------------------------------------
 
     before(function (done) {
-      // this.timeout(30000);
+
+      // Clear cache app
+      app = clearCacheApp();
+      const port = app.get('port') || 3030;
+      
       server = app.listen(port);
       server.once('listening', () => {
         setTimeout(async () => {
@@ -97,6 +95,10 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
         if (isDebug) debug('Done after EndTest!');
         done();
       }, 500);
+    });
+
+    it('#1: Registered the authentication service', () => {
+      assert.ok(app.service('authentication'));
     });
 
     it('#2.1: Authenticates (appRestClient) user and get accessToken', async () => {

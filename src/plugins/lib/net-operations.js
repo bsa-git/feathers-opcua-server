@@ -98,9 +98,7 @@ const getHostname = function () {
         url.toJSON()
  */
 const getParseUrl = function (url, base) {
-  // const url = require('url');
   const URL = require('url').URL;
-  // return url.parse(aUrl);
   return new URL(url, base);
 };
 

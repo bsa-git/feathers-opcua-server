@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
+const { join } = require('path');
 const errors = require('@feathersjs/errors');
 const seedService = require('./seed-service');
-const  fakeNormalize = require('./fake-normalize');
-const typeOf = require('../lib/type-of');
+const fakeNormalize = require('./fake-normalize');
+const { appRoot, typeOf } = require('../lib');
 const debug = require('debug')('app:plugin.service-helper');
 
 const isLog = false;
@@ -10,6 +11,22 @@ const isDebug = false;
 
 // Get fake data
 const fakeData = fakeNormalize();
+// Get feathers-gen-specs.json
+const specsPath = join(appRoot, '/config/feathers-specs.json');
+const genSpecs = require(specsPath);
+const appPath = join(appRoot, genSpecs.app.src, 'app');
+
+/**
+ * Clear cache app
+ * @method clearCacheApp
+ * @return {Object}
+ */
+const clearCacheApp = function() {
+  // Restarting app.*s is required if the last mocha test did REST calls on its server.
+  delete require.cache[require.resolve(appPath)];
+  const app = require(appPath);
+  return app;
+};
 
 
 /**
@@ -171,6 +188,7 @@ const removeDataFromServices = async function (app, path = '') {
 };
 
 module.exports = {
+  clearCacheApp,
   getFakeData,
   serviceFields,
   getServicePaths,

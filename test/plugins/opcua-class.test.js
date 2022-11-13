@@ -44,7 +44,7 @@ const srvParams = {
 };
 
 // Default user identity info
-const userIdentityInfo = { type: UserTokenType.UserName, userName: process.env.OPCUA_ADMIN_NAME, password: process.env.OPCUA_ADMIN_PASS };
+const userIdentityInfo = { type: UserTokenType.UserName, userName: process.env.OPCUA_ADMIN_LOGIN, password: process.env.OPCUA_ADMIN_PASS };
 
 const clientParams = {
   applicationName: 'ua-cherkassy-azot_test1',

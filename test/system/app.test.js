@@ -1,18 +1,11 @@
 const assert = require('assert');
 const axios = require('axios');
-const url = require('url');
 const app = require('../../src/app');
-const debug = require('debug')('app:app.test');
-
-const isDebug = false;
-
 const port = app.get('port') || 3030;
-const getUrl = pathname => url.format({
-  hostname: app.get('host') || 'localhost',
-  protocol: 'http',
-  port,
-  pathname
-});
+const { getURL } = require('../../src/plugins');
+
+const debug = require('debug')('app:app.test');
+const isDebug = false;
 
 describe('<<=== Feathers Application Tests (app.test.js) ===>>', () => {
   let server;
@@ -29,14 +22,14 @@ describe('<<=== Feathers Application Tests (app.test.js) ===>>', () => {
   });
 
   it('#1: Starts and shows the index page', async () => {
-    const { data } = await axios.get(getUrl());
+    const { data } = await axios.get(getURL());
     assert.ok(data.indexOf('<html lang="en">') !== -1);
   });
 
   describe('<<--- 404 --->>', function () {
     it('#2: Shows a 404 HTML page', async () => {
       try {
-        await axios.get(getUrl('path/to/nowhere'), {
+        await axios.get(getURL('path/to/nowhere'), {
           headers: {
             'Accept': 'text/html'
           }
@@ -52,7 +45,7 @@ describe('<<=== Feathers Application Tests (app.test.js) ===>>', () => {
 
     it('#3: Shows a 404 JSON error without stack trace', async () => {
       try {
-        await axios.get(getUrl('path/to/nowhere'), {
+        await axios.get(getURL('path/to/nowhere'), {
           json: true
         });
         assert.fail('Should never get here');

@@ -75,10 +75,10 @@ The script test number must be set in the command execution arguments in the `pa
 ```bash
     "scripts": {
         ...
-        "mocha:script": "... --timeout 60000 --script=#5.2",
+        "mocha:script": "... --timeout 60000 --script=#4.2",
     }
 ```
-This will run the script in test mode `/scripts/test/#5-scriptRunSessionCommand.js`.
+This will run the script in test mode `/scripts/test/#4-scriptRunSessionCommand.js`.
 
 ### Writing Test Data to the Database
 

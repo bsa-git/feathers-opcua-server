@@ -25,7 +25,7 @@
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
-      "userName": "OPCUA_ADMIN_NAME",
+      "userName": "OPCUA_ADMIN_LOGIN",
       "password": "OPCUA_ADMIN_PASS"
     },
     "paths": {
@@ -63,7 +63,7 @@
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
-      "userName": "OPCUA_ADMIN_NAME",
+      "userName": "OPCUA_ADMIN_LOGIN",
       "password": "OPCUA_ADMIN_PASS"
     },
     "include": {
@@ -157,7 +157,7 @@
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
-      "userName": "OPCUA_ADMIN_NAME",
+      "userName": "OPCUA_ADMIN_LOGIN",
       "password": "OPCUA_ADMIN_PASS"
     },
     "paths": {
@@ -184,7 +184,7 @@
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
-      "userName": "OPCUA_ADMIN_NAME",
+      "userName": "OPCUA_ADMIN_LOGIN",
       "password": "OPCUA_ADMIN_PASS"
     },
     "paths": {
@@ -228,7 +228,7 @@
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
-      "userName": "OPCUA_ADMIN_NAME",
+      "userName": "OPCUA_ADMIN_LOGIN",
       "password": "OPCUA_ADMIN_PASS"
     },
     "include": {
@@ -274,7 +274,7 @@
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
-      "userName": "OPCUA_KEP_NAME",
+      "userName": "OPCUA_KEP_LOGIN",
       "password": "OPCUA_KEP_PASS"
     },
     "include": {
@@ -301,7 +301,7 @@
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
-      "userName": "OPCUA_KEP_NAME",
+      "userName": "OPCUA_KEP_LOGIN",
       "password": "OPCUA_KEP_PASS"
     },
     "NodeId": {
@@ -347,7 +347,7 @@
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
-      "userName": "OPCUA_KEP_NAME",
+      "userName": "OPCUA_KEP_LOGIN",
       "password": "OPCUA_KEP_PASS"
     },
     "include": {

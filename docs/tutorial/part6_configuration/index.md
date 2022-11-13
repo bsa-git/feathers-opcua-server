@@ -51,11 +51,11 @@ OPCUA_BOOTSTRAP_ENABLE=1
 # -1(no limits) | 1..n(n limit)
 OPCUA_VALUES_MAXROWS=10
 # AuthenticatedUser, Supervisor, Administrator
-OPCUA_USER_NAME="xxxxxxxxxxxxxx"
+OPCUA_USER_LOGIN="xxxxxxxxxxxxxx"
 OPCUA_USER_PASS="xxxxxxxxxxxxxx"
-OPCUA_ADMIN_NAME="xxxxxxxxxxxxxx"
+OPCUA_ADMIN_LOGIN="xxxxxxxxxxxxxx"
 OPCUA_ADMIN_PASS="xxxxxxxxxxxxxx"
-OPCUA_KEP_NAME="xxxxxxxxxxxxxx"
+OPCUA_KEP_LOGIN="xxxxxxxxxxxxxx"
 OPCUA_KEP_PASS="xxxxxxxxxxxxxx"
 
 ### LOG ###
@@ -250,7 +250,7 @@ Main sections of the config file **OPCUA_Config**:
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
-      "userName": "OPCUA_ADMIN_NAME",
+      "userName": "OPCUA_ADMIN_LOGIN",
       "password": "OPCUA_ADMIN_PASS"
     },
     "NodeId": {
