@@ -68,8 +68,8 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
         },
         userIdentityInfo: {
           type: UserTokenType.UserName, // UserTokenType.Anonymous, 
-          userName: process.env.OPCUA_KEP_LOGIN, // OPCUA_ADMIN_LOGIN|OPCUA_KEP_LOGIN|OPCUA_A5_LOGIN
-          password: process.env.OPCUA_KEP_PASS // OPCUA_ADMIN_PASS|OPCUA_KEP_PASS|OPCUA_A5_PASS
+          userName: process.env.OPCUA_ADMIN_LOGIN, // OPCUA_ADMIN_LOGIN|OPCUA_KEP_LOGIN|OPCUA_A5_LOGIN
+          password: process.env.OPCUA_ADMIN_PASS // OPCUA_ADMIN_PASS|OPCUA_KEP_PASS|OPCUA_A5_PASS
         },
         clientParams: {},
         subscriptionOptions: {},
