@@ -5,7 +5,7 @@ const {
   assert
 } = require('../../../lib');
 
-const moment = require('moment'); 
+const moment = require('moment');
 const chalk = require('chalk');
 const loMerge = require('lodash/merge');
 
@@ -55,24 +55,30 @@ const callbackSubscriptionMonitor = async (subscription, params) => {
       mergeRequestedParameters,
       timestampsToReturn
     );
-    if (isDebug && monitoredItem) inspector('callbackSubscriptionMonitor.monitoredItem:', `nodeId="${monitoredItem.itemToMonitor.nodeId.value}" statusCode="${monitoredItem.statusCode.name}"`);
-
-    _itemToMonitor = Object.assign({}, itemToMonitor);
-    // Run subscriptionHandler
-    monitoredItem.on('changed', (dataValue) => {
-      if (isDebug && dataValue) inspector(`subscriptionMonitor.${itemNodeId}:`, dataValue);
-      const value = dataValue.value.value;
-      if (value === null) return;
-      _itemToMonitor.locale = 'en';
-      _itemToMonitor.addressSpaceOption = itemNodeId;
-      _itemToMonitor.app = params.app;
-      dataValue.serverTimestamp = moment().format();
-      callBack(_itemToMonitor, dataValue);
+    if (isDebug && monitoredItem) inspector('callbackSubscriptionMonitor.monitoredItem:', {
+      nodeId: monitoredItem.itemToMonitor.nodeId.value,
+      statusCode: monitoredItem.statusCode.name,
+      description: monitoredItem.statusCode.description
     });
 
-    return { statusCode: monitoredItem.statusCode.name, monitoredItem };
+    if (monitoredItem.statusCode.name === 'Good') {
+      _itemToMonitor = Object.assign({}, itemToMonitor);
+      // Run subscriptionHandler
+      monitoredItem.on('changed', (dataValue) => {
+        if (isDebug && dataValue) inspector(`subscriptionMonitor.${itemNodeId}:`, dataValue);
+        const value = dataValue.value.value;
+        if (value === null) return;
+        _itemToMonitor.locale = 'en';
+        _itemToMonitor.addressSpaceOption = itemNodeId;
+        _itemToMonitor.app = params.app;
+        dataValue.serverTimestamp = moment().format();
+        callBack(_itemToMonitor, dataValue);
+      });
+    }
+
+    return { statusCode: monitoredItem.statusCode.name, description: monitoredItem.statusCode.description };
   }
-  return { statusCode: 'NoSubscriptionMonitor'};
+  return { statusCode: 'NoSubscriptionMonitor' };
 };
 
 module.exports = callbackSubscriptionMonitor;

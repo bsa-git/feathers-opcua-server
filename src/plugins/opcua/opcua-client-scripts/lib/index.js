@@ -6,6 +6,7 @@ const callbackSessionCallMethod = require('./callbackSessionCallMethod');
 const callbackSubscriptionCreate = require('./callbackSubscriptionCreate');
 const callbackSubscriptionMonitor = require('./callbackSubscriptionMonitor');
 const callbackSessionEndpoint = require('./callbackSessionEndpoint');
+const callbackSessionRead = require('./callbackSessionRead');
 
 module.exports = {
   checkRunCommand,
@@ -15,5 +16,6 @@ module.exports = {
   callbackSessionCallMethod,
   callbackSubscriptionCreate,
   callbackSubscriptionMonitor,
-  callbackSessionEndpoint
+  callbackSessionEndpoint,
+  callbackSessionRead
 };

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const loOmit = require('lodash/omit');
+const loRound = require('lodash/round');
 
 const {
   inspector,
@@ -17,21 +18,19 @@ const debug = require('debug')('app:showInfoForHandler');
 const isDebug = false;
 
 /**
- * @method showInfoForHandler
+ * @method showInfoForHandler2
  * 
  * @param {Object} params 
  * @param {Object} dataValue
  * @returns {void}
  */
-async function showInfoForHandler(params, dataValue) {
+function showInfoForHandler2(params, dataValue) {
   let valueKeys = 0, command = '';
   //---------------------
   if (isDebug && params) inspector('showInfoForHandler.params:', loOmit(params, ['app']));
   if (isDebug && dataValue) inspector('showInfoForHandler.dataValue:', dataValue);
 
   const browseName = getValueFromNodeId(params.addressSpaceOption);
-  // dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
-  if (isDebug && dataValue) inspector('showInfoForHandler.dataValue:', dataValue);
   const timestamp = moment(dataValue.serverTimestamp).format('YYYY-MM-DD HH:mm:ss');
 
   let value = dataValue.value.value;
@@ -46,6 +45,7 @@ async function showInfoForHandler(params, dataValue) {
     }
   } catch (error) {
     value = dataValue.value.value;
+    value = loRound(value, 3);
   }
 
   if (command) {
@@ -57,10 +57,10 @@ async function showInfoForHandler(params, dataValue) {
   } else {
     console.log('<=',
       chalk.greenBright(`Name="${browseName}"; `),
-      chalk.whiteBright(`Values=(${valueKeys ? valueKeys : value});`),
+      chalk.whiteBright(`${valueKeys? 'Values=(' + valueKeys + ')' : 'Value = ' + loRound(value, 3)};`),
       chalk.cyanBright(`TM=${timestamp}`),
       '=>');
   }
 }
 
-module.exports = showInfoForHandler;
+module.exports = showInfoForHandler2;
