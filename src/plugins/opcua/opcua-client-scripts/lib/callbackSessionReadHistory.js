@@ -25,26 +25,32 @@ const isDebug = false;
  * @async
  * @example
    *
-   *   ``` javascript
-   *   const nodesToRead = [{
-   *          nodeId: "ns=2;s=Furnace_1.Temperature",
-   *          attributeId: AttributeIds.BrowseName
-   *        }];
-   *   await session.read(nodesToRead) {
-   *     ...
-   *   });
-   *   ```
- * @name callbackSessionRead
+   *   ```javascript
+   * //  es6
+   * const dataValues = await session.readHistoryValue(
+   *   [{
+   *  nodeId: "ns=0;i=2258",
+   *  attributeId: AttributeIds.Value,
+   *  indexRange: null,
+   *  dataEncoding: { namespaceIndex: 0, name: null }
+   *}],
+   *   "2015-06-10T09:00:00.000Z",
+   *   "2015-06-10T09:01:00.000Z");
+   * ```
+ * @name callbackSessionReadHistory
  * @param {Object} session 
  * @param {Object} params 
  * @returns {String}
  */
-const callbackSessionRead = async (session, params) => {
+const callbackSessionReadHistory = async (session, params) => {
   let itemNodeIds = [], itemNodeId;
   //-------------------------
-  if (isDebug && params) inspector('callbackSessionRead.params:', loOmit(params, ['app']));
-  const nodesToRead = params.sessReadOpts.nodesToRead;
+  if (isDebug && params) inspector('callbackSessionReadHistory.params:', loOmit(params, ['app']));
+  
   const showReadValues = params.sessReadOpts.showReadValues;
+  const startTime = params.sessReadOpts.startTime; 
+  const endTime = params.sessReadOpts.endTime;
+  const nodesToRead = params.sessReadOpts.nodesToRead;
   if (Array.isArray(nodesToRead)) {
     for (let index = 0; index < nodesToRead.length; index++) {
       const nodeToRead = nodesToRead[index];
@@ -68,12 +74,12 @@ const callbackSessionRead = async (session, params) => {
     }
   }
 
-  if (isDebug && itemNodeIds.length) inspector('callbackSessionRead.itemNodeIds:', itemNodeIds);
+  if (isDebug && itemNodeIds.length) inspector('callbackSessionReadHistory.itemNodeIds:', itemNodeIds);
   // Session read data
-  let readValues = await session.read(itemNodeIds);
+  let readValues = await session.readHistoryValue(itemNodeIds, startTime, endTime );
   // Format simple DataValue
   readValues = formatSimpleDataValue(readValues);
-  if (isDebug && readValues.length) inspector('callbackSessionRead.readValues:', readValues);
+  if (isDebug && readValues.length) inspector('callbackSessionReadHistory.readValues:', readValues);
   // Get statusCode
   let statusCode = readValues.filter(v => v.statusCode.name === 'Good').length === readValues.length;
   if (showReadValues) {
@@ -88,4 +94,4 @@ const callbackSessionRead = async (session, params) => {
   return { statusCode: statusCode ? 'Good' : 'Bad', readValues };
 };
 
-module.exports = callbackSessionRead;
+module.exports = callbackSessionReadHistory;

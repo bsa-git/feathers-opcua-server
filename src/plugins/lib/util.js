@@ -297,7 +297,7 @@ const getTimeDurations = function (timeList, unit) {
  * @param {Array} period 
  * e.g. [1, 'hours']
  * @param {Boolean} isUtc 
- * @returns {Number}
+ * @returns {String}
  */
 const getNextDateTime = function (startDateTime, period, isUtc = true) {
   startDateTime = moment.utc(startDateTime);

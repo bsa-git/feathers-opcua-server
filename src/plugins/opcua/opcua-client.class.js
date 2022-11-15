@@ -529,6 +529,7 @@ class OpcuaClient {
    */
   async sessionRead(nameNodeIds, attributeIds, maxAge = 0) {
     let result = [], itemNodeIds = [], dataValues;
+    //--------------------------------------------------
     this.sessionNotCreated();
     // Get nodeIds
     this.getNodeIds(nameNodeIds).forEach((itemNodeId, index) => {
@@ -682,10 +683,11 @@ class OpcuaClient {
    * @param {ReadValueIdLike|ReadValueIdLike[]} nameNodeIds   the read value id
    * @param {String} start   the start time in UTC format
    * @param {String} end     the end time in UTC format
-   * @return {Promise<HistoryReadResult[]>}
+   * @return {HistoryReadResult[]}
    */
   async sessionReadHistoryValues(nameNodeIds, start, end) {
     let result = [], itemNodeIds = [], dataValues;
+    //---------------------------------------------
     this.sessionNotCreated();
     // Get nodeIds
     itemNodeIds = this.getNodeIds(nameNodeIds);
@@ -694,7 +696,7 @@ class OpcuaClient {
       dataValues = await this.session.readHistoryValue(itemNodeIds, start, end);
       result = dataValues;
     }
-    if (isDebug) inspector('plugins.opcua-client.class::sessionReadHistoryValue.result:', result);
+    if (isDebug) inspector('opcua-client.class::sessionReadHistoryValue.result:', result);
     return result;
   }
 
@@ -737,7 +739,7 @@ class OpcuaClient {
    * @param {ReadValueIdLike|ReadValueIdLike[]} browseNames   the read value id
    * @param {String} start   the start time in UTC format
    * @param {String} end     the end time in UTC format
-   * @return {Promise<HistoryReadResult[]>}
+   * @return {HistoryReadResult[]}
    */
   async sessionReadHistoryValuesEx(browseNames, start, end) {
     let result = [], itemNodeIds = [], dataValues;
@@ -982,52 +984,6 @@ class OpcuaClient {
   }
 
   /**
-   * @method subscriptionGetSession
-   * @returns {ClientSessionImpl}
-   */
-  subscriptionGetSession() {
-    this.subscriptionNotCreated();
-    return this.subscription.session;
-  }
-
-  /**
-   * @method subscriptionHasSession
-   * @returns {Boolean}
-   */
-  subscriptionHasSession() {
-    this.subscriptionNotCreated();
-    return this.subscription.hasSession;
-  }
-
-  /**
-   * @method subscriptionIsActive
-   * @returns {Boolean}
-   */
-  subscriptionIsActive() {
-    this.subscriptionNotCreated();
-    return this.subscription.isActive;
-  }
-
-  /**
-   * @method subscriptionToString
-   * @returns {String}
-   */
-  subscriptionToString() {
-    this.subscriptionNotCreated();
-    return this.subscription.toString();
-  }
-
-  /**
-   * @method subscriptionEvaluateRemainingLifetime 
-   * @returns {Number}
-   */
-  subscriptionEvaluateRemainingLifetime() {
-    this.subscriptionNotCreated();
-    return this.subscription.evaluateRemainingLifetime();
-  }
-
-
-  /**
      * Add a monitor item to the subscription
      *
      * @method monitor
@@ -1172,6 +1128,51 @@ class OpcuaClient {
         cb(itemToMonitor, dataValue);
       });
     }
+  }
+
+  /**
+   * @method subscriptionGetSession
+   * @returns {ClientSessionImpl}
+   */
+   subscriptionGetSession() {
+    this.subscriptionNotCreated();
+    return this.subscription.session;
+  }
+
+  /**
+   * @method subscriptionHasSession
+   * @returns {Boolean}
+   */
+  subscriptionHasSession() {
+    this.subscriptionNotCreated();
+    return this.subscription.hasSession;
+  }
+
+  /**
+   * @method subscriptionIsActive
+   * @returns {Boolean}
+   */
+  subscriptionIsActive() {
+    this.subscriptionNotCreated();
+    return this.subscription.isActive;
+  }
+
+  /**
+   * @method subscriptionToString
+   * @returns {String}
+   */
+  subscriptionToString() {
+    this.subscriptionNotCreated();
+    return this.subscription.toString();
+  }
+
+  /**
+   * @method subscriptionEvaluateRemainingLifetime 
+   * @returns {Number}
+   */
+  subscriptionEvaluateRemainingLifetime() {
+    this.subscriptionNotCreated();
+    return this.subscription.evaluateRemainingLifetime();
   }
 
   /**

@@ -32,6 +32,7 @@ function showInfoForHandler2(params, dataValue) {
 
   const browseName = getValueFromNodeId(params.addressSpaceOption);
   const timestamp = moment(dataValue.serverTimestamp).format('YYYY-MM-DD HH:mm:ss');
+  const statusCode = dataValue.statusCode.name;
 
   let value = dataValue.value.value;
   try {
@@ -51,12 +52,14 @@ function showInfoForHandler2(params, dataValue) {
   if (command) {
     console.log('<=',
       chalk.greenBright(`Name="${browseName}"; `),
+      chalk.whiteBright(`StatusCode=('${statusCode}');`),
       chalk.whiteBright(`Command=('${command}');`),
       chalk.cyanBright(`TM=${timestamp}`),
       '=>');
   } else {
     console.log('<=',
       chalk.greenBright(`Name="${browseName}"; `),
+      chalk.whiteBright(`StatusCode=('${statusCode}');`),
       chalk.whiteBright(`${valueKeys? 'Values=(' + valueKeys + ')' : 'Value = ' + loRound(value, 3)};`),
       chalk.cyanBright(`TM=${timestamp}`),
       '=>');
