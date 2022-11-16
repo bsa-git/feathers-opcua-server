@@ -16,6 +16,7 @@ const {
   logger,
   inspector,
   pause,
+  getTime,
   getPreviousDateTime
 } = require('../../src/plugins/lib');
 
@@ -69,13 +70,15 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
       let options = {
         app,
         opt: {
-          // (Endpoint URL) ports: OpcuaSrv(localhost:26570), KepSrv(localhost:49370) A5KepSrv(10.60.147.29:49370)
-          url: 'opc.tcp://10.60.147.29:49370',
+          // (Endpoint URL) ports: OpcuaSrv(opc.tcp://localhost:26570, opc.tcp://10.60.5.128:26570), 
+          // KepSrv(opc.tcp://localhost:49370, opc.tcp://10.60.5.128:49370) 
+          // A5-KepSrv(opc.tcp://10.60.147.29:49370)
+          url: 'opc.tcp://localhost:26570',
         },
         userIdentityInfo: {
           type: UserTokenType.UserName, // UserTokenType.Anonymous, 
-          userName: process.env.OPCUA_A5_LOGIN, // OPCUA_ADMIN_LOGIN|OPCUA_KEP_LOGIN|OPCUA_A5_LOGIN
-          password: process.env.OPCUA_A5_PASS // OPCUA_ADMIN_PASS|OPCUA_KEP_PASS|OPCUA_A5_PASS
+          userName: process.env.OPCUA_ADMIN_LOGIN, // OPCUA_ADMIN_LOGIN|OPCUA_KEP_LOGIN|OPCUA_A5_LOGIN
+          password: process.env.OPCUA_ADMIN_PASS // OPCUA_ADMIN_PASS|OPCUA_KEP_PASS|OPCUA_A5_PASS
         },
         clientParams: {},
         // Session read options
@@ -103,7 +106,7 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
       };
 
       //--------------------------------------------
-      let nodesToRead;
+      let nodesToRead, startTime, endTime;
 
       switch (switchScript) {
       case '#4.1':
@@ -165,21 +168,28 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
           return result;
         };
         break;
-        case '#4.4':
-          options.command = 'ch_a5-SessionReadHistory';
+      case '#4.4':
+        options.command = 'ch_a5-SessionReadHistory';
   
-          nodesToRead = [
-            'ns=2;s=A5.Device2.WP301_PV',
-          ];
-          options.sessReadOpts.nodesToRead = nodesToRead;
-          options.sessReadOpts.startTime = moment.utc().format();
-          options.sessReadOpts.endTime = getPreviousDateTime(moment.utc(), [1, 'hours']);
-          callback = async function (session, params) {
-            let result = await callbackSessionReadHistory(session, params);
-            await pause(1000);
-            return result;
-          };
-          break;  
+        nodesToRead = [
+          // 'ns=2;s=A5.Device2.WP301_PV',
+          // 'ns=1;s=CH_M52::ValueFromFile',
+          'ns=1;s=CH_M52::02AMIAK:02T4',
+          'ns=1;s=CH_M52::02AMIAK:02P4_1',
+          'ns=1;s=CH_M52::02AMIAK:02F4',
+        ];
+        options.sessReadOpts.nodesToRead = nodesToRead;
+        // 'minutes', 'seconds'
+        endTime = moment().format();
+        startTime = getPreviousDateTime(moment(), [60, 'seconds'], false);
+        options.sessReadOpts.startTime = startTime;
+        options.sessReadOpts.endTime = endTime;
+        callback = async function (session, params) {
+          let result = await callbackSessionReadHistory(session, params);
+          await pause(1000);
+          return result;
+        };
+        break;  
       case '#4.5':
         options.command = 'ch_m5-SessionEndpoint';
 

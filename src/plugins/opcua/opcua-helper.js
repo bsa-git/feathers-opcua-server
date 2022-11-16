@@ -375,6 +375,44 @@ const formatHistoryResults = function (id, historyResults, browseNames, locale =
 };
 
 /**
+ * @method formatSimpleHistoryResults
+ * @param {Object[]} historyResults 
+ * @param {String[]} browseNames 
+ * e.g. ['CH_M51::01AMIAK:01F4.PNT', 'CH_M51::01AMIAK:01F21_1.PNT'] ||
+ * @returns {Object[]}
+ */
+const formatSimpleHistoryResults = function (historyResults, browseNames) {
+  let results = [], result, value, browseName;
+  //---------------------------------------------------
+  if (!Array.isArray(browseNames)) {
+    browseNames = [browseNames];
+  }
+  if (Array.isArray(browseNames) && (browseNames.length === historyResults.length)) {
+    historyResults.forEach((historyResult, index) => {
+      browseName = browseNames[index].nodeId ? browseNames[index].nodeId : browseNames[index];
+      browseName = isNodeId(browseName) ? getValueFromNodeId(browseName) : browseName;
+      result = {};
+      result.browseName = browseName;
+      result.statusCode = {
+        code: historyResult.statusCode._code,
+        description: historyResult.statusCode._description,
+        name: historyResult.statusCode._name
+      };
+      result.historyData = {};
+      result.historyData.dataValues = [];
+      historyResult.historyData.dataValues.forEach(v => {
+        value = formatSimpleDataValue(v);
+        result.historyData.dataValues.push(loMerge({}, value));
+      });
+      results.push(loMerge({}, result));
+    });
+  } else {
+    results = historyResults;
+  }
+  return results;
+};
+
+/**
  * @method formatDataValue
  * @param {String} id 
  * e.g. 'ua-cherkassy-azot_test1'
@@ -1498,6 +1536,7 @@ module.exports = {
   formatUAVariable,
   formatConfigOption,
   formatHistoryResults,
+  formatSimpleHistoryResults,
   formatDataValue,
   formatSimpleDataValue,
   getOpcuaConfig,

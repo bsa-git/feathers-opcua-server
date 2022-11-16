@@ -300,13 +300,15 @@ const getTimeDurations = function (timeList, unit) {
  * @returns {String}
  */
 const getNextDateTime = function (startDateTime, period, isUtc = true) {
-  startDateTime = moment.utc(startDateTime);
-  const nextDateTime = moment.utc(startDateTime).add(period[0], period[1]);
+  let _startDateTime;
+  //---------------------------------------------
   if (isUtc) {
-    return moment.utc(nextDateTime).format();
+    _startDateTime = moment.utc(startDateTime);
   } else {
-    return moment(nextDateTime).format();
+    _startDateTime = moment(startDateTime);
   }
+  const nextDateTime = _startDateTime.add(period[0], period[1]);
+  return nextDateTime.format();
 };
 
 /**
@@ -315,16 +317,18 @@ const getNextDateTime = function (startDateTime, period, isUtc = true) {
  * @param {Array} period 
  * e.g. [1, 'hours']
  * @param {Boolean} isUtc 
- * @returns {Number}
+ * @returns {String}
  */
 const getPreviousDateTime = function (startDateTime, period, isUtc = true) {
-  startDateTime = moment.utc(startDateTime);
-  const nextDateTime = moment.utc(startDateTime).subtract(period[0], period[1]);
+  let _startDateTime;
+  //---------------------------------------------
   if (isUtc) {
-    return moment.utc(nextDateTime).format();
+    _startDateTime = moment.utc(startDateTime);
   } else {
-    return moment(nextDateTime).format();
+    _startDateTime = moment(startDateTime);
   }
+  const nextDateTime = _startDateTime.subtract(period[0], period[1]);
+  return nextDateTime.format();
 };
 
 /**

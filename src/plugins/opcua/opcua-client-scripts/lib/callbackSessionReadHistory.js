@@ -8,7 +8,7 @@ const {
 
 const {
   isNodeId,
-  formatSimpleDataValue,
+  formatSimpleHistoryResults,
 } = require('../../../opcua/opcua-helper');
 
 const {
@@ -74,19 +74,24 @@ const callbackSessionReadHistory = async (session, params) => {
     }
   }
 
-  if (isDebug && itemNodeIds.length) inspector('callbackSessionReadHistory.itemNodeIds:', itemNodeIds);
+  if (isDebug && itemNodeIds.length) inspector(`callbackSessionReadHistory.itemNodeIds(${startTime}, ${endTime}):`, itemNodeIds);
   // Session read data
   let readValues = await session.readHistoryValue(itemNodeIds, startTime, endTime );
   // Format simple DataValue
-  readValues = formatSimpleDataValue(readValues);
+  readValues = formatSimpleHistoryResults(readValues, itemNodeIds);
   if (isDebug && readValues.length) inspector('callbackSessionReadHistory.readValues:', readValues);
   // Get statusCode
   let statusCode = readValues.filter(v => v.statusCode.name === 'Good').length === readValues.length;
-  if (showReadValues) {
+  // let statusCode = 'Good';
+  if (true && showReadValues) {
     console.log('<-------------------------------------------------------------------------------------->');
     for (let index = 0; index < itemNodeIds.length; index++) {
       const nodeId = itemNodeIds[index].nodeId;
-      showInfoForHandler2({ addressSpaceOption: nodeId }, readValues[index]);
+      const dataValues = readValues[index]['historyData']['dataValues'];
+      for (let index2 = 0; index2 < dataValues.length; index2++) {
+        const dataValue = dataValues[index2];
+        showInfoForHandler2({ addressSpaceOption: nodeId }, dataValue);        
+      }
     }
     console.log('<-------------------------------------------------------------------------------------->');
   }

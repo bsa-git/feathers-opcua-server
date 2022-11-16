@@ -1134,7 +1134,7 @@ class OpcuaClient {
    * @method subscriptionGetSession
    * @returns {ClientSessionImpl}
    */
-   subscriptionGetSession() {
+  subscriptionGetSession() {
     this.subscriptionNotCreated();
     return this.subscription.session;
   }
