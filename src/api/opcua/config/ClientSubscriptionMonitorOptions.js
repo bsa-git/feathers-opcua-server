@@ -4,6 +4,16 @@ const {
   // TimestampsToReturn
 } = require('node-opcua');
 
+/** 
+TimestampsToReturn {
+  Source = 0,
+  Server = 1,
+  Both = 2,
+  Neither = 3,
+  Invalid = 4
+}
+*/
+
 const defaultItemToMonitor = {
   nodeId: '',
   attributeId: AttributeIds.Value,

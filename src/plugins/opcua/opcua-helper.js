@@ -1099,7 +1099,7 @@ const setOpcuaValueFromSource = (addedVariable, valueWithParams) => {
  */
 const setValueFromSourceForGroup = (params = {}, dataItems = {}) => {
   let groupVariable, browseName;
-  const opcuaGetters = require(`${appRoot}src/plugins/opcua/opcua-getters`);
+  const opcuaGetters = require(`${appRoot}/src/plugins/opcua/opcua-getters`);
   //-----------------------------------------------------------------------
 
   if (isDebug) debug('setValueFromSourceForGroup.opcuaGetters:', opcuaGetters);

@@ -4,18 +4,26 @@ const chalk = require('chalk');
 const loMerge = require('lodash/merge');
 
 const {
+  TimestampsToReturn,
+} = require('node-opcua');
+
+const {
   appRoot,
   inspector,
   assert,
   isString,
-  isFunction
+  isFunction,
+  checkCorrectEnumType
 } = require('../../../lib');
 
 const {
   isNodeId
 } = require('../../../opcua/opcua-helper');
 
-const { defaultItemToMonitor, defaultRequestedParameters } = require(`${appRoot}/src/api/opcua/config/ClientSubscriptionMonitorOptions`);
+const { 
+  defaultItemToMonitor, 
+  defaultRequestedParameters 
+} = require(`${appRoot}/src/api/opcua/config/ClientSubscriptionMonitorOptions`);
 
 const debug = require('debug')('app:callbackSubscriptionMonitor');
 const isDebug = false;
@@ -34,25 +42,25 @@ const callbackSubscriptionMonitor = async (subscription, params) => {
   // Get subscription monitor options
   const requestedParameters = params.subscrMonOpts.requestedParameters;
   const timestampsToReturn = params.subscrMonOpts.timestampsToReturn;
+  checkCorrectEnumType(TimestampsToReturn, timestampsToReturn);
   const callBack = params.subscrMonOpts.callBack;
   assert(isFunction(callBack), 'callBack must be a function');
 
   itemToMonitor = params.subscrMonOpts.itemToMonitor;
   if (isString(itemToMonitor)) {
-    assert(isNodeId(itemToMonitor), `Wrong format - nodeId: ${itemToMonitor}`);
-    itemToMonitor = Object.assign({}, defaultItemToMonitor, { nodeId: itemToMonitor });
-  } else {
-    assert(isNodeId(itemToMonitor.nodeId), `Wrong format - nodeId: ${itemToMonitor.nodeId}`);
-    itemToMonitor = Object.assign({}, defaultItemToMonitor, itemToMonitor);
+    itemToMonitor = { nodeId: itemToMonitor };
   }
+  assert(isNodeId(itemToMonitor.nodeId), `Wrong format - nodeId: ${itemToMonitor.nodeId}`);
   const itemNodeId = itemToMonitor.nodeId;
 
   // subscription.monitor
   const mergeItemToMonitor = loMerge({}, defaultItemToMonitor, itemToMonitor);
   const mergeRequestedParameters = loMerge({}, defaultRequestedParameters, requestedParameters);
 
-  if (isDebug && mergeItemToMonitor) inspector('callbackSubscriptionMonitor.mergeItemToMonitor:', mergeItemToMonitor);
-  if (isDebug && mergeRequestedParameters) inspector('callbackSubscriptionMonitor.mergeRequestedParameters:', mergeRequestedParameters);
+  if (isDebug && mergeItemToMonitor) 
+    inspector('callbackSubscriptionMonitor.mergeItemToMonitor:', mergeItemToMonitor);
+  if (isDebug && mergeRequestedParameters) 
+    inspector('callbackSubscriptionMonitor.mergeRequestedParameters:', mergeRequestedParameters);
 
   const monitoredItem = await subscription.monitor(
     mergeItemToMonitor,
