@@ -75,12 +75,12 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
         // (Endpoint URL) ports: OpcuaSrv(opc.tcp://localhost:26570, opc.tcp://10.60.5.128:26570), 
         // KepSrv(opc.tcp://localhost:49370, opc.tcp://10.60.5.128:49370) 
         // A5-KepSrv(opc.tcp://10.60.147.29:49370)
-        url: 'opc.tcp://localhost:49370',
+        url: 'opc.tcp://10.60.147.29:49370',
       };
       options.userIdentityInfo = {
         type: UserTokenType.UserName,
-        userName: process.env.OPCUA_KEP_LOGIN, // OPCUA_ADMIN_LOGIN|OPCUA_KEP_LOGIN|OPCUA_A5_LOGIN
-        password: process.env.OPCUA_KEP_PASS // OPCUA_ADMIN_PASS|OPCUA_KEP_PASS|OPCUA_A5_PASS
+        userName: process.env.OPCUA_A5_LOGIN, // OPCUA_ADMIN_LOGIN|OPCUA_KEP_LOGIN|OPCUA_A5_LOGIN
+        password: process.env.OPCUA_A5_PASS // OPCUA_ADMIN_PASS|OPCUA_KEP_PASS|OPCUA_A5_PASS
       };
       options.subscrMonOpts.callBack = showInfoForHandler2;
       //--------------------------------------------
@@ -98,10 +98,10 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
       case '#4.2':
         options.command = 'ch_a5-SubscriptionMonitor';
         // M5_OpcuaSrv('ns=1;s=CH_M52::ValueFromFile'), 
-        // KEPServer-ogmt-0088846('ns=2;s=Channel1.Device1.Черкассы \'АЗОТ\' цех M5-2.02PGAZ_F5')
-        // KEPServer-ogmt-0088846('ns=2;s=Channel2.Device1.A5.Device2.WT301_PV', 'ns=2;s=Channel2.Device1.A5.Device1.F501AM_PV')
+        // KEPServer-ogmt-0088846('ns=2;s=OGMT-0088846.Device1.M5-2.02PGAZ_F5')
+        // KEPServer-ogmt-0088846('ns=2;s=A5-GW00.Device1.A5.Device1.F501AM_PV', ns=2;s=A5-GW00.Device1.A5.Device1.F359AM_PV)
         // KEPServer-CH-A5-GW00('ns=2;s=A5.Device2.WP301_PV', 'ns=2;s=A5.Device1.F501AM_PV')
-        options.subscrMonOpts.itemToMonitor = 'ns=2;s=Channel2.Device1.A5.Device1.F501AM_PV';
+        options.subscrMonOpts.itemToMonitor = 'ns=2;s=A5.Device1.F59AM_PV';
 
         callback = async function (session, params) {
           let result = callbackSubscriptionCreate(session, params);
@@ -118,32 +118,32 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
 
         nodesToRead = [
           /**--- KEPServer-ogmt-0088846 ---*/
-          'ns=2;s=Channel1.Device1.Черкассы \'АЗОТ\' цех M5-2.02PGAZ_F5',
-          'ns=2;s=Channel2.Device1.A5.Device2.WT301_PV',
-          'ns=2;s=Channel2.Device1.A5.Device1.F501AM_PV',
+          // 'ns=2;s=OGMT-0088846.Device1.M5-2.02PGAZ_F5',
+          // 'ns=2;s=A5-GW00.Device1.A5.Device1.F501AM_PV',
+          // 'ns=2;s=A5-GW00.Device1.A5.Device1.F359AM_PV'
           /**--- KEPServer-CH-A5-GW00 ---*/
-          // 'ns=2;s=A5.Device1.F59AM_PV',// Нормализованный природный газ (тыс.м3/ч)
-          // 'ns=2;s=A5.Device1.F46A_PV',// Жидкий NH3 в хранилище (тонн/ч)
-          // 'ns=2;s=A5.Device1.F191AM_PV',// Массовый Г.О. NH3 (тонн/ч)
-          // 'ns=2;s=A5.Device1.F400AM_PV',// Массовый раход Г.О. NH3 (тонн/ч)
-          // 'ns=2;s=A5.Device1.F359AM_PV',// Расход азота (норм) в цех (нм3/ч)
-          // 'ns=2;s=A5.Device1.F501AM_PV',// Норм. расход ПГ из А-5 (нм3/ч)
-          // 'ns=2;s=A5.Device1.F107AM_PV',// Норм. расход ТГ из А-5 (нм3/ч)
+          'ns=2;s=A5.Device1.F59AM_PV',// Нормализованный природный газ (тыс.м3/ч)
+          'ns=2;s=A5.Device1.F46A_PV',// Жидкий NH3 в хранилище (тонн/ч)
+          'ns=2;s=A5.Device1.F191AM_PV',// Массовый Г.О. NH3 (тонн/ч)
+          'ns=2;s=A5.Device1.F400AM_PV',// Массовый раход Г.О. NH3 (тонн/ч)
+          'ns=2;s=A5.Device1.F359AM_PV',// Расход азота (норм) в цех (нм3/ч)
+          'ns=2;s=A5.Device1.F501AM_PV',// Норм. расход ПГ из А-5 (нм3/ч)
+          'ns=2;s=A5.Device1.F107AM_PV',// Норм. расход ТГ из А-5 (нм3/ч)
           // 'ns=2;s=A5.Device1.F21AM_PV',// Массовый расход пара-16 (тонн/ч)
-          // 'ns=2;s=A5.Device1.F738AM_PV',// Норм. расход пара-30 (тонн/ч)
-          // 'ns=2;s=A5.Device1.F46AM_PV',// Норм. расход NH3 на склад (тонн/ч)
-          // 'ns=2;s=A5.Device1.F34_PV',// ОтпАр. конден. на сторон (т/н)
-          // 'ns=2;s=A5.Device1.F46AA_PV',// Скоригована витрата (тонн/ч)
-          // 'ns=2;s=A5.Device1.F206AM_PV',// Норм. расход NH3 в М-7 (тонн/ч)
-          // 'ns=2;s=A5.Device1.F352_PV',// NH3 в М-2 (тонн/ч)
-          // 'ns=2;s=A5.Device1.F360_PV',// NH3 в М-6 (тонн/ч)
-          // 'ns=2;s=A5.Device1.F101AM_PV',// Пар-16 в цех А-5
-          // 'ns=2;s=A5.Device1.F379AM_PV',// Масс. Г.О.  из 1001-F  (ton/hr)
-          // 'ns=2;s=A5.Device1.F306_PV',// Вода в поз.6 (м3/ч)
-          // 'ns=2;s=A5.Device1.F308_PV',// А.вода в скл (м3/ч)
-          // 'ns=2;s=A5.Device1.F90_PV',// Расход воды на К.701 (м3/ч)
-          // 'ns=2;s=A5.Device1.F98_PV',// Расход воды на К.701 (м3/ч)
-          // 'ns=2;s=A5.Device1.F93_PV',// Расход воды в цех (м3/ч)
+          'ns=2;s=A5.Device1.F738AM_PV',// Норм. расход пара-30 (тонн/ч)
+          'ns=2;s=A5.Device1.F46AM_PV',// Норм. расход NH3 на склад (тонн/ч)
+          'ns=2;s=A5.Device1.F34_PV',// ОтпАр. конден. на сторон (т/н)
+          'ns=2;s=A5.Device1.F46AA_PV',// Скоригована витрата (тонн/ч)
+          'ns=2;s=A5.Device1.F206AM_PV',// Норм. расход NH3 в М-7 (тонн/ч)
+          'ns=2;s=A5.Device1.F352_PV',// NH3 в М-2 (тонн/ч)
+          'ns=2;s=A5.Device1.F360_PV',// NH3 в М-6 (тонн/ч)
+          'ns=2;s=A5.Device1.F101AM_PV',// Пар-16 в цех А-5
+          'ns=2;s=A5.Device1.F379AM_PV',// Масс. Г.О.  из 1001-F  (ton/hr)
+          'ns=2;s=A5.Device1.F306_PV',// Вода в поз.6 (м3/ч)
+          'ns=2;s=A5.Device1.F308_PV',// А.вода в скл (м3/ч)
+          'ns=2;s=A5.Device1.F90_PV',// Расход воды на К.701 (м3/ч)
+          'ns=2;s=A5.Device1.F98_PV',// Расход воды на К.701 (м3/ч)
+          'ns=2;s=A5.Device1.F93_PV',// Расход воды в цех (м3/ч)
         ];
         options.sessReadOpts.nodesToRead = nodesToRead;
         callback = async function (session, params) {
@@ -157,8 +157,7 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
 
         nodesToRead = [
           // 'ns=2;s=A5.Device2.WP301_PV',
-          // 'ns=2;s=Channel1.Device1.Черкассы \'АЗОТ\' цех M5-2.Values from file for CH_M52',
-          // 'ns=1;s=CH_M52::ValueFromFile',
+          // 'ns=2;s=OGMT-0088846.Device1.M5-2.02PGAZ_F5',
           'ns=1;s=CH_M52::02AMIAK:02T4',
           'ns=1;s=CH_M52::02AMIAK:02P4_1',
           'ns=1;s=CH_M52::02AMIAK:02F4',

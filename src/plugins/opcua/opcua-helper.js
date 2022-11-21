@@ -762,7 +762,7 @@ const getOpcuaClientScript = function (id, nameScript = '') {
   let opcuaClientScripts, opcuaClientScript = null;
   const defaultOpcuaClientScripts = require('./opcua-client-scripts');
   //--------------------------------------------
-  if (isDebug) debug('getOpcuaClientScript.id,nameScript:', id, nameScript);
+  if (isDebug && nameScript) debug('getOpcuaClientScript.id,nameScript:', id, nameScript);
 
   // Get defaultOpcuaClientScript
   if (nameScript) {

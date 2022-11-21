@@ -3,79 +3,79 @@
     {
       "isEnable": true,
       "browseName": "CH_M5",
-      "displayName": "Черкассы 'АЗОТ' цех M5",
+      "displayName": "M5",
       "type": "object"
     },
     {
       "isEnable": true,
       "browseName": "CH_M51",
-      "displayName": "Черкассы 'АЗОТ' цех M5-1",
+      "displayName": "M5-1",
       "type": "object"
     },
     {
       "isEnable": true,
       "browseName": "CH_M52",
-      "displayName": "Черкассы 'АЗОТ' цех M5-2",
+      "displayName": "M5-2",
       "type": "object"
     },
     {
       "isEnable": true,
       "browseName": "CH_M51_ACM",
-      "displayName": "Черкассы 'АЗОТ' цех M5/1 ACM",
+      "displayName": "M51-ACM",
       "type": "object"
     },
     {
       "isEnable": true,
       "browseName": "CH_M52_ACM",
-      "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM",
+      "displayName": "M52-ACM",
       "type": "object"
     },
     {
       "isEnable": true,
       "browseName": "CH_M52_ACM2",
-      "displayName": "Черкассы 'АЗОТ' цех M5/2 ACM2",
+      "displayName": "M52-ACM2",
       "type": "object"
     },
     {
       "isEnable": true,
       "browseName": "CH_A3",
-      "displayName": "Черкассы 'АЗОТ' цех A3",
+      "displayName": "A3",
       "type": "object"
     },
     {
       "isEnable": true,
       "browseName": "CH_NG-UPG2",
-      "displayName": "Черкассы 'АЗОТ' узел ПГ №2",
+      "displayName": "NG_UPG-2",
       "type": "object"
     },
     {
       "isEnable": true,
       "browseName": "CH_M7-313",
-      "displayName": "Черкассы 'АЗОТ' цех М7-313",
+      "displayName": "M7-313",
       "type": "object"
     },
     {
       "isEnable": true,
       "browseName": "CH_M7-357",
-      "displayName": "Черкассы 'АЗОТ' цех М7-357",
+      "displayName": "M7-357",
       "type": "object"
     },
     {
       "isEnable": true,
       "browseName": "CH_M7-657",
-      "displayName": "Черкассы 'АЗОТ' цех М7-657",
+      "displayName": "M7-657",
       "type": "object"
     },
     {
       "isEnable": true,
       "browseName": "CH_M9",
-      "displayName": "Черкассы 'АЗОТ' цех М9",
+      "displayName": "М9",
       "type": "object"
     },
     {
       "isEnable": true,
       "browseName": "CH_M2",
-      "displayName": "Черкассы 'АЗОТ' цех М2",
+      "displayName": "М2",
       "type": "object"
     }
   ],

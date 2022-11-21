@@ -36,6 +36,7 @@ async function startSubscriptionMonitor(id, service) {
   if (isDebug && srvCurrentState) inspector('subscriptionMonitor.srvCurrentState:', srvCurrentState);
   // Start subscriptionMonitor
   const allVariables = srvCurrentState.paramsAddressSpace.variables;
+  if (isDebug && allVariables.length) inspector('startSubscriptionMonitor.allVariables:', allVariables);
   //---- Group owners  ---//
   browseNames = allVariables.filter(v => v.hist && v.group && v.subscription).map(v => v.browseName);
   if (isDebug && browseNames.length) inspector('startSubscriptionMonitor.groupOwners.browseNames:', browseNames);
@@ -50,7 +51,7 @@ async function startSubscriptionMonitor(id, service) {
     }
     // Subscription monitor for group members
     const groupBrowseNames = allVariables.filter(v => v.hist && (v.ownerGroup === browseName) && v.subscription).map(v => v.browseName);
-    if (isDebug && groupBrowseNames.length) inspector('startSubscriptionMonitor.groupBrowseNames:', groupBrowseNames);
+    if (isDebug && groupBrowseNames.length) inspector('startSubscriptionMonitor.groupMembers.browseNames:', groupBrowseNames);
     if (groupBrowseNames.length) browseNames4Monitor.groupMembers = groupBrowseNames.length;
     groups = getGroupsFromArray(groupBrowseNames, 10);
     for (let index = 0; index < groups.length; index++) {
@@ -73,6 +74,7 @@ async function startSubscriptionMonitor(id, service) {
     // Subscription monitor for value
     for (let index2 = 0; index2 < nodeIds.length; index2++) {
       const nodeId = nodeIds[index2];
+      if(isDebug && nodeId) console.log('startSubscriptionMonitor.histValues.nodeId:', nodeId);
       await service.subscriptionMonitor(id, '', { nodeId });
     }
   }
