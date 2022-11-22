@@ -1,0 +1,45 @@
+{
+  "objects": [
+    {
+      "browseName": "CH_A5.Device2",
+      "displayName": "A5.Device2",
+      "type": "object"
+    }
+  ],
+  "variables": [
+    {
+      "browseName": "CH_A5.Device2::Mnemo1",
+      "displayName": "Mnemo1 values for CH_A5.Device2",
+      "ownerName": "CH_A5.Device2",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "",
+      "getterParams": {}
+    }
+  ],
+  "groups": [
+    {
+      "browseName": "CH_A5.Device2::Mnemo1:WP301_PV",
+      "aliasName": "WP301",
+      "displayName": "WP301_PV",
+      "ownerName": "CH_A5.Device2",
+      "ownerGroup": "CH_A5.Device2::Mnemo1",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "subscription": "onChangedCommonHandler",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 100
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "F ПГ (WP301_PV)"
+    }
+  ]
+}

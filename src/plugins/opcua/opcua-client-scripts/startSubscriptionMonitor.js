@@ -51,7 +51,7 @@ async function startSubscriptionMonitor(id, service) {
     }
     // Subscription monitor for group members
     const groupBrowseNames = allVariables.filter(v => v.hist && (v.ownerGroup === browseName) && v.subscription).map(v => v.browseName);
-    if (isDebug && groupBrowseNames.length) inspector('startSubscriptionMonitor.groupMembers.browseNames:', groupBrowseNames);
+    if (true && groupBrowseNames.length) inspector('startSubscriptionMonitor.groupMembers.browseNames:', groupBrowseNames);
     if (groupBrowseNames.length) browseNames4Monitor.groupMembers = groupBrowseNames.length;
     groups = getGroupsFromArray(groupBrowseNames, 10);
     for (let index = 0; index < groups.length; index++) {

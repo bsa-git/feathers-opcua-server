@@ -1,13 +1,13 @@
 {
   "objects": [
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_A5.Device1",
       "displayName": "A5.Device1",
       "type": "object"
     },
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_A5.Device2",
       "displayName": "A5.Device2",
       "type": "object"
@@ -25,7 +25,7 @@
       "group": true,
       "subscription": "onChangedCommonHandler",
       "variableGetType": "valueFromSource",
-      "getter": "getterPlugForVariable",
+      "getter": "",
       "getterParams": {}
     },
     {
@@ -39,7 +39,7 @@
       "group": true,
       "subscription": "onChangedCommonHandler",
       "variableGetType": "valueFromSource",
-      "getter": "getterPlugForVariable",
+      "getter": "",
       "getterParams": {}
     }
   ]

@@ -550,13 +550,12 @@ const getOpcuaConfigsForMe = function () {
   let opcuaOptions = [];
   const myHostname = getHostname().toLowerCase();
   const myIp = getMyIp();
-  if (isDebug) debug('getOpcuaConfigForMe.myHostname, myIp:', myHostname, myIp);
+  if (isDebug && myHostname) debug('getOpcuaConfigForMe.myHostname, myIp:', myHostname, myIp);
   const opcuaConfig = require(`${appRoot}/src/api/opcua/config/OPCUA_Config.json`);
   opcuaOptions = opcuaConfig.filter(opt => {
     const url = opt.clientServiceUrl ? opt.clientServiceUrl : opt.srvServiceUrl;
     const parts = getParseUrl(url);
-    if (isDebug) debug('getOpcuaConfigForMe.getParseUrl:', parts);
-    // debug('getOpcuaConfigForMe.getParseUrl:', parts);
+    if (isDebug && parts) debug('getOpcuaConfigForMe.getParseUrl:', parts);
     return (parts.hostname.includes(myHostname)) || (parts.hostname === myIp);
   });
   return opcuaOptions;
