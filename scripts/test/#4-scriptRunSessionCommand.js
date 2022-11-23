@@ -32,11 +32,10 @@ const {
   showInfoForHandler2
 } = require('../../src/plugins/opcua/opcua-subscriptions/lib');
 
-let options = require(`${appRoot}/src/api/opcua/config/ClientSessOperOptions`);
-
 const loOmit = require('lodash/omit');
 const chalk = require('chalk');
-// const { format } = require('path');
+
+let options = require(`${appRoot}/src/api/opcua/config/ClientSessOperOptions`);
 
 const debug = require('debug')('app:#5-scriptRunSessionOperation');
 const isDebug = false;
@@ -52,7 +51,7 @@ const argv = yargs(hideBin(process.argv)).argv;
 if (isDebug && argv) inspector('Yargs.argv:', argv);
 const scripts = argv.script.split('.');
 const script = scripts[0];
-let scriptCount = 5;
+let scriptCount = 6;
 scriptCount = (script === '#all' || scripts.length === 1) ? scriptCount : 1;
 const numberScript = '#4';
 const isScript = (script === numberScript || script === '#all');
@@ -71,24 +70,25 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
 
       //--- Set options params ---
       options.app = app;
-      options.opt = {
-        // (Endpoint URL) ports: OpcuaSrv(opc.tcp://localhost:26570, opc.tcp://10.60.5.128:26570), 
-        // KepSrv(opc.tcp://localhost:49370, opc.tcp://10.60.5.128:49370) 
-        // A5-KepSrv(opc.tcp://10.60.147.29:49370)
-        url: 'opc.tcp://10.60.147.29:49370',
-      };
-      options.userIdentityInfo = {
-        type: UserTokenType.UserName,
-        userName: process.env.OPCUA_A5_LOGIN, // OPCUA_ADMIN_LOGIN|OPCUA_KEP_LOGIN|OPCUA_A5_LOGIN
-        password: process.env.OPCUA_A5_PASS // OPCUA_ADMIN_PASS|OPCUA_KEP_PASS|OPCUA_A5_PASS
-      };
+      // (Endpoint URL) ports: OpcuaSrv(opc.tcp://localhost:26570, opc.tcp://10.60.5.128:26570), 
+      // KepSrv(opc.tcp://localhost:49370, opc.tcp://10.60.5.128:49370) 
+      // A5-KepSrv(opc.tcp://10.60.147.29:49370)
+      options.opt.url = 'opc.tcp://10.60.147.29:49370';
+
+      // UserTokenType.Anonymous|UserTokenType.UserName
+      options.userIdentityInfo.type = UserTokenType.UserName;
+      // OPCUA_ADMIN_LOGIN|OPCUA_KEP_LOGIN|OPCUA_A5_LOGIN
+      options.userIdentityInfo.userName = process.env.OPCUA_A5_LOGIN;
+      // OPCUA_ADMIN_PASS|OPCUA_KEP_PASS|OPCUA_A5_PASS
+      options.userIdentityInfo.password = process.env.OPCUA_A5_PASS;
+      
       options.subscrMonOpts.callBack = showInfoForHandler2;
       //--------------------------------------------
-      let nodesToRead, startTime, endTime;
+      let nodesToWrite, nodesToRead, startTime, endTime;
 
       switch (switchScript) {
       case '#4.1':
-        options.command = 'ch_m5-SubscriptionCreate';
+        options.command = 'subscriptionCreate';
         callback = async function (session, params) {
           let result = callbackSubscriptionCreate(session, params);
           await pause(1000);
@@ -96,7 +96,7 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
         };
         break;
       case '#4.2':
-        options.command = 'ch_a5-SubscriptionMonitor';
+        options.command = 'subscriptionMonitor';
         // M5_OpcuaSrv('ns=1;s=CH_M52::ValueFromFile'), 
         // KEPServer-ogmt-0088846('ns=2;s=OGMT-0088846.Device1.M5-2.02PGAZ_F5')
         // KEPServer-ogmt-0088846('ns=2;s=A5-GW00.Device1.A5.Device1.F501AM_PV', ns=2;s=A5-GW00.Device1.A5.Device1.F359AM_PV)
@@ -114,7 +114,7 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
         };
         break;
       case '#4.3':
-        options.command = 'ch_a5-SessionRead';
+        options.command = 'sessionRead';
 
         nodesToRead = [
           /**--- KEPServer-ogmt-0088846 ---*/
@@ -153,7 +153,7 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
         };
         break;
       case '#4.4':
-        options.command = 'ch_a5-SessionReadHistory';
+        options.command = 'sessionReadHistory';
 
         nodesToRead = [
           // 'ns=2;s=A5.Device2.WP301_PV',
@@ -175,7 +175,22 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
         };
         break;
       case '#4.5':
-        options.command = 'ch_m5-SessionEndpoint';
+        options.command = 'sessionWrite';
+
+        nodesToWrite = [
+          // 'ns=2;s=OGMT-0088846.Device1.M5-2.02PGAZ_F5',
+          // 'ns=2;s=A5-GW00.Device1.A5.Device1.F501AM_PV',
+          // 'ns=2;s=A5-GW00.Device1.A5.Device1.F359AM_PV'
+        ];
+        options.sessReadOpts.nodesToWrite[0]['nodeId'] = 'ns=1;s=CH_A5.Device2::Mnemo1:WP301_PV';
+        callback = async function (session, params) {
+          let result = await callbackSessionRead(session, params);
+          await pause(1000);
+          return result;
+        };
+        break;
+      case '#4.6':
+        options.command = 'sessionEndpoint';
 
         callback = async function (session, params) {
           let result = callbackSessionEndpoint(session, params);

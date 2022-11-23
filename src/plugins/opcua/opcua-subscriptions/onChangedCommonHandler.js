@@ -2,11 +2,11 @@
 const loOmit = require('lodash/omit');
 const loRound = require('lodash/round');
 
-const { 
-  inspector, 
+const {
+  inspector,
 } = require('../../lib');
 
-const { 
+const {
   getValueFromNodeId,
   getLastNameFromNodeId
 } = require('../opcua-helper');
@@ -25,18 +25,18 @@ const isDebug = false;
  * @returns {void}
  */
 function onChangedCommonHandler(params, dataValue) {
-  if (isDebug) inspector('onChangedCommonHandle.params:', loOmit(params, ['myOpcuaClient', 'app']));
-  if (isDebug && dataValue) inspector('onChangedCommonHandle.dataValue:', dataValue);
+  if (true && params) inspector('onChangedCommonHandle.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (true && dataValue) inspector('onChangedCommonHandle.dataValue:', dataValue);
   const statusCode = dataValue.statusCode.name;
   const value = dataValue.value.value;
-  // console.log('onChangedCommonHandle.params.addressSpaceOption:', params.addressSpaceOption);
+  if (isDebug && params.addressSpaceOption) inspector('onChangedCommonHandle.params.addressSpaceOption:', params.addressSpaceOption);
   const browseName = getValueFromNodeId(params.addressSpaceOption.nodeId);
   const timestamp = moment(dataValue.serverTimestamp).format('YYYY-MM-DD HH:mm:ss');
 
-  if(true && browseName) console.log('<=',
+  if (true && browseName) console.log('<=',
     chalk.greenBright(`Name="${browseName}"; `),
     chalk.whiteBright(`StatusCode=('${statusCode}');`),
-    chalk.whiteBright(`Value = ${loRound(value, 3)};`),
+    chalk.whiteBright(`Value = "${value}";`),
     chalk.cyanBright(`TM=${timestamp}`),
     '=>');
 }

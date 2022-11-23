@@ -2,7 +2,8 @@
 const {
   UserTokenType,
   TimestampsToReturn,
-  AttributeIds
+  AttributeIds,
+  DataType
 } = require('node-opcua');
 
 module.exports = {
@@ -11,8 +12,8 @@ module.exports = {
   },
   userIdentityInfo: {
     type: UserTokenType.Anonymous, // UserTokenType.Anonymous, UserTokenType.UserName
-    userName: '', 
-    password: '' 
+    userName: '',
+    password: ''
   },
   clientParams: {},
   // Session read options
@@ -22,8 +23,25 @@ module.exports = {
       nodeId: '',
       attributeId: AttributeIds.Value
     }],
-    startTime: '', 
+    startTime: '',
     endTime: ''
+  },
+  // Session write options
+  sessWriteOpts: {
+    showWriteValues: true,
+    nodesToWrite: [
+      {
+        nodeId: '',
+        attributeId: AttributeIds.Value,
+        value: {
+          statusCode: 'Good',
+          value: {
+            dataType: DataType.Double,
+            value: 100.0
+          }
+        }
+      }
+    ]
   },
   // Subscription options
   subscriptionOptions: {},

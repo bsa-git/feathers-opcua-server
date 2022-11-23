@@ -1,6 +1,7 @@
 {
   "objects": [
     {
+      "isEnable": true,
       "browseName": "CH_A5.Device2",
       "displayName": "A5.Device2",
       "type": "object"
@@ -8,6 +9,7 @@
   ],
   "variables": [
     {
+      "isEnable": true,
       "browseName": "CH_A5.Device2::Mnemo1",
       "displayName": "Mnemo1 values for CH_A5.Device2",
       "ownerName": "CH_A5.Device2",
@@ -31,7 +33,7 @@
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "subscription": "onChangedKepValue",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,

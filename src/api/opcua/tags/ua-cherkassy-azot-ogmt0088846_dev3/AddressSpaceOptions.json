@@ -1,13 +1,13 @@
 {
   "objects": [
     {
-      "isEnable": true,
+      "isEnable": false,
       "browseName": "CH_A5.Device1",
       "displayName": "A5.Device1",
       "type": "object"
     },
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_A5.Device2",
       "displayName": "A5.Device2",
       "type": "object"
@@ -23,10 +23,12 @@
       "dataType": "String",
       "hist": 1,
       "group": true,
-      "subscription": "onChangedCommonHandler",
       "variableGetType": "valueFromSource",
-      "getter": "",
-      "getterParams": {}
+      "getter": "getterPlugForVariable",
+      "subscription": "onChangedCommonHandler",
+      "subscribeParams": {
+        "srvEndpointUrl": "opc.tcp://OGMT-0088846.OSTCHEM.COM.UA:26560"
+      }
     },
     {
       "isEnable": true,
@@ -37,10 +39,12 @@
       "dataType": "String",
       "hist": 1,
       "group": true,
-      "subscription": "onChangedCommonHandler",
       "variableGetType": "valueFromSource",
-      "getter": "",
-      "getterParams": {}
+      "getter": "getterPlugForVariable",
+      "subscription": "onChangedCommonHandler",
+      "subscribeParams": {
+        "srvEndpointUrl": "opc.tcp://OGMT-0088846.OSTCHEM.COM.UA:26560"
+      }
     }
   ]
 }

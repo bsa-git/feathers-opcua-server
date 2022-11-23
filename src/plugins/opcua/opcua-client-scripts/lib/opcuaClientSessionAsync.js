@@ -11,7 +11,7 @@ const {
 const {
   getSecurityMode,
   getSecurityPolicy
-} = require('../../../opcua');
+} = require('../../../opcua/opcua-helper');
 
 const {
   OPCUAClient,
