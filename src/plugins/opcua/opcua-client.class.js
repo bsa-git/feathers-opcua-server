@@ -831,6 +831,7 @@ class OpcuaClient {
    */
   async sessionWrite(nameNodeIds, valuesToWrite = []) {
     let statusCodes = [], itemNodeIds = [];
+    //------------------------------------------
     this.sessionNotCreated();
     // Get nodeIds
     this.getNodeIds(nameNodeIds).forEach((itemNodeId, index) => {

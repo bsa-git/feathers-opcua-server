@@ -18,7 +18,7 @@ function checkRunCommand(options) {
   case 'ch_m5CreateAcmYearTemplate':
     points = options.opt.points;
     if (points && points.length) {
-      options.sessWriteOpts.nodesToWrite = { nodeId: 'ns=1;s=CH_M5::RunCommand'};
+      options.sessWriteOpts.nodesToWrite.nodeId = 'ns=1;s=CH_M5::RunCommand';
     } else {
       return null;
     }
@@ -26,7 +26,7 @@ function checkRunCommand(options) {
   case 'ch_m5SyncStoreAcmValues':
     points = options.opt.points;
     if (points && points.length) {
-      options.sessWriteOpts.nodesToWrite = { nodeId: 'ns=1;s=CH_M5::RunCommand'};
+      options.sessWriteOpts.nodesToWrite.nodeId = 'ns=1;s=CH_M5::RunCommand';
     } else {
       return null;
     }
@@ -34,7 +34,7 @@ function checkRunCommand(options) {
   case 'ch_m5SyncAcmYearReport':
     points = options.opt.points;
     if (points && points.length) {
-      options.sessWriteOpts.nodesToWrite = { nodeId: 'ns=1;s=CH_M5::RunCommand'};
+      options.sessWriteOpts.nodesToWrite.nodeId = 'ns=1;s=CH_M5::RunCommand';
     } else {
       return null;
     }

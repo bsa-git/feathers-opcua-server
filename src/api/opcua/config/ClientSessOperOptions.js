@@ -29,19 +29,18 @@ module.exports = {
   // Session write options
   sessWriteOpts: {
     showWriteValues: true,
-    nodesToWrite: [
-      {
-        nodeId: '',
-        attributeId: AttributeIds.Value,
+    // nodesToWrite: {...}|[{...}, {...}]
+    nodesToWrite: {
+      nodeId: '',
+      attributeId: AttributeIds.Value,
+      value: {
+        statusCode: 'Good',
         value: {
-          statusCode: 'Good',
-          value: {
-            dataType: DataType.Double,
-            value: 100.0
-          }
+          dataType: DataType.String,
+          value: ''
         }
       }
-    ]
+    }
   },
   // Subscription options
   subscriptionOptions: {},

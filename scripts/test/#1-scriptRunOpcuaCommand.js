@@ -11,12 +11,17 @@ const {
 } = require('../../src/plugins/lib');
 
 const {
+  DataType,
+} = require('node-opcua');
+
+const {
   checkRunCommand,
   callbackSessionWrite,
   opcuaClientSessionAsync
 } = require('../../src/plugins/opcua/opcua-client-scripts/lib');
 
 const chalk = require('chalk');
+const loPick = require('lodash/pick');
 
 let options = require(`${appRoot}/src/api/opcua/config/ClientSessOperOptions`);
 
@@ -51,6 +56,10 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunOpcuaCommand) ===>>`
 
       //--- Set options params ---
       options.opt.url = 'opc.tcp://localhost:26570';// (Endpoint URL)
+      // Session write options
+      options.sessWriteOpts.showWriteValues = true;
+      options.sessWriteOpts.nodesToWrite.value.value.dataType = DataType.String;
+      options.sessWriteOpts.nodesToWrite.value.value.value = '';
 
       switch (switchScript) {
       case '#1.1':
@@ -96,10 +105,13 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunOpcuaCommand) ===>>`
           inspector('runOpcuaCommand_ERROR.options:', options);
           throw new Error(`Command error. This command "${options.command}" does not exist or there are not enough options.`);
         }
+        // Set value for write
+        checkResult.sessWriteOpts.nodesToWrite.value.value.value = JSON.stringify(loPick(checkResult, ['command', 'opt']));
+        // Run opcuaClientSessionAsync
         const result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionWrite);
         if (isDebug && result) inspector('runOpcuaCommand.result:', result);
-        console.log(chalk.green(`${switchScript}: Script run opcua command:" ${options.command}" - OK!`), 'result:', chalk.cyan(result));
-        assert.ok(result === 'Good', `${numberScript}-scriptRunOpcuaCommand`);
+        console.log(chalk.green(`${switchScript}: Script run opcua command:" ${options.command}" - OK!`), 'result:', chalk.cyan(result.statusCode));
+        assert.ok(result.statusCode === 'Good', `${numberScript}-scriptRunOpcuaCommand`);
       } catch (error) {
         logger.error(`${chalk.red('Error message:')} "${error.message}"`);
         assert.ok(false, `${numberScript}-scriptRunOpcuaCommand`);

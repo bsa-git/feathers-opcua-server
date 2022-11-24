@@ -37,6 +37,7 @@ async function showInfoForHandler(params, dataValue) {
   let value = dataValue.value.value;
   try {
     value = JSON.parse(value);
+    if (isDebug && value) inspector('showInfoForHandler.value:', value);
     valueKeys = Object.keys(value).length;
     if (Object.keys(value).includes('!value')) {
       valueKeys = valueKeys - 1;

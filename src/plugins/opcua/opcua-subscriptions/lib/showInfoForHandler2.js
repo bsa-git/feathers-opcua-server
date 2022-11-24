@@ -41,29 +41,20 @@ function showInfoForHandler2(params, dataValue) {
     if (Object.keys(value).includes('!value')) {
       valueKeys = valueKeys - 1;
     }
-    if (Object.keys(value).includes('command')) {
-      command = value['command'];
-    }
+    // if (Object.keys(value).includes('command')) {
+    //   command = value['command'];
+    // }
   } catch (error) {
     value = dataValue.value.value;
     value = loRound(value, 3);
   }
 
-  if (command) {
-    console.log('<=',
-      chalk.greenBright(`Name="${browseName}"; `),
-      chalk.whiteBright(`StatusCode=('${statusCode}');`),
-      chalk.whiteBright(`Command=('${command}');`),
-      chalk.cyanBright(`TM=${timestamp}`),
-      '=>');
-  } else {
-    console.log('<=',
-      chalk.greenBright(`Name="${browseName}"; `),
-      chalk.whiteBright(`StatusCode=('${statusCode}');`),
-      chalk.whiteBright(`${valueKeys? 'Values=(' + valueKeys + ')' : 'Value = ' + loRound(value, 3)};`),
-      chalk.cyanBright(`TM=${timestamp}`),
-      '=>');
-  }
+  console.log('<=',
+    chalk.greenBright(`Name="${browseName}"; `),
+    chalk.whiteBright(`StatusCode=('${statusCode}');`),
+    chalk.whiteBright(`${valueKeys ? 'ValueKeys=(' + valueKeys + ')' : 'Value = ' + loRound(value, 3)};`),
+    chalk.cyanBright(`TM=${timestamp}`),
+    '=>');
 }
 
 module.exports = showInfoForHandler2;

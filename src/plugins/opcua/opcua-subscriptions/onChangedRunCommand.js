@@ -66,8 +66,6 @@ async function onChangedRunCommand(params, dataValue) {
     if(statusCode !== 'Good' ||  !value) return;
     if (isDebug && value) inspector('onChangedRunCommand.value:', value);
 
-    
-
     // Add subscribe to queue
     queueOfSubscribe.push({
       token,

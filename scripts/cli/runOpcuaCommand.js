@@ -3,8 +3,10 @@
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const chalk = require('chalk');
+const loMerge = require('lodash/merge');
 
 const {
+  appRoot,
   inspector,
 } = require('../../src/plugins/lib');
 
@@ -13,6 +15,13 @@ const {
   callbackSessionWrite,
   opcuaClientSessionAsync
 } = require('../../src/plugins/opcua/opcua-client-scripts/lib');
+
+const {
+  DataType,
+} = require('node-opcua');
+
+
+let options = require(`${appRoot}/src/api/opcua/config/ClientSessOperOptions`);
 
 const isDebug = false;
 
@@ -54,13 +63,22 @@ const argv = yargs(hideBin(process.argv))
 if (isDebug && argv) inspector('Yargs.argv:', argv);
 
 // Run script
-(async function runOpcuaCommand(options) {
+(async function runOpcuaCommand(cliArgv) {
+  options = loMerge({}, options, cliArgv);
+  // Session write options
+  options.sessWriteOpts.showWriteValues = true;
+  options.sessWriteOpts.nodesToWrite.value.value.dataType = DataType.String;
+  options.sessWriteOpts.nodesToWrite.value.value.value = '';
+  // Check run command
   const checkResult = checkRunCommand(options);
   if (!checkResult) {
     // Command error
     inspector('runOpcuaCommand_ERROR.options:', options);
     throw new Error(`Command error. This command "${options.command}" does not exist or there are not enough options.`);
   }
+  // Set value for write
+  checkResult.sessWriteOpts.nodesToWrite.value.value.value = JSON.stringify(checkResult);
+  // Run opcuaClientSessionAsync
   const result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionWrite);
   if (isDebug && result) inspector('runOpcuaCommand.result:', result);
   console.log(chalk.green(`Run session write command "${options.command}" - OK!`), 'result:', chalk.cyan(result));
