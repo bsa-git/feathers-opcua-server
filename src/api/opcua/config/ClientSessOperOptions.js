@@ -7,6 +7,8 @@ const {
 } = require('node-opcua');
 
 module.exports = {
+  command: '',
+  method: '',
   opt: {
     url: 'opc.tcp://localhost:26570',
   },
@@ -19,6 +21,7 @@ module.exports = {
   // Session read options
   sessReadOpts: {
     showReadValues: true,
+    // nodesToRead: 'ns=1;s=tag1'|['ns=1;s=tag1',..., 'ns=1;s=tag2']|{nodeId: 'ns=1;s=tag1'}|[{nodeId: 'ns=1;s=tag1'},..., {nodeId: 'ns=1;s=tag2'}]
     nodesToRead: [{
       nodeId: '',
       attributeId: AttributeIds.Value
@@ -40,6 +43,17 @@ module.exports = {
           value: ''
         }
       }
+    }
+  },
+  // Session call method options
+  sessCallMethodOpts: {
+    showCallMethod: true,
+    // nodesToCallMethod: {...}|[{...}, {...}]
+    nodesToCallMethod: {
+      objectId: '',
+      methodId: '',
+      // inputArguments: [new Variant({...}),..., new Variant({...})]
+      inputArguments: []
     }
   },
   // Subscription options

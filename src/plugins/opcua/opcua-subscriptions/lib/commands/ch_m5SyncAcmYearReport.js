@@ -101,6 +101,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
     const groupBrowseName = reportParams.acmTagBrowseName;
     const storeBrowseNames = opcuaTags.filter(t => t.ownerGroup === groupBrowseName).map(t => t.browseName);
     dataItems = await getOpcuaTagValuesFromStores(app, storeBrowseNames);
+    if(isDebug && dataItems) inspector('ch_m5SyncAcmYearReport.dataItems:', dataItems);
     // Get filter dataItems
     if (dataItems.length && pattern && isValidDateTime(pattern)) {
       const patterns = pattern.split('-');
@@ -110,6 +111,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
         if (patterns.length === 2) return loStartsWith(date, `${patterns[0]}-${patterns[1]}`);
         if (patterns.length === 3) return loStartsWith(date, `${patterns[0]}-${patterns[1]}-${patterns[2]}`);
       });
+      if(isDebug && dataItems) inspector(`ch_m5SyncAcmYearReport.dataItems.filter(pattern: "${pattern}"):`, dataItems);
     }
     if (isDebug && dataItems.length) console.log(
       chalk.green('RunCommand(ch_m5SyncAcmYearReport).getOpcuaTagValuesFromStores: OK!'),
@@ -134,6 +136,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
     statusCode = metodResult[0].statusCode.name;
     if (statusCode === 'Good') {
       outputArguments = JSON.parse(metodResult[0].outputArguments[0].value);// { resultPath, params }
+      if (isDebug && outputArguments) inspector('runMetod.methodAcmDayReportsDataGet.outputArguments:', outputArguments);
       // Get params
       pointID = outputArguments.params.pointID;
       const syncResultOutputPath = outputArguments.params.outputPath;
@@ -183,7 +186,7 @@ async function ch_m5SyncAcmYearReport(params, value) {
   statusCode = metodResult[0].statusCode.name;
   if (statusCode === 'Good') {
     outputArguments = JSON.parse(metodResult[0].outputArguments[0].value);// [{ statusCode, resultPath, params, reportYear, reportDates }, ...]
-    if (isDebug && outputArguments) inspector('runMetod.methodAcmYearReportUpdate.reportDates:', outputArguments);
+    if (isDebug && outputArguments) inspector('runMetod.methodAcmYearReportUpdate.outputArguments:', outputArguments);
 
     // Remove files from tmp path
     if (!reportParams.syncYearReportFromStore && !isUncPath(reportParams.dataTestPath)) {
@@ -201,10 +204,11 @@ async function ch_m5SyncAcmYearReport(params, value) {
     inspector('runMetod.methodAcmDayReportsDataGet.ERROR.metodResult:', metodResult);
     return;
   }
+  const outputArgument = Array.isArray(outputArguments)? outputArguments[0] : outputArguments;
   if (isDebug && outputArguments) console.log(
     chalk.green('RunCommand(ch_m5SyncAcmYearReport): OK!'),
     `For pointID=${chalk.cyan(pointID)};`,
-    `syncAcmYearReportCount: ${chalk.cyan(outputArguments.reportDates.length)};`
+    `syncAcmYearReportCount: ${chalk.cyan(outputArgument.reportDates.length)};`
   );
 }
 

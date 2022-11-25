@@ -3,6 +3,7 @@ const assert = require('assert');
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const {
+  appRoot,
   inspector,
   logger
 } = require('../../src/plugins/lib');
@@ -14,6 +15,8 @@ const {
 } = require('../../src/plugins/opcua/opcua-client-scripts/lib');
 
 const chalk = require('chalk');
+
+let options = require(`${appRoot}/src/api/opcua/config/ClientSessOperOptions`);
 
 const debug = require('debug')('app:#5-scriptCallOpcuaMetod');
 const isDebug = false;

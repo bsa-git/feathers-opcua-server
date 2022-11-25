@@ -32,16 +32,16 @@ const sessionWrite = async (params, value) => {
   // Get arguments for function
   const client = params.myOpcuaClient;
   const browseName = params.addressSpaceOption.browseName;
-  const dataType = (params.opcua && params.opcua.dataType) ? params.opcua.dataType : DataType.String;
-  const attributeIds = (params.opcua && params.opcua.attributeIds) ? params.opcua.attributeIds : AttributeIds.Value;
+  const dataType = (value.dataType) ? value.dataType : DataType.String;
+  const attributeId = (value.attributeId) ? value.attributeId : AttributeIds.Value;
 
   const nodeToWrite = [{
     nodeId: params.nodeId,
-    attributeId: attributeIds,
+    attributeId,
     value: {
       value: {
         dataType,
-        value
+        value: value.value
       }
     }
   }];

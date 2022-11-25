@@ -890,6 +890,7 @@ class OpcuaClient {
    */
   async sessionCallMethod(nameNodeIds, inputArguments = []) {
     let result = [], itemNodeIds = [];
+    //---------------------------------------------
     this.sessionNotCreated();
     // Get nodeIds
     this.getNodeIds(nameNodeIds).forEach((itemNodeId, index) => {

@@ -58,7 +58,7 @@ const urlExists = async function (target, params = { showMsg: true }) {
     await axios({
       method: 'get',
       url: uri,
-      timeout: 2000, // only wait for 2s
+      timeout: 5000, // only wait for 5s
       proxy: params.proxy? params.proxy : null
     });
 
@@ -181,9 +181,9 @@ const httpGetFileNamesFromDir = async function (url, pattern = '', options = {},
     }
   } catch (error) {
     if (error.code === 'ECONNREFUSED') {
-      console.log(chalk.red('error:'), 'http-operations.httpGetNewFileFromDir.url:', chalk.cyan(`Url "${url}" does not exist!`));
+      console.log(chalk.red('error:'), 'http-operations.httpGetFileNamesFromDir.url:', chalk.cyan(`Url "${url}" does not exist!`));
     } else {
-      console.log(chalk.red('error:'), 'http-operations.httpGetNewFileFromDir.url:', chalk.cyan(`${error.message}!`));
+      console.log(chalk.red('error:'), 'http-operations.httpGetFileNamesFromDir.url:', chalk.cyan(`${error.message}!`));
     }
   }
   if (isDebug && fileList.length) inspector('httpGetFileNamesFromDir.fileList:', fileList);
@@ -226,9 +226,9 @@ const httpGetFileFromUrl = async function (params = {}) {
     result = response.data;
   } catch (error) {
     if (error.code === 'ECONNREFUSED') {
-      console.log(chalk.red('error:'), 'http-operations.httpGetNewFileFromDir.url:', chalk.cyan(`Url "${url}" does not exist!`));
+      console.log(chalk.red('error:'), 'http-operations.httpGetFileFromUrl.url:', chalk.cyan(`Url "${url}" does not exist!`));
     } else {
-      console.log(chalk.red('error:'), 'http-operations.httpGetNewFileFromDir.url:', chalk.cyan(`${error.message}!`));
+      console.log(chalk.red('error:'), 'http-operations.httpGetFileFromUrl.url:', chalk.cyan(`${error.message}!`));
     }
   }
   return result;

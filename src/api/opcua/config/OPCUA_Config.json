@@ -215,7 +215,7 @@
     "opcuaSaveModeToDB": "localUpdate",
     "opcuaRemoteDbUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3131",
     "opcuaBootstrapParams": {
-      "clearHistoryAtStartup": false,
+      "clearHistoryAtStartup": true,
       "syncHistoryAtStartup": { 
         "active": false,
         "methodName": "methodAcmDayReportsDataGet"

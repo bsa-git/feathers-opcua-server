@@ -6,6 +6,11 @@ const loHead = require('lodash/head');
 const loDrop = require('lodash/drop');
 
 const {
+  AttributeIds,
+  DataType,
+} = require('node-opcua');
+
+const {
   inspector,
   pause,
   getTimeDuration
@@ -90,7 +95,11 @@ async function onChangedRunCommand(params, dataValue) {
     // Run command
     const p1 = runCommand(params, dataValue);
     // Clear command
-    const p2 = sessionWrite(params, '');
+    const p2 = sessionWrite(params, { 
+      attributeId: AttributeIds.Value,
+      dataType: DataType.String, 
+      value: '' 
+    });
 
     // Show info
     Promise.all([p1, p2]).then(results => {

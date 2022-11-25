@@ -59,7 +59,7 @@ async function ch_m5CreateAcmYearTemplate(params, value) {
   if (statusCode === 'Good') {
     outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, hours, days }
     const resultFile = getPathBasename(outputArguments.resultPath);
-    if (true && result) console.log(
+    if (isDebug && result) console.log(
       chalk.greenBright('sessionCallMethod(methodAcmYearTemplateCreate) - OK!'),
       `For pointID=${pointID};`,
       `hours: ${outputArguments.hours};`,
