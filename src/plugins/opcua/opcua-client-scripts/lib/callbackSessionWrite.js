@@ -22,6 +22,36 @@ const isDebug = false;
 /**
  * @async
  * @name callbackSessionWrite
+ * 
+ * @example :
+ *
+ *     const nodesToWrite = [
+ *     {
+ *          nodeId: "ns=1;s=SetPoint1",
+ *          attributeId: opcua.AttributeIds.Value,
+ *          value: {
+ *             statusCode: Good,
+ *             value: {
+ *               dataType: opcua.DataType.Double,
+ *               value: 100.0
+ *             }
+ *          }
+ *     },
+ *     {
+ *          nodeId: "ns=1;s=SetPoint2",
+ *          attributeId opcua.AttributeIds.Value,
+ *          value: {
+ *             statusCode: Good,
+ *             value: {
+ *               dataType: opcua.DataType.Double,
+ *               value: 45.0
+ *             }
+ *          }
+ *     }
+ *     ];
+ * 
+ *     const statusCodes = await session.write(nodesToWrite); 
+ * 
  * @param {Object} session 
  * @param {Object} params 
  * @returns {String}
