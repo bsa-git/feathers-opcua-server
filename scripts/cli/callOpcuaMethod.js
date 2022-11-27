@@ -3,8 +3,10 @@
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const chalk = require('chalk');
+const loMerge = require('lodash/merge');
 
 const {
+  appRoot,
   inspector,
   strReplace
 } = require('../../src/plugins/lib');
@@ -14,6 +16,8 @@ const {
   callbackSessionCallMethod,
   opcuaClientSessionAsync
 } = require('../../src/plugins/opcua/opcua-client-scripts/lib');
+
+let options = require(`${appRoot}/src/api/opcua/config/ClientSessOperOptions`);
 
 const isDebug = false;
 
@@ -53,7 +57,12 @@ const argv = yargs(hideBin(process.argv))
 if (isDebug && argv) inspector('Yargs.argv:', argv);
 
 // Run script
-(async function callOpcuaMethod(options) {
+(async function callOpcuaMethod(cliArgv) {
+  options = loMerge({}, options, cliArgv);
+  // Session call method options
+  options.sessCallMethodOpts.showCallMethod = false;
+  options.sessCallMethodOpts.nodesToCallMethod.objectId = '';
+  options.sessCallMethodOpts.nodesToCallMethod.methodId = '';
   // Check call method options
   const checkResult = checkCallMethod(options);
   if (!checkResult) {
@@ -62,6 +71,6 @@ if (isDebug && argv) inspector('Yargs.argv:', argv);
     throw new Error(`Method error. This method "${options.method}" does not exist or there are not enough options.`);
   }
   const result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionCallMethod);
-  // Check call method result
-  checkCallMethod(options, result);
+  if (isDebug && result) inspector('callOpcuaMethod.result:', result);
+  console.log(chalk.green(`Run session call method "${options.method}" - OK!`), 'result:', chalk.cyan(result.statusCode));
 })(argv);

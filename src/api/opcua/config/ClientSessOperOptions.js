@@ -52,7 +52,8 @@ module.exports = {
     nodesToCallMethod: {
       objectId: '',
       methodId: '',
-      // inputArguments: [new Variant({...}),..., new Variant({...})]
+      // inputArguments: [new Variant({...}),..., new Variant({...})]|
+      // [{dataType: DataType.String, value: 'qwerty'},..., {dataType: DataType.String, value: 'qwerty'}]
       inputArguments: []
     }
   },

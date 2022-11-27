@@ -60,7 +60,11 @@ const callbackSessionWrite = async (session, params) => {
   let nodesToRead = [], result;
   //------------------------------
   if (isDebug && params) inspector('callbackSessionWrite.params:', loOmit(params, ['app']));
-  let nodesToWrite = params.sessWriteOpts.nodesToWrite;
+  let nodesToWrite =
+    Array.isArray(params.sessWriteOpts.nodesToWrite) ?
+      params.sessWriteOpts.nodesToWrite :
+      Object.assign({}, params.sessWriteOpts.nodesToWrite);
+  
   const showWriteValues = params.sessWriteOpts.showWriteValues;
   if(!Array.isArray(nodesToWrite)) nodesToWrite = [nodesToWrite];
 
@@ -79,7 +83,6 @@ const callbackSessionWrite = async (session, params) => {
   const statusCodes = await session.write(nodesToWrite);
   if (isDebug && statusCodes.length) inspector('callbackSessionWrite.statusCodes:', statusCodes);
   // Get statusCode
-  // console.log('callbackSessionWrite.statusCodes:', statusCodes[0].name, statusCodes[0]['_name']);
   let statusCode = statusCodes.filter(v => v.name === 'Good').length === statusCodes.length;
   result = { statusCode: statusCode ? 'Good' : 'Bad', statusCodes };
 

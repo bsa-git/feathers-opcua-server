@@ -81,5 +81,5 @@ if (isDebug && argv) inspector('Yargs.argv:', argv);
   // Run opcuaClientSessionAsync
   const result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionWrite);
   if (isDebug && result) inspector('runOpcuaCommand.result:', result);
-  console.log(chalk.green(`Run session write command "${options.command}" - OK!`), 'result:', chalk.cyan(result));
+  console.log(chalk.green(`Run session write command "${options.command}" - OK!`), 'result:', chalk.cyan(result.statusCode));
 })(argv);

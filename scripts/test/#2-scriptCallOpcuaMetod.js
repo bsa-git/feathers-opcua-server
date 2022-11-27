@@ -15,6 +15,7 @@ const {
 } = require('../../src/plugins/opcua/opcua-client-scripts/lib');
 
 const chalk = require('chalk');
+const loPick = require('lodash/pick');
 
 let options = require(`${appRoot}/src/api/opcua/config/ClientSessOperOptions`);
 
@@ -30,7 +31,8 @@ const argv = yargs(hideBin(process.argv)).argv;
 if (isDebug && argv) inspector('Yargs.argv:', argv);
 const scripts = argv.script.split('.');
 const script = scripts[0];
-const scriptCount = (script === '#all' || scripts.length === 1) ? 2 : 1;
+let scriptCount = 2;
+scriptCount = (script === '#all' || scripts.length === 1) ? scriptCount : 1;
 const numberScript = '#2';
 const isScript = (script === numberScript || script === '#all');
 
@@ -43,32 +45,30 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptCallOpcuaMetod) ===>>`,
     
     // Call opcua method
     it(`${switchScript}: ScriptOperations: Call opcua metod`, async () => {
-      let options = null;
+      // let options = null;
       //-------------------------------------
+
+      //--- Set options params ---
+      options.opt.url = 'opc.tcp://localhost:26570';// (Endpoint URL)
+      // Session call method options
+      options.sessCallMethodOpts.showCallMethod = false;
+      options.sessCallMethodOpts.nodesToCallMethod.objectId = '';
+      options.sessCallMethodOpts.nodesToCallMethod.methodId = '';
+
       switch (switchScript) {
       case '#2.1':
-        options = {
-          method: 'ch_m5CreateAcmYearTemplate',
-          opt: {
-            url: 'opc.tcp://localhost:26570',// (Endpoint URL)
-            point: 2,
-            test: true,
-            period: [1, 'months'],
-            year: 2022
-          }
-        };
+        options.method = 'ch_m5CreateAcmYearTemplate';
+        options.opt.point = 2;
+        options.opt.test = true;
+        options.opt.period = [1, 'months'];
+        options.opt.year = 2022;
         break;
       case '#2.2':
-        options = {
-          method: 'ch_m5GetAcmDayReportsData',
-          opt: {
-            url: 'opc.tcp://localhost:26570',// (Endpoint URL)
-            point: 2,
-            pattern: '/**/DayHist*.xls'
-            // e.g. '/**/DayHist*.xls'|'/**/2022-01/DayHist*.xls'|'/**/DayHist*2022_*.xls'|'/**/DayHist*_01*2022*.xls'|'/**/DayHist*_01022022*.xls'|'/**/DayHist*_14F120_01022022*.xls'
-            // e.g. '/**/DayHist01_14F120_01022022_0000.xls'
-          }
-        };
+        options.method = 'ch_m5GetAcmDayReportsData';
+        options.opt.point = 2;
+        options.opt.pattern = '/**/DayHist*.xls';
+        // e.g. '/**/DayHist*.xls'|'/**/2022-01/DayHist*.xls'|'/**/DayHist*2022_*.xls'|'/**/DayHist*_01*2022*.xls'|'/**/DayHist*_01022022*.xls'|'/**/DayHist*_14F120_01022022*.xls'
+        // e.g. '/**/DayHist01_14F120_01022022_0000.xls'
         break;
       default:
         break;
@@ -85,9 +85,9 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptCallOpcuaMetod) ===>>`,
         }
         let result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionCallMethod);
         // Check call method result
-        result = checkCallMethod(options, result);
-        console.log(chalk.green(`${switchScript}: Script call opcua metod:" ${options.method}" - OK!`), 'result:', chalk.cyan(result));
-        assert.ok(result === 'Good', `${numberScript}-scriptCallOpcuaMetod`);
+        // result = checkCallMethod(options, result);
+        console.log(chalk.green(`${switchScript}: Script call opcua metod:" ${options.method}" - OK!`), 'result:', chalk.cyan(result.statusCode));
+        assert.ok(result.statusCode === 'Good', `${numberScript}-scriptCallOpcuaMetod`);
       } catch (error) {
         logger.error(`${chalk.red('Error message:')} "${error.message}"`);
         assert.ok(false, `${numberScript}-scriptCallOpcuaMetod`);

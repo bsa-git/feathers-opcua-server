@@ -9,7 +9,7 @@ const {
 const isDebug = false;
 
 /**
- * @method sessionCallMethod
+ * @method sessionReadHistoryValues
  * 
  * @param {Object} params 
  * @returns {Object[]}
