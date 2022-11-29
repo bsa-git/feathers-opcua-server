@@ -39,6 +39,8 @@ const {
   acmYearTemplateFileName,
 } = require(join(...[appRoot, paramsPath]));
 
+const sessionCallMethod = require('../sessionCallMethod');
+
 const debug = require('debug')('app:command.ch_m5SyncAcmYearReport');
 const isDebug = false;
 

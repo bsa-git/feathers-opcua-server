@@ -25,6 +25,8 @@ const {
   saveStoreOpcuaGroupValues
 } = require('../../../../db-helpers');
 
+const sessionCallMethod = require('../sessionCallMethod');
+
 const debug = require('debug')('app:command.ch_m5SyncStoreAcmValues');
 const isDebug = false;
 
@@ -36,8 +38,8 @@ const isDebug = false;
  * @returns {void}
  */
 async function ch_m5SyncStoreAcmValues(params, value) {
-  let result, inputArgument = {}, inputArguments = [];
-  let statusCode, outputArguments, savedValuesCount = 0;
+  let result, inputArgument = {}, inputArguments = [], outputArguments;
+  let statusCode, savedValuesCount = 0, inputArgsStatusCode;
   //---------------------------------------------------
 
   if (isDebug && params) inspector('ch_m5SyncStoreAcmValues.params:', loOmit(params, ['myOpcuaClient', 'app']));
@@ -56,17 +58,22 @@ async function ch_m5SyncStoreAcmValues(params, value) {
     }
   ]);
   // Run server method
-  const client = params.myOpcuaClient;
   const browseName = 'CH_M5::AcmDayReportsDataGet';
-  result = await client.sessionCallMethod(browseName, inputArguments);
-  if (isDebug && result) inspector('ch_m5SyncStoreAcmValues.sessionCallMethod.result:', result);
+  
+  const callMethodResult = await sessionCallMethod(params, {
+    showCallMethod: false,
+    methodIds: browseName,
+    inputArguments
+  });
+  if (isDebug && callMethodResult) inspector('ch_m5SyncStoreAcmValues.callMethodResult:', callMethodResult);
 
-  statusCode = result[0].statusCode.name;
-  if (statusCode === 'Good') {
-    outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params }
+  statusCode = callMethodResult.statusCode;
+  inputArgsStatusCode = callMethodResult.inputArgsStatusCode;
+  if (statusCode === 'Good' && inputArgsStatusCode === 'Good') {
+    outputArguments = JSON.parse(callMethodResult.outputArguments[0][0].value);// { resultPath, params }
     if (isDebug && outputArguments) console.log(
-      chalk.green('sessionCallMethod(methodAcmDayReportsDataGet): OK!'),
-      'resultFile:', chalk.cyan(getPathBasename(outputArguments.resultPath))
+      chalk.greenBright('sessionCallMethod(methodAcmDayReportsDataGet): OK!'),
+      'resultFile:', getPathBasename(outputArguments.resultPath)
     );
     // Get params
     const pointID = outputArguments.params.pointID;
@@ -80,13 +87,14 @@ async function ch_m5SyncStoreAcmValues(params, value) {
 
     // Save store opcua group value
     const savedValues = await saveStoreOpcuaGroupValues(params.app, groupBrowseName, dataItems, true);
-    if (isDebug && savedValues.length) inspector('runCommand.ch_m5SyncStoreAcmValues.savedValues:', savedValues);
+    if (isDebug && savedValues.length) inspector('ch_m5SyncStoreAcmValues.savedValues:', savedValues);
     savedValuesCount += savedValues.length;
 
-    if (isDebug && outputArguments) console.log(
-      chalk.green('runCommand(ch_m5SyncStoreAcmValues): OK!'),
-      `For pointID=${chalk.cyan(pointID)};`,
-      `syncStoreCount: ${chalk.cyan(savedValuesCount)};`
+    if (true && outputArguments) console.log(
+      chalk.greenBright('runCommand(ch_m5SyncStoreAcmValues): OK!'),
+      `For pointID=${pointID};`,
+      `syncStoreCount: ${savedValuesCount};`,
+      `resultFile: "${getPathBasename(outputArguments.resultPath)}"`, 
     );
     // Remove files from tmp path
     if (!isUncPath(syncResultOutputPath)) {
@@ -101,9 +109,9 @@ async function ch_m5SyncStoreAcmValues(params, value) {
       browseName:'${chalk.cyan(browseName)}'`
     );
     inspector('runMetod.methodAcmDayReportsDataGet.ERROR.inputArguments:', inputArguments);
-    inspector('runMetod.methodAcmDayReportsDataGet.ERROR.result:', result);
+    inspector('runMetod.methodAcmDayReportsDataGet.ERROR.callMethodResult:', callMethodResult);
   }
-  return result;
+  return callMethodResult;
 }
 
 module.exports = ch_m5SyncStoreAcmValues;

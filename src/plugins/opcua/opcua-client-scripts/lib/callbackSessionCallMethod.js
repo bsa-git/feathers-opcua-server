@@ -78,7 +78,7 @@ const callbackSessionCallMethod = async (session, params) => {
 
   // Session call method
   callResults = await session.call(nodesToCallMethod);
-  if (isDebug && result) inspector('callbackSessionCallMethod.result:', result);
+  if (isDebug && callResults) inspector('callbackSessionCallMethod.callResults:', callResults);
   let statusCode = callResults.filter(callResult => callResult.statusCode.name === 'Good').length === callResults.length;
   statusCode = statusCode ? 'Good' : 'Bad';
   let inputArgsStatusCode = callResults.filter(callResult => {

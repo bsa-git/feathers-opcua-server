@@ -11,7 +11,6 @@ const {
   getPathBasename
 } = require('../../../../lib');
 
-
 const sessionCallMethod = require('../sessionCallMethod');
 
 const debug = require('debug')('app:ch_m5CreateAcmYearTemplate');
@@ -25,8 +24,8 @@ const isDebug = false;
  * @returns {void}
  */
 async function ch_m5CreateAcmYearTemplate(params, value) {
-  let result, inputArgument = {}, inputArguments = [];
-  let pointID = 0, statusCode, outputArguments;
+  let inputArgument = {}, inputArguments = [], outputArguments;
+  let pointID = 0, statusCode, inputArgsStatusCode;
   //---------------------------------------------------
 
   if (isDebug && params) inspector('ch_m5CreateAcmYearTemplate.params:', loOmit(params, ['myOpcuaClient', 'app']));
@@ -49,17 +48,20 @@ async function ch_m5CreateAcmYearTemplate(params, value) {
       value: JSON.stringify(inputArgument),
     }
   ]);
-  // Run server method
-  const client = params.myOpcuaClient;
-  const browseName = 'CH_M5::YearTemplateCreate';
-  result = await client.sessionCallMethod(browseName, inputArguments);
-  if (isDebug && result) inspector('ch_m5CreateAcmYearTemplate.result:', result);
 
-  statusCode = result[0].statusCode.name;
-  if (statusCode === 'Good') {
-    outputArguments = JSON.parse(result[0].outputArguments[0].value);// { resultPath, params, hours, days }
+  const callMethodResult = await sessionCallMethod(params, {
+    showCallMethod: false,
+    methodIds: 'CH_M5::YearTemplateCreate',
+    inputArguments
+  });
+  if (isDebug && callMethodResult) inspector('ch_m5CreateAcmYearTemplate.callMethodResult:', callMethodResult);
+
+  statusCode = callMethodResult.statusCode;
+  inputArgsStatusCode = callMethodResult.inputArgsStatusCode;
+  if (statusCode === 'Good' && inputArgsStatusCode === 'Good') {
+    outputArguments = JSON.parse(callMethodResult.outputArguments[0][0].value);// { resultPath, params, hours, days }
     const resultFile = getPathBasename(outputArguments.resultPath);
-    if (isDebug && result) console.log(
+    if (true && callMethodResult) console.log(
       chalk.greenBright('sessionCallMethod(methodAcmYearTemplateCreate) - OK!'),
       `For pointID=${pointID};`,
       `hours: ${outputArguments.hours};`,
@@ -72,7 +74,7 @@ async function ch_m5CreateAcmYearTemplate(params, value) {
       `statusCode: '${chalk.cyan(statusCode)}';`
     );
   }
-  return result;
+  return callMethodResult;
 }
 
 module.exports = ch_m5CreateAcmYearTemplate;
