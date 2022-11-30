@@ -71,7 +71,8 @@ async function ch_m5CreateAcmYearTemplate(params, value) {
   } else {
     console.log(
       chalk.redBright('runCommand(ch_m5CreateAcmYearTemplate): ERROR!'),
-      `statusCode: '${chalk.cyan(statusCode)}';`
+      `statusCode: '${statusCode}';`,
+      `inputArgsStatusCode: '${inputArgsStatusCode}';`
     );
   }
   return callMethodResult;

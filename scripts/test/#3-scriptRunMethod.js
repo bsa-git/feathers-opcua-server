@@ -32,7 +32,8 @@ const argv = yargs(hideBin(process.argv)).argv;
 if (isDebug && argv) inspector('Yargs.argv:', argv);
 const scripts = argv.script.split('.');
 const script = scripts[0];
-const scriptCount = (script === '#all' || scripts.length === 1) ? 2 : 1;
+let scriptCount = 2;
+scriptCount = (script === '#all' || scripts.length === 1) ? scriptCount : 1;
 const numberScript = '#3';
 const isScript = (script === numberScript || script === '#all');
 
@@ -66,12 +67,12 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunMethod) ===>>`, () =
               const point = options.point[index];
               result = await methodAcmYearTemplateCreate([{ value: point }]);
               if (isDebug && result) inspector('methodAcmYearTemplateCreate.result:', result);
-              console.log(chalk.green('Run script - OK!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
+              console.log(chalk.green(`Run script for (pointID = ${point}) - OK!`), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
             }
           } else {
             result = await methodAcmYearTemplateCreate([{ value: options.point }]);
             if (isDebug && result) inspector('methodAcmYearTemplateCreate.result:', result);
-            console.log(chalk.green('Run script - OK!'), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
+            console.log(chalk.green(`Run script (pointID = ${options.point}) - OK!`), 'resultFile:', chalk.cyan(getPathBasename(result.resultPath)));
           }
           console.log(chalk.green(`${switchScript}: Script create an acm year template - OK!`), 'result:', chalk.cyan(result.statusCode));
           assert.ok(result.statusCode === 'Good', `${switchScript}: ScriptOperations: Create acm year template`);

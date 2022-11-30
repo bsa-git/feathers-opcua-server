@@ -87,6 +87,7 @@ const callbackSessionCallMethod = async (session, params) => {
   }).length === callResults.length;
   inputArgsStatusCode = inputArgsStatusCode ? 'Good' : 'Bad';
   const outputArguments = callResults.map(callResult => callResult.outputArguments);
+  if (isDebug && outputArguments) inspector('callbackSessionCallMethod.outputArguments:', outputArguments);
   
   if (showCallMethod) {
     console.log('<-------------------------------------------------------------------------------------->');

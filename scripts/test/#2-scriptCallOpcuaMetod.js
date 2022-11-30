@@ -45,7 +45,7 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptCallOpcuaMetod) ===>>`,
     
     // Call opcua method
     it(`${switchScript}: ScriptOperations: Call opcua metod`, async () => {
-      // let options = null;
+      let checkResult;
       //-------------------------------------
 
       //--- Set options params ---
@@ -77,17 +77,17 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptCallOpcuaMetod) ===>>`,
       try {
         if (isDebug && options) inspector(`${numberScript}-scriptCallOpcuaMetod.options:`, options);
         // Check call method options
-        const checkResult = checkCallMethod(options);
+        checkResult = checkCallMethod(options);
         if (!checkResult) {
           // Method error
           inspector('callOpcuaMethod_ERROR.options:', options);
           throw new Error(`Method error. This method "${options.method}" does not exist or there are not enough options.`);
         }
         let result = await opcuaClientSessionAsync(options.opt.url, checkResult, callbackSessionCallMethod);
+        checkResult = checkCallMethod(options, result);
         // Check call method result
-        // result = checkCallMethod(options, result);
         console.log(chalk.green(`${switchScript}: Script call opcua metod:" ${options.method}" - OK!`), 'result:', chalk.cyan(result.statusCode));
-        assert.ok(result.statusCode === 'Good', `${numberScript}-scriptCallOpcuaMetod`);
+        assert.ok(checkResult.statusCode === 'Good', `${numberScript}-scriptCallOpcuaMetod`);
       } catch (error) {
         logger.error(`${chalk.red('Error message:')} "${error.message}"`);
         assert.ok(false, `${numberScript}-scriptCallOpcuaMetod`);
