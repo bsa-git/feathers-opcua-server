@@ -269,7 +269,7 @@
     },
     "paths": {
       "base-options": [
-        "/src/api/opcua/tags/ua-cherkassy-azot-ogmt0088846_dev3"
+        "/src/api/opcua/tags/ua-cherkassy-azot-ogmtmztp_prod1/index2"
       ],
       "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmt0088846_dev2/AddressSpaceOptions.json",
       "getters": "",
@@ -300,7 +300,7 @@
       "addObjectItem": true
     },
     "paths": {
-      "base-options": ["/src/api/opcua/tags/ua-cherkassy-azot-ogmt0088846_dev3"],
+      "base-options": ["/src/api/opcua/tags/ua-cherkassy-azot-ogmtmztp_prod1/index2"],
       "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmt0088846_dev3/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",

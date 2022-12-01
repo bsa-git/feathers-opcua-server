@@ -17,10 +17,13 @@
       "dataType": "String",
       "hist": 1,
       "group": true,
-      "subscription": "onChangedCommonHandler",
+      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
-      "getter": "",
-      "getterParams": {}
+      "getter": "getterValuesFromKepServer",
+      "getterParams": {
+        "clientId": "ua-cherkassy-azot-ogmtmztp_prod3",
+        "interval": 20000
+      }
     }
   ],
   "groups": [
@@ -33,7 +36,8 @@
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedKepValue",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,

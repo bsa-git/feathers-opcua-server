@@ -23,10 +23,13 @@
       "dataType": "String",
       "hist": 1,
       "group": true,
-      "subscription": "onChangedCommonHandler",
+      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
-      "getter": "getterPlugForVariable",
-      "getterParams": {}
+      "getter": "getterValuesFromKepServer",
+      "getterParams": {
+        "clientId": "ua-cherkassy-azot-ogmt0088846_dev3",
+        "interval": 20000
+      }
     },
     {
       "isEnable": true,
@@ -37,10 +40,13 @@
       "dataType": "String",
       "hist": 1,
       "group": true,
-      "subscription": "onChangedCommonHandler",
+      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
-      "getter": "getterPlugForVariable",
-      "getterParams": {}
+      "getter": "getterValuesFromKepServer",
+      "getterParams": {
+        "clientId": "ua-cherkassy-azot-ogmt0088846_dev3",
+        "interval": 20000
+      }
     }
   ]
 }
