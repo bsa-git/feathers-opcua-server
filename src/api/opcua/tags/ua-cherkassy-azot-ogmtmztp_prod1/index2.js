@@ -8,8 +8,8 @@ function customizer(objValue, srcValue) {
   }
 }
 
-let mergeResult = loMergeWith(CH_A3_Options, CH_M2_Options, customizer);
-mergeResult = loMergeWith(mergeResult, CH_A5_EconomicCalc_Options, customizer);
-mergeResult = loMergeWith(mergeResult, CH_A5_Mnemo1_Options, customizer);
+let mergeResult = loMergeWith(CH_A5_EconomicCalc_Options, CH_A5_Mnemo1_Options, customizer);
+// mergeResult = loMergeWith(mergeResult, CH_A5_EconomicCalc_Options, customizer);
+// mergeResult = loMergeWith(mergeResult, CH_A5_Mnemo1_Options, customizer);
 
 module.exports = mergeResult;

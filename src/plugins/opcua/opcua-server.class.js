@@ -46,6 +46,7 @@ class OpcuaServer {
   constructor(params = {}) {
     params = Object.assign({}, params);
     this.id = params.serverInfo.applicationName;
+    this.app = null;
     // Set process.on to event 'SIGINT'
     this.isOnSignInt = true;
     // Get opcua config

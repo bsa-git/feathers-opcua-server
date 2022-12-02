@@ -28,7 +28,7 @@ const isDebug = false;
 async function runCommand(params, dataValue) {
   let points, result, results = [];
   //--------------------------------
-  if (isDebug && params) inspector('runCommand.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && params) inspector('runCommand.params:', loOmit(params, ['myOpcuaClient']));
   if (isDebug && dataValue) inspector('runCommand.dataValue:', dataValue);
 
   let value = dataValue.value.value;

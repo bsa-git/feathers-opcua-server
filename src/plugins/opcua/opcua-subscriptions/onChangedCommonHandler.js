@@ -25,7 +25,7 @@ const isDebug = false;
  * @returns {void}
  */
 function onChangedCommonHandler(params, dataValue) {
-  if (true && params) inspector('onChangedCommonHandle.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (true && params) inspector('onChangedCommonHandle.params:', loOmit(params, ['myOpcuaClient']));
   if (true && dataValue) inspector('onChangedCommonHandle.dataValue:', dataValue);
   const statusCode = dataValue.statusCode.name;
   const value = dataValue.value.value;

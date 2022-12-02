@@ -23,7 +23,7 @@ const isDebug = false;
  * @returns {void}
  */
 function onChangedGroupHandler(params, dataValue) {
-  if (isDebug) inspector('subscriptions.onChangedGroupHandler.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug) inspector('subscriptions.onChangedGroupHandler.params:', loOmit(params, ['myOpcuaClient']));
   if (isDebug && dataValue) inspector('subscriptions.onChangedGroupHandler.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
   const browseName = addressSpaceOption.browseName;

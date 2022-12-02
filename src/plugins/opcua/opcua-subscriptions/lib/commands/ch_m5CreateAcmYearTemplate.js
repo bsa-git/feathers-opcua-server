@@ -28,7 +28,7 @@ async function ch_m5CreateAcmYearTemplate(params, value) {
   let pointID = 0, statusCode, inputArgsStatusCode;
   //---------------------------------------------------
 
-  if (isDebug && params) inspector('ch_m5CreateAcmYearTemplate.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && params) inspector('ch_m5CreateAcmYearTemplate.params:', loOmit(params, ['myOpcuaClient']));
   if (isDebug && value) inspector('ch_m5CreateAcmYearTemplate.value:', value);
 
   const opt = value.opt;

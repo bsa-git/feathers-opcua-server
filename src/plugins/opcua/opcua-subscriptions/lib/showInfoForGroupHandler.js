@@ -25,7 +25,7 @@ const isDebug = false;
 async function showInfoForGroupHandler(params, dataValue) {
   let storeTime = '';
   //------------------------
-  if (isDebug && params) inspector('showInfoForGroupHandler.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && params) inspector('showInfoForGroupHandler.params:', loOmit(params, ['myOpcuaClient']));
   if (isDebug && dataValue) inspector('showInfoForGroupHandler.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 

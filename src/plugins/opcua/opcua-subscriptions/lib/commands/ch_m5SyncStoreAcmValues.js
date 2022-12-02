@@ -42,10 +42,11 @@ async function ch_m5SyncStoreAcmValues(params, value) {
   let statusCode, savedValuesCount = 0, inputArgsStatusCode;
   //---------------------------------------------------
 
-  if (isDebug && params) inspector('ch_m5SyncStoreAcmValues.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && params) inspector('ch_m5SyncStoreAcmValues.params:', loOmit(params, ['myOpcuaClient']));
   if (isDebug && value) inspector('ch_m5SyncStoreAcmValues.value:', value);
 
   const opt = value.opt;
+  const app = params.myOpcuaClient.app;
 
   // Set input argument
   if (opt.point) inputArgument.pointID = opt.point;
@@ -86,7 +87,7 @@ async function ch_m5SyncStoreAcmValues(params, value) {
     const dataItems = readJsonFileSync([appRoot, syncResultOutputPath, outputFile])['dataItems'];
 
     // Save store opcua group value
-    const savedValues = await saveStoreOpcuaGroupValues(params.app, groupBrowseName, dataItems, true);
+    const savedValues = await saveStoreOpcuaGroupValues(app, groupBrowseName, dataItems, true);
     if (isDebug && savedValues.length) inspector('ch_m5SyncStoreAcmValues.savedValues:', savedValues);
     savedValuesCount += savedValues.length;
 

@@ -43,7 +43,7 @@ async function ch_m5UpdateAcmYearReport(params, dataValue) {
   let statusCode, outputArguments;
   //-----------------------------------
 
-  if (isDebug && params) inspector('ch_m5UpdateAcmYearReport.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && params) inspector('ch_m5UpdateAcmYearReport.params:', loOmit(params, ['myOpcuaClient']));
   if (isDebug && dataValue) inspector('ch_m5UpdateAcmYearReport.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
   const pointID = addressSpaceOption.getterParams.pointID;

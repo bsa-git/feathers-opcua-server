@@ -54,7 +54,7 @@ async function sessionCallMethod(params, value) {
   let methodIds, inputArguments;
   //--------------------------------------------
   const _value = Object.assign({}, value);
-  if (isDebug && params) inspector('sessionCallMethod.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && params) inspector('sessionCallMethod.params:', loOmit(params, ['myOpcuaClient']));
   if (isDebug && _value) inspector('sessionCallMethod.value:', _value);
   const showCallMethod = !!_value.showCallMethod;
   // Check methodIds

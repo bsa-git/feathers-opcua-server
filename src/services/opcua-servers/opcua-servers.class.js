@@ -38,6 +38,7 @@ class OpcuaServers {
     }
     // Create OPC-UA server
     const server = new OpcuaServer(data.params);
+    server.app = this.app;
     // Server create
     await server.opcuaServerCreate();
     // Server constructAddressSpace

@@ -46,7 +46,7 @@ async function onChangedKepValue(params, dataValue) {
     // Get startTime
     const startTime = moment.utc().format();
 
-    if (isDebug && params) inspector('onChangedRunCommand.params:', loOmit(params, ['myOpcuaClient', 'app']));
+    if (isDebug && params) inspector('onChangedRunCommand.params:', loOmit(params, ['myOpcuaClient']));
     if (isDebug && dataValue) inspector('onChangedRunCommand.dataValue:', dataValue);
     const addressSpaceOption = params.addressSpaceOption;
     const browseName = addressSpaceOption.browseName;

@@ -57,11 +57,11 @@ async function ch_m5SyncAcmYearReport(params, value) {
   let metodBrowseName, dataItems, paramsFile, paramFullsPath, baseParamsFile;
   //---------------------------------------------------
 
-  if (isDebug && params) inspector('ch_m5SyncAcmYearReport.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && params) inspector('ch_m5SyncAcmYearReport.params:', loOmit(params, ['myOpcuaClient']));
   if (isDebug && value) inspector('ch_m5SyncAcmYearReport.value:', value);
 
   // Get app
-  const app = params.app;
+  const app = params.myOpcuaClient.app;
 
   // Get params file
   pointID = value.opt.point;

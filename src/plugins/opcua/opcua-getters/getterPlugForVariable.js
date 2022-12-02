@@ -29,7 +29,7 @@ const isDebug = false;
 const getterPlugForVariable = function (params = {}, addedValue) {
   let value;
   //-----------------------------------------------
-  if (isDebug && params) inspector('getterPlugForVariable.params:', loOmit(params, ['myOpcuaServer', 'app']));
+  if (isDebug && params) inspector('getterPlugForVariable.params:', loOmit(params, ['myOpcuaServer']));
   if (isDebug && addedValue) inspector('getterPlugForVariable.addedValue:', addedValue);
   if (addedValue) {
     value = getInitValueForDataType(params.dataType);

@@ -1,26 +1,19 @@
 /* eslint-disable no-unused-vars */
 const chalk = require('chalk');
-const papa = require('papaparse');
 
 const {
   appRoot,
   inspector,
-  readOnlyNewFile,
-  readFileSync,
-  writeFileSync,
-  removeFileSync,
-  getFileName,
-  getDateTimeFromFileName,
-  getPathBasename,
-  createPath,
-  getRandomValue,
   addIntervalId
 } = require('../../lib');
 
 const loForEach = require('lodash/forEach');
+const loOmit = require('lodash/omit');
 
 const {
   formatUAVariable,
+  getParamsAddressSpace,
+  getClientService,
   setValueFromSourceForGroup,
   convertAliasListToBrowseNameList
 } = require('../opcua-helper');
@@ -31,24 +24,34 @@ const isDebug = false;
 //=============================================================================
 
 /**
- * @method getterHistValueFromFile
+ * @method getterValuesFromKepServer
  * @param {Object} params 
  * @param {Object} addedValue 
  * @returns {void}
  */
-const getterHistValueFromFile = function (params = {}, addedValue) {
+const getterValuesFromKepServer = function (params = {}, addedValue) {
   let dataItems, dataType, results;
-  let id = params.myOpcuaServer.id;
+  const id = params.myOpcuaServer.id;
+  const app = params.myOpcuaServer.app;
   //------------------------------------
-  // Create path
-  const path = createPath(params.path);
+  
+  if (isDebug && params) inspector('getterValuesFromKepServer.params:', loOmit(params, ['myOpcuaServer']));
+  
+  const  browseName = formatUAVariable(addedValue).browseName;
+  let configOptions = getParamsAddressSpace(id).variables;
+  if (isDebug && configOptions) inspector('getterValuesFromKepServer.groupTags:', configOptions);
+  // const groupTagNodeIds = configOptions.filter(opt => opt.ownerGroup && opt.ownerGroup === browseName).map(t => t.nodeId);
+  const groupTagNodeIds = configOptions.filter(opt => opt.ownerGroup === browseName).map(t => t.nodeId);
+  if (isDebug && groupTagNodeIds) inspector('getterValuesFromKepServer.groupTagNodeIds:', groupTagNodeIds);
+
 
   // Watch read only new file
-  readOnlyNewFile(path, (filePath, data) => {
+  const getValuesFromKepServer = async function(clientId, nodeIds) {
     // Show filePath, data
-    if (isDebug && filePath) console.log(chalk.green('getterHistValueFromFile.file:'), chalk.cyan(filePath));
-    if (isDebug && filePath) console.log(chalk.green('getterHistValueFromFile.file:'), chalk.cyan(getPathBasename(filePath)));
-    if (isDebug && data) console.log(chalk.green('getterHistValueFromFile.data:'), chalk.cyan(data));
+    if (isDebug && clientId) console.log('getterValuesFromKepServer.clientId:', clientId);
+    if (true && nodeIds) console.log('getterValuesFromKepServer.nodeIds:', nodeIds);
+
+    /** 
     // Set value from source
     dataType = formatUAVariable(addedValue).dataType[1];
     results = papa.parse(data, { delimiter: ';', header: true });
@@ -73,21 +76,17 @@ const getterHistValueFromFile = function (params = {}, addedValue) {
     if (params.addedVariableList) {
       setValueFromSourceForGroup(params, dataItems);
     }
-  });
-
+    */
+  };
+ 
   // Set interval
-  const intervalId = setInterval(function () {
-    let csv = readFileSync([appRoot, params.fromFile]);
-    if (csv) {
-      results = papa.parse(csv, { delimiter: ';', header: true });
-      loForEach(results.data[0], function (value, key) {
-        results.data[0][key] = getRandomValue(value);
-      });
-      csv = papa.unparse(results.data, { delimiter: ';' });
-      if (isDebug) inspector('getterHistValueFromFile.csv:', csv);
+  const intervalId = setInterval(async function () {
+    // let csv = readFileSync([appRoot, params.fromFile]);
+    const clientId = params.clientId;
+    const service = await getClientService(app, clientId);
+    if(service){
+      await getValuesFromKepServer(clientId, groupTagNodeIds);
     }
-    const fileName = getFileName('data-', 'csv', true);
-    writeFileSync([path, fileName], csv);
   }, params.interval);
 
   // Add interval Id to list
@@ -95,4 +94,4 @@ const getterHistValueFromFile = function (params = {}, addedValue) {
 };
 
 
-module.exports = getterHistValueFromFile;
+module.exports = getterValuesFromKepServer;

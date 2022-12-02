@@ -25,7 +25,7 @@ const isDebug = false;
 async function showInfoForHandler(params, dataValue) {
   let valueKeys = 0, command = '';
   //---------------------
-  if (isDebug && params) inspector('showInfoForHandler.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && params) inspector('showInfoForHandler.params:', loOmit(params, ['myOpcuaClient']));
   if (isDebug && dataValue) inspector('showInfoForHandler.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
 

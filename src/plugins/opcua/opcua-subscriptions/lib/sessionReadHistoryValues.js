@@ -16,7 +16,7 @@ const isDebug = false;
  */
 async function sessionReadHistoryValues(params) {
 
-  if (isDebug && params) inspector('sessionReadHistoryValues.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && params) inspector('sessionReadHistoryValues.params:', loOmit(params, ['myOpcuaClient']));
   // Get client
   const client = params.myOpcuaClient;
   // Get browseName

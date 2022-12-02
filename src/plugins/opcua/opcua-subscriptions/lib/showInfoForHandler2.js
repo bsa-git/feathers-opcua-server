@@ -27,7 +27,7 @@ const isDebug = false;
 function showInfoForHandler2(params, dataValue) {
   let valueKeys = 0, command = '';
   //---------------------
-  if (isDebug && params) inspector('showInfoForHandler.params:', loOmit(params, ['app']));
+  if (isDebug && params) inspector('showInfoForHandler.params:', params);
   if (isDebug && dataValue) inspector('showInfoForHandler.dataValue:', dataValue);
 
   const browseName = getValueFromNodeId(params.addressSpaceOption);

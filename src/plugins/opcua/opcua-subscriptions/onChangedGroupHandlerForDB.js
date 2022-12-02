@@ -24,7 +24,7 @@ const isDebug = false;
 async function onChangedGroupHandlerForDB(params, dataValue) {
   
   try {
-    if (isDebug && params) inspector('subscriptions.onChangedGroupHandlerForDB.params:', loOmit(params, ['myOpcuaClient', 'app']));
+    if (isDebug && params) inspector('subscriptions.onChangedGroupHandlerForDB.params:', loOmit(params, ['myOpcuaClient']));
     if (isDebug && dataValue) inspector('subscriptions.onChangedGroupHandlerForDB.dataValue:', dataValue);
     const addressSpaceOption = params.addressSpaceOption;
 

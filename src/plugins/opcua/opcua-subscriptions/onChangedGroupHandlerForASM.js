@@ -50,7 +50,7 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     const startTime = moment.utc().format();
     if (isDebug && startTime) console.log('onChangedGroupHandlerForASM.startTime:', startTime, 'browseName:', browseName);
 
-    if (isDebug && params) inspector('onChangedGroupHandlerForASM.params:', loOmit(params, ['myOpcuaClient', 'app']));
+    if (isDebug && params) inspector('onChangedGroupHandlerForASM.params:', loOmit(params, ['myOpcuaClient']));
     if (isDebug && dataValue) inspector('onChangedGroupHandlerForASM.dataValue:', dataValue);
     const addressSpaceOption = params.addressSpaceOption;
 

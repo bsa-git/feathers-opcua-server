@@ -267,6 +267,12 @@
       "userName": "OPCUA_ADMIN_LOGIN",
       "password": "OPCUA_ADMIN_PASS"
     },
+    "NodeId": {
+      "namespaceIndex": 2,
+      "identifierType": "displayName",
+      "identifierPrefix": "",
+      "addObjectItem": true
+    },
     "paths": {
       "base-options": [
         "/src/api/opcua/tags/ua-cherkassy-azot-ogmtmztp_prod1/index2"

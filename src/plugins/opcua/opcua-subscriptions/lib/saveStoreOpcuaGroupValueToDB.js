@@ -27,9 +27,10 @@ const isDebug = false;
 async function saveStoreOpcuaGroupValueToDB(params, dataValue) {
   let savedValue = null;
   //--------------------------
-  if (isDebug && params) inspector('saveStoreOpcuaGroupValueToDB.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && params) inspector('saveStoreOpcuaGroupValueToDB.params:', loOmit(params, ['myOpcuaClient']));
   if (isDebug && dataValue) inspector('saveStoreOpcuaGroupValueToDB.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
+  const app = params.myOpcuaClient.app;
 
   // Only for group values
   if (addressSpaceOption && !addressSpaceOption.group) return;
@@ -41,7 +42,7 @@ async function saveStoreOpcuaGroupValueToDB(params, dataValue) {
 
   // Save data to DB
   if (isSaveOpcuaToDB()) {
-    savedValue = await saveStoreOpcuaGroupValues(params.app, browseName, value, true);
+    savedValue = await saveStoreOpcuaGroupValues(app, browseName, value, true);
     if (isDebug && savedValue) inspector('saveStoreOpcuaGroupValueToDB.savedValue:', savedValue);
   } 
   return savedValue;

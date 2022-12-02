@@ -45,6 +45,7 @@ class OpcuaClient {
   constructor(params = {}) {
     const params_ = Object.assign({}, params);
     this.id = params_.applicationName;
+    this.app = null;
     // Get opcua config
     const opcuaConfig = getOpcuaConfig(this.id);
     this.locale = (params_.locale === undefined) ? process.env.LOCALE : params_.locale;
@@ -1096,7 +1097,7 @@ class OpcuaClient {
      *   );
      */
   async subscriptionMonitor(cb = null, itemToMonitor = {}, requestedParameters = {}, timestampsToReturn = TimestampsToReturn.Neither) {
-    let self = this;
+    let self = this, _itemToMonitor = {};
     //----------------------------------
     this.subscriptionNotCreated();
     const nodeId = itemToMonitor.nodeId;
@@ -1122,12 +1123,12 @@ class OpcuaClient {
         if (isDebug && dataValue) inspector(`opcua-client.class::subscriptionMonitor.${nodeId}:`, dataValue);
         const value = dataValue.value.value;
         if (value === null) return;
-        itemToMonitor.id = this.id;
-        itemToMonitor.locale = this.locale;
-        itemToMonitor.addressSpaceOption = itemNodeId;
-        itemToMonitor.myOpcuaClient = self;
+        _itemToMonitor.id = this.id;
+        _itemToMonitor.locale = this.locale;
+        _itemToMonitor.addressSpaceOption = itemNodeId;
+        _itemToMonitor.myOpcuaClient = self;
         dataValue.serverTimestamp = moment().format();
-        cb(itemToMonitor, dataValue);
+        cb(_itemToMonitor, dataValue);
       });
     }
   }

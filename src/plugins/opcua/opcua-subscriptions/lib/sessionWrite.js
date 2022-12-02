@@ -63,7 +63,7 @@ const isDebug = false;
  */
 const sessionWrite = async (params, value) => {
 
-  if (isDebug && params) inspector('sessionWrite.params:', loOmit(params, ['myOpcuaClient', 'app']));
+  if (isDebug && params) inspector('sessionWrite.params:', loOmit(params, ['myOpcuaClient']));
   if (isDebug && value) inspector('sessionWrite.value:', value);
 
   // Get arguments for function
