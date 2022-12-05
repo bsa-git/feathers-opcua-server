@@ -16,7 +16,7 @@
   "variables": [
     {
       "isEnable": true,
-      "browseName": "CH_A5.Device1::EconomicCalc",
+      "browseName": "CH_A5.Device1::XozUchet",
       "displayName": "Economic calculation values for CH_A5",
       "ownerName": "CH_A5.Device1",
       "type": "variable.simple",

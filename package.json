@@ -57,7 +57,8 @@
     "nedbTest-remove": "shx rm -rf data/nedb/test/*.db",
     "nedbDev-remove": "shx rm -rf data/nedb/dev/*.db",
     "nedbProd-remove": "shx rm -rf data/nedb/prod/*.db",
-    "nedb-find-users": "nedb ./data/nedb/dev/users.db"
+    "nedb-find-users": "nedb ./data/nedb/dev/users.db",
+    "nedb-find-opcuaValues": "nedb ./data/nedb/dev/opcua-values.db"
   },
   "dependencies": {
     "@feathersjs/authentication": "^4.5.3",
@@ -88,6 +89,7 @@
     "feathers-hooks-common": "^5.0.4",
     "feathers-mongoose": "^8.3.3",
     "feathers-nedb": "^5.1.0",
+    "global": "^4.4.0",
     "helmet": "^3.22.0",
     "is-unc-path": "^1.0.0",
     "jwt-decode": "^3.1.2",

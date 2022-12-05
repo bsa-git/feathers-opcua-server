@@ -8,14 +8,20 @@
   ],
   "variables": [
     {
-      "browseName": "CH_A5.Device1::EconomicCalc",
+      "browseName": "CH_A5.Device1::XozUchet",
       "displayName": "Economic calculation values for CH_A5",
       "ownerName": "CH_A5.Device1",
       "type": "variable.simple",
       "dataType": "String",
       "hist": 1,
       "group": true,
-      "subscription": "onChangedCommonHandler"
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterValuesFromKepServer",
+      "getterParams": {
+        "clientId": "ua-cherkassy-azot-ogmtmztp_prod3",
+        "interval": 20000
+      }
     }
   ],
   "groups": [
@@ -24,11 +30,12 @@
       "aliasName": "F59AM",
       "displayName": "F59AM_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -43,11 +50,12 @@
       "aliasName": "F46A",
       "displayName": "F46A_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -62,11 +70,12 @@
       "aliasName": "F191AM",
       "displayName": "F191AM_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -81,11 +90,12 @@
       "aliasName": "F400AM",
       "displayName": "F400AM_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -100,11 +110,12 @@
       "aliasName": "F359AM",
       "displayName": "F359AM_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -119,11 +130,12 @@
       "aliasName": "F501AM",
       "displayName": "F501AM_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -138,11 +150,12 @@
       "aliasName": "F107AM",
       "displayName": "F107AM_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -157,11 +170,12 @@
       "aliasName": "F21AM",
       "displayName": "F21AM_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -176,11 +190,12 @@
       "aliasName": "F738AM",
       "displayName": "F738AM_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -195,11 +210,12 @@
       "aliasName": "F46AM",
       "displayName": "F46AM_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -214,11 +230,12 @@
       "aliasName": "F34",
       "displayName": "F34_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -233,11 +250,12 @@
       "aliasName": "F46AA",
       "displayName": "F46AA_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -252,11 +270,12 @@
       "aliasName": "F206AM",
       "displayName": "F206AM_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -271,11 +290,12 @@
       "aliasName": "F352",
       "displayName": "F352_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -290,11 +310,12 @@
       "aliasName": "F360",
       "displayName": "F360_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -309,11 +330,12 @@
       "aliasName": "F101AM",
       "displayName": "F101AM_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -328,11 +350,12 @@
       "aliasName": "F379AM",
       "displayName": "F379AM_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -347,11 +370,12 @@
       "aliasName": "F306",
       "displayName": "F306_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -366,11 +390,12 @@
       "aliasName": "F308",
       "displayName": "F308_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -385,11 +410,12 @@
       "aliasName": "F90",
       "displayName": "F90_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -404,11 +430,12 @@
       "aliasName": "F98",
       "displayName": "F98_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
@@ -423,11 +450,12 @@
       "aliasName": "F93",
       "displayName": "F93_PV",
       "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::EconomicCalc",
+      "ownerGroup": "CH_A5.Device1::XozUchet",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,
-      "subscription": "onChangedCommonHandler",
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const chalk = require('chalk');
+const moment = require('moment');
 
 const {
   appRoot,
@@ -14,9 +15,11 @@ const {
   formatUAVariable,
   getParamsAddressSpace,
   getClientService,
+  formatDataValue,
   setValueFromSourceForGroup,
-  convertAliasListToBrowseNameList
+  // setValueFromSourceForGroup
 } = require('../opcua-helper');
+const logger = require('../../../logger');
 
 const debug = require('debug')('app:getterAcmDayValueFromFile');
 const isDebug = false;
@@ -30,63 +33,62 @@ const isDebug = false;
  * @returns {void}
  */
 const getterValuesFromKepServer = function (params = {}, addedValue) {
-  let dataItems, dataType, results;
+  let service, readResults, dataItems = {}, dataType, dateTime;
   const id = params.myOpcuaServer.id;
   const app = params.myOpcuaServer.app;
+  const clientId = params.clientId;
   //------------------------------------
   
   if (isDebug && params) inspector('getterValuesFromKepServer.params:', loOmit(params, ['myOpcuaServer']));
   
   const  browseName = formatUAVariable(addedValue).browseName;
+  dataType = formatUAVariable(addedValue).dataType[1];
   let configOptions = getParamsAddressSpace(id).variables;
-  if (isDebug && configOptions) inspector('getterValuesFromKepServer.groupTags:', configOptions);
-  // const groupTagNodeIds = configOptions.filter(opt => opt.ownerGroup && opt.ownerGroup === browseName).map(t => t.nodeId);
-  const groupTagNodeIds = configOptions.filter(opt => opt.ownerGroup === browseName).map(t => t.nodeId);
+  if (isDebug && configOptions) inspector('getterValuesFromKepServer.configOptions:', configOptions);
+  const groupTags = configOptions.filter(opt => opt.ownerGroup === browseName);
+  const groupTagNodeIds = groupTags.map(t => t.nodeId);
   if (isDebug && groupTagNodeIds) inspector('getterValuesFromKepServer.groupTagNodeIds:', groupTagNodeIds);
 
 
-  // Watch read only new file
+  // Get values from KepServer
   const getValuesFromKepServer = async function(clientId, nodeIds) {
     // Show filePath, data
     if (isDebug && clientId) console.log('getterValuesFromKepServer.clientId:', clientId);
-    if (true && nodeIds) console.log('getterValuesFromKepServer.nodeIds:', nodeIds);
+    if (isDebug && nodeIds) console.log('getterValuesFromKepServer.nodeIds:', nodeIds);
 
-    /** 
-    // Set value from source
-    dataType = formatUAVariable(addedValue).dataType[1];
-    results = papa.parse(data, { delimiter: ';', header: true });
-    dataItems = results.data[0];
-    dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
-    
-    // Get dateTime from fileName
-    // e.g. data-20220518_075752.txt -> 2022-05-18T07:57:52
-    const dateTime = getDateTimeFromFileName(filePath, [5], 'YYYYMMDD_HHmmss');
-    if(isDebug && dateTime) inspector('getterHistValueFromFile.dateTime:', dateTime);
+    // service.sessionRead
+    readResults = await service.sessionRead(clientId, nodeIds);
+    // Get dataItems
+    for (let index = 0; index < readResults.length; index++) {
+      const readResult = readResults[index];
+      const browseName = groupTags[index].browseName;
+      const formatValue = formatDataValue(id, readResult, browseName, 'ru');
+      if (isDebug && formatValue) inspector('getterValuesFromKepServer.formatValue:', formatValue);
+      if(!dateTime) {
+        dateTime = formatValue.serverTimestamp;
+        dateTime = moment.utc(dateTime).format('YYYY-MM-DDTHH:mm:ss');
+        dataItems['!value'] = { dateTime };
+      } 
+      if(formatValue.statusCode.name === 'Good') dataItems[browseName] = formatValue.value.value;
+      if(formatValue.statusCode.name !== 'Good') logger.info(`For browseName: "${chalk.yellowBright(browseName)}" statusCode = "${chalk.redBright(formatValue.statusCode.name)}"`);
+    }
+    if (isDebug && dataItems) inspector('getterValuesFromKepServer.dataItems:', dataItems);
 
-    // Add prop "!value": { dateTime: ''2022-05-17T13:22:56' } to dataItems
-    dataItems['!value'] = { dateTime };
-    if(isDebug && dataItems) inspector('getterHistValueFromFile.dataItems:', dataItems);
-    
+    // Set value for owner group
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
-
-    // Remove file 
-    removeFileSync(filePath);
 
     // Set value from source for group 
     if (params.addedVariableList) {
       setValueFromSourceForGroup(params, dataItems);
     }
-    */
   };
  
   // Set interval
   const intervalId = setInterval(async function () {
-    // let csv = readFileSync([appRoot, params.fromFile]);
-    const clientId = params.clientId;
-    const service = await getClientService(app, clientId);
-    if(service){
-      await getValuesFromKepServer(clientId, groupTagNodeIds);
+    if(!service){
+      service = await getClientService(app, clientId);
     }
+    await getValuesFromKepServer(clientId, groupTagNodeIds);
   }, params.interval);
 
   // Add interval Id to list

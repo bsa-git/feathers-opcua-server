@@ -1105,10 +1105,8 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}) => {
 
   // Get group variable list 
   let groupVariableList = params.addedVariableList;
-  if (isDebug) inspector('setValueFromSourceForGroup.groupVariableList.browseName:', groupVariableList.map(v => v.browseName.name));
-  // inspector('setValueFromSourceForGroup.groupVariableList.browseName:', groupVariableList.map(v => v.browseName.name));
-  if (isDebug) inspector('setValueFromSourceForGroup.dataItems:', dataItems);
-  // inspector('setValueFromSourceForGroup.dataItems:', dataItems);
+  if (isDebug && groupVariableList) inspector('setValueFromSourceForGroup.groupVariableList.browseName:', groupVariableList.map(v => v.browseName.name));
+  if (isDebug && dataItems) inspector('setValueFromSourceForGroup.dataItems:', dataItems);
 
   loForEach(dataItems, function (value, key) {
     groupVariable = groupVariableList.find(v => v.browseName.name === key);
@@ -1117,19 +1115,16 @@ const setValueFromSourceForGroup = (params = {}, dataItems = {}) => {
     }
     // Set value from source
     if (groupVariable) {
-      if (isDebug) inspector('setValueFromSourceForGroup.groupVariable:', formatUAVariable(groupVariable));
-      // inspector('setValueFromSourceForGroup.groupVariable:', formatUAVariable(groupVariable));
+      if (isDebug && groupVariable) inspector('setValueFromSourceForGroup.groupVariable:', formatUAVariable(groupVariable));
       browseName = formatUAVariable(groupVariable).browseName;
       // Run setValueFromSource for groupVariable
       const currentState = params.myOpcuaServer.getCurrentState();
       const variable = currentState.paramsAddressSpace.variables.find(v => v.browseName === browseName);
-      if (isDebug) inspector('setValueFromSourceForGroup.variable:', variable);
-      // inspector('setValueFromSourceForGroup.variable:', variable);
+      if (isDebug && variable) inspector('setValueFromSourceForGroup.variable:', variable);
 
       if (loIsFunction(opcuaGetters[variable.getter])) {
         params.myOpcuaServer.setValueFromSource(variable, groupVariable, opcuaGetters[variable.getter], value);
-        if (isDebug) debug('setValueFromSourceForGroup.browseName:', `"${browseName}" =`, value);
-        // debug('setValueFromSourceForGroup.browseName:', `"${browseName}" =`, value);
+        if (isDebug && browseName) debug('setValueFromSourceForGroup.browseName:', `"${browseName}" =`, value);
       } else {
         console.log(chalk.red(`Error: is absent getter - "${variable.getter}" for browseName: "${browseName}"`));
         throw new Error(`Error: is absent getter - "${variable.getter}" for browseName: "${browseName}"`);
