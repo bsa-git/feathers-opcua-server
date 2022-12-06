@@ -2,7 +2,7 @@ const getterAcmDayValueFromFile = require('./getterAcmDayValueFromFile');
 const getterHistValueFromFile = require('./getterHistValueFromFile');
 const getterHistValueFromHttpPath = require('./getterHistValueFromHttpPath');
 const getterHistValueFromPath = require('./getterHistValueFromPath');
-const getterHistValuesFromDB = require('./getterHistValuesFromDB');
+const getterHistValuesFromMsSqlDB = require('./getterHistValuesFromMsSqlDB');
 const getterPlugForVariable = require('./getterPlugForVariable');
 const getterValueFromFile = require('./getterValueFromFile');
 const getterValuesFromKepServer = require('./getterValuesFromKepServer');
@@ -12,7 +12,7 @@ module.exports = {
   getterHistValueFromFile,
   getterHistValueFromHttpPath,
   getterHistValueFromPath,
-  getterHistValuesFromDB,
+  getterHistValuesFromMsSqlDB,
   getterPlugForVariable,
   getterValueFromFile,
   getterValuesFromKepServer

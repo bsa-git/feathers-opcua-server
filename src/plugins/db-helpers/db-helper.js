@@ -20,6 +20,7 @@ const {
   pause,
   cloneObject,
   isTest,
+  isFunction,
   getStartEndOfPeriod,
   isDeepEqual,
   isDeepStrictEqual,
@@ -37,6 +38,9 @@ const {
 const {
   feathersClient
 } = require('../auth');
+
+const MssqlTedious = require('./mssql-tedious.class');
+const queryFuncs = require('./lib');
 
 const opcuaMethods = require('../opcua/opcua-methods');
 
@@ -132,6 +136,33 @@ const getMssqlConfigFromEnv = (config, prefix) => {
   _config.authentication.options.password = pass;
   if (isDebug) inspector('getMssqlConfigFromEnv._config:', _config);
   return _config;
+};
+
+/**
+ * @async
+ * @method executeQueryAgainstMsSqlDB
+ * @param {Object} params 
+ * @returns {Array}
+ */
+const executeQueryAgainstMsSqlDB = async (params) => {
+  let rows;
+  //-------------------------------
+  // Get db config
+  let config = MssqlTedious.getDefaultConnConfig();
+  config = getMssqlConfigFromEnv(config, params.dbEnv);
+  if (isDebug) inspector('getMssqlConfigFromEnv.config:', config);
+
+  const db = new MssqlTedious(config);
+  await db.connect();
+  // Select values from DB
+  const queryFunc = queryFuncs[params['queryFunc']];
+  if (isFunction(queryFunc)) {
+    rows = await queryFunc(db, params.queryParams);
+  } else {
+    throw new Error(`The function "${params['queryFunc']}" is missing.`);
+  }
+  await db.disconnect();
+  return rows;
 };
 
 //================ Tools for DB  ==============//
@@ -514,11 +545,11 @@ const saveStoreOpcuaGroupValues = async function (app, groupBrowseName, values, 
   // Normalize values
   let _values = cloneObject(values);
 
-  if(!Array.isArray(_values)){
+  if (!Array.isArray(_values)) {
     if (loIsString(_values)) {
       _values = [JSON.parse(_values)];
     }
-    if(!Array.isArray(_values)){
+    if (!Array.isArray(_values)) {
       if (loIsObject(_values)) {
         _values = [_values];
       }
@@ -1169,7 +1200,7 @@ const updateRemoteFromLocalStore = async function (app, appRestClient, opcuaTags
         // Remove and create value for remote DB
         if (findedRemoteStoreValue && findedRemoteStoreValue.store.hash !== hash) {
           // const removedItems = await removeItem(appRestClient, 'opcua-values', {
-          const removedItems = await removeItems(appRestClient, 'opcua-values', {  
+          const removedItems = await removeItems(appRestClient, 'opcua-values', {
             tagName: storeBrowseName,
             storeStart: findedStoreValue.storeStart,
             $select: ['tagName', 'store', 'storeStart', 'storeEnd']
@@ -1899,6 +1930,7 @@ module.exports = {
   isMssqlDatasetInList,
   getIdFromMssqlConfig,
   getMssqlConfigFromEnv,
+  executeQueryAgainstMsSqlDB,
   //-------------------
   dbNullIdValue,
   getEnvTypeDB,

@@ -48,7 +48,7 @@ const getValue = function (v) {
  */
 const getData = function (fileName) {
   let csv = '', json = '';
-  csv = readFileSync([appRoot, '/src/api/opcua', id, fileName]);
+  csv = readFileSync([appRoot, '/test/data/csv', fileName]);
   if (csv) {
     const results = papa.parse(csv, { delimiter: ';', header: true });
     json = results.data[0];

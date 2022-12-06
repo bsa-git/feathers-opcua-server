@@ -16,7 +16,7 @@
       "hist": 1,
       "group": true,
       "variableGetType": "valueFromSource",
-      "getter": "getterHistValuesFromDB",
+      "getter": "getterHistValuesFromMsSqlDB",
       "getterParams": {
         "dbEnv": "MSSQL_ASODU_TEST",
         "queryFunc": "getValuesFromChAsoduDB",

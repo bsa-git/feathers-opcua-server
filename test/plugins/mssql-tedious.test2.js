@@ -23,7 +23,7 @@ let config = MssqlTedious.getDefaultConnConfig();
 config = getMssqlConfigFromEnv(config, 'MSSQL_BSAHOME_TEST');
 if(isLog) inspector('getMssqlConfigFromEnv.config:', config);
 
-describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
+describe('<<=== MSSQL-Tedious Test (mssql-tedious.test2.js) ===>>', () => {
 
   const isTest =  canTestRun(getPathBasename(__filename));
   if(!isTest) return;
