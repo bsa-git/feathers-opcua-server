@@ -13,7 +13,7 @@ const isDebug = false;
 /**
  * @method getValuesFromChAsoduDB
  * @param {Object} db 
- * @param {Object} params 
+ * @param {Object} queryParams 
  * @returns {Object}
  */
 const getValuesFromChAsoduDB = async function (db, queryParams) {
@@ -24,18 +24,15 @@ const getValuesFromChAsoduDB = async function (db, queryParams) {
   JOIN dbConfig.dbo.TagsInfo AS tInfo ON sh.TagID = tInfo.ID
   WHERE sh.ScanerName = @scanerName AND tInfo.OnOff = 1
   `;
+  //---------------------------------------------------
   db.buildParams(params, 'scanerName', TYPES.Char, queryParams.scanerName);
 
   let rows = await db.query(params, sql);
   if (isDebug && rows.length) inspector('selectValuesFromChAsoduDB.query.rows:', rows);
-  // inspector('selectValuesFromChAsoduDB.query.rows:', rows);
   if (rows.length) {
     rows = convertArray2Object(rows, 'TagName', 'Value');
     if (isDebug) inspector('selectValuesFromChAsoduDB.convertArray2Object.rows:', rows);
-    // inspector('selectValuesFromChAsoduDB.convertArray2Object.rows:', rows);
-  } else {
-    rows = null;
-  }
+  } else { rows = null; }
   return rows;
 };
 

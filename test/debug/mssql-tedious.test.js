@@ -11,7 +11,6 @@ const {
   MssqlTedious,
   canTestRun,
   getPathBasename,
-  getMssqlConfigFromEnv,
   readFileSync
 } = require('../../src/plugins');
 
@@ -20,16 +19,11 @@ const loRound = require('lodash/round');
 const loForEach = require('lodash/forEach');
 
 const debug = require('debug')('app:mssql-tedious.test');
-
 const isDebug = false;
 
-let config = MssqlTedious.getDefaultConnConfig();
-config = getMssqlConfigFromEnv(config, 'MSSQL_ASODU_TEST');
-if (isDebug) inspector('getMssqlConfigFromEnv.config:', config);
+const mssqlEnvName = 'MSSQL_ASODU_TEST';
 
-const id = 'ua-cherkassy-azot-asutp_dev1';
-
-//===============================================================
+//=============================================================
 
 /**
  * @method getValue
@@ -74,7 +68,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
   });
 
   it('#1: Delete rows from table', async () => {
-    const db = new MssqlTedious(config);
+    const db = new MssqlTedious(mssqlEnvName);
     await db.connect();
     await db.query([], 'DELETE FROM dbo.tblMessages');
     const rows = await db.query([], 'SELECT * FROM tblMessages');
@@ -88,17 +82,17 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
   it('#2: Insert "CH_M51" rows to table', async () => {
     let sql = '', rows;
     //---------------------------------------------
-    const db = new MssqlTedious(config);
+    const db = new MssqlTedious(mssqlEnvName);
     await db.connect();
 
     // Insert row to tblMessages
     let params = [];
     sql = 'INSERT INTO dbo.tblMessages VALUES (@value, @type, @text)';
-    const jsonText = getData('data-CH_M51.csv');
-    if(isDebug) inspector('getData:', jsonText);
+    const jsonData = getData('data-CH_M51.csv');
+    if(isDebug && jsonData) inspector('getData:', jsonData);
     db.buildParams(params, 'value', TYPES.Char, 'CH_M51::ValueFromFile');
     db.buildParams(params, 'type', TYPES.Char, 'tag');
-    db.buildParams(params, 'text', TYPES.Char, JSON.stringify(jsonText));
+    db.buildParams(params, 'text', TYPES.Char, JSON.stringify(jsonData));
     await db.query(params, sql);
 
     // Select rows from tblMessages
@@ -109,16 +103,17 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     db.buildParams(params, 'value', TYPES.Char, 'CH_M51::ValueFromFile');
     db.buildParams(params, 'text', TYPES.Char, null, true);
     rows = await db.query(params, sql);
-    if(isDebug) inspector('Request result:', { sql, rows });
+    if(isDebug && rows) inspector('Request result:', { sql, rows });
     await db.disconnect();
 
-    assert.deepStrictEqual(JSON.parse(rows[0]['text']), jsonText, 'Insert rows to table');
+    const jsonRows = JSON.parse(rows[0]['text']);
+    assert.deepStrictEqual(jsonRows, jsonData, 'Insert rows to table');
   });
 
   it('#3: Insert "CH_M52" rows to table', async () => {
     let sql = '', rows;
     //---------------------------------------------
-    const db = new MssqlTedious(config);
+    const db = new MssqlTedious(mssqlEnvName);
     await db.connect();
 
     // Insert row to tblMessages
@@ -147,7 +142,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
   it('#4: Update "CH_M51" value from table', async () => {
     let sql = '', rows;
     //---------------------------------------------
-    const db = new MssqlTedious(config);
+    const db = new MssqlTedious(mssqlEnvName);
     await db.connect();
 
     // Update text from tblMessages
@@ -177,7 +172,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
   it('#5: Execute Stored Procedure "dbo.MessagesSummary"', async () => {
     let sql = '';
     //---------------------------------------------
-    const db = new MssqlTedious(config);
+    const db = new MssqlTedious(mssqlEnvName);
     await db.connect();
 
     // Select rows from tblMessages
@@ -199,7 +194,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
   it('#6: Select values for "webM51" from SnapShot table', async () => {
     let sql = '', rows;
     //---------------------------------------------
-    const db = new MssqlTedious(config);
+    const db = new MssqlTedious(mssqlEnvName);
     await db.connect();
 
     // Select rows from SnapShot table
@@ -223,7 +218,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
   it('#7: Select values for "opcUPG2" from SnapShot table', async () => {
     let sql = '', rows;
     //---------------------------------------------
-    const db = new MssqlTedious(config);
+    const db = new MssqlTedious(mssqlEnvName);
     await db.connect();
 
     // Select rows from SnapShot table

@@ -17,7 +17,7 @@
     {
       "isEnable": true,
       "browseName": "CH_A5.Device1::XozUchet",
-      "displayName": "Economic calculation values for CH_A5",
+      "displayName": "XozUchet values for CH_A5",
       "ownerName": "CH_A5.Device1",
       "type": "variable.simple",
       "dataType": "String",

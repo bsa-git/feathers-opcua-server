@@ -3,10 +3,7 @@ const errors = require('@feathersjs/errors');
 const loMerge = require('lodash/merge');
 
 const { 
-  MssqlTedious, 
-  getIdFromMssqlConfig,
-  isMssqlDatasetInList,
-  getMssqlDatasetForProvider 
+  MssqlTedious
 } = require('../../plugins/db-helpers');
 
 const mssqlDatasetMixins = require('./mssql-dataset.mixins');
@@ -16,7 +13,8 @@ const loAt = require('lodash/at');
 
 const debug = require('debug')('app:mssql-datasets.class');
 const isDebug = false;
-const isLog = false;
+
+//===============================================================
 
 class MssqlDatasets {
 
@@ -40,25 +38,23 @@ class MssqlDatasets {
       return result;
     }
 
-    // Get id
-    const id = getIdFromMssqlConfig(data.config);
-    if (isMssqlDatasetInList(this, id)) {
-      throw new errors.BadRequest(`The mssql dataset already exists for this id = '${id}' in the service list`);
-    }
     // Create DB
     const db = new MssqlTedious(data.config);
+    if (db.isDatasetInList(this)) {
+      throw new errors.BadRequest(`The mssql dataset already exists for this id = '${db.id}' in the service list`);
+    }
     // DB connect
     await db.connect();
     // Add mssqlDataset to service list
     const mssqlDataset = {
-      id,
+      id: db.id,
       db,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt
     };
     this.mssqlDatasets.push(mssqlDataset);
     // Get result
-    result = params.provider ? Object.assign({}, mssqlDataset, getMssqlDatasetForProvider(mssqlDataset.db)) : mssqlDataset;
+    result = params.provider ? Object.assign({}, mssqlDataset, db.getDatasetForProvider()) : mssqlDataset;
     return result;
   }
 

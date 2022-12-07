@@ -67,104 +67,6 @@ const chalk = require('chalk');
 const debug = require('debug')('app:db-helper');
 const isDebug = false;
 
-//================ Mssql DB operations  ==============//
-
-/**
- * @method getMssqlDatasetForProvider
- * @param {MssqlTedious} db 
- * @returns {Object}
- */
-const getMssqlDatasetForProvider = (db) => {
-  return {
-    db: {
-      currentState: db.getCurrentState()
-    }
-  };
-};
-
-/**
- * @method isMssqlDatasetInList
- * @param {MssqlDatasets} service 
- * @param {String} id 
- * @returns {Boolean}
- */
-const isMssqlDatasetInList = (service, id) => {
-  const mssqlDataset = service.mssqlDatasets.find(obj => obj.id === id);
-  return !!mssqlDataset;
-};
-
-/**
- * @method getIdFromMssqlConfig
- * @param {Object} config 
- * @returns {String}
- */
-const getIdFromMssqlConfig = (config) => {
-  const id = config.server +
-    `${config.options.instanceName ? '.' + config.options.instanceName : ''}` +
-    `.${config.options.database}`;
-  return id;
-};
-
-/**
- * @method getMssqlConfigFromEnv
- * @param {Object} config 
- * @param {String} prefix 
- * @returns {Object}
- */
-const getMssqlConfigFromEnv = (config, prefix) => {
-  let idParts = [], server = '', instanceName = '', database = '';
-  //---------------------------------------------------------------
-  let _config = loMerge({}, config);
-  const id = process.env[`${prefix}_ID`];
-  const user = process.env[`${prefix}_USER`];
-  const pass = process.env[`${prefix}_PASS`];
-  idParts = id.split('.');
-  if (idParts.length === 3) {
-    server = idParts[0];
-    instanceName = idParts[1];
-    database = idParts[2];
-    _config.options.instanceName = instanceName;
-  } else {
-    _config = loOmit(_config, ['options.instanceName']);
-    server = idParts[0];
-    database = idParts[1];
-  }
-
-  _config.server = server;
-  _config.options.database = database;
-  _config.authentication.options.userName = user;
-  _config.authentication.options.password = pass;
-  if (isDebug) inspector('getMssqlConfigFromEnv._config:', _config);
-  return _config;
-};
-
-/**
- * @async
- * @method executeQueryAgainstMsSqlDB
- * @param {Object} params 
- * @returns {Array}
- */
-const executeQueryAgainstMsSqlDB = async (params) => {
-  let rows;
-  //-------------------------------
-  // Get db config
-  let config = MssqlTedious.getDefaultConnConfig();
-  config = getMssqlConfigFromEnv(config, params.dbEnv);
-  if (isDebug) inspector('getMssqlConfigFromEnv.config:', config);
-
-  const db = new MssqlTedious(config);
-  await db.connect();
-  // Select values from DB
-  const queryFunc = queryFuncs[params['queryFunc']];
-  if (isFunction(queryFunc)) {
-    rows = await queryFunc(db, params.queryParams);
-  } else {
-    throw new Error(`The function "${params['queryFunc']}" is missing.`);
-  }
-  await db.disconnect();
-  return rows;
-};
-
 //================ Tools for DB  ==============//
 
 /**
@@ -1926,12 +1828,6 @@ const createItems = async function (app, path = '', data = [], query = {}) {
 };
 
 module.exports = {
-  getMssqlDatasetForProvider,
-  isMssqlDatasetInList,
-  getIdFromMssqlConfig,
-  getMssqlConfigFromEnv,
-  executeQueryAgainstMsSqlDB,
-  //-------------------
   dbNullIdValue,
   getEnvTypeDB,
   getEnvAdapterDB,

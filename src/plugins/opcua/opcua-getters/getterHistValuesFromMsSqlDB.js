@@ -5,7 +5,7 @@ const {
   isFunction
 } = require('../../lib');
 
-const { executeQueryAgainstMsSqlDB } = require('../../db-helpers/db-helper');
+const { MssqlTedious } = require('../../db-helpers');
 
 const {
   formatUAVariable,
@@ -44,7 +44,8 @@ function getterHistValuesFromMsSqlDB(params = {}, addedValue) {
     let rows;
     //-------------------------------
     // Execute query against MsSql DB
-    rows = await executeQueryAgainstMsSqlDB(params);
+    const db = new MssqlTedious(params.dbEnv);
+    rows = await db.executeQuery(params);
     
     if (rows) {
       setValuesFromSource(rows);

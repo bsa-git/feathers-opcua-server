@@ -8,20 +8,15 @@ const {
   stopListenPort,
   MssqlTedious,
   canTestRun,
-  getPathBasename,
-  getMssqlConfigFromEnv
+  getPathBasename
 } = require('../../src/plugins');
 
 const { TYPES } = require('tedious');
 
 const debug = require('debug')('app:mssql-tedious.test');
-
 const isDebug = false;
-const isLog = false;
 
-let config = MssqlTedious.getDefaultConnConfig();
-config = getMssqlConfigFromEnv(config, 'MSSQL_BSAHOME_TEST');
-if(isLog) inspector('getMssqlConfigFromEnv.config:', config);
+const mssqlEnvName = 'MSSQL_BSAHOME_TEST';
 
 describe('<<=== MSSQL-Tedious Test (mssql-tedious.test2.js) ===>>', () => {
 
@@ -37,7 +32,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test2.js) ===>>', () => {
   });
 
   it('Connecting and request', async () => {
-    const db = new MssqlTedious(config);
+    const db = new MssqlTedious(mssqlEnvName);
     await db.connect();
 
     const params = [];
@@ -50,7 +45,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test2.js) ===>>', () => {
     //   console.log('Request result:', { params, sql, rows: result });
     // });
 
-    // if(isLog) inspector('Connecting and request.getCurrentState:', db.getCurrentState());
+    // if(isDebug) inspector('Connecting and request.getCurrentState:', db.getCurrentState());
 
     await db.disconnect();
 

@@ -5,15 +5,10 @@ const { inspector } = require('../../plugins/lib');
 
 const {
   MssqlTedious,
-  getIdFromMssqlConfig,
-  isMssqlDatasetInList,
-  getMssqlDatasetForProvider
 } = require('../../plugins/db-helpers');
 
-
 const debug = require('debug')('app:mssql-datasets.mixins');
-const isLog = true;
-const isDebug = false;
+const isDebug = true;
 
 let result;
 
@@ -38,6 +33,9 @@ module.exports = function mssqlDatasetsMixins(service, path) {
     case 'connReset':
       result = ['id'];
       break;
+    case 'executeQuery':
+      result = ['id', 'params'];
+      break;
     case 'buildParams':
       result = ['id', 'params', 'paramName', 'paramType', 'paramValue'];
       break;
@@ -59,27 +57,25 @@ module.exports = function mssqlDatasetsMixins(service, path) {
    * @returns {Object}
    */
   service.createMssqlDataset = async function (config) {
-    // Get id
-    const id = getIdFromMssqlConfig(config);
-    if (isMssqlDatasetInList(service, id)) {
-      throw new errors.BadRequest(`The mssql dataset already exists for this id = '${id}' in the service list`);
-    }
     // Create DB
     const db = new MssqlTedious(config);
+    if (db.isDatasetInList(service)) {
+      throw new errors.BadRequest(`The mssql dataset already exists for this id = '${db.id}' in the service list`);
+    }
     // DB connect
     await db.connect();
     // Get createdAt
     const dt = moment().utc().valueOf();
     // Add mssqlDataset to service list
     const mssqlDataset = {
-      id,
+      id: db.id,
       db,
       createdAt: dt,
       updatedAt: dt
     };
     service.mssqlDatasets.push(mssqlDataset);
     // Get result
-    result = Object.assign({}, mssqlDataset, getMssqlDatasetForProvider(mssqlDataset.db));
+    result = Object.assign({}, mssqlDataset, mssqlDataset.db.getDatasetForProvider());
     return result;
   };
 
@@ -93,7 +89,7 @@ module.exports = function mssqlDatasetsMixins(service, path) {
   service.connect = async function (id) {
     const mssqlDataset = await service.get(id);
     await mssqlDataset.db.connect();
-    result = Object.assign({}, mssqlDataset, getMssqlDatasetForProvider(mssqlDataset.db));
+    result = Object.assign({}, mssqlDataset, mssqlDataset.db.getDatasetForProvider());
     return result;
   };
 
@@ -107,7 +103,7 @@ module.exports = function mssqlDatasetsMixins(service, path) {
   service.disconnect = async function (id) {
     const mssqlDataset = await service.get(id);
     await mssqlDataset.db.disconnect();
-    result = Object.assign({}, mssqlDataset, getMssqlDatasetForProvider(mssqlDataset.db));
+    result = Object.assign({}, mssqlDataset, mssqlDataset.db.getDatasetForProvider());
     return result;
   };
 
@@ -121,7 +117,7 @@ module.exports = function mssqlDatasetsMixins(service, path) {
   service.connCancel = async function (id) {
     const mssqlDataset = await service.get(id);
     await mssqlDataset.db.connCancel();
-    result = Object.assign({}, mssqlDataset, getMssqlDatasetForProvider(mssqlDataset.db));
+    result = Object.assign({}, mssqlDataset, mssqlDataset.db.getDatasetForProvider());
     return result;
   };
 
@@ -135,7 +131,7 @@ module.exports = function mssqlDatasetsMixins(service, path) {
   service.connReset = async function (id) {
     const mssqlDataset = await service.get(id);
     await mssqlDataset.db.connReset();
-    result = Object.assign({}, mssqlDataset, getMssqlDatasetForProvider(mssqlDataset.db));
+    result = Object.assign({}, mssqlDataset, mssqlDataset.db.getDatasetForProvider());
     return result;
   };
 
@@ -185,6 +181,20 @@ module.exports = function mssqlDatasetsMixins(service, path) {
   service.buildParams = async function (id, params, paramName, paramType, paramValue) {
     const mssqlDataset = await service.get(id);
     result = mssqlDataset.db.buildParams(params, paramName, paramType, paramValue);
+    return result;
+  };
+
+  /**
+   * @method executeQuery
+   * @async
+   * 
+   * @param {String} id
+   * @param {Object} params  
+   * @returns {Object[]}
+   */
+  service.executeQuery = async function (id, params) {
+    const mssqlDataset = await service.get(id);
+    result = await mssqlDataset.db.executeQuery(params);
     return result;
   };
 

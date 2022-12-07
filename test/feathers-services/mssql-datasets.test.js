@@ -10,8 +10,6 @@ const {
   MssqlTedious,
   canTestRun,
   getPathBasename,
-  getMssqlConfigFromEnv,
-  getIdFromMssqlConfig
 } = require('../../src/plugins');
 
 const debug = require('debug')('app:mssql-datasets.test');
@@ -20,8 +18,10 @@ const isDebug = false;
 const isLog = false;
 
 let config = MssqlTedious.getDefaultConnConfig();
-config = getMssqlConfigFromEnv(config, 'MSSQL_ASODU_TEST');
-const id = getIdFromMssqlConfig(config);
+config = MssqlTedious.getConfigFromEnv(config, 'MSSQL_ASODU_TEST');
+
+const id = MssqlTedious.getIdFromConfig(config);
+const mssqlEnvName = 'MSSQL_ASODU_TEST';
 
 describe('<<=== MSSQL-Datasets Test (mssql-datasets.test.js) ===>>', () => {
 
