@@ -150,8 +150,6 @@ class OpcuaClient {
   async opcuaClientDisconnect() {
     this.opcuaClientNotCreated();
 
-    // inspector('opcuaClientDisconnect.opcuaClient:', this.opcuaClient);
-
     await this.opcuaClient.disconnect();
     this.currentState.isConnect = false;
     this.currentState.endpointUrl = '';

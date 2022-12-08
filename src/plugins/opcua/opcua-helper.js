@@ -584,7 +584,8 @@ const getOpcuaConfigOptions = function (id, browseName = '') {
  */
 const getOpcuaSaveModeToDB = function () {
   const myConfigs = getOpcuaConfigsForMe();
-  const myConfig = myConfigs.find(item => (item.isEnable || item.isEnable === undefined) && item.opcuaSaveModeToDB);
+  // const myConfig = myConfigs.find(item => (item.isEnable || item.isEnable === undefined) && item.opcuaSaveModeToDB);
+  const myConfig = myConfigs.find(item => item.opcuaSaveModeToDB);
   return myConfig ? myConfig.opcuaSaveModeToDB : process.env.DEFAULT_OPCUA_SAVEMODE_TODB;
 };
 
@@ -651,17 +652,17 @@ const getOpcuaTags = function (browseName = '') {
   let mergedOpcuaOptions = {}, opcuaTags = [], opcuaTag = null;
   //-----------------------------
   // Get opcua enable configs for me
-  let opcuaOptions = getOpcuaConfigsForMe();
-  opcuaOptions = opcuaOptions.filter(item => item.isEnable || item.isEnable === undefined);
+  let opcuaConfigs = getOpcuaConfigsForMe();
+  opcuaConfigs = opcuaConfigs.filter(item => item.isEnable || item.isEnable === undefined);
   // Get all tags
-  loForEach(opcuaOptions, opt => {
-    mergedOpcuaOptions = mergeOpcuaConfigOptions(opt.id);
+  loForEach(opcuaConfigs, cfg => {
+    mergedOpcuaOptions = mergeOpcuaConfigOptions(cfg.id);
     const mergedOpcuaOptionsObjects = mergedOpcuaOptions.objects.map(obj => {
       if (!obj.histParams) {
         obj.histParams = {};
       }
-      obj.histParams.opcuaId = opt.id;
-      obj.histParams.opcuaUrl = opt.clientServiceUrl;
+      obj.histParams.opcuaId = cfg.id;
+      obj.histParams.opcuaUrl = cfg.clientServiceUrl;
       obj.histParams.savingValuesMode = getSavingValuesMode();
       return obj;
     });
@@ -760,7 +761,7 @@ const getSubscriptionHandler = function (id, nameFile = '') {
 const getOpcuaClientScript = function (id, nameScript = '') {
   let opcuaClientScripts, opcuaClientScript = null;
   const defaultOpcuaClientScripts = require('./opcua-client-scripts');
-  //--------------------------------------------
+  //--------------------------------------------------------------------
   if (isDebug && nameScript) debug('getOpcuaClientScript.id,nameScript:', id, nameScript);
 
   // Get defaultOpcuaClientScript
@@ -768,11 +769,11 @@ const getOpcuaClientScript = function (id, nameScript = '') {
     opcuaClientScript = defaultOpcuaClientScripts[nameScript];
   }
 
-  // Get opcuaOption 
-  const opcuaOption = getOpcuaConfig(id);
+  // Get opcuaConfig 
+  const opcuaConfig = getOpcuaConfig(id);
   // Get opcuaClientScript
-  if (opcuaOption.paths['client-scripts']) {
-    opcuaClientScripts = require(`${appRoot}${opcuaOption.paths['client-scripts']}`);
+  if (opcuaConfig.paths['client-scripts']) {
+    opcuaClientScripts = require(`${appRoot}${opcuaConfig.paths['client-scripts']}`);
     if (opcuaClientScripts[nameScript]) {
       opcuaClientScript = opcuaClientScripts[nameScript];
     }

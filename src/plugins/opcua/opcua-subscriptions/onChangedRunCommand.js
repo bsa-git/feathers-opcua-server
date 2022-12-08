@@ -51,8 +51,6 @@ async function onChangedRunCommand(params, dataValue) {
     // Get startTime
     const startTime = moment.utc().format();
 
-    console.log('onChangedRunCommand.app:', params.app);
-
     if (isDebug && params) inspector('onChangedRunCommand.params:', loOmit(params, ['myOpcuaClient']));
     if (isDebug && dataValue) inspector('onChangedRunCommand.dataValue:', dataValue);
     const addressSpaceOption = params.addressSpaceOption;

@@ -77,6 +77,7 @@ const clientData = {
 };
 // Get ID
 const id = srvData.params.serverInfo.applicationName;
+const testNumbers = ['all']; // e.g. ['all'] | ['#5',...,'#13.4']
 
 describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
 
@@ -135,6 +136,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   it('#5: OPC-UA clients: session history values for "CH_M51"', async () => {
     let dataItems, readResult = null, accumulator = '', timestamp = '';
     //----------------------------------------------------------
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#5')) return;
     const service = await getClientService(app, id);
 
     // service.getItemNodeId
@@ -182,6 +186,10 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
 
   it('#6: OPC-UA clients: session history values for "CH_M51" group', async () => {
     let dataItem, readResults = null;
+    //---------------------------------------------------
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#6')) return;
     const service = await getClientService(app, id);
 
     const srvCurrentState = await service.getSrvCurrentState(id);
@@ -227,6 +235,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   it('#7: OPC-UA clients: session history values for "CH_M52_ACM" group', async () => {
     let dataItem, readResults = null, engineeringUnits = '';
     //-------------------------------------------------------
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#7')) return;
     const service = await getClientService(app, id);
 
     const srvCurrentState = await service.getSrvCurrentState(id);
@@ -284,6 +295,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   //============== SUBSCRIPTION MONITOR ====================//
 
   it('#10.1: OPC-UA clients: subscription monitor for "CH_M51::ValueFromFile" group', async () => {
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#10.1')) return;
     const service = await getClientService(app, id);
     const srvCurrentState = await service.getSrvCurrentState(id);
     // Start subscriptionMonitor
@@ -302,6 +316,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   });
 
   it('#10.2: OPC-UA clients: subscription monitor for "CH_M52_ACM::ValueFromFile" group', async () => {
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#10.2')) return;
     const service = await getClientService(app, id);
     const srvCurrentState = await service.getSrvCurrentState(id);
     // Start subscriptionMonitor
@@ -320,6 +337,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   });
 
   it('#10.3: OPC-UA clients: subscription monitor for "CH_M5::RunCommandTest"', async () => {
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#10.3')) return;
     const service = await getClientService(app, id);
     const srvCurrentState = await service.getSrvCurrentState(id);
     // Start subscriptionMonitor
@@ -351,6 +371,10 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
 
   it('#11.1: OPC-UA clients: session write single node value', async () => {
     let readResult, statusCode = null;
+    //------------------------------------------------
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#11.1')) return;
     const service = await getClientService(app, id);
 
     const arrayOfvalues = new Uint16Array([2, 23, 23, 12, 24, 3, 25, 3, 26, 3, 27, 3, 28, 1, 43690, 1, 1261, 0, 0, 0, 0, 0, 0, 0]);
@@ -375,6 +399,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   it('#11.2: OPC-UA clients: session write single node value', async () => {
     let readResult, statusCode = null;
     //-----------------------------------
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#11.2')) return;
     const service = await getClientService(app, id);
     // service.sessionWriteSingleNode
     const dataForWrite = {
@@ -395,6 +422,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   it('#11.3: OPC-UA clients: session write single node value', async () => {
     let readResult, statusCode = null;
     //-----------------------------------
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#11.3')) return;
     const service = await getClientService(app, id);
     // service.sessionWriteSingleNode
     const dataForWrite = {
@@ -415,6 +445,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   //============== SESSION CALL METHOD ====================//
 
   it('#12.0: Data base: Save opcua tags', async () => {
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#12.0')) return;
     // Get opcua tags 
     const opcuaTags = getOpcuaConfigOptions(id);
     // Save opcua tags to local DB
@@ -433,6 +466,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   it('#12.1: OPC-UA clients: session call method "methodAcmYearTemplateCreate"', async () => {
     let statusCode = '', outputArguments;
     //------------------------------------------------
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#12.1')) return;
     const service = await getClientService(app, id);
     // Set input argument
     const pointID = 2;
@@ -477,6 +513,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   it('#12.2: OPC-UA clients: session call method "methodAcmDayReportsDataGet"', async () => {
     let statusCode = '', outputArguments;
     //------------------------------------------------
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#12.2')) return;
     const service = await getClientService(app, id);
     // Set input argument
     const pointID = 2;
@@ -508,6 +547,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   });
 
   it('#12.3: OPC-UA clients: run method "syncHistoryAtStartup"', async () => {
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#12.3')) return;
     // Get opcua tags
     const opcuaTags = getOpcuaConfigOptions(id);
     const syncResult = await syncHistoryAtStartup(app, opcuaTags, 'methodAcmDayReportsDataGet');
@@ -516,6 +558,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   });
 
   it('#12.4: OPC-UA clients: run method "syncReportAtStartup"', async () => {
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#12.4')) return;
     // Get opcua tags
     const opcuaTags = getOpcuaConfigOptions(id);
     const syncResult = await syncReportAtStartup(app, opcuaTags, 'methodAcmYearReportUpdate');
@@ -523,9 +568,17 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
     assert.ok(syncResult.length, 'OPC-UA clients: run method "syncReportAtStartup"');
   });
 
-  it('#12.5: OPC-UA clients: run method "methodAcmDayReportsDataGet" with not clear store', async () => {
+  it('#12.5: OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store', async () => {
     let statusCode = '', dataItems;
     //------------------------------------------------
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#12.5')) return;
+
+    // Remove opcua store values
+    const removeResult = await removeOpcuaStoreValues(app);
+    if (isDebug && removeResult) inspector('removeOpcuaStoreValues.removeResult:', removeResult);
+
     // Get opcua tags
     const opcuaTags = getOpcuaConfigOptions(id);
     // Get opcua group store tags 
@@ -537,6 +590,7 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
       const pointID = opcuaGroupTag.getterParams.pointID;
       // Run metod
       const storeParams = await getStoreParams4Data(app, [groupBrowseName]);
+      if (isDebug && storeParams) inspector('methodAcmDayReportsDataGet.storeParams:', storeParams);
       const params = { isSaveOutputFile: true };
       const methodResult = await methodAcmDayReportsDataGet([{ value: pointID }], { storeParams, params, test4Remove: true });
       const methodResultOutputPath = methodResult.params.outputPath;
@@ -554,9 +608,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
         }
         if (isDebug && dataItems) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
       }
-      assert.ok(statusCode === 'Good', 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with not clear store');  
-      assert.ok(dataItems.length === 0, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with not clear store');  
-      assert.ok(methodResult.storeParams4Remove.length, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with not clear store');  
+      assert.ok(statusCode === 'Good', 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store');  
+      assert.ok(dataItems.length, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store');  
+      assert.ok(methodResult.storeParams4Remove.length === 0, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store');  
     }
   });
 
@@ -564,6 +618,8 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
     let statusCode = '', dataItems;
     //------------------------------------------------
 
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#12.6')) return;
     // Remove opcua store values
     const removeResult = await removeOpcuaStoreValues(app);
     if (isDebug && removeResult) inspector('removeOpcuaStoreValues.removeResult:', removeResult);
@@ -579,6 +635,7 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
       const pointID = opcuaGroupTag.getterParams.pointID;
       // Run metod
       const storeParams = await getStoreParams4Data(app, [groupBrowseName]);
+      if (isDebug && storeParams) inspector('methodAcmDayReportsDataGet.storeParams:', storeParams);
       const params = { isSaveOutputFile: false };
       const methodResult = await methodAcmDayReportsDataGet([{ value: pointID }], { storeParams, params });
       const methodResultOutputPath = methodResult.params.outputPath;
@@ -596,7 +653,8 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
         }
         if (isDebug && dataItems) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
       }
-      assert.ok(statusCode === 'Good' && dataItems.length, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with not clear store');  
+      assert.ok(statusCode === 'Good' && dataItems.length, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store');  
+      assert.ok(methodResult.storeParams4Remove.length === 0, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store');
     }
   });
 
@@ -605,6 +663,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
     let statusCode = '', inputArgument, inputArgument2, inputArguments, outputArguments;
     let callResults;
     //------------------------------------------------------------------------------------
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#12.7')) return;
     const service = await getClientService(app, id);
 
     //--- Run 'methodAcmDayReportsDataGet' metod ---//
@@ -664,6 +725,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   it('#13.1: OPC-UA clients: RunCommand(ch_m5CreateAcmYearTemplate)', async () => {
     let statusCode = null;
     //-----------------------------------
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#13.1')) return;
     const service = await getClientService(app, id);
 
     // Get data for run command
@@ -690,6 +754,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   it('#13.2: OPC-UA clients: RunCommand(ch_m5SyncStoreAcmValues)', async () => {
     let statusCode = null;
     //-----------------------------------
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#13.2')) return;
     const service = await getClientService(app, id);
 
     // Get data for run command
@@ -714,6 +781,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   it('#13.3: OPC-UA clients: RunCommand(ch_m5SyncAcmYearReport) get dataItems from store', async () => {
     let statusCode = null;
     //-----------------------------------
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#13.3')) return;
     const service = await getClientService(app, id);
 
     // Get data for run command
@@ -739,6 +809,9 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
   it('#13.4: OPC-UA clients: RunCommand(ch_m5SyncAcmYearReport) get dataItems from day reports', async () => {
     let statusCode = null;
     //-----------------------------------
+    
+    // Select test
+    if(!testNumbers.includes('all') && !testNumbers.includes('#13.4')) return;
     const service = await getClientService(app, id);
 
     // Get data for run command

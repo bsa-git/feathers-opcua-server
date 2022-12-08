@@ -2,7 +2,11 @@
 const chalk = require('chalk');
 const loStartsWith = require('lodash/startsWith');
 const loEndsWith = require('lodash/endsWith');
-const loSplit = require('lodash/split');
+const loReplace = require('lodash/replace');
+
+const startsWith = 'OPCUA_';
+const loginEndsWith = '_LOGIN';
+const passEndsWith = '_PASS';
 
 // startsWith
 const debug = require('debug')('app:opcua-user-manager');
@@ -22,13 +26,12 @@ const isValidUser = ( userName, password ) => {
   }
 
   // Check user credentials
-  const envLoginKeys = Object.keys(process.env).filter(key => loStartsWith(key, 'OPCUA_') && loEndsWith(key, '_LOGIN'));
+  const envLoginKeys = Object.keys(process.env).filter(key => loStartsWith(key, startsWith) && loEndsWith(key, loginEndsWith));
   if(isDebug && envLoginKeys) console.log('isValidUser.envLoginKeys:', envLoginKeys);
   for (let index = 0; index < envLoginKeys.length; index++) {
     const key = envLoginKeys[index];
     if(process.env[key] === userName){
-      const arrKey = loSplit(key, '_');
-      const passKey = `${arrKey[0]}_${arrKey[1]}_PASS`;
+      const passKey = loReplace(key, loginEndsWith, passEndsWith);
       if(process.env[passKey] === password) result = true; 
     }
   }
