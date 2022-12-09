@@ -13,15 +13,10 @@ const {
 } = require('../../src/plugins');
 
 const debug = require('debug')('app:mssql-datasets.test');
-
 const isDebug = false;
-const isLog = false;
 
-let config = MssqlTedious.getDefaultConnConfig();
-config = MssqlTedious.getConfigFromEnv(config, 'MSSQL_ASODU_TEST');
-
-const id = MssqlTedious.getIdFromConfig(config);
 const mssqlEnvName = 'MSSQL_ASODU_TEST';
+const db = new MssqlTedious(mssqlEnvName);
 
 describe('<<=== MSSQL-Datasets Test (mssql-datasets.test.js) ===>>', () => {
 
@@ -36,77 +31,72 @@ describe('<<=== MSSQL-Datasets Test (mssql-datasets.test.js) ===>>', () => {
     stopListenPort(done);
   });
 
-  it('MSSQL datasets: registered the service', async () => {
+  it('#1: MSSQL datasets: registered the service', async () => {
     const service = app.service('mssql-datasets');
     assert.ok(service, 'MSSQL datasets: registered the service');
   });
 
-  it('MSSQL datasets: created the service', async () => {
+  it('#2: MSSQL datasets: created the service', async () => {
     const service = app.service('mssql-datasets');
     // service create
-    const mssqlDataset = await service.create({ config });
-    if (isLog) inspector('Created the service.mssqlDataset:', mssqlDataset.db.getCurrentState());
-    // inspector('Created the service.mssqlDataset:', mssqlDataset.db.getCurrentState());
+    const mssqlDataset = await service.create({ config: db.config });
+    if (isDebug) inspector('Created the service.mssqlDataset:', mssqlDataset.db.getCurrentState());
     assert.ok(mssqlDataset, 'MSSQL datasets: created the service');
   });
 
-  it('MSSQL datasets: db.query', async () => {
+  it('#3: MSSQL datasets: db.query', async () => {
     const params = [];
     const sql = 'select * from tblMessages';
     //-----------------------------------------
     const service = app.service('mssql-datasets');
-    const queryResult = await service.query(id, params, sql);
-    if (isLog) inspector('MSSQL datasets: db.query:', { params, sql, rows: queryResult });
-
+    const queryResult = await service.query(db.id, params, sql);
+    if (isDebug) inspector('MSSQL datasets: db.query:', { params, sql, rows: queryResult });
     assert.ok(queryResult, 'MSSQL datasets: db.query');
   });
 
-  it('MSSQL datasets: db.query', async () => {
+  it('#4: MSSQL datasets: db.query', async () => {
     const params = [];
     const sql = 'select * from tblMessages';
     //-----------------------------------------
     const service = app.service('mssql-datasets');
     const data = {
-      id,
+      id: db.id,
       action: 'query',
       params,
       sql
     };
     const queryResult = await service.create(data);
-    if (isLog) inspector('MSSQL datasets: db.query:', { params, sql, rows: queryResult });
+    if (isDebug) inspector('MSSQL datasets: db.query:', { params, sql, rows: queryResult });
 
     assert.ok(queryResult, 'MSSQL datasets: db.query');
   });
 
-  it('MSSQL datasets: service update', async () => {
-    let _config = Object.assign({}, config);
+  it('#5: MSSQL datasets: service update', async () => {
+    let _config = Object.assign({}, db.config);
     _config.events.connection.debug.enable = true;
     //-----------------------------------------
     const service = app.service('mssql-datasets');
-    const result = await service.update(id, { config: _config });
-    if (isLog) inspector('MSSQL datasets: service update:', result);
-    // inspector('MSSQL datasets: service update:', result.db.getCurrentState());
+    const result = await service.update(db.id, { config: _config });
+    if (isDebug) inspector('MSSQL datasets: service update:', result);
     assert.ok(result, 'MSSQL datasets: service update');
   });
 
-  it('MSSQL datasets: service patch', async () => {
+  it('#6: MSSQL datasets: service patch', async () => {
     const _config = { events: { connection: { debug: { enable: false } } } };
     //-----------------------------------------
     const service = app.service('mssql-datasets');
-    const result = await service.patch(id, { config: _config });
-    if (isLog) inspector('MSSQL datasets: service patch:', result.db.getConnConfig());
-    // inspector('MSSQL datasets: service patch:', result.db.getConnConfig());
+    const result = await service.patch(db.id, { config: _config });
+    if (isDebug) inspector('MSSQL datasets: service patch:', result.db.getConnConfig());
     assert.ok(result, 'MSSQL datasets: service patch');
   });
 
-  it('MSSQL datasets: service remove', async () => {
+  it('#7: MSSQL datasets: service remove', async () => {
     try {
       const service = app.service('mssql-datasets');
-      let result = await service.remove(id);
-      if (isLog) inspector('MSSQL datasets: service remove:', result.db.currentState);
-      // inspector('MSSQL datasets: service remove:', result.db.currentState);
+      let result = await service.remove(db.id);
+      if (isDebug) inspector('MSSQL datasets: service remove:', result.db.currentState);
       // Check the availability of the service
-      result = await service.get(id);
+      result = await service.get(db.id);
       assert.ok(false, 'MSSQL datasets: service remove');
     } catch (error) {
       assert.ok(true, 'MSSQL datasets: service remove');

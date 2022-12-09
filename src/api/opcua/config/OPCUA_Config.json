@@ -51,6 +51,7 @@
     "opcuaRemoteDbUrl": "http://M5-0095488.OSTCHEM.COM.UA:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": false,
+      "mssqlDataBases": ["MSSQL_ASODU_TEST"],
       "syncHistoryAtStartup": { 
         "active": false,
         "methodName": "methodAcmDayReportsDataGet"
@@ -93,7 +94,6 @@
     "endpointUrl": "opc.tcp://localhost:49370",
     "srvServiceUrl": "",
     "clientServiceUrl": "http://M5-0095488.OSTCHEM.COM.UA:3030",
-    "clientScript": "startSubscriptionMonitor",
     "subscription": "onChangedGroupHandler",
     "security": {
       "mode": "SignAndEncrypt",
@@ -124,7 +124,6 @@
     "endpointUrl": "opc.tcp://OGMT-MZTP.OSTCHEM.COM.UA:26570",
     "srvServiceUrl": "",
     "clientServiceUrl": "http://M5-0095488.OSTCHEM.COM.UA:3030",
-    "clientScript": "startSubscriptionMonitor",
     "subscription": "onChangedGroupHandler",
     "security": {
       "mode": "SignAndEncrypt",
@@ -154,6 +153,17 @@
     "clientServiceUrl": "http://192.168.3.5:3030",
     "clientScript": "startSubscriptionMonitor",
     "subscription": "onChangedGroupHandler",
+    "opcuaBootstrapParams": {
+      "clearHistoryAtStartup": true,
+      "syncHistoryAtStartup": { 
+        "active": false,
+        "methodName": "methodAcmDayReportsDataGet"
+      },
+      "syncReportAtStartup": {
+        "active": false,
+        "methodName": "methodAcmYearReportUpdate"
+      }
+    },
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
@@ -181,6 +191,10 @@
     "clientServiceUrl": "http://OGMT-MZTP.OSTCHEM.COM.UA:3030",
     "clientScript": "startSubscriptionMonitor",
     "subscription": "onChangedGroupHandler",
+    "opcuaBootstrapParams": {
+      "clearHistoryAtStartup": true,
+      "mssqlDataBases": ["MSSQL_ASODU_TEST"]
+    },
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
@@ -216,6 +230,7 @@
     "opcuaRemoteDbUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": true,
+      "mssqlDataBases": ["MSSQL_ASODU_TEST"],
       "syncHistoryAtStartup": { 
         "active": false,
         "methodName": "methodAcmDayReportsDataGet"
@@ -251,7 +266,7 @@
     }
   },
   {
-    "isEnable": false,
+    "isEnable": true,
     "id": "ua-cherkassy-azot-ogmt0088846_dev2",
     "name": "380-472-00203826-ogmt0088846_dev2",
     "description": "Opcua server and client. Client connect to `opc.tcp://OGMT-0088846.OSTCHEM.COM.UA:26560`(OGMT-0088846 OpcuaServer)",
@@ -259,11 +274,6 @@
     "endpointPort": 26560,
     "srvServiceUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3030",
     "clientServiceUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3030",
-    "clientScript": "startSubscriptionMonitor",
-    "executeMethodsFrom": "client",
-    "hostTypeDB": "nedb",
-    "opcuaSaveModeToDB": "localUpdate",
-    "opcuaRemoteDbUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3131",
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
@@ -288,14 +298,13 @@
     }
   },
   {
-    "isEnable": false,
+    "isEnable": true,
     "id": "ua-cherkassy-azot-ogmt0088846_dev3",
     "name": "380-472-00203826-ogmt0088846_dev3",
     "description": "Opcua client. Client connect to `opc.tcp://10.60.147.29:49370` (A5 KEPServer)",
     "endpointUrl": "opc.tcp://10.60.147.29:49370",
     "srvServiceUrl": "",
     "clientServiceUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3030",
-    "clientScript": "startSubscriptionMonitor",
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",

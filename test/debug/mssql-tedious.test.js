@@ -224,19 +224,53 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     // Select rows from SnapShot table
     const params = [];
     sql = `
-    SELECT sh.Value, sh.Time, tInfo.TagName, tInfo.ScanerName, tInfo.TagGroup, tInfo.KIPname
+    SELECT sh.Value, sh.Time, sh.TagId, tInfo.TagName, tInfo.ScanerName, tInfo.TagGroup, tInfo.KIPname
     FROM dbMonitor.dbo.SnapShot AS sh
-    JOIN dbConfig.dbo.TagsInfo AS tInfo ON sh.TagID = tInfo.ID
+    JOIN dbConfig.dbo.TagsInfo AS tInfo ON (sh.TagID = tInfo.ID)
     WHERE sh.ScanerName = @scanerName AND tInfo.OnOff = 1
     `;
     db.buildParams(params, 'scanerName', TYPES.Char, 'opcUPG2');
-    
+        
     rows = await db.query(params, sql);
-    if(isDebug) inspector('Request result:', { sql, rows });
+    if(isDebug && rows) inspector('Request result:', { sql, rows });
     
     await db.disconnect();
 
     assert.ok(rows.length, 'Select values for "opcUPG2" from SnapShot table');
   });
-  
+
+  it('#8: Select values for "opcUA(A5)" from TagsInfo table', async () => {
+    let sql = '', rows;
+    const scanerName = 'opcUA(A5)'; 
+    const tagGroup = 'XozUchet';
+    //---------------------------------------------
+    const db = new MssqlTedious(mssqlEnvName);
+    await db.connect();
+
+    // Select rows from SnapShot table
+    const params = [];
+    sql = `
+    SELECT tInfo.TagName, tInfo.ID 
+    FROM dbConfig.dbo.TagsInfo AS tInfo
+    WHERE tInfo.ScanerName = @scanerName AND tInfo.TagGroup = @tagGroup
+    ORDER BY ID
+    `;
+
+    sql = `
+    SELECT sh.Value, sh.Time, sh.TagId, tInfo.TagName, tInfo.ScanerName, tInfo.TagGroup, tInfo.KIPname
+    FROM dbMonitor.dbo.SnapShot AS sh
+    JOIN dbConfig.dbo.TagsInfo AS tInfo ON sh.TagID = tInfo.ID
+    WHERE (sh.ScanerName = @scanerName) AND (tInfo.OnOff = 1) AND (tInfo.TagGroup = @tagGroup)
+    `;
+        
+    db.buildParams(params, 'scanerName', TYPES.Char, scanerName);
+    db.buildParams(params, 'tagGroup', TYPES.Char, tagGroup);
+    
+    rows = await db.query(params, sql);
+    if(true && rows) inspector('Request result.rows:', rows);
+    
+    await db.disconnect();
+
+    assert.ok(rows, 'Select values for "opcUA(A5)" from TagsInfo table');
+  });
 });

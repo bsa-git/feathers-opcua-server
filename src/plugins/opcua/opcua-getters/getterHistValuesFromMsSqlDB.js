@@ -24,7 +24,12 @@ const isDebug = false;
  */
 function getterHistValuesFromMsSqlDB(params = {}, addedValue) {
   let dataType;
+  const app = params.myOpcuaServer.app;
   //------------------------------------
+
+  // Get mssql service
+  const service = app.service('mssql-datasets');
+  const mssqlId = MssqlTedious.getIdFromConfig(params.dbEnv);
 
   // Set values from source
   const setValuesFromSource = function (dataItems) {
@@ -43,10 +48,9 @@ function getterHistValuesFromMsSqlDB(params = {}, addedValue) {
   const intervalId = setInterval(async function () {
     let rows;
     //-------------------------------
-    // Execute query against MsSql DB
-    const db = new MssqlTedious(params.dbEnv);
-    rows = await db.executeQuery(params);
-    
+    // Execute query MsSql DB
+    rows = await service.executeQuery(mssqlId, params);
+
     if (rows) {
       setValuesFromSource(rows);
     }

@@ -38,6 +38,7 @@ const getTagInfoFromChAsoduDB = async function (db, queryParams) {
 };
 
 /**
+ 
  // Работаем с таблицей SnapShot
 		public void WriteSnapShotToDB(string scanerID, ref Dictionary<int, SnapShotRecords> snapShot, ref int updCounter, ref int insCounter, ref int delCounter)
 		{

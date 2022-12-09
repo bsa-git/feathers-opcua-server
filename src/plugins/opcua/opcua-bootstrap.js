@@ -78,11 +78,10 @@ module.exports = async function opcuaBootstrap(app) {
   const isOpcuaBootstrapAllowed = feathersSpecs.app.envAllowingOpcuaBootstrap.find(item => item === app.get('env'));
   if (!isOpcuaBootstrapAllowed) return;
 
+  // Get opcua bootstrap params
+  bootstrapParams = getOpcuaBootstrapParams();
+
   if (isSaveOpcuaToDB()) {
-
-    // Get opcua bootstrap params
-    bootstrapParams = getOpcuaBootstrapParams();
-
     // Get opcua tags 
     const opcuaTags = getOpcuaTags();
     // Check store parameter changes
@@ -165,6 +164,20 @@ module.exports = async function opcuaBootstrap(app) {
     }
   }
 
+  // Create mssql datasets
+  if (bootstrapParams &&
+    bootstrapParams.mssqlDataBases &&
+    bootstrapParams.mssqlDataBases.length) {
+    const mssqlDataBases = bootstrapParams.mssqlDataBases;
+    for (let index = 0; index < mssqlDataBases.length; index++) {
+      const mssqlDataBase = mssqlDataBases[index];
+      const service = app.service('mssql-datasets');
+      await service.create({ config: mssqlDataBase });
+    }
+    logger.info(`opcuaBootstrap.CreateMssqlDatasets: OK. ${mssqlDataBases.length}`);
+  }
+
+  // Create server and client services
   let opcuaOptions = getOpcuaConfig();
   opcuaOptions = opcuaOptions.filter(item => item.isEnable || item.isEnable === undefined);
   for (let index = 0; index < opcuaOptions.length; index++) {
