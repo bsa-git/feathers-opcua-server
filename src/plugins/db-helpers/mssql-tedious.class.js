@@ -381,7 +381,7 @@ class MssqlTedious {
           reject(err);
         } else {
           self.isBeginTransaction = true;
-          logger.info('BeginTransaction() done');
+          if(isDebug && self.isBeginTransaction) logger.info('BeginTransaction() done');
           resolve('BeginTransaction() done');
         }
       });
@@ -402,7 +402,7 @@ class MssqlTedious {
         } else {
           self.isBeginTransaction = false;
           self.isCommitTransaction = true;
-          logger.info('CommitTransaction() done!');
+          if(isDebug && self.isCommitTransaction) logger.info('CommitTransaction() done!');
           resolve('CommitTransaction() done!');
         }
       });
@@ -411,12 +411,13 @@ class MssqlTedious {
 
   /**
    * @method rollbackTransaction
+   * @param {String} errMessage
    * @description SQL: Rolling Back Transaction - due to errors during transaction process.
    */
-  rollbackTransaction(err) {
+  rollbackTransaction(errMessage) {
     const self = this;
     return new Promise((resolve, reject) => {
-      logger.error(`Transaction err: "${err}"`);
+      logger.error(`Transaction err: "${errMessage}"`);
       self.connection.rollbackTransaction((err) => {
         if (err) {
           logger.error(`Transaction rollback error: ${err}`);
@@ -428,6 +429,42 @@ class MssqlTedious {
           resolve('RollbackTransaction() done!');
         }
       });
+    });
+  }
+
+  /**
+   * @method insertBulkData
+   * @description Executing Bulk Load
+   * @param {String} table
+   * e.g. table = '[dbo].[test_bulk]' 
+   * @param {Array[]} colums 
+   * e.g. colums = [
+   *  ['c1', TYPES.Int, { nullable: true }], 
+   *  ['c2', TYPES.NVarChar, { length: 50, nullable: true }]
+   * ] 
+   * @param {Object[]} data 
+   * e.g  data = [{ c1: 1 }, { c1: 2, c2: 'hello' }];
+   */
+  insertBulkData(table, colums, data) {
+    const self = this;
+    return new Promise((resolve, reject) => {
+      const option = { keepNulls: true }; // option to enable null values
+      const bulkLoad = self.connection.newBulkLoad(table, option, (err, rowCount) => {
+        if (err) {
+          logger.error(`newBulkLoad error: ${err}`);
+          reject(err);
+        } else {
+          if(isDebug && rowCount) logger.info(`Rows inserted to table "${table}": ${rowCount}`);
+          resolve(rowCount);
+        }
+      });
+
+      for (let index = 0; index < colums.length; index++) {
+        const colum = colums[index];
+        bulkLoad.addColumn(...colum);  
+      }
+      // perform bulk insert
+      self.connection.execBulkLoad(bulkLoad, data);
     });
   }
 
@@ -451,7 +488,9 @@ class MssqlTedious {
           reject(err.message);
           return;
         }
-        resolve(_rows);
+        const _query = sql.trim().split(' ')[0];
+        if(isDebug && rowCount) logger.info(`RowCount for query "${_query}": ${rowCount}`);
+        resolve({ rows:_rows, rowCount });
       });
 
       // Subscribe to request events
@@ -531,7 +570,7 @@ class MssqlTedious {
           reject(err.message);
           return;
         }
-        resolve(_rows);
+        resolve({ rows:_rows, rowCount });
       });
 
       // Subscribe to request events
@@ -630,15 +669,15 @@ class MssqlTedious {
         // The server has issued an information message.
         if (value.enable) self.connection.on('infoMessage', function (info) {
           /**
-                              info - An object with these properties:
-                                number - Error number
-                                state - The error state, used as a modifier to the error number.
-                                class - The class (severity) of the error. A class of less than 10 indicates an informational message.
-                                message - The message text.
-                                procName - The stored procedure name (if a stored procedure generated the message).
-                                lineNumber - The line number in the SQL batch or stored procedure that caused the error. 
-                                             Line numbers begin at 1; therefore, if the line number is not applicable to the message, the value of LineNumber will be 0. 
-                             */
+                                info - An object with these properties:
+                                  number - Error number
+                                  state - The error state, used as a modifier to the error number.
+                                  class - The class (severity) of the error. A class of less than 10 indicates an informational message.
+                                  message - The message text.
+                                  procName - The stored procedure name (if a stored procedure generated the message).
+                                  lineNumber - The line number in the SQL batch or stored procedure that caused the error. 
+                                               Line numbers begin at 1; therefore, if the line number is not applicable to the message, the value of LineNumber will be 0. 
+                               */
           value.cb ? value.cb(info) : self.onInfoMessageForConn(info);
         });
         break;
@@ -696,15 +735,15 @@ class MssqlTedious {
         // This event may be emited multiple times when more than one recordset is produced by the statement.
         if (value.enable) request.on('columnMetadata', function (columns) {
           /**
-                              An array like object, where the columns can be accessed either by index or name. 
-                              Columns with a name that is an integer are not accessible by name, as it would be interpreted as an array index.
-                              Each column has these properties.
-                                colName - The column's name.
-                                type.name - The column's type, such as VarChar, Int or Binary.
-                                precision - The precision. Only applicable to numeric and decimal.
-                                scale - The scale. Only applicable to numeric, decimal, time, datetime2 and datetimeoffset.
-                                dataLength - The length, for char, varchar, nvarchar and varbinary. 
-                             */
+                                An array like object, where the columns can be accessed either by index or name. 
+                                Columns with a name that is an integer are not accessible by name, as it would be interpreted as an array index.
+                                Each column has these properties.
+                                  colName - The column's name.
+                                  type.name - The column's type, such as VarChar, Int or Binary.
+                                  precision - The precision. Only applicable to numeric and decimal.
+                                  scale - The scale. Only applicable to numeric, decimal, time, datetime2 and datetimeoffset.
+                                  dataLength - The length, for char, varchar, nvarchar and varbinary. 
+                               */
           value.cb ? value.cb(columns) : self.onColumnMetadataForRequest(columns);
         });
         break;
@@ -728,22 +767,22 @@ class MssqlTedious {
         break;
       case 'done':
         /**
-                           All rows from a result set have been provided (through row events). 
-                           This token is used to indicate the completion of a SQL statement. 
-                           As multiple SQL statements can be sent to the server in a single SQL batch, multiple done events can be generated. 
-                           An done event is emited for each SQL statement in the SQL batch except variable declarations. 
-                           For execution of SQL statements within stored procedures, doneProc and doneInProc events are used in place of done events.
-                
-                           If you are using execSql then SQL server may treat the multiple calls with the same query as a stored procedure. 
-                           When this occurs, the doneProc or doneInProc events may be emitted instead. 
-                           You must handle both events to ensure complete coverage. 
-                           */
+                             All rows from a result set have been provided (through row events). 
+                             This token is used to indicate the completion of a SQL statement. 
+                             As multiple SQL statements can be sent to the server in a single SQL batch, multiple done events can be generated. 
+                             An done event is emited for each SQL statement in the SQL batch except variable declarations. 
+                             For execution of SQL statements within stored procedures, doneProc and doneInProc events are used in place of done events.
+                  
+                             If you are using execSql then SQL server may treat the multiple calls with the same query as a stored procedure. 
+                             When this occurs, the doneProc or doneInProc events may be emitted instead. 
+                             You must handle both events to ensure complete coverage. 
+                             */
         if (value.enable) request.on('done', function (rowCount, more, rows) {
           /**
-                              rowCount - The number of result rows. May be undefined if not available.
-                              more - If there are more results to come (probably because multiple statements are being executed), then true.
-                              rows - Rows as a result of executing the SQL statement. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true. 
-                             */
+                                rowCount - The number of result rows. May be undefined if not available.
+                                more - If there are more results to come (probably because multiple statements are being executed), then true.
+                                rows - Rows as a result of executing the SQL statement. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true. 
+                               */
           value.cb ? value.cb(rowCount, more, rows) : self.onDoneForRequest(rowCount, more, rows);
         });
         break;
@@ -751,10 +790,10 @@ class MssqlTedious {
         // A value for an output parameter (that was added to the request with addOutputParameter(...)).
         if (value.enable) request.on('returnValue', function (parameterName, value, metadata) {
           /**
-                              parameterName - The parameter name. (Does not start with '@'.)
-                              value - The parameter's output value.
-                              metadata - The same data that is exposed in the columnMetadata event. 
-                             */
+                                parameterName - The parameter name. (Does not start with '@'.)
+                                value - The parameter's output value.
+                                metadata - The same data that is exposed in the columnMetadata event. 
+                               */
           value.cb ? value.cb(parameterName, value, metadata) : self.onReturnValueForRequest(parameterName, value, metadata);
         });
         break;
@@ -762,8 +801,8 @@ class MssqlTedious {
         // This event gives the columns by which data is ordered, if ORDER BY clause is executed in SQL Server.
         if (value.enable) request.on('order', function (orderColumns) {
           /**
-                              orderColumns - An array of column numbers in the result set by which data is ordered. 
-                             */
+                                orderColumns - An array of column numbers in the result set by which data is ordered. 
+                               */
           value.cb ? value.cb(orderColumns) : self.onOrderForRequest(orderColumns);
         });
         break;

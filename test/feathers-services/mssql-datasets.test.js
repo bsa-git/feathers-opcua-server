@@ -50,7 +50,7 @@ describe('<<=== MSSQL-Datasets Test (mssql-datasets.test.js) ===>>', () => {
     //-----------------------------------------
     const service = app.service('mssql-datasets');
     const queryResult = await service.query(db.id, params, sql);
-    if (isDebug) inspector('MSSQL datasets: db.query:', { params, sql, rows: queryResult });
+    if (isDebug) inspector('MSSQL datasets: db.query:', { params, sql, rows: queryResult.rows });
     assert.ok(queryResult, 'MSSQL datasets: db.query');
   });
 
@@ -66,7 +66,7 @@ describe('<<=== MSSQL-Datasets Test (mssql-datasets.test.js) ===>>', () => {
       sql
     };
     const queryResult = await service.create(data);
-    if (isDebug) inspector('MSSQL datasets: db.query:', { params, sql, rows: queryResult });
+    if (isDebug) inspector('MSSQL datasets: db.query:', { params, sql, rows: queryResult.rows });
 
     assert.ok(queryResult, 'MSSQL datasets: db.query');
   });

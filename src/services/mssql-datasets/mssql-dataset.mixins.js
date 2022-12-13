@@ -27,11 +27,16 @@ module.exports = function mssqlDatasetsMixins(service, path) {
     case 'createMssqlDataset':
       result = ['config'];
       break;
+    case 'beginTransaction':
+    case 'commitTransaction':
     case 'connect':
     case 'disconnect':
     case 'connCancel':
     case 'connReset':
       result = ['id'];
+      break;
+    case 'rollbackTransaction':
+      result = ['id', 'errMessage'];
       break;
     case 'executeQuery':
       result = ['id', 'params'];
@@ -42,6 +47,9 @@ module.exports = function mssqlDatasetsMixins(service, path) {
     case 'query':
     case 'proc':
       result = ['id', 'params', 'sql', 'callback'];
+      break;
+    case 'insertBulkData':
+      result = ['id', 'table', 'colums', 'data'];
       break;
     default:
       break;

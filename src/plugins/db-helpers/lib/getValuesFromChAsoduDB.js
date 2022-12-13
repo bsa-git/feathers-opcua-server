@@ -27,7 +27,7 @@ const getValuesFromChAsoduDB = async function (db, queryParams) {
   //---------------------------------------------------
   db.buildParams(params, 'scanerName', TYPES.Char, queryParams.scanerName);
 
-  let rows = await db.query(params, sql);
+  let { rows } = await db.query(params, sql);
   if (isDebug && rows.length) inspector('selectValuesFromChAsoduDB.query.rows:', rows);
   if (rows.length) {
     rows = convertArray2Object(rows, 'TagName', 'Value');
