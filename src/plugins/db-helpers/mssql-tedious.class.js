@@ -411,8 +411,9 @@ class MssqlTedious {
 
   /**
    * @method rollbackTransaction
-   * @param {String} errMessage
    * @description SQL: Rolling Back Transaction - due to errors during transaction process.
+   * @param {String} errMessage
+   * 
    */
   rollbackTransaction(errMessage) {
     const self = this;
@@ -444,6 +445,7 @@ class MssqlTedious {
    * ] 
    * @param {Object[]} data 
    * e.g  data = [{ c1: 1 }, { c1: 2, c2: 'hello' }];
+   * @returns {Number}
    */
   insertBulkData(table, colums, data) {
     const self = this;

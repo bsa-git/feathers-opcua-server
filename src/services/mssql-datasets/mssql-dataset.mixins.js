@@ -88,6 +88,52 @@ module.exports = function mssqlDatasetsMixins(service, path) {
   };
 
   /**
+   * @method beginTransaction
+   * @description SQL: Begin Transaction
+   * @async
+   * 
+   * @param {String} id 
+   * @returns {Object}
+   */
+  service.beginTransaction = async function (id) {
+    const mssqlDataset = await service.get(id);
+    await mssqlDataset.db.beginTransaction();
+    result = Object.assign({}, mssqlDataset, mssqlDataset.db.getDatasetForProvider());
+    return result;
+  };
+
+  /**
+   * @method commitTransaction
+   * @description SQL: Commit Transaction (if no errors)
+   * @async
+   * 
+   * @param {String} id 
+   * @returns {Object}
+   */
+  service.commitTransaction = async function (id) {
+    const mssqlDataset = await service.get(id);
+    await mssqlDataset.db.commitTransaction();
+    result = Object.assign({}, mssqlDataset, mssqlDataset.db.getDatasetForProvider());
+    return result;
+  };
+
+  /**
+   * @method rollbackTransaction
+   * @description SQL: Rolling Back Transaction - due to errors during transaction process.
+   * @async
+   * 
+   * @param {String} id 
+   * @param {String} errMessage
+   * @returns {Object}
+   */
+  service.rollbackTransaction = async function (id, errMessage) {
+    const mssqlDataset = await service.get(id);
+    await mssqlDataset.db.commitTransaction(errMessage);
+    result = Object.assign({}, mssqlDataset, mssqlDataset.db.getDatasetForProvider());
+    return result;
+  };
+
+  /**
    * @method connect
    * @async
    * 
@@ -140,6 +186,26 @@ module.exports = function mssqlDatasetsMixins(service, path) {
     const mssqlDataset = await service.get(id);
     await mssqlDataset.db.connReset();
     result = Object.assign({}, mssqlDataset, mssqlDataset.db.getDatasetForProvider());
+    return result;
+  };
+
+  /**
+   * @method insertBulkData
+   * @description Executing Bulk insert
+   * @param {String} table
+   * e.g. table = '[dbo].[test_bulk]' 
+   * @param {Array[]} colums 
+   * e.g. colums = [
+   *  ['c1', TYPES.Int, { nullable: true }], 
+   *  ['c2', TYPES.NVarChar, { length: 50, nullable: true }]
+   * ] 
+   * @param {Object[]} data 
+   * e.g  data = [{ c1: 1 }, { c1: 2, c2: 'hello' }];
+   * @returns {Number}
+   */
+  service.insertBulkData = async function (id, table, colums, data) {
+    const mssqlDataset = await service.get(id);
+    result = mssqlDataset.db.insertBulkData(table, colums, data);
     return result;
   };
 

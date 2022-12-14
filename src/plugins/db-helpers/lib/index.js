@@ -1,6 +1,6 @@
 
 const getValuesFromChAsoduDB = require('./getValuesFromChAsoduDB');
-const insertValues4ChAsoduDB = require('./insertValues4ChAsoduDB');
+const insertValues4ChAsoduDB = require('./insertValuesToChAsoduDB');
 
 module.exports = Object.assign({},
   {
