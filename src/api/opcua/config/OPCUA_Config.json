@@ -357,7 +357,7 @@
       "password": "OPCUA_KEP_PASS"
     },
     "include": {
-      "tests": ["http-operations.test.js", "mssql-tedious.test2.js"]
+      "tests": ["http-operations.test.js"]
     },
     "paths": {
       "base-options": [
