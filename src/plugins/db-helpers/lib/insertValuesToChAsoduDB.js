@@ -19,6 +19,19 @@ const isDebug = false;
  * @method insertValues4ChAsoduDB
  * @param {Object} db 
  * @param {Object} queryParams 
+ * e.g. {
+ *  scanerName: 'opcUA(A5)',
+    tagGroup: 'XozUchet',
+    rowSnapShot['TagID'] = row.ID;
+    data['ScanerName'] = scanerName;
+    data['TagGroup'] = tagGroup;
+    data['Time'] = dt -> moment();
+    data['dtYear'] = dt.year();
+    data['dtDofY'] = dt.dayOfYear();
+    data['dtTotalS'] = (dt.hours() * 3600) + dt.seconds();
+    data['Value'] = val;
+ * 
+ * }
  * @returns {Object}
  */
 const insertValues4ChAsoduDB = async function (db, queryParams) {

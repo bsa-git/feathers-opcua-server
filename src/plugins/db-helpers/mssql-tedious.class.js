@@ -6,6 +6,7 @@ const { Connection, Request, TYPES } = require('tedious');
 
 const {
   getter,
+  assert,
   inspector,
   isFunction,
   isObject
@@ -157,6 +158,7 @@ class MssqlTedious {
     //---------------------------------------------------------------
     let _config = loMerge({}, config);
     const id = process.env[`${prefix}_ID`];
+    assert(id, `getConfigFromEnv.Error of id="${id}", prefix="${prefix}"`);
     const user = process.env[`${prefix}_USER`];
     const pass = process.env[`${prefix}_PASS`];
     idParts = id.split('.');

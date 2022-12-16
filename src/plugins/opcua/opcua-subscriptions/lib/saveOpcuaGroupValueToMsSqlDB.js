@@ -11,6 +11,8 @@ const {
   formatDataValue
 } = require('../../opcua-helper');
 
+const { MssqlTedious } = require('../../../db-helpers');
+
 const {
   findItem,
   findItems,
@@ -35,19 +37,24 @@ const isDebug = false;
  * @returns {Object[]}
  */
 async function saveOpcuaGroupValueToMsSqlDB(params, dataValue) {
-  let savedValue = null, opcuaValueItem, opcuaValues = [];
-  //--------------------------
-  if (isDebug && params) inspector('saveOpcuaGroupValueToDB.params:', loOmit(params, ['myOpcuaClient']));
-  if (isDebug && dataValue) inspector('saveOpcuaGroupValueToDB.dataValue:', dataValue);
+  let savedValue = null, opcuaValueItem = {}, opcuaValues = [];
+  //----------------------------------------------------------
+  if (isDebug && params) inspector('saveOpcuaGroupValueToMsSqlDB.params:', loOmit(params, ['myOpcuaClient']));
+  if (isDebug && dataValue) inspector('saveOpcuaGroupValueToMsSqlDB.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
+  const subscribeParams = addressSpaceOption.subscribeParams;
+  const browseName = addressSpaceOption.browseName;
   const app = params.myOpcuaClient.app;
+
+  // Get mssql service
+  const service = app.service('mssql-datasets');
+  const mssqlId = MssqlTedious.getIdFromConfig(subscribeParams.dbEnv);
 
   // Only for group values
   if (addressSpaceOption && !addressSpaceOption.group) return;
 
-  const browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
-  if (isDebug && dataValue) inspector('saveOpcuaGroupValueToDB.formatDataValue:', dataValue);
+  if (isDebug && dataValue) inspector('saveOpcuaGroupValueToMsSqlDB.formatDataValue:', dataValue);
   let opcuaValue = dataValue.value.value;
   opcuaValue = JSON.parse(opcuaValue);
 
@@ -58,29 +65,23 @@ async function saveOpcuaGroupValueToMsSqlDB(params, dataValue) {
     const groupTagItems = await findItems(app, 'opcua-tags', { ownerGroup: browseName });
     // Normalize opcuaValue
     loForEach(opcuaValue, (value, key) => {
-      const findedKey = groupTagItems.find(item => (item.browseName === key) || (item.aliasName === key));
-      if (findedKey) {
-        key = findedKey.browseName;
-        if (value === null) {
-          value = getInt(value);
-        }
-        opcuaValueItem = { key };
-        if (opcuaValue['!value']) opcuaValueItem.params = opcuaValue['!value'];
-        if (Array.isArray(value)) {
-          opcuaValueItem.values = value;
-        } else {
-          opcuaValueItem.value = value;
-        }
+      const findedGroupTag = groupTagItems.find(item => (item.browseName === key) || (item.aliasName === key));
+      if (findedGroupTag) {
+        opcuaValueItem = {};
+        const aliasName = findedGroupTag.aliasName;
+        opcuaValueItem[aliasName] = value;
         opcuaValues.push(opcuaValueItem);
       }
     });
   }
 
-  // Save data to DB
-  // if (isSaveOpcuaToDB()) {
-  //   savedValue = await saveOpcuaGroupValue(app, browseName, value);
-  //   if (isDebug && savedValue) inspector('saveOpcuaGroupValueToDB.savedValue:', savedValue);
-  // } 
+  const queryParams = Object.assign({}, subscribeParams, opcuaValue['!value'], { opcuaValues });
+  if (true && queryParams) inspector('saveOpcuaGroupValueToMsSqlDB.queryParams:', queryParams);
+
+  // Execute query MsSql DB
+  // const { rows, rowCount } = await service.executeQuery(mssqlId, queryParams);
+  // if (isDebug && queryParams) inspector('saveOpcuaGroupValueToMsSqlDB.executeQuery.result:', { rows, rowCount });
+  
   return savedValue;
 }
 
