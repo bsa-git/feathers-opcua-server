@@ -22,7 +22,8 @@ const isDebug = false;
  * @returns {void}
  */
 async function onChangedGroupHandlerForDB(params, dataValue) {
-  
+  // let subscribeParams = null;
+  //--------------------------
   try {
     if (isDebug && params) inspector('subscriptions.onChangedGroupHandlerForDB.params:', loOmit(params, ['myOpcuaClient']));
     if (isDebug && dataValue) inspector('subscriptions.onChangedGroupHandlerForDB.dataValue:', dataValue);

@@ -23,12 +23,21 @@
       "dataType": "String",
       "hist": 1,
       "group": true,
-      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
       "getter": "getterValuesFromKepServer",
       "getterParams": {
         "clientId": "ua-cherkassy-azot-ogmt0088846_dev3",
         "interval": 20000
+      },
+      "subscription": "onChangedKepValue",
+      "subscribeParams": {
+        "subscribeFuncs": ["saveOpcuaGroupValueToDB", "saveOpcuaGroupValueToMsSqlDB"],
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "insertValuesToChAsoduDB",
+        "queryParams": {
+          "scanerName": "opcUA(A5)",
+          "tagGroup": "XozUchet"
+        }
       }
     },
     {

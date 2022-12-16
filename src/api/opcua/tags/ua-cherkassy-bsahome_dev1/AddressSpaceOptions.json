@@ -64,14 +64,7 @@
         "fromFile": "test/data/csv/data-CH_M51.csv",
         "interval": 10000
       },
-      "subscription": "onChangedGroupHandlerForDB",
-      "subscribeParams": {
-        "dbEnv": "MSSQL_ASODU_TEST",
-        "queryFunc": "getValuesFromChAsoduDB",
-        "queryParams": {
-          "scanerName": "xlsxGA10(A3)"
-        }
-      }
+      "subscription": "onChangedGroupHandlerForDB"
     },
     {
       "browseName": "CH_M52::ValueFromFile",
