@@ -397,8 +397,8 @@
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
-      "userName": "OPCUA_KEP_LOGIN",
-      "password": "OPCUA_KEP_PASS"
+      "userName": "OPCUA_ADMIN_LOGIN",
+      "password": "OPCUA_ADMIN_PASS"
     },
     "include": {
       "tests": ["http-operations.test.js"]
