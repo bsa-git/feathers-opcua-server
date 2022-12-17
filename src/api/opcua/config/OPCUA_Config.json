@@ -369,5 +369,49 @@
       "subscriptions": "",
       "client-scripts": ""
     }
+  },
+  {
+    "id": "ua-cherkassy-bsahome_dev2",
+    "name": "380-472-bsahome_dev2",
+    "description": "Opcua client. Client connect to `opc.tcp://HOME-PC:26570` (HOME-PC OpcuaServer)",
+    "endpointUrl": "opc.tcp://HOME-PC:26570",
+    "endpointPort": 26570,
+    "srvServiceUrl": "http://HOME-PC:3030",
+    "clientServiceUrl": "http://HOME-PC:3030",
+    "clientScript": "startSubscriptionMonitor",
+    "executeMethodsFrom": "client",
+    "hostTypeDB": "nedb",
+    "opcuaSaveModeToDB": "localUpdate",
+    "opcuaRemoteDbUrl": "http://HOME-PC:3131",
+    "opcuaBootstrapParams": {
+      "clearHistoryAtStartup": true,
+      "syncHistoryAtStartup": { 
+        "active": false,
+        "methodName": "methodAcmDayReportsDataGet"
+      },
+      "syncReportAtStartup": {
+        "active": false,
+        "methodName": "methodAcmYearReportUpdate"
+      }
+    },
+    "security": {
+      "mode": "SignAndEncrypt",
+      "policy": "Basic256Sha256",
+      "userName": "OPCUA_KEP_LOGIN",
+      "password": "OPCUA_KEP_PASS"
+    },
+    "include": {
+      "tests": ["http-operations.test.js"]
+    },
+    "paths": {
+      "base-options": [
+        "/src/api/opcua/tags/ua-cherkassy-azot-m5_prod1"
+      ],
+      "options": "/src/api/opcua/tags/ua-cherkassy-bsahome_dev1/AddressSpaceOptions.json",
+      "getters": "",
+      "methods": "",
+      "subscriptions": "",
+      "client-scripts": ""
+    }
   }
 ]
