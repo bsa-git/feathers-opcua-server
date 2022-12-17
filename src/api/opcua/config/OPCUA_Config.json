@@ -384,7 +384,7 @@
     "opcuaSaveModeToDB": "localUpdate",
     "opcuaRemoteDbUrl": "http://HOME-PC:3131",
     "opcuaBootstrapParams": {
-      "clearHistoryAtStartup": true,
+      "clearHistoryAtStartup": false,
       "syncHistoryAtStartup": { 
         "active": false,
         "methodName": "methodAcmDayReportsDataGet"
