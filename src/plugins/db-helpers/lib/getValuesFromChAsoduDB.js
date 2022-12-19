@@ -33,7 +33,7 @@ const getValuesFromChAsoduDB = async function (db, queryParams) {
     rows = convertArray2Object(rows, 'TagName', 'Value');
     if (isDebug) inspector('selectValuesFromChAsoduDB.convertArray2Object.rows:', rows);
   } else { rows = null; }
-  return rows;
+  return { rows };
 };
 
 module.exports = getValuesFromChAsoduDB;

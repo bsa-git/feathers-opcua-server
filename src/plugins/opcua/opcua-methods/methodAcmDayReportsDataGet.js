@@ -199,6 +199,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
         if (isDebug && dirList) console.log('methodAcmDayReportsDataGet.filterDirList.length:', dirList.length);
       }
     }
+    if (isDebug && dirList) inspector('methodAcmDayReportsDataGet.DirList:', dirList);
 
     // Convert xls data to json data 
     for (let index = 0; index < dirList.length; index++) {
@@ -245,7 +246,7 @@ async function methodAcmDayReportsDataGet(inputArguments, context, callback) {
       }
     }
 
-    if (isDebug && dataItems.length) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
+    if (isDebug && dataItems) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
 
     // Remove files from dir
     if (params.isRemoveXlsFiles) {

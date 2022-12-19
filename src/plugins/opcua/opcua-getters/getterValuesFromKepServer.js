@@ -66,9 +66,11 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
       if (isDebug && formatValue) inspector('getterValuesFromKepServer.formatValue:', formatValue);
       if(!dateTime) {
         dateTime = formatValue.serverTimestamp;
-        dateTime = moment.utc(dateTime).format('YYYY-MM-DDTHH:mm:ss');
+        // dateTime = moment.utc(dateTime).format('YYYY-MM-DDTHH:mm:ss');
+        dateTime = moment(dateTime).format('YYYY-MM-DDTHH:mm:ss');
         dataItems['!value'] = { dateTime };
-      } 
+      }
+      if(isDebug && dateTime) console.log('getterValuesFromKepServer.dateTime: ', dateTime); 
       dataItems[browseName] = formatValue.value.value;
       if(formatValue.statusCode.name !== 'Good') logger.info(`For browseName: "${chalk.yellowBright(browseName)}" statusCode = "${chalk.redBright(formatValue.statusCode.name)}", value = ${formatValue.value.value}`);
     }

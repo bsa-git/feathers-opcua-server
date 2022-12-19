@@ -39,7 +39,7 @@ module.exports = function mssqlDatasetsMixins(service, path) {
       result = ['id', 'errMessage'];
       break;
     case 'executeQuery':
-      result = ['id', 'params'];
+      result = ['id', 'queryFunc', 'queryParams'];
       break;
     case 'buildParams':
       result = ['id', 'params', 'paramName', 'paramType', 'paramValue'];
@@ -263,12 +263,15 @@ module.exports = function mssqlDatasetsMixins(service, path) {
    * @async
    * 
    * @param {String} id
-   * @param {Object} params  
-   * @returns {Object[]}
+   * @param {String} queryFunc
+   * e.g. queryFunc = 'getTagInfoFromChAsoduDB' 
+   * @param {Object} queryParams 
+   * e.g. queryParams = { "scanerName": "opcUA(A5)", "tagGroup": "XozUchet" } 
+   * @returns {Object}
    */
-  service.executeQuery = async function (id, params) {
+  service.executeQuery = async function (id, queryFunc, queryParams) {
     const mssqlDataset = await service.get(id);
-    result = await mssqlDataset.db.executeQuery(params);
+    result = await mssqlDataset.db.executeQuery(queryFunc, queryParams);
     return result;
   };
 

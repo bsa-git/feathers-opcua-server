@@ -250,20 +250,22 @@ class MssqlTedious {
   /**
  * @async
  * @method executeQuery
- * @param {Object} params 
- * e.g. params = { queryFunc: 'getTagInfoFromChAsoduDB' }
- * @returns {Array}
+ * @param {String} queryFunc 
+ * e.g. queryFunc = 'getTagInfoFromChAsoduDB' 
+ * @param {Object} queryParams 
+ * e.g. queryParams = { "scanerName": "opcUA(A5)", "tagGroup": "XozUchet" }
+ * @returns {Object}
  */
-  async executeQuery(params) {
+  async executeQuery(queryFunc, queryParams) {
     let rows;
     //-------------------------------
     await this.connect();
     // Select values from DB
-    const queryFunc = queryFuncs[params['queryFunc']];
-    if (isFunction(queryFunc)) {
-      rows = await queryFunc(this, params.queryParams);
+    const _queryFunc = queryFuncs[queryFunc];
+    if (isFunction(_queryFunc)) {
+      rows = await _queryFunc(this, queryParams);
     } else {
-      throw new Error(`The function "${params['queryFunc']}" is missing.`);
+      throw new Error(`The function "${queryFunc}" is missing.`);
     }
     await this.disconnect();
     return rows;

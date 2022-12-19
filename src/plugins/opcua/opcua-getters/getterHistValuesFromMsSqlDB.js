@@ -46,10 +46,11 @@ function getterHistValuesFromMsSqlDB(params = {}, addedValue) {
 
   // Set interval
   const intervalId = setInterval(async function () {
-    let rows;
     //-------------------------------
     // Execute query MsSql DB
-    rows = await service.executeQuery(mssqlId, params);
+    const queryFunc = params.queryFunc;
+    const queryParams = params.queryParams;
+    const { rows } = await service.executeQuery(mssqlId, queryFunc, queryParams);
 
     if (rows) {
       setValuesFromSource(rows);

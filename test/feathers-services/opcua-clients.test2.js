@@ -550,11 +550,16 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
     
     // Select test
     if(!testNumbers.includes('all') && !testNumbers.includes('#12.3')) return;
+
+    // Remove opcua store values
+    const removeResult = await removeOpcuaStoreValues(app);
+    if (isDebug && removeResult) inspector('removeOpcuaStoreValues.removeResult:', removeResult);
+
     // Get opcua tags
     const opcuaTags = getOpcuaConfigOptions(id);
     const syncResult = await syncHistoryAtStartup(app, opcuaTags, 'methodAcmDayReportsDataGet');
     if(isDebug && syncResult) debug(`Run method "syncHistoryAtStartup".syncResult: {"saved": ${syncResult.savedValuesCount}, "removed": ${syncResult.removedValuesCount}}`);
-    assert.ok(syncResult.savedValuesCount, 'OPC-UA clients: run method "syncHistoryAtStartup"');
+    assert.ok(syncResult.statusCode === 'Good', 'OPC-UA clients: run method "syncHistoryAtStartup"');
   });
 
   it('#12.4: OPC-UA clients: run method "syncReportAtStartup"', async () => {
@@ -609,8 +614,6 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
         if (isDebug && dataItems) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
       }
       assert.ok(statusCode === 'Good', 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store');  
-      assert.ok(dataItems.length, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store');  
-      assert.ok(methodResult.storeParams4Remove.length === 0, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store');  
     }
   });
 
@@ -653,8 +656,7 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
         }
         if (isDebug && dataItems) inspector('methodAcmDayReportsDataGet.dataItems:', dataItems);
       }
-      assert.ok(statusCode === 'Good' && dataItems.length, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store');  
-      assert.ok(methodResult.storeParams4Remove.length === 0, 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store');
+      assert.ok(statusCode === 'Good', 'OPC-UA clients: run method "methodAcmDayReportsDataGet" with clear store');  
     }
   });
 
@@ -717,7 +719,6 @@ describe('<<=== OPC-UA: (opcua-clients.test2) ===>>', () => {
       }
       assert.ok(statusCode === 'Good', 'OPC-UA clients: session call method "methodAcmDayReportsDataGet"');
     }
-    // await pause(1000);
   });
 
   //============== RUN COMMAND ====================//

@@ -1324,7 +1324,7 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
     // Run metod
     const storeParams = await getStoreParams4Data(app, [groupBrowseName]);
     methodResult = await opcuaMethods[methodName]([{ value: pointID }], { storeParams });
-    if (isDebug && methodResult) inspector('syncHistoryAtStartup.methodAcmDayReportsDataGet.methodResult:', methodResult);
+    if (isDebug && methodResult) inspector(`syncHistoryAtStartup.${methodName}.methodResult:`, methodResult);
     statusCode = methodResult.statusCode;
 
     // Get dataItems
@@ -1337,6 +1337,7 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
     } else {
       dataItems = methodResult.dataItems;
     }
+    if (isDebug && dataItems) inspector(`syncHistoryAtStartup.${methodName}.dataItems:`, dataItems);
 
     // Add dataItems for storeParams4Remove
     const storeParams4Remove = methodResult.storeParams4Remove;
@@ -1347,7 +1348,7 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
       const dataItem = {};
       dataItem['!value'] = storeParam4Remove;
       Object.assign(dataItem, dataItemBrowseNames);
-      if (isDebug && dataItem) inspector('syncHistoryAtStartup.methodAcmDayReportsDataGet.dataItem:', dataItem);
+      if (isDebug && dataItem) inspector(`syncHistoryAtStartup.${methodName}.dataItem:`, dataItem);
       dataItems.push(dataItem);
     }
 
@@ -1363,7 +1364,7 @@ const syncHistoryAtStartup = async function (app, opcuaTags, methodName) {
     if (isDebug && deletedItems.length) inspector('removeItemsSync.deletedItems:', deletedItems);
   }
   // Get sync result
-  const syncResult = { savedValuesCount, removedValuesCount };
+  const syncResult = { statusCode, savedValuesCount, removedValuesCount };
   if (isDebug && dataItems) console.log(`syncHistoryAtStartup.syncResult: ${syncResult}`);
   return syncResult;
 };

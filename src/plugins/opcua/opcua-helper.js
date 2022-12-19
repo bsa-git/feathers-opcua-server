@@ -1353,6 +1353,7 @@ const convertArrayToTypedArray = function (valueWithParams) {
 const getTimestamp = function (timestamp) {
   // Mon Feb 08 2021 11:47:22 GMT+0200 (GMT+02:00)
   let dt = loIsObject(timestamp) ? timestamp.toString() : timestamp;
+  if(isDebug && dt) console.log('opcua-helper.timestamp: ', timestamp);
   const dtList = dt.split(' ');
   if (dtList.length >= 5) {
     dt = moment(`${dtList[1]} ${dtList[2]} ${dtList[3]} ${dtList[4]}`, 'MMM DD YYYY HH:mm:ss');

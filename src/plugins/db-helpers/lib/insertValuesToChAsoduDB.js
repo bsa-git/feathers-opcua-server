@@ -16,41 +16,84 @@ const isDebug = false;
 
 //=============================================================================
 /**
- * @method insertValues4ChAsoduDB
+ * @method insertValuesToChAsoduDB
  * @param {Object} db 
  * @param {Object} queryParams 
  * e.g. {
  *  scanerName: 'opcUA(A5)',
     tagGroup: 'XozUchet',
-    rowSnapShot['TagID'] = row.ID;
-    data['ScanerName'] = scanerName;
-    data['TagGroup'] = tagGroup;
-    data['Time'] = dt -> moment();
-    data['dtYear'] = dt.year();
-    data['dtDofY'] = dt.dayOfYear();
-    data['dtTotalS'] = (dt.hours() * 3600) + dt.seconds();
-    data['Value'] = val;
+    dateTime: '2022-12-19T08:52:56',
+    opcuaValues: [
+    { F59AM: 71.1017837524414 },
+    { F21AM: null },
+    ...,
+    { F98: 114.83361053466797 },
+    { F93: 87.92138671875 }
+  ]
  * 
  * }
  * @returns {Object}
  */
-const insertValues4ChAsoduDB = async function (db, queryParams) {
+const insertValuesToChAsoduDB = async function (db, queryParams) {
   let sql = '', result, rows, params = [];
+  let rowSnapShot = {}, rowsSnapShot = [];
   const scanerName = queryParams.scanerName;
   const tagGroup = queryParams.tagGroup;
-  const data = queryParams.data;
+  const dateTime = queryParams.dateTime;
+  const utcOffset = queryParams.utcOffset;
+  const opcuaValues = queryParams.opcuaValues;
   //--------------------------------------
   try {
-    await db.connect();
+    // await db.connect();
+
+    if (isDebug && queryParams) inspector('insertValues4ChAsoduDB.queryParams:', queryParams);
+
+    // Select rows from SnapShot table
+    params = [];
+    sql = `
+    SELECT tInfo.ID, tInfo.TagName, tInfo.ScaleMin, tInfo.ScaleMax
+    FROM dbConfig.dbo.TagsInfo AS tInfo
+    WHERE tInfo.ScanerName = @scanerName AND 
+          tInfo.TagGroup = @tagGroup AND
+          tInfo.OnOff=1
+    ORDER BY ID
+    `;
+
+    db.buildParams(params, 'scanerName', TYPES.Char, scanerName);
+    db.buildParams(params, 'tagGroup', TYPES.Char, tagGroup);
+
+    result = await db.query(params, sql);
+    rows = result.rows;
+    if (isDebug && rows) inspector('Get tags from TagsInfo.rows:', rows);
+
+    for (let index = 0; index < rows.length; index++) {
+      rowSnapShot = {};
+      const row = rows[index];
+      const tagOpcuaValue = opcuaValues.find(opcuaValue => opcuaValue[row.TagName] !== undefined);
+      if (tagOpcuaValue) {
+        const dt = moment(dateTime);
+        rowSnapShot['TagID'] = row.ID;
+        rowSnapShot['ScanerName'] = scanerName;
+        rowSnapShot['TagGroup'] = tagGroup;
+        rowSnapShot['Time'] = dt.add(utcOffset, 'hours');
+        rowSnapShot['dtYear'] = dt.year();
+        rowSnapShot['dtDofY'] = dt.dayOfYear();
+        rowSnapShot['dtTotalS'] = (dt.hours() * 3600) + dt.seconds();
+        rowSnapShot['Value'] = tagOpcuaValue[row.TagName];
+
+        rowsSnapShot.push(rowSnapShot);
+      }
+    }
+    if (true && rowsSnapShot.length) inspector('Get tags from TagsInfo.rowsSnapShot:', rowsSnapShot);
+
+    if(!rowsSnapShot.length) return { rows: [], rowCount: 0 };
 
     //--- Begin transaction ---
     await db.beginTransaction();
 
-    if (isDebug && queryParams) inspector('insertValues4ChAsoduDB.queryParams:', queryParams);
-
-    // Remove rows from dbBSA.dbo.SnapShotTest
+    // Remove rows from dbBSA.dbo.SnapShot
     sql = `
-    DELETE sh FROM dbBSA.dbo.SnapShotTest AS sh
+    DELETE sh FROM dbBSA.dbo.SnapShot AS sh
     WHERE (sh.ScanerName = @scanerName) AND (sh.TagGroup = @tagGroup OR sh.TagGroup IS NULL)
     `;
     params = [];
@@ -58,10 +101,10 @@ const insertValues4ChAsoduDB = async function (db, queryParams) {
     db.buildParams(params, 'tagGroup', TYPES.VarChar, tagGroup);
 
     result = await db.query(params, sql);
-    if (isDebug && result) inspector('Delete rows from dbBSA.dbo.SnapShotTest:', result.rowCount);
+    if (isDebug && result) inspector('Delete rows from dbBSA.dbo.SnapShot:', result.rowCount);
 
-    // Insert row to dbBSA.dbo.SnapShotTest
-    const table = 'dbBSA.dbo.SnapShotTest';
+    // Insert row to dbBSA.dbo.SnapShot
+    const table = 'dbBSA.dbo.SnapShot';
     const colums = [
       ['TagID', TYPES.Int, { nullable: false }],
       ['ScanerName', TYPES.VarChar, { nullable: false }],
@@ -73,15 +116,12 @@ const insertValues4ChAsoduDB = async function (db, queryParams) {
       ['Value', TYPES.Real, { nullable: true }],
     ];
 
-    const rowCount = await db.insertBulkData(table, colums, data);
+    const rowCount = await db.insertBulkData(table, colums, rowsSnapShot);
     if (isDebug && rowCount) logger.info(`Rows inserted to table "${table}": ${rowCount}`);
-
-    //--- Commit transaction ---
-    await db.commitTransaction();
 
     sql = `
     SELECT *
-    FROM dbBSA.dbo.SnapShotTest AS sh
+    FROM dbBSA.dbo.SnapShot AS sh
     WHERE (sh.ScanerName = @scanerName) AND (sh.TagGroup = @tagGroup OR sh.TagGroup IS NULL)
     `;
 
@@ -97,13 +137,18 @@ const insertValues4ChAsoduDB = async function (db, queryParams) {
         row['Time'] = moment(row['Time']).format();
       }
     }
-    if (isDebug && rows) inspector('Get values from dbBSA.dbo.SnapShotTest.rows:', rows);
+    if (isDebug && rows) inspector('Get values from dbBSA.dbo.SnapShot.rows:', rows);
 
-    await db.disconnect();
+    //--- Commit transaction ---
+    await db.commitTransaction();
+
+    // await db.disconnect();
+
+    return { rows, rowCount: result.rowCount };
 
   } catch (error) {
     //--- Rollback transaction ---
     await db.rollbackTransaction(error.message);
   }
 };
-module.exports = insertValues4ChAsoduDB;
+module.exports = insertValuesToChAsoduDB;

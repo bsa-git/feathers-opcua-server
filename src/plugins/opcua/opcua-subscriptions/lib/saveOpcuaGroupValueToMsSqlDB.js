@@ -75,13 +75,14 @@ async function saveOpcuaGroupValueToMsSqlDB(params, dataValue) {
     });
   }
 
-  const queryParams = Object.assign({}, subscribeParams, opcuaValue['!value'], { opcuaValues });
-  if (true && queryParams) inspector('saveOpcuaGroupValueToMsSqlDB.queryParams:', queryParams);
+  const queryFunc = subscribeParams.queryFunc;
+  const queryParams = Object.assign({}, subscribeParams.queryParams, opcuaValue['!value'], { opcuaValues });
+  if (isDebug && queryParams) inspector('saveOpcuaGroupValueToMsSqlDB.queryParams:', queryParams);
 
   // Execute query MsSql DB
-  // const { rows, rowCount } = await service.executeQuery(mssqlId, queryParams);
-  // if (isDebug && queryParams) inspector('saveOpcuaGroupValueToMsSqlDB.executeQuery.result:', { rows, rowCount });
-  
+  savedValue = await service.executeQuery(mssqlId, queryFunc, queryParams);
+  if (isDebug && savedValue) inspector('saveOpcuaGroupValueToMsSqlDB.executeQuery.result:', savedValue);
+
   return savedValue;
 }
 
