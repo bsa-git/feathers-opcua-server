@@ -24,6 +24,7 @@ const defaultConnConfig = {
   options: {
     instanceName: 'instanceName',
     encrypt: false,
+    trustServerCertificate: false,
     database: 'database',
     connectTimeout: 20000,
     rowCollectionOnDone: true, // Only get row set instead of row by row

@@ -34,38 +34,39 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test2.js) ===>>', () => {
 
   it('#1: Connecting and request', async () => {
     const db = new MssqlTedious(mssqlEnvName);
+    db.config.options.debug.data = true;
+    db.config.options.debug.packet = true;
+    db.config.events.connection.debug.enable = true;
+    db.config.events.connection.infoMessage.enable = true;
+    db.config.events.connection.errorMessage.enable = true;
     const connection = await db.connect();
-
-    // const params = [];
-    // const sql = "select * from tblMessages where number = @number";
-    // For each param do: db.buildParams(params, "name", TYPES.type, variable)
-    // db.buildParams(params, "number", TYPES.Int, number);
-
-    // const sql = 'select * from tblMessages';
-    // await db.query(params, sql, result => {
-    //   console.log('Request result:', { params, sql, rows: result });
-    // });
-
-    // if(isDebug) inspector('Connecting and request.getCurrentState:', db.getCurrentState());
 
     await db.disconnect();
 
 
-    /** 
+    /**  
     var config = {
       server: 'BSA-HOME', // or "localhost" "'BSA-HOME\\SQLEXPRESS'"
       options: {
         // port: 1433,
         instanceName: 'SQLEXPRESS',
         encrypt: false,
-        database: 'dbTest',
+        trustServerCertificate: false,
+        database: 'dbBSA',
         connectTimeout: 5000,
+      },
+      debug: {
+        data: true,
+        packet: true,
+        log: false,
+        payload: false,
+        token: false,
       },
       authentication: {
         type: 'default',
         options: {
           userName: 'sa',
-          password: 'sa123',
+          password: 'bs261257',
         }
       }
     };
@@ -89,7 +90,6 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test2.js) ===>>', () => {
     await pause(6000);
 
     */
-
     assert.ok(true, 'Connecting to the database (tedious)');
   });
 });
