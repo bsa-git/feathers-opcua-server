@@ -99,6 +99,14 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     let sql = '';
     //---------------------------------------------
     const db = new MssqlTedious(mssqlEnvName);
+
+    // db.config.options.debug.data = false;
+    // db.config.options.debug.packet = true;
+
+    // db.config.events.connection.debug.enable = true;
+    // db.config.events.connection.infoMessage.enable = true;
+    // db.config.events.connection.errorMessage.enable = true;
+
     await db.connect();
 
     // Insert row to tblMessages
