@@ -255,7 +255,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     assert.ok(rows.length, 'Select values for "opcUPG2" from SnapShot table');
   });
 
-  it('#8: Insert values to SnapShot table for "opcUA(A5)" and "XozUchet"', async () => {
+  it('#8: Insert values with insertBulkData to SnapShot table for "opcUA(A5)" and "XozUchet"', async () => {
     let db, sql = '', result, rows, rowSnapShot = {}, rowsSnapShot = [];
     const scanerName = 'opcUA(A5)';
     const tagGroup = 'XozUchet';
@@ -294,7 +294,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
         rowSnapShot['TagID'] = row.ID;
         rowSnapShot['ScanerName'] = scanerName;
         rowSnapShot['TagGroup'] = tagGroup;
-        rowSnapShot['Time'] = dt;
+        rowSnapShot['Time'] = dt.format('YYYY-MM-DDTHH:mm:ss');
         rowSnapShot['dtYear'] = dt.year();
         rowSnapShot['dtDofY'] = dt.dayOfYear();
         rowSnapShot['dtTotalS'] = (dt.hours() * 3600) + dt.seconds();
@@ -321,19 +321,16 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
       const colums = [
         ['TagID', TYPES.Int, { nullable: false }],
         ['ScanerName', TYPES.VarChar, { nullable: false }],
-        ['TagGroup', TYPES.VarChar, { nullable: true }],
         ['Time', TYPES.DateTime, { nullable: false }],
         ['dtYear', TYPES.SmallInt, { nullable: false }],
         ['dtDofY', TYPES.SmallInt, { nullable: false }],
         ['dtTotalS', TYPES.Int, { nullable: false }],
         ['Value', TYPES.Real, { nullable: true }],
+        ['TagGroup', TYPES.VarChar, { nullable: true }],
       ];
 
       const rowCount = await db.insertBulkData(table, colums, rowsSnapShot);
       if (isDebug && rowCount) logger.info(`Rows inserted to table "${table}": ${rowCount}`);
-
-      //--- Commit transaction ---
-      await db.commitTransaction();
 
       sql = `
       SELECT *
@@ -347,13 +344,122 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
 
       result = await db.query(params, sql);
       rows = result.rows;
-      if (rows.length) {
-        for (let index = 0; index < rows.length; index++) {
-          const row = rows[index];
-          row['Time'] = moment(row['Time']).format();
-        }
-      }
       if (isDebug && rows) inspector('Get values from dbBSA.dbo.SnapShotTest.rows:', rows);
+
+      //--- Commit transaction ---
+      await db.commitTransaction();
+
+      await db.disconnect();
+
+      assert.ok(rows.length, 'Insert values to SnapShot table for "opcUA(A5)" and "XozUchet"');
+    } catch (error) {
+      //--- Rollback transaction ---
+      await db.rollbackTransaction(error.message);
+      assert.ok(false, 'Insert values to SnapShot table for "opcUA(A5)" and "XozUchet"');
+    }
+
+  });
+
+
+  it('#9: Insert values with params to SnapShot table for "opcUA(A5)" and "XozUchet"', async () => {
+    let db, sql = '', result, rows, rowSnapShot = {}, rowsSnapShot = [];
+    const scanerName = 'opcUA(A5)';
+    const tagGroup = 'XozUchet';
+    //---------------------------------------------
+
+    try {
+      db = new MssqlTedious(mssqlEnvName);
+      await db.connect();
+
+      //--- Begin transaction ---
+      await db.beginTransaction();
+
+      // Select rows from SnapShot table
+      let params = [];
+      sql = `
+      SELECT tInfo.ID, tInfo.ScaleMin, tInfo.ScaleMax
+      FROM dbConfig.dbo.TagsInfo AS tInfo
+      WHERE tInfo.ScanerName = @scanerName AND tInfo.TagGroup = @tagGroup
+      ORDER BY ID
+      `;
+
+      db.buildParams(params, 'scanerName', TYPES.Char, scanerName);
+      db.buildParams(params, 'tagGroup', TYPES.Char, tagGroup);
+
+      result = await db.query(params, sql);
+      rows = result.rows;
+      if (isDebug && rows) inspector('Get tags from TagsInfo.rows:', rows);
+
+      for (let index = 0; index < rows.length; index++) {
+        rowSnapShot = {};
+        const row = rows[index];
+        const dt = moment();
+        let val = (row.ScaleMax - row.ScaleMin) / 2;
+        val = getValue(val);
+
+        rowSnapShot['TagID'] = row.ID;
+        rowSnapShot['ScanerName'] = scanerName;
+        rowSnapShot['TagGroup'] = tagGroup;
+        rowSnapShot['Time'] = dt.format('YYYY-MM-DDTHH:mm:ss');
+        rowSnapShot['dtYear'] = dt.year();
+        rowSnapShot['dtDofY'] = dt.dayOfYear();
+        rowSnapShot['dtTotalS'] = (dt.hours() * 3600) + dt.seconds();
+        rowSnapShot['Value'] = val;
+
+        rowsSnapShot.push(rowSnapShot);
+      }
+      if (isDebug && rowsSnapShot.length) inspector('Get tags from TagsInfo.rowsSnapShot:', rowsSnapShot);
+
+      // Remove rows from dbBSA.dbo.SnapShotTest
+      sql = `
+      DELETE sh FROM dbBSA.dbo.SnapShotTest AS sh
+      WHERE (sh.ScanerName = @scanerName) AND (sh.TagGroup = @tagGroup OR sh.TagGroup IS NULL)
+      `;
+      params = [];
+      db.buildParams(params, 'scanerName', TYPES.VarChar, scanerName);
+      db.buildParams(params, 'tagGroup', TYPES.VarChar, tagGroup);
+
+      result = await db.query(params, sql);
+      if (isDebug && result) inspector('Delete rows from dbBSA.dbo.SnapShotTest:', result.rowCount);
+
+      // Insert row to dbBSA.dbo.SnapShotTest
+      for (let index = 0; index < rowsSnapShot.length; index++) {
+        params = [];
+        const _rowSnapShot = rowsSnapShot[index];
+        sql = `
+        INSERT INTO dbBSA.dbo.SnapShotTest 
+        (TagID, ScanerName, Time, dtYear, dtDofY, dtTotalS, Value, TagGroup)
+        VALUES (@tagID, @scanerName, '${_rowSnapShot['Time']}', @dtYear, @dtDofY, @dtTotalS, @value, @tagGroup)
+        `;
+
+        db.buildParams(params, 'tagID', TYPES.Int, _rowSnapShot['TagID']);
+        db.buildParams(params, 'scanerName', TYPES.VarChar, _rowSnapShot['ScanerName']);
+        db.buildParams(params, 'dtYear', TYPES.SmallInt, _rowSnapShot['dtYear']);
+        db.buildParams(params, 'dtDofY', TYPES.SmallInt, _rowSnapShot['dtDofY']);
+        db.buildParams(params, 'dtTotalS', TYPES.Int, _rowSnapShot['dtTotalS']);
+        db.buildParams(params, 'value', TYPES.Real, _rowSnapShot['Value']);
+        db.buildParams(params, 'tagGroup', TYPES.VarChar, _rowSnapShot['TagGroup']);
+        // Run query
+        result = await db.query(params, sql);
+        if (isDebug && result) inspector('INSERT rows to dbBSA.dbo.SnapShotTest:', result.rowCount);
+      }
+
+      sql = `
+      SELECT *
+      FROM dbBSA.dbo.SnapShotTest AS sh
+      WHERE (sh.ScanerName = @scanerName) AND (sh.TagGroup = @tagGroup OR sh.TagGroup IS NULL)
+      `;
+
+      params = [];
+      db.buildParams(params, 'scanerName', TYPES.VarChar, scanerName);
+      db.buildParams(params, 'tagGroup', TYPES.VarChar, tagGroup);
+
+      result = await db.query(params, sql);
+      rows = result.rows;
+      if (isDebug && rows) inspector('Get values from dbBSA.dbo.SnapShotTest.rows:', rows);
+
+      //--- Commit transaction ---
+      await db.commitTransaction();
 
       await db.disconnect();
 

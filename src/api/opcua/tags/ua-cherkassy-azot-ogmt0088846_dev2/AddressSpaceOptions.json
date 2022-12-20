@@ -36,8 +36,7 @@
         "queryFunc": "insertValuesToChAsoduDB",
         "queryParams": {
           "scanerName": "opcUA(A5)",
-          "tagGroup": "XozUchet",
-          "utcOffset": 0
+          "tagGroup": "XozUchet"
         }
       }
     },

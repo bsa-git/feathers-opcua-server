@@ -37,14 +37,15 @@ const isDebug = false;
 const insertValuesToChAsoduDB = async function (db, queryParams) {
   let sql = '', result, rows, params = [];
   let rowSnapShot = {}, rowsSnapShot = [];
+  const tableName = 'SnapShot'; // 'SnapShotTest', 'SnapShot'
   const scanerName = queryParams.scanerName;
   const tagGroup = queryParams.tagGroup;
   const dateTime = queryParams.dateTime;
-  const utcOffset = queryParams.utcOffset;
   const opcuaValues = queryParams.opcuaValues;
   //--------------------------------------
   try {
-    // await db.connect();
+    // Connect DB
+    if(!db.currentState.isConnected) await db.connect();
 
     if (isDebug && queryParams) inspector('insertValues4ChAsoduDB.queryParams:', queryParams);
 
@@ -75,7 +76,7 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
         rowSnapShot['TagID'] = row.ID;
         rowSnapShot['ScanerName'] = scanerName;
         rowSnapShot['TagGroup'] = tagGroup;
-        rowSnapShot['Time'] = dt.add(utcOffset, 'hours');
+        rowSnapShot['Time'] = dt.format('YYYY-MM-DDTHH:mm:ss');
         rowSnapShot['dtYear'] = dt.year();
         rowSnapShot['dtDofY'] = dt.dayOfYear();
         rowSnapShot['dtTotalS'] = (dt.hours() * 3600) + dt.seconds();
@@ -84,7 +85,7 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
         rowsSnapShot.push(rowSnapShot);
       }
     }
-    if (true && rowsSnapShot.length) inspector('Get tags from TagsInfo.rowsSnapShot:', rowsSnapShot);
+    if (isDebug && rowsSnapShot.length) inspector('Get tags from TagsInfo.rowsSnapShot:', rowsSnapShot);
 
     if(!rowsSnapShot.length) return { rows: [], rowCount: 0 };
 
@@ -93,7 +94,7 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
 
     // Remove rows from dbBSA.dbo.SnapShot
     sql = `
-    DELETE sh FROM dbBSA.dbo.SnapShot AS sh
+    DELETE sh FROM dbBSA.dbo.${tableName} AS sh
     WHERE (sh.ScanerName = @scanerName) AND (sh.TagGroup = @tagGroup OR sh.TagGroup IS NULL)
     `;
     params = [];
@@ -103,25 +104,32 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
     result = await db.query(params, sql);
     if (isDebug && result) inspector('Delete rows from dbBSA.dbo.SnapShot:', result.rowCount);
 
-    // Insert row to dbBSA.dbo.SnapShot
-    const table = 'dbBSA.dbo.SnapShot';
-    const colums = [
-      ['TagID', TYPES.Int, { nullable: false }],
-      ['ScanerName', TYPES.VarChar, { nullable: false }],
-      ['TagGroup', TYPES.VarChar, { nullable: true }],
-      ['Time', TYPES.DateTime, { nullable: false }],
-      ['dtYear', TYPES.SmallInt, { nullable: false }],
-      ['dtDofY', TYPES.SmallInt, { nullable: false }],
-      ['dtTotalS', TYPES.Int, { nullable: false }],
-      ['Value', TYPES.Real, { nullable: true }],
-    ];
 
-    const rowCount = await db.insertBulkData(table, colums, rowsSnapShot);
-    if (isDebug && rowCount) logger.info(`Rows inserted to table "${table}": ${rowCount}`);
+    // Insert row to dbBSA.dbo.SnapShotTest
+    for (let index = 0; index < rowsSnapShot.length; index++) {
+      params = [];
+      const _rowSnapShot = rowsSnapShot[index];
+      sql = `
+      INSERT INTO dbBSA.dbo.${tableName} 
+      (TagID, ScanerName, Time, dtYear, dtDofY, dtTotalS, Value, TagGroup)
+      VALUES (@tagID, @scanerName, '${_rowSnapShot['Time']}', @dtYear, @dtDofY, @dtTotalS, @value, @tagGroup)
+      `;
+
+      db.buildParams(params, 'tagID', TYPES.Int, _rowSnapShot['TagID']);
+      db.buildParams(params, 'scanerName', TYPES.VarChar, _rowSnapShot['ScanerName']);
+      db.buildParams(params, 'dtYear', TYPES.SmallInt, _rowSnapShot['dtYear']);
+      db.buildParams(params, 'dtDofY', TYPES.SmallInt, _rowSnapShot['dtDofY']);
+      db.buildParams(params, 'dtTotalS', TYPES.Int, _rowSnapShot['dtTotalS']);
+      db.buildParams(params, 'value', TYPES.Real, _rowSnapShot['Value']);
+      db.buildParams(params, 'tagGroup', TYPES.VarChar, _rowSnapShot['TagGroup']);
+      // Run query
+      result = await db.query(params, sql);
+      if (isDebug && result) inspector('INSERT rows to dbBSA.dbo.SnapShotTest:', result.rowCount);
+    }
 
     sql = `
     SELECT *
-    FROM dbBSA.dbo.SnapShot AS sh
+    FROM dbBSA.dbo.${tableName} AS sh
     WHERE (sh.ScanerName = @scanerName) AND (sh.TagGroup = @tagGroup OR sh.TagGroup IS NULL)
     `;
 
