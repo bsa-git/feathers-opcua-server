@@ -75,7 +75,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
 
       res.on('end', () => {
         body = JSON.parse(body);
-        if (true && body) inspector(`https.get(${url})`, body);
+        if (isDebug && body) inspector(`https.get(${url})`, body);
       });
     });
     assert.ok(true, 'HttpOperations: https.get');
@@ -86,7 +86,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     if (! await isUrlExists(url)) return;
     const response = await axios.get(url);
     const data = response.data;
-    if (true && data) inspector(`axios.get(${url})`, data);
+    if (isDebug && data) inspector(`axios.get(${url})`, data);
     assert.ok(data, 'HttpOperations: axios.get');
   });
 
@@ -97,7 +97,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
 
     const response = await fetch(url);
     const data = await response.json();
-    if (true && data) inspector(`fetch.get(${url})`, data[0]);
+    if (isDebug && data) inspector(`fetch.get(${url})`, data[0]);
     assert.ok(data, 'HttpOperations: fetch.get');
   });
 
