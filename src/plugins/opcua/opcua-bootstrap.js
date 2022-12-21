@@ -174,7 +174,7 @@ module.exports = async function opcuaBootstrap(app) {
       const service = app.service('mssql-datasets');
       await service.create({ config: mssqlDataBase });
     }
-    logger.info(`opcuaBootstrap.CreateMssqlDatasets: OK. ${mssqlDataBases.length}`);
+    logger.info(`opcuaBootstrap.CreateMssqlDatasets: OK. (${mssqlDataBases.length})`);
   }
 
   // Create server and client services

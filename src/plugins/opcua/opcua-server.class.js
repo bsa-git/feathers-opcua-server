@@ -613,7 +613,7 @@ class OpcuaServer {
       // Set currentState.paths
       Object.assign(this.currentState.paths, opcuaConfig.paths);
       // inspector('currentState:', this.currentState);
-      console.log(chalk.yellow('Server constructed address space'));
+      console.log(chalk.yellow('Server constructed address space: OK'), `(${this.addedItemList.length})`);
       if (isDebug && this.addedItemList.length) inspector('constructAddressSpace.addedItemList:', this.addedItemList.map(item => loOmit(item, ['item'])));
     }
   }

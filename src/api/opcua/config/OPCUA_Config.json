@@ -77,7 +77,7 @@
     "paths": {
       "base-options": [
         "/src/api/opcua/tags/ua-cherkassy-azot-m5_prod1",
-        "/src/api/opcua/tags/ua-cherkassy-azot-ogmtmztp_prod1"
+        "/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1"
       ],
       "options": "/src/api/opcua/tags/ua-cherkassy-azot-asutp_dev1/AddressSpaceOptions.json",
       "getters": "",
@@ -134,7 +134,7 @@
     "paths": {
       "base-options": [
         "/src/api/opcua/tags/ua-cherkassy-azot-m5_prod1",
-        "/src/api/opcua/tags/ua-cherkassy-azot-ogmtmztp_prod1"
+        "/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1"
       ],
       "options": "",
       "getters": "",
@@ -182,15 +182,17 @@
     }
   },
   {
-    "id": "ua-cherkassy-azot-ogmtmztp_prod1",
-    "name": "380-472-00203826-ogmtmztp_prod1",
-    "description": "Opcua server and client. Client connect to `opc.tcp://OGMT-MZTP.OSTCHEM.COM.UA:26570`(OGMT-MZTP OpcuaServer)",
-    "endpointUrl": "opc.tcp://OGMT-MZTP.OSTCHEM.COM.UA:26570",
+    "id": "ua-cherkassy-azot-ogmttsd_prod1",
+    "name": "380-472-00203826-ogmttsd_prod1",
+    "description": "Opcua server and client. Client connect to `opc.tcp://OGMT-TSD:26570`(OGMT-TSD OpcuaServer)",
+    "endpointUrl": "opc.tcp://OGMT-TSD:26570",
     "endpointPort": 26570,
-    "srvServiceUrl": "http://OGMT-MZTP.OSTCHEM.COM.UA:3030",
-    "clientServiceUrl": "http://OGMT-MZTP.OSTCHEM.COM.UA:3030",
+    "srvServiceUrl": "http://OGMT-TSD:3030",
+    "clientServiceUrl": "http://OGMT-TSD:3030",
     "clientScript": "startSubscriptionMonitor",
-    "subscription": "onChangedGroupHandler",
+    "hostTypeDB": "nedb",
+    "opcuaSaveModeToDB": "localUpdate",
+    "opcuaRemoteDbUrl": "http://OGMT-TSD:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": true,
       "mssqlDataBases": ["MSSQL_ASODU_TEST"]
@@ -201,12 +203,19 @@
       "userName": "OPCUA_ADMIN_LOGIN",
       "password": "OPCUA_ADMIN_PASS"
     },
+    "include": {
+      "tests": [
+        "mssql-tedious.test.js",
+        "mssql-datasets.test.js",
+        "http-operations.test.js"
+      ]
+    },
     "paths": {
       "base-options": [
         "/src/api/opcua/tags/ua-cherkassy-azot-m5_prod1",
-        "/src/api/opcua/tags/ua-cherkassy-azot-ogmtmztp_prod1"
+        "/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1"
       ],
-      "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmtmztp_prod1/AddressSpaceOptions.json",
+      "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
       "subscriptions": "",
@@ -256,7 +265,7 @@
     "paths": {
       "base-options": [
         "/src/api/opcua/tags/ua-cherkassy-azot-m5_prod1",
-        "/src/api/opcua/tags/ua-cherkassy-azot-ogmtmztp_prod1"
+        "/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1"
       ],
       "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmt0088846_dev1/AddressSpaceOptions.json",
       "getters": "",
@@ -288,7 +297,7 @@
     },
     "paths": {
       "base-options": [
-        "/src/api/opcua/tags/ua-cherkassy-azot-ogmtmztp_prod1/index2"
+        "/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1/index2"
       ],
       "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmt0088846_dev2/AddressSpaceOptions.json",
       "getters": "",
@@ -318,7 +327,7 @@
       "addObjectItem": true
     },
     "paths": {
-      "base-options": ["/src/api/opcua/tags/ua-cherkassy-azot-ogmtmztp_prod1/index2"],
+      "base-options": ["/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1/index2"],
       "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmt0088846_dev3/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",

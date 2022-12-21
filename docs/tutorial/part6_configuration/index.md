@@ -269,7 +269,7 @@ Main sections of the config file **OPCUA_Config**:
     "paths": {
       "base-options": [
         "/src/api/opcua/tags/ua-cherkassy-azot-m5_prod1",
-        "/src/api/opcua/tags/ua-cherkassy-azot-ogmtmztp_prod1"
+        "/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1"
       ],
       "options": "/src/api/opcua/tags/ua-cherkassy-azot-asutp_dev1/AddressSpaceOptions.json",
       "getters": "",
