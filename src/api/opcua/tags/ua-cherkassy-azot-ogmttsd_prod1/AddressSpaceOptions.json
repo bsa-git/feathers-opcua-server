@@ -2,14 +2,38 @@
   "objects": [
     {
       "isEnable": true,
+      "browseName": "CH_M5",
+      "displayName": "M5",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
       "browseName": "CH_M51",
       "displayName": "Черкассы 'АЗОТ' цех M5-1",
       "type": "object"
     },
     {
-      "isEnable": false,
+      "isEnable": true,
       "browseName": "CH_M52",
       "displayName": "Черкассы 'АЗОТ' цех M5-2",
+      "type": "object"
+    },
+    {
+      "isEnable": false,
+      "browseName": "CH_M51_ACM",
+      "displayName": "M51-ACM",
+      "type": "object"
+    },
+    {
+      "isEnable": false,
+      "browseName": "CH_M52_ACM",
+      "displayName": "M52-ACM",
+      "type": "object"
+    },
+    {
+      "isEnable": false,
+      "browseName": "CH_M52_ACM2",
+      "displayName": "M52-ACM2",
       "type": "object"
     },
     {
@@ -56,6 +80,17 @@
     }
   ],
   "variables": [
+    {
+      "browseName": "CH_M5::RunCommand",
+      "aliasName": "RunCommand",
+      "displayName": "Variable For RunCommand",
+      "ownerName": "CH_M5",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "subscription": "onChangedRunCommand",
+      "description": "Executing commands on an 'CH_M5' object"
+    },
     {
       "browseName": "CH_M51::ValueFromFile",
       "displayName": "Values from file for CH_M51",

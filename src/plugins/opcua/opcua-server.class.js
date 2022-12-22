@@ -2,8 +2,9 @@
 const {
   appRoot,
   inspector,
-  getIntervalIds,
-  clearIntervalIds,
+  assert,
+  isFunction,
+  isObject
 } = require('../lib');
 
 const {
@@ -412,6 +413,7 @@ class OpcuaServer {
       getters = require(`${appRoot}${opcuaConfig.paths.getters}`);
     }
     getters = Object.assign({}, opcuaDefaultGetters, getters ? getters : {});
+    assert(Object.keys(getters).length, 'Getters is not object.');
 
     // Merge methods
     if (methods === null && opcuaConfig.paths.methods) {
@@ -480,6 +482,8 @@ class OpcuaServer {
 
               if (v.variableGetType === 'get') {
                 // Value get func merge 
+                assert(v.getter, 'Getter function name not set');
+                assert(isFunction(getters[v.getter]), `getters["${v.getter}"] is not a function`);
                 loMerge(varParams, { value: { get: () => { return getters[v.getter](getterParams); } } });
               }
               // Add variables
@@ -537,6 +541,8 @@ class OpcuaServer {
                     getterParams.addedVariableList = addedVariableList;
                   }
                   // Run getter
+                  assert(v.getter, 'Getter function name not set');
+                  assert(isFunction(getters[v.getter]), `getters["${v.getter}"] is not a function`);
                   getters[v.getter](getterParams, addedVariable);
                 } else {
                   // Set value from source
@@ -544,6 +550,8 @@ class OpcuaServer {
                   if (v.group) {
                     variable.group = addedVariableList;
                   }
+                  assert(v.getter, 'Getter function name not set');
+                  assert(isFunction(getters[v.getter]), `getters["${v.getter}"] is not a function`);
                   this.setValueFromSource(variable, addedVariable, getters[v.getter]);
                 }
               }

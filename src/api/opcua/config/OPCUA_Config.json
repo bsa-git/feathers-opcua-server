@@ -182,6 +182,7 @@
     }
   },
   {
+    "isEnable": true,
     "id": "ua-cherkassy-azot-ogmttsd_prod1",
     "name": "380-472-00203826-ogmttsd_prod1",
     "description": "Opcua server and client. Client connect to `opc.tcp://OGMT-TSD:26570`(OGMT-TSD OpcuaServer)",
@@ -190,7 +191,7 @@
     "srvServiceUrl": "http://OGMT-TSD:3030",
     "clientServiceUrl": "http://OGMT-TSD:3030",
     "clientScript": "startSubscriptionMonitor",
-    "hostTypeDB": "nedb",
+    "hostTypeDB": "mongodb",
     "opcuaSaveModeToDB": "localUpdate",
     "opcuaRemoteDbUrl": "http://OGMT-TSD:3131",
     "opcuaBootstrapParams": {
@@ -216,6 +217,67 @@
         "/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1"
       ],
       "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1/AddressSpaceOptions.json",
+      "getters": "",
+      "methods": "",
+      "subscriptions": "",
+      "client-scripts": ""
+    }
+  },
+  {
+    "isEnable": false,
+    "id": "ua-cherkassy-azot-ogmttsd_prod2",
+    "name": "380-472-00203826-ogmttsd_prod2",
+    "description": "Opcua server and client. Client connect to `opc.tcp://OGMT-TSD:26560`(OGMT-TSD OpcuaServer)",
+    "endpointUrl": "opc.tcp://OGMT-TSD:26560",
+    "endpointPort": 26560,
+    "srvServiceUrl": "http://OGMT-TSD:3030",
+    "clientServiceUrl": "http://OGMT-TSD:3030",
+    "security": {
+      "mode": "SignAndEncrypt",
+      "policy": "Basic256Sha256",
+      "userName": "OPCUA_ADMIN_LOGIN",
+      "password": "OPCUA_ADMIN_PASS"
+    },
+    "NodeId": {
+      "namespaceIndex": 2,
+      "identifierType": "displayName",
+      "identifierPrefix": "",
+      "addObjectItem": true
+    },
+    "paths": {
+      "base-options": [
+        "/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1/index2"
+      ],
+      "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod2/AddressSpaceOptions.json",
+      "getters": "",
+      "methods": "",
+      "subscriptions": "",
+      "client-scripts": ""
+    }
+  },
+  {
+    "isEnable": false,
+    "id": "ua-cherkassy-azot-ogmttsd_prod3",
+    "name": "380-472-00203826-ogmttsd_prod3",
+    "description": "Opcua client. Client connect to `opc.tcp://10.60.147.29:49370` (A5 KEPServer)",
+    "endpointUrl": "opc.tcp://10.60.147.29:49370",
+    "srvServiceUrl": "",
+    "clientServiceUrl": "http://OGMT-TSD:3030",
+    "security": {
+      "mode": "SignAndEncrypt",
+      "policy": "Basic256Sha256",
+      "userName": "OPCUA_A5_LOGIN",
+      "password": "OPCUA_A5_PASS"
+    },
+    "NodeId": {
+      "namespaceIndex": 2,
+      "identifierType": "displayName",
+      "identifierPrefix": "",
+      "addObjectItem": true
+    },
+    "paths": {
+      "base-options": ["/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1/index2"],
+      "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod3/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
       "subscriptions": "",

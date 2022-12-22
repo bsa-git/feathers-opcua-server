@@ -25,7 +25,7 @@
       "hist": 1,
       "group": true,
       "variableGetType": "valueFromSource",
-      "getter": "acmDayValueFromPath",
+      "getter": "getterAcmDayValueFromPath",
       "getterParams": {
         "path": "//192.168.3.5/www_m5/day_reports/m5-2/ACM/57AGR",
         "acmPath": "//192.168.3.5/www_m5/day_reports/m5-2/ACM/57AGR/",

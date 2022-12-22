@@ -1,0 +1,61 @@
+{
+  "objects": [
+    {
+      "isEnable": true,
+      "browseName": "CH_A5.Device1",
+      "displayName": "A5.Device1",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_A5.Device2",
+      "displayName": "A5.Device2",
+      "type": "object"
+    }
+  ],
+  "variables": [
+    {
+      "isEnable": true,
+      "browseName": "CH_A5.Device1::XozUchet",
+      "displayName": "XozUchet values for CH_A5",
+      "ownerName": "CH_A5.Device1",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "getterValuesFromKepServer",
+      "getterParams": {
+        "clientId": "ua-cherkassy-azot-ogmttsd_prod3",
+        "interval": 20000
+      },
+      "subscription": "onChangedKepValue",
+      "subscribeParams": {
+        "subscribeFuncs": ["saveOpcuaGroupValueToDB", "saveOpcuaGroupValueToMsSqlDB"],
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "insertValuesToChAsoduDB",
+        "queryParams": {
+          "scanerName": "opcUA(A5)",
+          "tagGroup": "XozUchet"
+        }
+      }
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_A5.Device2::Mnemo1",
+      "displayName": "Mnemo1 values for CH_A5.Device2",
+      "ownerName": "CH_A5.Device2",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterValuesFromKepServer",
+      "getterParams": {
+        "clientId": "ua-cherkassy-azot-ogmttsd_prod3",
+        "interval": 20000
+      }
+    }
+  ]
+}
