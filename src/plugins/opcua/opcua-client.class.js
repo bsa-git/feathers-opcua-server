@@ -965,7 +965,7 @@ class OpcuaClient {
     this.subscription = await Promise.resolve(ClientSubscription.create(this.session, mergeOptions));
 
     this.subscription
-      .on('started', () => console.log(chalk.yellow('Client subscription started.') + ' SubscriptionId=', this.subscription.subscriptionId))
+      .on('started', () => console.log(chalk.yellow('Client subscription started.'), `SubscriptionId = ${this.subscription.subscriptionId}`))
       .on('keepalive', () => console.log(chalk.yellow('Client subscription keepalive')))
       .on('terminated', () => console.log(chalk.yellow('Client subscription terminated')));
 

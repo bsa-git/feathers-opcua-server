@@ -100,19 +100,19 @@ module.exports = async function opcuaBootstrap(app) {
     }
     if (isUpdateOpcuaToDB()) {
       removeResult = await removeOpcuaGroupValues(app);
-      if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: OK. ${removeResult}`);
+      if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.localDB: OK. (${removeResult})`);
     }
 
     if (storeChangesBrowseNames.length) {
       const saveStoreResults = await saveStoreParameterChanges(app, storeChangesBrowseNames, opcuaTags);
       if (isDebug && saveStoreResults.length) inspector('saveStoreParameterChanges.saveStoreResults:', saveStoreResults);
-      logger.info(`opcuaBootstrap.saveStoreParameterChanges.localDB: OK. ${saveStoreResults.length}`);
+      logger.info(`opcuaBootstrap.saveStoreParameterChanges.localDB: OK. (${saveStoreResults.length})`);
     }
 
     // Remove opcua store values
     if (bootstrapParams && bootstrapParams.clearHistoryAtStartup) {
       removeResult = await removeOpcuaStoreValues(app);
-      if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.localDB: OK. ${removeResult}`);
+      if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.localDB: OK. (${removeResult})`);
     }
 
     // Sync opcua store at startup
@@ -149,17 +149,17 @@ module.exports = async function opcuaBootstrap(app) {
         // Remove opcua group values
         if (isUpdateOpcuaToDB()) {
           removeResult = await removeOpcuaGroupValues(appRestClient);
-          if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.remoteDB: OK. ${removeResult}`);
+          if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.remoteDB: OK. (${removeResult})`);
         }
 
         // Remove opcua remote store values
         if (bootstrapParams && bootstrapParams.clearHistoryAtStartup) {
           removeResult = await removeOpcuaStoreValues(appRestClient);
-          if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.remoteDB: OK. ${removeResult}`);
+          if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.remoteDB: OK. (${removeResult})`);
         }
         // Update remote store from local store
         const updateStores = await updateRemoteFromLocalStore(app, appRestClient, opcuaTags);
-        logger.info(`opcuaBootstrap.updateRemoteFromLocalStore.remoteDB: OK. ${updateStores}`);
+        logger.info(`opcuaBootstrap.updateRemoteFromLocalStore.remoteDB: OK. (${updateStores})`);
       }
     }
   }

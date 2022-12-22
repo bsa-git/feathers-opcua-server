@@ -583,7 +583,7 @@ const saveStoreOpcuaValues4Hook = async function (app, storeBrowseName, data, st
  * @param {Object[]} opcuaTags 
  * @param {Boolean} isRemote 
  * @returns {Object}
- * e.g. { added: 123, updated: 32, deleted: 12, total: 125}
+ * e.g. { added: 123, updated: 32, deleted: 12, total: 125 }
  */
 const saveOpcuaTags = async function (app, opcuaTags, isRemote = false) {
   let idField, tagId, query = {};

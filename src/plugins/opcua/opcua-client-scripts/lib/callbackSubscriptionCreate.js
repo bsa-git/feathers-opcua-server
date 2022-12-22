@@ -33,7 +33,7 @@ const callbackSubscriptionCreate = (session, params) => {
   subscription
     .on('started', () => {
       subscriptionId = subscription.subscriptionId;
-      console.log(chalk.yellow('Client subscription started.') + ' SubscriptionId =', subscription.subscriptionId);
+      console.log(chalk.yellow('Client subscription started.'), 'SubscriptionId =', subscription.subscriptionId);
     })
     .on('keepalive', () => console.log(chalk.yellow('Client subscription keepalive')))
     .on('terminated', () => console.log(chalk.yellow('Client subscription terminated')));
