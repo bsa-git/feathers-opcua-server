@@ -11,6 +11,7 @@ const {
 } = require('node-opcua');
 
 const {
+  logger,
   inspector,
   pause,
   getTimeDuration
@@ -121,6 +122,7 @@ async function onChangedRunCommand(params, dataValue) {
   } catch (error) {
     // Drop element from the beginning of array
     queueOfSubscribe = loDrop(queueOfSubscribe);
+    logger.error('onChangedRunCommand.Error:', error.message);
   }
 }
 

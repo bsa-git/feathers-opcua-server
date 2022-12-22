@@ -215,7 +215,7 @@
         "queryParams": {
           "scanerName": "xlsxGA10(A3)"
         },
-        "interval": 20000
+        "interval": 5000
       }
     },
     {
@@ -235,7 +235,7 @@
         "queryParams": {
           "scanerName": "opcUPG2"
         },
-        "interval": 20000
+        "interval": 5000
       }
     },
     {
@@ -255,7 +255,7 @@
         "queryParams": {
           "scanerName": "xlsxGA10(M7-313)"
         },
-        "interval": 20000
+        "interval": 5000
       }
     },
     {
@@ -275,7 +275,7 @@
         "queryParams": {
           "scanerName": "xlsxGA10(M7-357)"
         },
-        "interval": 20000
+        "interval": 5000
       }
     },
     {
@@ -295,7 +295,7 @@
         "queryParams": {
           "scanerName": "xlsxGA10(M7-657)"
         },
-        "interval": 20000
+        "interval": 5000
       }
     },
     {
@@ -315,7 +315,7 @@
         "queryParams": {
           "scanerName": "xlsxGA10(M9)"
         },
-        "interval": 20000
+        "interval": 5000
       }
     },
     {
@@ -335,7 +335,7 @@
         "queryParams": {
           "scanerName": "xlsxGA10(M2)"
         },
-        "interval": 20000
+        "interval": 5000
       }
     }
   ]

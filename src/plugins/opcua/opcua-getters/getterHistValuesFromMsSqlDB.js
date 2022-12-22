@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const {
   inspector,
+  logger,
   addIntervalId,
   isFunction
 } = require('../../lib');
@@ -47,13 +48,16 @@ function getterHistValuesFromMsSqlDB(params = {}, addedValue) {
   // Set interval
   const intervalId = setInterval(async function () {
     //-------------------------------
-    // Execute query MsSql DB
-    const queryFunc = params.queryFunc;
-    const queryParams = params.queryParams;
-    const { rows } = await service.executeQuery(mssqlId, queryFunc, queryParams);
-
-    if (rows) {
-      setValuesFromSource(rows);
+    try {
+      // Execute query MsSql DB
+      const queryFunc = params.queryFunc;
+      const queryParams = params.queryParams;
+      const { rows } = await service.executeQuery(mssqlId, queryFunc, queryParams);
+      if (rows) {
+        setValuesFromSource(rows);
+      }
+    } catch (error) {
+      logger.error('getterHistValuesFromMsSqlDB.Error:', error.message);
     }
   }, params.interval);
 

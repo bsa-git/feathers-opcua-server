@@ -3,7 +3,7 @@ const chalk = require('chalk');
 const moment = require('moment');
 
 const {
-  appRoot,
+  logger,
   inspector,
   addIntervalId
 } = require('../../lib');
@@ -19,7 +19,6 @@ const {
   setValueFromSourceForGroup,
   // setValueFromSourceForGroup
 } = require('../opcua-helper');
-const logger = require('../../../logger');
 
 const debug = require('debug')('app:getterAcmDayValueFromFile');
 const isDebug = false;
@@ -87,10 +86,14 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
  
   // Set interval
   const intervalId = setInterval(async function () {
-    if(!service){
-      service = await getClientService(app, clientId);
+    try {
+      if(!service){
+        service = await getClientService(app, clientId);
+      }
+      await getValuesFromKepServer(clientId, groupTagNodeIds);
+    } catch (error) {
+      logger.error('getterValuesFromKepServer.Error:', error.message);
     }
-    await getValuesFromKepServer(clientId, groupTagNodeIds);
   }, params.interval);
 
   // Add interval Id to list

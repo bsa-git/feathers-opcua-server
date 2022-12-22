@@ -7,6 +7,7 @@ const loHead = require('lodash/head');
 const loDrop = require('lodash/drop');
 
 const {
+  logger,
   inspector,
   getTimeDuration,
   pause,
@@ -117,6 +118,7 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     console.log(error.message);
     // Drop element from the beginning of array
     if (isQueue) queueOfSubscribe = loDrop(queueOfSubscribe);
+    logger.error('onChangedGroupHandlerForASM.Error:', error.message);
   }
 }
 

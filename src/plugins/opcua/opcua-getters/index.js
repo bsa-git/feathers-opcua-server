@@ -1,4 +1,5 @@
 const getterAcmDayValueFromFile = require('./getterAcmDayValueFromFile');
+const getterAcmDayValueFromPath = require('./getterAcmDayValueFromPath');
 const getterHistValueFromFile = require('./getterHistValueFromFile');
 const getterHistValueFromHttpPath = require('./getterHistValueFromHttpPath');
 const getterHistValueFromPath = require('./getterHistValueFromPath');
@@ -9,6 +10,7 @@ const getterValuesFromKepServer = require('./getterValuesFromKepServer');
 
 module.exports = {
   getterAcmDayValueFromFile,
+  getterAcmDayValueFromPath,
   getterHistValueFromFile,
   getterHistValueFromHttpPath,
   getterHistValueFromPath,

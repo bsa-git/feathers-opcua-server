@@ -25,7 +25,7 @@ const getValuesFromChAsoduDB = async function (db, queryParams) {
   WHERE sh.ScanerName = @scanerName AND tInfo.OnOff = 1
   `;
   //---------------------------------------------------
-  db.buildParams(params, 'scanerName', TYPES.Char, queryParams.scanerName);
+  db.buildParams(params, 'scanerName', TYPES.VarChar, queryParams.scanerName);
 
   let { rows } = await db.query(params, sql);
   if (isDebug && rows.length) inspector('selectValuesFromChAsoduDB.query.rows:', rows);

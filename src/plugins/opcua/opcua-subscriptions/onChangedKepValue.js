@@ -123,16 +123,16 @@ async function onChangedKepValue(params, dataValue) {
       if (isFunction(libSubscribeFunc)) {
         const result = libSubscribeFunc(params, dataValue);
         resultSubscribeFuncs.push(result);
-        if (isDebug && subscribeFuncName) logger.info(`onChangedKepValue.runSubscribeFunc: "${subscribeFuncName}"`);
+        if (true && subscribeFuncName) logger.info(`onChangedKepValue.runSubscribeFunc: "${subscribeFuncName}"`);
       }
     }
 
     // Show info
     Promise.all(resultSubscribeFuncs).then(results => {
-      if (isDebug && results.length) inspector('runCommand.results:', results[0]);
-      if (isDebug && results.length) inspector('sessionWrite.results:', results[1]);
+      if (isDebug && results.length) inspector('saveOpcuaGroupValueToDB.result:', results[0]);
+      if (isDebug && results.length) inspector('saveOpcuaGroupValueToMsSqlDB.result:', results[1]);
 
-      // Show info
+      // Show info  
       // showInfoForHandler(params, dataValue);
       libs.showInfoForGroupHandler(params, dataValue);
       // endTime and timeDuration
@@ -147,6 +147,7 @@ async function onChangedKepValue(params, dataValue) {
   } catch (error) {
     // Drop element from the beginning of array
     queueOfSubscribe = loDrop(queueOfSubscribe);
+    logger.error('onChangedKepValue.Error:', error.message);
   }
 }
 

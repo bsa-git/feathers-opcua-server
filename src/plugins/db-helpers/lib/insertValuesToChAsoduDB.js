@@ -4,6 +4,7 @@ const { TYPES } = require('tedious');
 
 const {
   inspector,
+  assert,
   logger
 } = require('../../lib');
 
@@ -45,7 +46,7 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
   //--------------------------------------
   try {
     // Connect DB
-    if(!db.currentState.isConnected) await db.connect();
+    assert(db.currentState.isConnected, 'No connection for MssqlTedious.');
 
     if (isDebug && queryParams) inspector('insertValues4ChAsoduDB.queryParams:', queryParams);
 
@@ -157,6 +158,7 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
   } catch (error) {
     //--- Rollback transaction ---
     await db.rollbackTransaction(error.message);
+    throw error;
   }
 };
 module.exports = insertValuesToChAsoduDB;

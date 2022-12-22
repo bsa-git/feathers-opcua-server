@@ -25,10 +25,7 @@
       "group": true,
       "variableGetType": "valueFromSource",
       "getter": "getterPlugForVariable",
-      "subscription": "onChangedCommonHandler",
-      "subscribeParams": {
-        "srvEndpointUrl": "opc.tcp://OGMT-0088846.OSTCHEM.COM.UA:26560"
-      }
+      "subscription": "onChangedCommonHandler"
     },
     {
       "isEnable": true,
@@ -41,10 +38,7 @@
       "group": true,
       "variableGetType": "valueFromSource",
       "getter": "getterPlugForVariable",
-      "subscription": "onChangedCommonHandler",
-      "subscribeParams": {
-        "srvEndpointUrl": "opc.tcp://OGMT-0088846.OSTCHEM.COM.UA:26560"
-      }
+      "subscription": "onChangedCommonHandler"
     }
   ]
 }
