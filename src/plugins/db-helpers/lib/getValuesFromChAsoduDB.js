@@ -32,7 +32,9 @@ const getValuesFromChAsoduDB = async function (db, queryParams) {
   if (rows.length) {
     rows = convertArray2Object(rows, 'TagName', 'Value');
     if (isDebug) inspector('selectValuesFromChAsoduDB.convertArray2Object.rows:', rows);
-  } else { rows = null; }
+  } else { 
+    rows = null; 
+  }
   return { rows };
 };
 

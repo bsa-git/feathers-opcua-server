@@ -123,7 +123,7 @@ async function onChangedKepValue(params, dataValue) {
       if (isFunction(libSubscribeFunc)) {
         const result = libSubscribeFunc(params, dataValue);
         resultSubscribeFuncs.push(result);
-        if (true && subscribeFuncName) logger.info(`onChangedKepValue.runSubscribeFunc: "${subscribeFuncName}"`);
+        if (isDebug && subscribeFuncName) logger.info(`onChangedKepValue.runSubscribeFunc: "${subscribeFuncName}"`);
       }
     }
 

@@ -4,7 +4,8 @@ const loForEach = require('lodash/forEach');
 
 const {
   inspector,
-  getInt
+  logger,
+  isFunction
 } = require('../../../lib');
 
 const {
@@ -12,6 +13,7 @@ const {
 } = require('../../opcua-helper');
 
 const { MssqlTedious } = require('../../../db-helpers');
+const queryFuncs = require('../../../db-helpers/lib');
 
 const {
   findItem,
@@ -46,10 +48,6 @@ async function saveOpcuaGroupValueToMsSqlDB(params, dataValue) {
   const browseName = addressSpaceOption.browseName;
   const app = params.myOpcuaClient.app;
 
-  // Get mssql service
-  const service = app.service('mssql-datasets');
-  const mssqlId = MssqlTedious.getIdFromConfig(subscribeParams.dbEnv);
-
   // Only for group values
   if (addressSpaceOption && !addressSpaceOption.group) return;
 
@@ -75,13 +73,27 @@ async function saveOpcuaGroupValueToMsSqlDB(params, dataValue) {
     });
   }
 
-  const queryFunc = subscribeParams.queryFunc;
-  const queryParams = Object.assign({}, subscribeParams.queryParams, opcuaValue['!value'], { opcuaValues });
-  if (isDebug && queryParams) inspector('saveOpcuaGroupValueToMsSqlDB.queryParams:', queryParams);
-
   // Execute query MsSql DB
-  savedValue = await service.executeQuery(mssqlId, queryFunc, queryParams);
-  if (isDebug && savedValue) inspector('saveOpcuaGroupValueToMsSqlDB.executeQuery.result:', savedValue);
+  try {
+    // Get subscribe params
+    const queryFunc = subscribeParams.queryFunc;
+    const queryParams = Object.assign({}, subscribeParams.queryParams, opcuaValue['!value'], { opcuaValues });
+    if (isDebug && queryParams) inspector('saveOpcuaGroupValueToMsSqlDB.queryParams:', queryParams);
+    
+    // Create an instance of a class
+    const mssqlDB = new MssqlTedious(subscribeParams.dbEnv);
+    // mssqlDB connect
+    await mssqlDB.connect();
+    
+    // Execute query
+    savedValue = await mssqlDB.executeQuery(queryFunc, queryParams);
+    if (isDebug && savedValue) inspector('saveOpcuaGroupValueToMsSqlDB.savedValue:', savedValue);
+
+    // mssqlDB disconnect
+    if (mssqlDB.connection) await mssqlDB.disconnect();
+  } catch (error) {
+    logger.error('getterHistValuesFromMsSqlDB.Error:', error.message);
+  }
 
   return savedValue;
 }

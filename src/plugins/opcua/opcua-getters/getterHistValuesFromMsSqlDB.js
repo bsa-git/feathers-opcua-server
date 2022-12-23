@@ -3,10 +3,11 @@ const {
   inspector,
   logger,
   addIntervalId,
-  isFunction
+  isFunction,
 } = require('../../lib');
 
 const { MssqlTedious } = require('../../db-helpers');
+const queryFuncs = require('../../db-helpers/lib');
 
 const {
   formatUAVariable,
@@ -16,6 +17,7 @@ const {
 
 const debug = require('debug')('app:getterHistValuesFromMsSqlDB');
 const isDebug = false;
+
 
 /**
  * @method getterHistValuesFromMsSqlDB
@@ -27,10 +29,6 @@ function getterHistValuesFromMsSqlDB(params = {}, addedValue) {
   let dataType;
   const app = params.myOpcuaServer.app;
   //------------------------------------
-
-  // Get mssql service
-  const service = app.service('mssql-datasets');
-  const mssqlId = MssqlTedious.getIdFromConfig(params.dbEnv);
 
   // Set values from source
   const setValuesFromSource = function (dataItems) {
@@ -49,13 +47,21 @@ function getterHistValuesFromMsSqlDB(params = {}, addedValue) {
   const intervalId = setInterval(async function () {
     //-------------------------------
     try {
+
+      // Create an instance of a class
+      const mssqlDB = new MssqlTedious(params.dbEnv);
+      // mssqlDB connect
+      await mssqlDB.connect();
+
       // Execute query MsSql DB
       const queryFunc = params.queryFunc;
       const queryParams = params.queryParams;
-      const { rows } = await service.executeQuery(mssqlId, queryFunc, queryParams);
+      const { rows } = await mssqlDB.executeQuery(queryFunc, queryParams);
       if (rows) {
         setValuesFromSource(rows);
       }
+      // mssqlDB disconnect
+      if(mssqlDB.connection) await mssqlDB.disconnect();
     } catch (error) {
       logger.error('getterHistValuesFromMsSqlDB.Error:', error.message);
     }
