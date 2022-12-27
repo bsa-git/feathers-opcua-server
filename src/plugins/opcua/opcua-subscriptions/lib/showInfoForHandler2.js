@@ -4,6 +4,7 @@ const loRound = require('lodash/round');
 
 const {
   inspector,
+  isStartAppAsService
 } = require('../../../lib');
 
 const {
@@ -27,6 +28,9 @@ const isDebug = false;
 function showInfoForHandler2(params, dataValue) {
   let valueKeys = 0, command = '';
   //---------------------
+  // Without logging
+  if(isStartAppAsService()) return;
+
   if (isDebug && params) inspector('showInfoForHandler.params:', params);
   if (isDebug && dataValue) inspector('showInfoForHandler.dataValue:', dataValue);
 

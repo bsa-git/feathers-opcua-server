@@ -3,6 +3,7 @@ const loOmit = require('lodash/omit');
 
 const {
   inspector,
+  isStartAppAsService
 } = require('../../../lib');
 
 const {
@@ -25,6 +26,9 @@ const isDebug = false;
 async function showInfoForHandler(params, dataValue) {
   let valueKeys = 0, command = '';
   //---------------------
+  // Without logging
+  if(isStartAppAsService()) return;
+
   if (isDebug && params) inspector('showInfoForHandler.params:', loOmit(params, ['myOpcuaClient']));
   if (isDebug && dataValue) inspector('showInfoForHandler.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;

@@ -58,7 +58,9 @@
     "nedbDev-remove": "shx rm -rf data/nedb/dev/*.db",
     "nedbProd-remove": "shx rm -rf data/nedb/prod/*.db",
     "nedb-find-users": "nedb ./data/nedb/dev/users.db",
-    "nedb-find-opcuaValues": "nedb ./data/nedb/dev/opcua-values.db"
+    "nedb-find-opcuaValues": "nedb ./data/nedb/dev/opcua-values.db",
+    "install-win-service": "node scripts/cli/install-windows-service.js",
+    "uninstall-win-service": "node scripts/cli/uninstall-windows.service.js"
   },
   "dependencies": {
     "@feathersjs/authentication": "^4.5.3",

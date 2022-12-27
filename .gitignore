@@ -106,6 +106,8 @@ $RECYCLE.BIN/
 *.lnk
 
 # Others
+openssl
+daemon
 site/
 data/mongodb/*
 !data/mongodb/README.md

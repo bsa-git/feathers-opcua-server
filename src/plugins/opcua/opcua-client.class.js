@@ -4,6 +4,7 @@ const {
   isString,
   isObject,
   appRoot,
+  isStartAppAsService
 } = require('../lib');
 
 const {
@@ -784,7 +785,7 @@ class OpcuaClient {
     this.sessionNotCreated();
     // Get nodeIds
     let nodeId = this.getNodeIds(nameNodeId);
-    if(isDebug && nodeId) console.log('sessionWriteSingleNode.nodeId:', nodeId);
+    if (isDebug && nodeId) console.log('sessionWriteSingleNode.nodeId:', nodeId);
     nodeId = nodeId[0];
     const statusCode = await this.session.writeSingleNode(nodeId, variantValue);
     if (isDebug) inspector('plugins.opcua-client.class::sessionWriteSingleNode.statusCode:', statusCode);
@@ -917,7 +918,7 @@ class OpcuaClient {
     });
 
     if (itemNodeIds.length) {
-      if(isDebug && itemNodeIds) inspector('sessionCallMethod.itemNodeIds:', itemNodeIds);
+      if (isDebug && itemNodeIds) inspector('sessionCallMethod.itemNodeIds:', itemNodeIds);
       result = await this.session.call(itemNodeIds);
     }
     if (isDebug) inspector('plugins.opcua-client.class::sessionCallMethod.result:', result);
@@ -966,8 +967,10 @@ class OpcuaClient {
 
     this.subscription
       .on('started', () => console.log(chalk.yellow('Client subscription started.'), `SubscriptionId = ${this.subscription.subscriptionId}`))
-      .on('keepalive', () => console.log(chalk.yellow('Client subscription keepalive')))
-      .on('terminated', () => console.log(chalk.yellow('Client subscription terminated')));
+      .on('terminated', () => console.log(chalk.yellow('Client subscription terminated')))
+      .on('keepalive', () => {
+        if (!isStartAppAsService()) console.log(chalk.yellow('Client subscription keepalive'));
+      });
 
     this.currentState.isSubscriptionCreated = true;
   }

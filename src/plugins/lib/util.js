@@ -37,7 +37,16 @@ const timerIntervalIds = [];
 */
 const isTest = function () {
   return (feathersSpecs.app.envTestModeName === process.env.NODE_ENV);
-};// isCorrectEnumType(EnumType, value)
+};
+
+/**
+* Is this application starts as service
+* @method isStartAppAsService
+* @return {boolean}
+*/
+const isStartAppAsService = function () {
+  return (process.env.START_APP === 'win_service');
+};
 
 /**
  * @method sysMemUsage
@@ -1148,6 +1157,7 @@ module.exports = {
   appRoot,
   logger,
   isTest,
+  isStartAppAsService,
   feathersSpecs,
   sysMemUsage,
   assert,
