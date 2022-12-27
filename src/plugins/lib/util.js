@@ -45,7 +45,22 @@ const isTest = function () {
 * @return {boolean}
 */
 const isStartAppAsService = function () {
-  return (process.env.START_APP === 'win_service');
+  const isProd = (process.env.NODE_ENV === 'production');
+  const isStartService = (process.env.START_APP === 'win_service');
+  return isProd && isStartService;
+};
+
+/**
+* Is show log for production
+* @method isShowLog4Prod
+* @return {boolean}
+*/
+const isShowLog4Prod = function () {
+  const isProd = (process.env.NODE_ENV === 'production');
+  if(!isProd) return true;
+  if(process.env.IS_SHOW_LOG === undefined) return true;
+  const isShowLog = isTrue(process.env.IS_SHOW_LOG);
+  return isShowLog;
 };
 
 /**
@@ -1158,6 +1173,7 @@ module.exports = {
   logger,
   isTest,
   isStartAppAsService,
+  isShowLog4Prod,
   feathersSpecs,
   sysMemUsage,
   assert,

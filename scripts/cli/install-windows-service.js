@@ -19,9 +19,14 @@ var svc = new Service({
     value: 'production' // env NODE_ENV = 'production'
   },
   {
+    name: 'IS_SHOW_LOG', 
+    value: false // env IS_SHOW_LOG = true|false; Is show log for production
+  },
+  {
     name: 'START_APP',
     value: 'win_service' // env START_APP = 'win_service'; Start application as windows service
-  }
+  },
+  
   ]
 });
 

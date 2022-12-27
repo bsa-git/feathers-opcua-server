@@ -3,7 +3,7 @@ const loOmit = require('lodash/omit');
 
 const {
   inspector,
-  isStartAppAsService
+  isShowLog4Prod
 } = require('../../../lib');
 
 const {
@@ -27,7 +27,7 @@ async function showInfoForGroupHandler(params, dataValue) {
   let storeTime = '', logMessage = '';
   //------------------------
   // Without logging
-  if(isStartAppAsService()) return;
+  if(!isShowLog4Prod()) return;
   
   if (isDebug && params) inspector('showInfoForGroupHandler.params:', loOmit(params, ['myOpcuaClient']));
   if (isDebug && dataValue) inspector('showInfoForGroupHandler.dataValue:', dataValue);

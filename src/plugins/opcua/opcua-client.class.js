@@ -4,7 +4,7 @@ const {
   isString,
   isObject,
   appRoot,
-  isStartAppAsService
+  isShowLog4Prod
 } = require('../lib');
 
 const {
@@ -969,7 +969,7 @@ class OpcuaClient {
       .on('started', () => console.log(chalk.yellow('Client subscription started.'), `SubscriptionId = ${this.subscription.subscriptionId}`))
       .on('terminated', () => console.log(chalk.yellow('Client subscription terminated')))
       .on('keepalive', () => {
-        if (!isStartAppAsService()) console.log(chalk.yellow('Client subscription keepalive'));
+        if (isShowLog4Prod()) console.log(chalk.yellow('Client subscription keepalive'));
       });
 
     this.currentState.isSubscriptionCreated = true;
