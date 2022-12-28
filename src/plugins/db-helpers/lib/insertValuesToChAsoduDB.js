@@ -38,7 +38,7 @@ const isDebug = false;
 const insertValuesToChAsoduDB = async function (db, queryParams) {
   let sql = '', result, rows, params = [];
   let rowSnapShot = {}, rowsSnapShot = [];
-  const tableName = 'SnapShot'; // 'SnapShotTest', 'SnapShot'
+  const tableName = queryParams.tableName; // 'SnapShotTest', 'SnapShot'
   const scanerName = queryParams.scanerName;
   const tagGroup = queryParams.tagGroup;
   const dateTime = queryParams.dateTime;

@@ -36,7 +36,8 @@
         "queryFunc": "insertValuesToChAsoduDB",
         "queryParams": {
           "scanerName": "opcUA(A5)",
-          "tagGroup": "XozUchet"
+          "tagGroup": "XozUchet",
+          "tableName": "SnapShot"
         }
       }
     },

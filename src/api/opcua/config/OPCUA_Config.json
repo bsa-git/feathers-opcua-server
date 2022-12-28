@@ -277,7 +277,7 @@
     },
     "paths": {
       "base-options": ["/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1/index2"],
-      "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod3/AddressSpaceOptions.json",
+      "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod2/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
       "subscriptions": "",
@@ -285,7 +285,7 @@
     }
   },
   {
-    "isEnable": true,
+    "isEnable": false,
     "id": "ua-cherkassy-azot-ogmt0088846_dev1",
     "name": "380-472-00203826-ogmt0088846_dev1",
     "description": "Opcua server and client. Client connect to `opc.tcp://OGMT-0088846.OSTCHEM.COM.UA:26570`(OGMT-0088846 OpcuaServer)",
@@ -390,7 +390,7 @@
     },
     "paths": {
       "base-options": ["/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1/index2"],
-      "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmt0088846_dev3/AddressSpaceOptions.json",
+      "options": "/src/api/opcua/tags/ua-cherkassy-azot-ogmt0088846_dev2/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
       "subscriptions": "",
