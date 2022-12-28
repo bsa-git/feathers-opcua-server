@@ -47,12 +47,6 @@
     "mkdocs-build": "mkdocs build",
     "mkdocs-deploy": "mkdocs gh-deploy",
     "coverage": "nyc npm run mocha",
-    "mocha": "cross-env NODE_ENV=test DEBUG=app:* mocha test/ --recursive --exit --timeout 80000",
-    "mocha:debug": "cross-env NODE_ENV=test DEBUG=app:* mocha test/debug/ --recursive --exit --timeout 80000",
-    "mocha:script": "cross-env NODE_ENV=test DEBUG=app:* mocha scripts/test/ --recursive --exit --timeout 80000 --script=#3.2",
-    "eslint": "eslint --fix src/. test/. scripts/. --config .eslintrc.json",
-    "eslint:debug": "eslint --fix src/. test/debug/.  --config .eslintrc.json",
-    "eslint:script": "eslint --fix src/. scripts/test/.  --config .eslintrc.json",
     "clone:cli-scripts": "npm link",
     "nedbTest-remove": "shx rm -rf data/nedb/test/*.db",
     "nedbDev-remove": "shx rm -rf data/nedb/dev/*.db",
@@ -60,7 +54,13 @@
     "nedb-find-users": "nedb ./data/nedb/dev/users.db",
     "nedb-find-opcuaValues": "nedb ./data/nedb/dev/opcua-values.db",
     "install-win-service": "node scripts/cli/install-windows-service.js",
-    "uninstall-win-service": "node scripts/cli/uninstall-windows.service.js"
+    "uninstall-win-service": "node scripts/cli/uninstall-windows.service.js",
+    "eslint": "eslint --fix src/. test/. scripts/. --config .eslintrc.json",
+    "eslint:debug": "eslint --fix src/. test/debug/.  --config .eslintrc.json",
+    "eslint:script": "eslint --fix src/. scripts/test/.  --config .eslintrc.json",
+    "mocha": "cross-env NODE_ENV=test DEBUG=app:* mocha test/ --recursive --exit --timeout 80000",
+    "mocha:debug": "cross-env NODE_ENV=test DEBUG=app:* mocha test/debug/ --recursive --exit --timeout 80000",
+    "mocha:script": "cross-env NODE_ENV=test DEBUG=app:* mocha scripts/test/ --recursive --exit --timeout 80000 --script=#3.2"
   },
   "dependencies": {
     "@feathersjs/authentication": "^4.5.3",
