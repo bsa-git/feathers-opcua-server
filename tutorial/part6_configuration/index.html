@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://bsa-git.github.io/feathers-opcua-server/tutorial/part6_configuration/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Part6. Configuration - Feathers OPC UA application</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../css/styles.css" rel="stylesheet" />
+        <link href="../../css/dark-mode.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Part6. Configuration";
+        var mkdocs_page_input_path = "tutorial\\part6_configuration\\index.md";
+        var mkdocs_page_url = "/feathers-opcua-server/tutorial/part6_configuration/";
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Feathers OPC UA application
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../..">What is OPC UA?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Get started</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../part1_getting-started/">Part1. Getting started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../part2_framework-overview/">Part2. FeathersJS framework overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../part3_app-features/">Part3. Application Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../part4_resources-info/">Part4. Resources info</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../part5_installation/">Part5. Installation</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Part6. Configuration</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#feathersjsconfiguration">@feathersjs/configuration</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#env">.env</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#feathers-specs">feathers-specs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#opcua-config">OPCUA Config</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#opcua-tags">OPCUA Tags</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../part7_install-as-win-service/">Part7. Install as a Windows service</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../LICENSE/">License</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Feathers OPC UA application</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Get started &raquo;</li>
+      <li>Part6. Configuration</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="configuration">Configuration</h1>
+<h3 id="feathersjsconfiguration">@feathersjs/configuration</h3>
+<p>It is a wrapper for <a href="https://github.com/lorenwest/node-config">node-config</a>  which allows to configure a server side Feathers application.</p>
+<p>By default this implementation will look in <code>config/*</code> for <code>default.json</code> which retains convention. It will be merged with other configuration files in the <code>config/</code> folder using the <strong>NODE_ENV</strong> environment variable. So setting <strong>NODE_ENV=production</strong> will merge <code>config/default.json</code> with <code>config/production.json</code>.</p>
+<p>As per the <a href="https://github.com/lorenwest/node-config/wiki/Configuration-Files">config docs</a> you can organize <em>"hierarchical configurations for your app deployments"</em>.</p>
+<h3 id="env">.env</h3>
+<p>The <code>.env</code> file must be located at the root of the project, if it is missing, then it must be created based on the example file <code>.env.example</code>, otherwise the application will throw an <strong>error</strong>. The <code>.env</code> file sets environment variables. Environment variables usually contain user secrets, such as <strong>user_id</strong>, <strong>user_secret</strong>, etc.</p>
+<p>Example for <strong>.env.example</strong>.</p>
+<pre><code class="language-bash">### SERVER ###
+#-------------#
+HOST=&quot;localhost&quot;
+PORT=3030
+BASE_URL=&quot;http://localhost:3030&quot;
+
+...
+
+### AUTH ###
+#----------#
+# External accounts to login
+EXTERNAL_ACCOUNTS=&quot;google;github&quot;
+# yes | no; true | false; 1 | 0
+MY_LOCALHOST_TO_IP=0
+# yes | no; true | false; 1 | 0
+IS_AUTH_MANAGER=0
+
+# yes | no; true | false; 1 | 0
+SET_USER_ACTIVE=1
+
+...
+
+### OPC-UA ###
+#------------#
+# localUpdate|localAdd|remoteUpdate|remoteAdd|no
+DEFAULT_OPCUA_SAVEMODE_TODB=&quot;no&quot;
+# client|server|asyncServer
+DEFAULT_EXECUTE_METHODS_FROM=&quot;client&quot;
+# http://localhost:3131
+DEFAULT_OPCUA_REMOTE_DB_URL=&quot;http://localhost:3131&quot;
+# yes | no; true | false; 1 | 0
+OPCUA_BOOTSTRAP_ENABLE=1
+# -1(no limits) | 1..n(n limit)
+OPCUA_VALUES_MAXROWS=10
+# AuthenticatedUser, Supervisor, Administrator
+OPCUA_USER_LOGIN=&quot;xxxxxxxxxxxxxx&quot;
+OPCUA_USER_PASS=&quot;xxxxxxxxxxxxxx&quot;
+OPCUA_ADMIN_LOGIN=&quot;xxxxxxxxxxxxxx&quot;
+OPCUA_ADMIN_PASS=&quot;xxxxxxxxxxxxxx&quot;
+OPCUA_KEP_LOGIN=&quot;xxxxxxxxxxxxxx&quot;
+OPCUA_KEP_PASS=&quot;xxxxxxxxxxxxxx&quot;
+
+### LOG ###
+#----------#
+# yes | no; true | false; 1 | 0
+LOGMSG_ENABLE=1
+# -1(no limits) | 1..n(n limit)
+LOGMSG_MAXROWS=100
+
+### SECRET DATA ###
+#-----------------#
+GITHUB_ID=&quot;xxxxxxxxxxxxxxxxxxxxxxxx&quot;
+GITHUB_SECRET=&quot;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;
+
+GOOGLE_ID=&quot;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com&quot;
+GOOGLE_SECRET=&quot;xxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;
+
+### DATA-BASE ###
+#-----------------#
+
+# MSSQL
+MSSQL_ASODU_TEST_ID=&quot;OGMT-MZTP.FIRST.dbBSA&quot;
+MSSQL_ASODU_TEST_USER=&quot;xxxxxxxxxxxxxxx&quot;
+MSSQL_ASODU_TEST_PASS=&quot;xxxxxxxxxxxxxxx&quot;
+
+MSSQL_BSAHOME_TEST_ID=&quot;BSA-HOME.SQLEXPRESS.Feathers_test&quot;
+MSSQL_BSAHOME_TEST_USER=&quot;xxxx&quot;
+MSSQL_BSAHOME_TEST_PASS=&quot;xxxxxxxxxxxxx&quot;
+
+# DEFAULT TYPE DB (mongodb | nedb)
+DEFAULT_TYPE_DB=&quot;nedb&quot;
+
+# MONGODB
+MONGODB_DEV_URL=&quot;mongodb://localhost:27017/feathers_opcua_devserver&quot;
+MONGODB_TEST_URL=&quot;mongodb://localhost:27017/feathers_opcua_testserver&quot;
+MONGODB_PROD_URL=&quot;mongodb://localhost:27017/feathers_opcua_prodserver&quot;
+
+# NEDB
+NEDB_DEV_PATH=&quot;nedb://../data/nedb/dev&quot;
+NEDB_TEST_PATH=&quot;nedb://../data/nedb/test&quot;
+NEDB_PROD_PATH=&quot;nedb://../data/nedb/prod&quot;
+</code></pre>
+<blockquote>
+<p>Note: To have real keys to access the API of various services, you need to register your application in these services. Examples of registering an application and obtaining API keys in different services can be found <a href="https://github.com/sahat/hackathon-starter#obtaining-api-keys">here</a>.</p>
+</blockquote>
+<p>Main sections of the environment variable file <strong>.env</strong>:</p>
+<ul>
+<li><strong>SERVER</strong> - used in configuration files <code>\config\default.json</code>, <code>\config\development.json</code>, <code>\config\production.json</code>, <code>\config\test.json</code>.</li>
+<li><strong>AUTH</strong> - used to authenticate and authorize users to access application resources.</li>
+<li><strong>OPC-UA</strong> - used to set the parameters of the library NodeOPCUA.</li>
+<li><strong>LOG</strong> - used for logging events.</li>
+<li><strong>SECRET DATA</strong> - secret data for services (GOOGLE, GITHUB).</li>
+<li><strong>DATA-BASE</strong> - database information (MSSQL, MONGODB, NEDB).</li>
+</ul>
+<h3 id="feathers-specs">feathers-specs</h3>
+<p>This configuration file is located in the folder <code>\config\feathers-specs.json</code>.
+Main sections of <strong>feathers-specs</strong>:</p>
+<ul>
+<li><strong>envTestModeName</strong> - the value is set to a variable <code>NODE_ENV</code> for the test mode.</li>
+</ul>
+<pre><code class="language-bash">{
+  &quot;app&quot;: {
+    &quot;envTestModeName&quot;: &quot;test&quot;,
+    ...
+  },
+  ...
+}
+</code></pre>
+<ul>
+<li><strong>envAllowingSeedData</strong> - modes for which it is allowed to change data in the database with <code>\seeds\fake-data.json</code>.</li>
+</ul>
+<pre><code class="language-bash">{
+  &quot;app&quot;: {
+    ...
+    &quot;envAllowingSeedData&quot;: [&quot;test&quot;],
+    ...
+  },
+  ...
+}
+</code></pre>
+<ul>
+<li><strong>providers</strong> - transport types used to transfer data.</li>
+</ul>
+<pre><code class="language-bash">{
+  &quot;app&quot;: {
+    ...
+    &quot;providers&quot;: [
+      &quot;rest&quot;,
+      &quot;socketio&quot;
+    ]
+    ...
+  },
+  ...
+}
+</code></pre>
+<ul>
+<li><strong>services</strong> - service properties such as name, path, etc.</li>
+</ul>
+<pre><code class="language-bash">{
+  &quot;services&quot;: {
+    &quot;users&quot;: {
+      &quot;name&quot;: &quot;users&quot;,
+      &quot;nameSingular&quot;: &quot;user&quot;,
+      &quot;subFolder&quot;: &quot;&quot;,
+      &quot;fileName&quot;: &quot;users&quot;,
+      &quot;adapter&quot;: &quot;nedb&quot;,
+      &quot;path&quot;: &quot;/users&quot;,
+      &quot;isAuthEntity&quot;: true,
+      &quot;requiresAuth&quot;: true,
+      &quot;overriddenAuth&quot;: {
+        &quot;create&quot;: &quot;noauth&quot;,
+        &quot;get&quot;: &quot;auth&quot;,
+        &quot;find&quot;: &quot;auth&quot;,
+        &quot;update&quot;: &quot;auth&quot;,
+        &quot;patch&quot;: &quot;auth&quot;,
+        &quot;remove&quot;: &quot;auth&quot;
+      }
+    },
+  },
+  ...
+}
+</code></pre>
+<ul>
+<li><strong>hooks</strong> - hook properties such as fileName, ifMulti, etc.</li>
+</ul>
+<pre><code class="language-bash">{
+  &quot;hooks&quot;: {
+    &quot;normalize&quot;: {
+      &quot;fileName&quot;: &quot;normalize&quot;,
+      &quot;camelName&quot;: &quot;normalize&quot;,
+      &quot;ifMulti&quot;: &quot;y&quot;,
+      &quot;multiServices&quot;: [
+        &quot;*app&quot;
+      ],
+      &quot;singleService&quot;: &quot;&quot;
+    },
+    ...
+  },
+  ...
+}
+</code></pre>
+<h3 id="opcua-config">OPCUA Config</h3>
+<p>An application is configured for its host on which it is installed using a configuration file <code>src\api\opcua\config\OPCUA_Config.json</code>. In doing so, you can define separate configurations for this host. Each configuration has its own unique number, for example <code>ua-cherkassy-azot-asutp_dev1</code> , you can also define the server and client and what tags they will work with. Also in the configuration, you can determine which database to work with and in which mode, which data transfer protection mode to use, and how to authenticate the user.</p>
+<p>Main sections of the config file <strong>OPCUA_Config</strong>:</p>
+<ul>
+<li><strong>id</strong> - unique configuration code.</li>
+<li><strong>name</strong> - unique configuration name.</li>
+<li><strong>endpointUrl</strong> - opcua server endpoint url.</li>
+<li><strong>endpointPort</strong> - opcua server endpoint port.</li>
+<li><strong>srvServiceUrl</strong> - features framework host url for opcua-servers service.</li>
+<li><strong>clientServiceUrl</strong> - features framework host url for opcua-clients service.</li>
+<li><strong>clientScript</strong> - the name of the function to initialize the subscription on the client at startup <code>src\plugins\opcua\opcua-bootstrap.js</code>.</li>
+<li><strong>executeMethodsFrom</strong> - the place where the method should be executed, possible values: <code>client|server|asyncServer</code>.</li>
+<li><strong>hostTypeDB</strong> - the type of database the application will work with, possible values: <code>(mongodb|nedb)</code>.</li>
+<li><strong>opcuaSaveModeToDB</strong> - database operation mode, working or not, local or remote database, updating or adding current <code>opcua-values</code>, possible values:  <code>localUpdate|localAdd|remoteUpdate|remoteAdd|no</code>.</li>
+<li><strong>opcuaRemoteDbUrl</strong> - the url of the database where we will store the <code>opcua-tags</code> or <code>opcua-values</code> data.</li>
+<li><strong>opcuaBootstrapParams</strong> - parameters at startup of <code>src\plugins\opcua\opcua-bootstrap.js</code>.</li>
+<li><strong>security</strong> - opcua data transfer security settings and user authentication.</li>
+<li><strong>NodeId</strong> - parameters for the client to receive specific values <code>NodeId</code> from the server. e.g. <code>nodeName</code>. </li>
+<li><strong>include tests</strong> - what tests will we run on this host e.g. <code>["mssql-tedious.test.js","mssql-datasets.test.js", "http-operations.test.js"]</code>.</li>
+<li><strong>paths['base-options']</strong> - base tag paths.</li>
+<li><strong>paths['options']</strong> - path to tags for a specific configuration, tags that override tag values from base paths.</li>
+</ul>
+<pre><code class="language-bash">[
+  ...
+  {
+    &quot;isEnable&quot;: true,
+    &quot;id&quot;: &quot;ua-cherkassy-azot-asutp_dev1&quot;,
+    &quot;name&quot;: &quot;380-472-00203826-asutp_dev1&quot;,
+    &quot;description&quot;: &quot;Opcua server and client for `azot-m5`, `azot-ogmtmztp` tags from `opc.tcp://M5-0095488.OSTCHEM.COM.UA:26570`&quot;,
+    &quot;endpointUrl&quot;: &quot;opc.tcp://M5-0095488.OSTCHEM.COM.UA:26570&quot;,
+    &quot;endpointPort&quot;: 26570,
+    &quot;srvServiceUrl&quot;: &quot;http://10.60.0.220:3030&quot;,
+    &quot;clientServiceUrl&quot;: &quot;http://10.60.0.220:3030&quot;,
+    &quot;clientScript&quot;: &quot;startSubscriptionMonitor&quot;,
+    &quot;executeMethodsFrom&quot;: &quot;client&quot;,
+    &quot;hostTypeDB&quot;: &quot;mongodb&quot;,
+    &quot;opcuaSaveModeToDB&quot;: &quot;localUpdate&quot;,
+    &quot;opcuaRemoteDbUrl&quot;: &quot;http://M5-0095488.OSTCHEM.COM.UA:3131&quot;,
+    &quot;opcuaBootstrapParams&quot;: {
+      &quot;clearHistoryAtStartup&quot;: false,
+      &quot;syncHistoryAtStartup&quot;: { 
+        &quot;active&quot;: false,
+        &quot;methodName&quot;: &quot;methodAcmDayReportsDataGet&quot;
+      },
+      &quot;syncReportAtStartup&quot;: {
+        &quot;active&quot;: false,
+        &quot;methodName&quot;: &quot;methodAcmYearReportUpdate&quot;
+      }
+    },
+    &quot;security&quot;: {
+      &quot;mode&quot;: &quot;SignAndEncrypt&quot;,
+      &quot;policy&quot;: &quot;Basic256Sha256&quot;,
+      &quot;userName&quot;: &quot;OPCUA_ADMIN_LOGIN&quot;,
+      &quot;password&quot;: &quot;OPCUA_ADMIN_PASS&quot;
+    },
+    &quot;NodeId&quot;: {
+      &quot;namespaceIndex&quot;: 2,
+      &quot;identifierType&quot;: &quot;displayName&quot;,
+      &quot;identifierPrefix&quot;: &quot;Channel1.Device1&quot;,
+      &quot;addObjectItem&quot;: true
+    },
+    &quot;include&quot;: {
+      &quot;tests&quot;: [
+        &quot;mssql-tedious.test.js&quot;,
+        &quot;mssql-datasets.test.js&quot;,
+        &quot;http-operations.test.js&quot;
+      ]
+    },
+    &quot;paths&quot;: {
+      &quot;base-options&quot;: [
+        &quot;/src/api/opcua/tags/ua-cherkassy-azot-m5_prod1&quot;,
+        &quot;/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1&quot;
+      ],
+      &quot;options&quot;: &quot;/src/api/opcua/tags/ua-cherkassy-azot-asutp_dev1/AddressSpaceOptions.json&quot;,
+      &quot;getters&quot;: &quot;&quot;,
+      &quot;methods&quot;: &quot;&quot;,
+      &quot;subscriptions&quot;: &quot;&quot;,
+      &quot;client-scripts&quot;: &quot;&quot;
+    }
+  }
+  ...
+]
+</code></pre>
+<h3 id="opcua-tags">OPCUA Tags</h3>
+<p>An application is configured for its host on which it is installed using a configuration file <code>src\api\opcua\config\OPCUA_Config.json</code>. In doing so, you can define separate configurations for this host. Each configuration has its own unique number, for example <code>ua-cherkassy-azot-asutp_dev1</code>, you can also define the server and client and what tags they will work with. The configuration specifies the base paths <strong>paths['base-options']</strong> to the tag files and the config path <strong>paths['options']</strong> to the tag file, which overrides the values of the base tags.</p>
+<p>Example of base path tags:</p>
+<pre><code class="language-bash">{
+  &quot;objects&quot;: [
+    {
+      &quot;isEnable&quot;: true,
+      &quot;browseName&quot;: &quot;CH_M5&quot;,
+      &quot;displayName&quot;: &quot;Workshop M5 Cherkasy `AZOT`&quot;,
+      &quot;type&quot;: &quot;object&quot;
+    },
+    {
+      &quot;isEnable&quot;: true,
+      &quot;browseName&quot;: &quot;CH_M51&quot;,
+      &quot;displayName&quot;: &quot;Workshop M5 dep.1 Cherkassy `AZOT`&quot;,
+      &quot;type&quot;: &quot;object&quot;
+    }
+  ],
+  &quot;variables&quot;: [
+    {
+      &quot;browseName&quot;: &quot;CH_M51::ValueFromFile&quot;,
+      &quot;displayName&quot;: &quot;Values from file for CH_M51&quot;,
+      &quot;ownerName&quot;: &quot;CH_M51&quot;,
+      &quot;type&quot;: &quot;variable.simple&quot;,
+      &quot;dataType&quot;: &quot;String&quot;,
+      &quot;hist&quot;: 1,
+      &quot;group&quot;: true,
+      &quot;subscription&quot;: &quot;onChangedGroupHandlerForDB&quot;,
+      &quot;variableGetType&quot;: &quot;valueFromSource&quot;,
+      &quot;getter&quot;: &quot;getterHistValueFromPath&quot;,
+      &quot;getterParams&quot;: {
+        &quot;path&quot;: &quot;//192.168.3.5/www_m5/m5_data2&quot;
+      }
+    }
+  ],
+  &quot;groups&quot;: [
+    {
+      &quot;browseName&quot;: &quot;CH_M51::01AMIAK:01T4&quot;,
+      &quot;aliasName&quot;: &quot;01NH3_T4&quot;,
+      &quot;displayName&quot;: &quot;01NH3_T4&quot;,
+      &quot;ownerName&quot;: &quot;CH_M51&quot;,
+      &quot;ownerGroup&quot;: &quot;CH_M51::ValueFromFile&quot;,
+      &quot;type&quot;: &quot;variable.analog&quot;,
+      &quot;dataType&quot;: &quot;Double&quot;,
+      &quot;hist&quot;: 1,
+      &quot;variableGetType&quot;: &quot;valueFromSource&quot;,
+      &quot;getter&quot;: &quot;getterPlugForVariable&quot;,
+      &quot;valueParams&quot;: {
+        &quot;engineeringUnitsRange&quot;: {
+          &quot;low&quot;: 0,
+          &quot;high&quot;: 200
+        },
+        &quot;engineeringUnits&quot;: &quot;degree_celsius&quot;
+      },
+      &quot;description&quot;: &quot;Ammonia gas temperature NH3 (T4)&quot;
+    },
+  ],
+  &quot;methods&quot;: [
+    {
+      &quot;browseName&quot;: &quot;CH_M5::YearTemplateCreate&quot;,
+      &quot;displayName&quot;: &quot;Create an annual report template&quot;,
+      &quot;ownerName&quot;: &quot;CH_M5&quot;,
+      &quot;type&quot;: &quot;method&quot;,
+      &quot;bindMethod&quot;: &quot;methodAcmYearTemplateCreate&quot;,
+      &quot;inputArguments&quot;: [
+        {
+          &quot;name&quot;: &quot;methodParameters&quot;,
+          &quot;description&quot;: {
+            &quot;text&quot;: &quot;Method parameters&quot;
+          },
+          &quot;dataType&quot;: &quot;String&quot;
+        }
+      ],
+      &quot;outputArguments&quot;: [
+        {
+          &quot;name&quot;: &quot;methodExecutionResult&quot;,
+          &quot;description&quot;: {
+            &quot;text&quot;: &quot;Method execution result&quot;
+          },
+          &quot;dataType&quot;: &quot;String&quot;,
+          &quot;valueRank&quot;: 1
+        }
+      ],
+      &quot;userAccessLevel&quot;: {
+        &quot;inputArguments&quot;: &quot;CurrentRead&quot;,
+        &quot;outputArguments&quot;: &quot;CurrentRead&quot;
+      }
+    }
+  ]
+}
+</code></pre>
+<p>Example of config path tags:</p>
+<pre><code class="language-bash">{
+  &quot;objects&quot;: [
+    {
+      &quot;isEnable&quot;: false,
+      &quot;browseName&quot;: &quot;CH_M5&quot;,
+      &quot;displayName&quot;: &quot;Workshop M5 Cherkasy `AZOT`&quot;,
+      &quot;type&quot;: &quot;object&quot;
+    },
+    {
+      &quot;isEnable&quot;: true,
+      &quot;browseName&quot;: &quot;CH_M51&quot;,
+      &quot;displayName&quot;: &quot;Workshop M5 dep.1 Cherkassy `AZOT`&quot;,
+      &quot;type&quot;: &quot;object&quot;
+    }
+  ],
+  &quot;variables&quot;: [
+    {
+      &quot;browseName&quot;: &quot;CH_M51::ValueFromFile&quot;,
+      &quot;displayName&quot;: &quot;Values from file for CH_M51&quot;,
+      &quot;ownerName&quot;: &quot;CH_M51&quot;,
+      &quot;type&quot;: &quot;variable.simple&quot;,
+      &quot;dataType&quot;: &quot;String&quot;,
+      &quot;hist&quot;: 1,
+      &quot;group&quot;: true,
+      &quot;subscription&quot;: &quot;onChangedGroupHandlerForDB&quot;,
+      &quot;variableGetType&quot;: &quot;valueFromSource&quot;,
+      &quot;getter&quot;: &quot;getterHistValueFromHttpPath&quot;,
+      &quot;getterParams&quot;: {
+        &quot;path&quot;: &quot;http://192.168.3.5/www_m5/m5_data2/&quot;,
+        &quot;interval&quot;: 20000
+      }
+    }
+  ]
+}
+</code></pre>
+<p>Main sections of the tag file:</p>
+<ul>
+<li><strong>objects</strong> - set of object tags. All tags ("variables", "groups", "methods") belong to some object tag through the <strong>ownerName</strong> field (e.g. <em>"ownerName": "CH_M51"</em>).</li>
+<li><strong>variables</strong> - set of variable tags. If the "group" field is set to true, then this tag is the owner of the tag group (e.g. <em>"group": true</em>).</li>
+<li><strong>groups</strong> - set of group tags. These are tags that belong to a tag group. The name of the owner of this group is indicated in the <strong>ownerGroup</strong> field (e.g. <em>"ownerGroup": "CH_M51::ValueFromFile"</em>).</li>
+<li><strong>methods</strong> - set of method tags.</li>
+<li><strong>browseName</strong> - browse name (e.g. <em>"browseName": "CH_M51::ValueFromFile"</em>).</li>
+<li><strong>displayName</strong> - display name (e.g. <em>"displayName": "Values from file for CH_M51"</em>).</li>
+<li><strong>ownerName</strong> - name of owner (e.g. <em>"ownerName": "CH_M51"</em>).</li>
+<li><strong>type</strong> - variable type (e.g. <em>"type": "variable.simple"</em>).</li>
+<li><strong>dataType</strong> - data type (e.g. <em>"dataType": "Double"</em>).</li>
+<li><strong>hist</strong> - story size (e.g. <em>"hist": 1</em>).</li>
+<li><strong>group</strong> - group tag (e.g. <em>"group": true</em>).</li>
+<li><strong>ownerGroup</strong> - owner tag name (e.g. <em>"ownerGroup": "CH_M51::ValueFromFile"</em>).</li>
+<li><strong>variableGetType</strong> - data source for a variable (e.g. <em>"variableGetType": "valueFromSource"</em>).</li>
+<li><strong>subscription</strong> - variable change event handler function name (e.g. <em>"subscription": "onChangedGroupHandlerForDB"</em>).</li>
+<li><strong>getter</strong> - the name of the get data function for the variable (e.g. <em>"getter": "getterHistValueFromHttpPath"</em>).</li>
+<li><strong>getterParams</strong> - parameters for the get data function for a variable (e.g. <em>"getterParams": {   "path": "http://192.168.3.5/www_m5/m5_data2/", "interval": 20000 }</em>).</li>
+<li><strong>valueParams.engineeringUnitsRange</strong> - engineering units range (e.g. <em>valueParams.engineeringUnitsRange: { "low": 0, "high": 200 }</em>).</li>
+<li><strong>valueParams.engineeringUnits</strong> - engineering units (e.g. <em>valueParams.engineeringUnits: "degree_celsius"</em>).</li>
+<li><strong>description</strong> - tag description (e.g. <em>"description": "Ammonia gas temperature NH3 (T4)"</em>).</li>
+<li><strong>bindMethod</strong> - bind method (e.g. <em>"bindMethod": "methodAcmYearTemplateCreate"</em>).</li>
+<li><strong>inputArguments</strong> - input arguments for the method.</li>
+<li><strong>outputArguments</strong> - output arguments for the method.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../part5_installation/" class="btn btn-neutral float-left" title="Part5. Installation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../part7_install-as-win-service/" class="btn btn-neutral float-right" title="Part7. Install as a Windows service">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../part5_installation/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../part7_install-as-win-service/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

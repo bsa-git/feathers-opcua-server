@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://bsa-git.github.io/feathers-opcua-server/tutorial/part1_getting-started/" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Part1. Getting started - FeathersJS OPC UA application</title>
+    <title>Part1. Getting started - Feathers OPC UA application</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
@@ -33,7 +33,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href="../.." class="icon icon-home"> FeathersJS OPC UA application
+          <a href="../.." class="icon icon-home"> Feathers OPC UA application
         </a><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
       <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
@@ -51,6 +51,8 @@
               <ul class="current">
                   <li class="toctree-l1 current"><a class="reference internal current" href="./">Part1. Getting started</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#distributed-data-collection-system">Distributed data collection system</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#why-do-you-need-a-framework">Why do you need a framework.</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#why-the-framework-feathersjs-was-chosen">Why the framework FeathersJS was chosen.</a>
@@ -61,17 +63,13 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../part3_app-features/">Part3. Application Features</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../sharing-our-app/">Part4. Share the application</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../part4_resources-info/">Part4. Resources info</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../persisting-our-data/">Part5. Persist the DB</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../part5_installation/">Part5. Installation</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../using-bind-mounts/">Part6. Use bind mounts</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../part6_configuration/">Part6. Configuration</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../multi-container-apps/">Part7. Multi-container apps</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../using-docker-compose/">Part8. Use Docker Compose</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../image-building-best-practices/">Part9. Image-building best practices</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../part7_install-as-win-service/">Part7. Install as a Windows service</a>
                   </li>
               </ul>
               <p class="caption"><span class="caption-text">About</span></p>
@@ -86,7 +84,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
       <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../..">FeathersJS OPC UA application</a>
+          <a href="../..">Feathers OPC UA application</a>
         
       </nav>
       <div class="wy-nav-content">
@@ -116,8 +114,10 @@
 <li><strong>NodeOPCUA</strong> runs on all the platforms that nodeJS supports.</li>
 <li><strong>NodeOPCUA</strong> will benefit from a <a href="https://node-opcua.github.io/api_doc/index.html">comprehensive SDK API documentation</a>, numerous end-to-end functional tests, and a set of practical examples to help you learn how to use it.</li>
 </ul>
+<h3 id="distributed-data-collection-system">Distributed data collection system</h3>
+<p>An application is configured for its host on which it is installed using a configuration file <code>src\api\opcua\config\OPCUA_Config.json</code>. In doing so, you can define separate configurations for this host. Each configuration has its own unique <code>id</code>, for example <code>ua-cherkassy-azot-asutp_dev1</code> , you can also define the server and client and what tags they will work with. Also in the configuration, you can determine which database to work with and in which mode, which data transfer protection mode to use, and how to authenticate the user. Details can be found <a href="/feathers-opcua-server/tutorial/part6_configuration/#opcua-config">here</a>.</p>
 <h3 id="why-do-you-need-a-framework">Why do you need a framework.</h3>
-<p>There was an idea to embed the implementation of the protocol <strong>NodeOPCUA</strong> in the framework in order to use the features of this framework, such as:</p>
+<p>There was an idea to embed the implementation of the library <strong>NodeOPCUA</strong> in the framework in order to use the features of this framework, such as:</p>
 <ul>
 <li>Working with databases.</li>
 <li>Access to data through protocols <strong>REST API</strong> and <strong>Websockets</strong>.</li>

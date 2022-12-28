@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://bsa-git.github.io/feathers-opcua-server/tutorial/part5_installation/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Part5. Installation - Feathers OPC UA application</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../css/styles.css" rel="stylesheet" />
+        <link href="../../css/dark-mode.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Part5. Installation";
+        var mkdocs_page_input_path = "tutorial\\part5_installation\\index.md";
+        var mkdocs_page_url = "/feathers-opcua-server/tutorial/part5_installation/";
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Feathers OPC UA application
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../..">What is OPC UA?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Get started</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../part1_getting-started/">Part1. Getting started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../part2_framework-overview/">Part2. FeathersJS framework overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../part3_app-features/">Part3. Application Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../part4_resources-info/">Part4. Resources info</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Part5. Installation</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment variables</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#script-testing">Script testing</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#writing-test-data-to-the-database">Writing Test Data to the Database</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#launch-of-the-cli-scripts">Launch of the CLI Scripts</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#launch-of-the-project">Launch of the project</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#in-development-mode">In development mode</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#in-production-mode">In production mode</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../part6_configuration/">Part6. Configuration</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../part7_install-as-win-service/">Part7. Install as a Windows service</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../LICENSE/">License</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Feathers OPC UA application</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Get started &raquo;</li>
+      <li>Part5. Installation</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="installation">Installation</h1>
+<p>Make sure you have installed </p>
+<ul>
+<li><a href="https://nodejs.org/en/download/releases/">NodeJS</a> v12.*</li>
+<li><a href="https://www.mongodb.com/try/download/community">MongoDB x64</a> v6.* (if used) </li>
+<li><a href="https://www.mongodb.com/try/download/community">MongoDB x32</a> v3.2.22 (if used) </li>
+<li><a href="https://classic.yarnpkg.com/en/docs/install#windows-stable">Yarn</a> v1.*</li>
+</ul>
+<p>Clone or download the project from <a href="https://github.com/bsa-git/feathers-opcua-server">GitHub</a>.</p>
+<p>Install your dependencies:</p>
+<pre><code class="language-bash">    cd to/&lt;feathers-opcua-server&gt;
+    yarn install
+</code></pre>
+<p>If you are using a database <strong>MongoDB</strong>, then you need to start it before testing or working, using the command:</p>
+<pre><code class="language-bash">    npm run start-mongod
+</code></pre>
+<p>or</p>
+<pre><code class="language-bash">    npm run start-mongod32
+</code></pre>
+<h3 id="environment-variables">Environment variables</h3>
+<p>The <code>.env</code> file must be located at the root of the project, if it is missing, then it must be created based on the example file <code>.env.example</code>, otherwise the application will throw an <strong>error</strong>. The <code>.env</code> file sets environment variables. </p>
+<p>Environment variables usually contain user secrets, such as <strong>user_id</strong>, <strong>user_secret</strong>, etc.</p>
+<p>e.g.</p>
+<pre><code class="language-bash">    ...
+    # MONGODB
+    MONGODB_DEV_URL=&quot;mongodb://localhost:27017/feathers_opcua_devserver&quot;
+    MONGODB_TEST_URL=&quot;mongodb://localhost:27017/feathers_opcua_testserver&quot;
+    MONGODB_PROD_URL=&quot;mongodb://localhost:27017/feathers_opcua_prodserver&quot;
+
+    # NEDB
+    NEDB_DEV_PATH=&quot;nedb://../data/nedb/dev&quot;
+    NEDB_TEST_PATH=&quot;nedb://../data/nedb/test&quot;
+    NEDB_PROD_PATH=&quot;nedb://../data/nedb/prod&quot;
+</code></pre>
+<h3 id="testing">Testing</h3>
+<p>Before working with the project, you need to start testing using the command.</p>
+<pre><code class="language-bash">    npm run test:all
+</code></pre>
+<p>All tests in the <code>/test</code> directory will be executed. If you need to run a separate test, you need to move it to the <code>/test/debug</code> directory and run the command.</p>
+<pre><code class="language-bash">    npm run test:debug
+</code></pre>
+<p>The test in the <code>/test/debug</code> directory will be executed.</p>
+<p>This sets the environment variable <code>NODE_ENV</code> to <strong>test</strong> mode.</p>
+<pre><code class="language-bash">    cross-env NODE_ENV=test
+</code></pre>
+<p>In this case, all test data is written to the test database.
+e.g. <code>mongodb://localhost:27017/feathers_opcua_testserver</code> or <code>nedb://../data/nedb/test</code></p>
+<h3 id="script-testing">Script testing</h3>
+<p>When testing scripts, the command is used:</p>
+<pre><code class="language-bash">    npm run test:script
+</code></pre>
+<p>The script test number must be set in the command execution arguments in the <code>package.json</code> file, see here: </p>
+<pre><code class="language-bash">    &quot;scripts&quot;: {
+        ...
+        &quot;mocha:script&quot;: &quot;... --timeout 60000 --script=#4.2&quot;,
+    }
+</code></pre>
+<p>This will run the script in test mode <code>/scripts/test/#4-scriptRunSessionCommand.js</code>.</p>
+<h3 id="writing-test-data-to-the-database">Writing Test Data to the Database</h3>
+<p>To write the test data from the <code>/seeds/fake-data.json</code> file to the test database, you need to run the command:</p>
+<pre><code class="language-bash">    npm run start:seed
+</code></pre>
+<p>In this case, the test data will be written to the test database
+e.g. <code>mongodb://localhost:27017/feathers_opcua_testserver</code> or <code>nedb://../data/nedb/test</code></p>
+<h3 id="launch-of-the-cli-scripts">Launch of the CLI Scripts</h3>
+<p>The links to the <strong>cli scripts</strong> are in the <code>package.json</code> file, see here:</p>
+<pre><code class="language-bash">    ...
+    &quot;bin&quot;: {
+    &quot;callOpcuaMethod&quot;: &quot;./scripts/cli/callOpcuaMethod.js&quot;,
+    &quot;runOpcuaCommand&quot;: &quot;./scripts/cli/runOpcuaCommand.js&quot;,
+    &quot;createAcmYearTemplate&quot;: &quot;./scripts/cli/createAcmYearTemplate.js&quot;,
+    &quot;getAcmDayReportsData&quot;: &quot;./scripts/cli/getAcmDayReportsData.js&quot;
+  },
+  ...
+</code></pre>
+<p>To create links to <strong>cli scripts</strong>, you need to run the command:</p>
+<pre><code class="language-bash">    npm run clone:cli-scripts
+</code></pre>
+<h3 id="launch-of-the-project">Launch of the project</h3>
+<h4 id="in-development-mode">In development mode</h4>
+<p>Run the application in development mode with the command:</p>
+<pre><code class="language-bash">    npm run dev
+</code></pre>
+<p>his sets the environment variable <code>NODE_ENV</code> to <strong>development</strong> mode.</p>
+<pre><code class="language-bash">    cross-env NODE_ENV=development
+</code></pre>
+<p>In this case, all development data is written to the development database.
+e.g. <code>mongodb://localhost:27017/feathers_opcua_devserver</code> or <code>nedb://../data/nedb/dev</code></p>
+<h4 id="in-production-mode">In production mode</h4>
+<p>Run the application in production mode with the command:</p>
+<pre><code class="language-bash">    npm start
+</code></pre>
+<p>his sets the environment variable <code>NODE_ENV</code> to <strong>production</strong> mode.</p>
+<pre><code class="language-bash">    cross-env NODE_ENV=production
+</code></pre>
+<p>In this case, all production data is written to the production database.
+e.g. <code>mongodb://localhost:27017/feathers_opcua_prodserver</code> or <code>nedb://../data/nedb/prod</code></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../part4_resources-info/" class="btn btn-neutral float-left" title="Part4. Resources info"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../part6_configuration/" class="btn btn-neutral float-right" title="Part6. Configuration">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../part4_resources-info/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../part6_configuration/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
