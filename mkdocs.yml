@@ -28,8 +28,6 @@ nav:
     - 'Part4. Resources info': 'tutorial\part4_resources-info\index.md'
     - 'Part5. Installation': 'tutorial\part5_installation\index.md'
     - 'Part6. Configuration': 'tutorial\part6_configuration\index.md'
-    - 'Part7. Multi-container apps': 'tutorial\multi-container-apps\index.md'
-    - 'Part8. Use Docker Compose': 'tutorial\using-docker-compose\index.md'
-    - 'Part9. Image-building best practices': 'tutorial\image-building-best-practices\index.md'
+    - 'Part7. Install as a Windows service': 'tutorial\part7_install-as-win-service\index.md'
   - About:
     - 'License': 'LICENSE.md'

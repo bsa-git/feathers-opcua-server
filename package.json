@@ -11,7 +11,8 @@
     "m2m",
     "iot",
     "opc ua",
-    "internet of things"
+    "internet of things",
+    "windows service"
   ],
   "author": {
     "name": "BSA Lab.",
@@ -53,7 +54,7 @@
     "nedbProd-remove": "shx rm -rf data/nedb/prod/*.db",
     "nedb-find-users": "nedb ./data/nedb/dev/users.db",
     "nedb-find-opcuaValues": "nedb ./data/nedb/dev/opcua-values.db",
-    "install-win-service": "node scripts/cli/install-windows-service.js",
+    "install-win-service": "node scripts/cli/install-windows.service.js",
     "uninstall-win-service": "node scripts/cli/uninstall-windows.service.js",
     "eslint": "eslint --fix src/. test/. scripts/. --config .eslintrc.json",
     "eslint:debug": "eslint --fix src/. test/debug/.  --config .eslintrc.json",
