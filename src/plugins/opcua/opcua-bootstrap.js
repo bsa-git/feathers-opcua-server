@@ -14,6 +14,7 @@ const {
   readJsonFileSync,
   removeFilesFromDirSync,
   isTrue,
+  isUrlExists
 } = require('../lib');
 
 const {
@@ -132,8 +133,9 @@ module.exports = async function opcuaBootstrap(app) {
     }
 
     const isRemote = isRemoteOpcuaToDB();
-    if (isRemote) {
-      const remoteDbUrl = getOpcuaRemoteDbUrl();
+    const remoteDbUrl = getOpcuaRemoteDbUrl();
+    const isURL = isRemote ? await isUrlExists(remoteDbUrl) : false;
+    if (isRemote && isURL) {
       const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
       if (appRestClient) {
         // Save opcua tags to remote DB

@@ -10,6 +10,10 @@ const {
 } = require('../opcua/opcua-helper');
 
 const {
+  isUrlExists
+} = require('../lib/http-operations');
+
+const {
   DataType,
 } = require('node-opcua');
 
@@ -370,9 +374,11 @@ const saveOpcuaGroupValue = async function (app, groupBrowseName, value) {
     }
     if (isDebug && savedValue) inspector('db-helper.saveOpcuaValue.local.savedValue:', savedValue);
 
-    // Save values for remote host
-    if (isRemoteOpcuaToDB()) {
-      const remoteDbUrl = getOpcuaRemoteDbUrl();
+    // Save values for remote host  
+    const isRemote = isRemoteOpcuaToDB();
+    const remoteDbUrl = getOpcuaRemoteDbUrl();
+    const isURL = isRemote ? await isUrlExists(remoteDbUrl) : false;
+    if (isRemote && isURL) {
       const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
       if (appRestClient) {
         if (isUpdateOpcuaToDB()) {
@@ -480,7 +486,10 @@ const saveStoreOpcuaGroupValues = async function (app, groupBrowseName, values, 
           savedValues.push(savedValue);
 
           // Save opcua values to remote store
-          if (isRemoteOpcuaToDB() && saveRemote && !isTest()) {
+          const isRemote = isRemoteOpcuaToDB();
+          const remoteDbUrl = getOpcuaRemoteDbUrl();
+          const isURL = isRemote ? await isUrlExists(remoteDbUrl) : false;
+          if (isRemote && isURL && saveRemote && !isTest()) {
             const remoteDbUrl = getOpcuaRemoteDbUrl();
             const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
             if (appRestClient) {
