@@ -73,6 +73,25 @@ const isDebug = false;
 
 //================ Tools for DB  ==============//
 
+let isInitRemoteDB = false;
+
+/**
+ * @method setInitRemoteDB
+ * @param {Boolean} value 
+ */
+const setInitRemoteDB = function (value) {
+  isInitRemoteDB = value;
+  return isInitRemoteDB;
+};
+
+/**
+ * @method getInitRemoteDB
+ * @param {Boolean} value 
+ */
+const getInitRemoteDB = function () {
+  return isInitRemoteDB;
+};
+
 /**
  * Get dbNullIdValue
  * e.g. for mongodb -> '000000000000000000000000'
@@ -375,10 +394,11 @@ const saveOpcuaGroupValue = async function (app, groupBrowseName, value) {
     if (isDebug && savedValue) inspector('db-helper.saveOpcuaValue.local.savedValue:', savedValue);
 
     // Save values for remote host  
-    const isRemote = isRemoteOpcuaToDB();
+    let isRemote = isRemoteOpcuaToDB();
     const remoteDbUrl = getOpcuaRemoteDbUrl();
     const isURL = isRemote ? await isUrlExists(remoteDbUrl) : false;
-    if (isRemote && isURL) {
+    isRemote = isRemote && isURL && getInitRemoteDB();
+    if (isRemote) {
       const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
       if (appRestClient) {
         if (isUpdateOpcuaToDB()) {
@@ -474,6 +494,13 @@ const saveStoreOpcuaGroupValues = async function (app, groupBrowseName, values, 
       // Get store items from opcua tag values
       storeTags.push(groupTag);
       const storeItems = getStoresFromOpcuaTagValues(storeTags, _values);
+
+      // Save opcua values to remote store
+      let isRemote = isRemoteOpcuaToDB();
+      const remoteDbUrl = getOpcuaRemoteDbUrl();
+      const isURL = isRemote ? await isUrlExists(remoteDbUrl, { showMsg: false }) : false;
+      isRemote = isRemote && isURL && saveRemote && !isTest()  && getInitRemoteDB();
+
       // Save store opcua values for hook
       const keys = Object.keys(storeItems);
       for (let index = 0; index < keys.length; index++) {
@@ -485,11 +512,8 @@ const saveStoreOpcuaGroupValues = async function (app, groupBrowseName, values, 
           if (isDebug && savedValue) inspector('saveStoreOpcuaGroupValues.local.savedValue:', savedValue);
           savedValues.push(savedValue);
 
-          // Save opcua values to remote store
-          const isRemote = isRemoteOpcuaToDB();
-          const remoteDbUrl = getOpcuaRemoteDbUrl();
-          const isURL = isRemote ? await isUrlExists(remoteDbUrl) : false;
-          if (isRemote && isURL && saveRemote && !isTest()) {
+          // // Save opcua values to remote store
+          if (isRemote) {
             const remoteDbUrl = getOpcuaRemoteDbUrl();
             const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
             if (appRestClient) {
@@ -1450,6 +1474,48 @@ const syncReportAtStartup = async function (app, opcuaTags, methodName) {
   return methodResult;
 };
 
+/**
+ * @method initRemoteDB
+ * @async
+ * 
+ * @param {Object} app 
+ * @param {String} dbUrl 
+ * @param {Object[]} opcuaTags 
+ * @param {Boolean} isClearHistoryAtStartup 
+ */
+const initRemoteDB = async function (app, dbUrl, opcuaTags, isClearHistoryAtStartup) {
+  let removeResult;
+  //--------------------------------------
+  const appRestClient = await feathersClient({ transport: 'rest', serverUrl: dbUrl });
+  if (appRestClient) {
+    // Save opcua tags to remote DB
+    const saveResult = await saveOpcuaTags(appRestClient, opcuaTags, true);
+    logger.info('opcuaBootstrap.saveOpcuaTags.remoteDB: OK.', saveResult);
+    // Integrity check opcua data
+    const integrityResult = await integrityCheckOpcua(appRestClient, true);
+    if (integrityResult) {
+      logger.info('Result integrity check opcua.remoteDB: OK.');
+    } else {
+      logger.error('Result integrity check opcua.remoteDB: ERR.');
+    }
+    // Remove opcua group values
+    if (isUpdateOpcuaToDB()) {
+      removeResult = await removeOpcuaGroupValues(appRestClient);
+      if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.remoteDB: OK. (${removeResult})`);
+    }
+
+    // Remove opcua remote store values
+    if (isClearHistoryAtStartup) {
+      removeResult = await removeOpcuaStoreValues(appRestClient);
+      if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.remoteDB: OK. (${removeResult})`);
+    }
+    // Update remote store from local store
+    const updateStores = await updateRemoteFromLocalStore(app, appRestClient, opcuaTags);
+    logger.info(`opcuaBootstrap.updateRemoteFromLocalStore.remoteDB: OK. (${updateStores})`);
+
+  }
+};
+
 //================================================================================
 
 /**
@@ -1838,6 +1904,8 @@ const createItems = async function (app, path = '', data = [], query = {}) {
 };
 
 module.exports = {
+  setInitRemoteDB,
+  getInitRemoteDB,
   dbNullIdValue,
   getEnvTypeDB,
   getEnvAdapterDB,
@@ -1867,6 +1935,7 @@ module.exports = {
   integrityCheckOpcua,
   syncHistoryAtStartup,
   syncReportAtStartup,
+  initRemoteDB,
   //-------------------
   getCountItems,
   getItem,
