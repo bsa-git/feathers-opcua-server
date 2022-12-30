@@ -34,8 +34,12 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test2.js) ===>>', () => {
 
   it('#1: Connecting and request', async () => {
     const db = new MssqlTedious(mssqlEnvName);
-    db.config.options.debug.data = true;
-    db.config.options.debug.packet = true;
+    const _debug = db.config.options.debug;
+    _debug.data = true;
+    _debug.packet = true;
+    _debug.log = true;
+    _debug.payload = true;
+    _debug.token = true;
     db.config.events.connection.debug.enable = true;
     db.config.events.connection.infoMessage.enable = true;
     db.config.events.connection.errorMessage.enable = true;
