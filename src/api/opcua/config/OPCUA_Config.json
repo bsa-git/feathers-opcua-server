@@ -192,7 +192,7 @@
     "clientServiceUrl": "http://OGMT-TSD:3030",
     "clientScript": "startSubscriptionMonitor",
     "hostTypeDB": "mongodb",
-    "opcuaSaveModeToDB": "localUpdate",
+    "opcuaSaveModeToDB": "remoteUpdate",
     "opcuaRemoteDbUrl": "http://OGMT-TSD:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": true,
