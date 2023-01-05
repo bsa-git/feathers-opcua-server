@@ -14,6 +14,7 @@ const {
   readJsonFileSync,
   removeFilesFromDirSync,
   isTrue,
+  isUrlExists
 } = require('../lib');
 
 const {
@@ -40,7 +41,10 @@ const {
   getOpcuaRemoteDbUrl,
   getCountItems,
   syncHistoryAtStartup,
-  syncReportAtStartup
+  syncReportAtStartup,
+  initRemoteDB,
+  setInitRemoteDB,
+  getInitRemoteDB
 } = require('../db-helpers');
 
 const {
@@ -57,7 +61,6 @@ const isDebug = false;
 // Get feathers-specs data
 const feathersSpecs = readJsonFileSync(`${appRoot}/config/feathers-specs.json`) || {};
 
-
 /**
  * Bootstrap of OPC-UA services
  * @param {Object} app 
@@ -67,6 +70,8 @@ module.exports = async function opcuaBootstrap(app) {
   let integrityResult, removeResult, bootstrapParams = null;
   let methodName;
   //--------------------------------------------------------
+
+  setInitRemoteDB(false);
 
   // Determine if command line argument exists for seeding data
   const isSeedServices = ['--seed', '-s'].some(str => process.argv.slice(2).includes(str));
@@ -80,6 +85,9 @@ module.exports = async function opcuaBootstrap(app) {
 
   // Get opcua bootstrap params
   bootstrapParams = getOpcuaBootstrapParams();
+  const isClearHistoryAtStartup = bootstrapParams && bootstrapParams.clearHistoryAtStartup;
+  const isSyncHistoryAtStartup = bootstrapParams && bootstrapParams.syncHistoryAtStartup && bootstrapParams.syncHistoryAtStartup.active;
+  const isSyncReportAtStartup = bootstrapParams && bootstrapParams.syncReportAtStartup && bootstrapParams.syncReportAtStartup.active;
 
   if (isSaveOpcuaToDB()) {
     // Get opcua tags 
@@ -110,13 +118,13 @@ module.exports = async function opcuaBootstrap(app) {
     }
 
     // Remove opcua store values
-    if (bootstrapParams && bootstrapParams.clearHistoryAtStartup) {
+    if (isClearHistoryAtStartup) {
       removeResult = await removeOpcuaStoreValues(app);
       if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.localDB: OK. (${removeResult})`);
     }
 
     // Sync opcua store at startup
-    if (bootstrapParams && bootstrapParams.syncHistoryAtStartup && bootstrapParams.syncHistoryAtStartup.active) {
+    if (isSyncHistoryAtStartup) {
       methodName = bootstrapParams.syncHistoryAtStartup.methodName;
       const syncResult = await syncHistoryAtStartup(app, opcuaTags, methodName);
       if (isDebug && syncResult) inspector('opcuaBootstrap.syncHistoryAtStartup.syncResult:', syncResult);
@@ -124,7 +132,7 @@ module.exports = async function opcuaBootstrap(app) {
     }
 
     // Sync opcua store values
-    if (bootstrapParams && bootstrapParams.syncReportAtStartup && bootstrapParams.syncReportAtStartup.active) {
+    if (isSyncReportAtStartup) {
       methodName = bootstrapParams.syncReportAtStartup.methodName;
       const syncResult = await syncReportAtStartup(app, opcuaTags, methodName);
       if (isDebug && syncResult) inspector('opcuaBootstrap.syncReportAtStartup.syncResult:', syncResult);
@@ -132,35 +140,28 @@ module.exports = async function opcuaBootstrap(app) {
     }
 
     const isRemote = isRemoteOpcuaToDB();
-    if (isRemote) {
-      const remoteDbUrl = getOpcuaRemoteDbUrl();
-      const appRestClient = await feathersClient({ transport: 'rest', serverUrl: remoteDbUrl });
-      if (appRestClient) {
-        // Save opcua tags to remote DB
-        saveResult = await saveOpcuaTags(appRestClient, opcuaTags, isRemote);
-        logger.info('opcuaBootstrap.saveOpcuaTags.remoteDB: OK.', saveResult);
-        // Integrity check opcua data
-        integrityResult = await integrityCheckOpcua(appRestClient, isRemote);
-        if (integrityResult) {
-          logger.info('Result integrity check opcua.remoteDB: OK.');
-        } else {
-          logger.error('Result integrity check opcua.remoteDB: ERR.');
-        }
-        // Remove opcua group values
-        if (isUpdateOpcuaToDB()) {
-          removeResult = await removeOpcuaGroupValues(appRestClient);
-          if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaGroupValues.remoteDB: OK. (${removeResult})`);
-        }
+    const remoteDbUrl = getOpcuaRemoteDbUrl();
+    const isURL = isRemote ? await isUrlExists(remoteDbUrl) : false;
 
-        // Remove opcua remote store values
-        if (bootstrapParams && bootstrapParams.clearHistoryAtStartup) {
-          removeResult = await removeOpcuaStoreValues(appRestClient);
-          if (removeResult) logger.info(`opcuaBootstrap.removeOpcuaStoreValues.remoteDB: OK. (${removeResult})`);
+    if (isRemote && !isURL) {
+      const intervalId = setInterval( async function () {
+        
+        const isURL = isRemote ? await isUrlExists(remoteDbUrl, { showMsg: false }) : false;
+        const isInitRemoteDB = getInitRemoteDB();
+        console.log(`Start Interval for InitRemoteDB: OK, isURL=${isURL}, isInitRemoteDB=${isInitRemoteDB}`);
+        if (isRemote && isURL && !isInitRemoteDB){
+          clearInterval(intervalId);
+          // Init remote DB
+          await initRemoteDB(app, remoteDbUrl, opcuaTags, isClearHistoryAtStartup);
+          setInitRemoteDB(true);
         }
-        // Update remote store from local store
-        const updateStores = await updateRemoteFromLocalStore(app, appRestClient, opcuaTags);
-        logger.info(`opcuaBootstrap.updateRemoteFromLocalStore.remoteDB: OK. (${updateStores})`);
-      }
+      }, 5000);
+    }
+
+    if (isRemote && isURL) {
+      // Init remote DB
+      await initRemoteDB(app, remoteDbUrl, opcuaTags, isClearHistoryAtStartup);
+      setInitRemoteDB(true);
     }
   }
 

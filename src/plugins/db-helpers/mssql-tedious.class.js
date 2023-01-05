@@ -9,7 +9,8 @@ const {
   assert,
   inspector,
   isFunction,
-  isObject
+  isObject,
+  getInt
 } = require('../lib');
 
 const queryFuncs = require('./lib');
@@ -24,6 +25,7 @@ const defaultConnConfig = {
     instanceName: 'instanceName',
     encrypt: false,
     trustServerCertificate: false,
+    truestedConnection: true,
     database: 'database',
     connectTimeout: 20000,
     rowCollectionOnDone: true, // Only get row set instead of row by row
@@ -154,13 +156,15 @@ class MssqlTedious {
  * @returns {Object}
  */
   static getConfigFromEnv(config, prefix) {
-    let idParts = [], server = '', instanceName = '', database = '';
+    let idParts = [], envPort, defaultPort = 1433, server = '', instanceName = '', database = '';
     //---------------------------------------------------------------
     let _config = loMerge({}, config);
     const id = process.env[`${prefix}_ID`];
     assert(id, `getConfigFromEnv.Error of id="${id}", prefix="${prefix}"`);
     const user = process.env[`${prefix}_USER`];
     const pass = process.env[`${prefix}_PASS`];
+    envPort = process.env[`${prefix}_PORT`];
+    envPort = envPort ? getInt(envPort) : 0;
     idParts = id.split('.');
     if (idParts.length === 3) {
       server = idParts[0];
@@ -171,13 +175,15 @@ class MssqlTedious {
       _config = loOmit(_config, ['options.instanceName']);
       server = idParts[0];
       database = idParts[1];
+      envPort = envPort ? envPort : defaultPort;
+      _config.options.port = envPort;
     }
 
     _config.server = server;
     _config.options.database = database;
     _config.authentication.options.userName = user;
     _config.authentication.options.password = pass;
-    if (isDebug) inspector('getConfigFromEnv._config:', _config);
+    if (isDebug && _config) inspector('getConfigFromEnv._config:', _config);
     return _config;
   }
 
@@ -285,7 +291,8 @@ class MssqlTedious {
       connection.on('connect', function (err) {
         // err - If successfully connected, will be falsey. If there was a problem (with either connecting or validation), will be an error object.
         if (err) {
-          console.log('connection.on("connect") -> Error: ', err.message);
+          // console.log('connection.on("connect") -> Error:', err.message);
+          console.error('connection.on("connect") -> Error:', err);
           self.connection = null;
           reject(err.message);
         } else {
