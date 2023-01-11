@@ -26,10 +26,6 @@ const newUser = {
   password: 'new-user'
 };
 
-const newMessage = {
-  text: 'New message!'
-};
-
 let newUserId = '';
 
 
@@ -38,7 +34,7 @@ const baseUrl = process.env.BASE_URL;
 describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
 
   describe('<<--- Local strategy --->>', () => {
-    let app, appRestClient, server;
+    let app, appClient, server;
     //----------------------------------------------
 
     before(function (done) {
@@ -52,7 +48,7 @@ describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
           await saveFakesToServices(app, 'roles');
           await saveFakesToServices(app, 'users');
           localStorage.clear();
-          appRestClient = await feathersClient({ transport: 'rest', serverUrl: baseUrl });
+          appClient = await feathersClient({ transport: 'socketio', serverUrl: baseUrl });
           if (isDebug) debug('Done before StartTest!');
           done();
         }, 500);
@@ -93,8 +89,8 @@ describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
     it('#4: Error removing a new user for authenticates user (Guest)', async () => {
       try {
         // Login
-        await loginLocal(appRestClient, guestFakeUser.email, guestFakeUser.password);
-        const service = appRestClient.service('users');
+        await loginLocal(appClient, guestFakeUser.email, guestFakeUser.password);
+        const service = appClient.service('users');
         await service.remove(newUserId);
         // inspector('Error reading new user for not authenticates user user::', user);
         assert.ok(false, 'Error removing new user for authenticates user (Guest)');
@@ -103,18 +99,18 @@ describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
         assert.ok(error.name === 'Forbidden', 'Error removing new user for authenticates user (Guest)');
         assert.ok(error.message === 'You are not allowed to remove users', 'Error removing new user for authenticates user (Guest)');
         // Logout
-        await appRestClient.logout();
+        await appClient.logout();
       }
     });
 
     it('#5: Remove a new user for authenticates user (Administrator)', async () => {
       // Login
-      await loginLocal(appRestClient, adminFakeUser.email, adminFakeUser.password);
-      const service = appRestClient.service('users');
+      await loginLocal(appClient, adminFakeUser.email, adminFakeUser.password);
+      const service = appClient.service('users');
       const user = await service.remove(newUserId);
       assert.ok(user, 'Remove a new user for authenticates user (Administrator)');
       // Logout
-      await appRestClient.logout();
+      await appClient.logout();
     });
   });
 });

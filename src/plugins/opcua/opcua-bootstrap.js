@@ -1,18 +1,11 @@
 /* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const logger = require('../../logger');
-const moment = require('moment');
-const fs = require('fs');
-
-const loReduce = require('lodash/reduce');
-const loTemplate = require('lodash/template');
 
 const {
   appRoot,
   inspector,
-  pause,
   readJsonFileSync,
-  removeFilesFromDirSync,
   isTrue,
   isUrlExists
 } = require('../lib');
@@ -27,11 +20,9 @@ const {
 } = require('./opcua-helper');
 
 const {
-  getStoreParams4Data,
   saveOpcuaTags,
   removeOpcuaGroupValues,
   removeOpcuaStoreValues,
-  updateRemoteFromLocalStore,
   integrityCheckOpcua,
   checkStoreParameterChanges,
   saveStoreParameterChanges,
@@ -39,21 +30,12 @@ const {
   isRemoteOpcuaToDB,
   isUpdateOpcuaToDB,
   getOpcuaRemoteDbUrl,
-  getCountItems,
   syncHistoryAtStartup,
   syncReportAtStartup,
   initRemoteDB,
   setInitRemoteDB,
   getInitRemoteDB
 } = require('../db-helpers');
-
-const {
-  feathersClient
-} = require('../auth');
-
-const {
-  methodAcmDayReportsDataGet
-} = require('./opcua-methods');
 
 const debug = require('debug')('app:opcua-bootstrap');
 const isDebug = false;
