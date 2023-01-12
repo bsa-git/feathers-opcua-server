@@ -59,9 +59,6 @@ const fakeUsers = fakes['users'];
 const fakeUser = fakeUsers[0];
 const idField = AuthServer.getIdField(fakeUser);
 
-const baseUrl = process.env.BASE_URL;
-const serverUrl = 'http://localhost:3131';
-
 describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
 
   describe('<<--- Local strategy --->>', () => {
@@ -73,6 +70,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       // Clear cache app
       app = clearCacheApp();
       const port = app.get('port') || 3030;
+      const baseUrl = process.env.BASE_URL;
       
       server = app.listen(port);
       server.once('listening', () => {

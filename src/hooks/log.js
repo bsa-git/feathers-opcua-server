@@ -27,6 +27,7 @@ module.exports = function (isTest = false) {
     // hh.showDebugInfo('messages', true);
     // hh.showDebugInfo('messages.create', true);
     // hh.showDebugInfo('users', true);
+    // hh.showDebugInfo('users.get.before', true, true); // isConn = true (show connect and headers)
 
 
     // Is log msg enable
