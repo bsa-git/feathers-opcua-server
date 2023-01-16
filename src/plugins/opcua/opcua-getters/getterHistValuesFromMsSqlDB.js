@@ -3,7 +3,7 @@ const {
   inspector,
   logger,
   addIntervalId,
-  isFunction,
+  getDateTime,
 } = require('../../lib');
 
 const { MssqlTedious } = require('../../db-helpers');
@@ -63,7 +63,7 @@ function getterHistValuesFromMsSqlDB(params = {}, addedValue) {
       // mssqlDB disconnect
       if(mssqlDB.connection) await mssqlDB.disconnect();
     } catch (error) {
-      logger.error('getterHistValuesFromMsSqlDB.Error:', error.message);
+      logger.error(`getterHistValuesFromMsSqlDB.Error (${getDateTime('', false)}):`, error.message);
     }
   }, params.interval);
 

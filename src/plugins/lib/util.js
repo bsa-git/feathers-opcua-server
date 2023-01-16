@@ -288,8 +288,9 @@ const getTime = function (dt = '', isUtc = true) {
  * @returns {String} e.g. 2021-01-10T15:50:10.134
  */
 const getDateTime = function (dt = '', isUtc = true) {
-  dt = dtToObject(dt, isUtc);
-  return `${dt.years}-${dt.months}-${dt.date}T${dt.hours}:${dt.minutes}:${dt.seconds}.${dt.milliseconds}`;
+  const date = getDate(dt, isUtc);
+  const time = getTime(dt, isUtc);
+  return `${date}T${time}`;
 };
 
 /**

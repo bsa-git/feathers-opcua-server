@@ -5,7 +5,7 @@ const loForEach = require('lodash/forEach');
 const {
   inspector,
   logger,
-  isFunction
+  getDateTime
 } = require('../../../lib');
 
 const {
@@ -92,7 +92,7 @@ async function saveOpcuaGroupValueToMsSqlDB(params, dataValue) {
     // mssqlDB disconnect
     if (mssqlDB.connection) await mssqlDB.disconnect();
   } catch (error) {
-    logger.error('getterHistValuesFromMsSqlDB.Error:', error.message);
+    logger.error(`saveOpcuaGroupValueToMsSqlDB.Error (${getDateTime('', false)}):`, error.message);
   }
 
   return savedValue;
