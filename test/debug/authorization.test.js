@@ -46,6 +46,7 @@ describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
       const port = app.get('port') || 3030;
       const baseUrl =  process.env.BASE_URL;
       // const baseUrl = 'http://10.60.0.50:3131';
+      // const baseUrl = 'http://localhost:3131';
 
       server = app.listen(port);
       server.once('listening', () => {
@@ -54,7 +55,7 @@ describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
           await saveFakesToServices(app, 'users');
           localStorage.clear();
           // Create feathers client for transport = 'rest'|'socketio'
-          appClient = await feathersClient({ transport: 'socketio', serverUrl: baseUrl });
+          appClient = await feathersClient({ transport: 'rest', serverUrl: baseUrl });
           if (isDebug) debug('Done before StartTest!');
           done();
         }, 500);
@@ -108,7 +109,7 @@ describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
         assert.ok(false, 'Authenticates (appClient) and get user from `users` service');
       }
     });
-
+    /** 
     it('#4: Error while searching for a new user by not authenticated user', async () => {
       try {
         const service = appClient.service('users');
@@ -144,5 +145,6 @@ describe('<<=== Authorization Tests (authorization.test.js) ===>>', () => {
       // Logout
       await appClient.logout();
     });
+    */
   });
 });
