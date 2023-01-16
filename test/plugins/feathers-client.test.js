@@ -35,7 +35,6 @@ const loForEach = require('lodash/forEach');
 const debug = require('debug')('app:feathers-client.test');
 
 const isDebug = false;
-const isLog = false;
 const isTest = false;
 
 // OPCUA Options
@@ -60,9 +59,6 @@ const fakeUsers = fakes['users'];
 const fakeUser = fakeUsers[0];
 const idField = AuthServer.getIdField(fakeUser);
 
-const baseUrl = process.env.BASE_URL;
-const serverUrl = 'http://localhost:3131';
-
 describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
 
   describe('<<--- Local strategy --->>', () => {
@@ -74,6 +70,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       // Clear cache app
       app = clearCacheApp();
       const port = app.get('port') || 3030;
+      const baseUrl = process.env.BASE_URL;
       
       server = app.listen(port);
       server.once('listening', () => {
@@ -107,7 +104,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       const { accessToken } = await appRestClient.get('authentication');
       assert.ok(accessToken, 'Get access token for user');
       const payload = await AuthServer.verifyJWT(accessToken);
-      if (isLog) inspector('Get userId from payload:', payload);
+      if (isDebug) inspector('Get userId from payload:', payload);
       assert.ok(payload.sub === fakeUser[idField], 'Get userId from payload');
       // Logout
       await appRestClient.logout();
@@ -123,7 +120,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       assert.ok(accessToken, 'Get access token for user');
       
       const payload = await AuthServer.verifyJWT(accessToken);
-      if (isLog) inspector('Get userId from payload:', payload);
+      if (isDebug) inspector('Get userId from payload:', payload);
       assert.ok(payload.sub === fakeUser[idField], 'Get userId from payload');
       // Logout
       await appSocketioClient.logout();
@@ -141,7 +138,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       const payload = await AuthServer.verifyJWT(accessToken);
       assert.ok(payload.sub === fakeUser[idField], 'Get userId from payload');
       const user = await service.get(payload.sub);
-      if (isLog) inspector('Get user from `users` service.user:', user);
+      if (isDebug) inspector('Get user from `users` service.user:', user);
       assert.ok(user, 'Get user from `users` service');
       // Logout
       await appRestClient.logout();
@@ -156,7 +153,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       const payload = await AuthServer.verifyJWT(accessToken);
       assert.ok(payload.sub === fakeUser[idField], 'Get userId from payload');
       const user = await service.get(payload.sub);
-      if (isLog) inspector('Get user from `users` service.user:', user);
+      if (isDebug) inspector('Get user from `users` service.user:', user);
       assert.ok(user, 'Get user from `users` service');
       // Logout
       await appSocketioClient.logout();
@@ -189,7 +186,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       let accessToken = await auth.getAccessToken();
       assert.ok(accessToken, 'Created access token for user');
       const feathersJwt = await auth.storage.getItem('feathers-jwt');
-      if (isLog) inspector('Get storage.feathersJwt:', feathersJwt);
+      if (isDebug) inspector('Get storage.feathersJwt:', feathersJwt);
       assert.ok(accessToken === feathersJwt, 'Get access token from storage');
       // reAuthenticate
       await auth.reAuthenticate();
@@ -210,7 +207,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       let accessToken = await auth.getAccessToken();
       assert.ok(accessToken, 'Created access token for user');
       const feathersJwt = await auth.storage.getItem('feathers-jwt');
-      if (isLog) inspector('Get storage.feathersJwt:', feathersJwt);
+      if (isDebug) inspector('Get storage.feathersJwt:', feathersJwt);
       assert.ok(accessToken === feathersJwt, 'Get access token from storage');
       // reAuthenticate
       await auth.reAuthenticate();
@@ -232,7 +229,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
 
       // Get opcua tags 
       const opcuaTags = fakes['opcuaTags'];
-      if (isLog) inspector('fakes.opcua-tags:', opcuaTags);
+      if (isDebug) inspector('fakes.opcua-tags:', opcuaTags);
 
       if (opcuaTags.length) {
         // Remove data from 'opcua-tags' services 
@@ -246,7 +243,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
         await createItems(appRestClient, 'opcua-tags', opcuaTags);
         // Find all tags
         const findedItems = await findItems(appRestClient, 'opcua-tags');
-        if (isLog) inspector('Find tags from \'opcua-tags\' service', findedItems);
+        if (isDebug) inspector('Find tags from \'opcua-tags\' service', findedItems);
         assert.ok(findedItems.length === opcuaTags.length, 'Error for test: `Save tags and find tags`');
       }
 
@@ -261,7 +258,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
 
       // Get opcua tags 
       const opcuaTags = fakes['opcuaTags'];
-      if (isLog) inspector('fakes.opcua-tags:', opcuaTags);
+      if (isDebug) inspector('fakes.opcua-tags:', opcuaTags);
 
       if (opcuaTags.length) {
         // Remove data from 'opcua-tags' services 
@@ -275,7 +272,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
         await createItems(appSocketioClient, 'opcua-tags', opcuaTags);
         // Find all tags
         const findedItems = await findItems(appSocketioClient, 'opcua-tags');
-        if (isLog) inspector('Find tags from \'opcua-tags\' service', findedItems);
+        if (isDebug) inspector('Find tags from \'opcua-tags\' service', findedItems);
         assert.ok(findedItems.length === opcuaTags.length, 'Error for test: `Save tags and find tags`');
       }
 
@@ -309,7 +306,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       const service = appRestClient.service('opcua-servers');
       // service create
       const opcuaServer = await service.create(srvData);
-      if (isLog) inspector('created the service.opcuaServer:', opcuaServer.server.currentState);
+      if (isDebug) inspector('created the service.opcuaServer:', opcuaServer.server.currentState);
       assert.ok(opcuaServer, 'OPC-UA servers: created the service');
     });
 
@@ -317,7 +314,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       const service = appRestClient.service('opcua-clients');
       // service create
       let opcuaClient = await service.create(clientData);
-      if (isLog) inspector('created the service.opcuaClient:', opcuaClient);
+      if (isDebug) inspector('created the service.opcuaClient:', opcuaClient);
       assert.ok(opcuaClient, 'OPC-UA clients: created the service');
       // Get client service
       opcuaClient = await service.get(id);
@@ -347,7 +344,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
 
       data = { id, action: 'getItemNodeId', nameNodeId: 'CH_M51::ValueFromFile' };
       readResult = await service.create(data);
-      if (isLog) inspector('getItemNodeId.readResult:', readResult);
+      if (isDebug) inspector('getItemNodeId.readResult:', readResult);
 
       if (readResult) {
         // Get start time
@@ -363,7 +360,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
         data = { id, action: 'sessionReadHistoryValues', nameNodeIds: 'CH_M51::ValueFromFile', start, end };
         readResult = await service.create(data);
 
-        if (isLog) inspector('SessionHistoryValue_ForCH_M51.readResult:', readResult);
+        if (isDebug) inspector('SessionHistoryValue_ForCH_M51.readResult:', readResult);
         // inspector('SessionHistoryValue_ForCH_M51.readResult:', readResult);
         if (readResult.length && readResult[0].statusCode.value === 0) {
           if (readResult[0].historyData.dataValues.length) {
@@ -391,7 +388,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       } else {
         assert.ok(false, 'OPC-UA clients: session history value from file');
       }
-      if (isLog) inspector('SessionHistoryValue_ForCH_M51.histOpcuaValues:', histOpcuaValues);
+      if (isDebug) inspector('SessionHistoryValue_ForCH_M51.histOpcuaValues:', histOpcuaValues);
       inspector('SessionHistoryValue_ForCH_M51.histOpcuaValues:', histOpcuaValues);
       assert.ok(readResult.length, 'OPC-UA clients: session history value from file');
     });
@@ -400,7 +397,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
     it('#12.1 OPC-UA clients: remove service (appRestClient)', async () => {
       const service = appRestClient.service('opcua-clients');
       const opcuaClient = await service.remove(id);
-      if (isLog) inspector('Remove client service:', opcuaClient);
+      if (isDebug) inspector('Remove client service:', opcuaClient);
       // inspector('Remove client service:', opcuaClient);
       assert.ok(opcuaClient, 'OPC-UA clients: remove service');
     });
@@ -408,7 +405,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
     it('#13.1 OPC-UA servers:  remove service (appRestClient)', async () => {
       const service = appRestClient.service('opcua-servers');
       const opcuaServer = await service.remove(id);
-      if (isLog) inspector('Remove server service:', opcuaServer);
+      if (isDebug) inspector('Remove server service:', opcuaServer);
       // inspector('Remove server service:', opcuaServer);
       assert.ok(opcuaServer, 'OPC-UA servers:  remove service');
     });

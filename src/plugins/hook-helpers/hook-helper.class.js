@@ -257,7 +257,7 @@ class HookHelper {
     if (params) {
       target.params = {};
 
-      let { user, authenticated, authentication, provider, query, connection, rules, ability } = params;
+      let { user, authenticated, authentication, provider, query, connection, headers , rules, ability } = params;
 
       if (user) {
         target.params.user = user;
@@ -286,8 +286,13 @@ class HookHelper {
       if (query && Object.keys(query).length > 0) {
         target.params.query = query;
       }
+
       if (isConn && connection && Object.keys(connection).length > 0) {
         target.params.connection = connection;
+      }
+
+      if(isConn && headers && Object.keys(headers).length > 0) {
+        target.params.headers = headers;
       }
     }
     if (id) target.id = id;
