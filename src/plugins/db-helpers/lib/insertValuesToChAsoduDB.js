@@ -106,10 +106,11 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
     if (isDebug && result) inspector('Delete rows from dbBSA.dbo.SnapShot:', result.rowCount);
 
 
-    // Insert row to dbBSA.dbo.SnapShotTest
+    // Insert row to dbBSA.dbo.SnapShot
     for (let index = 0; index < rowsSnapShot.length; index++) {
       params = [];
       const _rowSnapShot = rowsSnapShot[index];
+      if (isDebug && _rowSnapShot) inspector('Insert row to dbBSA.dbo.SnapShot._rowSnapShot:', _rowSnapShot);
       sql = `
       INSERT INTO dbBSA.dbo.${tableName} 
       (TagID, ScanerName, Time, dtYear, dtDofY, dtTotalS, Value, TagGroup)

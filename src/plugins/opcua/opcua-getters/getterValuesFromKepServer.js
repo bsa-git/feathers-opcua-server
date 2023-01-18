@@ -37,10 +37,10 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
   const app = params.myOpcuaServer.app;
   const clientId = params.clientId;
   //------------------------------------
-  
+
   if (isDebug && params) inspector('getterValuesFromKepServer.params:', loOmit(params, ['myOpcuaServer']));
-  
-  const  browseName = formatUAVariable(addedValue).browseName;
+
+  const browseName = formatUAVariable(addedValue).browseName;
   dataType = formatUAVariable(addedValue).dataType[1];
   let configOptions = getParamsAddressSpace(id).variables;
   if (isDebug && configOptions) inspector('getterValuesFromKepServer.configOptions:', configOptions);
@@ -50,7 +50,7 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
 
 
   // Get values from KepServer
-  const getValuesFromKepServer = async function(clientId, nodeIds) {
+  const getValuesFromKepServer = async function (clientId, nodeIds) {
     // Show filePath, data
     if (isDebug && clientId) console.log('getterValuesFromKepServer.clientId:', clientId);
     if (isDebug && nodeIds) console.log('getterValuesFromKepServer.nodeIds:', nodeIds);
@@ -63,15 +63,14 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
       const browseName = groupTags[index].browseName;
       const formatValue = formatDataValue(id, readResult, browseName, 'ru');
       if (isDebug && formatValue) inspector('getterValuesFromKepServer.formatValue:', formatValue);
-      if(!dateTime) {
-        dateTime = formatValue.serverTimestamp;
-        // dateTime = moment.utc(dateTime).format('YYYY-MM-DDTHH:mm:ss');
-        dateTime = moment(dateTime).format('YYYY-MM-DDTHH:mm:ss');
-        dataItems['!value'] = { dateTime };
-      }
-      if(isDebug && dateTime) console.log('getterValuesFromKepServer.dateTime: ', dateTime); 
+      // Get dateTime
+      dateTime = formatValue.serverTimestamp;
+      // dateTime = moment.utc(dateTime).format('YYYY-MM-DDTHH:mm:ss');
+      dateTime = moment(dateTime).format('YYYY-MM-DDTHH:mm:ss');
+      dataItems['!value'] = { dateTime };
+      if (isDebug && dateTime) console.log('getterValuesFromKepServer.dateTime: ', dateTime);
       dataItems[browseName] = formatValue.value.value;
-      if(formatValue.statusCode.name !== 'Good') logger.info(`For browseName: "${chalk.yellowBright(browseName)}" statusCode = "${chalk.redBright(formatValue.statusCode.name)}", value = ${formatValue.value.value}`);
+      if (formatValue.statusCode.name !== 'Good') logger.info(`For browseName: "${chalk.yellowBright(browseName)}" statusCode = "${chalk.redBright(formatValue.statusCode.name)}", value = ${formatValue.value.value}`);
     }
     if (isDebug && dataItems) inspector('getterValuesFromKepServer.dataItems:', dataItems);
 
@@ -83,11 +82,11 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
       setValueFromSourceForGroup(params, dataItems);
     }
   };
- 
+
   // Set interval
   const intervalId = setInterval(async function () {
     try {
-      if(!service){
+      if (!service) {
         service = await getClientService(app, clientId);
       }
       await getValuesFromKepServer(clientId, groupTagNodeIds);

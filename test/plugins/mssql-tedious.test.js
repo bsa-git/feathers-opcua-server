@@ -369,7 +369,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
   });
 
 
-  it('#9: Insert values with params to SnapShot table for "opcUA(A5)" and "XozUchet"', async () => {
+  it('#9: Insert values with params to SnapShotTest table for "opcUA(A5)" and "XozUchet"', async () => {
     let db, sql = '', result, rows, rowSnapShot = {}, rowsSnapShot = [];
     const scanerName = 'opcUA(A5)';
     const tagGroup = 'XozUchet';
