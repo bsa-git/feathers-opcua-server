@@ -74,13 +74,16 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
       // KepSrv(opc.tcp://localhost:49370, opc.tcp://10.60.5.128:49370) 
       // A5-KepSrv(opc.tcp://10.60.147.29:49370)
       options.opt.url = 'opc.tcp://10.60.147.29:49370';
+      // options.opt.url = 'opc.tcp://localhost:49370';
 
       // UserTokenType.Anonymous|UserTokenType.UserName
       options.userIdentityInfo.type = UserTokenType.UserName;
       // OPCUA_ADMIN_LOGIN|OPCUA_KEP_LOGIN|OPCUA_A5_LOGIN
       options.userIdentityInfo.userName = process.env.OPCUA_A5_LOGIN;
+      // options.userIdentityInfo.userName = process.env.OPCUA_KEP_LOGIN;
       // OPCUA_ADMIN_PASS|OPCUA_KEP_PASS|OPCUA_A5_PASS
       options.userIdentityInfo.password = process.env.OPCUA_A5_PASS;
+      // options.userIdentityInfo.password = process.env.OPCUA_KEP_PASS;
       
       options.subscrMonOpts.callBack = showInfoForHandler2;
       //--------------------------------------------
@@ -117,14 +120,19 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
         options.command = 'sessionRead';
 
         nodesToRead = [
-          /**--- KEPServer-ogmt-0088846 ---*/
+          /**--- KEPServer_ogmt-0088846 ---*/
           // 'ns=2;s=OGMT-0088846.Device1.M5-2.02PGAZ_F5',
           // 'ns=2;s=A5-GW00.Device1.A5.Device1.F501AM_PV',
           // 'ns=2;s=A5-GW00.Device1.A5.Device1.F359AM_PV'
-          /**--- KEPServer-CH-A5-GW00 (XozUchet.SUM) ---*/
+          
+          /**--- KEPServer_ogmt-osd (XozUchet.SUM) ---*/
+          // 'ns=2;s=A5-Channel.Device1.A5.Device1.1002JAR_PV',
+
+          /**--- KEPServer_CH-A5-GW00 (XozUchet.SUM) ---*/
           'ns=2;s=A5.Device1.F59AM_SUM_PV',
           'ns=2;s=A5.Device1.F46A_SUM_PV',
-          /**--- KEPServer-CH-A5-GW00 (XozUchet) ---*/
+          
+          /**--- KEPServer_CH-A5-GW00 (XozUchet) ---*/
           ///** 
           'ns=2;s=A5.Device1.F59AM_PV',// Нормализованный природный газ (тыс.м3/ч)
           'ns=2;s=A5.Device1.F46A_PV',// Жидкий NH3 в хранилище (тонн/ч)

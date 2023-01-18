@@ -19,7 +19,7 @@ const svc = new Service({
   },
   {
     name: 'IS_SHOW_LOG', 
-    value: false // env IS_SHOW_LOG = true|false; Is show log for production
+    value: true // env IS_SHOW_LOG = true|false; Is show log for production
   },
   {
     name: 'START_APP',

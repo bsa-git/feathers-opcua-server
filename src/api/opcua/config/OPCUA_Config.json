@@ -182,7 +182,7 @@
     }
   },
   {
-    "isEnable": true,
+    "isEnable": false,
     "id": "ua-cherkassy-azot-ogmttsd_prod1",
     "name": "380-472-00203826-ogmttsd_prod1",
     "description": "Opcua server and client. Client connect to `opc.tcp://OGMT-TSD:26570`(OGMT-TSD OpcuaServer)",
@@ -224,7 +224,7 @@
     }
   },
   {
-    "isEnable": false,
+    "isEnable": true,
     "id": "ua-cherkassy-azot-ogmttsd_prod2",
     "name": "380-472-00203826-ogmttsd_prod2",
     "description": "Opcua server and client. Client connect to `opc.tcp://OGMT-TSD:26560`(OGMT-TSD OpcuaServer)",
@@ -256,7 +256,7 @@
     }
   },
   {
-    "isEnable": false,
+    "isEnable": true,
     "id": "ua-cherkassy-azot-ogmttsd_prod3",
     "name": "380-472-00203826-ogmttsd_prod3",
     "description": "Opcua client. Client connect to `opc.tcp://10.60.147.29:49370` (A5 KEPServer)",
