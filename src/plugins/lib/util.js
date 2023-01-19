@@ -58,8 +58,8 @@ const isStartAppAsService = function () {
 const isShowLog4Prod = function () {
   const isProd = (process.env.NODE_ENV === 'production');
   if(!isProd) return true;
-  if(process.env.IS_SHOW_LOG === undefined) return true;
-  const isShowLog = isTrue(process.env.IS_SHOW_LOG);
+  if(process.env.IS_SHOW_LOG_FOR_PROD === undefined) return true;
+  const isShowLog = isTrue(process.env.IS_SHOW_LOG_FOR_PROD);
   return isShowLog;
 };
 

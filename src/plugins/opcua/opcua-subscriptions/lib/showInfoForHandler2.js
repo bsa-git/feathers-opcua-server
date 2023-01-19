@@ -45,9 +45,6 @@ function showInfoForHandler2(params, dataValue) {
     if (Object.keys(value).includes('!value')) {
       valueKeys = valueKeys - 1;
     }
-    // if (Object.keys(value).includes('command')) {
-    //   command = value['command'];
-    // }
   } catch (error) {
     value = dataValue.value.value;
     value = loRound(value, 3);

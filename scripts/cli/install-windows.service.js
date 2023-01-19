@@ -18,10 +18,6 @@ const svc = new Service({
     value: 'production' // env NODE_ENV = 'production'
   },
   {
-    name: 'IS_SHOW_LOG', 
-    value: true // env IS_SHOW_LOG = true|false; Is show log for production
-  },
-  {
     name: 'START_APP',
     value: 'win_service' // env START_APP = 'win_service'|'win_user'; Start application as windows service
   },
@@ -29,8 +25,7 @@ const svc = new Service({
   ]
 });
 
-// Listen for the "install" event, which indicates the
-// process is available as a service.
+// Listen for the "install" event, which indicates the process is available as a service.
 svc.on('install', function () {
   svc.start();
   console.log('Install complete.');
