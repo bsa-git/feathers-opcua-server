@@ -1,3 +1,6 @@
+### refs: Win paths to client certificate and private key for an application running as a service 
+  * certificateFile =  C:\WINDOWS\system32\config\systemprofile\AppData\Roaming\node-opcua-default-nodejs\Config\PKI\own\certs\client_certificate.pem
+  *  privateKeyFile  =  C:\WINDOWS\system32\config\systemprofile\AppData\Roaming\node-opcua-default-nodejs\Config\PKI\own\private\private_key.pem
 ### refs: Win paths to certificates for different applications
   * C:\Users\userName\AppData\Roaming
   * C:\ProgramData
