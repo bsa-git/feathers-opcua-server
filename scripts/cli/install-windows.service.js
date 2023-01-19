@@ -23,7 +23,7 @@ const svc = new Service({
   },
   {
     name: 'START_APP',
-    value: 'win_service' // env START_APP = 'win_service'; Start application as windows service
+    value: 'win_service' // env START_APP = 'win_service'|'win_user'; Start application as windows service
   },
   
   ]
