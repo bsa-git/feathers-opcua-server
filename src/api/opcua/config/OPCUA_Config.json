@@ -182,7 +182,7 @@
     }
   },
   {
-    "isEnable": false,
+    "isEnable": true,
     "id": "ua-cherkassy-azot-ogmttsd_prod1",
     "name": "380-472-00203826-ogmttsd_prod1",
     "description": "Opcua server and client. Client connect to `opc.tcp://OGMT-TSD:26570`(OGMT-TSD OpcuaServer)",

@@ -18,6 +18,7 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 server.on('listening', async () => {
+  console.log('=======================================================================================================');
   logger.info(`Feathers application started at (${getDateTime('', false)}) on http://%s:%d`, app.get('host'), port);
   logger.info('Feathers application started on env="%s"', app.get('env'));
 

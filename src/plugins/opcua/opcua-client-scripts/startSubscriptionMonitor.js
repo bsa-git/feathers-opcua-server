@@ -85,7 +85,7 @@ async function startSubscriptionMonitor(id, service) {
   if (groupOwners || groupMembers || onlyHistValues) {
     console.log(
       chalk.yellow('Client subscription monitor:'),
-      `groupOwners: ${getInt(groupOwners)}, groupMembers: ${getInt(groupMembers)}, onlyHistValues: ${getInt(onlyHistValues)}`
+      `(groupOwners: ${getInt(groupOwners)}, groupMembers: ${getInt(groupMembers)}, onlyHistValues: ${getInt(onlyHistValues)})`
     );
   }
 }
