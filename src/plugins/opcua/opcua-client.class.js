@@ -117,8 +117,8 @@ class OpcuaClient {
     this.currentState.isCreated = true;
     console.log(chalk.yellow('OPCUAClient created ...'), 'opcuaClient.id:', chalk.cyan(this.id));
 
-    if (true && this.opcuaClient) console.log('certificateFile = ', this.opcuaClient.certificateFile);
-    if (true && this.opcuaClient) console.log('privateKeyFile  = ', this.opcuaClient.privateKeyFile);
+    if (isDebug && this.opcuaClient) console.log('certificateFile = ', this.opcuaClient.certificateFile);
+    if (isDebug && this.opcuaClient) console.log('privateKeyFile  = ', this.opcuaClient.privateKeyFile);
   }
 
   /**
