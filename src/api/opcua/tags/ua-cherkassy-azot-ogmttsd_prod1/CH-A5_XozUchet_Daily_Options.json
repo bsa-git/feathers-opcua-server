@@ -1,0 +1,369 @@
+{
+  "objects": [
+    {
+      "browseName": "CH_A5.Device1",
+      "displayName": "A5.Device1",
+      "type": "object"
+    }
+  ],
+  "variables": [
+    {
+      "browseName": "CH_A5.Device1::XozUchet_Daily",
+      "displayName": "Daily XozUchet values for CH_A5",
+      "ownerName": "CH_A5.Device1",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "subscription": "onChangedGroupHandlerForDB",
+      "variableGetType": "valueFromSource",
+      "getter": "getterValuesFromKepServer",
+      "getterParams": {
+        "clientId": "ua-cherkassy-azot-ogmtmztp_prod3",
+        "interval": 20000
+      }
+    }
+  ],
+  "groups": [
+    {
+      "browseName": "CH_A5.Device1::CLEAR_S:F59AM_SUM_PV",
+      "aliasName": "F59AM_SUM",
+      "displayName": "F59AM_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 100
+        },
+        "engineeringUnits": "thousand_normal_cubic_metre_per_day"
+      },
+      "description": "ПГ Сіро Очистка (расх.н)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SYNTEZ_NH3:F46A_SUM_PV",
+      "aliasName": "F46A_SUM",
+      "displayName": "F46A_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 100
+        },
+        "engineeringUnits": "tonne_per_day"
+      },
+      "description": "Ж.NH3 на складе (расх.)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SYNTEZ_NH3:F191AM_SUM_PV",
+      "aliasName": "F191AM_SUM",
+      "displayName": "F191AM__SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 100
+        },
+        "engineeringUnits": "tonne_per_day"
+      },
+      "description": "ГО. NH3 (мас.расх.)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SYNTEZ_NH3:F400AM_SUM_PV",
+      "aliasName": "F400AM_SUM",
+      "displayName": "F400AM_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 20
+        },
+        "engineeringUnits": "tonne_per_day"
+      },
+      "description": "ГО. NH3 (мас.расх.)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SYNTEZ_NH3:F359AM_SUM_PV",
+      "aliasName": "F359AM_SUM",
+      "displayName": "F359AM_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 2500
+        },
+        "engineeringUnits": "normal_cubic_metre_per_day"
+      },
+      "description": "Азот в цех (расх.н)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SYNTEZ_NH3:F501AM_SUM_PV",
+      "aliasName": "F501AM_SUM",
+      "displayName": "F501AM_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 16000
+        },
+        "engineeringUnits": "normal_cubic_metre_per_day"
+      },
+      "description": "ПГ из A5 (расх.н)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SYNTEZ_NH3:F46AM_SUM_PV",
+      "aliasName": "F46AM_SUM",
+      "displayName": "F46AM_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 150
+        },
+        "engineeringUnits": "tonne_per_day"
+      },
+      "description": "NH3 на склад (расх.н)"
+    },
+    {
+      "browseName": "CH_A5.Device1::OTPKOL_CO2:F34_SUM_PV",
+      "aliasName": "F34_SUM",
+      "displayName": "F34_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 100
+        },
+        "engineeringUnits": "tonne_per_day"
+      },
+      "description": "CO2 выдача (расх.)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SYNTEZ_NH3:F46AA_SUM_PV",
+      "aliasName": "F46AA_SUM",
+      "displayName": "F46AA_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 100
+        },
+        "engineeringUnits": "tonne_per_day"
+      },
+      "description": "NH3 (расх.)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SYNTEZ_NH3:F206AM_SUM_PV",
+      "aliasName": "F206AM_SUM",
+      "displayName": "F206AM_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 100
+        },
+        "engineeringUnits": "tonne_per_day"
+      },
+      "description": "NH3 в М7 (расх.н)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SKLAD_NH3:F352_SUM_PV",
+      "aliasName": "F352_SUM",
+      "displayName": "F352_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 45
+        },
+        "engineeringUnits": "tonne_per_day"
+      },
+      "description": "NH3 в М2 (расх.)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SKLAD_NH3:F360_SUM_PV",
+      "aliasName": "F360_SUM",
+      "displayName": "F360_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 45
+        },
+        "engineeringUnits": "tonne_per_day"
+      },
+      "description": "NH3 в М6 (расх.)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SKLAD_NH3:F101AM_SUM_PV",
+      "aliasName": "F101AM_SUM",
+      "displayName": "F101AM_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10
+        },
+        "engineeringUnits": "tonne_per_day"
+      },
+      "description": "ПАР-16 в цех (расх.)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SKLAD_NH3:F379AM_SUM_PV",
+      "aliasName": "F379AM_SUM",
+      "displayName": "F379AM_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 10
+        },
+        "engineeringUnits": "tonne_per_day"
+      },
+      "description": "ГО. NH3 из 1001-F (мас.расх.)"
+    },
+    {
+      "browseName": "CH_A5.Device1::DEMINERALIZ_H2O:F90_SUM_PV",
+      "aliasName": "F90_SUM",
+      "displayName": "F90_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 160
+        },
+        "engineeringUnits": "cubic_metre_per_day"
+      },
+      "description": "Вода на К.701 (расх.)"
+    },
+    {
+      "browseName": "CH_A5.Device1::DEMINERALIZ_H2O:F98_SUM_PV",
+      "aliasName": "F98_SUM",
+      "displayName": "F98_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 250
+        },
+        "engineeringUnits": "cubic_metre_per_day"
+      },
+      "description": "Вода на К.701 (расх.)"
+    },
+    {
+      "browseName": "CH_A5.Device1::DEMINERALIZ_H2O:F93_SUM_PV",
+      "aliasName": "F93_SUM",
+      "displayName": "F93_SUM_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 200
+        },
+        "engineeringUnits": "cubic_metre_per_day"
+      },
+      "description": "Вода в цех (расх.)"
+    }
+  ]
+}
