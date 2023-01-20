@@ -66,8 +66,8 @@
       "description": "Ж.NH3 на складе (расх.)"
     },
     {
-      "browseName": "CH_A5.Device1::SYNTEZ_NH3:F191AM_SUM_PV",
-      "aliasName": "F191AM_SUM",
+      "browseName": "CH_A5.Device1::SYNTEZ_NH3:F191AM__SUM_PV",
+      "aliasName": "F191AM__SUM",
       "displayName": "F191AM__SUM_PV",
       "ownerName": "CH_A5.Device1",
       "ownerGroup": "CH_A5.Device1::XozUchet_Daily",
