@@ -146,66 +146,6 @@
       "description": "ПГ из A5 (расх.н)"
     },
     {
-      "browseName": "CH_A5.Device1::SYNTEZ_NH3:F107AM_PV",
-      "aliasName": "F107AM",
-      "displayName": "F107AM_PV",
-      "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::XozUchet",
-      "type": "variable.analog",
-      "dataType": "Double",
-      "hist": 1,
-      "variableGetType": "valueFromSource",
-      "getter": "getterPlugForVariable",
-      "valueParams": {
-        "engineeringUnitsRange": {
-          "low": 0,
-          "high": 6300
-        },
-        "engineeringUnits": "normal_cubic_metre_per_hour"
-      },
-      "description": "ТГ. из A5 (расх.н)"
-    },
-    {
-      "browseName": "CH_A5.Device1::ПАР:F21AM_PV",
-      "aliasName": "F21AM",
-      "displayName": "F21AM_PV",
-      "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::XozUchet",
-      "type": "variable.analog",
-      "dataType": "Double",
-      "hist": 1,
-      "variableGetType": "valueFromSource",
-      "getter": "getterPlugForVariable",
-      "valueParams": {
-        "engineeringUnitsRange": {
-          "low": 0,
-          "high": 40
-        },
-        "engineeringUnits": "tonne_per_hour"
-      },
-      "description": "ПАР-16 (мас.расх.)"
-    },
-    {
-      "browseName": "CH_A5.Device1::ПАР:F738AM_PV",
-      "aliasName": "F738AM",
-      "displayName": "F738AM_PV",
-      "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::XozUchet",
-      "type": "variable.analog",
-      "dataType": "Double",
-      "hist": 1,
-      "variableGetType": "valueFromSource",
-      "getter": "getterPlugForVariable",
-      "valueParams": {
-        "engineeringUnitsRange": {
-          "low": 0,
-          "high": 100
-        },
-        "engineeringUnits": "tonne_per_hour"
-      },
-      "description": "ПАР-30 (расх.н)"
-    },
-    {
       "browseName": "CH_A5.Device1::SYNTEZ_NH3:F46AM_PV",
       "aliasName": "F46AM",
       "displayName": "F46AM_PV",
@@ -364,46 +304,6 @@
         "engineeringUnits": "tonne_per_hour"
       },
       "description": "ГО. NH3 из 1001-F (мас.расх.)"
-    },
-    {
-      "browseName": "CH_A5.Device1::MONSANTO:F306_PV",
-      "aliasName": "F306",
-      "displayName": "F306_PV",
-      "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::XozUchet",
-      "type": "variable.analog",
-      "dataType": "Double",
-      "hist": 1,
-      "variableGetType": "valueFromSource",
-      "getter": "getterPlugForVariable",
-      "valueParams": {
-        "engineeringUnitsRange": {
-          "low": 0,
-          "high": 16
-        },
-        "engineeringUnits": "cubic_metre_per_hour"
-      },
-      "description": "Вода в поз.6 (расх.)"
-    },
-    {
-      "browseName": "CH_A5.Device1::MONSANTO:F308_PV",
-      "aliasName": "F308",
-      "displayName": "F308_PV",
-      "ownerName": "CH_A5.Device1",
-      "ownerGroup": "CH_A5.Device1::XozUchet",
-      "type": "variable.analog",
-      "dataType": "Double",
-      "hist": 1,
-      "variableGetType": "valueFromSource",
-      "getter": "getterPlugForVariable",
-      "valueParams": {
-        "engineeringUnitsRange": {
-          "low": 0,
-          "high": 10
-        },
-        "engineeringUnits": "cubic_metre_per_hour"
-      },
-      "description": "А.Вода в склад (расх.)"
     },
     {
       "browseName": "CH_A5.Device1::DEMINERALIZ_H2O:F90_PV",
