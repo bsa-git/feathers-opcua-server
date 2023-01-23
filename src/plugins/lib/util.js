@@ -3,6 +3,7 @@
 const moment = require('moment');
 const hash = require('object-hash');
 const os = require('os');
+const crypto = require('crypto');
 const Color = require('color');
 const chalk = require('chalk');
 const logger = require('../../logger');
@@ -610,6 +611,67 @@ const shiftTimeByOneHour = function (dt = '', isUtc = true) {
   return dtString;
 };
 
+//--------------------- CRYPTO -------------------//
+
+/**
+ * Random bytes
+ * @param len
+ * @return {Promise}
+ * @private
+ */
+const randomBytes = function(len) {
+  return new Promise(function (resolve, reject) {
+    crypto.randomBytes(len, function (err, buf) {
+      return err ? reject(err) : resolve(buf.toString('hex'));
+    });
+  });
+};
+
+/**
+ * Random digits
+ * @param len
+ * @return {string}
+ * @private
+ */
+const randomDigits = function(len) {
+  let str = '';
+  while (str.length < len) {
+    str += parseInt('0x' + crypto.randomBytes(4).toString('hex')).toString();
+  }
+  return str.substring(0, len);
+};
+
+/**
+* @async
+* @method getLongToken
+* @param {Number} len
+* @return {String}
+*/
+const getLongToken = async function(len) {
+  return await randomBytes(len);
+};
+
+/**
+* @async
+* @method getShortToken
+* @param {Number} len
+* @param {Boolean} ifDigits
+* @return {String}
+*/
+const getShortToken = async function(len, ifDigits) {
+  if (ifDigits) {
+    return Promise.resolve(randomDigits(len));
+  }
+
+  let str = await randomBytes(Math.floor(len / 2) + 1);
+  str = str.substring(0, len);
+  if (str.match(/^[0-9]+$/)) {
+    // tests will fail on all digits
+    str = 'q' + str.substring(1); // shhhh, secret.
+  }
+  return str;
+};
+
 //--------------------- STRING -------------------//
 
 /**
@@ -1200,6 +1262,8 @@ module.exports = {
   getStartEndOfPeriod,
   getRangeStartEndOfPeriod,
   shiftTimeByOneHour,
+  getLongToken,
+  getShortToken,
   stripSlashes,
   stripSpecific,
   strReplace,

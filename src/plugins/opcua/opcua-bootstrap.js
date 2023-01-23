@@ -159,7 +159,7 @@ module.exports = async function opcuaBootstrap(app) {
     }
     logger.info(`opcuaBootstrap.CreateMssqlDatasets: OK. (${mssqlDataBases.length})`);
   }
-  console.log('------------------------------------------------------------------------------------------------')
+  console.log('------------------------------------------------------------------------------------------------');
 
   // Create server and client services
   let opcuaOptions = getOpcuaConfig();
@@ -198,7 +198,7 @@ module.exports = async function opcuaBootstrap(app) {
       // Execute client script
       await executeOpcuaClientScript(service, id);
       if (isDebug && opcuaClient) inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
-      console.log('------------------------------------------------------------------------------------------------')
+      console.log('------------------------------------------------------------------------------------------------');
     }
   }
 };

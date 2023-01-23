@@ -16,13 +16,13 @@ const isDebug = false;
  * @return {Promise}
  * @private
  */
-const randomBytes = (len) => {
-  return new Promise(function (resolve, reject) {
-    crypto.randomBytes(len, function (err, buf) {
-      return err ? reject(err) : resolve(buf.toString('hex'));
-    });
-  });
-};
+// const randomBytes = (len) => {
+//   return new Promise(function (resolve, reject) {
+//     crypto.randomBytes(len, function (err, buf) {
+//       return err ? reject(err) : resolve(buf.toString('hex'));
+//     });
+//   });
+// };
 
 /**
  * Random digits
@@ -30,13 +30,13 @@ const randomBytes = (len) => {
  * @return {string}
  * @private
  */
-const randomDigits = (len) => {
-  let str = '';
-  while (str.length < len) {
-    str += parseInt('0x' + crypto.randomBytes(4).toString('hex')).toString();
-  }
-  return str.substring(0, len);
-};
+// const randomDigits = (len) => {
+//   let str = '';
+//   while (str.length < len) {
+//     str += parseInt('0x' + crypto.randomBytes(4).toString('hex')).toString();
+//   }
+//   return str.substring(0, len);
+// };
 
 /**
  * Get items from env. config
@@ -556,9 +556,9 @@ class AuthServer {
    * @param {Number} len
    * @return {String}
    */
-  static getLongToken(len) {
-    return randomBytes(len);
-  }
+  // static getLongToken(len) {
+  //   return randomBytes(len);
+  // }
 
   /**
    * @async
@@ -567,20 +567,20 @@ class AuthServer {
    * @param {Boolean} ifDigits
    * @return {String}
    */
-  static getShortToken(len, ifDigits) {
-    if (ifDigits) {
-      return Promise.resolve(randomDigits(len));
-    }
+  // static getShortToken(len, ifDigits) {
+  //   if (ifDigits) {
+  //     return Promise.resolve(randomDigits(len));
+  //   }
 
-    return randomBytes(Math.floor(len / 2) + 1).then(function (str) {
-      str = str.substring(0, len);
-      if (str.match(/^[0-9]+$/)) {
-        // tests will fail on all digits
-        str = 'q' + str.substring(1); // shhhh, secret.
-      }
-      return str;
-    });
-  }
+  //   return randomBytes(Math.floor(len / 2) + 1).then(function (str) {
+  //     str = str.substring(0, len);
+  //     if (str.match(/^[0-9]+$/)) {
+  //       // tests will fail on all digits
+  //       str = 'q' + str.substring(1); // shhhh, secret.
+  //     }
+  //     return str;
+  //   });
+  // }
 
   /**
    * Get fake data

@@ -15,7 +15,9 @@ const {
   objectHashKeys,
   objectHashMD5,
   objectHashKeysMD5,
-  objectHashWriteToStream
+  objectHashWriteToStream,
+  getLongToken,
+  getShortToken
 } = require('../../src/plugins/lib');
 
 const {
@@ -231,5 +233,23 @@ describe('<<=== Util: (util.test) ===>>', () => {
   it('#16: util.objectHashWriteToStream', () => {
     objectHashWriteToStream({ foo: 'bar', a: 42 }, process.stdout, { respectType: false });
     assert.ok(true, 'util.objectHashWriteToStream');
+  });
+
+  it('#17: util.getLongToken(len)', async () => {
+    const token = await getLongToken(16);
+    if (isDebug && token) debug('getLongToken.token:', token);
+    assert.ok(token, 'util.getLongToken(len)');
+  });
+
+  it('#18: util.getShortToken(8, true)', async () => {
+    const token = await getShortToken(8, true);
+    if (true && token) debug('getShortToken.token:', token);
+    assert.ok(token, 'util.getLongToken(8, true)');
+  });
+
+  it('#19: util.getShortToken(8, false)', async () => {
+    const token = await getShortToken(8, false);
+    if (true && token) debug('getShortToken.token:', token);
+    assert.ok(token, 'util.getLongToken(8, false)');
   });
 });
