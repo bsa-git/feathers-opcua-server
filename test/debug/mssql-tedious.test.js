@@ -3,12 +3,13 @@ const assert = require('assert');
 const app = require('../../src/app');
 const papa = require('papaparse');
 const moment = require('moment');
+const chalk = require('chalk');
 
 const {
   appRoot,
   inspector,
   logger,
-  getRandomValue,
+  Queue,
   startListenPort,
   stopListenPort,
   MssqlTedious,
@@ -20,6 +21,7 @@ const {
 const { TYPES } = require('tedious');
 const loRound = require('lodash/round');
 const loForEach = require('lodash/forEach');
+const { pause } = require('../../src/plugins/lib/util');
 
 const debug = require('debug')('app:mssql-tedious.test');
 const isDebug = false;
@@ -55,6 +57,37 @@ const getData = function (fileName) {
     if (isDebug) inspector('getData.json:', json);
   }
   return json;
+};
+
+const insertData = async function () {
+  let sql = '';
+  //---------------------------------------------
+  const db = new MssqlTedious(mssqlEnvName);
+  await db.connect();
+
+  // Insert row to tblMessages
+  let params = [];
+  sql = 'INSERT INTO dbo.tblMessages VALUES (@value, @type, @text)';
+  const jsonData = getData('data-CH_M51.csv');
+  if (isDebug && jsonData) inspector('getData:', jsonData);
+  db.buildParams(params, 'value', TYPES.Char, 'CH_M51::ValueFromFile');
+  db.buildParams(params, 'type', TYPES.Char, 'tag');
+  db.buildParams(params, 'text', TYPES.Char, JSON.stringify(jsonData));
+  await db.query(params, sql);
+
+  // Select rows from tblMessages
+  params = [];
+  sql = 'SELECT @text = Text FROM dbo.tblMessages WHERE Type = @type AND Value = @value';
+  // For each param do: db.buildParams(params, "name", TYPES.type, variable)
+  db.buildParams(params, 'type', TYPES.Char, 'tag');
+  db.buildParams(params, 'value', TYPES.Char, 'CH_M51::ValueFromFile');
+  db.buildParams(params, 'text', TYPES.Char, null, true);
+  const { rows } = await db.query(params, sql);
+  if (isDebug && rows) inspector('Request result:', { sql, rows });
+  await db.disconnect();
+
+  const jsonRows = JSON.parse(rows[0]['text']);
+  return { jsonRows, jsonData };
 };
 
 describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
@@ -96,42 +129,10 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
 
 
   it('#2: Insert "CH_M51" rows to table', async () => {
-    let sql = '';
+    let result = null;
     //---------------------------------------------
-    const db = new MssqlTedious(mssqlEnvName);
-
-    // db.config.options.debug.data = false;
-    // db.config.options.debug.packet = true;
-
-    // db.config.events.connection.debug.enable = true;
-    // db.config.events.connection.infoMessage.enable = true;
-    // db.config.events.connection.errorMessage.enable = true;
-
-    await db.connect();
-
-    // Insert row to tblMessages
-    let params = [];
-    sql = 'INSERT INTO dbo.tblMessages VALUES (@value, @type, @text)';
-    const jsonData = getData('data-CH_M51.csv');
-    if (isDebug && jsonData) inspector('getData:', jsonData);
-    db.buildParams(params, 'value', TYPES.Char, 'CH_M51::ValueFromFile');
-    db.buildParams(params, 'type', TYPES.Char, 'tag');
-    db.buildParams(params, 'text', TYPES.Char, JSON.stringify(jsonData));
-    await db.query(params, sql);
-
-    // Select rows from tblMessages
-    params = [];
-    sql = 'SELECT @text = Text FROM dbo.tblMessages WHERE Type = @type AND Value = @value';
-    // For each param do: db.buildParams(params, "name", TYPES.type, variable)
-    db.buildParams(params, 'type', TYPES.Char, 'tag');
-    db.buildParams(params, 'value', TYPES.Char, 'CH_M51::ValueFromFile');
-    db.buildParams(params, 'text', TYPES.Char, null, true);
-    const { rows } = await db.query(params, sql);
-    if (isDebug && rows) inspector('Request result:', { sql, rows });
-    await db.disconnect();
-
-    const jsonRows = JSON.parse(rows[0]['text']);
-    assert.deepStrictEqual(jsonRows, jsonData, 'Insert rows to table');
+    result = await insertData();
+    assert.deepStrictEqual(result.jsonRows, result.jsonData, 'Insert rows to table');
   });
 
   it('#3: Insert "CH_M52" rows to table', async () => {
@@ -263,7 +264,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     assert.ok(rows.length, 'Select values for "opcUPG2" from SnapShot table');
   });
 
-  it('#8: Insert values with insertBulkData to SnapShot table for "opcUA(A5)" and "XozUchet"', async () => {
+  it('#8: Insert values with insertBulkData to SnapShotTest table for "opcUA(A5)" and "XozUchet"', async () => {
     let db, sql = '', result, rows, rowSnapShot = {}, rowsSnapShot = [];
     const scanerName = 'opcUA(A5)';
     const tagGroup = 'XozUchet';
@@ -477,6 +478,47 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
       await db.rollbackTransaction(error.message);
       assert.ok(false, 'Insert values to SnapShot table for "opcUA(A5)" and "XozUchet"');
     }
+  });
+
+  it('#10: Insert data to table with queue', async () => {
+    let result = null;
+    //---------------------------------------------
+    // Set interval_1
+    const intervalId_1 = setInterval(async function () {
+      try {
+        const queue = new Queue('intervalId_1');
+        await queue.doWhile();
+        console.log('TimeDuration1_1:', queue.timeDuration);
+        result = await insertData();
+        assert.deepStrictEqual(result.jsonRows, result.jsonData, 'Insert data to table with queue');
+        queue.dropCurrentItem();
+        if (true && result) console.log('TimeDuration1_2:', queue.getTimeDuration());
+      } catch (error) {
+        inspector(chalk.red('Insert data to table with queue.Error:'), error);
+      }
+    }, 2000);
+
+    // Set interval_2
+    const intervalId_2 = setInterval(async function () {
+      try {
+        const queue = new Queue('intervalId_2');
+        await queue.doWhile();
+        console.log('TimeDuration2_1:', queue.timeDuration);
+        result = await insertData();
+        assert.deepStrictEqual(result.jsonRows, result.jsonData, 'Insert data to table with queue');
+        queue.dropCurrentItem();
+        if (true && result) console.log('TimeDuration2_2:', queue.getTimeDuration());
+      } catch (error) {
+        inspector(chalk.red('Insert data to table with queue.Error:'), error);
+      }
+    }, 2000);
+
+    await pause(10000);
+
+    // Clear intervals
+    clearInterval(intervalId_1);
+    clearInterval(intervalId_2);
+
 
   });
 });

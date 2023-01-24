@@ -969,7 +969,7 @@ class OpcuaClient {
       .on('started', () => console.log(chalk.yellow('Client subscription started.'), `SubscriptionId = ${this.subscription.subscriptionId}`))
       .on('terminated', () => console.log(chalk.yellow('Client subscription terminated')))
       .on('keepalive', () => {
-        if (isDebug && isShowLog4Prod()) console.log(chalk.yellow('Client subscription keepalive'));
+        if (true && isShowLog4Prod()) console.log(chalk.yellow('Client subscription keepalive'));
       });
 
     this.currentState.isSubscriptionCreated = true;

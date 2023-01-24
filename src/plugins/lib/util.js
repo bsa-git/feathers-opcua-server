@@ -620,11 +620,14 @@ const shiftTimeByOneHour = function (dt = '', isUtc = true) {
  * @private
  */
 const randomBytes = function(len) {
-  return new Promise(function (resolve, reject) {
-    crypto.randomBytes(len, function (err, buf) {
-      return err ? reject(err) : resolve(buf.toString('hex'));
-    });
-  });
+  // return new Promise(function (resolve, reject) {
+  //   crypto.randomBytes(len, function (err, buf) {
+  //     return err ? reject(err) : resolve(buf.toString('hex'));
+  //   });
+  // });
+
+  const buf = crypto.randomBytes(len);
+  return buf.toString('hex');
 };
 
 /**
@@ -647,8 +650,9 @@ const randomDigits = function(len) {
 * @param {Number} len
 * @return {String}
 */
-const getLongToken = async function(len) {
-  return await randomBytes(len);
+const getLongToken = function(len) {
+  // return await randomBytes(len);
+  return randomBytes(len);
 };
 
 /**
@@ -658,12 +662,24 @@ const getLongToken = async function(len) {
 * @param {Boolean} ifDigits
 * @return {String}
 */
-const getShortToken = async function(len, ifDigits) {
+const getShortToken = function(len, ifDigits) {
+  // if (ifDigits) {
+  //   return Promise.resolve(randomDigits(len));
+  // }
+
+  // let str = await randomBytes(Math.floor(len / 2) + 1);
+  // str = str.substring(0, len);
+  // if (str.match(/^[0-9]+$/)) {
+  //   // tests will fail on all digits
+  //   str = 'q' + str.substring(1); // shhhh, secret.
+  // }
+  // return str;
+
   if (ifDigits) {
-    return Promise.resolve(randomDigits(len));
+    return randomDigits(len);
   }
 
-  let str = await randomBytes(Math.floor(len / 2) + 1);
+  let str = randomBytes(Math.floor(len / 2) + 1);
   str = str.substring(0, len);
   if (str.match(/^[0-9]+$/)) {
     // tests will fail on all digits

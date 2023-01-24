@@ -235,20 +235,20 @@ describe('<<=== Util: (util.test) ===>>', () => {
     assert.ok(true, 'util.objectHashWriteToStream');
   });
 
-  it('#17: util.getLongToken(len)', async () => {
-    const token = await getLongToken(16);
+  it('#17: util.getLongToken(len)', () => {
+    const token = getLongToken(16);
     if (isDebug && token) debug('getLongToken.token:', token);
     assert.ok(token, 'util.getLongToken(len)');
   });
 
-  it('#18: util.getShortToken(8, true)', async () => {
-    const token = await getShortToken(8, true);
+  it('#18: util.getShortToken(8, true)', () => {
+    const token = getShortToken(8, true);
     if (true && token) debug('getShortToken.token:', token);
     assert.ok(token, 'util.getLongToken(8, true)');
   });
 
-  it('#19: util.getShortToken(8, false)', async () => {
-    const token = await getShortToken(8, false);
+  it('#19: util.getShortToken(8, false)', () => {
+    const token = getShortToken(8, false);
     if (true && token) debug('getShortToken.token:', token);
     assert.ok(token, 'util.getLongToken(8, false)');
   });

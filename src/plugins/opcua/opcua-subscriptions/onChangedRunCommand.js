@@ -59,7 +59,7 @@ async function onChangedRunCommand(params, dataValue) {
 
     const browseName = addressSpaceOption.browseName;
     // Get token
-    let token = await getShortToken(8);
+    let token = getShortToken(8);
     token = `${browseName}(${token})`;
     if (isDebug && token) console.log('onChangedRunCommand.token:', token);
     if (isDebug && startTime) console.log('onChangedRunCommand.startTime:', startTime, 'token:', token);
