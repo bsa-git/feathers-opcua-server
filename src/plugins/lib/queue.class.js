@@ -16,39 +16,37 @@ const debug = require('debug')('app:queue.class');
 const isDebug = false;
 
 // Queues of items
-const listQueueOfItems = [];
+const listQueueOfItems = {};
 
 class Queue {
   /**
   * Constructor
   * @param {String} itemName
-  * @param {Array} args
+  * @param {String} queueName
   */
-  constructor(itemName, args = [], indexOfQueue = 0) {
-    if (!listQueueOfItems[indexOfQueue]) {
-      listQueueOfItems[indexOfQueue] = [];
+  constructor(itemName, queueName = 'default-list') {
+    if (!listQueueOfItems[queueName]) {
+      listQueueOfItems[queueName] = [];
     }
-    this.indexOfQueue = indexOfQueue;
-    // this.queueOfItems = listQueueOfItems[this.indexOfQueue];
+    this.queueName = queueName;
     this.itemName = itemName;
-    this.args = args;
+    // this.args = args;
     this.startTime = moment.utc();
-    this.token = this.getToken();
+    this.token = this.createToken();
     this.addItemToQueue();
-    if(true && listQueueOfItems[this.indexOfQueue]) inspector('Queue.constructor.queueOfItems:', listQueueOfItems[this.indexOfQueue]);
+    if (isDebug && listQueueOfItems[this.queueName]) inspector('Queue.constructor.queueOfItems:', listQueueOfItems[this.queueName]);
   }
 
   /**
   * @async
-  * @method getToken
+  * @method createToken
   * @return {String}
   */
-  getToken() {
+  createToken() {
     // Get token
     const token = getShortToken(8);
     this.token = `${this.itemName}(${token})`;
-    if (isDebug && this.token) console.log('Queue.getToken.token:', this.token);
-    if (isDebug && this.startTime) console.log('Queue.getToken.startTime:', this.startTime, 'token:', this.token);
+    if (isDebug && this.startTime) console.log('Queue.createToken.startTime:', this.startTime, 'token:', this.token);
     return this.token;
   }
 
@@ -64,10 +62,9 @@ class Queue {
     }
     // Add item to queue
     const item = { token: this.token };
-    if(this.args.length) item.args = this.args;
-    listQueueOfItems[this.indexOfQueue].push(item);
+    listQueueOfItems[this.queueName].push(item);
 
-    if (true && listQueueOfItems[this.indexOfQueue].length) logger.info(`Queue.addItemToQueue.item.token: "${item.token}"`);
+    if (isDebug && listQueueOfItems[this.queueName].length) logger.info(`Queue.addItemToQueue.item.token: "${item.token}"`);
     return item;
   }
 
@@ -79,9 +76,9 @@ class Queue {
     let result = false;
     do {
       result = this.isTokenInQueue(this.token);
-      if (result) await pause(1000, false);
+      if (result) await pause(100, false);
     } while (result);
-    if(isDrop) this.dropCurrentItem();
+    if (isDrop) this.dropCurrentItem();
     this.endTime = moment.utc();
     this.timeDuration = getTimeDuration(this.startTime, this.endTime);
   }
@@ -94,10 +91,10 @@ class Queue {
   isTokenInQueue(token) {
     let isBusy = false;
     //---------------------------
-    const item = loHead(listQueueOfItems[this.indexOfQueue]);
+    const item = loHead(listQueueOfItems[this.queueName]);
     if (item) {
       isBusy = item.token !== token;
-      if (true && isBusy) console.log(`'${token}'`, chalk.cyan(' wait '), `'${item.token}'`);
+      if (isDebug && isBusy) console.log(`'${token}'`, chalk.cyan(' wait '), `'${item.token}'`);
     }
     return isBusy;
   }
@@ -108,12 +105,12 @@ class Queue {
   * @return {Object[]}
   */
   dropCurrentItem() {
-    if (listQueueOfItems[this.indexOfQueue].length) {
+    if (listQueueOfItems[this.queueName].length) {
       const currentItem = this.getCurrentItem();
-      listQueueOfItems[this.indexOfQueue] = loDrop(listQueueOfItems[this.indexOfQueue]);
-      if (true && listQueueOfItems[this.indexOfQueue]) inspector(`Queue.dropCurrentItem("${currentItem.token}").queueOfItems:`, listQueueOfItems[this.indexOfQueue].map(item => item.token));
+      listQueueOfItems[this.queueName] = loDrop(listQueueOfItems[this.queueName]);
+      if (isDebug && listQueueOfItems[this.queueName]) inspector(`Queue.dropCurrentItem("${currentItem.token}").queueOfItems:`, listQueueOfItems[this.queueName].map(item => item.token));
     }
-    return listQueueOfItems[this.indexOfQueue];
+    return listQueueOfItems[this.queueName];
   }
 
   /**
@@ -121,7 +118,7 @@ class Queue {
   * @return {Object[]}
   */
   getQueueOfItems() {
-    return listQueueOfItems[this.indexOfQueue];
+    return listQueueOfItems[this.queueName];
   }
 
 
@@ -130,7 +127,7 @@ class Queue {
   * @return {Object}
   */
   getCurrentItem() {
-    const item = loHead(listQueueOfItems[this.indexOfQueue]);
+    const item = loHead(listQueueOfItems[this.queueName]);
     return item;
   }
 
@@ -140,20 +137,26 @@ class Queue {
   * @return {Number}
   */
   getTimeDuration(endTime, unit) {
-    if(!endTime) endTime = moment.utc(endTime);
+    if (!endTime) endTime = moment.utc(endTime);
     this.timeDuration = getTimeDuration(this.startTime, endTime, unit);
     return this.timeDuration;
   }
 
   /**
-  * @method addQueueOfItems
-  * @return {Number}
-  */
-  static addQueueOfItems() {
-    const count = listQueueOfItems.push([]);
-    return count - 1;
+   * @method clearQueue
+   * @param {String} queueName 
+   */
+  static clearQueue(queueName) {
+    if(queueName && listQueueOfItems[queueName]){
+      listQueueOfItems[queueName] = [];
+      return;
+    }
+    const keys = Object.keys(listQueueOfItems);
+    for (let index = 0; index < keys.length; index++) {
+      const key = keys[index];
+      listQueueOfItems[key] = [];
+    }
   }
-
 }
 
 module.exports = Queue;

@@ -43,6 +43,33 @@
     },
     {
       "isEnable": true,
+      "browseName": "CH_A5.Device1::XozUchet_Daily",
+      "displayName": "Daily XozUchet values for CH_A5",
+      "ownerName": "CH_A5.Device1",
+      "type": "variable.simple",
+      "dataType": "String",
+      "hist": 1,
+      "group": true,
+      "variableGetType": "valueFromSource",
+      "getter": "getterValuesFromKepServer",
+      "getterParams": {
+        "clientId": "ua-cherkassy-azot-ogmt0088846_dev3",
+        "interval": 20000
+      },
+      "subscription": "onChangedKepValue",
+      "subscribeParams": {
+        "subscribeFuncs": ["saveOpcuaGroupValueToDB", "saveOpcuaGroupValueToMsSqlDB"],
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "insertValuesToChAsoduDB",
+        "queryParams": {
+          "scanerName": "opcUA(A5)",
+          "tagGroup": "XozUchet_Daily",
+          "tableName": "SnapShotTest"
+        }
+      }
+    },
+    {
+      "isEnable": true,
       "browseName": "CH_A5.Device2::Mnemo1",
       "displayName": "Mnemo1 values for CH_A5.Device2",
       "ownerName": "CH_A5.Device2",

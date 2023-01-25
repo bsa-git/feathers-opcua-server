@@ -3,7 +3,8 @@ const loRound = require('lodash/round');
 const loForEach = require('lodash/forEach');
 const loIsFinite = require('lodash/isFinite');
 const loFindIndex = require('lodash/findIndex');
-const loIsString = require('lodash/isString');// range
+const loIsString = require('lodash/isString');
+const loIsPlainObject = require('lodash/isPlainObject');
 const loRange = require('lodash/range');
 const loOrderBy = require('lodash/orderBy');
 
@@ -292,6 +293,40 @@ const removeEmptyValFromArray = function (initialArray) {
 };
 
 /**
+ * @method removeDuplicatedValFromArray
+ * @param {Array} initialArray 
+ * e.g. -> [{a:12, b:56}, {a:12, b:89}]
+ * e.g. -> [1,2,3,1,5,3]
+ * @param {String} itemProp 
+ * e.g. -> 'a'
+ * e.g. -> ''
+ * @returns {Array}
+ * e.g. -> [{a:12, b:56}]
+ * e.g. -> [1,2,3,5]
+ */
+const removeDuplicatedValFromArray = function (initialArray, itemProp) {
+  let newArray = [], items = [];
+  //------------------------------
+  if(!Array.isArray(initialArray)) return initialArray; 
+  for (let index = 0; index <= initialArray.length; index++) {
+    const item = initialArray[index];
+    if(item === undefined) continue;
+    if(!newArray.length) {
+      newArray.push(item);
+      continue;
+    }
+    if(itemProp && loIsPlainObject(item) && item[itemProp] !== undefined) {
+      items = newArray.filter(v => v[itemProp] === item[itemProp]);
+    } else {
+      items = newArray.filter(v => v === item);
+    }
+    if (items.length) continue;
+    newArray.push(item);
+  }
+  return newArray;
+};
+
+/**
  * @method convertRangeArray
  * @param {Array[]} initialArray
  * e.g. [empty, [empty, 1, 2]]
@@ -406,6 +441,7 @@ module.exports = {
   getIndex4Letter,
   getIndex4Range,
   removeEmptyValFromArray,
+  removeDuplicatedValFromArray,
   shiftRowRangeArray,
   shiftColRangeArray,
   convertRowRangeArray

@@ -2,41 +2,22 @@
 const moment = require('moment');
 const chalk = require('chalk');
 const loOmit = require('lodash/omit');
-const loHead = require('lodash/head');
-const loDrop = require('lodash/drop');
 
 const {
   inspector,
   logger,
-  pause,
   getTimeDuration,
   isFunction,
-  getShortToken
+  Queue
 } = require('../../lib');
-
-const {
-  AuthServer
-} = require('../../auth');
-
-// const {
-//   showInfoForHandler,
-//   showInfoForGroupHandler,
-//   saveOpcuaGroupValueToDB,
-//   runCommand,
-//   sessionWrite
-// } = require('./lib');
 
 const libs = require('./lib');
 
 const {
-  checkTokenQueueOfSubscribe,
   formatSimpleDataValue
 } = require('../opcua-helper');
 
 const isDebug = false;
-
-// Queue of subscribe
-let queueOfSubscribe = [];
 
 /**
  * @method onChangedKepValue
@@ -46,7 +27,7 @@ let queueOfSubscribe = [];
  * @returns {void}
  */
 async function onChangedKepValue(params, dataValue) {
-  let ownerGroupVariable, resultSubscribeFuncs = [], result = false;
+  let ownerGroupVariable, resultSubscribeFuncs = [], queue = null;
   //------------------------------------------------------------
   try {
 
@@ -77,12 +58,6 @@ async function onChangedKepValue(params, dataValue) {
     // Set subscribeParams for addressSpaceOption
     if(!addressSpaceOption.subscribeParams) addressSpaceOption.subscribeParams = subscribeParams;
 
-    // Get token
-    let token = getShortToken(8);
-    token = `${browseName}(${token})`;
-    if (isDebug && token) console.log('onChangedKepValue.token:', token);
-    if (isDebug && startTime) console.log('onChangedKepValue.startTime:', startTime, 'token:', token);
-
     // Format simple DataValue
     dataValue = formatSimpleDataValue(dataValue);
     const statusCode = dataValue.statusCode.name;
@@ -91,30 +66,11 @@ async function onChangedKepValue(params, dataValue) {
       value = JSON.parse(value);
     }
 
-    // Return else value is empty or (statusCode !== 'Good')
-    // if (statusCode !== 'Good' || !value) return;
     if (isDebug && value) inspector('onChangedKepValue.value:', value);
 
-    // Add subscribe to queue
-    queueOfSubscribe.push({
-      token,
-      browseName,
-      params,
-      dataValue
-    });
-
-    if (isDebug && queueOfSubscribe.length) inspector('onChangedKepValue.queueOfSubscribe:', queueOfSubscribe.map(s => s.token));
-
-    // WaitTimeout
-    do {
-      result = checkTokenQueueOfSubscribe(queueOfSubscribe, token, false);
-      if (result) await pause(1000, false);
-    } while (result);
-
-    // Get current subscribe
-    const subscribe = loHead(queueOfSubscribe);
-    params = subscribe.params;
-    dataValue = subscribe.dataValue;
+    // Create queue
+    queue = new Queue(browseName, 'mssql-list');
+    await queue.doWhile();
 
     // Run subscribe funcs 
     const subscribeFuncs = subscribeParams.subscribeFuncs;
@@ -134,22 +90,19 @@ async function onChangedKepValue(params, dataValue) {
       if (isDebug && results.length) inspector('saveOpcuaGroupValueToMsSqlDB.result:', results[1]);
 
       // Show info  
-      // showInfoForHandler(params, dataValue);
       libs.showInfoForGroupHandler(params, dataValue);
-      // endTime and timeDuration
+
       const endTime = moment.utc().format();
       const timeDuration = getTimeDuration(startTime, endTime);
-      if (isDebug && endTime) console.log('onChangedKepValue.endTime:', endTime, 'token:', token);
-      if (isDebug && timeDuration) console.log('onChangedKepValue.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'token:', chalk.cyan(token));
+      if (isDebug && timeDuration) console.log('onChangedKepValue.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'token:', chalk.cyan(queue.token));
 
-      // Drop element from the beginning of array
-      queueOfSubscribe = loDrop(queueOfSubscribe);
+      // Drop item from the beginning of array
+      queue.dropCurrentItem();
     });
   } catch (error) {
-    // Drop element from the beginning of array
-    queueOfSubscribe = loDrop(queueOfSubscribe);
-    inspector('onChangedKepValue.Error:', error);
-    // logger.error('onChangedKepValue.Error:', error.message);
+    // Drop item from the beginning of array
+    if(queue) queue.dropCurrentItem();
+    inspector(chalk.red('onChangedKepValue.Error:'), error);
   }
 }
 

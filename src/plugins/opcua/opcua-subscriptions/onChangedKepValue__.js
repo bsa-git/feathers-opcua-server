@@ -11,12 +11,20 @@ const {
   pause,
   getTimeDuration,
   isFunction,
-  Queue
+  getShortToken
 } = require('../../lib');
 
+const {
+  AuthServer
+} = require('../../auth');
+
 // const {
-//   AuthServer
-// } = require('../../auth');
+//   showInfoForHandler,
+//   showInfoForGroupHandler,
+//   saveOpcuaGroupValueToDB,
+//   runCommand,
+//   sessionWrite
+// } = require('./lib');
 
 const libs = require('./lib');
 
@@ -29,9 +37,6 @@ const isDebug = false;
 
 // Queue of subscribe
 let queueOfSubscribe = [];
-let queue = null;
-
-const indexOfQueue = Queue.addQueueOfItems();
 
 /**
  * @method onChangedKepValue
@@ -73,10 +78,10 @@ async function onChangedKepValue(params, dataValue) {
     if(!addressSpaceOption.subscribeParams) addressSpaceOption.subscribeParams = subscribeParams;
 
     // Get token
-    // let token = await AuthServer.getShortToken(8);
-    // token = `${browseName}(${token})`;
-    // if (isDebug && token) console.log('onChangedKepValue.token:', token);
-    // if (isDebug && startTime) console.log('onChangedKepValue.startTime:', startTime, 'token:', token);
+    let token = getShortToken(8);
+    token = `${browseName}(${token})`;
+    if (isDebug && token) console.log('onChangedKepValue.token:', token);
+    if (isDebug && startTime) console.log('onChangedKepValue.startTime:', startTime, 'token:', token);
 
     // Format simple DataValue
     dataValue = formatSimpleDataValue(dataValue);
@@ -91,31 +96,25 @@ async function onChangedKepValue(params, dataValue) {
     if (isDebug && value) inspector('onChangedKepValue.value:', value);
 
     // Add subscribe to queue
-    // queueOfSubscribe.push({
-    //   token,
-    //   browseName,
-    //   params,
-    //   dataValue
-    // });
+    queueOfSubscribe.push({
+      token,
+      browseName,
+      params,
+      dataValue
+    });
 
-    // if (isDebug && queueOfSubscribe.length) inspector('onChangedKepValue.queueOfSubscribe:', queueOfSubscribe.map(s => s.token));
-
-    queue = new Queue(indexOfQueue, browseName, [params, dataValue]);
-    const token = await queue.getToken();
-    queue.addItemToQueue();
-    await queue.doWhile();
-    const subscribe = queue.getCurrentItemFromQueue();
+    if (isDebug && queueOfSubscribe.length) inspector('onChangedKepValue.queueOfSubscribe:', queueOfSubscribe.map(s => s.token));
 
     // WaitTimeout
-    // do {
-    //   result = checkTokenQueueOfSubscribe(queueOfSubscribe, token, false);
-    //   if (result) await pause(1000, false);
-    // } while (result);
+    do {
+      result = checkTokenQueueOfSubscribe(queueOfSubscribe, token, false);
+      if (result) await pause(1000, false);
+    } while (result);
 
     // Get current subscribe
-    // const subscribe = loHead(queueOfSubscribe);
-    // params = subscribe.params;
-    // dataValue = subscribe.dataValue;
+    const subscribe = loHead(queueOfSubscribe);
+    params = subscribe.params;
+    dataValue = subscribe.dataValue;
 
     // Run subscribe funcs 
     const subscribeFuncs = subscribeParams.subscribeFuncs;
@@ -123,8 +122,7 @@ async function onChangedKepValue(params, dataValue) {
       const subscribeFuncName = subscribeFuncs[index];
       const libSubscribeFunc = libs[subscribeFuncName];
       if (isFunction(libSubscribeFunc)) {
-        // const result = libSubscribeFunc(params, dataValue);
-        const result = libSubscribeFunc(...subscribe.args);
+        const result = libSubscribeFunc(params, dataValue);
         resultSubscribeFuncs.push(result);
         if (isDebug && subscribeFuncName) logger.info(`onChangedKepValue.runSubscribeFunc: "${subscribeFuncName}"`);
       }
@@ -137,8 +135,7 @@ async function onChangedKepValue(params, dataValue) {
 
       // Show info  
       // showInfoForHandler(params, dataValue);
-      // libs.showInfoForGroupHandler(params, dataValue);
-      libs.showInfoForGroupHandler(...subscribe.args);
+      libs.showInfoForGroupHandler(params, dataValue);
       // endTime and timeDuration
       const endTime = moment.utc().format();
       const timeDuration = getTimeDuration(startTime, endTime);
@@ -146,14 +143,13 @@ async function onChangedKepValue(params, dataValue) {
       if (isDebug && timeDuration) console.log('onChangedKepValue.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'token:', chalk.cyan(token));
 
       // Drop element from the beginning of array
-      // queueOfSubscribe = loDrop(queueOfSubscribe);
-      queue.dropCurrentItemFromQueue();
+      queueOfSubscribe = loDrop(queueOfSubscribe);
     });
   } catch (error) {
     // Drop element from the beginning of array
-    // queueOfSubscribe = loDrop(queueOfSubscribe);
-    if(queue) queue.dropCurrentItemFromQueue();
-    logger.error('onChangedKepValue.Error:', error);
+    queueOfSubscribe = loDrop(queueOfSubscribe);
+    inspector('onChangedKepValue.Error:', error);
+    // logger.error('onChangedKepValue.Error:', error.message);
   }
 }
 

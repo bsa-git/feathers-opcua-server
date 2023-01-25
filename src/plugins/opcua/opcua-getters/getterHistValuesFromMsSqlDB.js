@@ -1,9 +1,12 @@
 /* eslint-disable no-unused-vars */
+const chalk = require('chalk');
+
 const {
   inspector,
   logger,
   addIntervalId,
   getDateTime,
+  Queue
 } = require('../../lib');
 
 const { MssqlTedious } = require('../../db-helpers');
@@ -26,7 +29,7 @@ const isDebug = false;
  * @returns {void}
  */
 function getterHistValuesFromMsSqlDB(params = {}, addedValue) {
-  let dataType;
+  let dataType, queue = null;
   const app = params.myOpcuaServer.app;
   //------------------------------------
 
@@ -47,6 +50,10 @@ function getterHistValuesFromMsSqlDB(params = {}, addedValue) {
   const intervalId = setInterval(async function () {
     //-------------------------------
     try {
+      const browseName = formatUAVariable(addedValue).browseName;
+      // Create queue
+      queue = new Queue(browseName, 'mssql-list');
+      await queue.doWhile();
 
       // Create an instance of a class
       const mssqlDB = new MssqlTedious(params.dbEnv);
@@ -61,9 +68,15 @@ function getterHistValuesFromMsSqlDB(params = {}, addedValue) {
         setValuesFromSource(rows);
       }
       // mssqlDB disconnect
-      if(mssqlDB.connection) await mssqlDB.disconnect();
+      if (mssqlDB.connection) await mssqlDB.disconnect();
+
+      // Drop item from the beginning of array
+      queue.dropCurrentItem();
+
     } catch (error) {
-      logger.error(`getterHistValuesFromMsSqlDB.Error (${getDateTime('', false)}):`, error.message);
+      // Drop item from the beginning of array
+      if (queue) queue.dropCurrentItem();
+      inspector(chalk.red(`getterHistValuesFromMsSqlDB.Error (${getDateTime('', false)}):`), error);
     }
   }, params.interval);
 

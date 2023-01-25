@@ -483,16 +483,20 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
   it('#10: Insert data to table with queue', async () => {
     let result = null;
     //---------------------------------------------
+    
+    // Clear queue
+    Queue.clearQueue();
+
     // Set interval_1
     const intervalId_1 = setInterval(async function () {
       try {
-        const queue = new Queue('intervalId_1');
+        const queue = new Queue('intervalId_1', 'mssql-list');
         await queue.doWhile();
-        console.log('TimeDuration1_1:', queue.timeDuration);
+        if(isDebug && queue) console.log('TimeDuration1_1:', queue.timeDuration);
         result = await insertData();
         assert.deepStrictEqual(result.jsonRows, result.jsonData, 'Insert data to table with queue');
         queue.dropCurrentItem();
-        if (true && result) console.log('TimeDuration1_2:', queue.getTimeDuration());
+        if (isDebug && result) console.log('TimeDuration1_2:', queue.getTimeDuration());
       } catch (error) {
         inspector(chalk.red('Insert data to table with queue.Error:'), error);
       }
@@ -501,13 +505,13 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     // Set interval_2
     const intervalId_2 = setInterval(async function () {
       try {
-        const queue = new Queue('intervalId_2');
+        const queue = new Queue('intervalId_2', 'mssql-list');
         await queue.doWhile();
-        console.log('TimeDuration2_1:', queue.timeDuration);
+        if(isDebug && queue) console.log('TimeDuration2_1:', queue.timeDuration);
         result = await insertData();
         assert.deepStrictEqual(result.jsonRows, result.jsonData, 'Insert data to table with queue');
         queue.dropCurrentItem();
-        if (true && result) console.log('TimeDuration2_2:', queue.getTimeDuration());
+        if (isDebug && result) console.log('TimeDuration2_2:', queue.getTimeDuration());
       } catch (error) {
         inspector(chalk.red('Insert data to table with queue.Error:'), error);
       }

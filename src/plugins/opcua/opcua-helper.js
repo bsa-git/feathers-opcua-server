@@ -11,7 +11,8 @@ const {
   getMyIp,
   strReplace,
   getInt,
-  convertObject2Array
+  convertObject2Array,
+  removeDuplicatedValFromArray
 } = require('../lib');
 
 const {
@@ -686,6 +687,7 @@ const mergeOpcuaConfigOptions = function (id) {
   //---------------------------------------------
   // Get opcuaOption 
   let opcuaOptions = getOpcuaConfig(id);
+  if(isDebug && opcuaOptions) inspector('mergeOpcuaConfigOptions.opcuaOptions:', opcuaOptions);
   if (opcuaOptions.paths['base-options']) {
     opcuaOptions.paths['base-options'].forEach(path => {
       const opt = loMerge({}, require(`${appRoot}${path}`));
@@ -695,8 +697,10 @@ const mergeOpcuaConfigOptions = function (id) {
         } else {
           baseOptions[key] = value;
         }
+        baseOptions[key] = removeDuplicatedValFromArray(baseOptions[key], 'browseName');
       });
     });
+    if(isDebug && baseOptions) inspector('mergeOpcuaConfigOptions.baseOptions.objects:', baseOptions.objects);  
     if (opcuaOptions.paths.options) {
       const options = require(`${appRoot}${opcuaOptions.paths.options}`);
       loForEach(options, (value, key) => {
@@ -719,8 +723,7 @@ const mergeOpcuaConfigOptions = function (id) {
   } else {
     mergeOpcuaOptions = loMerge({}, require(`${appRoot}${opcuaOptions.paths.options}`));
   }
-  // opcuaOptions = loMerge({}, opcuaOptions);
-  // inspector('mergeOpcuaConfigOptions.opcuaOptions.objects:', opcuaOptions.objects);
+  if(isDebug && mergeOpcuaOptions) inspector('mergeOpcuaConfigOptions.mergeOpcuaOptions.objects:', mergeOpcuaOptions.objects);
   return mergeOpcuaOptions;
 };
 
