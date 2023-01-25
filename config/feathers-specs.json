@@ -1,6 +1,8 @@
 {
   "app": {
     "envTestModeName": "test",
+    "envDevModeName": "development",
+    "envProdModeName": "production",
     "envAllowingSeedData": [
       "test"
     ],

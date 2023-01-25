@@ -54,7 +54,7 @@
       "getter": "getterValuesFromKepServer",
       "getterParams": {
         "clientId": "ua-cherkassy-azot-ogmttsd_prod3",
-        "interval": 1200000
+        "interval": 20000
       },
       "subscription": "onChangedKepValue",
       "subscribeParams": {

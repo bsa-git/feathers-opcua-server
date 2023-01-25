@@ -41,6 +41,24 @@ const isTest = function () {
 };
 
 /**
+* Determine if environment allows development
+* @method isDev
+* @return {boolean}
+*/
+const isDev = function () {
+  return (feathersSpecs.app.envDevModeName === process.env.NODE_ENV);
+};
+
+/**
+* Determine if environment allows production
+* @method isProd
+* @return {boolean}
+*/
+const isProd = function () {
+  return (feathersSpecs.app.envProdModeName === process.env.NODE_ENV);
+};
+
+/**
 * Is this application starts as service
 * @method isStartAppAsService
 * @return {boolean}
@@ -1251,6 +1269,8 @@ module.exports = {
   appRoot,
   logger,
   isTest,
+  isDev,
+  isProd,
   isStartAppAsService,
   isShowLog4Prod,
   feathersSpecs,
