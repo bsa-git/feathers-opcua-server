@@ -23,9 +23,12 @@ const {
 const debug = require('debug')('app:getterAcmDayValueFromFile');
 const isDebug = false;
 
+let prevDailyData = '';
+// e.g. -> prevDailyData = '2023-01-26';
+
 //=============================================================================
 
-/**
+/** 
  * @method getterValuesFromKepServer
  * @param {Object} params 
  * @param {Object} addedValue 
@@ -36,6 +39,7 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
   const id = params.myOpcuaServer.id;
   const app = params.myOpcuaServer.app;
   const clientId = params.clientId;
+  const getterType = params.type; // e.g. -> 'daily'
   //------------------------------------
 
   if (isDebug && params) inspector('getterValuesFromKepServer.params:', loOmit(params, ['myOpcuaServer']));
@@ -65,14 +69,24 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
       if (isDebug && formatValue) inspector('getterValuesFromKepServer.formatValue:', formatValue);
       // Get dateTime
       dateTime = formatValue.serverTimestamp;
-      // dateTime = moment.utc(dateTime).format('YYYY-MM-DDTHH:mm:ss');
-      dateTime = moment(dateTime).format('YYYY-MM-DDTHH:mm:ss');
+      if(getterType === 'daily') {
+        dateTime = moment(dateTime).format('YYYY-MM-DD');
+      } else {
+        dateTime = moment(dateTime).format('YYYY-MM-DDTHH:mm:ss');
+      }
+      
       dataItems['!value'] = { dateTime };
       if (isDebug && dateTime) console.log('getterValuesFromKepServer.dateTime: ', dateTime);
       dataItems[browseName] = formatValue.value.value;
       if (isDebug && formatValue.statusCode.name !== 'Good') logger.info(`For browseName: "${chalk.yellowBright(browseName)}" statusCode = "${chalk.redBright(formatValue.statusCode.name)}", value = ${formatValue.value.value}`);
     }
     if (isDebug && dataItems) inspector('getterValuesFromKepServer.dataItems:', dataItems);
+
+    if(getterType === 'daily') {
+      dateTime = dataItems['!value']['dateTime'];
+      if(dateTime === prevDailyData) return;
+      prevDailyData = dateTime;
+    } 
 
     // Set value for owner group
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
