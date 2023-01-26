@@ -49,6 +49,10 @@
       "type": "variable.simple",
       "dataType": "String",
       "hist": 1,
+      "store": {
+        "numberOfValuesInDoc": [1, "years"],
+        "numberOfDocsForTag": [5, "years"]
+      },
       "group": true,
       "variableGetType": "valueFromSource",
       "getter": "getterValuesFromKepServer",
@@ -58,7 +62,11 @@
       },
       "subscription": "onChangedKepValue",
       "subscribeParams": {
-        "subscribeFuncs": ["saveOpcuaGroupValueToDB", "saveOpcuaGroupValueToMsSqlDB"],
+        "subscribeFuncs": [
+          "saveOpcuaGroupValueToDB", 
+          "saveStoreOpcuaGroupValueToDB",
+          "saveOpcuaGroupValueToMsSqlDB"
+        ],
         "dbEnv": "MSSQL_ASODU_TEST",
         "queryFunc": "insertValuesToChAsoduDB",
         "queryParams": {
