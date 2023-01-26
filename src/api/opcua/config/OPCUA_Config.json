@@ -195,7 +195,7 @@
     "opcuaSaveModeToDB": "localUpdate",
     "opcuaRemoteDbUrl": "http://OGMT-TSD:3131",
     "opcuaBootstrapParams": {
-      "clearHistoryAtStartup": true,
+      "clearHistoryAtStartup": false,
       "mssqlDataBases": ["MSSQL_ASODU_TEST"]
     },
     "security": {
