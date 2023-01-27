@@ -92,7 +92,7 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
       const currentDataItemsHash = objectHash(loOmit(dataItems, omits));
       // if ((dateTime === prevDailyData) && (prevDataItemsHash === currentDataItemsHash)) return;
 
-      if(true && dataItems) inspector('getterValuesFromKepServer.forDailyType:', {
+      if (true && dataItems) inspector('getterValuesFromKepServer.forDailyType:', {
         dateTime,
         prevDailyData,
         currentDataItemsHash,
@@ -121,7 +121,7 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
       }
       await getValuesFromKepServer(clientId, groupTagNodeIds);
     } catch (error) {
-      logger.error('getterValuesFromKepServer.Error:', error.message);
+      logger.error(`getterValuesFromKepServer.Error: ${error.message}`);
     }
   }, params.interval);
 
