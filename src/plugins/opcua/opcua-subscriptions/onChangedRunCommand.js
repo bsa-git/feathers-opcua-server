@@ -83,12 +83,7 @@ async function onChangedRunCommand(params, dataValue) {
       
       // Show info
       showInfoForHandler(params, dataValue);
-      // endTime and timeDuration
-      const endTime = moment.utc().format();
-      const timeDuration = getTimeDuration(startTime, endTime);
-      if (isDebug && endTime) console.log('onChangedRunCommand.endTime:', endTime, 'token:', token);
-      if (isDebug && timeDuration) console.log('onChangedRunCommand.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'token:', chalk.cyan(token));
-
+      
       // Drop item from the beginning of array
       queue.dropCurrentItem();
     });

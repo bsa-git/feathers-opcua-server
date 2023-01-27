@@ -52,8 +52,8 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
 
     // Create queue
     if (isQueue) {
-    queue = new Queue(browseName, 'excel-list');
-    await queue.doWhile();
+      queue = new Queue(browseName, 'excel-list');
+      await queue.doWhile();
     }
 
     // Save data to DB
@@ -74,12 +74,6 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
 
       // Show info
       showInfoForGroupHandler(params, dataValue);
-
-      // endTime and timeDuration
-      const endTime = moment.utc().format();
-      const timeDuration = getTimeDuration(startTime, endTime);
-      if (isDebug && endTime) console.log('onChangedGroupHandlerForASM.endTime:', endTime, 'browseName:', browseName);
-      if (isDebug && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
 
       // Drop item from the beginning of array
       if (isQueue) queue.dropCurrentItem();

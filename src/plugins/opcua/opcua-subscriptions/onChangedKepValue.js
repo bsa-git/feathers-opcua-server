@@ -92,10 +92,6 @@ async function onChangedKepValue(params, dataValue) {
       // Show info  
       libs.showInfoForGroupHandler(params, dataValue);
 
-      const endTime = moment.utc().format();
-      const timeDuration = getTimeDuration(startTime, endTime);
-      if (isDebug && timeDuration) console.log('onChangedKepValue.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'token:', chalk.cyan(queue.token));
-
       // Drop item from the beginning of array
       queue.dropCurrentItem();
     });

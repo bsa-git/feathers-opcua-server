@@ -98,7 +98,7 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
         currentDataItemsHash,
         prevDataItemsHash,
         dataItems
-      })
+      });
 
       prevDailyData = dateTime;
       prevDataItemsHash = currentDataItemsHash;
