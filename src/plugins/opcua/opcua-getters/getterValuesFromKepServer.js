@@ -5,7 +5,8 @@ const moment = require('moment');
 const {
   logger,
   inspector,
-  addIntervalId
+  addIntervalId,
+  objectHash
 } = require('../../lib');
 
 const loForEach = require('lodash/forEach');
@@ -25,6 +26,7 @@ const isDebug = false;
 
 let prevDailyData = '';
 // e.g. -> prevDailyData = '2023-01-26';
+let prevDataItemsHash = ''; // e.g. -> '5baf17d1c0d7beac7ceaabf49e67fd577c899e3c'
 
 //=============================================================================
 
@@ -69,12 +71,13 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
       if (isDebug && formatValue) inspector('getterValuesFromKepServer.formatValue:', formatValue);
       // Get dateTime
       dateTime = formatValue.serverTimestamp;
-      if(getterType === 'daily') {
-        dateTime = moment(dateTime).format('YYYY-MM-DD');
+      if (getterType === 'daily') {
+        // dateTime = moment(dateTime).format('YYYY-MM-DD');
+        dateTime = moment(dateTime).format('YYYY-MM-DDTHH:mm:ss');
       } else {
         dateTime = moment(dateTime).format('YYYY-MM-DDTHH:mm:ss');
       }
-      
+
       dataItems['!value'] = { dateTime };
       if (isDebug && dateTime) console.log('getterValuesFromKepServer.dateTime: ', dateTime);
       dataItems[browseName] = formatValue.value.value;
@@ -82,11 +85,24 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
     }
     if (isDebug && dataItems) inspector('getterValuesFromKepServer.dataItems:', dataItems);
 
-    if(getterType === 'daily') {
+    if (getterType === 'daily') {
       dateTime = dataItems['!value']['dateTime'];
-      if(dateTime === prevDailyData) return;
+      // Get current dataItems hash 
+      const omits = ['!value'];
+      const currentDataItemsHash = objectHash(loOmit(dataItems, omits));
+      // if ((dateTime === prevDailyData) && (prevDataItemsHash === currentDataItemsHash)) return;
+
+      if(true && dataItems) inspector('getterValuesFromKepServer.forDailyType:', {
+        dateTime,
+        prevDailyData,
+        currentDataItemsHash,
+        prevDataItemsHash,
+        dataItems
+      })
+
       prevDailyData = dateTime;
-    } 
+      prevDataItemsHash = currentDataItemsHash;
+    }
 
     // Set value for owner group
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });

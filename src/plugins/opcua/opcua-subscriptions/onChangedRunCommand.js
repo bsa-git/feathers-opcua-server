@@ -2,8 +2,6 @@
 const moment = require('moment');
 const chalk = require('chalk');
 const loOmit = require('lodash/omit');
-const loHead = require('lodash/head');
-const loDrop = require('lodash/drop');
 
 const {
   AttributeIds,
@@ -11,16 +9,11 @@ const {
 } = require('node-opcua');
 
 const {
-  logger,
   inspector,
-  pause,
   getTimeDuration,
-  getShortToken
+  getShortToken,
+  Queue
 } = require('../../lib');
-
-const {
-  AuthServer
-} = require('../../auth');
 
 const {
   showInfoForHandler,
@@ -29,14 +22,10 @@ const {
 } = require('./lib');
 
 const {
-  checkTokenQueueOfSubscribe,
   formatSimpleDataValue
 } = require('../opcua-helper');
 
 const isDebug = false;
-
-// Queue of subscribe
-let queueOfSubscribe = [];
 
 /**
  * @method onChangedRunCommand
@@ -46,7 +35,7 @@ let queueOfSubscribe = [];
  * @returns {void}
  */
 async function onChangedRunCommand(params, dataValue) {
-  let result = false;
+  let queue = null;
   //-----------------------------------------
   try {
 
@@ -73,26 +62,9 @@ async function onChangedRunCommand(params, dataValue) {
     if(statusCode !== 'Good' ||  !value) return;
     if (isDebug && value) inspector('onChangedRunCommand.value:', value);
 
-    // Add subscribe to queue
-    queueOfSubscribe.push({
-      token,
-      browseName,
-      params,
-      dataValue
-    });
-
-    if (isDebug && queueOfSubscribe.length) inspector('onChangedRunCommand.queueOfSubscribe:', queueOfSubscribe.map(s => s.token));
-
-    // WaitTimeout
-    do {
-      result = checkTokenQueueOfSubscribe(queueOfSubscribe, token, false);
-      if (result) await pause(1000, false);
-    } while (result);
-
-    // Get current subscribe
-    const subscribe = loHead(queueOfSubscribe);
-    params = subscribe.params;
-    dataValue = subscribe.dataValue;
+    // Create queue and while
+    queue = new Queue(browseName, 'runCommand-list');
+    await queue.doWhile();
 
     // Run command
     const p1 = runCommand(params, dataValue);
@@ -117,13 +89,13 @@ async function onChangedRunCommand(params, dataValue) {
       if (isDebug && endTime) console.log('onChangedRunCommand.endTime:', endTime, 'token:', token);
       if (isDebug && timeDuration) console.log('onChangedRunCommand.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'token:', chalk.cyan(token));
 
-      // Drop element from the beginning of array
-      queueOfSubscribe = loDrop(queueOfSubscribe);
+      // Drop item from the beginning of array
+      queue.dropCurrentItem();
     });
   } catch (error) {
-    // Drop element from the beginning of array
-    queueOfSubscribe = loDrop(queueOfSubscribe);
-    logger.error('onChangedRunCommand.Error:', error.message);
+    // Drop item from the beginning of array
+    if(queue) queue.dropCurrentItem();
+    inspector(chalk.red('onChangedKepValue.Error:'), error);
   }
 }
 

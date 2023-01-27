@@ -3,20 +3,13 @@ const moment = require('moment');
 const chalk = require('chalk');
 
 const loOmit = require('lodash/omit');
-const loHead = require('lodash/head');
-const loDrop = require('lodash/drop');
 
 const {
-  logger,
   inspector,
   getTimeDuration,
-  pause,
-  sysMemUsage
+  sysMemUsage,
+  Queue
 } = require('../../lib');
-
-const {
-  checkQueueOfSubscribe
-} = require('../opcua-helper');
 
 const {
   showInfoForGroupHandler,
@@ -28,10 +21,6 @@ const ch_m5UpdateAcmYearReport = require('./lib/commands/ch_m5UpdateAcmYearRepor
 
 const isDebug = false;
 
-// Queue of subscribe
-let queueOfSubscribe = [];
-
-
 /**
  * @method onChangedGroupHandlerForASM
  * 
@@ -40,7 +29,7 @@ let queueOfSubscribe = [];
  * @returns {void}
  */
 async function onChangedGroupHandlerForASM(params, dataValue) {
-  let result = false, isQueue = false;
+  let result = false, isQueue = false, queue = null;
   //---------------------------------------------------------
   try {
 
@@ -61,30 +50,11 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     // Only for group values
     if (!addressSpaceOption.group) return;
 
-    // Add subscribe to queue
-    if (isQueue) queueOfSubscribe.push({
-      browseName,
-      params,
-      dataValue
-    });
-
-
-    if (isDebug && queueOfSubscribe.length)
-      inspector('onChangedGroupHandlerForASM.queueOfSubscribe:', queueOfSubscribe.map(s => s.browseName));
-
-    // WaitTimeout
-    if (isQueue) do {
-      result = checkQueueOfSubscribe(queueOfSubscribe, browseName, false);
-      if (result) await pause(1000, false);
-    } while (result);
-
-    // Get current subscribe
+    // Create queue
     if (isQueue) {
-      const subscribe = loHead(queueOfSubscribe);
-      params = subscribe.params;
-      dataValue = subscribe.dataValue;
+    queue = new Queue(browseName, 'excel-list');
+    await queue.doWhile();
     }
-
 
     // Save data to DB
     const p1 = saveOpcuaGroupValueToDB(params, dataValue);
@@ -111,14 +81,14 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
       if (isDebug && endTime) console.log('onChangedGroupHandlerForASM.endTime:', endTime, 'browseName:', browseName);
       if (isDebug && timeDuration) console.log('onChangedGroupHandlerForASM.timeDuration:', chalk.cyan(`${timeDuration}(ms)`), 'browseName:', chalk.cyan(browseName));
 
-      // Drop element from the beginning of array
-      if (isQueue) queueOfSubscribe = loDrop(queueOfSubscribe);
+      // Drop item from the beginning of array
+      if (isQueue) queue.dropCurrentItem();
     });
   } catch (error) {
     console.log(error.message);
-    // Drop element from the beginning of array
-    if (isQueue) queueOfSubscribe = loDrop(queueOfSubscribe);
-    logger.error('onChangedGroupHandlerForASM.Error:', error.message);
+    // Drop item from the beginning of array
+    if(isQueue && queue) queue.dropCurrentItem();
+    inspector(chalk.red('onChangedGroupHandlerForASM.Error:'), error);
   }
 }
 
