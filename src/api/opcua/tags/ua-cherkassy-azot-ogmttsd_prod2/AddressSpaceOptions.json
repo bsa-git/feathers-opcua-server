@@ -59,7 +59,7 @@
       "getterParams": {
         "clientId": "ua-cherkassy-azot-ogmttsd_prod3",
         "type": "daily",
-        "interval": 3600000
+        "interval": 60000
       },
       "subscription": "onChangedKepValue",
       "subscribeParams": {
