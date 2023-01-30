@@ -72,8 +72,8 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
       // Get dateTime
       dateTime = formatValue.serverTimestamp;
       if (getterType === 'daily') {
-        // dateTime = moment(dateTime).format('YYYY-MM-DD');
-        dateTime = moment(dateTime).format('YYYY-MM-DDTHH:mm:ss');
+        dateTime = moment(dateTime).format('YYYY-MM-DD');
+        // dateTime = moment(dateTime).format('YYYY-MM-DDTHH:mm:ss');
       } else {
         dateTime = moment(dateTime).format('YYYY-MM-DDTHH:mm:ss');
       }
@@ -90,9 +90,9 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
       // Get current dataItems hash 
       const omits = ['!value'];
       const currentDataItemsHash = objectHash(loOmit(dataItems, omits));
-      // if ((dateTime === prevDailyData) && (prevDataItemsHash === currentDataItemsHash)) return;
+      if ((dateTime === prevDailyData) && (prevDataItemsHash === currentDataItemsHash)) return;
 
-      if (true && dataItems) inspector('getterValuesFromKepServer.forDailyType:', {
+      if (isDebug && dataItems) inspector('getterValuesFromKepServer.forDailyType:', {
         dateTime,
         prevDailyData,
         currentDataItemsHash,
