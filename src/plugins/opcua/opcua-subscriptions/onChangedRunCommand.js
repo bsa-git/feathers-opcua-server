@@ -10,7 +10,7 @@ const {
 
 const {
   inspector,
-  getTimeDuration,
+  logger,
   getShortToken,
   Queue
 } = require('../../lib');
@@ -90,7 +90,7 @@ async function onChangedRunCommand(params, dataValue) {
   } catch (error) {
     // Drop item from the beginning of array
     if(queue) queue.dropCurrentItem();
-    inspector(chalk.red('onChangedKepValue.Error:'), error);
+    logger.error(`onChangedKepValue.Error: "${error.message}"`);
   }
 }
 

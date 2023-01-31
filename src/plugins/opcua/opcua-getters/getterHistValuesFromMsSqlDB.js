@@ -76,7 +76,7 @@ function getterHistValuesFromMsSqlDB(params = {}, addedValue) {
     } catch (error) {
       // Drop item from the beginning of array
       if (queue) queue.dropCurrentItem();
-      inspector(chalk.red(`getterHistValuesFromMsSqlDB.Error (${getDateTime('', false)}):`), error);
+      logger.error(`getterHistValuesFromMsSqlDB.Error (${getDateTime('', false)}), message: "${error.message}"`);
     }
   }, params.interval);
 
