@@ -6,7 +6,7 @@ const loOmit = require('lodash/omit');
 const {
   inspector,
   logger,
-  getTimeDuration,
+  getDateTime,
   isFunction,
   Queue
 } = require('../../lib');
@@ -98,7 +98,8 @@ async function onChangedKepValue(params, dataValue) {
   } catch (error) {
     // Drop item from the beginning of array
     if(queue) queue.dropCurrentItem();
-    logger.error(`onChangedKepValue.Error: "${error.message}"`);
+    const errorMessage = error.message? error.message : error;
+    logger.error(`onChangedKepValue.Error (${getDateTime('', false)}): "${errorMessage}"`);
   }
 }
 

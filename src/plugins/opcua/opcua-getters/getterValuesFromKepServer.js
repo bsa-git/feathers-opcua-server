@@ -6,6 +6,7 @@ const {
   logger,
   inspector,
   addIntervalId,
+  getDateTime,
   objectHash
 } = require('../../lib');
 
@@ -121,7 +122,8 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
       }
       await getValuesFromKepServer(clientId, groupTagNodeIds);
     } catch (error) {
-      logger.error(`getterValuesFromKepServer.Error: ${error.message}`);
+      const errorMessage = error.message? error.message : error;
+      logger.error(`getterValuesFromKepServer.Error (${getDateTime('', false)}): ${errorMessage}`);
     }
   }, params.interval);
 

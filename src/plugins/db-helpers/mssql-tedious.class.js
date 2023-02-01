@@ -291,8 +291,8 @@ class MssqlTedious {
       connection.on('connect', function (err) {
         // err - If successfully connected, will be falsey. If there was a problem (with either connecting or validation), will be an error object.
         if (err) {
-          // console.log('connection.on("connect") -> Error:', err.message);
-          console.error('connection.on("connect") -> Error:', err);
+          const errorMessage = err.message? err.message : err;
+          console.error('connection.on("connect") -> Error:', errorMessage);
           self.connection = null;
           reject(err.message);
         } else {

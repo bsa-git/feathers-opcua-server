@@ -7,7 +7,7 @@ const loOmit = require('lodash/omit');
 const {
   inspector,
   logger,
-  getTimeDuration,
+  getDateTime,
   sysMemUsage,
   Queue
 } = require('../../lib');
@@ -83,7 +83,8 @@ async function onChangedGroupHandlerForASM(params, dataValue) {
     console.log(error.message);
     // Drop item from the beginning of array
     if(isQueue && queue) queue.dropCurrentItem();
-    logger.error(`onChangedGroupHandlerForASM.Error: "${error.message}`);
+    const errorMessage = error.message? error.message : error;
+    logger.error(`onChangedGroupHandlerForASM.Error (${getDateTime('', false)}): "${errorMessage}`);
   }
 }
 

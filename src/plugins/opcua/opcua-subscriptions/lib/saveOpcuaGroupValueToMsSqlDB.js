@@ -92,9 +92,9 @@ async function saveOpcuaGroupValueToMsSqlDB(params, dataValue) {
     // mssqlDB disconnect
     if (mssqlDB.connection) await mssqlDB.disconnect();
   } catch (error) {
-    logger.error(`saveOpcuaGroupValueToMsSqlDB.Error (${getDateTime('', false)}), message: "${error.message}"`);
+    const errorMessage = error.message? error.message : error;
+    logger.error(`saveOpcuaGroupValueToMsSqlDB.Error (${getDateTime('', false)}), message: "${errorMessage}"`);
   }
-
   return savedValue;
 }
 

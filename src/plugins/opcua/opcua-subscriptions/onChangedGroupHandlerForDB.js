@@ -4,6 +4,7 @@ const logger = require('../../../logger');
 
 const {
   inspector,
+  getDateTime
 } = require('../../lib'); 
 
 const {
@@ -44,9 +45,9 @@ async function onChangedGroupHandlerForDB(params, dataValue) {
       if (isDebug && results.length) inspector('sessionReadHistoryValues.readResult:', results[1]);
       showInfoForGroupHandler(params, dataValue);
     });     
-
   } catch (error) {
-    logger.error(`onChangedGroupHandlerForDB.Error: ${error.message}`);
+    const errorMessage = error.message? error.message : error;
+    logger.error(`onChangedGroupHandlerForDB.Error (${getDateTime('', false)}): ${errorMessage}`);
   }
   
   

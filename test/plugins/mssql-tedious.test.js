@@ -498,7 +498,8 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
         queue.dropCurrentItem();
         if (isDebug && result) console.log('TimeDuration1_2:', queue.getTimeDuration());
       } catch (error) {
-        logger.error(`Insert data to table with queue.Error: "${error}"`);
+        const errorMessage = error.message? error.message : error;
+        logger.error(`Insert data to table with queue.Error: "${errorMessage}"`);
       }
     }, 2000);
 
@@ -513,7 +514,8 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
         queue.dropCurrentItem();
         if (isDebug && result) console.log('TimeDuration2_2:', queue.getTimeDuration());
       } catch (error) {
-        logger.error(`Insert data to table with queue.Error: "${error}"`);
+        const errorMessage = error.message? error.message : error;
+        logger.error(`Insert data to table with queue.Error: "${errorMessage}"`);
       }
     }, 2000);
 
