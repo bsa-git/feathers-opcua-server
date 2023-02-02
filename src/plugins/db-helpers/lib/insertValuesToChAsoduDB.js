@@ -40,7 +40,6 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
   let rowSnapShot = {}, rowsSnapShot = [];
   const tableName = queryParams.tableName; // 'SnapShotTest', 'SnapShot'
   const scanerName = queryParams.scanerName;
-  const tagGroup = queryParams.tagGroup;
   const dateTime = queryParams.dateTime;
   const opcuaValues = queryParams.opcuaValues;
   //--------------------------------------
@@ -56,13 +55,11 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
     SELECT tInfo.ID, tInfo.TagName, tInfo.ScaleMin, tInfo.ScaleMax
     FROM dbConfig.dbo.TagsInfo AS tInfo
     WHERE tInfo.ScanerName = @scanerName AND 
-          tInfo.TagGroup = @tagGroup AND
           tInfo.OnOff=1
     ORDER BY ID
     `;
 
     db.buildParams(params, 'scanerName', TYPES.Char, scanerName);
-    db.buildParams(params, 'tagGroup', TYPES.Char, tagGroup);
 
     result = await db.query(params, sql);
     rows = result.rows;
@@ -76,7 +73,6 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
         const dt = moment(dateTime);
         rowSnapShot['TagID'] = row.ID;
         rowSnapShot['ScanerName'] = scanerName;
-        rowSnapShot['TagGroup'] = tagGroup;
         rowSnapShot['Time'] = dt.format('YYYY-MM-DDTHH:mm:ss');
         rowSnapShot['dtYear'] = dt.year();
         rowSnapShot['dtDofY'] = dt.dayOfYear();
@@ -96,15 +92,13 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
     // Remove rows from dbBSA.dbo.SnapShot
     sql = `
     DELETE sh FROM dbBSA.dbo.${tableName} AS sh
-    WHERE (sh.ScanerName = @scanerName) AND (sh.TagGroup = @tagGroup OR sh.TagGroup IS NULL)
+    WHERE (sh.ScanerName = @scanerName)
     `;
     params = [];
     db.buildParams(params, 'scanerName', TYPES.VarChar, scanerName);
-    db.buildParams(params, 'tagGroup', TYPES.VarChar, tagGroup);
 
     result = await db.query(params, sql);
     if (isDebug && result) inspector('Delete rows from dbBSA.dbo.SnapShot:', result.rowCount);
-
 
     // Insert row to dbBSA.dbo.SnapShot
     for (let index = 0; index < rowsSnapShot.length; index++) {
@@ -113,8 +107,8 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
       if (isDebug && _rowSnapShot) inspector('Insert row to dbBSA.dbo.SnapShot._rowSnapShot:', _rowSnapShot);
       sql = `
       INSERT INTO dbBSA.dbo.${tableName} 
-      (TagID, ScanerName, Time, dtYear, dtDofY, dtTotalS, Value, TagGroup)
-      VALUES (@tagID, @scanerName, '${_rowSnapShot['Time']}', @dtYear, @dtDofY, @dtTotalS, @value, @tagGroup)
+      (TagID, ScanerName, Time, dtYear, dtDofY, dtTotalS, Value)
+      VALUES (@tagID, @scanerName, '${_rowSnapShot['Time']}', @dtYear, @dtDofY, @dtTotalS, @value)
       `;
 
       db.buildParams(params, 'tagID', TYPES.Int, _rowSnapShot['TagID']);
@@ -123,7 +117,6 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
       db.buildParams(params, 'dtDofY', TYPES.SmallInt, _rowSnapShot['dtDofY']);
       db.buildParams(params, 'dtTotalS', TYPES.Int, _rowSnapShot['dtTotalS']);
       db.buildParams(params, 'value', TYPES.Real, _rowSnapShot['Value']);
-      db.buildParams(params, 'tagGroup', TYPES.VarChar, _rowSnapShot['TagGroup']);
       // Run query
       result = await db.query(params, sql);
       if (isDebug && result) inspector('INSERT rows to dbBSA.dbo.SnapShotTest:', result.rowCount);
@@ -132,12 +125,11 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
     sql = `
     SELECT *
     FROM dbBSA.dbo.${tableName} AS sh
-    WHERE (sh.ScanerName = @scanerName) AND (sh.TagGroup = @tagGroup OR sh.TagGroup IS NULL)
+    WHERE (sh.ScanerName = @scanerName)
     `;
 
     params = [];
     db.buildParams(params, 'scanerName', TYPES.VarChar, scanerName);
-    db.buildParams(params, 'tagGroup', TYPES.VarChar, tagGroup);
 
     result = await db.query(params, sql);
     rows = result.rows;

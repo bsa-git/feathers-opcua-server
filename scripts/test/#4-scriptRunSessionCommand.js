@@ -131,9 +131,9 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
           /**--- KEPServer_CH-A5-GW00 (XozUchet.SUM) ---*/
           'ns=2;s=A5.Device1.F59AM_SUM_PV',
           'ns=2;s=A5.Device1.F46A_SUM_PV',
+          // 'ns=2;s=A5.Device1.F191AM__SUM_PV',
           
           /**--- KEPServer_CH-A5-GW00 (XozUchet) ---*/
-          ///** 
           'ns=2;s=A5.Device1.F59AM_PV',// Нормализованный природный газ (тыс.м3/ч)
           'ns=2;s=A5.Device1.F46A_PV',// Жидкий NH3 в хранилище (тонн/ч)
           'ns=2;s=A5.Device1.F191AM_PV',// Массовый Г.О. NH3 (тонн/ч)
@@ -156,7 +156,6 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
           'ns=2;s=A5.Device1.F90_PV',// Расход воды на К.701 (м3/ч)
           'ns=2;s=A5.Device1.F98_PV',// Расход воды на К.701 (м3/ч)
           'ns=2;s=A5.Device1.F93_PV',// Расход воды в цех (м3/ч)
-          //*/
         ];
         options.sessReadOpts.nodesToRead = nodesToRead;
         callback = async function (session, params) {

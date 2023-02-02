@@ -35,8 +35,7 @@
         "dbEnv": "MSSQL_ASODU_TEST",
         "queryFunc": "insertValuesToChAsoduDB",
         "queryParams": {
-          "scanerName": "opcUA(A5)",
-          "tagGroup": "XozUchet",
+          "scanerName": "XozUchet(A5)",
           "tableName": "SnapShotTest"
         }
       }
@@ -63,8 +62,7 @@
         "dbEnv": "MSSQL_ASODU_TEST",
         "queryFunc": "insertValuesToChAsoduDB",
         "queryParams": {
-          "scanerName": "opcUA(A5)",
-          "tagGroup": "XozUchet_Daily",
+          "scanerName": "XozUchetDay(A5)",
           "tableName": "SnapShotTest"
         }
       }
