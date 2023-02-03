@@ -54,8 +54,10 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
     sql = `
     SELECT tInfo.ID, tInfo.TagName, tInfo.ScaleMin, tInfo.ScaleMax
     FROM dbConfig.dbo.TagsInfo AS tInfo
+    JOIN dbConfig.dbo.Scaners AS tScan ON (tScan.Name = tInfo.ScanerName)
     WHERE tInfo.ScanerName = @scanerName AND 
-          tInfo.OnOff=1
+          tInfo.OnOff = 1 AND 
+          tScan.SS = 1
     ORDER BY ID
     `;
 
@@ -84,6 +86,7 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
     }
     if (isDebug && rowsSnapShot.length) inspector('Get tags from TagsInfo.rowsSnapShot:', rowsSnapShot);
 
+    // Exit, else rowsSnapShot is empty
     if(!rowsSnapShot.length) return { rows: [], rowCount: 0 };
 
     //--- Begin transaction ---
@@ -144,13 +147,10 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
     //--- Commit transaction ---
     await db.commitTransaction();
 
-    // await db.disconnect();
-
     return { rows, rowCount: result.rowCount };
-
   } catch (error) {
     //--- Rollback transaction ---
-    await db.rollbackTransaction(error.message);
+    if(db.connection) await db.rollbackTransaction(error.message);
     throw error;
   }
 };

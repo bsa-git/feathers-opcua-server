@@ -352,13 +352,12 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
 
       //--- Commit transaction ---
       await db.commitTransaction();
-
       await db.disconnect();
 
       assert.ok(rows.length, 'Insert values to SnapShot table for "opcUA(A5)" and "XozUchet"');
     } catch (error) {
       //--- Rollback transaction ---
-      await db.rollbackTransaction(error.message);
+      if(db.connection) await db.rollbackTransaction(error.message);
       assert.ok(false, 'Insert values to SnapShot table for "opcUA(A5)" and "XozUchet"');
     }
   });
@@ -366,6 +365,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
 
   it('#9: Insert values with params to SnapShotTest table for "XozUchetDay(A5)"', async () => {
     let db, sql = '', result, rows, rowSnapShot = {}, rowsSnapShot = [];
+    let params, tScanSS = false;
     const scanerName = 'XozUchetDay(A5)';// 'XozUchet(A5)';
     //---------------------------------------------
 
@@ -376,14 +376,38 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
       //--- Begin transaction ---
       await db.beginTransaction();
 
-      // Select rows from SnapShot table
-      let params = [];
+      // Get dbConfig.dbo.Scaners.SS from Scaners table
+      params = [];
       sql = `
-      SELECT tInfo.ID, tInfo.ScaleMin, tInfo.ScaleMax
-      FROM dbConfig.dbo.TagsInfo AS tInfo
-      WHERE tInfo.ScanerName = @scanerName
-      ORDER BY ID
+      SELECT tScan.SS
+      FROM dbConfig.dbo.Scaners AS tScan
+      WHERE tScan.Name = @scanerName
       `;
+      db.buildParams(params, 'scanerName', TYPES.Char, scanerName);
+
+      result = await db.query(params, sql);
+      rows = result.rows;
+      if(rows.length) tScanSS = rows[0]['SS'];
+      if (isDebug && rows) logger.info('Get dbConfig.dbo.Scaners.SS: %d', tScanSS);
+
+      // Select rows from SnapShot table
+      params = [];
+      if(tScanSS){
+        sql = `
+        SELECT tInfo.ID, tInfo.ScaleMin, tInfo.ScaleMax
+        FROM dbConfig.dbo.TagsInfo AS tInfo
+        JOIN dbConfig.dbo.Scaners AS tScan ON (tScan.Name = tInfo.ScanerName)
+        WHERE tInfo.ScanerName = @scanerName AND tInfo.OnOff = 1 AND tScan.SS = 1
+        ORDER BY ID
+        `;
+      } else {
+        sql = `
+        SELECT tInfo.ID, tInfo.ScaleMin, tInfo.ScaleMax
+        FROM dbConfig.dbo.TagsInfo AS tInfo
+        WHERE tInfo.ScanerName = @scanerName AND tInfo.OnOff = 1
+        ORDER BY ID
+        `;
+      }
 
       db.buildParams(params, 'scanerName', TYPES.Char, scanerName);
 
@@ -457,13 +481,12 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
 
       //--- Commit transaction ---
       await db.commitTransaction();
-
       await db.disconnect();
 
-      assert.ok(rows.length, 'Insert values to SnapShot table for "XozUchetDay(A5)"');
+      assert.ok(rows.length, 'Values don`t insert to SnapShot table for "XozUchetDay(A5)"');
     } catch (error) {
       //--- Rollback transaction ---
-      await db.rollbackTransaction(error.message);
+      if(db.connection) await db.rollbackTransaction(error.message);
       assert.ok(false, 'Insert values to SnapShot table for "XozUchetDay(A5)"');
     }
   });
