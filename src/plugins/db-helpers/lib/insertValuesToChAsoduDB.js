@@ -42,6 +42,8 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
   const scanerName = queryParams.scanerName;
   const dateTime = queryParams.dateTime;
   const opcuaValues = queryParams.opcuaValues;
+
+  logger.info('insertValuesToChAsoduDB.dateTime: %s', dateTime);
   //--------------------------------------
   try {
     // Connect DB
@@ -72,7 +74,8 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
       const row = rows[index];
       const tagOpcuaValue = opcuaValues.find(opcuaValue => opcuaValue[row.TagName] !== undefined);
       if (tagOpcuaValue) {
-        const dt = moment(dateTime);
+        const isFullDateTime = dateTime.split('T').length > 1;
+        const dt = isFullDateTime ?  moment(dateTime) : moment();
         rowSnapShot['TagID'] = row.ID;
         rowSnapShot['ScanerName'] = scanerName;
         rowSnapShot['Time'] = dt.format('YYYY-MM-DDTHH:mm:ss');
