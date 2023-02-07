@@ -109,6 +109,7 @@
     "socket.io-client": "^2.4.0",
     "tedious": "14.7.0",
     "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^4.7.1",
     "xlsx": "^0.17.5",
     "yargs": "^17.3.1"
   },

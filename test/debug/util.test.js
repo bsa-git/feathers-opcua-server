@@ -5,6 +5,7 @@ const moment = require('moment');
 
 const {
   inspector,
+  logger,
   getStartOfPeriod,
   getEndOfPeriod,
   getStartEndOfPeriod,
@@ -251,5 +252,13 @@ describe('<<=== Util: (util.test) ===>>', () => {
     const token = getShortToken(8, false);
     if (true && token) debug('getShortToken.token:', token);
     assert.ok(token, 'util.getLongToken(8, false)');
+  });
+
+  it('#20: util.logger.timestamp', () => {
+    logger.error('Error message');
+    logger.warn('Warn message');
+    logger.info('Info message');
+    logger.debug('Debugging message');
+    assert.ok(true, 'util.logger.timestamp');
   });
 });
