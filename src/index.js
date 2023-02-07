@@ -3,9 +3,7 @@ const logger = require('./logger');
 const chalk = require('chalk');
 const app = require('./app');
 const seedData = require('./seed-data');
-const {
-  getDateTime,
-} = require('./plugins');
+
 const {
   opcuaBootstrap,
 } = require('./plugins/opcua');
@@ -13,14 +11,14 @@ const {
 const port = app.get('port');
 const server = app.listen(port);
 process.on('unhandledRejection', (reason, p) => {
-  logger.error('Unhandled Rejection at: Promise ', p, reason);
+  logger.error('Unhandled Rejection at: Promise %s, %s', reason, p);
   console.log(chalk.red(reason), p);
 });
 
 server.on('listening', async () => {
   console.log('======================================================================================');
-  logger.info(`Feathers application started at (${getDateTime('', false)}) on http://%s:%d`, app.get('host'), port);
-  logger.info('Feathers application started on env="%s"', app.get('env'));
+  logger.info('Feathers application started at on http://%s:%d', app.get('host'), port);
+  logger.info('Feathers application started on env=%s', app.get('env'));
 
   // Start seed data
   await seedData(app);

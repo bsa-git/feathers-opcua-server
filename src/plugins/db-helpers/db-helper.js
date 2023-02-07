@@ -1490,7 +1490,7 @@ const initRemoteDB = async function (app, dbUrl, opcuaTags, isClearHistoryAtStar
   if (appRestClient) {
     // Save opcua tags to remote DB
     const saveResult = await saveOpcuaTags(appRestClient, opcuaTags, true);
-    logger.info('opcuaBootstrap.saveOpcuaTags.remoteDB: OK.', saveResult);
+    logger.info('opcuaBootstrap.saveOpcuaTags.remoteDB: OK. %s', saveResult);
     // Integrity check opcua data
     const integrityResult = await integrityCheckOpcua(appRestClient, true);
     if (integrityResult) {

@@ -12,7 +12,6 @@ const {
   inspector,
   logger,
   getShortToken,
-  getDateTime,
   Queue
 } = require('../../lib');
 
@@ -92,7 +91,7 @@ async function onChangedRunCommand(params, dataValue) {
     // Drop item from the beginning of array
     if(queue) queue.dropCurrentItem();
     const errorMessage = error.message? error.message : error;
-    logger.error(`onChangedKepValue.Error (${getDateTime('', false)}): "${errorMessage}"`);
+    logger.error(`onChangedKepValue.Error: "${errorMessage}"`);
   }
 }
 

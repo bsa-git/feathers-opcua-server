@@ -292,12 +292,12 @@ class MssqlTedious {
         // err - If successfully connected, will be falsey. If there was a problem (with either connecting or validation), will be an error object.
         if (err) {
           const errorMessage = err.message? err.message : err;
-          console.error('connection.on("connect") -> Error:', errorMessage);
+          logger.error('connection.on("connect") -> Error: %s', errorMessage);
           self.connection = null;
           reject(err.message);
         } else {
           // If no error, then good to go...
-          if (isDebug) console.log(`Connection to "${self.id}" OK`);
+          if (isDebug, self.id) console.log(`Connection to "${self.id}" OK`);
           // Set current state
           self.currentState.connError = '';
           self.currentState.isConnected = true;
@@ -310,7 +310,7 @@ class MssqlTedious {
       // Internal error occurs
       connection.on('error', function (err) {
         if (err) {
-          console.log('Error: ', err);
+          logger.error('Error: %s', err);
           // Set current state
           self.currentState.connError = err.message;
           reject(err.message);
@@ -366,7 +366,7 @@ class MssqlTedious {
       assert(self.connection, 'No connection for MssqlTedious.');
       self.connection.reset(function (err) {
         if (err) {
-          console.log('ConnReset.error: ', err);
+          logger.error('ConnReset.error: %s', err);
           // Set current state
           self.currentState.connError = err.message;
           reject('ConnReset ERR');
@@ -391,6 +391,7 @@ class MssqlTedious {
       self.connection.beginTransaction((err) => {
         if (err) {
           // If error in begin transaction, roll back!
+          logger.error(`Begin transaction err: ${err}`);
           reject(err);
         } else {
           self.isBeginTransaction = true;
@@ -501,7 +502,7 @@ class MssqlTedious {
     return new Promise((resolve, reject) => {
       const request = new Request(sql, (err, rowCount) => {
         if (err) {
-          console.log('Request.error: ', err);
+          logger.error('Request.error: %s', err);
           // Set current state
           self.currentState.requestError = err.message;
           reject(err.message);
@@ -584,7 +585,7 @@ class MssqlTedious {
     return new Promise((resolve, reject) => {
       const request = new Request(sql, (err, rowCount) => {
         if (err) {
-          console.log('Request.error: ', err);
+          logger.error('Request.error: %s', err);
           // Set current state
           self.currentState.requestError = err.message;
           reject(err.message);

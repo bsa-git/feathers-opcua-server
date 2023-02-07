@@ -4,7 +4,6 @@ const logger = require('../../../logger');
 
 const {
   inspector,
-  getDateTime
 } = require('../../lib'); 
 
 const {
@@ -47,7 +46,7 @@ async function onChangedGroupHandlerForDB(params, dataValue) {
     });     
   } catch (error) {
     const errorMessage = error.message? error.message : error;
-    logger.error(`onChangedGroupHandlerForDB.Error (${getDateTime('', false)}): ${errorMessage}`);
+    logger.error(`onChangedGroupHandlerForDB.Error: ${errorMessage}`);
   }
   
   

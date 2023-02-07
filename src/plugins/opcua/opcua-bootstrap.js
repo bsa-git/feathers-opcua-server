@@ -80,7 +80,7 @@ module.exports = async function opcuaBootstrap(app) {
 
     // Save opcua tags to local DB
     let saveResult = await saveOpcuaTags(app, opcuaTags, false);
-    logger.info('opcuaBootstrap.saveOpcuaTags.localDB: OK.', saveResult);
+    logger.info('opcuaBootstrap.saveOpcuaTags.localDB: OK. %s', saveResult);
     // Integrity check opcua data
     integrityResult = await integrityCheckOpcua(app, false);
     if (integrityResult) {
