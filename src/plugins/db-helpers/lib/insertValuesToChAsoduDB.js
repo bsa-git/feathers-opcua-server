@@ -42,8 +42,6 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
   const scanerName = queryParams.scanerName;
   const dateTime = queryParams.dateTime;
   const opcuaValues = queryParams.opcuaValues;
-
-  logger.info('insertValuesToChAsoduDB.dateTime: %s', dateTime);
   //--------------------------------------
   try {
     // Connect DB
