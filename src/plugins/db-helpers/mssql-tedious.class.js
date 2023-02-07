@@ -297,7 +297,7 @@ class MssqlTedious {
           reject(err.message);
         } else {
           // If no error, then good to go...
-          if (isDebug, self.id) console.log(`Connection to "${self.id}" OK`);
+          if (isDebug && self.id) console.log(`Connection to "${self.id}" OK`);
           // Set current state
           self.currentState.connError = '';
           self.currentState.isConnected = true;
@@ -372,7 +372,7 @@ class MssqlTedious {
           reject('ConnReset ERR');
           return;
         }
-        console.log('ConnReset OK');
+        if (isDebug && self.id) console.log('ConnReset OK');
         // Set current state
         self.currentState.isConnReset = true;
         resolve('ConnReset OK');

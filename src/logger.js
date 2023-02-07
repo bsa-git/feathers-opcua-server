@@ -20,7 +20,7 @@ if (!fs.existsSync(logDir)) {
 
 const transport1 = new transports.DailyRotateFile({
   filename: path.join(logDir, 'app-%DATE%.log'),
-  datePattern: 'YYYY-MM-DD-HH',
+  datePattern: 'YYYY-MM-DD',
   zippedArchive: true,
   maxSize: '20m',
   maxFiles: '14d'
@@ -29,7 +29,7 @@ const transport1 = new transports.DailyRotateFile({
 const transport2 = new transports.DailyRotateFile({
   level: 'error',
   filename: path.join(logDir, 'app-error-%DATE%.log'),
-  datePattern: 'YYYY-MM-DD-HH',
+  datePattern: 'YYYY-MM-DD',
   zippedArchive: true,
   maxSize: '20m',
   maxFiles: '14d',
