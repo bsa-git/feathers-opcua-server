@@ -134,43 +134,43 @@ describe(`<<=== ScriptOperations: (${numberScript}-scriptRunSessionOperation) ==
           // 'ns=2;s=A5.Device1.F191AM__SUM_PV',
           
           /**--- KEPServer_CH-A5-GW00 (XozUchet) ---*/
-          'ns=2;s=A5.Device1.F191_PV',// (нм3/ч)
+          'ns=2;s=A5.Device1.F191_PV',
           'ns=2;s=A5.Device1.P190_PV',
           'ns=2;s=A5.Device2.T190_PV',
-          'ns=2;s=A5.Device1.F21_2_PV',// (тонн/ч)
+          'ns=2;s=A5.Device1.F21_2_PV',
           'ns=2;s=A5.Device1.P21_1_PV',
           'ns=2;s=A5.Device2.T2A_PV',
-          'ns=2;s=A5.Device1.F400_PV',// (нм3/ч)
+          'ns=2;s=A5.Device1.F400_PV',
           'ns=2;s=A5.Device2.P400_PV',
           'ns=2;s=A5.Device2.T400_PV',
-          'ns=2;s=A5.Device1.F101_PV',// (тонн/ч)
+          'ns=2;s=A5.Device1.F101_PV',
           'ns=2;s=A5.Device1.P101Q_PV',
           'ns=2;s=A5.Device2.T101_PV',
           'ns=2;s=A5.Device2.PBAR_PV',
-          'ns=2;s=A5.Device1.F359_PV',// (м3/ч)
+          'ns=2;s=A5.Device1.F359_PV',
           'ns=2;s=A5.Device2.P359_PV',
           'ns=2;s=A5.Device2.T359_PV',
-          'ns=2;s=A5.Device1.F206_PV',// (тонн/ч)
+          'ns=2;s=A5.Device1.F206_PV',
           'ns=2;s=A5.Device1.P206_PV',
           'ns=2;s=A5.Device2.T206_PV',
-          'ns=2;s=A5.Device1.F738_PV',// (тонн/ч)
+          'ns=2;s=A5.Device1.F738_PV',
           'ns=2;s=A5.Device2.P738_PV',
           'ns=2;s=A5.Device2.T738_PV',
-          'ns=2;s=A5.Device1.F207_PV',// (тонн/ч)
+          'ns=2;s=A5.Device1.F207_PV',
           'ns=2;s=A5.Device1.P207_PV',
           'ns=2;s=A5.Device2.T207_PV',
-          'ns=2;s=A5.Device1.F352AM_PV',// (тонн/ч)
+          'ns=2;s=A5.Device1.F352AM_PV',
           'ns=2;s=A5.Device2.TC214_1_PV',
-          'ns=2;s=A5.Device1.F59_PV',// (м3/ч)
+          'ns=2;s=A5.Device1.F59_PV',
           'ns=2;s=A5.Device2.P9_PV',
           'ns=2;s=A5.Device2.T28_21_PV',
           'ns=2;s=A5.Device1.GNG_PV',
           'ns=2;s=A5.Device1.N2_NG_PV',
           'ns=2;s=A5.Device1.CO2_NG_PV',
-          'ns=2;s=A5.Device1.F107_PV',// (м3/ч)
+          'ns=2;s=A5.Device1.F107_PV',
           'ns=2;s=A5.Device2.T107A_PV',
-          //'ns=2;s=A5.Device1.P107_PV',// (кгс/см2)
 
+          // 'ns=2;s=A5.Device1.F207AM_PV',
 
           'ns=2;s=A5.Device1.F59AM_PV',// Нормализованный природный газ (тыс.м3/ч)
           'ns=2;s=A5.Device1.F46A_PV',// Жидкий NH3 в хранилище (тонн/ч)

@@ -1,24 +1,17 @@
 {
   "objects": [
     {
-      "isEnable": true,
-      "browseName": "CH_A5.Device1",
-      "displayName": "A5.Device1",
-      "type": "object"
-    },
-    {
-      "isEnable": true,
-      "browseName": "CH_A5.Device2",
-      "displayName": "A5.Device2",
+      "browseName": "CH_A5",
+      "displayName": "A5.Device",
       "type": "object"
     }
   ],
   "variables": [
     {
       "isEnable": true,
-      "browseName": "CH_A5.Device1::XozUchet",
+      "browseName": "CH_A5::XozUchet",
       "displayName": "XozUchet values for CH_A5",
-      "ownerName": "CH_A5.Device1",
+      "ownerName": "CH_A5",
       "type": "variable.simple",
       "dataType": "String",
       "hist": 1,
@@ -42,9 +35,9 @@
     },
     {
       "isEnable": true,
-      "browseName": "CH_A5.Device1::XozUchet_Daily",
+      "browseName": "CH_A5::XozUchet_Daily",
       "displayName": "Daily XozUchet values for CH_A5",
-      "ownerName": "CH_A5.Device1",
+      "ownerName": "CH_A5",
       "type": "variable.simple",
       "dataType": "String",
       "hist": 1,
@@ -69,9 +62,9 @@
     },
     {
       "isEnable": true,
-      "browseName": "CH_A5.Device2::Mnemo1",
+      "browseName": "CH_A5::Mnemo1",
       "displayName": "Mnemo1 values for CH_A5.Device2",
-      "ownerName": "CH_A5.Device2",
+      "ownerName": "CH_A5",
       "type": "variable.simple",
       "dataType": "String",
       "hist": 1,

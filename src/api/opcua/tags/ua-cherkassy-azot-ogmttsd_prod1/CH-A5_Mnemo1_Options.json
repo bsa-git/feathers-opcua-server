@@ -2,6 +2,18 @@
   "objects": [
     {
       "isEnable": true,
+      "browseName": "CH_A5",
+      "displayName": "A5.Device",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
+      "browseName": "CH_A5.Device1",
+      "displayName": "A5.Device1",
+      "type": "object"
+    },
+    {
+      "isEnable": true,
       "browseName": "CH_A5.Device2",
       "displayName": "A5.Device2",
       "type": "object"
@@ -10,9 +22,9 @@
   "variables": [
     {
       "isEnable": true,
-      "browseName": "CH_A5.Device2::Mnemo1",
+      "browseName": "CH_A5::Mnemo1",
       "displayName": "Mnemo1 values for CH_A5.Device2",
-      "ownerName": "CH_A5.Device2",
+      "ownerName": "CH_A5",
       "type": "variable.simple",
       "dataType": "String",
       "hist": 1,
@@ -32,7 +44,7 @@
       "aliasName": "WP301",
       "displayName": "WP301_PV",
       "ownerName": "CH_A5.Device2",
-      "ownerGroup": "CH_A5.Device2::Mnemo1",
+      "ownerGroup": "CH_A5::Mnemo1",
       "type": "variable.analog",
       "dataType": "Double",
       "hist": 1,

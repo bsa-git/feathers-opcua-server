@@ -83,10 +83,11 @@ async function startSubscriptionMonitor(id, service) {
   const groupMembers = browseNames4Monitor.groupMembers;
   const onlyHistValues = browseNames4Monitor.onlyHistValues;
   if (groupOwners || groupMembers || onlyHistValues) {
-    console.log(
-      chalk.yellow('Client subscription monitor:'),
-      `(groupOwners: ${getInt(groupOwners)}, groupMembers: ${getInt(groupMembers)}, onlyHistValues: ${getInt(onlyHistValues)})`
-    );
+    // console.log(
+    //   chalk.yellow('Client subscription monitor:'),
+    //   `(groupOwners: ${getInt(groupOwners)}, groupMembers: ${getInt(groupMembers)}, onlyHistValues: ${getInt(onlyHistValues)})`
+    // );
+    logger.info('Client subscription monitor: (groupOwners: %d, groupMembers: %d, onlyHistValues: %d)', getInt(groupOwners), getInt(groupMembers), getInt(onlyHistValues));
   }
 }
 

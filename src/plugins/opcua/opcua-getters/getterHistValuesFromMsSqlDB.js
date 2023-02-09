@@ -77,7 +77,7 @@ function getterHistValuesFromMsSqlDB(params = {}, addedValue) {
       // Drop item from the beginning of array
       if (queue) queue.dropCurrentItem();
       const errorMessage = error.message? error.message : error;
-      logger.error(`getterHistValuesFromMsSqlDB.Error (${getDateTime('', false)}), message: "${errorMessage}"`);
+      logger.error(`getterHistValuesFromMsSqlDB.Error: "${errorMessage}"`);
     }
   }, params.interval);
 

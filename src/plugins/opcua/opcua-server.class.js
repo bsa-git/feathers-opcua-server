@@ -2,6 +2,7 @@
 const {
   appRoot,
   inspector,
+  logger,
   assert,
   isFunction,
   isObject
@@ -140,7 +141,8 @@ class OpcuaServer {
 
     this.currentState.isCreated = true;
     // OPC-UA server created.
-    console.log(chalk.yellow('OPCUAServer created ...'), 'opcuaServer.id:', chalk.cyan(this.id));
+    // console.log(chalk.yellow('OPCUAServer created ...'), 'opcuaServer.id:', chalk.cyan(this.id));
+    logger.info('OPCUAServer created OK. id: %s', this.id);
     if (isDebug && this.params) inspector('opcuaServerCreate.params:', this.params);
   }
 
@@ -161,8 +163,12 @@ class OpcuaServer {
     this.currentState.serverInfo = this.getServerInfo();
     const applicationUri = this.currentState.serverInfo.applicationUri;
     this.currentState.applicationUri = applicationUri;
-    console.log(chalk.yellow('Server applicationUri:'), chalk.cyan(applicationUri));
-    console.log(chalk.yellow('Server started and now listening ...'), 'EndPoint URL:', chalk.cyan(endpointUrl));
+    // console.log(chalk.yellow('Server applicationUri:'), chalk.cyan(applicationUri));
+    // console.log(chalk.yellow('Server started and now listening ...'), 'EndPoint URL:', chalk.cyan(endpointUrl));
+    
+    logger.info('Server applicationUri: %s', applicationUri);
+    logger.info('Server EndPointURL: %s', endpointUrl);
+    
     const endpoints = this.opcuaServer.endpoints[0].endpointDescriptions().map(endpoint => {
       return {
         endpointUrl: endpoint.endpointUrl,
@@ -621,7 +627,8 @@ class OpcuaServer {
       // Set currentState.paths
       Object.assign(this.currentState.paths, opcuaConfig.paths);
       // inspector('currentState:', this.currentState);
-      console.log(chalk.yellow('Server constructed address space: OK'), `(${this.addedItemList.length})`);
+      // console.log(chalk.yellow('Server constructed address space: OK'), `(${this.addedItemList.length})`);
+      logger.info('Server constructed address space: OK (%d)', this.addedItemList.length);
       if (isDebug && this.addedItemList.length) inspector('constructAddressSpace.addedItemList:', this.addedItemList.map(item => loOmit(item, ['item'])));
     }
   }

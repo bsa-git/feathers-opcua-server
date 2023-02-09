@@ -284,9 +284,6 @@ class MssqlTedious {
     // return Promise
     return new Promise((resolve, reject) => {
       const connection = new Connection(this.config);
-      self.connection = connection;
-      // Subscribe to events
-      self.subscribeToConnEvent();
       // The attempt to connect and validate has completed.
       connection.on('connect', function (err) {
         // err - If successfully connected, will be falsey. If there was a problem (with either connecting or validation), will be an error object.
@@ -299,21 +296,26 @@ class MssqlTedious {
           // If no error, then good to go...
           if (isDebug && self.id) console.log(`Connection to "${self.id}" OK`);
           // Set current state
+          self.connection = connection;
           self.currentState.connError = '';
           self.currentState.isConnected = true;
           self.currentState.isConnCanceled = false;
           self.currentState.isConnReset = false;
-          // resolve('Connection OK');
+          
+          // Subscribe to events
+          self.subscribeToConnEvent();
+
           resolve(self);
         }
       });
       // Internal error occurs
       connection.on('error', function (err) {
         if (err) {
-          logger.error('Error: %s', err);
+          const errorMessage = err.message? err.message : err;
+          logger.error('connection.on("error") -> Error: %s', errorMessage);
           // Set current state
-          self.currentState.connError = err.message;
-          reject(err.message);
+          self.currentState.connError = errorMessage;
+          reject(errorMessage);
         }
       });
       connection.connect();
@@ -332,7 +334,7 @@ class MssqlTedious {
       assert(self.connection, 'No connection for MssqlTedious.');
       self.connection.on('end', function () {
         self.connection = null;
-        if (isDebug) console.log(`Disconnect from "${self.id}" OK`);
+        if (isDebug && self) console.log(`Disconnect from "${self.id}" OK`);
         // Set current state
         self.currentState.isConnected = false;
         self.currentState.isConnCanceled = false;
@@ -350,7 +352,7 @@ class MssqlTedious {
   connCancel() {
     assert(this.connection, 'No connection for MssqlTedious.');
     this.connection.cancel();
-    console.log('RequestCancel OK');
+    console.log('Connection cancel OK');
     // Set current state
     this.currentState.isConnCanceled = true;
   }
@@ -502,7 +504,7 @@ class MssqlTedious {
     return new Promise((resolve, reject) => {
       const request = new Request(sql, (err, rowCount) => {
         if (err) {
-          logger.error('Request.error: %s', err);
+          logger.error('Query.error: %s', err);
           // Set current state
           self.currentState.requestError = err.message;
           reject(err.message);

@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 const {
   inspector,
+  logger,
   isString,
   isObject,
   appRoot,
-  isShowLog4Prod,
   isProd
 } = require('../lib');
 
@@ -116,7 +116,8 @@ class OpcuaClient {
     this.opcuaClient.on('backoff', (retry) => console.log(chalk.yellow('Retrying to connect to:'), endpointUrl, ' attempt: ', retry));
     this.currentState.applicationUri = this.opcuaClient._applicationUri;
     this.currentState.isCreated = true;
-    console.log(chalk.yellow('OPCUAClient created ...'), 'opcuaClient.id:', chalk.cyan(this.id));
+    // console.log(chalk.yellow('OPCUAClient created ...'), 'opcuaClient.id:', chalk.cyan(this.id));
+    logger.info('OPCUAClient created OK. id: %s', this.id);
 
     if (isDebug && this.opcuaClient) console.log('certificateFile = ', this.opcuaClient.certificateFile);
     if (isDebug && this.opcuaClient) console.log('privateKeyFile  = ', this.opcuaClient.privateKeyFile);
@@ -138,10 +139,15 @@ class OpcuaClient {
     this.currentState.isConnect = true;
     this.currentState.endpointUrl = params.endpointUrl;
     this.currentState.port = params.endpointUrl.split(':')[2];
-    console.log(chalk.yellow('Client connected to:'), chalk.cyan(params.endpointUrl));
-    console.log(chalk.yellow('Client applicationUri:'), chalk.cyan(this.currentState.applicationUri));
-    console.log(chalk.yellow('Client securityMode:'), chalk.cyan(getSecurityMode(this.opcuaClient.securityMode)));
-    console.log(chalk.yellow('Client securityPolicy:'), chalk.cyan(getSecurityPolicy(this.opcuaClient.securityPolicy)));
+    // console.log(chalk.yellow('Client connected to:'), chalk.cyan(params.endpointUrl));
+    // console.log(chalk.yellow('Client applicationUri:'), chalk.cyan(this.currentState.applicationUri));
+    // console.log(chalk.yellow('Client securityMode:'), chalk.cyan(getSecurityMode(this.opcuaClient.securityMode)));
+    // console.log(chalk.yellow('Client securityPolicy:'), chalk.cyan(getSecurityPolicy(this.opcuaClient.securityPolicy)));
+
+    logger.info('Client connected to: %s', params.endpointUrl);
+    logger.info('Client applicationUri: %s', this.currentState.applicationUri);
+    logger.info('Client securityMode: %s', getSecurityMode(this.opcuaClient.securityMode));
+    logger.info('Client securityPolicy: %s', getSecurityPolicy(this.opcuaClient.securityPolicy));
   }
 
   /**
@@ -197,11 +203,13 @@ class OpcuaClient {
       }
       this.currentState.isSessionCreated = true;
       const msg = userIdentityInfo.type === UserTokenType.UserName ? `user: "${userIdentityInfo.userName}" is authenticated` : '';
-      console.log(chalk.yellow('Client session is created.'), chalk.cyan(msg));
+      // console.log(chalk.yellow('Client session is created.'), chalk.cyan(msg));
+      logger.info('Client session is created. %s', msg);
       if (isDebug) inspector('opcua-client.class::sessionCreate.sessionToString:', this.sessionToString());
     } catch (error) {
       if (error.message.includes('End point must exist') && process.env.NODE_ENV === 'production') {
-        console.log(chalk.red('In production mode, the client must be authenticated, and must also encrypt and digitally sign the transmitted messages!'));
+        // console.log(chalk.red('In production mode, the client must be authenticated, and must also encrypt and digitally sign the transmitted messages!'));
+        logger.error('In production mode, the client must be authenticated, and must also encrypt and digitally sign the transmitted messages!');
       }
       throw error;
     }
@@ -967,8 +975,10 @@ class OpcuaClient {
     this.subscription = await Promise.resolve(ClientSubscription.create(this.session, mergeOptions));
 
     this.subscription
-      .on('started', () => console.log(chalk.yellow('Client subscription started.'), `SubscriptionId = ${this.subscription.subscriptionId}`))
-      .on('terminated', () => console.log(chalk.yellow('Client subscription terminated')))
+      // .on('started', () => console.log(chalk.yellow('Client subscription started.'), `SubscriptionId = ${this.subscription.subscriptionId}`))
+      // .on('terminated', () => console.log(chalk.yellow('Client subscription terminated')))
+      .on('started', () => logger.info('Client subscription started. SubscriptionId = %s', this.subscription.subscriptionId))
+      .on('terminated', () => logger.warn('Client subscription terminated'))
       .on('keepalive', () => {
         if (true && !isProd()) console.log(chalk.yellow('Client subscription keepalive'));
       });

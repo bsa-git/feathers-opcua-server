@@ -80,13 +80,14 @@ module.exports = async function opcuaBootstrap(app) {
 
     // Save opcua tags to local DB
     let saveResult = await saveOpcuaTags(app, opcuaTags, false);
-    logger.info('opcuaBootstrap.saveOpcuaTags.localDB: OK. %s', saveResult);
+    logger.info('opcuaBootstrap.saveOpcuaTags.localDB: OK.');
+    logger.info('opcuaBootstrap.saveOpcuaTags.saveResult: %s', saveResult);
     // Integrity check opcua data
     integrityResult = await integrityCheckOpcua(app, false);
     if (integrityResult) {
-      logger.info('Result integrity check opcua.localDB: OK.');
+      logger.info('opcuaBootstrap.Result integrity check opcua.localDB: OK.');
     } else {
-      logger.error('Result integrity check opcua.localDB: ERR.');
+      logger.error('opcuaBootstrap.Result integrity check opcua.localDB: ERR.');
     }
     if (isUpdateOpcuaToDB()) {
       removeResult = await removeOpcuaGroupValues(app);
@@ -130,7 +131,8 @@ module.exports = async function opcuaBootstrap(app) {
         
         const isURL = isRemote ? await isUrlExists(remoteDbUrl, { showMsg: false }) : false;
         const isInitRemoteDB = getInitRemoteDB();
-        console.log(`Start Interval for InitRemoteDB: OK, isURL=${isURL}, isInitRemoteDB=${isInitRemoteDB}`);
+        // console.log(`Start Interval for InitRemoteDB: OK, isURL=${isURL}, isInitRemoteDB=${isInitRemoteDB}`);
+        logger.info(`Start Interval for InitRemoteDB: OK, isURL=${isURL}, isInitRemoteDB=${isInitRemoteDB}`);
         if (isRemote && isURL && !isInitRemoteDB){
           clearInterval(intervalId);
           // Init remote DB
@@ -159,7 +161,7 @@ module.exports = async function opcuaBootstrap(app) {
     }
     logger.info(`opcuaBootstrap.CreateMssqlDatasets: OK. (${mssqlDataBases.length})`);
   }
-  console.log('------------------------------------------------------------------------------------------------');
+  logger.info('-------------------------------------------------------------------');
 
   // Create server and client services
   let opcuaOptions = getOpcuaConfig();
@@ -180,6 +182,7 @@ module.exports = async function opcuaBootstrap(app) {
       if (isDebug && srvData) inspector('opcuaBootstrap.srvData:', srvData);
       opcuaServer = await service.create(srvData);
       if (isDebug && opcuaServer) inspector('opcuaBootstrap.opcuaServer:', opcuaServer.server.getCurrentState());
+      logger.info('-------------------------------------------------------------------');
     }
 
     // Create service for OPC-UA client
@@ -198,7 +201,7 @@ module.exports = async function opcuaBootstrap(app) {
       // Execute client script
       await executeOpcuaClientScript(service, id);
       if (isDebug && opcuaClient) inspector('opcuaBootstrap.opcuaClient:', opcuaClient.client.getClientInfo());
-      console.log('------------------------------------------------------------------------------------------------');
+      logger.info('-------------------------------------------------------------------');
     }
   }
 };
