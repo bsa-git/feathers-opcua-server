@@ -82,7 +82,9 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
       dataItems['!value'] = { dateTime };
       if (isDebug && dateTime) console.log('getterValuesFromKepServer.dateTime: ', dateTime);
       dataItems[browseName] = formatValue.value.value;
-      if (isDebug && formatValue.statusCode.name !== 'Good') logger.info(`For browseName: "${chalk.yellowBright(browseName)}" statusCode = "${chalk.redBright(formatValue.statusCode.name)}", value = ${formatValue.value.value}`);
+      if (isDebug && formatValue.statusCode.name !== 'Good') logger.warn(`For browseName: "${chalk.yellowBright(browseName)}" statusCode = "${chalk.redBright(formatValue.statusCode.name)}", value = ${formatValue.value.value}`);
+      if (true && formatValue.statusCode.name !== 'Good') logger.warn(`For browseName: "${browseName}", statusCode = "${formatValue.statusCode.name}", value = ${formatValue.value.value}`
+      );
     }
     if (isDebug && dataItems) inspector('getterValuesFromKepServer.dataItems:', dataItems);
 

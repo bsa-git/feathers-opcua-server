@@ -53,7 +53,7 @@
         },
         "engineeringUnits": "thousand_normal_cubic_metre_per_hour"
       },
-      "description": "ПГ Сіро Очистка (расх.н)"
+      "description": "ПГ Сіро Очистка (норм.расход)"
     },
     {
       "browseName": "CH_A5.Device1::SYNTEZ_NH3:F46A_PV",
@@ -73,7 +73,7 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "Ж.NH3 на складе (расход)"
+      "description": "Ж.NH3 на складе (масс.расход)"
     },
     {
       "browseName": "CH_A5.Device1::SYNTEZ_NH3:F191AM_PV",
@@ -133,7 +133,7 @@
         },
         "engineeringUnits": "normal_cubic_metre_per_hour"
       },
-      "description": "Азот в цех (расх.н)"
+      "description": "Азот в цех (норм.расход)"
     },
     {
       "browseName": "CH_A5.Device1::SYNTEZ_NH3:F501AM_PV",
@@ -153,7 +153,7 @@
         },
         "engineeringUnits": "normal_cubic_metre_per_hour"
       },
-      "description": "ПГ из A5 (расх.н)"
+      "description": "ПГ из A5 (норм.расход)"
     },
     {
       "browseName": "CH_A5.Device1::SYNTEZ_NH3:F46AM_PV",
@@ -173,7 +173,7 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "NH3 на склад (расх.н)"
+      "description": "NH3 на склад (масс.расход)"
     },
     {
       "browseName": "CH_A5.Device1::OTPKOL_CO2:F34_PV",
@@ -193,7 +193,7 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "CO2 выдача (расход)"
+      "description": "CO2 выдача (масс.расход)"
     },
     {
       "browseName": "CH_A5.Device1::SYNTEZ_NH3:F46AA_PV",
@@ -213,7 +213,7 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "NH3 (расход)"
+      "description": "NH3 (масс.расход)"
     },
     {
       "browseName": "CH_A5.Device1::SYNTEZ_NH3:F206AM_PV",
@@ -233,12 +233,12 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "NH3 в М7 (расх.н)"
+      "description": "NH3 в М7 (масс.расход)"
     },
     {
-      "browseName": "CH_A5.Device1::SKLAD_NH3:F352_PV",
-      "aliasName": "F352",
-      "displayName": "F352_PV",
+      "browseName": "CH_A5.Device1::SKLAD_NH3:F352AM_PV",
+      "aliasName": "F352AM",
+      "displayName": "F352AM_PV",
       "ownerName": "CH_A5.Device1",
       "ownerGroup": "CH_A5::XozUchet",
       "type": "variable.analog",
@@ -249,11 +249,11 @@
       "valueParams": {
         "engineeringUnitsRange": {
           "low": 0,
-          "high": 45
+          "high": 100
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "NH3 в М2 (расход)"
+      "description": "NH3 в М2 (масс.расход)"
     },
     {
       "browseName": "CH_A5.Device1::SKLAD_NH3:F360_PV",
@@ -273,7 +273,7 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "NH3 в М6 (расход)"
+      "description": "NH3 в М6 (масс.расход)"
     },
     {
       "browseName": "CH_A5.Device1::SKLAD_NH3:F101AM_PV",
@@ -293,7 +293,7 @@
         },
         "engineeringUnits": "tonne_per_hour"
       },
-      "description": "ПАР-16 в цех (расход)"
+      "description": "ПАР-16 в цех (масс.расход)"
     },
     {
       "browseName": "CH_A5.Device1::SKLAD_NH3:F379AM_PV",
@@ -615,6 +615,446 @@
         "engineeringUnits": "degree_celsius"
       },
       "description": "ПАР-16 в цех (температура)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SYNTEZ_NH3:F359_PV",
+      "aliasName": "F359",
+      "displayName": "F359_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -100,
+          "high": 2600
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "Азот в цех (расход)"
+    },
+    {
+      "browseName": "CH_A5.Device2::SYNTEZ_NH3:P359_PV",
+      "aliasName": "P359",
+      "displayName": "P359_PV",
+      "ownerName": "CH_A5.Device2",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 30
+        },
+        "engineeringUnits": "kilogram_per_square_centimetre"
+      },
+      "description": "Азот в цех (давление)"
+    },
+    {
+      "browseName": "CH_A5.Device2::SYNTEZ_NH3:T359_PV",
+      "aliasName": "T359",
+      "displayName": "T359_PV",
+      "ownerName": "CH_A5.Device2",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -100,
+          "high": 250
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "Азот в цех (температура)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SYNTEZ_NH3:F206_PV",
+      "aliasName": "F206",
+      "displayName": "F206_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 63
+        },
+        "engineeringUnits": "tonne_per_hour"
+      },
+      "description": "NH3 в М7 (масс.расход)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SYNTEZ_NH3:P206_PV",
+      "aliasName": "P206",
+      "displayName": "P206_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 30
+        },
+        "engineeringUnits": "kilogram_per_square_centimetre"
+      },
+      "description": "NH3 в М7 (давление)"
+    },
+    {
+      "browseName": "CH_A5.Device2::SYNTEZ_NH3:T206_PV",
+      "aliasName": "T206",
+      "displayName": "T206_PV",
+      "ownerName": "CH_A5.Device2",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -50,
+          "high": 100
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "NH3 в М7 (температура)"
+    },
+    {
+      "browseName": "CH_A5.Device1::PAR30:F738_PV",
+      "aliasName": "F738",
+      "displayName": "F738_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 70
+        },
+        "engineeringUnits": "tonne_per_hour"
+      },
+      "description": "ПАР-30 (масс.расход)"
+    },
+    {
+      "browseName": "CH_A5.Device2::PAR30:P738_PV",
+      "aliasName": "P738",
+      "displayName": "P738_PV",
+      "ownerName": "CH_A5.Device2",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 50
+        },
+        "engineeringUnits": "kilogram_per_square_centimetre"
+      },
+      "description": "ПАР-30 (давление)"
+    },
+    {
+      "browseName": "CH_A5.Device2::PAR30:T738_PV",
+      "aliasName": "T738",
+      "displayName": "T738_PV",
+      "ownerName": "CH_A5.Device2",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 300
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "ПАР-30 (температура)"
+    },
+    {
+      "browseName": "CH_A5.Device1::XozUchet:F207_PV",
+      "aliasName": "F207",
+      "displayName": "F207_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 70
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "??? (расход)"
+    },
+    {
+      "browseName": "CH_A5.Device1::XozUchet:P207_PV",
+      "aliasName": "P207",
+      "displayName": "P207_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 25
+        },
+        "engineeringUnits": "kilogram_per_square_centimetre"
+      },
+      "description": "??? (давление)"
+    },
+    {
+      "browseName": "CH_A5.Device2::XozUchet:T207_PV",
+      "aliasName": "T207",
+      "displayName": "T207_PV",
+      "ownerName": "CH_A5.Device2",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -50,
+          "high": 100
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "??? (температура)"
+    },
+    {
+      "browseName": "CH_A5.Device1::SKLAD_NH3:F352_PV",
+      "aliasName": "F352",
+      "displayName": "F352_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 45
+        },
+        "engineeringUnits": "tonne_per_hour"
+      },
+      "description": "NH3 в М2 (масс.расход)"
+    },
+    {
+      "browseName": "CH_A5.Device2::SKLAD_NH3:TC214_1_PV",
+      "aliasName": "TC214_1",
+      "displayName": "TC214_1_PV",
+      "ownerName": "CH_A5.Device2",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -50,
+          "high": 50
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "NH3 в М2 (температура)"
+    },
+    {
+      "browseName": "CH_A5.Device1::TGAZ:F107_PV",
+      "aliasName": "F107",
+      "displayName": "F107_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 6300
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "ТГ из цеха (норм.расход)"
+    },
+    {
+      "browseName": "CH_A5.Device2::TGAZ:T107A_PV",
+      "aliasName": "T107A",
+      "displayName": "T107A_PV",
+      "ownerName": "CH_A5.Device2",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -55,
+          "high": 200
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "ТГ из цеха (температура)"
+    },
+    {
+      "browseName": "CH_A5.Device1::CLEAR_S:F59_PV",
+      "aliasName": "F59",
+      "displayName": "F59_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 100000
+        },
+        "engineeringUnits": "cubic_metre_per_hour"
+      },
+      "description": "ПГ Сіро Очистка (расход)"
+    },
+    {
+      "browseName": "CH_A5.Device2::CLEAR_S:P9_PV",
+      "aliasName": "P9",
+      "displayName": "P9_PV",
+      "ownerName": "CH_A5.Device2",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 25
+        },
+        "engineeringUnits": "kilogram_per_square_centimetre"
+      },
+      "description": "ПГ Сіро Очистка (давление)"
+    },
+    {
+      "browseName": "CH_A5.Device2::CLEAR_S:T28_21_PV",
+      "aliasName": "T28_21",
+      "displayName": "T28_21_PV",
+      "ownerName": "CH_A5.Device2",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": -50,
+          "high": 150
+        },
+        "engineeringUnits": "degree_celsius"
+      },
+      "description": "ПГ Сіро Очистка (температура)"
+    },
+    {
+      "browseName": "CH_A5.Device1::NGAZ:GNG_PV",
+      "aliasName": "GNG",
+      "displayName": "GNG_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 1
+        },
+        "engineeringUnits": "kilogram_per_cubic_metre"
+      },
+      "description": "ПГ (плотность)"
+    },
+    {
+      "browseName": "CH_A5.Device1::NGAZ:N2_NG_PV",
+      "aliasName": "N2_NG",
+      "displayName": "N2_NG_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 2
+        },
+        "engineeringUnits": "percent"
+      },
+      "description": "вміст N2 в ПГ (концентрация)"
+    },
+    {
+      "browseName": "CH_A5.Device1::NGAZ:CO2_NG_PV",
+      "aliasName": "CO2_NG",
+      "displayName": "CO2_NG_PV",
+      "ownerName": "CH_A5.Device1",
+      "ownerGroup": "CH_A5::XozUchet",
+      "type": "variable.analog",
+      "dataType": "Double",
+      "hist": 1,
+      "variableGetType": "valueFromSource",
+      "getter": "getterPlugForVariable",
+      "valueParams": {
+        "engineeringUnitsRange": {
+          "low": 0,
+          "high": 3
+        },
+        "engineeringUnits": "percent"
+      },
+      "description": "вміст CO2 в ПГ (концентрация)"
     }
   ]
 }

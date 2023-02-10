@@ -71,6 +71,7 @@
       "description": "Ж.NH3 на складе (расх.)"
     },
     {
+      "isEnable": false,
       "browseName": "CH_A5.Device1::SYNTEZ_NH3:F191AM__SUM_PV",
       "aliasName": "F191AM__SUM",
       "displayName": "F191AM__SUM_PV",
