@@ -291,16 +291,17 @@ class MssqlTedious {
           const errorMessage = err.message? err.message : err;
           logger.error('connection.on("connect") -> Error: %s', errorMessage);
           self.connection = null;
-          reject(err.message);
+          reject(errorMessage);
         } else {
-          // If no error, then good to go...
-          if (isDebug && self.id) console.log(`Connection to "${self.id}" OK`);
           // Set current state
           self.connection = connection;
           self.currentState.connError = '';
           self.currentState.isConnected = true;
           self.currentState.isConnCanceled = false;
           self.currentState.isConnReset = false;
+
+          // If no error, then good to go...
+          if (isDebug && self.currentState.isConnected) console.log(`Connection to "${self.id}" OK`);
           
           // Subscribe to events
           self.subscribeToConnEvent();
@@ -352,9 +353,9 @@ class MssqlTedious {
   connCancel() {
     assert(this.connection, 'No connection for MssqlTedious.');
     this.connection.cancel();
-    console.log('Connection cancel OK');
     // Set current state
     this.currentState.isConnCanceled = true;
+    if (isDebug && this.currentState.isConnCanceled) console.log('Connection cancel OK');
   }
 
   /**
@@ -374,9 +375,9 @@ class MssqlTedious {
           reject('ConnReset ERR');
           return;
         }
-        if (isDebug && self.id) console.log('ConnReset OK');
         // Set current state
         self.currentState.isConnReset = true;
+        if (isDebug && self.currentState.isConnReset) console.log('ConnReset OK');
         resolve('ConnReset OK');
       });
     });
@@ -397,7 +398,7 @@ class MssqlTedious {
           reject(err);
         } else {
           self.isBeginTransaction = true;
-          if (isDebug && self.isBeginTransaction) logger.info('BeginTransaction() done');
+          if (isDebug && self.isBeginTransaction) console.log('BeginTransaction OK');
           resolve('BeginTransaction() done');
         }
       });
@@ -419,7 +420,7 @@ class MssqlTedious {
         } else {
           self.isBeginTransaction = false;
           self.isCommitTransaction = true;
-          if (isDebug && self.isCommitTransaction) logger.info('CommitTransaction() done!');
+          if (isDebug && self.isCommitTransaction) console.log('CommitTransaction OK');
           resolve('CommitTransaction() done!');
         }
       });
@@ -444,7 +445,7 @@ class MssqlTedious {
         } else {
           self.isBeginTransaction = false;
           self.isRollbackTransaction = true;
-          logger.info('RollbackTransaction() done!');
+          if (isDebug && self.isRollbackTransaction) console.log('RollbackTransaction OK');
           resolve('RollbackTransaction() done!');
         }
       });
@@ -475,7 +476,7 @@ class MssqlTedious {
           logger.error(`newBulkLoad error: ${err}`);
           reject(err);
         } else {
-          if (isDebug && rowCount) logger.info(`Rows inserted to table "${table}": ${rowCount}`);
+          if (isDebug && rowCount) console.log(`Rows inserted to table "${table}": ${rowCount}`);
           resolve(rowCount);
         }
       });
@@ -646,7 +647,7 @@ class MssqlTedious {
             returnStatus - The value returned from a stored procedure.
             rows - Rows as a result of executing the SQL. Will only be avaiable if Connection's config.options.rowCollectionOnDone is true.
            */
-          if (isDebug) console.log('Request result:', { params, sql, rows: _rows });
+          if (isDebug && self.id) console.log('Request result:', { params, sql, rows: _rows });
           if (callback) callback(_rows);
         });
       }

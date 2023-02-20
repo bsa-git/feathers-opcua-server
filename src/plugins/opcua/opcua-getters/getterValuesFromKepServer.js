@@ -125,7 +125,7 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
       await getValuesFromKepServer(clientId, groupTagNodeIds);
     } catch (error) {
       const errorMessage = error.message? error.message : error;
-      logger.error(`getterValuesFromKepServer.Error (${getDateTime('', false)}): ${errorMessage}`);
+      logger.error(`getterValuesFromKepServer.Error: ${errorMessage}`);
     }
   }, params.interval);
 
