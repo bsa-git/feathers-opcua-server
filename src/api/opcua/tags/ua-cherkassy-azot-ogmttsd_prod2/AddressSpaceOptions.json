@@ -25,7 +25,10 @@
       },
       "subscription": "onChangedKepValue",
       "subscribeParams": {
-        "subscribeFuncs": ["saveOpcuaGroupValueToDB", "saveOpcuaGroupValueToMsSqlDB"],
+        "subscribeFuncs": [
+          "saveOpcuaGroupValueToDB", 
+          "saveOpcuaGroupValueToMsSqlDB"
+        ],
         "dbEnv": "MSSQL_ASODU_TEST",
         "queryFunc": "insertValuesToChAsoduDB",
         "queryParams": {
