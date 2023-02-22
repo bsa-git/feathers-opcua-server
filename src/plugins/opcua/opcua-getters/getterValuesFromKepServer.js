@@ -38,7 +38,7 @@ let prevDataItemsHash = ''; // e.g. -> '5baf17d1c0d7beac7ceaabf49e67fd577c899e3c
  * @returns {void}
  */
 const getterValuesFromKepServer = function (params = {}, addedValue) {
-  let service, readResults, dataItems = {}, dataType, dateTime;
+  let service, readResults, dataItems = {}, dataValues = [], dataType, dateTime;
   const id = params.myOpcuaServer.id;
   const app = params.myOpcuaServer.app;
   const clientId = params.clientId;
@@ -47,11 +47,12 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
 
   if (isDebug && params) inspector('getterValuesFromKepServer.params:', loOmit(params, ['myOpcuaServer']));
 
-  const browseName = formatUAVariable(addedValue).browseName;
+  // const browseName = formatUAVariable(addedValue).browseName;
+  const ownerGroupBrowseName = formatUAVariable(addedValue).browseName;
   dataType = formatUAVariable(addedValue).dataType[1];
   let configOptions = getParamsAddressSpace(id).variables;
   if (isDebug && configOptions) inspector('getterValuesFromKepServer.configOptions:', configOptions);
-  const groupTags = configOptions.filter(opt => opt.ownerGroup === browseName);
+  const groupTags = configOptions.filter(opt => opt.ownerGroup === ownerGroupBrowseName);
   const groupTagNodeIds = groupTags.map(t => t.nodeId);
   if (isDebug && groupTagNodeIds) inspector('getterValuesFromKepServer.groupTagNodeIds:', groupTagNodeIds);
 
@@ -65,6 +66,7 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
     // service.sessionRead
     readResults = await service.sessionRead(clientId, nodeIds);
     // Get dataItems
+    dataValues = [];
     for (let index = 0; index < readResults.length; index++) {
       const readResult = readResults[index];
       const browseName = groupTags[index].browseName;
@@ -82,11 +84,27 @@ const getterValuesFromKepServer = function (params = {}, addedValue) {
       dataItems['!value'] = { dateTime };
       if (isDebug && dateTime) console.log('getterValuesFromKepServer.dateTime: ', dateTime);
       dataItems[browseName] = formatValue.value.value;
-      // if (isDebug && formatValue.statusCode.name !== 'Good') logger.warn(`For browseName: "${chalk.yellowBright(browseName)}" statusCode = "${chalk.redBright(formatValue.statusCode.name)}", value = ${formatValue.value.value}`);
-      if (true && formatValue.statusCode.name !== 'Good') logger.warn(`For browseName: "${browseName}", statusCode = "${formatValue.statusCode.name}", value = ${formatValue.value.value}`
-      );
+      
+      // Add value to dataValues
+      dataValues.push({
+        statusCode: formatValue.statusCode.name,
+        browseName,
+        value: formatValue.value.value
+      });
     }
     if (isDebug && dataItems) inspector('getterValuesFromKepServer.dataItems:', dataItems);
+
+    // Show logger.warn
+    const badDataValues = dataValues.filter(item => item.statusCode !== 'Good');
+    if(badDataValues.length && (dataValues.length > badDataValues.length)){
+      for (let index = 0; index < badDataValues.length; index++) {
+        const badItem = badDataValues[index];
+        if (true && badItem) logger.warn(`For browseName: "${badItem.browseName}", statusCode = "${badItem.statusCode}", value = ${badItem.value}`);
+      }
+    }
+    if(badDataValues.length && (dataValues.length === badDataValues.length)){
+      if (true && badDataValues.length) logger.warn(`For browseName: "${ownerGroupBrowseName}", statusCode = "Bad"`);
+    }
 
     if (getterType === 'daily') {
       dateTime = dataItems['!value']['dateTime'];
