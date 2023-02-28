@@ -151,7 +151,8 @@ const insertValuesToChAsoduDB = async function (db, queryParams) {
     return { rows, rowCount: result.rowCount };
   } catch (error) {
     //--- Rollback transaction ---
-    if(db.connection) await db.rollbackTransaction(error.message);
+    const errorMessage = error.message? error.message : error;
+    if(db.connection && db.isBeginTransaction) await db.rollbackTransaction(errorMessage);
     throw error;
   }
 };

@@ -121,8 +121,9 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
       await db.disconnect();
       assert.ok(!rows.length, 'Delete rows from table with transactions');
     } catch (error) {
-      // Rollback transaction      
-      await db.rollbackTransaction(error.message);
+      // Rollback transaction
+      const errorMessage = error.message? error.message : error;      
+      if(db.connection && db.isBeginTransaction) await db.rollbackTransaction(errorMessage);
       assert.ok(false, 'Delete rows from table with transactions');
     }
   });
@@ -357,7 +358,8 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
       assert.ok(rows.length, 'Insert values to SnapShot table for "opcUA(A5)" and "XozUchet"');
     } catch (error) {
       //--- Rollback transaction ---
-      if(db.connection) await db.rollbackTransaction(error.message);
+      const errorMessage = error.message? error.message : error;
+      if(db.connection && db.isBeginTransaction) await db.rollbackTransaction(errorMessage);
       assert.ok(false, 'Insert values to SnapShot table for "opcUA(A5)" and "XozUchet"');
     }
   });
@@ -486,7 +488,8 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
       assert.ok(rows.length, 'Values don`t insert to SnapShot table for "XozUchetDay(A5)"');
     } catch (error) {
       //--- Rollback transaction ---
-      if(db.connection) await db.rollbackTransaction(error.message);
+      const errorMessage = error.message? error.message : error;
+      if(db.connection && db.isBeginTransaction) await db.rollbackTransaction(errorMessage);
       assert.ok(false, 'Insert values to SnapShot table for "XozUchetDay(A5)"');
     }
   });
