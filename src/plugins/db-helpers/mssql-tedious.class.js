@@ -313,7 +313,7 @@ class MssqlTedious {
       connection.on('error', function (err) {
         if (err) {
           const errorMessage = err.message? err.message : err;
-          logger.error('connection.on("error") -> Error: %s', errorMessage);
+          if(isDebug && err) logger.error('connection.on("error") -> Error: %s', errorMessage);
           // Set current state
           self.currentState.connError = errorMessage;
           reject(errorMessage);
