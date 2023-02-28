@@ -74,8 +74,8 @@
     },
     {
       "isEnable": true,
-      "browseName": "CH_A5::Mnemo1",
-      "displayName": "Mnemo1 values for CH_A5.Device2",
+      "browseName": "CH_A5::TexnoMnemo1",
+      "displayName": "TexnoMnemo1 values for A5.Device",
       "ownerName": "CH_A5",
       "type": "variable.simple",
       "dataType": "String",
