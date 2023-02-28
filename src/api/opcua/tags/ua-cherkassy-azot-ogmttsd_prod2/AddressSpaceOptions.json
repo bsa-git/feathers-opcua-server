@@ -81,12 +81,25 @@
       "dataType": "String",
       "hist": 1,
       "group": true,
-      "subscription": "onChangedGroupHandlerForDB",
       "variableGetType": "valueFromSource",
       "getter": "getterValuesFromKepServer",
       "getterParams": {
         "clientId": "ua-cherkassy-azot-ogmttsd_prod3",
         "interval": 20000
+      },
+      "subscription": "onChangedKepValue",
+      "subscribeParams": {
+        "subscribeFuncs": [
+          "saveOpcuaGroupValueToDB", 
+          "saveStoreOpcuaGroupValueToDB",
+          "saveOpcuaGroupValueToMsSqlDB"
+        ],
+        "dbEnv": "MSSQL_ASODU_TEST",
+        "queryFunc": "insertValuesToChAsoduDB",
+        "queryParams": {
+          "scanerName": "TexnoMnemo1(A5)",
+          "tableName": "SnapShot"
+        }
       }
     }
   ]
