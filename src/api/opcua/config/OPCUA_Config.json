@@ -47,7 +47,7 @@
     "clientScript": "startSubscriptionMonitor",
     "executeMethodsFrom": "client",
     "hostTypeDB": "mongodb",
-    "opcuaSaveModeToDB": "localUpdate",
+    "opcuaSaveModeToDB": "remoteUpdate",
     "opcuaRemoteDbUrl": "http://M5-0095488.OSTCHEM.COM.UA:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": false,
