@@ -36,25 +36,25 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=production node src/",
-    "dev": "cross-env NODE_ENV=development DEBUG=app:* npm run eslint && nodemon src/",
-    "test:all": "npm run eslint && npm run mocha ",
-    "test:debug": "npm run eslint:debug && npm run mocha:debug",
-    "test:script": "npm run eslint:script && npm run mocha:script",
+    "dev": "cross-env NODE_ENV=development DEBUG=app:* yarn run eslint && nodemon src/",
+    "test:all": "yarn run eslint && yarn run mocha ",
+    "test:debug": "yarn run eslint:debug && yarn run mocha:debug",
+    "test:script": "yarn run eslint:script && yarn run mocha:script",
     "start-seed": "cross-env NODE_ENV=test node src/ --seed",
     "start-mongod": "mongod -f mongod.config.yml",
     "start-mongod32": "mongod --storageEngine=mmapv1 -f mongod.config.yml",
     "mkdocs-serve": "mkdocs serve",
     "mkdocs-build": "mkdocs build",
     "mkdocs-deploy": "mkdocs gh-deploy",
-    "coverage": "nyc npm run mocha",
-    "clone:cli-scripts": "npm link",
+    "coverage": "nyc yarn run mocha",
+    "clone:cli-scripts": "yarn link",
     "nedbTest-remove": "shx rm -rf data/nedb/test/*.db",
     "nedbDev-remove": "shx rm -rf data/nedb/dev/*.db",
     "nedbProd-remove": "shx rm -rf data/nedb/prod/*.db",
     "nedb-find-users": "nedb ./data/nedb/dev/users.db",
     "install-win-service": "node scripts/cli/install-windows.service.js",
     "uninstall-win-service": "node scripts/cli/uninstall-windows.service.js",
-    "link-node-windows": "npm link node-windows",
+    "link-node-windows": "yarn link node-windows",
     "eslint": "eslint --fix src/. test/. scripts/. --config .eslintrc.json",
     "eslint:debug": "eslint --fix src/. test/debug/.  --config .eslintrc.json",
     "eslint:script": "eslint --fix src/. scripts/test/.  --config .eslintrc.json",
@@ -123,6 +123,7 @@
     "typescript": "^4.5.2"
   },
   "volta": {
-    "node": "12.22.12"
+    "node": "12.22.12",
+    "yarn": "1.22.22"
   }
 }
