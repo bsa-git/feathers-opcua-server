@@ -31,8 +31,8 @@
     "config": "config/"
   },
   "engines": {
-    "node": "= 12.x",
-    "npm": "= 6.x"
+    "node": "=12.22.12",
+    "npm": "=6.14.16"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=production node src/",
