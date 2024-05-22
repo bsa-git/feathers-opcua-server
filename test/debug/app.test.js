@@ -22,11 +22,16 @@ describe('<<=== Feathers Application Tests (app.test.js) ===>>', () => {
   });
 
   it('#1: Starts and shows the index page', async () => {
-    const url = getURL();
-    if(url && true) console.log('#1.url:', url);
-    const { data } = await axios.get(getURL());
-    console.log('#1.data:', data);
-    assert.ok(data.indexOf('<html lang="en">') !== -1);
+    try {
+      const url = getURL();
+      if (url && isDebug) console.log('#1.url:', url);
+      const { data } = await axios.get(url);
+      console.log('#1.data:', data);
+      assert.ok(data.indexOf('<html lang="en">') !== -1);
+    } catch (error) {
+      if (error && isDebug) debug('Shows error message:', error.message);
+      assert.ok(false, `This answer was not expected: "${error.message}"`);
+    }
   });
 
   describe('<<--- 404 --->>', function () {
