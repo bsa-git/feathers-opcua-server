@@ -64,6 +64,40 @@ const getIpAddresses = function () {
   return ipAddresses;
 };
 
+/*
+const { networkInterfaces } = require('os');
+const nets = networkInterfaces();
+const results = Object.create(null);
+
+for (const name of Object.keys(nets)) {
+  for (const net of nets[name]) {
+    // Пропускаем не-IPv4 и внутренние (например, 127.0.0.1) адреса
+    const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4;
+    if (net.family === familyV4Value && !net.internal) {
+      if (!results[name]) {
+        results[name] = [];
+      }
+      results[name].push(net.address);
+    }
+  }
+}
+
+// Пример результата:
+// {
+//     "en0": ["192.168.1.101"],
+//     "eth0": ["10.0.0.101"],
+//     "<имя сети>": ["<IP-адрес>", "<псевдоним IP>", ...]
+// }
+
+// Пример использования:
+const ipAddress = '192.168.1.10';
+if (results['en0'] && results['en0'].includes(ipAddress)) {
+  console.log('Этот IP-адрес является локальным.');
+} else {
+  console.log('Этот IP-адрес относится к сети Интернет.');
+}
+*/
+
 /**
  * @method getHostname
  * @returns {String}
@@ -111,12 +145,12 @@ const getParseUrl = function (url, base) {
  */
 const getURL = (pathname = '', baseURL = '') => {
   const URL = require('url').URL;
-  if(!baseURL){
+  if (!baseURL) {
     const port = process.env.PORT || 3131;
     const host = process.env.HOST || 'localhost';
-    baseURL = process.env.BASE_URL? process.env.BASE_URL : `http://${host}:${port}`;
+    baseURL = process.env.BASE_URL ? process.env.BASE_URL : `http://${host}:${port}`;
   }
-  
+
   let url = new URL(pathname, baseURL);
   url = url.href;
   return url;
@@ -130,7 +164,7 @@ const getURL = (pathname = '', baseURL = '') => {
 const validateURL = (baseURL) => {
   const URL = require('url').URL;
   try {
-    new URL('', baseURL);    
+    new URL('', baseURL);
   } catch (error) {
     logger.error(`Validate error URL("${baseURL}")`);
     throw error;
@@ -216,7 +250,7 @@ const dnsLookup = function (url) {
         reject('dnsLookup ERR');
         return;
       }
-      resolve({addresses, family});
+      resolve({ addresses, family });
     });
   });
 };

@@ -71,8 +71,8 @@ function cbReadOnlyModifiedFile(filePath, data) {
  */
 function cbWatchFile(filePath, current, previous) {
   console.log(chalk.green('cbWatchFile.filePath:'), chalk.cyan(filePath));
-  inspector('cbWatchFile.current:', current);
-  inspector('cbWatchFile.previous:', previous);
+  if (isDebug && current) inspector('cbWatchFile.current:', current);
+  if (isDebug && previous) inspector('cbWatchFile.previous:', previous);
   // UnWatch File
   unwatchFile(filePath);
 }
@@ -155,9 +155,9 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
 
   it('#5: FileOperations: readDirSync', () => {
     const filenames = readDirSync([appRoot, 'test/data/tmp']);
-    inspector('FileOperations: readDirSync.filenames:', filenames);
+    if (isDebug && filenames) inspector('FileOperations: readDirSync.filenames:', filenames);
     const fileObjs = readDirSync([appRoot, 'test/data/tmp'], true);
-    inspector('FileOperations: readDirSync.fileObjs:', fileObjs);
+    if (isDebug && fileObjs) inspector('FileOperations: readDirSync.fileObjs:', fileObjs);
     assert.ok(true, 'FileOperations: readDirSync');
   });
 
