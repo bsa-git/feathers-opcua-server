@@ -14,8 +14,6 @@ const loIsObject = require('lodash/isPlainObject');
 const {
   inspector,
   stripSlashes,
-  stripSpecific,
-  isTrue,
   strReplaceEx
 } = require('./util');
 
@@ -130,7 +128,6 @@ const connectToProxy = (url) => {
     }).on('connect', (res, socket) => {
       if (isDebug && res) console.info('connectToProxy.statusCode:', res.statusCode);
       if (isDebug && res) inspector('connectToProxy.statusMessage:', res.statusMessage);
-      // resolve({ statusCode: res.statusCode, statusMessage: res.statusMessage, socket });
       resolve({ res, socket });
     }).on('error', (err) => {
       console.error('connectToProxy.error:', err);
@@ -154,7 +151,13 @@ const getHttp = (url) => {
       res.on('end', () => {
         const data = Buffer.concat(chunks).toString('utf8');
         if (isDebug && chunks.length) console.log('getHttp.data:', data);
-        resolve(data);
+        const response = {
+          statusCode : res.statusCode,
+          statusMessage: res.statusMessage,
+          headers: res.headers,
+          data
+        };
+        resolve(response);
       });
     }).on('error', (err) => {
       console.error('getHttp.error:', err);
@@ -187,7 +190,13 @@ const getHttps = (url, socket) => {
       res.on('end', () => {
         const data = Buffer.concat(chunks).toString('utf8');
         if (isDebug && chunks.length) console.log('DONE', data);
-        resolve(data);
+        const response = {
+          statusCode : res.statusCode,
+          statusMessage: res.statusMessage,
+          headers: res.headers,
+          data
+        };
+        resolve(response);
       });
     }).on('error', (err) => {
       console.error('getHttps.error:', err);
@@ -224,7 +233,13 @@ const reqHttp = (url, reqData = '', options = {}) => {
       res.on('end', () => {
         const resData = Buffer.concat(chunks).toString('utf8');
         if (isDebug && chunks.length) console.log('getHttp.resData:', resData);
-        resolve(resData);
+        const response = {
+          statusCode : res.statusCode,
+          statusMessage: res.statusMessage,
+          headers: res.headers,
+          data: resData
+        };
+        resolve(response);
       });
     });
     req.on('error', (e) => {
@@ -292,7 +307,13 @@ const reqHttps = (url, reqData = '', options = {}) => {
       res.on('end', () => {
         const resData = Buffer.concat(chunks).toString('utf8');
         if (isDebug && chunks.length) console.log('getHttp.resData:', resData);
-        resolve(resData);
+        const response = {
+          statusCode : res.statusCode,
+          statusMessage: res.statusMessage,
+          headers: res.headers,
+          data: resData
+        };
+        resolve(response);
       });
     });
     req.on('error', (e) => {

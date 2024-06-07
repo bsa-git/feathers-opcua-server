@@ -96,55 +96,55 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
   });
 
   it('#2.1: HttpOperations: https.get("http://nodejs.org/dist/index.json")', async () => {
-    let data, url = 'http://nodejs.org/dist/index.json';
+    let response, url = 'http://nodejs.org/dist/index.json';
     //------------------------------------------------------
     
     // External address
     if (! await isUrlExists(url)) return;
 
-    data = await getHttps(url);
-    if(isDebug && data) console.log('getHttps.data:', JSON.parse(data));
-    assert.ok(data, `HttpOperations: getHttps("${url}")`);
+    response = await getHttps(url);
+    if(isDebug && response.data) console.log('getHttps.data:', JSON.parse(response.data));
+    assert.ok(response.statusCode === 200, `HttpOperations: getHttps("${url}")`);
 
     // Local address
     url = 'http://192.168.3.5/www_m5/m5_data/';
     if (! await isUrlExists(url)) return;
 
-    data = await getHttp(url);
-    if(isDebug && data) console.log('getHttp.data:', data);
-    assert.ok(data, `HttpOperations: getHttp("${url}")`);
+    response = await getHttp(url);
+    if(isDebug && response.data) console.log('getHttp.data:', response.data);
+    assert.ok(response.statusCode === 200, `HttpOperations: getHttp("${url}")`);
   });
 
   it('#2.2: HttpOperations: http.request("https://jsonplaceholder.typicode.com/posts/2")', async () => {
-    let data, url = 'https://jsonplaceholder.typicode.com/posts/2';
+    let response, data, url = 'https://jsonplaceholder.typicode.com/posts/2';
     //------------------------------------------------------------------------
     
     // External address
     if (! await isUrlExists(url)) return;
 
-    data = await reqHttps(url);
-    data = JSON.parse(data);
+    response = await reqHttps(url);
+    data = JSON.parse(response.data);
     if(isDebug && data) console.log('getHttps.data:', data);
-    assert.ok(data.userId, `HttpOperations: http.request("${url}")`);
+    assert.ok(response.statusCode === 200 && data.userId, `HttpOperations: http.request("${url}")`);
 
     // Local address
     url = 'http://192.168.3.5/www_m5/m5_data2/';
     if (! await isUrlExists(url)) return;
 
-    data = await reqHttp(url);
-    if(isDebug && data) console.log('reqHttp.data:', data);
-    assert.ok(data, `HttpOperations: reqHttp("${url}")`);
+    response = await reqHttp(url);
+    if(isDebug && response.data) console.log('reqHttp.data:', response.data);
+    assert.ok(response.statusCode === 200, `HttpOperations: reqHttp("${url}")`);
   });
 
   
   it('#3: HttpOperations: https.get("https://jsonplaceholder.typicode.com/posts/1")', async () => {
-    let data, url = 'https://jsonplaceholder.typicode.com/posts/1';
+    let response, data, url = 'https://jsonplaceholder.typicode.com/posts/1';
     if (! await isUrlExists(url)) return;
 
-    data = await getHttps(url);
-    data = JSON.parse(data);
-    if(isDebug && data) console.log('getHttps.data:', data);
-    assert.ok(data.userId, 'HttpOperations: https.get("https://jsonplaceholder.typicode.com/posts/1")');
+    response = await getHttps(url);
+    data = JSON.parse(response.data);
+    if(isDebug && response.data) console.log('getHttps.data:', response.data);
+    assert.ok(response.statusCode === 200 &&  data.userId, 'HttpOperations: https.get("https://jsonplaceholder.typicode.com/posts/1")');
   });
 
   
