@@ -70,8 +70,7 @@
     "include": {
       "tests": [
         "mssql-tedious.test.js",
-        "mssql-datasets.test.js",
-        "http-operations.test.js"
+        "mssql-datasets.test.js"
       ]
     },
     "paths": {
@@ -181,8 +180,7 @@
     "include": {
       "tests": [
         "mssql-tedious.test.js",
-        "mssql-datasets.test.js",
-        "http-operations.test.js"
+        "mssql-datasets.test.js"
       ]
     },
     "paths": {
@@ -259,16 +257,16 @@
   {
     "id": "ua-cherkassy-bsahome_dev1",
     "name": "380-472-bsahome_dev1",
-    "description": "Opcua client. Client connect to `opc.tcp://BSA-HOME:26570` (BSA-HOME OpcuaServer)",
-    "endpointUrl": "opc.tcp://BSA-HOME:26570",
+    "description": "Opcua client. Client connect to `opc.tcp://HP-HOME:26570` (HP-HOME OpcuaServer)",
+    "endpointUrl": "opc.tcp://HP-HOME:26570",
     "endpointPort": 26570,
-    "srvServiceUrl": "http://BSA-HOME:3030",
-    "clientServiceUrl": "http://BSA-HOME:3030",
+    "srvServiceUrl": "http://HP-HOME:3030",
+    "clientServiceUrl": "http://HP-HOME:3030",
     "clientScript": "startSubscriptionMonitor",
     "executeMethodsFrom": "client",
     "hostTypeDB": "mongodb",
     "opcuaSaveModeToDB": "localUpdate",
-    "opcuaRemoteDbUrl": "http://BSA-HOME:3131",
+    "opcuaRemoteDbUrl": "http://HP-HOME:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": true,
       "syncHistoryAtStartup": { 
@@ -287,7 +285,7 @@
       "password": "OPCUA_KEP_PASS"
     },
     "include": {
-      "tests": ["http-operations.test.js", "_mssql-tedious.test2.js"]
+      "tests": ["_mssql-tedious.test2.js"]
     },
     "paths": {
       "base-options": [
