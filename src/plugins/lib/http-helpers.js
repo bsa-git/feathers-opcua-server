@@ -6,8 +6,11 @@ var minimatch = require('minimatch');
 const {
   inspector,
   stripSlashes,
-  urlExists
 } = require('./util');
+
+const {
+  urlExists
+} = require('./http-operations');
 
 const {
   sortByString,
