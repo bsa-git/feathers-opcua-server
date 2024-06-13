@@ -162,8 +162,8 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
   });
 
 
-  it('#10: HttpOperations: curly.get("http://www.google.com")', async () => {
-    const url = 'http://www.google.com';
+  it('#10: HttpOperations: curly.get("https://www.google.com")', async () => {
+    const url = 'https://www.google.com';
     if (! await isUrlExists(url, true)) return;
 
     const { statusCode, data, headers } = await curly.get(url);

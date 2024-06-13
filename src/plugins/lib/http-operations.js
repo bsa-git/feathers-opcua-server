@@ -1,10 +1,7 @@
 /* eslint-disable no-unused-vars */
 const axios = require('axios');
-const { curly } = require('node-libcurl');
 const http = require('http');
 const https = require('https');
-const cheerio = require('cheerio');
-var minimatch = require('minimatch');
 const logger = require('../../logger');
 const shouldProxy = require('should-proxy');
 const { getParseUrl } = require('./net-operations');
@@ -13,19 +10,8 @@ const loIsObject = require('lodash/isPlainObject');
 
 const {
   inspector,
-  stripSlashes,
   strReplaceEx
 } = require('./util');
-
-const {
-  sortByString,
-} = require('./array-operations');
-
-const {
-  getPathExtname,
-} = require('./file-operations');
-
-const chalk = require('chalk');
 
 const debug = require('debug')('app:http-operations');
 const isDebug = false;
