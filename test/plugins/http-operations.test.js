@@ -11,8 +11,6 @@ const {
   inspector,
   startListenPort,
   stopListenPort,
-  canTestRun,
-  getPathBasename,
   getParseUrl,
 } = require('../../src/plugins');
 
@@ -124,7 +122,7 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     assert.ok(response.statusCode === 200 && data.userId, `HttpOperations: https.request("${url}")`);
   });
 
-  it('#7: HttpOperations: http.request("https://jsonplaceholder.typicode.com/posts/2")', async () => {
+  it('#7: HttpOperations: http.request("http://192.168.3.5/www_m5/m5_data2/")', async () => {
     let response, data, url;
     //------------------------------------------------------------------------
 
@@ -157,17 +155,21 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     const response = await fetch(url);
     let data = await response.json();
     data = data[0];
-    if (isDebug && data) inspector(`fetch.get(${url})`, data);
+    if (isDebug && data) inspector(`fetch.get(${url}).data:`, data);
     assert.ok(data.id, `HttpOperations: fetch.get("${url}")`);
   });
 
 
-  it('#10: HttpOperations: curly.get("https://www.google.com")', async () => {
+  it('#10: HttpOperations: fetch("https://www.google.com")', async () => {
     const url = 'https://www.google.com';
     if (! await isUrlExists(url, true)) return;
 
-    const { statusCode, data, headers } = await curly.get(url);
-    if (isDebug && statusCode) console.log(`curly.get(${url}).statusCode:`, statusCode);
-    assert.ok(statusCode === 200, 'HttpOperations: curly.get');
+    const response = await fetch(url);
+    if (true && response) console.log(`fetch(${url}).ok:`, response.ok);
+    if (true && response) console.log(`fetch(${url}).status:`, response.status);
+    if (true && response) console.log(`fetch(${url}).statusText:`, response.statusText);
+    if (true && response) console.log(`fetch(${url}).headers['content-type']:`, '"' + response.headers.get('content-type') + '"' );
+
+    assert.ok(response.ok, `HttpOperations: fetch(${url})`);
   });
 });
