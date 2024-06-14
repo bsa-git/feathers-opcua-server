@@ -18,6 +18,7 @@
     "email": "bs261257@gmail.com"
   },
   "bin": {
+    "cmdTest": "./scripts/cli/cmdTest.js",
     "callOpcuaMethod": "./scripts/cli/callOpcuaMethod.js",
     "runOpcuaCommand": "./scripts/cli/runOpcuaCommand.js",
     "createAcmYearTemplate": "./scripts/cli/createAcmYearTemplate.js",
@@ -40,6 +41,7 @@
     "test:all": "yarn run eslint && yarn run mocha ",
     "test:debug": "yarn run eslint:debug && yarn run mocha:debug",
     "test:script": "yarn run eslint:script && yarn run mocha:script",
+    "cmdTest": "cmdTest",
     "start-seed": "cross-env NODE_ENV=test node src/ --seed",
     "start-mongod": "mongod -f mongod.config.yml",
     "start-mongod32": "mongod --storageEngine=mmapv1 -f mongod.config.yml",
