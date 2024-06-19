@@ -27,9 +27,9 @@ const argv = yargs(hideBin(process.argv))
   .epilog('copyright 2024')
   .argv;
 
-  if (true && argv) inspector('Yargs.argv:', argv);
+if (true && argv) inspector('Yargs.argv:', argv);
 
-  // Run script
+// Run script
 (function cmdTest(cliArgv) {
-    console.log(chalk.green(`Run cmdTest command "${cliArgv.command}"`), 'result:', chalk.cyan('OK'));
+  console.log(chalk.green(`Run cmdTest command "${cliArgv.command}"`), 'result:', chalk.cyan('OK'));
 })(argv);

@@ -4,7 +4,6 @@ const app = require('../../src/app');
 const host = app.get('host');
 const port = app.get('port');
 const fetch = require('node-fetch');
-const { curly } = require('node-libcurl');
 const axios = require('axios');
 
 const {
@@ -66,11 +65,10 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     const url = `http://${host}:${port}`;
     if (! await isUrlExists(url)) return;
 
-    const { statusCode, data, headers } = await curly.get(`http://${host}:${port}`);
+    const response = await fetch(url);
 
-    if (statusCode && isDebug) console.log(`curly.get(${url}).statusCode:`, statusCode);
-    if (data && isDebug) inspector(`curly.get(${url})`, data);
-    assert.ok(statusCode === 200, 'HttpOperations: curly.get("localhost")');
+    if (isDebug && response) console.log(`curly.get(${url}).statusCode:`, response.status);
+    assert.ok(response.status === 200, 'HttpOperations: curly.get("localhost")');
   });
 
   it('#3: HttpOperations: axios.get("http://${host}:${port}")', async () => {
