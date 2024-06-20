@@ -19,6 +19,8 @@
   },
   "bin": {
     "cmdTest": "./scripts/cli/cmdTest.js",
+    "sample_server": "scripts/cli/sample_server.js",
+    "sample_client": "scripts/cli/sample_client.js",
     "callOpcuaMethod": "./scripts/cli/callOpcuaMethod.js",
     "runOpcuaCommand": "./scripts/cli/runOpcuaCommand.js",
     "createAcmYearTemplate": "./scripts/cli/createAcmYearTemplate.js",

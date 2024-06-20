@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
+const minimatch = require('minimatch');
 const dirTree = require('directory-tree');
 const {
   appRoot,
@@ -24,6 +25,7 @@ const {
   unwatchFile,
   removeFileSync,
   getOsPlatform,
+  isWin32,
   winPathToUncPath,
   getFileListFromDir,
   createMatch,
@@ -222,21 +224,26 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
   });
 
   it('#11: FileOperations: Get file list from dir', () => {
-    let fileNames = [], filterFileNames = [];
+    let fileNames = [], filterFileNames = [], pattern = '';
     //---------------------------------------------------------------
     const testPath = 'test/data/excel/acm';
     // Get file names without pattern filter
     fileNames = getFileListFromDir([appRoot, testPath]);
     if (isDebug && fileNames.length) inspector(`FileOperations: Get all file list from dir (${testPath}):`, fileNames);
     // Get file names with pattern filter
-    filterFileNames = getFileListFromDir([appRoot, testPath], '*/**/2022/**/*.xls', { matchBase: true });
+    pattern = '*/**/2022/**/*.xls';
+    if(!isWin32()) pattern = `/${pattern}`;
+    filterFileNames = getFileListFromDir([appRoot, testPath], pattern, { matchBase: true });
     if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from dir (${testPath}):`, filterFileNames);
     assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from dir');
 
-    filterFileNames = getFileListFromDir([appRoot, testPath], '*/**/*_14F120*.xls', { matchBase: true });
+    pattern = '*/**/*_14F120*.xls';
+    if(!isWin32()) pattern = `/${pattern}`;
+    filterFileNames = getFileListFromDir([appRoot, testPath], pattern, { matchBase: true });
     if (isDebug && filterFileNames.length) inspector(`FileOperations: Get file list from dir (${testPath}):`, filterFileNames);
     assert.ok(filterFileNames.length && fileNames.length >= filterFileNames.length, 'FileOperations: Get file list from dir');
   });
+
 
   it('#12: FileOperations: Get file list from unc dir', () => {
     let fileNames = [], filterFileNames = [];
@@ -255,32 +262,40 @@ describe('<<=== FileOperations: (file-operations.test) ===>>', () => {
   });
 
   it('#13: FileOperations: Get file list from dir. With glob patterns to include/exclude  files', () => {
-    let filePaths = [], filterFilePaths = [];
+    let filePaths = [], filterFilePaths = [], includePattern = '', excludePattern = '';
     //---------------------------------------------------------------
     const testPath = 'test/data/excel/acm';
     // Get file paths without pattern filter
     filePaths = getFileListFromDir([appRoot, testPath]);
     if (isDebug && filePaths.length) inspector(`FileOperations: Get all file list from dir (${testPath}):`, filePaths);
     // Get file paths with pattern filter
+    includePattern = '*/**/2022/**/*.xls';
+    if(!isWin32()) includePattern = `/${includePattern}`;
+    excludePattern = '*/**/*_14F120*.xls';
+    if(!isWin32()) excludePattern = `/${excludePattern}`;
     filterFilePaths = filePaths.filter(filePath => createMatch(
-      ['*/**/2022/**/*.xls'], // patterns to include
-      ['*/**/*_14F120*.xls']  // patterns to exclude
+      [includePattern], // patterns to include
+      [excludePattern]  // patterns to exclude
     )(filePath));
     if (isDebug && filterFilePaths.length) inspector(`FileOperations: Get file list from dir (${testPath}):`, filterFilePaths);
     assert.ok(filterFilePaths.length && filePaths.length >= filterFilePaths.length, 'FileOperations: Get file list from dir. With glob patterns to include/exclude  files');
   });
 
   it('#14: FileOperations: Get file stat list from dir', () => {
-    let filePaths = [], filterFilePaths = [];
+    let filePaths = [], filterFilePaths = [], includePattern = '', excludePattern = '';
     //---------------------------------------------------------------
     const testPath = 'test/data/excel/acm';
     // Get file paths without pattern filter
     filePaths = getFileListFromDir([appRoot, testPath]);
     if (isDebug && filePaths.length) inspector(`FileOperations: Get file stat list from dir (${testPath}):`, filePaths);
     // Get file paths with pattern filter
+    includePattern = '*/**/2022/**/*.xls';
+    if(!isWin32()) includePattern = `/${includePattern}`;
+    excludePattern = '*/**/*_14F120*.xls';
+    if(!isWin32()) excludePattern = `/${excludePattern}`;
     filterFilePaths = filePaths.filter(filePath => createMatch(
-      ['*/**/2022/**/*.xls'], // patterns to include
-      ['*/**/*_14F120*.xls']  // patterns to exclude
+      [includePattern], // patterns to include
+      [excludePattern]  // patterns to exclude
     )(filePath));
     if (isDebug && filterFilePaths.length) inspector(`FileOperations: Get file stat list from dir (${testPath}):`, filterFilePaths);
     const fileStatList = getFileStatList(filterFilePaths);

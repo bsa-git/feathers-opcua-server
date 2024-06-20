@@ -42,6 +42,14 @@ const getOsPlatform = function () {
 };
 
 /**
+ * @method isWin32
+ * @returns {Boolean}
+ */
+const isWin32 = function () {
+  return getOsPlatform() === 'win32';
+};
+
+/**
  * @method getOsArchitecture
  * @returns {String}
  * e.g. 'arm', 'arm64', 'ia32', 'mips', 'mipsel', 'ppc', 'ppc64', 's390', 's390x', 'x32', and 'x64'
@@ -49,6 +57,7 @@ const getOsPlatform = function () {
 const getOsArchitecture = function () {
   return os.arch();
 };
+
 
 /**
  * @method getBitDepthOS
@@ -653,6 +662,8 @@ const readDirSync = function (path, withFileTypes = false) {
 const getFileListFromDir = function (path, pattern = '', options = {}, fileList = []) {
   let filenames = [];
   //--------------------
+  const defaultOptions = { platform: getOsPlatform() };
+  options = Object.assign(defaultOptions, options);
   if (Array.isArray(path)) {
     path = join(...path);
   }
@@ -1138,6 +1149,7 @@ const getParams4PointID = function (pointID, tmplFileName, paramsPath, argParams
 
 module.exports = {
   getOsPlatform,
+  isWin32,
   getOsArchitecture,
   getBitDepthOS,
   getFileName,
