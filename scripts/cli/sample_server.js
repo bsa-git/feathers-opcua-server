@@ -117,13 +117,12 @@ function available_memory() {
   // Start the server
   // Once the server has been created and initialised, we use the start asynchronous method 
   //to let the server initiate all its endpoints and start listening to clients.
-  server.start(function () {
-    console.log(chalk.yellow('Server is now listening ... ( press CTRL+C to stop)'));
-    // console.log(chalk.yellow("Port: "), server.endpoints[0].port);
-    console.log(chalk.yellow('Port: '), port);
-  });
+  await server.start();
+  console.log(chalk.yellow('Server started and is now listening ...'), '( press CTRL+C to stop)');
+
   //  Display endpoint url
   // Once the server has been created and configured, it is possible to retrieve the endpoint url.
   const endpointUrl = server.endpoints[0].endpointDescriptions()[0].endpointUrl;
   console.log(chalk.yellow('The primary server endpoint url is:'), endpointUrl);
+  console.log(chalk.yellow('Port: '), port);
 })();

@@ -70,6 +70,7 @@ module.exports = async function opcuaBootstrap(app) {
   const isClearHistoryAtStartup = bootstrapParams && bootstrapParams.clearHistoryAtStartup;
   const isSyncHistoryAtStartup = bootstrapParams && bootstrapParams.syncHistoryAtStartup && bootstrapParams.syncHistoryAtStartup.active;
   const isSyncReportAtStartup = bootstrapParams && bootstrapParams.syncReportAtStartup && bootstrapParams.syncReportAtStartup.active;
+  const isServiceMsSqlDataSets = bootstrapParams && bootstrapParams.serviceMsSqlDatasets && bootstrapParams.serviceMsSqlDatasets.active && bootstrapParams.serviceMsSqlDatasets.mssqlDataBases.length;
 
   if (isSaveOpcuaToDB()) {
     // Get opcua tags 
@@ -150,10 +151,8 @@ module.exports = async function opcuaBootstrap(app) {
   }
 
   // Create mssql datasets
-  if (bootstrapParams &&
-    bootstrapParams.mssqlDataBases &&
-    bootstrapParams.mssqlDataBases.length) {
-    const mssqlDataBases = bootstrapParams.mssqlDataBases;
+  if (isServiceMsSqlDataSets) {
+    const mssqlDataBases = bootstrapParams.serviceMsSqlDatasets.mssqlDataBases;
     for (let index = 0; index < mssqlDataBases.length; index++) {
       const mssqlDataBase = mssqlDataBases[index];
       const service = app.service('mssql-datasets');

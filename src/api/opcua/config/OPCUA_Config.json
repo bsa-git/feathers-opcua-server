@@ -51,7 +51,10 @@
     "opcuaRemoteDbUrl": "http://M5-0095488.OSTCHEM.COM.UA:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": false,
-      "mssqlDataBases": ["MSSQL_ASODU_TEST"],
+      "serviceMsSqlDatasets": {
+        "active": true,
+        "mssqlDataBases": ["MSSQL_ASODU_TEST"]
+      },
       "syncHistoryAtStartup": { 
         "active": false,
         "methodName": "methodAcmDayReportsDataGet"
@@ -116,26 +119,52 @@
     }
   },
   {
-    "isEnable": false,
+    "isEnable": true,
     "id": "ua-cherkassy-azot-asutp_dev3",
     "name": "380-472-00203826-asutp_dev3",
-    "description": "Opcua client. Client connect to `opc.tcp://OGMT-MZTP.OSTCHEM.COM.UA:26570` (OGMT-MZTP OpcuaServer)",
-    "endpointUrl": "opc.tcp://OGMT-MZTP.OSTCHEM.COM.UA:26570",
-    "srvServiceUrl": "",
-    "clientServiceUrl": "http://M5-0095488.OSTCHEM.COM.UA:3030",
-    "subscription": "onChangedGroupHandler",
+    "description": "Opcua server and client. Client connect to `opc.tcp://BSA-VM:26570`(M5 OpcuaServer for VM)",
+    "endpointUrl": "opc.tcp://BSA-VM:26570",
+    "endpointPort": 26570,
+    "srvServiceUrl": "http://BSA-VM:3030",
+    "clientServiceUrl": "http://BSA-VM:3030",
+    "clientScript": "startSubscriptionMonitor",
+    "executeMethodsFrom": "client",
+    "hostTypeDB": "mongodb",
+    "opcuaSaveModeToDB": "localUpdate",
+    "opcuaRemoteDbUrl": "http://BSA-VM:3131",
+    "opcuaBootstrapParams": {
+      "clearHistoryAtStartup": false,
+      "serviceMsSqlDatasets": {
+        "active": false,
+        "mssqlDataBases": ["MSSQL_ASODU_TEST"]
+      },
+      "syncHistoryAtStartup": { 
+        "active": false,
+        "methodName": "methodAcmDayReportsDataGet"
+      },
+      "syncReportAtStartup": {
+        "active": false,
+        "methodName": "methodAcmYearReportUpdate"
+      }
+    },
     "security": {
       "mode": "SignAndEncrypt",
       "policy": "Basic256Sha256",
-      "userName": "",
-      "password": ""
+      "userName": "OPCUA_ADMIN_LOGIN",
+      "password": "OPCUA_ADMIN_PASS"
+    },
+    "include": {
+      "tests": [
+        "_mssql-tedious.test.js",
+        "_mssql-datasets.test.js"
+      ]
     },
     "paths": {
       "base-options": [
         "/src/api/opcua/tags/ua-cherkassy-azot-m5_prod1",
         "/src/api/opcua/tags/ua-cherkassy-azot-ogmttsd_prod1"
       ],
-      "options": "",
+      "options": "/src/api/opcua/tags/ua-cherkassy-azot-asutp_dev3/AddressSpaceOptions.json",
       "getters": "",
       "methods": "",
       "subscriptions": "",
@@ -161,7 +190,10 @@
     "opcuaRemoteDbUrl": "http://OGMT-0088846.OSTCHEM.COM.UA:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": true,
-      "mssqlDataBases": ["MSSQL_ASODU_TEST"],
+      "serviceMsSqlDatasets": {
+        "active": true,
+        "mssqlDataBases": ["MSSQL_ASODU_TEST"]
+      },
       "syncHistoryAtStartup": { 
         "active": false,
         "methodName": "methodAcmDayReportsDataGet"
@@ -395,7 +427,10 @@
     "opcuaRemoteDbUrl": "http://OGMT-TSD:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": false,
-      "mssqlDataBases": ["MSSQL_ASODU_TEST"]
+      "serviceMsSqlDatasets": {
+        "active": true,
+        "mssqlDataBases": ["MSSQL_ASODU_TEST"]
+      }
     },
     "security": {
       "mode": "SignAndEncrypt",
