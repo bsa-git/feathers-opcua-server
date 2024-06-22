@@ -302,7 +302,7 @@ describe('<<=== OPC-UA: Test (sample-opcua.test) ===>>', () => {
         console.log(chalk.yellow('keepalive'));
       })
       .on('terminated', function () {
-        console.log(chalk.yellow('Terminated'));
+        console.log(chalk.yellow('OPCUA client subscription terminated'));
       });
 
     // Install monitored item
@@ -337,7 +337,6 @@ describe('<<=== OPC-UA: Test (sample-opcua.test) ===>>', () => {
 
     // Subscription terminate
     await subscription.terminate();
-    console.log(chalk.yellow('OPCUA client subscription terminated!'));
 
     // Closing session
     await session.close();
@@ -353,8 +352,8 @@ describe('<<=== OPC-UA: Test (sample-opcua.test) ===>>', () => {
     const timeout = 1000;
     if (timeout) await server.shutdown(timeout);
     else await server.shutdown();
-    if (timeout) console.log(chalk.yellow('Server terminated.'), 'Timeout:', chalk.cyan(`${timeout} Msec.`));
-    else console.log(chalk.yellow('Server terminated.'));
+    if (timeout) console.log(chalk.yellow('Server shutdown'), 'Timeout:', chalk.cyan(`${timeout} Msec.`));
+    else console.log(chalk.yellow('Server shutdown.'));
 
     assert.ok(true, 'OPCUA server not created');
   });
