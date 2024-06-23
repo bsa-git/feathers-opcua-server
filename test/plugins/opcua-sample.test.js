@@ -152,7 +152,6 @@ describe('<<=== OPC-UA: Test (sample-opcua.test) ===>>', () => {
     // Once the server has been created and configured, it is possible to retrieve the endpoint url.
     const endpointUrl = server.endpoints[0].endpointDescriptions()[0].endpointUrl;
     console.log(chalk.yellow('The primary server endpoint url is:'), endpointUrl);
-    console.log(chalk.yellow('Port: '), port);
 
     assert.ok(endpointUrl, 'OPCUA server not start');
   });
@@ -160,14 +159,12 @@ describe('<<=== OPC-UA: Test (sample-opcua.test) ===>>', () => {
   it('#4: OPCUA client create', async () => {
     // Let's use un-secure connection by setting securityMode to None and securityPolicy to None.
     client = OPCUAClient.create({
-      applicationName: 'MyClient',
+      applicationName: 'NodeOPCUA-Client',
       connectionStrategy: connectionStrategy,
-      securityMode: MessageSecurityMode.None,
-      securityPolicy: SecurityPolicy.None,
+      securityMode: MessageSecurityMode.SignAndEncrypt,
+      securityPolicy: SecurityPolicy.Basic256Sha256,
       endpointMustExist: false
     });
-    //const endpointUrl = "opc.tcp://opcuademo.sterfive.com:26543";
-    const endpointUrl = 'opc.tcp://' + os.hostname() + `:${srvParams.port}${srvParams.resourcePath}`;
 
     assert.ok(client, 'OPCUA client not created');
   });

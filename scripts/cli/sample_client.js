@@ -88,7 +88,7 @@ async function timeout(ms) {
 (async function sample_client() {
   // Let's use un-secure connection by setting securityMode to None and securityPolicy to None.
   const client = OPCUAClient.create({
-    applicationName: 'MyClient',
+    applicationName: 'NodeOPCUA-Client',
     connectionStrategy: connectionStrategy,
     securityMode: MessageSecurityMode.None,
     securityPolicy: SecurityPolicy.None,
