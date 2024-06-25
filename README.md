@@ -6,7 +6,7 @@
 
 This project uses [Feathers](http://feathersjs.com), a framework for real-time applications and REST APIs. It contains the OPC-UA application created in [node-opcua on GitHub](https://github.com/node-opcua).
 
-> __Important:__ This project requires NodeJS 10 or later.
+> __Important:__ This project requires NodeJS 12 or later.
 
 ### [Learn more...](https://bsa-git.github.io/feathers-opcua-server/)
 
