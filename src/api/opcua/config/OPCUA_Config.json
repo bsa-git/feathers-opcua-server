@@ -154,10 +154,7 @@
       "password": "OPCUA_ADMIN_PASS"
     },
     "include": {
-      "tests": [
-        "_mssql-tedious.test.js",
-        "_mssql-datasets.test.js"
-      ]
+      "tests": []
     },
     "paths": {
       "base-options": [

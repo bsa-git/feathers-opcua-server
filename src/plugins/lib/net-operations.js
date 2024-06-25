@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const dns = require('dns');
 
-const { logger } = require('./util');
+const { logger, inspector } = require('./util');
 
 const debug = require('debug')('app:net-operations');
 const isDebug = false;
@@ -107,6 +107,7 @@ const getHostname = function () {
   return os.hostname().toLowerCase();
 };
 
+
 /**
  * Get an instance of a class 'URL'
  * @method getPaseUrl
@@ -204,6 +205,46 @@ const getMyIp = function () {
 };
 
 /**
+ * @method getMyEnvPort
+ * @returns {Number}
+ */
+const getMyEnvPort = function () {
+  return process.env.PORT;
+};
+
+
+/**
+ * @method checkPort
+ * @async
+ * @param {Number} port 
+ * @param {String} host 
+ * @returns {Number|Error}
+ */
+const checkPort = function (port, host) {
+  return new Promise((resolve, reject) => {
+    const net = require('net');
+    const socket = new net.Socket();
+
+    socket.on('connect', () => {
+      socket.destroy();
+      resolve(port);
+    });
+
+    socket.on('timeout', () => {
+      socket.destroy();
+      reject(new Error(`Port ${port} not used on the host "${host}"`));
+    });
+
+    socket.on('error', () => {
+      socket.destroy();
+      reject(new Error(`Port ${port} not used on the host "${host}"`));
+    });
+
+    socket.connect(port, host);
+  });
+};
+
+/**
  * @method isMyIp
  * @param {Array} ips
  * @param {Boolean} exclude
@@ -227,7 +268,7 @@ const setLocalhostToIP = function () {
   if (isMyLocalhostToIP() && isLocalhost && getMyIp()) {
     process.env.HOST = getMyIp();
     process.env.BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`;
-    if (true && process.env.HOST) {
+    if (isDebug && process.env.HOST) {
       console.log('process.env.HOST', process.env.HOST);
       console.log('process.env.BASE_URL', process.env.BASE_URL);
     }
@@ -268,5 +309,7 @@ module.exports = {
   getMyIp,
   isMyIp,
   setLocalhostToIP,
+  getMyEnvPort,
+  checkPort,
   dnsLookup
 };
