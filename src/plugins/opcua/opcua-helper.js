@@ -9,6 +9,7 @@ const {
   getParseUrl,
   getHostname,
   getMyIp,
+  getMyEnvPort,
   strReplace,
   getInt,
   convertObject2Array,
@@ -513,11 +514,12 @@ const getOpcuaConfig = function (id = '') {
  */
 const getOpcuaConfigForIp = function (ip = '') {
   let opcuaOption = null;
+  const myEnvPort = getMyEnvPort();
   const opcuaOptions = require(`${appRoot}/src/api/opcua/config/OPCUA_Config.json`);
   opcuaOption = opcuaOptions.find(opt => {
     const url = opt.srvServiceUrl ? opt.srvServiceUrl : opt.clientServiceUrl;
     const parts = getParseUrl(url);
-    return parts.hostname === ip;
+    return (parts.hostname === ip) && (parts.port === myEnvPort);
   });
   return opcuaOption;
 };
@@ -527,18 +529,19 @@ const getOpcuaConfigForIp = function (ip = '') {
  * @returns {Object}
  */
 const getOpcuaConfigForMe = function () {
-  let opcuaOption = null;
+  let opcuaOption = null, isHostname = false;
   const myHostname = getHostname().toLowerCase();
   const myIp = getMyIp();
+  const myEnvPort = getMyEnvPort();
   if (isDebug) debug('getOpcuaConfigForMe.myHostname, myIp:', myHostname, myIp);
   // debug('getOpcuaConfigForMe.myHostname, myIp:', myHostname, myIp);
   const opcuaOptions = require(`${appRoot}/src/api/opcua/config/OPCUA_Config.json`);
   opcuaOption = opcuaOptions.find(opt => {
     const url = opt.clientServiceUrl ? opt.clientServiceUrl : opt.srvServiceUrl;
     const parts = getParseUrl(url);
-    if (isDebug) debug('getOpcuaConfigForMe.getParseUrl:', parts);
-    // debug('getOpcuaConfigForMe.getParseUrl:', parts);
-    return (parts.hostname.includes(myHostname)) || (parts.hostname === myIp);
+    if (isDebug && parts) debug('getOpcuaConfigForMe.getParseUrl:', parts);
+    isHostname = (parts.hostname.includes(myHostname)) || (parts.hostname === myIp);
+    return isHostname && (parts.port === myEnvPort);
   });
   return opcuaOption;
 };
@@ -548,16 +551,18 @@ const getOpcuaConfigForMe = function () {
  * @returns {Object[]}
  */
 const getOpcuaConfigsForMe = function () {
-  let opcuaOptions = [];
+  let opcuaOptions = [], isHostname = false;
   const myHostname = getHostname().toLowerCase();
   const myIp = getMyIp();
+  const myEnvPort = getMyEnvPort();
   if (isDebug && myHostname) debug('getOpcuaConfigForMe.myHostname, myIp:', myHostname, myIp);
   const opcuaConfig = require(`${appRoot}/src/api/opcua/config/OPCUA_Config.json`);
   opcuaOptions = opcuaConfig.filter(opt => {
     const url = opt.clientServiceUrl ? opt.clientServiceUrl : opt.srvServiceUrl;
     const parts = getParseUrl(url);
     if (isDebug && parts) debug('getOpcuaConfigForMe.getParseUrl:', parts);
-    return (parts.hostname.includes(myHostname)) || (parts.hostname === myIp);
+    isHostname = (parts.hostname.includes(myHostname)) || (parts.hostname === myIp);
+    return isHostname && (parts.port === myEnvPort);
   });
   return opcuaOptions;
 };

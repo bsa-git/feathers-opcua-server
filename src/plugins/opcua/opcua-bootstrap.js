@@ -7,12 +7,15 @@ const {
   inspector,
   readJsonFileSync,
   isTrue,
-  isUrlExists
+  isUrlExists,
+  getHostname,
+  getMyEnvPort
 } = require('../lib');
 
 const {
   getOpcuaTags,
   getOpcuaConfig,
+  getOpcuaConfigForMe,
   getServerService,
   getClientService,
   executeOpcuaClientScript,
@@ -64,6 +67,12 @@ module.exports = async function opcuaBootstrap(app) {
   // Check is opcua bootstrap allowed
   const isOpcuaBootstrapAllowed = feathersSpecs.app.envAllowingOpcuaBootstrap.find(item => item === app.get('env'));
   if (!isOpcuaBootstrapAllowed) return;
+
+  // Get opcua config for me
+  if(getOpcuaConfigForMe() === null) {
+    logger.warn('Feathers application did not find its hostname and port (http://%s:%d) in the configuration file (%s)', getHostname(), getMyEnvPort(), 'OPCUA_Config.json');
+    return;
+  }
 
   // Get opcua bootstrap params
   bootstrapParams = getOpcuaBootstrapParams();
