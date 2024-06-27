@@ -533,7 +533,7 @@ const getOpcuaConfigForMe = function () {
   const myHostname = getHostname().toLowerCase();
   const myIp = getMyIp();
   const myEnvPort = getMyEnvPort();
-  if (isDebug) debug('getOpcuaConfigForMe.myHostname, myIp:', myHostname, myIp);
+  if (isDebug) debug('getOpcuaConfigForMe.myHostname, myIp, myEnvPort:', myHostname, myIp, myEnvPort);
   // debug('getOpcuaConfigForMe.myHostname, myIp:', myHostname, myIp);
   const opcuaOptions = require(`${appRoot}/src/api/opcua/config/OPCUA_Config.json`);
   opcuaOption = opcuaOptions.find(opt => {
@@ -543,7 +543,7 @@ const getOpcuaConfigForMe = function () {
     isHostname = (parts.hostname.includes(myHostname)) || (parts.hostname === myIp);
     return isHostname && (parts.port === myEnvPort);
   });
-  return opcuaOption;
+  return opcuaOption? opcuaOption : null;
 };
 
 /**

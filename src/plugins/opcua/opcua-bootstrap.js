@@ -70,7 +70,7 @@ module.exports = async function opcuaBootstrap(app) {
 
   // Get opcua config for me
   if(getOpcuaConfigForMe() === null) {
-    logger.warn('Feathers application did not find its hostname and port (http://%s:%d) in the configuration file (%s)', getHostname(), getMyEnvPort(), 'OPCUA_Config.json');
+    logger.error('Feathers application did not find its hostname and port (http://%s:%d) in the configuration file (%s)', getHostname(), getMyEnvPort(), 'OPCUA_Config.json');
     return;
   }
 
