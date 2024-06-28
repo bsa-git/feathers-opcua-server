@@ -130,7 +130,7 @@
     "clientScript": "startSubscriptionMonitor",
     "executeMethodsFrom": "client",
     "hostTypeDB": "mongodb",
-    "opcuaSaveModeToDB": "localUpdate",
+    "opcuaSaveModeToDB": "remoteUpdate",
     "opcuaRemoteDbUrl": "http://BSA-VM:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": false,

@@ -43,11 +43,18 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
 
     // Check proxy
     let hostname = getParseUrl('http://192.168.3.5:3030').hostname;
+    let urlPort = getParseUrl('http://192.168.3.5:3030').port;
     let proxy = getProxy(`http://${hostname}`);
-    console.log('proxy_url-1.1:', `"http://${hostname}"`, `(${!!proxy})`);
+    console.log('proxy_url-1.1:', `"http://${hostname}:${urlPort}"`, `(${!!proxy})`);
     hostname = getParseUrl(`http://${host}:${port}`).hostname;
     proxy = getProxy(`http://${hostname}/my/1234`);
     console.log('proxy_url-1.2:', `"http://${hostname}"`, `(${!!proxy})`);
+
+    hostname = getParseUrl('http://bsa-vm:3131').hostname;
+    urlPort = getParseUrl('http://bsa-vm:3131').port;
+    proxy = getProxy(`http://${hostname}`);
+    console.log('proxy_url-1.2:', `"http://${hostname}:${urlPort}"`, `(${!!proxy})`);
+
     hostname = getParseUrl('http://zf2-asm.srv2').hostname;
     proxy = getProxy(`http://${hostname}`);
     console.log('proxy_url-1.3:', `"http://${hostname}"`, `(${!!proxy})`);
@@ -79,7 +86,6 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     if (isDebug && response) console.log(`axios.get(${url}).statusText`, response.statusText);
     assert.ok(response, 'HttpOperations: axios.get');
   });
-
 
   it('#4: HttpOperations: https.get("https://nodejs.org/dist/index.json")', async () => {
     let response, url = 'https://nodejs.org/dist/index.json';
@@ -169,5 +175,14 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     if (true && response) console.log(`fetch(${url}).headers['content-type']:`, '"' + response.headers.get('content-type') + '"' );
 
     assert.ok(response.ok, `HttpOperations: fetch(${url})`);
+  });
+
+  it('#11: HttpOperations: axios.get("http://bsa-vm:3131")', async () => {
+    const url = 'http://bsa-vm:3131';
+    if (! await isUrlExists(url)) return;
+
+    const response = await axios.get(url);
+    if (isDebug && response) console.log(`axios.get(${url}).statusText`, response.statusText);
+    assert.ok(response, 'HttpOperations: axios.get');
   });
 });
