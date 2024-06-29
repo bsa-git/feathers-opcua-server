@@ -139,10 +139,6 @@ class OpcuaClient {
     this.currentState.isConnect = true;
     this.currentState.endpointUrl = params.endpointUrl;
     this.currentState.port = params.endpointUrl.split(':')[2];
-    // console.log(chalk.yellow('Client connected to:'), chalk.cyan(params.endpointUrl));
-    // console.log(chalk.yellow('Client applicationUri:'), chalk.cyan(this.currentState.applicationUri));
-    // console.log(chalk.yellow('Client securityMode:'), chalk.cyan(getSecurityMode(this.opcuaClient.securityMode)));
-    // console.log(chalk.yellow('Client securityPolicy:'), chalk.cyan(getSecurityPolicy(this.opcuaClient.securityPolicy)));
 
     logger.info('Client connected to: %s', params.endpointUrl);
     logger.info('Client applicationUri: %s', this.currentState.applicationUri);
