@@ -297,7 +297,11 @@
     "opcuaSaveModeToDB": "localUpdate",
     "opcuaRemoteDbUrl": "http://HP-HOME:3131",
     "opcuaBootstrapParams": {
-      "clearHistoryAtStartup": true,
+      "clearHistoryAtStartup": false,
+      "serviceMsSqlDatasets": {
+        "active": false,
+        "mssqlDataBases": []
+      },
       "syncHistoryAtStartup": { 
         "active": false,
         "methodName": "methodAcmDayReportsDataGet"
@@ -330,18 +334,22 @@
   {
     "id": "ua-cherkassy-bsahome_dev2",
     "name": "380-472-bsahome_dev2",
-    "description": "Opcua client. Client connect to `opc.tcp://HOME-PC:26570` (HOME-PC OpcuaServer)",
-    "endpointUrl": "opc.tcp://HOME-PC:26570",
+    "description": "Opcua client. Client connect to `opc.tcp://HP-HOME:26570` (HP-HOME OpcuaServer)",
+    "endpointUrl": "opc.tcp://HP-HOME:26570",
     "endpointPort": 26570,
-    "srvServiceUrl": "http://HOME-PC:3030",
-    "clientServiceUrl": "http://HOME-PC:3030",
+    "srvServiceUrl": "http://HP-HOME:3232",
+    "clientServiceUrl": "http://HP-HOME:3232",
     "clientScript": "startSubscriptionMonitor",
     "executeMethodsFrom": "client",
     "hostTypeDB": "nedb",
     "opcuaSaveModeToDB": "localUpdate",
-    "opcuaRemoteDbUrl": "http://HOME-PC:3131",
+    "opcuaRemoteDbUrl": "http://HP-HOME:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": false,
+      "serviceMsSqlDatasets": {
+        "active": false,
+        "mssqlDataBases": []
+      },
       "syncHistoryAtStartup": { 
         "active": false,
         "methodName": "methodAcmDayReportsDataGet"

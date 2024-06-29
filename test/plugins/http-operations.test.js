@@ -169,10 +169,10 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     if (! await isUrlExists(url, true)) return;
 
     const response = await fetch(url);
-    if (true && response) console.log(`fetch(${url}).ok:`, response.ok);
-    if (true && response) console.log(`fetch(${url}).status:`, response.status);
-    if (true && response) console.log(`fetch(${url}).statusText:`, response.statusText);
-    if (true && response) console.log(`fetch(${url}).headers['content-type']:`, '"' + response.headers.get('content-type') + '"' );
+    if (isDebug && response) console.log(`fetch(${url}).ok:`, response.ok);
+    if (isDebug && response) console.log(`fetch(${url}).status:`, response.status);
+    if (isDebug && response) console.log(`fetch(${url}).statusText:`, response.statusText);
+    if (isDebug && response) console.log(`fetch(${url}).headers['content-type']:`, '"' + response.headers.get('content-type') + '"' );
 
     assert.ok(response.ok, `HttpOperations: fetch(${url})`);
   });
