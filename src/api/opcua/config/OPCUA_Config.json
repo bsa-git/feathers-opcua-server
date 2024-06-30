@@ -341,8 +341,8 @@
     "clientServiceUrl": "http://HP-HOME:3232",
     "clientScript": "startSubscriptionMonitor",
     "executeMethodsFrom": "client",
-    "hostTypeDB": "nedb",
-    "opcuaSaveModeToDB": "localUpdate",
+    "hostTypeDB": "mongodb",
+    "opcuaSaveModeToDB": "remoteUpdate",
     "opcuaRemoteDbUrl": "http://HP-HOME:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": false,
