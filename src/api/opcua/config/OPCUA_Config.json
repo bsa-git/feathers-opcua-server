@@ -342,7 +342,7 @@
     "clientScript": "startSubscriptionMonitor",
     "executeMethodsFrom": "client",
     "hostTypeDB": "mongodb",
-    "opcuaSaveModeToDB": "remoteUpdate",
+    "opcuaSaveModeToDB": "localUpdate",
     "opcuaRemoteDbUrl": "http://HP-HOME:3131",
     "opcuaBootstrapParams": {
       "clearHistoryAtStartup": false,
