@@ -146,6 +146,23 @@ const checkCorrectEnumType = function (EnumType, value, isCatch = true) {
   }
 };
 
+/**
+ * @method asyncHandled
+ * A function that would return an error or result if successful without indentation
+ * @async
+ * @param {Function} asyncFunc 
+ * @returns Array[Error|null, Any|null]
+ * e.g. const [error, res] = await handled(asyncFunc)
+ */
+const asyncHandled = async (asyncFunc) => { 
+  try { 
+    const res = await asyncFunc(); 
+    return [null, res]; 
+  } catch (error) { 
+    return [error, null] 
+  }
+}
+
 //--------------------- DATE TIME -------------------//
 /**
 * Pause
@@ -1277,6 +1294,7 @@ module.exports = {
   sysMemUsage,
   assert,
   checkCorrectEnumType,
+  asyncHandled,
   pause,
   waitTimeout,
   waitTill,
