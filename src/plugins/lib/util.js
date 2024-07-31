@@ -159,9 +159,9 @@ const asyncHandled = async (asyncFunc) => {
     const res = await asyncFunc(); 
     return [null, res]; 
   } catch (error) { 
-    return [error, null] 
+    return [error, null]; 
   }
-}
+};
 
 //--------------------- DATE TIME -------------------//
 /**
