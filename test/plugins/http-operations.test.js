@@ -68,14 +68,14 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     assert.ok(true, 'HttpOperations: getProxy');
   });
 
-  it('#2: HttpOperations: curly.get("http://${host}:${port}")', async () => {
+  it('#2: HttpOperations: fetch("http://${host}:${port}")', async () => {
     const url = `http://${host}:${port}`;
     if (! await isUrlExists(url)) return;
 
     const response = await fetch(url);
 
-    if (isDebug && response) console.log(`curly.get(${url}).statusCode:`, response.status);
-    assert.ok(response.status === 200, 'HttpOperations: curly.get("localhost")');
+    if (isDebug && response) console.log(`fetch(${url}).statusCode:`, response.status);
+    assert.ok(response.status === 200, 'HttpOperations: fetch("localhost")');
   });
 
   it('#3: HttpOperations: axios.get("http://${host}:${port}")', async () => {
@@ -177,8 +177,8 @@ describe('<<=== HttpOperations: (http-operations.test) ===>>', () => {
     assert.ok(response.ok, `HttpOperations: fetch(${url})`);
   });
 
-  it('#11: HttpOperations: axios.get("http://bsa-vm:3131")', async () => {
-    const url = 'http://bsa-vm:3131';
+  it('#11: HttpOperations: axios.get("http://bsa-vm:3030")', async () => {
+    const url = 'http://bsa-vm:3030';
     if (! await isUrlExists(url)) return;
 
     const response = await axios.get(url);
