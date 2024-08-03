@@ -33,7 +33,7 @@ const {
   MessageSecurityMode,
   SecurityPolicy
 } = require('node-opcua');
-const debug = require('debug')('app:opcua-class.test');
+// const debug = require('debug')('app:opcua-class.test');
 const isDebug = false;
 const isLog = false;
 
@@ -232,12 +232,12 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
       // Get start time
       // const start = moment.utc().format();
       const start = moment();
-      debug('SessionHistoryValue.StartTime:', getTime(start, false));
+      console.log('SessionHistoryValue.StartTime:', getTime(start, false));
       await pause(1000);
       // Get end time
       // const end = moment.utc().format();
       const end = moment();
-      debug('SessionHistoryValue.EndTime:', getTime(end, false));
+      console.log('SessionHistoryValue.EndTime:', getTime(end, false));
 
       readResult = await client.sessionReadHistoryValues('Device2.PressureVesselDevice', start, end);
       if (isLog && readResult) inspector('SessionHistoryValue.readResult:', readResult);

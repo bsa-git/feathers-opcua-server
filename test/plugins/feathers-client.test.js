@@ -32,10 +32,7 @@ const moment = require('moment');
 const loRound = require('lodash/round');
 const loForEach = require('lodash/forEach');
 
-const debug = require('debug')('app:feathers-client.test');
-
 const isDebug = false;
-const isTest = false;
 
 // OPCUA Options
 const srvData = {
@@ -79,7 +76,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
           await saveFakesToServices(app, 'users');
           appSocketioClient = await feathersClient({ transport: 'socketio', serverUrl: baseUrl });
           appRestClient = await feathersClient({ transport: 'rest', serverUrl: baseUrl });
-          if (isDebug) debug('Done before StartTest!');
+          if (isDebug) console.log('Done before StartTest!');
           done();
         }, 500);
       });
@@ -89,7 +86,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       // this.timeout(30000);
       server.close();
       setTimeout(() => {
-        if (isDebug) debug('Done after EndTest!');
+        if (isDebug) console.log('Done after EndTest!');
         done();
       }, 500);
     });
@@ -109,7 +106,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       // Logout
       await appRestClient.logout();
       let token = await appRestClient.authentication.getAccessToken();
-      if (isDebug) debug('token:', token);
+      if (isDebug) console.log('token:', token);
       assert.ok(!token, 'Get access token for user');
     });
 
@@ -125,7 +122,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       // Logout
       await appSocketioClient.logout();
       let token = await appSocketioClient.authentication.getAccessToken();
-      if (isDebug) debug('token:', token);
+      if (isDebug) console.log('token:', token);
       assert.ok(!token, 'Get access token for user');
     });
 
@@ -349,12 +346,12 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       if (readResult) {
         // Get start time
         const start = moment();
-        debug('SessionHistoryValue_ForCH_M51.StartTime:', getTime(start, false));
+        console.log('SessionHistoryValue_ForCH_M51.StartTime:', getTime(start, false));
         // Pause
         await pause(1000);
         // Get end time
         const end = moment();
-        debug('SessionHistoryValue_ForCH_M51.EndTime:', getTime(end, false));
+        console.log('SessionHistoryValue_ForCH_M51.EndTime:', getTime(end, false));
 
         // service.sessionReadHistoryValues
         data = { id, action: 'sessionReadHistoryValues', nameNodeIds: 'CH_M51::ValueFromFile', start, end };
