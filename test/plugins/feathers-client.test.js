@@ -311,7 +311,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       const service = appRestClient.service('opcua-clients');
       // service create
       let opcuaClient = await service.create(clientData);
-      if (isDebug) inspector('created the service.opcuaClient:', opcuaClient);
+      if (true && opcuaClient) inspector('created the service.opcuaClient:', opcuaClient);
       assert.ok(opcuaClient, 'OPC-UA clients: created the service');
       // Get client service
       opcuaClient = await service.get(id);
