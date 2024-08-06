@@ -97,7 +97,7 @@ function percentageMemUsed() {
  */
 function histValueFromSource(params = {}, addedValue) {
 
-  if (true && addedValue) console.log(chalk.white('<--- GETTER(histValueFromSource): Test (opcua-class.test) --->'));
+  if (isDebug && addedValue) console.log(chalk.white('<--- GETTER(histValueFromSource): Test (opcua-class.test) --->'));
 
   // simulate pressure change
   const _t = 0;
@@ -126,7 +126,7 @@ function histValueFromSource(params = {}, addedValue) {
  */
 function histArrayValue(params = {}, addedValue) {
   
-  if (true && addedValue) console.log(chalk.white('<--- GETTER(histArrayValue): Test (opcua-class.test) --->'));
+  if (isDebug && addedValue) console.log(chalk.white('<--- GETTER(histArrayValue): Test (opcua-class.test) --->'));
 
   // simulate pressure change
   const _t = 0;
@@ -156,7 +156,7 @@ function histArrayValue(params = {}, addedValue) {
 
 function getterHistValueFromFile(params = {}, addedValue) {
 
-  if (true && addedValue) console.log(chalk.white('<--- GETTER(getterHistValueFromFile): Test (opcua-class.test) --->'));
+  if (isDebug && addedValue) console.log(chalk.white('<--- GETTER(getterHistValueFromFile): Test (opcua-class.test) --->'));
 
   const _t = 0;
   const _interval = 200;
