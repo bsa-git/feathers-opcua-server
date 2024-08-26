@@ -19,7 +19,6 @@ need to write along the way: for Win -> "c:\Users\CH17545\AppData\Local\Programs
 
 path to bat file -> c:\OpenSSL-Win64\opcuaSSL_Commands.bat
 ----------------------------------------------------------
-----------------------------------------------------------
 
 generate a new private key and Certificate Signing Request
 ----------------------------------------------------------
