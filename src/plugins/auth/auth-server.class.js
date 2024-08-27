@@ -7,7 +7,6 @@ const { inspector, readJsonFileSync, stripSpecific, isTrue, appRoot } = require(
 const typeOf = require('../lib/type-of');
 const debug = require('debug')('app:plugins.auth-server.class');
 
-const isLog = false;
 const isDebug = false;
 
 /**
@@ -115,7 +114,7 @@ class AuthServer {
    */
   async getRole(id) {
     const role = await this.app.service('roles').get(id);
-    if (isLog) inspector('AuthServer.getRole:', role);
+    if (isDebug) inspector('AuthServer.getRole:', role);
     return role;
   }
 
@@ -214,9 +213,9 @@ class AuthServer {
     const msg1 = `<<AuthServer>>: Provider: ${this.contextProvider ? this.contextProvider : 'Not'}; ${this.contextType} app.service('${this.contextPath}').${this.contextMethod}()`;
     const msg2 = `; isAuth: ${this.isAuth() ? this.isAuth() : 'Not'}; MyRole: ${myRole ? myRole : 'Not'};`;
     // if (isDebug) debug(`${msg1}${this.contextProvider ? msg2 : ''}`);
-    if (isLog) inspector('AuthServer.contextProvider:', `${msg1}${this.contextProvider ? msg2 : ''}`);
-    if (isLog) inspector('AuthServer.context:', this.getHookContext());
-    if (isLog) inspector('AuthServer.isAccess:', !notAccess);
+    if (isDebug) inspector('AuthServer.contextProvider:', `${msg1}${this.contextProvider ? msg2 : ''}`);
+    if (isDebug) inspector('AuthServer.context:', this.getHookContext());
+    if (isDebug) inspector('AuthServer.isAccess:', !notAccess);
     // if (isDebug) debug(`AuthServer.isAccess: ${!notAccess}`);
 
     return !notAccess;
@@ -227,7 +226,7 @@ class AuthServer {
    * Checks the ability to log user
    * @return {Promise.<void>}
    */
-  async isLogin() {
+  async isDebugin() {
     let payload = this.contextPayload;
     if (!payload) {
       payload = await AuthServer.verifyJWT(this.contextAccessToken);
@@ -238,7 +237,7 @@ class AuthServer {
     const service = this.app.service('users');
     if (service) {
       const user = await service.get(payload.userId);
-      if (isLog) inspector('plugins::auth-server.class::isLogin.user:', user);
+      if (isDebug) inspector('plugins::auth-server.class::isDebugin.user:', user);
       return Promise.resolve(user.active);
     } else {
       throw new errors.BadRequest('There is no service for the path - "users"');
@@ -262,7 +261,7 @@ class AuthServer {
     if (service) {
       const dt = moment.utc().format();
       const user = await service.patch(payload.userId, { loginAt: dt });
-      if (isLog) inspector('plugins::auth-server.class::setLoginAt.user:', user);
+      if (isDebug) inspector('plugins::auth-server.class::setLoginAt.user:', user);
       return user;
     } else {
       throw new errors.BadRequest('There is no service for the path - "users"');
@@ -340,13 +339,13 @@ class AuthServer {
   }
 
   /**
-   * isLoginJWT
+   * isDebuginJWT
    * Is a jwt login with appClient.passwort.
    * @async
    * @param {Object} passport
    * @return {Boollean}
    */
-  static async isLoginJWT(passport) {
+  static async isDebuginJWT(passport) {
     if (!passport) new Error('No passport!');
     if(passport.passport) passport = passport.passport;
     const jwt = await passport.getJWT();
@@ -541,7 +540,7 @@ class AuthServer {
     const serviceFakeData = fakeData[serviceName][0];
     const idField = 'id' in serviceFakeData ? 'id' : '_id';
     const fields = Object.keys(serviceFakeData).filter(key => isId ? true : key !== idField);
-    if (isLog) debug('serviceFields.fields:', fields);
+    if (isDebug) debug('serviceFields.fields:', fields);
     return fields;
   }
 

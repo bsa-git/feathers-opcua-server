@@ -6,7 +6,6 @@ const app = require('../../src/app');
 const chalk = require('chalk');
 const debug = require('debug')('app:log.hook.test');
 
-const isLog = false;
 const isDebug = false;
 const isTest = false;
 
@@ -84,7 +83,7 @@ describe('<<=== Log Hook Test (log.hook.test.js) ===>>', () => {
       const countMessagesAfter = await hookHelper.getCountItems('log-messages');
       if(isDebug) debug('countMessagesBefore:', countMessagesBefore, ', countMessagesAfter:', countMessagesAfter);
 
-      if (isLog) inspector('Create log message for user login::contextAfter:', contextAfter);
+      if (isDebug) inspector('Create log message for user login::contextAfter:', contextAfter);
       if (isDebug) debug(`Create log message for user login - "${contextAfter.path}.${contextAfter.method}"`);
 
       assert(countMessagesAfter > countMessagesBefore, 'Error creating message log');

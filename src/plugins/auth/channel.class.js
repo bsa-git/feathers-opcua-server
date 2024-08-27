@@ -3,7 +3,6 @@ const {inspector } = require('../lib');
 const AuthServer = require('./auth-server.class');
 
 const debug = require('debug')('app:plugins.auth-server.class');
-const isLog = false;
 const isDebug = false;
 
 class Channel {
@@ -83,7 +82,7 @@ class Channel {
    */
   async getRole(id) {
     const role = await this.app.service('roles').get(id);
-    if (isLog) inspector('Channel.getRole:', role);
+    if (isDebug) inspector('Channel.getRole:', role);
     return role;
   }
 
@@ -211,7 +210,7 @@ class Channel {
         });
       }
     }
-    if(isLog)debug('getTeamsForUser:', teamsForUser? teamsForUser : 'Not teamsForUser');
+    if(isDebug)debug('getTeamsForUser:', teamsForUser? teamsForUser : 'Not teamsForUser');
     return  teamsForUser;
   }
 }

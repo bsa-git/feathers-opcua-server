@@ -9,7 +9,6 @@ let base = merge({},
   {
     title: 'UserTeams',
     description: 'UserTeams database.',
-    fakeRecords: 3,
     required: [],
     uniqueItemProperties: [],
     properties: {
@@ -20,16 +19,10 @@ let base = merge({},
         type: ID
       },
       teamId: {
-        type: ID,
-        faker: {
-          fk: 'teams:next'
-        }
+        type: ID
       },
       userId: {
-        type: ID,
-        faker: {
-          fk: 'users:next'
-        }
+        type: ID
       }
     }
   },

@@ -9,7 +9,6 @@ let base = merge({},
   {
     title: 'Messages',
     description: 'Messages database.',
-    fakeRecords: 1,
     required: [],
     uniqueItemProperties: [],
     properties: {
@@ -20,13 +19,9 @@ let base = merge({},
         type: ID
       },
       userId: {
-        type: ID,
-        faker: {
-          fk: 'users:random'
-        }
+        type: ID
       },
       text: {
-        faker: 'lorem.sentence',
         type: 'string'
       }
     }

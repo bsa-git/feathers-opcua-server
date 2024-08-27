@@ -2,7 +2,7 @@ const assert = require('assert');
 const app = require('../../src/app');
 const {inspector, checkServicesRegistered, saveFakesToServices} = require('../../src/plugins');
 
-const isLog = false;
+const isDebug = false;
 
 describe('<<=== Chat-Messages Service Test (chat-messages.test.js) ===>>', () => {
   it('#1: Registered the service', () => {
@@ -14,7 +14,7 @@ describe('<<=== Chat-Messages Service Test (chat-messages.test.js) ===>>', () =>
     const errPath = await saveFakesToServices(app, 'chatMessages');
     const service = app.service('chat-messages');
     const data = await service.find({});
-    if(isLog) inspector('Save fake data to \'chat-messages\' service.data[0]', data.data[0]);
+    if(isDebug) inspector('Save fake data to \'chat-messages\' service.data[0]', data.data[0]);
     assert.ok(errPath === '' && data, `Not save fakes to services - '${errPath}'`);
   });
 });

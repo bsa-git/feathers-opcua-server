@@ -18,7 +18,6 @@ const {
 
 const debug = require('debug')('app:getterValueFromFile');
 const isDebug = false;
-const isLog = false;
 
 //=============================================================================
 
@@ -40,7 +39,7 @@ const getterValueFromFile = function (params = {}, addedValue) {
   });
   dataItems = results.data[0];
   dataItems = convertAliasListToBrowseNameList(params.addedVariableList, dataItems);
-  if (isLog) inspector('getterValueFromFile.dataItems:', dataItems);
+  if (isDebug) inspector('getterValueFromFile.dataItems:', dataItems);
   // Set value from source for group 
   if (params.addedVariableList) {
     setValueFromSourceForGroup(params, dataItems);

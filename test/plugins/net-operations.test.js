@@ -19,7 +19,6 @@ const {
 const chalk = require('chalk');
 
 const isDebug = false;
-const isLog = false;
 
 describe('<<=== NetOperations: (net-operations.test) ===>>', () => {
 

@@ -10,7 +10,6 @@ let base = merge({},
   {
     title: 'Users',
     description: 'Users database.',
-    fakeRecords: 3,
     required: ['email'],
     uniqueItemProperties: ['email', 'profileId'],
     properties: {
@@ -24,42 +23,29 @@ let base = merge({},
         type: 'string',
         format: 'email',
         minLength: 8,
-        maxLength: 40,
-        faker: 'internet.email'
+        maxLength: 40
       },
       password: {
-        type: 'string',
-        faker: {
-          exp: 'rec.email.slice(0, rec.email.indexOf("@"))'
-        }
+        type: 'string'
       },
       firstName: {
         type: 'string',
         minLength: 2,
-        maxLength: 20,
-        faker: 'name.firstName'
+        maxLength: 20
       },
       lastName: {
         type: 'string',
         minLength: 2,
-        maxLength: 40,
-        faker: 'name.lastName'
+        maxLength: 40
       },
       avatar: {
-        type: 'string',
-        faker: 'internet.avatar'
+        type: 'string'
       },
       roleId: {
-        type: ID,
-        faker: {
-          fk: 'roles:random'
-        }
+        type: ID
       },
       profileId: {
-        type: ID,
-        faker: {
-          fk: 'userProfiles:next'
-        }
+        type: ID
       },
       active: {
         type: 'boolean',
@@ -70,12 +56,10 @@ let base = merge({},
         setDefault: !isTrue(process.env.IS_AUTH_MANAGER) 
       },
       googleId: {
-        type: 'string',
-        chance: 'natural'
+        type: 'string'
       },
       githubId: {
-        type: 'string',
-        chance: 'natural'
+        type: 'string'
       },
       loginAt: {
         type: 'string',

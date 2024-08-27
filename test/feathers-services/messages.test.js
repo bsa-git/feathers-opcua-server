@@ -7,7 +7,7 @@ const {
   removeDataFromServices 
 } = require('../../src/plugins');
 
-const isLog = false;
+const isDebug = false;
 
 describe('<<=== Messages Service Test (messages.test.js) ===>>', () => {
   it('#1: Registered the service', () => {
@@ -31,14 +31,14 @@ describe('<<=== Messages Service Test (messages.test.js) ===>>', () => {
 
     // The messages service call params (with the user we just created)
     const params = { user };
-    if(isLog) inspector('#2: Creates and processes message, adds user information.user:', user);
+    if(isDebug) inspector('#2: Creates and processes message, adds user information.user:', user);
 
     const message = await app.service('messages').create({
       text: 'a test',
       additional: 'should be removed'
     }, params);
 
-    if(isLog) inspector('#2: Creates and processes message, adds user information.message:', message);
+    if(isDebug) inspector('#2: Creates and processes message, adds user information.message:', message);
 
     assert.strictEqual(message.text, 'a test');
     // `userId` should be set to passed users it

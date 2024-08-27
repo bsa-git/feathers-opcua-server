@@ -35,7 +35,6 @@ const {
 } = require('node-opcua');
 // const debug = require('debug')('app:opcua-class.test');
 const isDebug = false;
-const isLog = false;
 
 // Options
 const srvParams = {
@@ -157,10 +156,10 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
       'RootFolder',
       '/Objects/Server.ServerStatus.BuildInfo.ProductName'
     );
-    if (isLog) inspector('sessionTranslateBrowsePath.browsePath:', browsePath);
+    if (isDebug) inspector('sessionTranslateBrowsePath.browsePath:', browsePath);
     // inspector('sessionTranslateBrowsePath.browsePath:', browsePath);
     browseResult = await client.sessionTranslateBrowsePath(browsePath);
-    if (isLog) inspector('sessionTranslateBrowsePath.browseResult:', browseResult);
+    if (isDebug) inspector('sessionTranslateBrowsePath.browseResult:', browseResult);
     // inspector('sessionTranslateBrowsePath.browseResult:', browseResult);
     console.log(chalk.green('sessionTranslateBrowsePath.nodeId:'), chalk.cyan(browseResult[0].targets[0].targetId.toString()));
 
@@ -240,7 +239,7 @@ describe('<<=== OPC-UA: Test (opcua-class.test) ===>>', () => {
       console.log('SessionHistoryValue.EndTime:', getTime(end, false));
 
       readResult = await client.sessionReadHistoryValues('Device2.PressureVesselDevice', start, end);
-      if (isLog && readResult) inspector('SessionHistoryValue.readResult:', readResult);
+      if (isDebug && readResult) inspector('SessionHistoryValue.readResult:', readResult);
       if (readResult.length && readResult[0].statusCode.name === 'Good') {
         if (readResult[0].historyData.dataValues.length) {
           let dataValues = readResult[0].historyData.dataValues;

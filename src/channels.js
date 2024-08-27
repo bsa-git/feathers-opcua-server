@@ -10,7 +10,6 @@ const loConcat = require('lodash/concat');
 
 const debug = require('debug')('app:channels');
 
-const isLog = false;
 const isDebug = false;
 
 module.exports = function (app) {
@@ -107,7 +106,7 @@ module.exports = function (app) {
       // app.channel('anonymous').leave(connection);
       app.channel('anonymous').join(connection);
       if (isDebug) debug('app.on(\'connection\') for SocketIo transport');
-      if (isLog) Channel.showChannelInfo(app, 'app.on(\'connection\')');
+      if (isDebug) Channel.showChannelInfo(app, 'app.on(\'connection\')');
     } else {
       if (isDebug) debug('app.on(\'connection\') for Rest transport');
     }
@@ -125,7 +124,7 @@ module.exports = function (app) {
       await joinChannels(connection);
 
       if (isDebug) debug('app.on(\'login\') for SocketIo transport');
-      if (isLog) Channel.showChannelInfo(app, 'app.on(\'login\')');
+      if (isDebug) Channel.showChannelInfo(app, 'app.on(\'login\')');
 
     } else {
       if (isDebug) debug('app.on(\'login\') for Rest transport');
@@ -137,7 +136,7 @@ module.exports = function (app) {
       app.channel('anonymous').join(connection);
 
       if (isDebug) debug('app.on(\'logout\') for SocketIo transport');
-      if (isLog) Channel.showChannelInfo(app, 'app.on(\'logout\')');
+      if (isDebug) Channel.showChannelInfo(app, 'app.on(\'logout\')');
     } else {
       if (isDebug) debug('app.on(\'logout\') for Rest transport');
     }
@@ -169,11 +168,11 @@ module.exports = function (app) {
         idField = Auth.getIdField(data);
         userId = data[idField].toString();
         publishResult.push(app.channel(`userIds/${userId}`));
-        if (isLog) Channel.showChannelInfo(app, 'app.service(\'users\').on(\'patched\')');
+        if (isDebug) Channel.showChannelInfo(app, 'app.service(\'users\').on(\'patched\')');
       }
       if (contextMethod === 'remove') {
         leaveChannels(data);
-        if (isLog) Channel.showChannelInfo(app, 'app.service(\'users\').on(\'removed\')');
+        if (isDebug) Channel.showChannelInfo(app, 'app.service(\'users\').on(\'removed\')');
       }
       break;
     case 'user-profiles':
@@ -186,12 +185,12 @@ module.exports = function (app) {
       if (contextMethod === 'create') {
         const user = await app.service('users').get(data.userId);
         await updateChannels(user);
-        if (isLog) Channel.showChannelInfo(app, 'app.service(\'user-teams\').on(\'created\')');
+        if (isDebug) Channel.showChannelInfo(app, 'app.service(\'user-teams\').on(\'created\')');
       }
       if (contextMethod === 'remove') {
         const user = await app.service('users').get(data.userId);
         await updateChannels(user);
-        if (isLog) Channel.showChannelInfo(app, 'app.service(\'user-teams\').on(\'removed\')');
+        if (isDebug) Channel.showChannelInfo(app, 'app.service(\'user-teams\').on(\'removed\')');
       }
       userId = data.userId.toString();
       publishResult.push(app.channel(`userIds/${userId}`));

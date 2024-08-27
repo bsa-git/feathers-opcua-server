@@ -17,7 +17,6 @@ const {
 
 const debug = require('debug')('app:getterHistValueFromPath');
 const isDebug = false;
-const isLog = false;
 
 //=============================================================================
 
@@ -54,7 +53,7 @@ const getterHistValueFromPath = function (params = {}, addedValue) {
     
     addedValue.setValueFromSource({ dataType, value: JSON.stringify(dataItems) });
 
-    if (isLog) inspector('getterHistValueFromPath.dataItems:', dataItems);
+    if (isDebug) inspector('getterHistValueFromPath.dataItems:', dataItems);
 
     // Set value from source for group 
     if (params.addedVariableList) {

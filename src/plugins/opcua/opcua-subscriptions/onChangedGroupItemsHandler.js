@@ -13,7 +13,6 @@ const chalk = require('chalk');
 
 const debug = require('debug')('app:opcua-subscriptions/onChangedGroupHandler');
 const isDebug = false;
-const isLog = false;
 
 /**
  * @method onChangedGroupItemsHandler
@@ -22,13 +21,13 @@ const isLog = false;
  * @returns {void}
  */
 function onChangedGroupItemsHandler(params, dataValue) {
-  if (isLog) inspector('subscriptions.onChangedGroupItemsHandler.params:', loOmit(params, ['myOpcuaClient']));
-  if (isLog) inspector('subscriptions.onChangedGroupItemsHandler.dataValue:', dataValue);
+  if (isDebug) inspector('subscriptions.onChangedGroupItemsHandler.params:', loOmit(params, ['myOpcuaClient']));
+  if (isDebug) inspector('subscriptions.onChangedGroupItemsHandler.dataValue:', dataValue);
   const addressSpaceOption = params.addressSpaceOption;
   const browseName = addressSpaceOption.browseName;
   dataValue = formatDataValue(params.id, dataValue, browseName, params.locale);
   let value = dataValue.value.value;
-  if (isLog) inspector('subscriptions.onChangedGroupItemsHandler.formatDataValue:', dataValue);
+  if (isDebug) inspector('subscriptions.onChangedGroupItemsHandler.formatDataValue:', dataValue);
   // value = (addressSpaceOption.dataType === 'Double')? loRound(value, 3) : value;
   let engineeringUnits = (dataValue.valueParams && dataValue.valueParams.engineeringUnits)? dataValue.valueParams.engineeringUnits : '';
   const timestamp = dataValue.serverTimestamp;

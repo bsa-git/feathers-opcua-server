@@ -5,7 +5,6 @@ const fakeNormalize = require('../test-helpers/fake-normalize');
 const chalk = require('chalk');
 
 const isDebug = false;
-const isLog = false;
 
 // Get generated fake data
 let fakeData = fakeNormalize();

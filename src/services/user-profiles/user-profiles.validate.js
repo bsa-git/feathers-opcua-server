@@ -16,7 +16,6 @@ let base = merge({},
   {
     title: 'UserProfiles',
     description: 'UserProfiles database.',
-    fakeRecords: 3,
     required: [],
     uniqueItemProperties: [],
     properties: {
@@ -28,85 +27,67 @@ let base = merge({},
       },
       personalPhone: {
         type: 'string',
-        format: 'phone',
-        faker: 'phone.phoneNumberFormat'
+        format: 'phone'
       },
       personalWebSite: {
         type: 'string',
-        format: 'uri',
-        faker: 'internet.url'
+        format: 'uri'
       },
       addressSuite: {
-        type: 'string',
-        faker: 'address.secondaryAddress'
+        type: 'string'
       },
       addressStreet: {
-        type: 'string',
-        faker: 'address.streetAddress'
+        type: 'string'
       },
       addressCity: {
-        type: 'string',
-        faker: 'address.city'
+        type: 'string'
       },
       addressState: {
-        type: 'string',
-        faker: 'address.state'
+        type: 'string'
       },
       addressStateAbbr: {
-        type: 'string',
-        faker: 'address.stateAbbr'
+        type: 'string'
       },
       addressCountry: {
-        type: 'string',
-        faker: 'address.country'
+        type: 'string'
       },
       addressCountryCode: {
-        type: 'string',
-        faker: 'address.countryCode'
+        type: 'string'
       },
       addressZipCode: {
         type: 'string',
-        format: 'zip_code',
-        faker: 'address.zipCode'
+        format: 'zip_code'
       },
       addressLatitude: {
         type: 'string',
-        format: 'lat',
-        faker: 'address.latitude'
+        format: 'lat'
       },
       addressLongitude: {
         type: 'string',
-        format: 'long',
-        faker: 'address.longitude'
+        format: 'long'
       },
       jobCompanyName: {
-        type: 'string',
-        faker: 'company.companyName'
+        type: 'string'
       },
       jobTitle: {
-        type: 'string',
-        faker: 'name.jobTitle'
+        type: 'string'
       },
       jobType: {
-        type: 'string',
-        faker: 'name.jobType'
+        type: 'string'
       },
       jobPhone: {
         type: 'string',
-        format: 'phone',
-        faker: 'phone.phoneNumberFormat'
+        format: 'phone'
       },
       jobWebSite: {
         type: 'string',
-        format: 'uri',
-        faker: 'internet.url'
+        format: 'uri'
       },
       jobEmail: {
         type: 'string',
         format: 'email',
         minLength: 8,
-        maxLength: 40,
-        faker: 'internet.exampleEmail'
+        maxLength: 40
       }
     }
   }

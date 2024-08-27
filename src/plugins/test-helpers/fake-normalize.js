@@ -19,7 +19,6 @@ if (result.error) {
 }
 
 const isDebug = false;
-const isLog = false;
 
 const prefixMongodbIds = '60af3870';
 const countMongodbId = 24;
@@ -101,12 +100,12 @@ fakeDataMessages = idsUpdate(fakeDataMessages);
 const rolesUpdate = () => {
   const roles = Auth.getBaseRoles();
   const roleKeys = Object.keys(Auth.getBaseRoles());
-  if (isLog) inspector('fake-service.rolesUpdate.roles:', roles);
+  if (isDebug) inspector('fake-service.rolesUpdate.roles:', roles);
   roleKeys.forEach((key, index) => {
     fakeDataRoles[index]['alias'] = key;
     fakeDataRoles[index]['name'] = roles[key];
   });
-  if (isLog) inspector('fake-service.rolesUpdate.fakeDataRoles:', fakeDataRoles);
+  if (isDebug) inspector('fake-service.rolesUpdate.fakeDataRoles:', fakeDataRoles);
   if (isDebug) console.log(chalk.yellow('Roles Update: Ok'));
 };
 
@@ -137,7 +136,7 @@ const usersUpdate = () => {
     return user;
   }));
 
-  if (isLog) inspector('fake-service.usersUpdate.fakeDataUsers:', fakeDataUsers);
+  if (isDebug) inspector('fake-service.usersUpdate.fakeDataUsers:', fakeDataUsers);
   if (isDebug) console.log(chalk.yellow('Users Update: Ok'));
 };
 
@@ -148,7 +147,7 @@ const userTeamsUpdate = () => {
   fakeDataUsers.forEach((user, index) => {
     fakeDataUserTeams[index]['userId'] = user[idFieldUser];
   });
-  if (isLog) inspector('fake-service.userTeamsUpdate.fakeDataUserTeams:', fakeDataUserTeams);
+  if (isDebug) inspector('fake-service.userTeamsUpdate.fakeDataUserTeams:', fakeDataUserTeams);
   if (isDebug) console.log(chalk.yellow('UserTeams Update: Ok'));
 };
 
@@ -159,7 +158,7 @@ const logMessagesUpdate = () => {
   fakeDataLogMessages[0]['msg'] = JSON.stringify({ message: 'Ullam eum enim incidunt unde omnis laborum voluptatum explicabo.' });
   fakeDataLogMessages[0]['ownerId'] = fakeDataUser[idFieldUser];
   fakeDataLogMessages[0]['userId'] = fakeDataUser[idFieldUser];
-  if (isLog) inspector('fake-service.logMessagesUpdate.fakeDataLogMessages:', fakeDataLogMessages);
+  if (isDebug) inspector('fake-service.logMessagesUpdate.fakeDataLogMessages:', fakeDataLogMessages);
   if (isDebug) console.log(chalk.yellow('LogMessages Update: Ok'));
 };
 
@@ -181,7 +180,7 @@ const chatMessagesUpdate = () => {
   fakeDataChatMessages[3]['teamId'] = dbNullIdValue();
   fakeDataChatMessages[3]['roleId'] = dbNullIdValue();
 
-  if (isLog) inspector('fake-service.chatMessagesUpdate.fakeDataChatMessages:', fakeDataChatMessages);
+  if (isDebug) inspector('fake-service.chatMessagesUpdate.fakeDataChatMessages:', fakeDataChatMessages);
   if (isDebug) console.log(chalk.yellow('ChatMessages Update: Ok'));
 };
 
@@ -191,7 +190,7 @@ const opcuaValuesUpdate = () => {
       fakeDataOpcuaValues[index - 1]['tagId'] = tag[idFieldUser];
     }
   });
-  if (isLog) inspector('fake-service.opcuaValuesUpdate.fakeDataOpcuaValues:', fakeDataOpcuaValues);
+  if (isDebug) inspector('fake-service.opcuaValuesUpdate.fakeDataOpcuaValues:', fakeDataOpcuaValues);
   if (isDebug) console.log(chalk.yellow('OpcuaValues Update: Ok'));
 };
 
@@ -199,7 +198,7 @@ const messagesUpdate = () => {
   fakeDataUsers.forEach((user, index) => {
     fakeDataMessages[index]['userId'] = user[idFieldUser];
   });
-  if (isLog) inspector('fake-service.messagesUpdate.fakeDataMessages:', fakeDataMessages);
+  if (isDebug) inspector('fake-service.messagesUpdate.fakeDataMessages:', fakeDataMessages);
   if (isDebug) console.log(chalk.yellow('Messages Update: Ok'));
 };
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const schema = require('../roles.validate').schema;
 const { inspector } = require('../../../plugins');
-const isLog = false;
+const isDebug = false;
 
 module.exports = function (options = {}) { 
   return async context => {

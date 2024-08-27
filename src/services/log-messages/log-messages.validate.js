@@ -9,7 +9,6 @@ let base = merge({},
   {
     title: 'LogMessages',
     description: 'LogMessages database.',
-    fakeRecords: 1,
     required: [],
     uniqueItemProperties: [],
     properties: {
@@ -20,31 +19,22 @@ let base = merge({},
         type: ID
       },
       gr: {
-        faker: 'name.title',
         type: 'string'
       },
       pr: {
         type: 'integer'
       },
       name: {
-        faker: 'name.title',
         type: 'string'
       },
       ownerId: {
-        type: ID,
-        faker: {
-          fk: 'users:random'
-        }
+        type: ID
       },
       userId: {
         type: ID,
-        faker: {
-          fk: 'users:random'
-        },
         default: dbNullIdValue()
       },
       msg: {
-        faker: 'lorem.sentence',
         type: 'string'
       }
     }

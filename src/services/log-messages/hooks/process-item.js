@@ -2,7 +2,7 @@
 const schema = require('../log-messages.validate').schema;
 const { dbNullIdValue, HookHelper } = require('../../../plugins');
 
-const isLog = false;
+const isDebug = false;
 
 module.exports = function (options = {}) {
   return async context => {

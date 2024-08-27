@@ -17,7 +17,6 @@ const {
 const debug = require('debug')('app:feathers-client');
 
 const isDebug = false;
-const isLog = false;
 
 module.exports = async function feathersClient(options) {
   let { transport, timeout, serverUrl, ioOptions, storage, ifNoAuth } = options;

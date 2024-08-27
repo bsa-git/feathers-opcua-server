@@ -3,7 +3,7 @@ const assert = require('assert');
 const app = require('../../src/app');
 const {inspector, HookHelper, checkServicesRegistered, saveFakesToServices} = require('../../src/plugins');
 
-const isLog = false;
+const isDebug = false;
 
 describe('<<=== Log-Messages Service Test (log-messages.test.js) ===>>', () => {
 
@@ -16,7 +16,7 @@ describe('<<=== Log-Messages Service Test (log-messages.test.js) ===>>', () => {
     const errPath = await saveFakesToServices(app, 'logMessages');
     const service = app.service('log-messages');
     const data = await service.find({});
-    if(isLog) inspector('Save fake data to \'log-messages\' service.data[0]', data.data[0]);
+    if(isDebug) inspector('Save fake data to \'log-messages\' service.data[0]', data.data[0]);
     assert.ok(errPath === '' && data, `Not save fakes to services - '${errPath}'`);
   });
 });

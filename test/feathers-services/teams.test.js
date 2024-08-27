@@ -8,7 +8,7 @@ const {
   saveFakesToServices
 } = require('../../src/plugins');
 
-const isLog = false;
+const isDebug = false;
 
 // Get generated fake data
 const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
@@ -23,7 +23,7 @@ describe('<<=== Teams Service Test (teams.test.js) ===>>', () => {
     const errPath = await saveFakesToServices(app, 'teams');
     const service = app.service('teams');
     const data = await service.find({});
-    if(isLog) inspector('Save fake data to \'teams\' service.data[0]', data.data[0]);
+    if(isDebug) inspector('Save fake data to \'teams\' service.data[0]', data.data[0]);
     assert.ok(errPath === '' && data, `Not save fakes to services - '${errPath}'`);
   });
 
@@ -39,7 +39,7 @@ describe('<<=== Teams Service Test (teams.test.js) ===>>', () => {
       });
       assert.ok(false, 'Error on unique `name`');
     } catch (error) {
-      if (isLog) inspector('Error on unique `name`.error', error.message);
+      if (isDebug) inspector('Error on unique `name`.error', error.message);
       assert.ok(true, 'Error on unique `name`');
     }
   });

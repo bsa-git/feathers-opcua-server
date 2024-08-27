@@ -6,7 +6,6 @@ const fakeNormalize = require('./fake-normalize');
 const { appRoot, typeOf } = require('../lib');
 const debug = require('debug')('app:plugin.service-helper');
 
-const isLog = false;
 const isDebug = false;
 
 // Get fake data
@@ -48,7 +47,7 @@ const serviceFields = function(serviceName = '', isId = false) {
   const serviceFakeData = fakeData[serviceName][0];
   const idField = 'id' in serviceFakeData ? 'id' : '_id';
   const fields = Object.keys(serviceFakeData).filter(key => isId ? true : key !== idField);
-  if (isLog) debug('serviceFields.fields:', fields);
+  if (isDebug) debug('serviceFields.fields:', fields);
   return fields;
 };
 

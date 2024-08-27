@@ -6,7 +6,6 @@ const HookHelper = require('./hook-helper.class');
 const debug = require('debug')('app:plugins.getLogMessage');
 
 const isDebug = false;
-const isLog = false;
 
 /**
  * Get log message
@@ -440,6 +439,6 @@ module.exports = async function getLogMessage(context) {
     }
   }
   // Timeout of 5000ms exceeded calling create on users
-  if(isLog) inspector('plugins.getLogMessage.result:', result);
+  if(isDebug) inspector('plugins.getLogMessage.result:', result);
   return result;
 };

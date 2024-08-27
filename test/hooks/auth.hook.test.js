@@ -20,7 +20,6 @@ const chalk = require('chalk');
 const app = require(`${appRoot}/src/app`);
 const debug = require('debug')('app:auth.unit.test');
 
-const isLog = false;
 const isDebug = false;
 const isTest = true;
 
@@ -104,7 +103,7 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
     contextBefore.method = 'create';
 
     await authHook.payloadExtension(true)(contextBefore);
-    if(isLog) inspector('Customizing the Payload with Hook.contextBefore:', contextBefore.params.payload);
+    if(isDebug) inspector('Customizing the Payload with Hook.contextBefore:', contextBefore.params.payload);
     assert(contextBefore.params.payload.role, 'Customizing the Payload');
   });
 

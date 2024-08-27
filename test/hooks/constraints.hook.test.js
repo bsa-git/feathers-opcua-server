@@ -24,7 +24,6 @@ const app = require(`${appRoot}/src/app`);
 const debug = require('debug')('app:constraints.test');
 
 const isDebug = false;
-const isLog = false;
 const isTest = true;
 const isSeed = true;
 
@@ -367,10 +366,10 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       const chatMessages = app.service('chat-messages');
       let findUserBefore = await users.find({ query: { roleId: roleId } });
       findUserBefore = findUserBefore.data;
-      if (isLog) inspector('Data integrity when removing a record from \'roles\' service.findResultsBefore:', findUserBefore);
+      if (isDebug) inspector('Data integrity when removing a record from \'roles\' service.findResultsBefore:', findUserBefore);
       let findChatMessagesBefore = await chatMessages.find({ query: { roleId: roleId } });
       findChatMessagesBefore = findChatMessagesBefore.data;
-      if (isLog) inspector('Data integrity when removing a record from \'roles\' service.findChatMessagesBefore:', findChatMessagesBefore);
+      if (isDebug) inspector('Data integrity when removing a record from \'roles\' service.findChatMessagesBefore:', findChatMessagesBefore);
 
       // Run constraints hook
       contextAfter.path = 'roles';
@@ -384,13 +383,13 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       // Check constraints for 'users'
       let findUserAfter = await users.find({ query: { roleId: roleId } });
       findUserAfter = findUserAfter.data;
-      if (isLog) inspector('Data integrity when removing a record from \'roles\' service.findResultsAfter:', findUserAfter);
+      if (isDebug) inspector('Data integrity when removing a record from \'roles\' service.findResultsAfter:', findUserAfter);
       assert.ok(findUserBefore.length > findUserAfter.length, 'Protection did not work to removing the data from service');
 
       // Check constraints for 'chat-messages'
       let findChatMessagesAfter = await chatMessages.find({ query: { roleId: roleId } });
       findChatMessagesAfter = findChatMessagesAfter.data;
-      if (isLog) inspector('Data integrity when removing a record from \'roles\' service.findChatMessagesAfter:', findChatMessagesAfter);
+      if (isDebug) inspector('Data integrity when removing a record from \'roles\' service.findChatMessagesAfter:', findChatMessagesAfter);
       assert.ok(findChatMessagesBefore.length > findChatMessagesAfter.length, 'Protection did not work to removing the data from service');
     });
 
@@ -411,9 +410,9 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
         if (!teamId && _findUserTeamsBefore.data.length && _findChatMessagesBefore.data.length) {
           teamId = _teamId;
           findUserTeamsBefore = _findUserTeamsBefore;
-          if (isLog && _findUserTeamsBefore.data.length) inspector('Data integrity when removing a record from \'teams\' service.findResultsBefore:', _findUserTeamsBefore.data);
+          if (isDebug && _findUserTeamsBefore.data.length) inspector('Data integrity when removing a record from \'teams\' service.findResultsBefore:', _findUserTeamsBefore.data);
           findChatMessagesBefore = _findChatMessagesBefore;
-          if (isLog && _findChatMessagesBefore.data.length) inspector('Data integrity when removing a record from \'teams\' service.findChatMessagesBefore:', _findChatMessagesBefore.data);
+          if (isDebug && _findChatMessagesBefore.data.length) inspector('Data integrity when removing a record from \'teams\' service.findChatMessagesBefore:', _findChatMessagesBefore.data);
 
           // Run constraints hook
           contextAfter.path = 'teams';
@@ -427,10 +426,10 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
 
           // Check constraints
           const findUserTeamsAfter = await userTeams.find({ query: { teamId: teamId } });
-          if (isLog) inspector('Data integrity when removing a record from \'teams\' service.findResultsAfter:', findUserTeamsAfter.data);
+          if (isDebug) inspector('Data integrity when removing a record from \'teams\' service.findResultsAfter:', findUserTeamsAfter.data);
           assert.ok(findUserTeamsBefore.data.length > findUserTeamsAfter.data.length, 'Protection did not work to removing the data from service');
           const findChatMessagesAfter = await chatMessages.find({ query: { teamId: teamId } });
-          if (isLog) inspector('Data integrity when removing a record from \'teams\' service.findChatMessagesAfter:', findChatMessagesAfter.data);
+          if (isDebug) inspector('Data integrity when removing a record from \'teams\' service.findChatMessagesAfter:', findChatMessagesAfter.data);
           assert.ok(findChatMessagesBefore.data.length > findChatMessagesAfter.data.length, 'Protection did not work to removing the data from service');
         }
       };
@@ -458,11 +457,11 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
 
       // Get before services
       const findUserTeamsBefore = await userTeams.find({ query: { userId: userId } });
-      if (isLog) inspector('Data integrity for \'user-teams\' service, when removing a record from \'users\' service.findUserTeamsBefore:', findUserTeamsBefore.data);
+      if (isDebug) inspector('Data integrity for \'user-teams\' service, when removing a record from \'users\' service.findUserTeamsBefore:', findUserTeamsBefore.data);
       const findUserProfilesBefore = await userProfiles.find({ query: { [idFieldUser]: profileId } });
-      if (isLog) inspector('Data integrity for \'user-profiles\' service, when removing a record from \'users\' service.findUserProfilesBefore:', findUserProfilesBefore.data);
+      if (isDebug) inspector('Data integrity for \'user-profiles\' service, when removing a record from \'users\' service.findUserProfilesBefore:', findUserProfilesBefore.data);
       const findChatMessagesBefore = await chatMessages.find({ query: { $or: [{ ownerId: userId }, { userId: userId }] } });
-      if (isLog) inspector('Data integrity for \'chat-messages\' service, when removing a record from \'users\' service.findChatMessagesBefore:', findChatMessagesBefore.data);
+      if (isDebug) inspector('Data integrity for \'chat-messages\' service, when removing a record from \'users\' service.findChatMessagesBefore:', findChatMessagesBefore.data);
 
       // Run constraints hook
       contextAfter.path = 'users';
@@ -477,13 +476,13 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
 
       // Check constraints
       const findUserTeamsAfter = await userTeams.find({ query: { userId: userId } });
-      if (isLog) inspector('Data integrity for \'user-teams\' service, when removing a record from \'users\' service.findUserTeamsAfter:', findUserTeamsAfter.data);
+      if (isDebug) inspector('Data integrity for \'user-teams\' service, when removing a record from \'users\' service.findUserTeamsAfter:', findUserTeamsAfter.data);
       assert.ok(findUserTeamsBefore.data.length > findUserTeamsAfter.data.length, 'Protection did not work to removing the data from service');
       const findUserProfilesAfter = await userProfiles.find({ query: { [idFieldUser]: profileId } });
-      if (isLog) inspector('Data integrity for \'user-profiles\' service, when removing a record from \'users\' service.findUserProfilesAfter:', findUserProfilesAfter.data);
+      if (isDebug) inspector('Data integrity for \'user-profiles\' service, when removing a record from \'users\' service.findUserProfilesAfter:', findUserProfilesAfter.data);
       assert.ok(findUserProfilesBefore.data.length > findUserProfilesAfter.data.length, 'Protection did not work to removing the data from service');
       const findChatMessagesAfter = await chatMessages.find({ query: { $or: [{ ownerId: userId }, { userId: userId }] } });
-      if (isLog) inspector('Data integrity for \'chat-messages\' service, when removing a record from \'users\' service.findChatMessagesAfter:', findChatMessagesAfter.data);
+      if (isDebug) inspector('Data integrity for \'chat-messages\' service, when removing a record from \'users\' service.findChatMessagesAfter:', findChatMessagesAfter.data);
       assert.ok(findChatMessagesBefore.data.length > findChatMessagesAfter.data.length, 'Protection did not work to removing the data from service');
     });
 
@@ -650,7 +649,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
 
       // Get before services
       const findOpcuaValuesBefore = await opcuaValues.find({ query: { tagId: tagId } });
-      if (isLog) inspector('Data integrity for \'opcua-values\' service, when removing a record from \'opcua-tags\' service.findOpcuaValuesBefore:', findOpcuaValuesBefore.data);
+      if (isDebug) inspector('Data integrity for \'opcua-values\' service, when removing a record from \'opcua-tags\' service.findOpcuaValuesBefore:', findOpcuaValuesBefore.data);
 
       // Run constraints hook
       contextAfter.path = 'opcua-tags';
@@ -663,7 +662,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
 
       // Check constraints
       const findOpcuaValuesAfter = await opcuaValues.find({ query: { tagId: tagId } });
-      if (isLog) inspector('Data integrity for \'opcua-values\' service, when removing a record from \'opcua-tags\' service.findOpcuaValuesAfter:', findOpcuaValuesAfter.data);
+      if (isDebug) inspector('Data integrity for \'opcua-values\' service, when removing a record from \'opcua-tags\' service.findOpcuaValuesAfter:', findOpcuaValuesAfter.data);
       assert.ok(findOpcuaValuesBefore.data.length > findOpcuaValuesAfter.data.length, 'Protection did not work to removing the data from service');
     });
   });

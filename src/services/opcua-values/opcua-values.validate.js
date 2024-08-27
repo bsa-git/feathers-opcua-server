@@ -9,7 +9,6 @@ let base = merge({},
   {
     title: 'OpcuaValues',
     description: 'OpcuaValues database.',
-    fakeRecords: 3,
     required: [],
     uniqueItemProperties: [],
     properties: {

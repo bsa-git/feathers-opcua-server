@@ -9,7 +9,6 @@ const loRound = require('lodash/round');
 
 const debug = require('debug')('app:opcua-addressspace-subscriptions');
 const isDebug = false;
-const isLog = false;
 
 /**
  * @method onChangedCommonHandle
@@ -19,7 +18,7 @@ const isLog = false;
  * @returns {void}
  */
 function onChangedValueHandler(params, dataValue) {
-  if (isLog) inspector('subscriptions.onChangedCommonHandle.params.nodeId:', params.nodeId);
+  if (isDebug) inspector('subscriptions.onChangedCommonHandle.params.nodeId:', params.nodeId);
   const browseName = getValueFromNodeId(params.nodeId);
   const value = loRound(dataValue.value.value, 3);
   console.log(chalk.green(`subscription::${browseName}:`), chalk.cyan(value));

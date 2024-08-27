@@ -8,7 +8,6 @@ let base = merge({},
   {
     title: 'OpcuaTags',
     description: 'OpcuaTags database.',
-    fakeRecords: 3,
     required: [],
     uniqueItemProperties: [
       'browseName'
@@ -69,8 +68,7 @@ let base = merge({},
           id: { type: 'string' },
           url: {
             type: 'string',
-            format: 'uri',
-            faker: 'internet.url'
+            format: 'uri'
           },
           savingValuesMode: { type: 'string' }// add|update
         }

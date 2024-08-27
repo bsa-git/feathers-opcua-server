@@ -9,7 +9,6 @@ let base = merge({},
   {
     title: 'Teams',
     description: 'Teams database.',
-    fakeRecords: 3,
     required: [],
     uniqueItemProperties: [
       'name'
@@ -24,17 +23,12 @@ let base = merge({},
       name: {
         minLength: 2,
         maxLength: 30,
-        faker: 'commerce.productName',
         type: 'string'
       },
       alias: {
-        type: 'string',
-        faker: {
-          exp: '"is" + rec.name.replace(/ /gi, "")'
-        }
+        type: 'string'
       },
       description: {
-        faker: 'lorem.sentence',
         type: 'string'
       }
     }
