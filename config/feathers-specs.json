@@ -199,6 +199,26 @@
         "patch": "auth",
         "remove": "auth"
       }
+    },
+    "mailer": {
+      "name": "mailer",
+      "nameSingular": "mailer",
+      "subFolder": "",
+      "fileName": "mailer",
+      "adapter": "generic",
+      "path": "/mailer",
+      "isAuthEntity": false,
+      "requiresAuth": false
+    },
+    "authManagement": {
+      "name": "authManagement",
+      "nameSingular": "authManagement",
+      "subFolder": "",
+      "fileName": "auth-management",
+      "adapter": "generic",
+      "path": "/auth-management",
+      "isAuthEntity": false,
+      "requiresAuth": true
     }
   },
   "hooks": {

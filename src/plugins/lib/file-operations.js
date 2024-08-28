@@ -1066,7 +1066,7 @@ const writeFileSync = function (path, data, isJson = false) {
 };
 
 /**
- * @method writeFileSync
+ * @method writeJsonFileSync
  * @param {String|Array} path
  * @param {String|Object|Buffer|TypeArray|DataView} data 
  * @returns {String}

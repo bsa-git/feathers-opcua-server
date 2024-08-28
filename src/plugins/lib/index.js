@@ -3,6 +3,7 @@ const netOperations = require('./net-operations');
 const arrayOperations = require('./array-operations');
 const httpOperations = require('./http-operations');
 const httpHelpers = require('./http-helpers');
+const langHelpers = require('./lang-helpers');
 const util = require('./util');
 const typeOf = require('./type-of');
 const colors = require('./colors');
@@ -14,6 +15,7 @@ module.exports = Object.assign({},
   arrayOperations,
   httpOperations,
   httpHelpers,
+  langHelpers,
   util,
   typeOf,
   colors,
