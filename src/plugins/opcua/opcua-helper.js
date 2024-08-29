@@ -252,10 +252,10 @@ const getOpcuaDataType = function (nodeId = '') {
  */
 const getEngineeringUnit = function (type, locale) {
   let result = null;
-  let locales = require(`${appRoot}/src/plugins/localization/locales/${locale}.json`);
+  let locales = require(`${appRoot}/src/plugins/localization/locales/${locale}-units.json`);
   let engineeringUnit = locales.standardUnits[type];
   if (!engineeringUnit) {
-    locales = require(`${appRoot}/src/plugins/localization/locales/${process.env.FALLBACK_LOCALE}.json`);
+    locales = require(`${appRoot}/src/plugins/localization/locales/${process.env.FALLBACK_LOCALE}-units.json`);
     engineeringUnit = locales.standardUnits[type];
   }
   if (engineeringUnit) {

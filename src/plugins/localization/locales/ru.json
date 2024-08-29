@@ -1,119 +1,37 @@
 {
-  "standardUnits": {
-    "degree_celsius": {
-      "symbol": "CEL",
-      "shortName": "град.С",
-      "longName": "градус Цельсия"
-    },
-    "kilogram_force_per_square_centimetre": {
-      "symbol": "E42",
-      "shortName": "кгс/см2",
-      "longName": "килограмм сила на сантиметр квадратный"
-    },
-    "kilogram_force_per_square_metre": {
-      "symbol": "B40",
-      "shortName": "кгс/м2",
-      "longName": "килограмм сила на метр квадратный"
-    },
-    "cubic_metre_per_hour": {
-      "symbol": "MQH",
-      "shortName": "м3/ч",
-      "longName": "метр кубический в час"
-    },
-    "cubic_metre_per_day": {
-      "symbol": "MQH",
-      "shortName": "м3/сут",
-      "longName": "метр кубический в сут"
-    },
-    "normal_cubic_metre_per_hour": {
-      "symbol": "MQH?",
-      "shortName": "н.м3/ч",
-      "longName": "нормальный метр кубический в час"
-    },
-    "normal_cubic_metre_per_day": {
-      "symbol": "MQH?",
-      "shortName": "н.м3/сут",
-      "longName": "нормальный метр кубический в сут"
-    },
-    "thousand_normal_cubic_metre_per_hour": {
-      "symbol": "MQH??",
-      "shortName": "тыс н.м3/ч",
-      "longName": "тысяч нормальных метров кубических в час"
-    },
-    "thousand_normal_cubic_metre_per_day": {
-      "symbol": "MQH??",
-      "shortName": "тыс н.м3/сут",
-      "longName": "тысяч нормальных метров кубических в сут"
-    },
-    "kilogram_per_cubic_metre": {
-      "symbol": "KMQ",
-      "shortName": "кг/м3",
-      "longName": "килограмм на метр кубический"
-    },
-    "kilogram_per_litre": {
-      "symbol": "B35",
-      "shortName": "кг/литр",
-      "longName": "килограмм на литр"
-    },
-    "tonne_per_hour": {
-      "symbol": "E18",
-      "shortName": "т/ч",
-      "longName": "тонн в час"
-    },
-    "tonne_per_day": {
-      "symbol": "E18",
-      "shortName": "т/сут",
-      "longName": "тонн в сут"
-    },
-    "cubic_metre": {
-      "symbol": "MTQ",
-      "shortName": "м3",
-      "longName": "метр кубический"
-    },
-    "kilowatt": {
-      "symbol": "KWT",
-      "shortName": "кВт",
-      "longName": "киловатт"
-    },
-    "conventional_millimetre_of_mercury": {
-      "symbol": "HN",
-      "shortName": "мм рт.ст.",
-      "longName": "миллиметры ртутного столба"
-    },
-    "kilogram_per_hour": {
-      "symbol": "E93",
-      "shortName": "кг/ч",
-      "longName": "килограмм в час"
-    },
-    "kilogram_per_day": {
-      "symbol": "E93",
-      "shortName": "кг/сут",
-      "longName": "килограмм в сут"
-    },
-    "normal_kilogram_per_hour": {
-      "symbol": "E93?",
-      "shortName": "н.кг/ч",
-      "longName": "нормальный килограмм в час"
-    },
-    "normal_kilogram_per_day": {
-      "symbol": "E93?",
-      "shortName": "н.кг/сут",
-      "longName": "нормальный килограмм в сут"
-    },
-    "kilopascal": {
-      "symbol": "KPA",
-      "shortName": "кПа",
-      "longName": "килопаскаль"
-    },
-    "gram_per_cubic_metre": {
-      "symbol": "A93",
-      "shortName": "g/m³",
-      "longName": "gram per cubic metre"
-    },
-    "milligram_per_cubic_metre": {
-      "symbol": "GP",
-      "shortName": "mg/m³",
-      "longName": "milligram per cubic metre"
-    }
+  "authManagement": {
+    "titleVerifySignUp": "Верификация регистрации пользователя",
+    "titleResetPwd": "Восстановление пароля",
+    "titleNewPwd": "Новый пароль",
+    "titleIdentityChange": "Изменение индентификации",
+    "descriptionVerifySignUp": "Верификация вашей электронной почты...",
+    "descriptionResetPwd": "Восстановление пользовательского пароля...",
+    "descriptionIdentityChange": "Изменение пользовательской индентификации",
+    "successfulUserVerification": "Проверка вашей электронной почты прошла успешно",
+    "successfulResetPwd": "Восстановление пароля прошло успешно",
+    "successfulChangePwd": "Изменение пароля прошло успешно",
+    "signUpVerification": "После создания аккаунта, вам необходимо пройти проверку вашей электронной почты. На ваш электронный адрес будут переданы инструкции по верификации пользоватея.",
+    "resendVerification": "На ваш электронный адрес будут переданы инструкции по верификации пользоватея.",
+    "sendResetPwdVerification": "На ваш электронный адрес будут переданы инструкции по восстановлению пароля.",
+    "signUpVerificationEmail": "Чтобы закончить проверку вашей электронной почты, перейдите по адресу ",
+    "msgForErrorUserNotFind": "Пользователь не найден. Возможно, вы уже прошли верификацию вашей электронной почты при создании аккаунта.",
+    "titleDialog": "Повторить проверку электронной почты пользователя",
+    "textDialog": "Пользовательская электронная почта еще не прошла проверку! Вы хотите сделать повторную проверку?",
+    "hintSingUpEmail": "Доступность пользовательской электронной почты будет проверена",
+    "hintLoginEmail": "Для успешного логирования, электронная почта должна быть проверена",
+    "hintEnterSecurityCode": "Введите секретный код, переданный на ваш емайл",
+    "verificationCode": "Код проверки",
+    "yourEmail": "Ваш email",
+    "forgotYourPassword": "Забыли ваш пароль",
+    "errorUserVerification": "Ошибка проверки пользовательского емайл",
+    "errorUserResetPwd": "Ошибка восстановления пользовательского пароля",
+    "errorUnregisteredEmail": "Введите емайл адрес, под которым вы регистрировались на сайте",
+    "msgForErrorInvalidToken": "Неверный токен. Повторите проверку еще раз. (authManagement)",
+    "msgForErrorEmailNotYetVerified": "Пользовательский емайл еще не проверен.",
+    "mailResendVerifySignUp": "Чтобы закончить проверку, перейдите по ссылке  \"{tokenLink}\" или введите код проверки \"{shortToken}\" в соответсвующее поле формы",
+    "mailVerifySignUp": "Спасибо за подтверждение вашей электронной почты",
+    "mailSendResetPwd": "Чтобы закончить восстановление пароля, перейдите по ссылке  \"{tokenLink}\"",
+    "mailResetPwd": "Процедура восстановления пароля прошла успешно",
+    "mailPasswordChange": "Процедура изменения пароля прошла успешно"
   }
 }

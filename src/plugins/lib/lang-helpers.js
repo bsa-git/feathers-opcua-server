@@ -33,10 +33,10 @@ module.exports.detectLang = async function (text) {
  * @return {Object}
  */
 module.exports.getLangMessages = function (lang) {
-  let path = `${appRoot}/public/plugins/localization/locales/${lang}.json`;
+  let path = `${appRoot}/src/plugins/localization/locales/${lang}.json`;
   let msgs = readJsonFileSync(path);
   if (!msgs) {
-    path = `${appRoot}/public/plugins/localization/locales/${process.env.FALLBACK_LOCALE}.json`;
+    path = `${appRoot}/src/plugins/localization/locales/${process.env.FALLBACK_LOCALE}.json`;
     msgs = readJsonFileSync(path);
   }
   return msgs;

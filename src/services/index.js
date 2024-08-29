@@ -14,7 +14,8 @@ const teams = require('./teams/teams.service');
 const userProfiles = require('./user-profiles/user-profiles.service');
 const userTeams = require('./user-teams/user-teams.service');
 const users = require('./users/users.service.js');
-const authManagement = require('./auth-management/auth-management.service.js');
+const authManagement = require('./auth-management/auth-management.service');
+const mailer = require('./mailer/mailer.service');
 
 module.exports = function (app) {
   app.configure(chatMessages);
@@ -31,4 +32,5 @@ module.exports = function (app) {
   app.configure(userTeams);
   app.configure(users);
   app.configure(authManagement);
+  app.configure(mailer);
 };

@@ -55,6 +55,29 @@ let base = merge({},
         type: 'boolean',
         setDefault: !isTrue(process.env.IS_AUTH_MANAGER) 
       },
+      verifyToken: {
+        type: "string"
+      },
+      verifyShortToken: {
+        type: "string"
+      },
+      verifyExpires: {
+        type: "string",
+        format: "date-time"
+      },
+      verifyChanges: {
+        type: "object"
+      },
+      resetToken: {
+        type: "string"
+      },
+      resetShortToken: {
+        type: "string"
+      },
+      resetExpires: {
+        type: "string",
+        format: "date-time"
+      },
       googleId: {
         type: 'string'
       },
