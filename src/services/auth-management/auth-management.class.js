@@ -3,7 +3,7 @@ const errors = require('@feathersjs/errors');
 const authManagement = require('feathers-authentication-management');
 const notifier = require('./notifier');
 
-const debug = require('debug')('app:mssql-datasets.class');
+const debug = require('debug')('app:auth-management.class');
 const isDebug = false;
 
 //===============================================================
@@ -14,7 +14,7 @@ class AuthManagement {
     this.app = app;
     this.app.configure(authManagement(notifier(this.app)));
     this.authManagement = this.app.service('authManagement');
-    if(isDebug) debug('service initialized');
+    if(isDebug) debug('AuthManagement service initialized');
   }
 
   // Create authManagement
@@ -27,9 +27,9 @@ class AuthManagement {
       throw new errors.BadRequest('Missing data or missing data property action (data.action)');  
     }
 
-    if(isDebug && data.action) debug('service called. action=' + data.action);
+    if(isDebug && data.action) debug('AuthManagement service called.action=' + data.action);
     const result = await this.authManagement.create(data);
-    if(isDebug && result) inspector('app:service.auth-management.class.create.result:', result);
+    if(isDebug && result) debug('AuthManagement.create.result:', result);
     return result;
   }
 

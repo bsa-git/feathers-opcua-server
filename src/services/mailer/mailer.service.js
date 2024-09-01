@@ -1,6 +1,10 @@
 // Initializes the `auth-management` service on path `/auth-management`
 const { Mailer } = require('./mailer.class');
+// const Mailer = require('./mailer.class');
 const hooks = require('./mailer.hooks');
+
+const debug = require('debug')('app:service.mailer.service');
+const isDebug = false;
 
 module.exports = function (app) {
 
@@ -21,6 +25,8 @@ module.exports = function (app) {
 
   // Get our initialized service so that we can register hooks
   const service = app.service('mailer');
+
+  if(isDebug) debug('Registered mailer service:', !!service);
 
   service.hooks(hooks);
 };

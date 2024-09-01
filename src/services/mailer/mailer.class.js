@@ -2,19 +2,33 @@
 const feathersMailer = require('feathers-mailer');
 const smtpTransport = require('nodemailer-smtp-transport');
 const {inspector} = require('../../plugins/lib');
+
 const debug = require('debug')('app:service.mailer.class');
-const isDebug = false;
+const isDebug = true;
 
 //===============================================================
 
 class Mailer {
 
-  setup(app, options) {
+  // setup(app, options) {
+  setup(app, patch) {  
+    
+    if(isDebug) debug('Mailer.setup.options:');
+    console.log('Mailer.setup.options:', patch);
     this.app = app;
-    this.app.use('/feathers-mailer', feathersMailer(smtpTransport(options.mailer)));
-    this.feathersMailer = this.app.service('feathers-mailer');
-    if(true && options)debug('setup.options:', options);
+    // this.app.use('/feathers-mailer', feathersMailer(smtpTransport(options.mailer)));
+    // this.feathersMailer = this.app.service('feathers-mailer');
+    // if(isDebug && options)debug('setup.options:', options);
   }
+
+  // constructor (options) {
+  //   this.options = options || {};
+  //   // !code: constructor1
+  //   this.app = this.options.app;
+  //   this.app.use('/feathers-mailer', Mailer(smtpTransport(this.options.mailer)));
+  //   this.feathersMailer = this.app.service('feathers-mailer');
+  //   if(isDebug)debug('constructor.options.mailer:', this.options.mailer);
+  // }
 
 
   // Create authManagement
@@ -51,3 +65,4 @@ class Mailer {
 }
 
 exports.Mailer = Mailer;
+// module.exports = Mailer;
