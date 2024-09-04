@@ -8,13 +8,14 @@ const loRemove = require('lodash/remove');
 const loAt = require('lodash/at');
 
 const debug = require('debug')('app:opcua-servers.class');
-const isDebug = false;
+const isDebug = true;
 
 class OpcuaServers {
 
   setup(app, path) {
     this.app = app;
     this.opcuaServers = [];
+    if(isDebug) debug('setup.app:', app.get('port'));
   }
 
   async create(data, params) {

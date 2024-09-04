@@ -12,10 +12,8 @@ class Mailer {
 
   // setup(app, options) {
   setup(app, patch) {  
-    
-    if(isDebug) debug('Mailer.setup.options:');
-    console.log('Mailer.setup.options:', patch);
     this.app = app;
+    if(isDebug) debug('Mailer.setup.app:', app.get('port'));
     // this.app.use('/feathers-mailer', feathersMailer(smtpTransport(options.mailer)));
     // this.feathersMailer = this.app.service('feathers-mailer');
     // if(isDebug && options)debug('setup.options:', options);
