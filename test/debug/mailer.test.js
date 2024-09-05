@@ -49,19 +49,19 @@ describe('<<< Test services/mailer.test.js >>>', () => {
     assert.ok(result, 'service.get.result:', result);
   });
 
-  // it('Mailer.create service', async () => {
-  //   let result;
-  //   //--------------------------------------
-  //   const email = {
-  //     senderId: '60af3870270f24162c049c09',
-  //     from: process.env.FROM_EMAIL,
-  //     to: 'bs261257@gmail.com',
-  //     subject: 'Verify SignUp',
-  //     html: '<p>Hellow</p>'
-  //   };
+  it('Mailer.create service', async () => {
+    let result;
+    //--------------------------------------
+    const email = {
+      senderId: '60af3870270f24162c049c09',
+      from: process.env.FROM_EMAIL,
+      to: 'bs261257@gmail.com',
+      subject: 'Verify SignUp',
+      html: '<p>Hellow</p>'
+    };
     
-  //   result = await sendEmail(app, email);
-  //   if (isDebug) debug('service.get.result:', result);
-  //   assert.ok(result, 'service.get.result:', result);
-  // });
+    result = await sendEmail(app, email);
+    if (isDebug) debug('service.create.result:', result);
+    assert.ok(result, 'service.get.result:', result);
+  });
 });

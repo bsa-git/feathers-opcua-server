@@ -10,23 +10,17 @@ const isDebug = true;
 
 class Mailer {
 
-  // setup(app, options) {
   setup(app, patch) {  
-    this.app = app;
-    if(isDebug) debug('Mailer.setup.app:', app.get('port'));
-    // this.app.use('/feathers-mailer', feathersMailer(smtpTransport(options.mailer)));
-    // this.feathersMailer = this.app.service('feathers-mailer');
-    // if(isDebug && options)debug('setup.options:', options);
   }
 
-  // constructor (options) {
-  //   this.options = options || {};
-  //   // !code: constructor1
-  //   this.app = this.options.app;
-  //   this.app.use('/feathers-mailer', Mailer(smtpTransport(this.options.mailer)));
-  //   this.feathersMailer = this.app.service('feathers-mailer');
-  //   if(isDebug)debug('constructor.options.mailer:', this.options.mailer);
-  // }
+  constructor (options, app) {
+    this.options = options || {};
+    this.app = app;
+    this.app.use('/feathers-mailer', feathersMailer(smtpTransport(this.options.mailer)));
+    this.feathersMailer = this.app.service('feathers-mailer');
+    if(isDebug)debug('constructor.options:', this.options);
+    if(isDebug && app) debug('constructor.app:', app.get('port'));
+  }
 
 
   // Create authManagement
