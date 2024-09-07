@@ -4,7 +4,7 @@ const assert = require('assert');
 const errors = require('@feathersjs/errors');
 const app = require('../../src/app');
 const debug = require('debug')('app:mailer.test');
-const isDebug = true;
+const isDebug = false;
 
 const isTest = true;
 
@@ -16,12 +16,12 @@ const isTest = true;
 async function sendEmail(app, email) {
   try {
     const mailer = app.service('mailer');
-    if (isDebug) debug('sendEmail.email:', email);
+    if (isDebug && email) debug('sendEmail.email:', email);
     const result = await mailer.create(email);
-    if (isDebug) debug('sendEmail.result:', result);
+    if (isDebug && result) debug('sendEmail.result:', result);
     return result;
   } catch (err) {
-    if (isDebug) debug('sendEmail.error:', err);
+    if (true && err) debug('sendEmail.error:', err.message);
     new errors.BadRequest(`Error while sending email: ${err.message}`);
   }
 }
@@ -45,7 +45,7 @@ describe('<<< Test services/mailer.test.js >>>', () => {
     //--------------------------------------
     const service = app.service('mailer');
     result = await service.get('mailerID');
-    if (isDebug) debug('service.get.result:', result);
+    if (isDebug && result) debug('service.get.result:', result);
     assert.ok(result, 'service.get.result:', result);
   });
 
@@ -61,7 +61,7 @@ describe('<<< Test services/mailer.test.js >>>', () => {
     };
     
     result = await sendEmail(app, email);
-    if (isDebug) debug('service.create.result:', result);
+    if (true && result) debug('service.create.result:', result);
     assert.ok(result, 'service.get.result:', result);
   });
 });
