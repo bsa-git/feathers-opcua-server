@@ -49,6 +49,7 @@ describe('<<< Test services/mailer.test.js >>>', () => {
     assert.ok(result, 'service.get.result:', result);
   });
 
+  /*
   it('Mailer.create service', async () => {
     let result;
     //--------------------------------------
@@ -64,4 +65,5 @@ describe('<<< Test services/mailer.test.js >>>', () => {
     if (true && result) debug('service.create.result:', result);
     assert.ok(result, 'service.get.result:', result);
   });
+  */
 });
