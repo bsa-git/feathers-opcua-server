@@ -14,7 +14,8 @@ module.exports = function (options = {}) {
         }
         const userProfiles = await hh.findItems('user-profiles', { [fieldId]: data.profileId });
         if(userProfiles.length){
-          data.userProfile = userProfiles[0];
+          // data.userProfile = userProfiles[0];
+          data.profile = userProfiles[0];
         }
       }
     };
