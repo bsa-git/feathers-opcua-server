@@ -10,11 +10,15 @@ const isDebug = false;
 
 class AuthManagement {
 
-  setup(app, path) {
+  setup(app, path) {}
+
+  constructor (options, app) {
+    // this.options = options || {};
     this.app = app;
     this.app.configure(authManagement(notifier(this.app)));
     this.authManagement = this.app.service('authManagement');
-    if(isDebug) debug('AuthManagement service initialized');
+    if(isDebug && options)debug('constructor.options:', options);
+    if(isDebug && app) debug('AuthManagement service initialized');
   }
 
   // Create authManagement
