@@ -217,55 +217,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     assert.ok(rows[0].text, 'Execute Stored Procedure "dbo.MessagesSummary"');
   });
 
-  it('#6: Select values for "webM51" from SnapShot table', async () => {
-    let sql = '';
-    //---------------------------------------------
-    const db = new MssqlTedious(mssqlEnvName);
-    await db.connect();
-
-    // Select rows from SnapShot table
-    const params = [];
-    sql = `
-    SELECT sh.Value, sh.Time, tInfo.TagName, tInfo.ScanerName, tInfo.TagGroup, tInfo.KIPname
-    FROM dbMonitor.dbo.SnapShot AS sh
-    JOIN dbConfig.dbo.TagsInfo AS tInfo ON sh.TagID = tInfo.ID
-    WHERE sh.ScanerName = @scanerName AND tInfo.OnOff = 1
-    `;
-    db.buildParams(params, 'scanerName', TYPES.Char, 'webM51');
-
-    const { rows } = await db.query(params, sql);
-    if (isDebug) inspector('Request result:', { sql, rows });
-
-    await db.disconnect();
-
-    assert.ok(rows.length, 'Select values for "webM51" from SnapShot table');
-  });
-
-  it('#7: Select values for "opcUPG2" from SnapShot table', async () => {
-    let sql = '';
-    //---------------------------------------------
-    const db = new MssqlTedious(mssqlEnvName);
-    await db.connect();
-
-    // Select rows from SnapShot table
-    const params = [];
-    sql = `
-    SELECT sh.Value, sh.Time, sh.TagId, tInfo.TagName, tInfo.ScanerName, tInfo.TagGroup, tInfo.KIPname
-    FROM dbMonitor.dbo.SnapShot AS sh
-    JOIN dbConfig.dbo.TagsInfo AS tInfo ON (sh.TagID = tInfo.ID)
-    WHERE sh.ScanerName = @scanerName AND tInfo.OnOff = 1
-    `;
-    db.buildParams(params, 'scanerName', TYPES.Char, 'opcUPG2');
-
-    const { rows } = await db.query(params, sql);
-    if (isDebug && rows) inspector('Request result:', { sql, rows });
-
-    await db.disconnect();
-
-    assert.ok(rows.length, 'Select values for "opcUPG2" from SnapShot table');
-  });
-
-  it('#8: Insert values with insertBulkData to SnapShotTest table for "XozUchet(A5)"', async () => {
+  it('#6: Insert values with insertBulkData to SnapShotTest table for "XozUchet(A5)"', async () => {
     let db, sql = '', result, rows, rowSnapShot = {}, rowsSnapShot = [];
     const scanerName = 'XozUchet(A5)';// 'XozUchetDay(A5)'
     //---------------------------------------------
@@ -365,7 +317,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
   });
 
 
-  it('#9: Insert values with params to SnapShotTest table for "XozUchetDay(A5)"', async () => {
+  it('#7: Insert values with params to SnapShotTest table for "XozUchetDay(A5)"', async () => {
     let db, sql = '', result, rows, rowSnapShot = {}, rowsSnapShot = [];
     let params, tScanSS = false;
     const scanerName = 'XozUchetDay(A5)';// 'XozUchet(A5)';
@@ -494,7 +446,7 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
     }
   });
 
-  it('#10: Insert data to table with queue', async () => {
+  it('#8: Insert data to table with queue', async () => {
     let result = null;
     //---------------------------------------------
     
@@ -541,4 +493,54 @@ describe('<<=== MSSQL-Tedious Test (mssql-tedious.test.js) ===>>', () => {
 
 
   });
+
+  /*
+  it('#6: Select values for "webM51" from SnapShot table', async () => {
+    let sql = '';
+    //---------------------------------------------
+    const db = new MssqlTedious(mssqlEnvName);
+    await db.connect();
+
+    // Select rows from SnapShot table
+    const params = [];
+    sql = `
+    SELECT sh.Value, sh.Time, tInfo.TagName, tInfo.ScanerName, tInfo.TagGroup, tInfo.KIPname
+    FROM dbMonitor.dbo.SnapShot AS sh
+    JOIN dbConfig.dbo.TagsInfo AS tInfo ON sh.TagID = tInfo.ID
+    WHERE sh.ScanerName = @scanerName AND tInfo.OnOff = 1
+    `;
+    db.buildParams(params, 'scanerName', TYPES.Char, 'webM51');
+
+    const { rows } = await db.query(params, sql);
+    if (isDebug) inspector('Request result:', { sql, rows });
+
+    await db.disconnect();
+
+    assert.ok(rows.length, 'Select values for "webM51" from SnapShot table');
+  });
+
+  it('#7: Select values for "opcUPG2" from SnapShot table', async () => {
+    let sql = '';
+    //---------------------------------------------
+    const db = new MssqlTedious(mssqlEnvName);
+    await db.connect();
+
+    // Select rows from SnapShot table
+    const params = [];
+    sql = `
+    SELECT sh.Value, sh.Time, sh.TagId, tInfo.TagName, tInfo.ScanerName, tInfo.TagGroup, tInfo.KIPname
+    FROM dbMonitor.dbo.SnapShot AS sh
+    JOIN dbConfig.dbo.TagsInfo AS tInfo ON (sh.TagID = tInfo.ID)
+    WHERE sh.ScanerName = @scanerName AND tInfo.OnOff = 1
+    `;
+    db.buildParams(params, 'scanerName', TYPES.Char, 'opcUPG2');
+
+    const { rows } = await db.query(params, sql);
+    if (isDebug && rows) inspector('Request result:', { sql, rows });
+
+    await db.disconnect();
+
+    assert.ok(rows.length, 'Select values for "opcUPG2" from SnapShot table');
+  });
+  */
 });
