@@ -31,6 +31,7 @@ const defineRulesFor = (user) => {
 
   // Can 'user-profiles' actions
   can('create', 'user-profiles');
+  can('read', 'user-profiles');
   can('update', 'user-profiles', {id: user.profileId });
 
   // Can 'roles' actions
