@@ -2,7 +2,7 @@ const errors = require('@feathersjs/errors');
 const {inspector } = require('../lib');
 const AuthServer = require('./auth-server.class');
 
-const debug = require('debug')('app:plugins.auth-server.class');
+const debug = require('debug')('app:plugins.auth.channel.class');
 const isDebug = false;
 
 class Channel {
