@@ -5,8 +5,8 @@ const errors = require('@feathersjs/errors');
 const crypto = require('crypto');
 const { inspector, readJsonFileSync, stripSpecific, isTrue, appRoot } = require('../lib');
 const typeOf = require('../lib/type-of');
-const debug = require('debug')('app:plugins.auth-server.class');
 
+const debug = require('debug')('app:plugins.auth-server.class');
 const isDebug = false;
 
 /**

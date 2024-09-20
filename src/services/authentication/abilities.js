@@ -2,6 +2,7 @@
 const { AbilityBuilder, createAliasResolver, makeAbilityFromRules } = require('feathers-casl');
 const { inspector } = require('../../plugins/lib');
 
+const debug = require('debug')('app:serveces.authentication.abilities');
 const isDebug = false;
 
 // don't forget this, as `read` is used internally
@@ -15,7 +16,7 @@ const defineRulesFor = (user) => {
   // also see https://casl.js.org/v5/en/guide/define-rules
   const { can, cannot, rules } = new AbilityBuilder();
 
-  if(isDebug && user) inspector('abilities.defineRulesFor.user:', user);
+  if(isDebug && user) debug('abilities.defineRulesFor.user:', user);
 
   if (user.roleAlias === 'isAdministrator') {
     // Administrator can do all
