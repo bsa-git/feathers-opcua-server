@@ -11,6 +11,12 @@
 #### For "KepServer" 
   * C:\ProgramData\Kepware\KEPServerEnterprise\V6\UA\Server\cert
   * C:\ProgramData\Kepware\KEPServerEnterprise\V6\UA\Client Driver\cert
+### refs: Ubuntu paths to certificates for different applications
+  * /home/bsa/.config
+#### For "node-opcua" 
+  * /home/bsa/.config/node-opcua-default-nodejs/PKI/trusted/certs
+  * /home/bsa/.config/node-opcua-default-nodejs/PKI/own/certs
+  * /home/bsa/.config/NodeOPCUA-Server-nodejs/PKI/trusted/certs
 
 ===============================================================================================
 Contents of the packed folder "openssl-1.0.2u-x64_86-win64.zip" or "openssl-1.0.2u-i386-win32.zip"
