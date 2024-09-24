@@ -221,12 +221,14 @@ class AuthServer {
     return !notAccess;
   }
 
+  
   /**
-   * Is login
-   * Checks the ability to log user
-   * @return {Promise.<void>}
+   * @async
+   * Checks the ability active of user
+   * @method isUserActive
+   * @return {Boolean}
    */
-  async isDebugin() {
+  async isUserActive() {
     let payload = this.contextPayload;
     if (!payload) {
       payload = await AuthServer.verifyJWT(this.contextAccessToken);
@@ -237,8 +239,9 @@ class AuthServer {
     const service = this.app.service('users');
     if (service) {
       const user = await service.get(payload.userId);
-      if (isDebug) inspector('plugins::auth-server.class::isDebugin.user:', user);
-      return Promise.resolve(user.active);
+      if (isDebug) inspector('isUserActive.user:', user);
+      // return Promise.resolve(user.active);
+      return user.active;
     } else {
       throw new errors.BadRequest('There is no service for the path - "users"');
     }
@@ -339,13 +342,13 @@ class AuthServer {
   }
 
   /**
-   * isDebuginJWT
+   * isLoginJWT
    * Is a jwt login with appClient.passwort.
    * @async
    * @param {Object} passport
    * @return {Boollean}
    */
-  static async isDebuginJWT(passport) {
+  static async isLoginJWT(passport) {
     if (!passport) new Error('No passport!');
     if(passport.passport) passport = passport.passport;
     const jwt = await passport.getJWT();
@@ -446,6 +449,15 @@ class AuthServer {
    */
   static isAuthManager() {
     return (process.env.IS_AUTH_MANAGER === undefined) ? true : isTrue(process.env.IS_AUTH_MANAGER);
+  }
+
+  /**
+   * Is set user active
+   * @method isSetUserActive
+   * @return {boolean}
+   */
+  static isSetUserActive() {
+    return (process.env.SET_USER_ACTIVE === undefined) ? false : isTrue(process.env.SET_USER_ACTIVE);
   }
 
   /**

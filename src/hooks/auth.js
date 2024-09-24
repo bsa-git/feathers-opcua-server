@@ -35,8 +35,8 @@ const loginCheck = function (isTest = false) {
     if (isTest || (!AuthServer.isTest() && authServer.contextProvider)) {
       if (isDebug) debug('loginCheck: Start');
       if (authServer.isMask('authentication.create.after')) {
-        const isDebugin = await authServer.isDebugin();
-        if (!isDebugin) {
+        const isUserActive = await authServer.isUserActive();
+        if (!isUserActive) {
           throw new errors.Forbidden('Access to the login is denied because your account is not activated. Contact your administrator.');
         }
       }
