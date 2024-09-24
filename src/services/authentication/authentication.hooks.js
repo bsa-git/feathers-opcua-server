@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 const { defineAbilitiesFor } = require('./abilities');
-const { inspector } = require('../../plugins/lib');
 
+const debug = require('debug')('app:services.authentication.hooks');
 const isDebug = false;
 
 module.exports = {
@@ -21,7 +22,7 @@ module.exports = {
       async context => {
         const { app } = context;
         const { user } = context.result;
-        if (isDebug) inspector('authentication.hooks.user:', user);
+        if (isDebug && user) debug('after.create.user:', user);
         if (!user) return context;
         // Set roleAlias for user
         if (!user.roleAlias) {
@@ -31,10 +32,9 @@ module.exports = {
           role = role.data;
           if (!role.length) return context;
           role = role[0];
-          if (isDebug) inspector('authentication.hooks.role:', role);
+          if (isDebug && role) debug('after.create.role:', role);
           user.roleAlias = role.alias;
         }
-        if (isDebug) inspector('authentication.hooks.user:', user);
         // Set ability and rules properties
         const ability = defineAbilitiesFor(user);
         context.result.ability = ability;

@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 const { AbilityBuilder, createAliasResolver, makeAbilityFromRules } = require('feathers-casl');
-const { inspector } = require('../../plugins/lib');
 
 const debug = require('debug')('app:serveces.authentication.abilities');
 const isDebug = false;

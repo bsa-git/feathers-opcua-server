@@ -2,15 +2,15 @@ const { AuthenticationService, JWTStrategy } = require('@feathersjs/authenticati
 const { LocalStrategy } = require('@feathersjs/authentication-local');
 const { expressOauth, OAuthStrategy } = require('@feathersjs/authentication-oauth');
 const hooks = require('./services/authentication/authentication.hooks');
-const debug = require('debug')('app:authentication');
 
+const debug = require('debug')('app:authentication');
 const isDebug = false;
 
 class GitHubStrategy extends OAuthStrategy {
   async getEntityData(profile) {
     const baseData = await super.getEntityData(profile);
-    if(isDebug) debug('GitHubStrategy.getEntityData.baseData:', baseData);
-    if(isDebug) debug('GitHubStrategy.getEntityData.profile:', profile);
+    if(isDebug && baseData) debug('GitHubStrategy.getEntityData.baseData:', baseData);
+    if(isDebug && profile) debug('GitHubStrategy.getEntityData.profile:', profile);
     return {
       ...baseData,
       // You can also set the display name to profile.name
@@ -28,8 +28,8 @@ class GitHubStrategy extends OAuthStrategy {
 class GoogleStrategy extends OAuthStrategy {
   async getEntityData(profile) {
     const baseData = await super.getEntityData(profile);
-    if(isDebug) debug('GoogleStrategy.getEntityData.baseData:', baseData);
-    if(isDebug) debug('GoogleStrategy.getEntityData.profile:', profile);
+    if(isDebug && baseData) debug('GoogleStrategy.getEntityData.baseData:', baseData);
+    if(isDebug && profile) debug('GoogleStrategy.getEntityData.profile:', profile);
     return {
       ...baseData,
       // You can also set the display name to profile.name
