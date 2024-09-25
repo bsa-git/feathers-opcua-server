@@ -238,8 +238,10 @@ class AuthServer {
     }
     const service = this.app.service('users');
     if (service) {
-      const user = await service.get(payload.userId);
-      if (isDebug) inspector('isUserActive.user:', user);
+      if (isDebug && payload) inspector('isUserActive.payload:', payload);
+      const userId = payload.sub;
+      const user = await service.get(userId);
+      if (isDebug && user) inspector('isUserActive.user:', user);
       // return Promise.resolve(user.active);
       return user.active;
     } else {
@@ -263,13 +265,15 @@ class AuthServer {
     const service = this.app.service('users');
     if (service) {
       const dt = moment.utc().format();
-      const user = await service.patch(payload.userId, { loginAt: dt });
+      const userId = payload.sub;
+      const user = await service.patch(userId, { loginAt: dt });
       if (isDebug) inspector('plugins::auth-server.class::setLoginAt.user:', user);
       return user;
     } else {
       throw new errors.BadRequest('There is no service for the path - "users"');
     }
   }
+
 
   /**
    * getHookContext

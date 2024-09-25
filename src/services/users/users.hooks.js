@@ -28,8 +28,8 @@ const discardFields = iff(!isTest && isProvider('external'), discard(
   'resetToken',
   'resetShortToken',
   'resetExpires',
-  // 'googleId',
-  // 'githubId',
+  'googleId',
+  'githubId',
   'googleAccessToken',
   'googleRefreshToken',
   'githubAccessToken',
@@ -44,7 +44,7 @@ let moduleExports = {
     create: [ processItem(), hashPassword('password') ],
     update: [ authenticate('jwt') ],
     // update: [ hashPassword('password'),  authenticate('jwt') ],
-    patch: [ authenticate('jwt') ],
+    patch: [ authenticate('jwt'), iff(!isTest && isProvider('external'), discard('password')) ],
     // patch: [ hashPassword('password'),  authenticate('jwt') ],
     remove: [ authenticate('jwt') ]
   },
@@ -77,36 +77,48 @@ let moduleExports = {
 };
 
 //---- BEFORE ---
-// moduleExports.before.create = loConcat([accountsProfileData(),validateCreate()], moduleExports.before.create);
-// moduleExports.before.update = loConcat(iff(!isTest, disallow('external')), [validateUpdate()], moduleExports.before.update);
-// moduleExports.before.patch = loConcat(iff(!isTest && isProvider('external'), preventChanges(true,
-//   'isVerified',
-//   'verifyToken',
-//   'verifyShortToken',
-//   'verifyExpires',
-//   'verifyChanges',
-//   'resetToken',
-//   'resetShortToken',
-//   'resetExpires',
-//   'googleId',
-//   'githubId',
-// )), [accountsProfileData(), validatePatch()], moduleExports.before.patch);
-
+/*
+moduleExports.before.create = loConcat([accountsProfileData(),validateCreate()], moduleExports.before.create);
+moduleExports.before.update = loConcat(iff(!isTest, disallow('external')), [validateUpdate()], moduleExports.before.update);
+moduleExports.before.patch = loConcat(iff(!isTest && isProvider('external'), preventChanges(true,
+  'isVerified',
+  'verifyToken',
+  'verifyShortToken',
+  'verifyExpires',
+  'verifyChanges',
+  'resetToken',
+  'resetShortToken',
+  'resetExpires',
+  'googleId',
+  'githubId',
+)), [accountsProfileData(), validatePatch()], moduleExports.before.patch);
+*/
 
 moduleExports.before.find = loConcat(moduleExports.before.find, authorizeNormalize, authorizeHook);
 moduleExports.before.get = loConcat(moduleExports.before.get, authorizeNormalize, authorizeHook);
 moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create, authorizeNormalize, authorizeHook);
 moduleExports.before.update = loConcat([validateUpdate()], moduleExports.before.update, authorizeNormalize, authorizeHook);
-moduleExports.before.patch = loConcat([validatePatch()], moduleExports.before.patch, authorizeNormalize, authorizeHook);
+moduleExports.before.patch = loConcat(iff(!isTest && isProvider('external'), preventChanges(true,
+  'isVerified',
+  'verifyToken',
+  'verifyShortToken',
+  'verifyExpires',
+  'verifyChanges',
+  'resetToken',
+  'resetShortToken',
+  'resetExpires',
+  'googleId',
+  'githubId',
+)), [validatePatch()], moduleExports.before.patch, authorizeNormalize, authorizeHook);
 moduleExports.before.remove = loConcat(moduleExports.before.remove, authorizeNormalize, authorizeHook);
 
 //---- AFTER ---
-// moduleExports.after.create = loConcat(moduleExports.after.create);
-// moduleExports.after.find = loConcat(discardFields, moduleExports.after.find);
-// moduleExports.after.get = loConcat(discardFields, moduleExports.after.get);
-// moduleExports.after.update = loConcat(discardFields, moduleExports.after.update);
-// moduleExports.after.patch = loConcat(discardFields, moduleExports.after.patch);
-// moduleExports.after.remove = loConcat(discardFields, moduleExports.after.remove);
+moduleExports.after.create = loConcat(moduleExports.after.create);
+moduleExports.after.find = loConcat(discardFields, moduleExports.after.find);
+moduleExports.after.get = loConcat(discardFields, moduleExports.after.get);
+moduleExports.after.update = loConcat(discardFields, moduleExports.after.update);
+moduleExports.after.patch = loConcat(discardFields, moduleExports.after.patch);
+moduleExports.after.remove = loConcat(discardFields, moduleExports.after.remove);
 
 
 module.exports = moduleExports;

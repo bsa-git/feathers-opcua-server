@@ -216,7 +216,7 @@ class HookHelper {
     const isEnvReactClient = isTrue(process.env.IS_REACT_CLIENT);
     if (isDebug) debug('isPopulateItems.isProvider(\'external\'):', isProvider('external')(context));
     if (isDebug) debug('isPopulateItems.isProvider(\'rest\'):', isProvider('rest')(context));
-    const result = isProvider('server')(context) || isProvider('rest')(context) || !isEnvReactClient;
+    const result = isProvider('server')(context) || !isEnvReactClient;
     if (isDebug) debug('isPopulateItems.result:', result);
     return result;
   }

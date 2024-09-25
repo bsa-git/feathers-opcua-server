@@ -1,6 +1,7 @@
 const errors = require('@feathersjs/errors');
 const { inspector } = require('../plugins/lib');
 const { AuthServer } = require('../plugins/auth');
+const { defineAbilitiesFor } = require('../services/authentication/abilities');
 
 const debug = require('debug')('app:hooks.auth');
 const isDebug = false;
@@ -64,6 +65,39 @@ const setLoginAt = function (isTest = false) {
 };
 
 /**
+ * abilityExtension
+ * @param isTest
+ * @return {Object}
+ */
+const abilityExtension = function (isTest = false) {
+  return async context => {
+    const authServer = new AuthServer(context);
+    if (isTest || (!AuthServer.isTest() && authServer.contextProvider)) {
+      const { app } = context;
+      const { user } = context.result;
+      if (isDebug && user) debug('after.create.user:', user);
+      if (!user) return context;
+      // Set roleAlias for user
+      if (!user.roleAlias) {
+        const service = app.service('roles');
+        const idField = 'id' in user ? 'id' : '_id';
+        let role = await service.find({ query: { [idField]: user.roleId } });
+        role = role.data;
+        if (!role.length) return context;
+        role = role[0];
+        if (isDebug && role) debug('after.create.role:', role);
+        user.roleAlias = role.alias;
+      }
+      // Set ability and rules properties
+      const ability = defineAbilitiesFor(user);
+      context.result.ability = ability;
+      context.result.rules = ability.rules;
+    }
+    return context;
+  };
+};
+
+/**
  * Payload extension for hook
  * @param isTest
  * @return {Object}
@@ -88,29 +122,10 @@ const payloadExtension = function (isTest = false) {
   };
 };
 
-/**
- * Ability extension hook
- * @param isTest
- * @return {Object}
- */
-// const abilityExtension = function (isTest = false) {
-//   return context => {
-//     const isAbilityExtension = isTest ? true : !AuthServer.isTest();
-//     if (isAbilityExtension) {
-//       const { user } = context.result;
-//       if (!user) return context;
-//       const ability = defineAbilitiesFor(user);
-//       context.result.ability = ability;
-//       context.result.rules = ability.rules;
-//     }
-//     return context;
-//   };
-// };
-
 module.exports = {
   authCheck,
   loginCheck,
   setLoginAt,
   payloadExtension,
-  // abilityExtension
+  abilityExtension
 };

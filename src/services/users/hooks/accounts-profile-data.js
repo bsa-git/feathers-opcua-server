@@ -4,8 +4,8 @@
 const { checkContext, getItems, replaceItems } = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
 const { inspector } = require('../../../plugins/lib');
-const debug = require('debug')('app:service.hook.accounts-profile-data');
 
+const debug = require('debug')('app:services.hook.accounts-profile-data');
 const isDebug = false;
 
 // eslint-disable-next-line no-unused-vars
