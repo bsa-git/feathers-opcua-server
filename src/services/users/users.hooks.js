@@ -36,6 +36,21 @@ const discardFields = iff(!isTest && isProvider('external'), discard(
   'githubRefreshToken'
 ));
 
+const preventChangeFields = iff(!isTest && isProvider('external'), preventChanges(true,
+  'isVerified',
+  'verifyToken',
+  'verifyShortToken',
+  'verifyExpires',
+  'verifyChanges',
+  'resetToken',
+  'resetShortToken',
+  'resetExpires',
+  'googleId',
+  'githubId',
+));
+
+const discardPassword = iff(!isTest && isProvider('external'), discard('password'));
+
 let moduleExports = {
   before: {
     all: [],
@@ -44,7 +59,7 @@ let moduleExports = {
     create: [ processItem(), hashPassword('password') ],
     update: [ authenticate('jwt') ],
     // update: [ hashPassword('password'),  authenticate('jwt') ],
-    patch: [ authenticate('jwt'), iff(!isTest && isProvider('external'), discard('password')) ],
+    patch: [ authenticate('jwt'), discardPassword ],
     // patch: [ hashPassword('password'),  authenticate('jwt') ],
     remove: [ authenticate('jwt') ]
   },
@@ -98,22 +113,11 @@ moduleExports.before.find = loConcat(moduleExports.before.find, authorizeNormali
 moduleExports.before.get = loConcat(moduleExports.before.get, authorizeNormalize, authorizeHook);
 moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create, authorizeNormalize, authorizeHook);
 moduleExports.before.update = loConcat([validateUpdate()], moduleExports.before.update, authorizeNormalize, authorizeHook);
-moduleExports.before.patch = loConcat(iff(!isTest && isProvider('external'), preventChanges(true,
-  'isVerified',
-  'verifyToken',
-  'verifyShortToken',
-  'verifyExpires',
-  'verifyChanges',
-  'resetToken',
-  'resetShortToken',
-  'resetExpires',
-  'googleId',
-  'githubId',
-)), [validatePatch()], moduleExports.before.patch, authorizeNormalize, authorizeHook);
+moduleExports.before.patch = loConcat(preventChangeFields, [validatePatch()], moduleExports.before.patch, authorizeNormalize, authorizeHook);
 moduleExports.before.remove = loConcat(moduleExports.before.remove, authorizeNormalize, authorizeHook);
 
 //---- AFTER ---
-moduleExports.after.create = loConcat(moduleExports.after.create);
+moduleExports.after.create = loConcat(discardFields, moduleExports.after.create);
 moduleExports.after.find = loConcat(discardFields, moduleExports.after.find);
 moduleExports.after.get = loConcat(discardFields, moduleExports.after.get);
 moduleExports.after.update = loConcat(discardFields, moduleExports.after.update);

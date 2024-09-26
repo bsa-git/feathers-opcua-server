@@ -19,32 +19,6 @@ module.exports = {
     all: [],
     find: [],
     get: [],
-    /*
-    create: [loginCheck(),
-      async context => {
-        const { app } = context;
-        const { user } = context.result;
-        if (isDebug && user) debug('after.create.user:', user);
-        if (!user) return context;
-        // Set roleAlias for user
-        if (!user.roleAlias) {
-          const service = app.service('roles');
-          const idField = 'id' in user ? 'id' : '_id';
-          let role = await service.find({ query: { [idField]: user.roleId } });
-          role = role.data;
-          if (!role.length) return context;
-          role = role[0];
-          if (isDebug && role) debug('after.create.role:', role);
-          user.roleAlias = role.alias;
-        }
-        // Set ability and rules properties
-        const ability = defineAbilitiesFor(user);
-        context.result.ability = ability;
-        context.result.rules = ability.rules;
-        return context;
-      }
-    ],
-    */
     create: [loginCheck(), abilityExtension(), setLoginAt()],
     update: [],
     patch: [],
