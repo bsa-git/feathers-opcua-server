@@ -205,7 +205,7 @@ class HookHelper {
    */
   static isEnvPopulateItems() {
     const result = isTrue(process.env.IS_REACT_CLIENT);
-    return !result
+    return !result;
   }
 
   /**
