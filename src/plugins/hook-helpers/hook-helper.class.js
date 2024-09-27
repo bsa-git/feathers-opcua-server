@@ -199,11 +199,13 @@ class HookHelper {
   }
 
   /**
-   * Is env react client
+   * Is env populate items
+   * e.g. Else IS_REACT_CLIENT = 0 Then return -> true Else return -> false
    * @returns {Boolean}
    */
-  static isEnvReactClient() {
-    return isTrue(process.env.IS_REACT_CLIENT);
+  static isEnvPopulateItems() {
+    const result = isTrue(process.env.IS_REACT_CLIENT);
+    return !result
   }
 
   /**
@@ -213,10 +215,10 @@ class HookHelper {
    */
   static isPopulateItems(context) {
     if (HookHelper.isTest()) return false;
-    const isEnvReactClient = isTrue(process.env.IS_REACT_CLIENT);
+    const isEnvPopulateItems = HookHelper.isEnvPopulateItems();
     if (isDebug) debug('isPopulateItems.isProvider(\'external\'):', isProvider('external')(context));
     if (isDebug) debug('isPopulateItems.isProvider(\'rest\'):', isProvider('rest')(context));
-    const result = isProvider('server')(context) || !isEnvReactClient;
+    const result = isProvider('server')(context) || isEnvPopulateItems;
     if (isDebug) debug('isPopulateItems.result:', result);
     return result;
   }
