@@ -94,6 +94,8 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
   it('#6: Customizing the Payload with Hook', async () => {
 
     const fakeUser = fakes['users'][0];
+    const idField = HookHelper.getIdField(fakeUser);
+    const userId = fakeUser[idField];
     // Set context params
     contextBefore.app = app;
     contextBefore.params.authenticated = true;
@@ -103,8 +105,9 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
     contextBefore.method = 'create';
 
     await authHook.payloadExtension(true)(contextBefore);
-    if(isDebug) inspector('Customizing the Payload with Hook.contextBefore:', contextBefore.params.payload);
-    assert(contextBefore.params.payload.role, 'Customizing the Payload');
+    if(true && contextBefore.params.payload) inspector('Customizing the Payload with Hook.contextBefore:', contextBefore.params.payload);
+    const isCheckPayload = contextBefore.params.payload.role && (contextBefore.params.payload.userId === userId);
+    assert(isCheckPayload, 'Customizing the Payload');
   });
 
   it('#7: Check of set user loginAt field', async () => {
@@ -117,7 +120,7 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
       const users = app.service('users');
       let user = await users.get(fakeUser[idField]);
       let loginAtBefore = user.loginAt;
-      if (isDebug) debug('Check of set user loginAt field::loginAtBefore:', loginAtBefore);
+      if (isDebug && loginAtBefore) debug('Check of set user loginAt field::loginAtBefore:', loginAtBefore);
 
       contextAfter.app = app;
       contextAfter.path = 'authentication';
@@ -128,8 +131,8 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
 
       user = await users.get(fakeUser[idField]);
       let loginAtAfter = user.loginAt;
-      if (isDebug) debug('Check of set user loginAt field::loginAtAfter:', loginAtAfter);
-      if (isDebug) debug(`Check of set user loginAt field method - "${contextAfter.path}.${contextAfter.method}"`);
+      if (isDebug && loginAtAfter) debug('Check of set user loginAt field::loginAtAfter:', loginAtAfter);
+      if (isDebug && contextAfter) debug(`Check of set user loginAt field method - "${contextAfter.path}.${contextAfter.method}"`);
       assert(loginAtAfter !== loginAtBefore);
     }
     catch (ex) {

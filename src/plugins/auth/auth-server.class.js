@@ -221,7 +221,7 @@ class AuthServer {
     return !notAccess;
   }
 
-  
+
   /**
    * @async
    * Checks the ability active of user
@@ -265,7 +265,7 @@ class AuthServer {
     const service = this.app.service('users');
     if (service) {
       const dt = moment.utc().format();
-      const userId = payload.sub;
+      const userId = payload.userId ? payload.userId : payload.sub;
       const user = await service.patch(userId, { loginAt: dt });
       if (isDebug) inspector('plugins::auth-server.class::setLoginAt.user:', user);
       return user;
@@ -311,7 +311,7 @@ class AuthServer {
    */
   static async getPassportJWT(passport) {
     if (!passport) new Error('No passport!');
-    if(passport.passport) passport = passport.passport;
+    if (passport.passport) passport = passport.passport;
     return await passport.getJWT();
   }
 
@@ -325,8 +325,8 @@ class AuthServer {
   */
   static async verifyPassportJWT(passport, jwt) {
     if (!passport) new Error('No passport!');
-    if(!jwt) new Error('No jwt!');
-    if(passport.passport) passport = passport.passport;
+    if (!jwt) new Error('No jwt!');
+    if (passport.passport) passport = passport.passport;
     return await passport.verifyJWT(jwt);
   }
 
@@ -339,9 +339,9 @@ class AuthServer {
    * @return {Boolean}
    */
   static async isPassportPayloadValid(passport, jwt) {
-    if(!passport) new Error('No passport!');
-    if(!jwt) new Error('No jwt!');
-    if(passport.passport) passport = passport.passport;
+    if (!passport) new Error('No passport!');
+    if (!jwt) new Error('No jwt!');
+    if (passport.passport) passport = passport.passport;
     return await passport.payloadIsValid(jwt);
   }
 
@@ -354,7 +354,7 @@ class AuthServer {
    */
   static async isLoginJWT(passport) {
     if (!passport) new Error('No passport!');
-    if(passport.passport) passport = passport.passport;
+    if (passport.passport) passport = passport.passport;
     const jwt = await passport.getJWT();
     return !!jwt;
   }
@@ -504,7 +504,7 @@ class AuthServer {
    * @return {boolean}
    */
   static isTest() {
-    return feathersSpecs.app.envTestModeName ===  process.env.NODE_ENV;
+    return feathersSpecs.app.envTestModeName === process.env.NODE_ENV;
   }
 
   /**

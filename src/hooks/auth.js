@@ -106,15 +106,19 @@ const payloadExtension = function (isTest = false) {
   return async context => {
     const authServer = new AuthServer(context);
     const _isTest = isTest ? true : !AuthServer.isTest();
-    if (_isTest && authServer.contextUser) {
+    const user = authServer.contextUser;
+    if (_isTest && user) {
+      const idField = AuthServer.getIdField(user);
+      const userId = user[idField];
       let role = {};
-      const roleId = authServer.contextUser.roleId;
+      const roleId = user.roleId;
       if (roleId) {
         role = await authServer.app.service('roles').get(roleId);
-        if (isDebug) inspector('Role for authorized user:', role);
+        if (isDebug && role) inspector('Role for authorized user:', role);
       }
       // make sure params.payload exists
       context.params.payload = authServer.contextPayload || {};
+      if(!context.params.payload.userId) context.params.payload.userId = userId;
       // merge in a `role` property
       Object.assign(context.params.payload, { role: `${role.name ? role.name : ''}` });
     }
