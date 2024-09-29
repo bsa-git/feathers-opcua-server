@@ -171,11 +171,12 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
         await authHook.loginCheck(true)(contextAfter);  
         assert(active, 'Check of set user active field for "false"');
       } catch (error) {
+        console.error(chalk.red(error.message));
         assert(true, 'Check of set user active field for "false"');
       }
       
-    } catch (ex) {
-      console.error(chalk.red(ex.message));
+    } catch (error) {
+      console.error(chalk.red(error.message));
       assert(false, 'The hook "authHook.loginCheck()" generated an error of the wrong type.');
     }
   });
