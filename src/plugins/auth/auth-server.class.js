@@ -239,7 +239,7 @@ class AuthServer {
     const service = this.app.service('users');
     if (service) {
       if (isDebug && payload) inspector('isUserActive.payload:', payload);
-      const userId = payload.sub;
+      const userId = payload.userId ? payload.userId : payload.sub;
       const user = await service.get(userId);
       if (isDebug && user) inspector('isUserActive.user:', user);
       // return Promise.resolve(user.active);

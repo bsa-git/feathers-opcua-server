@@ -105,12 +105,12 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
     contextBefore.method = 'create';
 
     await authHook.payloadExtension(true)(contextBefore);
-    if(true && contextBefore.params.payload) inspector('Customizing the Payload with Hook.contextBefore:', contextBefore.params.payload);
+    if(isDebug && contextBefore.params.payload) inspector('Customizing the Payload with Hook.contextBefore:', contextBefore.params.payload);
     const isCheckPayload = contextBefore.params.payload.role && (contextBefore.params.payload.userId === userId);
     assert(isCheckPayload, 'Customizing the Payload');
   });
 
-  it('#7: Check of set user loginAt field', async () => {
+  it('#7: Check of set user loginAt field -> setLoginAt()', async () => {
     try {
       const fakeUser = fakes['users'][0];
       const idField = HookHelper.getIdField(fakeUser);
@@ -136,6 +136,45 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
       assert(loginAtAfter !== loginAtBefore);
     }
     catch (ex) {
+      console.error(chalk.red(ex.message));
+      assert(false, 'The hook "authHook.setLoginAt()" generated an error of the wrong type.');
+    }
+  });
+
+  it('#8: Check of set user active field -> loginCheck()', async () => {
+    try {
+      const fakeUser = fakes['users'][0];
+      const idField = HookHelper.getIdField(fakeUser);
+      const userId = fakeUser[idField];
+      const payload = {userId: fakeUser[idField], role: 'Administrator'};
+
+      // Get user loginAt field
+      const service = app.service('users');
+      let user = await service.get(userId);
+      let active = user.active;
+      if (isDebug && user) debug('Check of set user active field:user:', user);
+
+      contextAfter.app = app;
+      contextAfter.path = 'authentication';
+      contextAfter.method = 'create';
+      contextAfter.params.payload = payload;
+
+      // Run loginCheck hook
+      await authHook.loginCheck(true)(contextAfter);
+      assert(active, 'Check of set user active field for "true"');
+
+      user = await service.patch(userId, { active: false });
+      active = user.active;
+      if (isDebug && user) debug('Check of set user active field:user:', user);
+      try {
+        // Run loginCheck hook
+        await authHook.loginCheck(true)(contextAfter);  
+        assert(active, 'Check of set user active field for "false"');
+      } catch (error) {
+        assert(true, 'Check of set user active field for "false"');
+      }
+      
+    } catch (ex) {
       console.error(chalk.red(ex.message));
       assert(false, 'The hook "authHook.loginCheck()" generated an error of the wrong type.');
     }
