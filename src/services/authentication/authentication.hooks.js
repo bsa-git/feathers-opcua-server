@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
-const { loginCheck, abilityExtension, setLoginAt } = require('../../hooks/auth');
-const { defineAbilitiesFor } = require('./abilities');
+const { loginCheck, authorizeExtension, setLoginAt } = require('../../hooks/auth');
 
 const debug = require('debug')('app:services.authentication.hooks');
 const isDebug = false;
@@ -19,7 +18,7 @@ module.exports = {
     all: [],
     find: [],
     get: [],
-    create: [loginCheck(), abilityExtension(), setLoginAt()],
+    create: [loginCheck(), authorizeExtension(), setLoginAt()],
     update: [],
     patch: [],
     remove: []

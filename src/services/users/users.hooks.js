@@ -4,7 +4,8 @@ const { authorize } = require('feathers-casl').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 const { validateCreate, validateUpdate, validatePatch } = require('./users.validate');
 const commonHooks = require('feathers-hooks-common');
-const { HookHelper, authorizeNormalize } = require('../../plugins/hook-helpers');
+const { HookHelper } = require('../../plugins/hook-helpers');
+const { authorizeNormalize } = require('../../hooks/auth');
 const { getEnvAdapterDB } = require('../../plugins/db-helpers');
 const processItem = require('./hooks/process-item');
 const populateItems = require('./hooks/populate-items');
@@ -109,12 +110,12 @@ moduleExports.before.patch = loConcat(iff(!isTest && isProvider('external'), pre
 )), [accountsProfileData(), validatePatch()], moduleExports.before.patch);
 */
 
-moduleExports.before.find = loConcat(moduleExports.before.find, authorizeNormalize, authorizeHook);
-moduleExports.before.get = loConcat(moduleExports.before.get, authorizeNormalize, authorizeHook);
-moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create, authorizeNormalize, authorizeHook);
-moduleExports.before.update = loConcat([validateUpdate()], moduleExports.before.update, authorizeNormalize, authorizeHook);
-moduleExports.before.patch = loConcat(preventChangeFields, [validatePatch()], moduleExports.before.patch, authorizeNormalize, authorizeHook);
-moduleExports.before.remove = loConcat(moduleExports.before.remove, authorizeNormalize, authorizeHook);
+moduleExports.before.find = loConcat(moduleExports.before.find, authorizeNormalize(), authorizeHook);
+moduleExports.before.get = loConcat(moduleExports.before.get, authorizeNormalize(), authorizeHook);
+moduleExports.before.create = loConcat([validateCreate()], moduleExports.before.create, authorizeNormalize(), authorizeHook);
+moduleExports.before.update = loConcat([validateUpdate()], moduleExports.before.update, authorizeNormalize(), authorizeHook);
+moduleExports.before.patch = loConcat(preventChangeFields, [validatePatch()], moduleExports.before.patch, authorizeNormalize(), authorizeHook);
+moduleExports.before.remove = loConcat(moduleExports.before.remove, authorizeNormalize(), authorizeHook);
 
 //---- AFTER ---
 moduleExports.after.create = loConcat(discardFields, moduleExports.after.create);

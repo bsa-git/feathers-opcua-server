@@ -8,9 +8,6 @@ const {
   HookHelper, 
 } = require('../../src/plugins/hook-helpers');
 const {
-  AuthServer, 
-} = require('../../src/plugins/auth');
-const {
   saveFakesToServices,
   fakeNormalize
 } = require('../../src/plugins/test-helpers');
@@ -180,5 +177,25 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
       assert(false, 'The hook "authHook.loginCheck()" generated an error of the wrong type.');
     }
   });
-  
+
+  /*
+  it('#9: Checking authorize extension with hook', async () => {
+
+    const fakeUser = fakes['users'][0];
+    const idField = HookHelper.getIdField(fakeUser);
+    const userId = fakeUser[idField];
+    // Set context params
+    contextBefore.app = app;
+    contextBefore.params.authenticated = true;
+    contextBefore.params.user = fakeUser;
+    contextBefore.params.payload = {};
+    contextBefore.path = 'roles';
+    contextBefore.method = 'create';
+
+    await authHook.payloadExtension(true)(contextBefore);
+    if(isDebug && contextBefore.params.payload) inspector('Customizing the Payload with Hook.contextBefore:', contextBefore.params.payload);
+    const isCheckPayload = contextBefore.params.payload.role && (contextBefore.params.payload.userId === userId);
+    assert(isCheckPayload, 'Customizing the Payload');
+  });
+  */
 });
