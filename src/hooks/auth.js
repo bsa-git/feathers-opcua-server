@@ -66,83 +66,6 @@ const setLoginAt = function (isTest = false) {
 };
 
 /**
- * Authorize normalize for hook
- * @param isTest
- * @return {Object}
- */
-const authorizeNormalize = function (isTest = false) {
-  return async context => {
-    const authServer = new AuthServer(context);
-    if (isTest || (!AuthServer.isTest() && authServer.contextProvider)) {
-      const { app } = context;
-      const { user, ability, rules } = context.params;
-      if (isDebug) inspector('authorize-normalize.user:', user);
-      if (!user) return context;
-      if (ability && rules) return context;
-
-      // Set roleAlias for user
-      if (!user.roleAlias) {
-        const service = app.service('roles');
-        const idField = 'id' in user ? 'id' : '_id';
-        let role = await service.find({ query: { [idField]: user.roleId } });
-        role = role.data;
-        if (!role.length) return context;
-        role = role[0];
-        if (isDebug && role) inspector('authorizeNormalize.role:', role);
-        user.roleAlias = role.alias;
-      }
-      // Set ability and rules properties
-      const _ability = defineAbilitiesFor(user);
-      if (isDebug && _ability) debug('authorizeExtension.ability:', _ability);
-      context.params.ability = _ability;
-      // context.params.rules = _ability.rules;
-      const _rules = defineRulesFor(user);
-      if (isDebug && _rules.length) debug('authorizeExtension.rules:', _rules);
-      context.params.rules = _rules;
-    }
-    return context;
-  };
-};
-
-/**
- * Authorize extension for hook
- * @param isTest
- * @return {Object}
- */
-const authorizeExtension = function (isTest = false) {
-  return async context => {
-    const authServer = new AuthServer(context);
-    if (isTest || (!AuthServer.isTest() && authServer.contextProvider)) {
-      const { app } = context;
-      const { user } = context.result;
-      if (isDebug && user) debug('after.create.user:', user);
-      if (!user) return context;
-      // Set roleAlias for user
-      if (!user.roleAlias) {
-        const service = app.service('roles');
-        const idField = 'id' in user ? 'id' : '_id';
-        let role = await service.find({ query: { [idField]: user.roleId } });
-        role = role.data;
-        if (!role.length) return context;
-        role = role[0];
-        if (isDebug && role) debug('after.create.role:', role);
-        user.roleAlias = role.alias;
-      }
-      // Set ability and rules properties
-      const ability = defineAbilitiesFor(user);
-      if (isDebug && ability) debug('authorizeExtension.ability:', ability);
-      context.result.ability = ability;
-      // context.result.rules = ability.rules;
-      const rules = defineRulesFor(user);
-      if (isDebug && rules.length) debug('authorizeExtension.rules:', rules);
-      context.result.rules = rules;
-
-    }
-    return context;
-  };
-};
-
-/**
  * Payload extension for hook
  * @param isTest
  * @return {Object}
@@ -166,6 +89,84 @@ const payloadExtension = function (isTest = false) {
       if (!context.params.payload.userId) context.params.payload.userId = userId;
       // merge in a `role` property
       Object.assign(context.params.payload, { role: `${role.name ? role.name : ''}` });
+    }
+    return context;
+  };
+};
+
+/**
+ * Normalize authorize for a hook
+ * @param isTest
+ * @return {Object}
+ */
+const authorizeNormalize = function (isTest = false) {
+  return async context => {
+    const authServer = new AuthServer(context);
+    if (isTest || (!AuthServer.isTest() && authServer.contextProvider)) {
+      const { app } = context;
+      const { user, ability, rules } = context.params;
+      if (isDebug) inspector('authorize-normalize.user:', user);
+
+      // Set roleAlias for user
+      if (user && !user.roleAlias) {
+        const service = app.service('roles');
+        const idField = 'id' in user ? 'id' : '_id';
+        let role = await service.find({ query: { [idField]: user.roleId } });
+        role = role.data;
+        if (!role.length) return context;
+        role = role[0];
+        if (isDebug && role) inspector('authorizeNormalize.role:', role);
+        user.roleAlias = role.alias;
+      }
+
+      if (ability && rules) return context;
+      // Set ability and rules properties
+      const _ability = defineAbilitiesFor(user);
+      if (isDebug && _ability) debug('authorizeExtension.ability:', _ability);
+      context.params.ability = _ability;
+
+      const _rules = defineRulesFor(user);
+      if (isDebug && _rules.length) debug('authorizeExtension.rules:', _rules);
+      context.params.rules = _rules;
+    }
+    return context;
+  };
+};
+
+/**
+ * Authorize the extension for a hook
+ * @param isTest
+ * @return {Object}
+ */
+const authorizeExtension = function (isTest = false) {
+  return async context => {
+    const authServer = new AuthServer(context);
+    if (isTest || (!AuthServer.isTest() && authServer.contextProvider)) {
+      const { app } = context;
+      const { user } = context.result;
+      if (isDebug && user) debug('after.create.user:', user);
+      if (!user) return context;
+      
+      // Set roleAlias for user
+      if (user && !user.roleAlias) {
+        const service = app.service('roles');
+        const idField = 'id' in user ? 'id' : '_id';
+        let role = await service.find({ query: { [idField]: user.roleId } });
+        role = role.data;
+        if (!role.length) return context;
+        role = role[0];
+        if (isDebug && role) debug('after.create.role:', role);
+        user.roleAlias = role.alias;
+      }
+
+      // Set ability and rules properties
+      const ability = defineAbilitiesFor(user);
+      if (isDebug && ability) debug('authorizeExtension.ability:', ability);
+      context.result.ability = ability;
+
+      const rules = defineRulesFor(user);
+      if (isDebug && rules.length) debug('authorizeExtension.rules:', rules);
+      context.result.rules = rules;
     }
     return context;
   };

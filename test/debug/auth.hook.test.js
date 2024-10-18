@@ -15,8 +15,8 @@ const {
 const authHook = require(`${appRoot}/src/hooks/auth`);
 const chalk = require('chalk');
 const app = require(`${appRoot}/src/app`);
-const debug = require('debug')('app:auth.unit.test');
 
+const debug = require('debug')('app:auth.unit.test');
 const isDebug = false;
 const isTest = true;
 
@@ -178,24 +178,70 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
     }
   });
 
-  /*
-  it('#9: Checking authorize extension with hook', async () => {
+  it('#9: Extend authorization for a hook', async () => {
+    try {
+      const fakeUser = Object.assign({}, fakes['users'][0]);
 
-    const fakeUser = fakes['users'][0];
-    const idField = HookHelper.getIdField(fakeUser);
-    const userId = fakeUser[idField];
+      contextAfter.app = app;
+      contextAfter.path = 'authentication';
+      contextAfter.method = 'create';
+      contextAfter.result.user = fakeUser;
+
+      const resultBefore = contextAfter.result;
+      if (isDebug && resultBefore) debug('contextAfter.result before run hook:', resultBefore);
+      assert(resultBefore.user.roleAlias === undefined, 'The hook "authHook.authorizeExtension()"');
+      assert(!resultBefore.ability && !resultBefore.rules, 'The hook "authHook.authorizeExtension()"');
+
+      await authHook.authorizeExtension(true)(contextAfter);
+
+      const resultAfter = contextAfter.result;
+      if (isDebug && resultAfter) debug('contextAfter.result after run hook:', resultAfter);
+      if (isDebug && resultAfter.rules.length) debug('contextAfter.params.rules after run "authorizeExtension" hook:', resultAfter.rules);
+      assert(resultAfter.user.roleAlias, 'The hook "authHook.authorizeExtension()"');
+      assert(resultAfter.ability && resultAfter.rules, 'The hook "authHook.authorizeExtension()"');
+    }
+    catch (ex) {
+      console.error(chalk.red(ex.message));
+      assert(false, 'The hook "authHook.authorizeExtension()" generated an error of the wrong type.');
+    }
+  });
+
+  it('#10: Normalize authorize for a hook', async () => {
+
+    const fakeUser = Object.assign({}, fakes['users'][1]);
+
     // Set context params
     contextBefore.app = app;
-    contextBefore.params.authenticated = true;
+    // contextBefore.params.authenticated = true;
     contextBefore.params.user = fakeUser;
-    contextBefore.params.payload = {};
+    // contextBefore.params.payload = {};
     contextBefore.path = 'roles';
     contextBefore.method = 'create';
 
-    await authHook.payloadExtension(true)(contextBefore);
-    if(isDebug && contextBefore.params.payload) inspector('Customizing the Payload with Hook.contextBefore:', contextBefore.params.payload);
-    const isCheckPayload = contextBefore.params.payload.role && (contextBefore.params.payload.userId === userId);
-    assert(isCheckPayload, 'Customizing the Payload');
+    const paramsBefore = contextBefore.params;
+    if (isDebug && paramsBefore) debug('Params before run hook:', paramsBefore);
+    assert(paramsBefore.user.roleAlias === undefined, 'The hook "authHook.authorizeNormalize()"');
+    assert(!paramsBefore.ability && !paramsBefore.rules, 'The hook "authHook.authorizeNormalize()"');
+
+    await authHook.authorizeNormalize(true)(contextBefore);
+    
+    const paramsAfter = contextBefore.params;
+    const ability = paramsAfter.ability;
+    if (isDebug && paramsAfter) debug('contextBefore.params after run hook:', paramsAfter);
+    if (isDebug && paramsAfter.rules.length) debug('contextBefore.params.rules after run "authorizeNormalize" hook:', paramsAfter.rules);
+    
+    if (isDebug && paramsAfter) debug(
+      'contextBefore.ability:', 
+      `can('create', 'users')=${ability.can('create', 'users')}`,
+      `, can('read', 'users')=${ability.can('read', 'users')}`,
+      `, can('remove', 'users')=${ability.can('remove', 'users')}`
+    );
+
+    assert(paramsAfter.user.roleAlias, 'The hook "authHook.authorizeNormalize()"');
+    assert(paramsAfter.ability && paramsAfter.rules, 'The hook "authHook.authorizeNormalize()"');
+
+    assert(paramsAfter.ability.can('read', 'users'), 'The hook "authHook.authorizeNormalize()"');
+    assert(!paramsAfter.ability.can('remove', 'users'), 'The hook "authHook.authorizeNormalize()"');
+
   });
-  */
 });
