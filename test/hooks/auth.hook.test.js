@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 const assert = require('assert');
 const {
-  appRoot, 
-  inspector, 
+  appRoot,
+  inspector,
 } = require('../../src/plugins/lib');
 const {
-  HookHelper, 
+  HookHelper,
 } = require('../../src/plugins/hook-helpers');
 const {
   saveFakesToServices,
@@ -46,20 +46,20 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
 
     contextAfter = {
       type: 'after',
-      params: {provider: 'socketio'},
+      params: { provider: 'socketio' },
       result: {}
     };
 
     contextAfterMultiple = {
       type: 'after',
-      params: {provider: 'socketio'},
+      params: { provider: 'socketio' },
       result: []
     };
 
     contextAfterPaginated = {
       type: 'after',
       method: 'find',
-      params: {provider: 'socketio'},
+      params: { provider: 'socketio' },
       result: {
         data: []
       }
@@ -102,7 +102,7 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
     contextBefore.method = 'create';
 
     await authHook.payloadExtension(true)(contextBefore);
-    if(isDebug && contextBefore.params.payload) inspector('Customizing the Payload with Hook.contextBefore:', contextBefore.params.payload);
+    if (isDebug && contextBefore.params.payload) inspector('Customizing the Payload with Hook.contextBefore:', contextBefore.params.payload);
     const isCheckPayload = contextBefore.params.payload.role && (contextBefore.params.payload.userId === userId);
     assert(isCheckPayload, 'Customizing the Payload');
   });
@@ -111,7 +111,7 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
     try {
       const fakeUser = fakes['users'][0];
       const idField = HookHelper.getIdField(fakeUser);
-      const payload = {userId: fakeUser[idField], role: 'Administrator'};
+      const payload = { userId: fakeUser[idField], role: 'Administrator' };
 
       // Get user loginAt field
       const users = app.service('users');
@@ -143,7 +143,7 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
       const fakeUser = fakes['users'][0];
       const idField = HookHelper.getIdField(fakeUser);
       const userId = fakeUser[idField];
-      const payload = {userId: fakeUser[idField], role: 'Administrator'};
+      const payload = { userId: fakeUser[idField], role: 'Administrator' };
 
       // Get user loginAt field
       const service = app.service('users');
@@ -165,13 +165,13 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
       if (isDebug && user) debug('Check of set user active field:user:', user);
       try {
         // Run loginCheck hook
-        await authHook.loginCheck(true)(contextAfter);  
+        await authHook.loginCheck(true)(contextAfter);
         assert(active, 'Check of set user active field for "false"');
       } catch (error) {
         console.error(chalk.red(error.message));
         assert(true, 'Check of set user active field for "false"');
       }
-      
+
     } catch (error) {
       console.error(chalk.red(error.message));
       assert(false, 'The hook "authHook.loginCheck()" generated an error of the wrong type.');
@@ -197,8 +197,11 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
       const resultAfter = contextAfter.result;
       if (isDebug && resultAfter) debug('contextAfter.result after run hook:', resultAfter);
       if (isDebug && resultAfter.rules.length) debug('contextAfter.params.rules after run "authorizeExtension" hook:', resultAfter.rules);
+
       assert(resultAfter.user.roleAlias, 'The hook "authHook.authorizeExtension()"');
       assert(resultAfter.ability && resultAfter.rules, 'The hook "authHook.authorizeExtension()"');
+      assert(resultAfter.ability.can('read', 'users'), 'The hook "authHook.authorizeExtension()"');
+      assert(resultAfter.ability.can('remove', 'users'), 'The hook "authHook.authorizeExtension()"');
     }
     catch (ex) {
       console.error(chalk.red(ex.message));
@@ -224,14 +227,14 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
     assert(!paramsBefore.ability && !paramsBefore.rules, 'The hook "authHook.authorizeNormalize()"');
 
     await authHook.authorizeNormalize(true)(contextBefore);
-    
+
     const paramsAfter = contextBefore.params;
     const ability = paramsAfter.ability;
     if (isDebug && paramsAfter) debug('contextBefore.params after run hook:', paramsAfter);
     if (isDebug && paramsAfter.rules.length) debug('contextBefore.params.rules after run "authorizeNormalize" hook:', paramsAfter.rules);
-    
+
     if (isDebug && paramsAfter) debug(
-      'contextBefore.ability:', 
+      'contextBefore.ability:',
       `can('create', 'users')=${ability.can('create', 'users')}`,
       `, can('read', 'users')=${ability.can('read', 'users')}`,
       `, can('remove', 'users')=${ability.can('remove', 'users')}`

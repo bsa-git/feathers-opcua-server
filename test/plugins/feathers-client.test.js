@@ -101,7 +101,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       const { accessToken } = await appRestClient.get('authentication');
       assert.ok(accessToken, 'Get access token for user');
       const payload = await AuthServer.verifyJWT(accessToken);
-      if (isDebug) inspector('Get userId from payload:', payload);
+      if (isDebug && payload) inspector('Get userId from payload:', payload);
       assert.ok(payload.sub === fakeUser[idField], 'Get userId from payload');
       // Logout
       await appRestClient.logout();
@@ -183,7 +183,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
       let accessToken = await auth.getAccessToken();
       assert.ok(accessToken, 'Created access token for user');
       const feathersJwt = await auth.storage.getItem('feathers-jwt');
-      if (isDebug) inspector('Get storage.feathersJwt:', feathersJwt);
+      if (isDebug && feathersJwt) inspector('Get storage.feathersJwt:', feathersJwt);
       assert.ok(accessToken === feathersJwt, 'Get access token from storage');
       // reAuthenticate
       await auth.reAuthenticate();
@@ -226,7 +226,7 @@ describe('<<=== Feathers Client Tests (feathers-client.test.js) ===>>', () => {
 
       // Get opcua tags 
       const opcuaTags = fakes['opcuaTags'];
-      if (isDebug) inspector('fakes.opcua-tags:', opcuaTags);
+      if (isDebug && opcuaTags.length) inspector('fakes.opcua-tags:', opcuaTags);
 
       if (opcuaTags.length) {
         // Remove data from 'opcua-tags' services 
