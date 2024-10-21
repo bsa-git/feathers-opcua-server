@@ -105,7 +105,7 @@ const authorizeNormalize = function (isTest = false) {
     if (isTest || (!AuthServer.isTest() && authServer.contextProvider)) {
       const { app } = context;
       const { user, ability, rules } = context.params;
-      if (isDebug) inspector('authorize-normalize.user:', user);
+      if (isDebug && user) inspector('authorize-normalize.user:', user);
 
       // Set roleAlias for user
       if (user && !user.roleAlias) {
@@ -119,7 +119,7 @@ const authorizeNormalize = function (isTest = false) {
         user.roleAlias = role.alias;
       }
 
-      if (ability && rules) return context;
+      // if (ability && rules) return context;
       // Set ability and rules properties
       const _ability = defineAbilitiesFor(user);
       if (isDebug && _ability) debug('authorizeExtension.ability:', _ability);
@@ -145,7 +145,7 @@ const authorizeExtension = function (isTest = false) {
       const { app } = context;
       const { user } = context.result;
       if (isDebug && user) debug('after.create.user:', user);
-      if (!user) return context;
+      // if (!user) return context;
       
       // Set roleAlias for user
       if (user && !user.roleAlias) {
