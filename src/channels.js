@@ -9,8 +9,7 @@ const {
 const loConcat = require('lodash/concat');
 
 const debug = require('debug')('app:channels');
-
-const isDebug = false;
+const isDebug = true;
 
 module.exports = function (app) {
   if (typeof app.channel !== 'function' || Channel.isTest()) {
@@ -105,10 +104,10 @@ module.exports = function (app) {
     if (connection) {
       // app.channel('anonymous').leave(connection);
       app.channel('anonymous').join(connection);
-      if (isDebug) debug('app.on(\'connection\') for SocketIo transport');
-      if (isDebug) Channel.showChannelInfo(app, 'app.on(\'connection\')');
+      if (isDebug && connection) debug('app.on(\'connection\') for SocketIo transport');
+      if (isDebug && connection) Channel.showChannelInfo(app, 'app.on(\'connection\')');
     } else {
-      if (isDebug) debug('app.on(\'connection\') for Rest transport');
+      if (isDebug  && connection) debug('app.on(\'connection\') for Rest transport');
     }
   });
 
@@ -123,11 +122,11 @@ module.exports = function (app) {
       // Join channels for user
       await joinChannels(connection);
 
-      if (isDebug) debug('app.on(\'login\') for SocketIo transport');
-      if (isDebug) Channel.showChannelInfo(app, 'app.on(\'login\')');
+      if (isDebug && connection) debug('app.on(\'login\') for SocketIo transport');
+      if (isDebug && connection) Channel.showChannelInfo(app, 'app.on(\'login\')');
 
     } else {
-      if (isDebug) debug('app.on(\'login\') for Rest transport');
+      if (isDebug && connection) debug('app.on(\'login\') for Rest transport');
     }
   });
 
@@ -234,6 +233,8 @@ module.exports = function (app) {
       break;
     }
     const channelsWithReadAbility = getChannelsWithReadAbility(app, data, hook, caslOptions);
+    if(true && channelsWithReadAbility) debug('app.publish.channelsWithReadAbility:', channelsWithReadAbility);
+    if(true && publishResult) debug('app.publish.publishResult:', publishResult);
     return loConcat(publishResult, channelsWithReadAbility);
   });
 };

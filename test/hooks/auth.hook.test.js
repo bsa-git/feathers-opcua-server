@@ -195,8 +195,16 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
       await authHook.authorizeExtension(true)(contextAfter);
 
       const resultAfter = contextAfter.result;
+      const ability = resultAfter.ability;
       if (isDebug && resultAfter) debug('contextAfter.result after run hook:', resultAfter);
       if (isDebug && resultAfter.rules.length) debug('contextAfter.params.rules after run "authorizeExtension" hook:', resultAfter.rules);
+
+      if (true && resultAfter) debug(
+        'authorizeExtension.contextAfter.ability:',
+        `can('create', 'users')=${ability.can('create', 'users')}`,
+        `, can('read', 'users')=${ability.can('read', 'users')}`,
+        `, can('remove', 'users')=${ability.can('remove', 'users')}`
+      );
 
       assert(resultAfter.user.roleAlias, 'The hook "authHook.authorizeExtension()"');
       assert(resultAfter.ability && resultAfter.rules, 'The hook "authHook.authorizeExtension()"');
@@ -233,8 +241,8 @@ describe('<<=== Auth Hook Test (auth.unit.test.js) ===>>', () => {
     if (isDebug && paramsAfter) debug('contextBefore.params after run hook:', paramsAfter);
     if (isDebug && paramsAfter.rules.length) debug('contextBefore.params.rules after run "authorizeNormalize" hook:', paramsAfter.rules);
 
-    if (isDebug && paramsAfter) debug(
-      'contextBefore.ability:',
+    if (true && paramsAfter) debug(
+      'authorizeNormalize.contextBefore.ability:',
       `can('create', 'users')=${ability.can('create', 'users')}`,
       `, can('read', 'users')=${ability.can('read', 'users')}`,
       `, can('remove', 'users')=${ability.can('remove', 'users')}`

@@ -32,19 +32,19 @@ const defineRulesFor = (user) => {
     can('create', 'authentication');
 
     // Can 'users' actions
-    can('create', 'users');
+    // can('create', 'users');
 
     // Can 'mailer' actions
-    can('create', 'mailer');
+    // can('create', 'mailer');
 
     // Can 'auth-management' actions
-    can('create', 'auth-management');
+    // can('create', 'auth-management');
 
     // Can 'data-management' actions
-    can('create', 'data-management');
+    // can('create', 'data-management');
 
     // Can 'log-messages' actions
-    can('create', 'log-messages');
+    // can('create', 'log-messages');
 
     return rules;
   };
@@ -71,6 +71,7 @@ const defineRulesFor = (user) => {
     can('read', 'user-teams');
 
     // Can 'log-messages' actions
+    can('create', 'log-messages');
     can('read', 'log-messages');
 
     // Can 'chat-messages' actions
@@ -90,6 +91,16 @@ const defineRulesFor = (user) => {
     can('read', 'messages');
     can('update', 'messages', ['text'], { userId: user.id });
     can('remove', 'messages', { userId: user.id });
+
+    // Can 'mailer' actions
+    can('create', 'mailer');
+
+    // Can 'auth-management' actions
+    can('create', 'auth-management');
+
+    // Can 'data-management' actions
+    can('create', 'data-management');
+
 
     return rules;
   };
