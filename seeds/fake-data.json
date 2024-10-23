@@ -76,8 +76,8 @@
     },
     {
       "_id": "60af3870270f24162c049c0d",
-      "name": "Guest",
-      "alias": "isGuest",
+      "name": "Authenticated User",
+      "alias": "isAuthenticatedUser",
       "description": "Consequatur suscipit ut."
     },
     {

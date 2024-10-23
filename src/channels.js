@@ -9,7 +9,7 @@ const {
 const loConcat = require('lodash/concat');
 
 const debug = require('debug')('app:channels');
-const isDebug = true;
+const isDebug = false;
 
 module.exports = function (app) {
   if (typeof app.channel !== 'function' || Channel.isTest()) {
