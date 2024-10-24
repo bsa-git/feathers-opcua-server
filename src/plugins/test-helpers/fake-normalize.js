@@ -112,13 +112,13 @@ const rolesUpdate = () => {
 const usersUpdate = () => {
   // Set  roleId for first user
   fakeDataUsers[0]['roleId'] = fakeDataRole[idFieldRole];
-  fakeDataUsers[1]['roleId'] = foundGuestRole[idFieldRole];
+  fakeDataUsers[1]['roleId'] = foundUserRole[idFieldRole];
   // Set profileId for users
   fakeDataUserProfiles.forEach((profile, index) => {
     fakeDataUsers[index]['profileId'] = profile[idFieldUserProfile];
   });
   // Set  roleId for last user
-  fakeDataUsers[fakeDataUsers.length - 1]['roleId'] = foundNotAdminAndNotGuestRole[idFieldRole];
+  fakeDataUsers[fakeDataUsers.length - 1]['roleId'] = foundNotAdminAndNotUserRole[idFieldRole];
 
   Object.assign(fakeDataUsers, fakeDataUsers.map((user, index) => {
     const nowDate = new Date(0);
@@ -164,7 +164,7 @@ const logMessagesUpdate = () => {
 
 const chatMessagesUpdate = () => {
   fakeDataChatMessages[0]['ownerId'] = fakeDataUser[idFieldUser];
-  fakeDataChatMessages[0]['roleId'] = foundNotAdminAndNotGuestRole[idFieldRole];
+  fakeDataChatMessages[0]['roleId'] = foundNotAdminAndNotUserRole[idFieldRole];
   fakeDataChatMessages[0]['userId'] = dbNullIdValue();
   fakeDataChatMessages[0]['teamId'] = dbNullIdValue();
   fakeDataChatMessages[1]['ownerId'] = fakeDataUser[idFieldUser];
@@ -224,14 +224,14 @@ if (isDebug) console.log(chalk.yellow('Start: Fake-Service!'));
 // Services fake data update
 rolesUpdate();
 
-// Found guest role
-const foundGuestRole = fakeDataRoles.find(function (role) {
-  return (role.name === Auth.getRoles('isGuest'));
+// Found user role
+const foundUserRole = fakeDataRoles.find(function (role) {
+  return (role.name === Auth.getRoles('isUser'));
 });
 
-// Found not admin and not guest role
-const foundNotAdminAndNotGuestRole = fakeDataRoles.find(function (role) {
-  return (role.name !== Auth.getRoles('isAdministrator')) && (role.name !== Auth.getRoles('isGuest'));
+// Found not admin and not user role
+const foundNotAdminAndNotUserRole = fakeDataRoles.find(function (role) {
+  return (role.name !== Auth.getRoles('isAdministrator')) && (role.name !== Auth.getRoles('isUser'));
 });
 
 module.exports = function fakeNormalize(isWrite = false) {

@@ -53,7 +53,7 @@ module.exports = async function servicesConstraint(context) {
     validate = async (record) => {
       if (record.roleId) await hookHelper.validateRelationship('roles', record.roleId);
       if (hookHelper.contextMethod === 'create' && !record.roleId) {
-        const roleId = await authServer.getRoleId('isGuest');
+        const roleId = await authServer.getRoleId('isUser');
         if (roleId) record.roleId = roleId.toString();
       }
       if (hookHelper.contextMethod === 'create' && !record.profileId) {
@@ -239,11 +239,11 @@ module.exports = async function servicesConstraint(context) {
       let removed = await hookHelper.removeItems(servicePath, { roleId: roleId });
       if (isDebug) debug(`after.roles.remove: (${removed.length}) records have been removed from the "${servicePath}" service`);
 
-      // Update roleId to 'isGuest' for 'users' service
+      // Update roleId to 'isUser' for 'users' service
       servicePath = 'users';
-      const guestId = await authServer.getRoleId('isGuest');
-      if (guestId) {
-        const data = { roleId: guestId.toString() };
+      const roleUserId = await authServer.getRoleId('isUser');
+      if (roleUserId) {
+        const data = { roleId: roleUserId.toString() };
         const updated = await hookHelper.patchItems(servicePath, data, { roleId: roleId });
         if (isDebug) debug(`after.roles.remove: (${updated.length}) records have been updated from the "${servicePath}" service`);
       }

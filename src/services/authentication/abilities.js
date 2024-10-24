@@ -97,8 +97,6 @@ const defineRulesFor = (user) => {
 
   if (user && user.roleAlias === 'isAdministrator') {
     return defineRulesForAdmin();
-  } else if (user && user.roleAlias === 'isCustomerSecurityStrategist') {
-
   }
 
   definePublicRules();

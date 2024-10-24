@@ -29,7 +29,7 @@ const isSeed = true;
 
 // Get generated fake data
 const fakes = fakeNormalize();
-const roleGuest = fakes['roles'].find(role => role.alias === 'isGuest');
+const roleUser = fakes['roles'].find(role => role.alias === 'isUser');
 
 // Get max rows for log-messages service
 let maxLogRows = process.env.LOGMSG_MAXROWS;
@@ -235,13 +235,13 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
         return (role.name === AuthServer.getRoles('isAdministrator'));
       });
 
-      const recGuest = fakes['roles'].find(function (role) {
-        return (role.name !== AuthServer.getRoles('isGuest'));
+      const recUser = fakes['roles'].find(function (role) {
+        return (role.name !== AuthServer.getRoles('isUser'));
       });
 
       const idFieldRole = 'id' in recAdmin ? 'id' : '_id';
       const roleAdminId = recAdmin[idFieldRole];
-      const roleGuestId = recGuest[idFieldRole];
+      const roleUserId = recUser[idFieldRole];
 
       try {
         contextBefore.path = 'roles';
@@ -264,12 +264,12 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
         contextBefore.method = 'remove';
         contextBefore.service = app.service('roles');
         contextBefore.id = {
-          [idFieldRole]: roleGuestId
+          [idFieldRole]: roleUserId
         };
         await constraints(true)(contextBefore);
         assert.ok(false, 'Protection did not work to remove the data from service');
       } catch (ex) {
-        if (isDebug) debug('Error when removing a Guest base record from \'roles\' service', ex);
+        if (isDebug) debug('Error when removing a User base record from \'roles\' service', ex);
         assert.strictEqual(ex.code, 400, 'unexpected error.code');
         assert.strictEqual(ex.message, 'Error deleting item from \'roles\' service. You can not delete an item if it is base role.');
         assert.strictEqual(ex.name, 'BadRequest', 'unexpected error.name');
@@ -337,7 +337,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
     });
 
     it('#14: Set contextAfter.roleAlias while creating record for \'users\' service', async () => {
-      const idField = 'id' in roleGuest ? 'id' : '_id';
+      const idField = 'id' in roleUser ? 'id' : '_id';
       const service = app.service('users');
       contextAfter.path = 'users';
       contextAfter.method = 'create';
@@ -347,7 +347,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
         password: 'my_email',
         firstName: 'myFirstName',
         lastName: 'myLastName',
-        roleId: roleGuest[idField]
+        roleId: roleUser[idField]
       };
       await constraints(true)(contextAfter);
       if (isDebug) debug('Set contextAfter.roleAlias while creating record for \'users\' service.contextAfter:', contextAfter.result);
@@ -356,7 +356,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
 
     it('#15: Data integrity when removing a record from \'roles\' service', async () => {
       const rec = fakes['roles'].find(function (role) {
-        return (role.name !== AuthServer.getRoles('isAdministrator')) && (role.name !== AuthServer.getRoles('isGuest'));
+        return (role.name !== AuthServer.getRoles('isAdministrator')) && (role.name !== AuthServer.getRoles('isUser'));
       });
 
       // const rec = fakes['roles'][0];
@@ -470,7 +470,7 @@ describe('<<=== Constraints Hook Test (constraints.unit.test.js) ===>>', () => {
       contextAfter.result = {
         [idFieldUser]: userId,
         profileId: profileId,
-        roleAlias: roleGuest.alias
+        roleAlias: roleUser.alias
       };
       await constraints(true)(contextAfter);
 

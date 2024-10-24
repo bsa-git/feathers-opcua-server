@@ -123,7 +123,7 @@ class Channel {
 
   /**
    * Get roles
-   * e.g. { isAdministrator: 'Administrator', isGuest: 'Guest', isSuperRole: 'superRole' }
+   * e.g. { isAdministrator: 'Administrator', isUser: 'User', isSuperRole: 'superRole' }
    * @param isRole
    * @return {Object||String}
    */

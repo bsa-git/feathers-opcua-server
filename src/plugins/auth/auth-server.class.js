@@ -408,7 +408,7 @@ class AuthServer {
 
   /**
    * Get env roles
-   * e.g. { isAdministrator: 'Administrator', isGuest: 'Guest', isSuperRole: 'superRole' }
+   * e.g. { isAdministrator: 'Administrator', isUser: 'User', isSuperRole: 'superRole' }
    * @param isRole
    * @return {Object||String}
    */
@@ -426,7 +426,7 @@ class AuthServer {
 
   /**
    * Get base env roles
-   * e.g. { isAdministrator: 'Administrator', isGuest: 'Guest' }
+   * e.g. { isAdministrator: 'Administrator', isUser: 'User', isGuest: 'Guest' }
    * @param isBaseRole
    * @return {Object||String}
    */
@@ -477,7 +477,7 @@ class AuthServer {
 
   /**
    * Get aliase for roleName
-   * e.g. for Administrator => isAdministrator; NotEnvRole => isGuest
+   * e.g. for Administrator => isAdministrator; NotEnvRole => isUser
    * @param roleName
    * @return {String}
    */
@@ -485,7 +485,7 @@ class AuthServer {
     const envRoles = AuthServer.getRoles();
     const keys = Object.keys(envRoles);
     const result = keys.find(key => envRoles[key] === roleName);
-    return result ? result : 'isGuest';
+    return result ? result : 'isUser';
   }
 
   /**
