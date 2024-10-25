@@ -31,15 +31,15 @@ const defineRulesFor = (user) => {
     return rules;
   };
 
-  // Define public rules
+  // Define public rules for guest
   const definePublicRules = () => {
 
     // Can 'authentication' actions
     can('create', 'authentication');
   };
 
-  // Define rules for guest
-  const defineRulesForGuest = () => {
+  // Define rules for user role
+  const defineRulesForUser = () => {
 
     // Can 'users' actions
     can('read', 'users');
@@ -100,7 +100,7 @@ const defineRulesFor = (user) => {
   }
 
   definePublicRules();
-  defineRulesForGuest();
+  defineRulesForUser();
   return rules;
 };
 
