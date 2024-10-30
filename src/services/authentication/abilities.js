@@ -25,21 +25,21 @@ const defineRulesFor = (user) => {
   // can('remove', 'users');
 
   // Define rules for administrator
-  const defineRulesForAdmin = () => {
-    // Administrator can do all
-    can('manage', 'all');
-    return rules;
+  const definePathRulesFor_Admin = () => {
+    // Administrator can do all 
+    can('create', 'all');
+    can('read', 'all');
+    can('update', 'all');
+    can('remove', 'all');
   };
 
   // Define public rules for guest
-  const definePublicRules = () => {
-
-    // Can 'authentication' actions
+  const definePathRulesFor_Guest = () => {
     can('create', 'authentication');
   };
 
   // Define rules for user role
-  const defineRulesForUser = () => {
+  const definePathRulesFor_User = () => {
 
     // Can 'users' actions
     can('read', 'users');
@@ -91,16 +91,18 @@ const defineRulesFor = (user) => {
     can('create', 'data-management');
   };
 
-  
+
 
   //--------------------------------------------------------------
 
+  // Define rules for administrator
   if (user && user.roleAlias === 'isAdministrator') {
-    return defineRulesForAdmin();
+    definePathRulesFor_Admin();
+    return rules;
   }
 
-  definePublicRules();
-  defineRulesForUser();
+  definePathRulesFor_Guest();
+  definePathRulesFor_User();
   return rules;
 };
 
