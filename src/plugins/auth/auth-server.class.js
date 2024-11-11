@@ -426,7 +426,7 @@ class AuthServer {
 
   /**
    * Get base env roles
-   * e.g. { isAdministrator: 'Administrator', isUser: 'User', isGuest: 'Guest' }
+   * e.g. { isAdministrator: 'Administrator', isUser: 'User' }
    * @param isBaseRole
    * @return {Object||String}
    */
