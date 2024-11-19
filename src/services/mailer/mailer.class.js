@@ -4,7 +4,7 @@ const smtpTransport = require('nodemailer-smtp-transport');
 const {inspector} = require('../../plugins/lib');
 
 const debug = require('debug')('app:service.mailer.class');
-const isDebug = true;
+const isDebug = false;
 
 //===============================================================
 

@@ -8,7 +8,7 @@ const loRemove = require('lodash/remove');
 const loAt = require('lodash/at');
 
 const debug = require('debug')('app:opcua-servers.class');
-const isDebug = true;
+const isDebug = false;
 
 class OpcuaServers {
 
