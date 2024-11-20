@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const Channel = require('./plugins/auth/channel.class');
 const Auth = require('./plugins/auth/auth-server.class');
-const {dbNullIdValue} = require('./plugins/lib');
+const { dbNullIdValue } = require('./plugins/lib');
 const {
   getChannelsWithReadAbility,
   makeOptions
@@ -26,28 +26,37 @@ module.exports = function (app) {
    */
   const joinChannels = async (connection) => {
 
-    // Join connection for authenticated users
-    app.channel('authenticated').join(connection);
+    if (connection && connection.user) {
+      // Get object of Channel
+      const channel = new Channel(app, connection);
 
-    // Get object of Channel
-    const channel = new Channel(app, connection);
+      // Join connection for authenticated users
+      app.channel('authenticated').join(connection);
 
-    // Join connection for user.email
-    app.channel(`emails/${channel.user.email}`).join(connection);
+      // Join connection for admins
+      if (channel.isAdmin()) {
+        app.channel('admins').join(connection);
+      }
 
-    // Join connection for user.id
-    app.channel(`userIds/${channel.userId}`).join(connection);
+      // Join connection for user.email
+      app.channel(`emails/${channel.user.email}`).join(connection);
 
-    // Join connection for role
-    app.channel(`roles/${channel.roleId}`).join(connection);
+      // Join connection for user.id
+      app.channel(`userIds/${channel.userId}`).join(connection);
 
-    // Join connection for teams
-    const teamsForUser = await channel.getTeamsForUser();
-    if (teamsForUser && teamsForUser.length) {
-      teamsForUser.forEach(team => {
-        app.channel(`teams/${team.id}`).join(connection);
-      });
+      // Join connection for role
+      app.channel(`roles/${channel.roleId}`).join(connection);
+
+      // Join connection for teams
+      const teamsForUser = await channel.getTeamsForUser();
+      if (teamsForUser && teamsForUser.length) {
+        teamsForUser.forEach(team => {
+          app.channel(`teams/${team.id}`).join(connection);
+        });
+      }
     }
+
+
   };
 
   /**
@@ -76,7 +85,7 @@ module.exports = function (app) {
   const updateChannels = async user => {
     const idField = Channel.getIdField(user);
     // Find all connections for this user
-    const {connections} = app.channel(app.channels).filter(connection => {
+    const { connections } = app.channel(app.channels).filter(connection => {
       if (connection && connection.user) {
         const userId = user[idField].toString();
         const userIdConnection = connection.user[idField].toString();
@@ -104,14 +113,14 @@ module.exports = function (app) {
     if (connection) {
       // app.channel('anonymous').leave(connection);
       app.channel('anonymous').join(connection);
-      if (true && connection) debug('app.on(\'connection\') for SocketIo transport');
+      if (isDebug && connection) debug('app.on(\'connection\') for SocketIo transport');
       if (isDebug && connection) Channel.showChannelInfo(app, 'app.on(\'connection\')');
     } else {
-      if (isDebug  && connection) debug('app.on(\'connection\') for Rest transport');
+      if (isDebug && connection) debug('app.on(\'connection\') for Rest transport');
     }
   });
 
-  app.on('login', async (payload, {connection}) => {
+  app.on('login', async (payload, { connection }) => {
     // connection can be undefined if there is no
     // real-time connection, e.g. when logging in via REST
     if (connection && connection.user) {
@@ -122,7 +131,7 @@ module.exports = function (app) {
       // Join channels for user
       await joinChannels(connection);
 
-      if (true && connection) debug('app.on(\'login\') for SocketIo transport');
+      if (isDebug && connection) debug('app.on(\'login\') for SocketIo transport');
       if (isDebug && connection) Channel.showChannelInfo(app, 'app.on(\'login\')');
 
     } else {
@@ -130,11 +139,11 @@ module.exports = function (app) {
     }
   });
 
-  app.on('logout', (payload, {connection}) => {
+  app.on('logout', (payload, { connection }) => {
     if (connection) {
       app.channel('anonymous').join(connection);
 
-      if (true && connection) debug('app.on(\'logout\') for SocketIo transport');
+      if (isDebug && connection) debug('app.on(\'logout\') for SocketIo transport');
       if (isDebug && connection) Channel.showChannelInfo(app, 'app.on(\'logout\')');
     } else {
       if (isDebug) debug('app.on(\'logout\') for Rest transport');
@@ -149,94 +158,94 @@ module.exports = function (app) {
     const auth = new Auth(hook);
     const contextPath = auth.contextPath;
     const contextMethod = auth.contextMethod;
-    
-    if (true && auth) debug(`app.publish::${contextPath}.${contextMethod}`);
-    
+    const contextType = auth.contextType;
+
     if (!paths.includes(contextPath)) return;
+
+    if (isDebug && auth) debug(`app.publish::${contextPath}.${contextMethod}.${contextType}`);
 
     // Publish events to admins channel
     if (contextPath !== 'chat-messages') {
-      const roleIdForAdmin = await auth.getRoleId('isAdministrator');
-      publishChannels.push(app.channel(`roles/${roleIdForAdmin}`));
-      // if(isDebug) debug(`roleIdForAdmin::${contextPath}.${contextMethod}.${contextType}:`, `roles/${roleIdForAdmin}`);
+      publishChannels.push(app.channel('admins'));
     }
 
     // Publish events to users channel
     switch (`${contextPath}`) {
-    case 'users':
-      if (contextMethod === 'patch') {
-        await updateChannels(data);
-        idField = Auth.getIdField(data);
-        userId = data[idField].toString();
+      case 'users':
+        if (contextMethod === 'patch') {
+          await updateChannels(data);
+          idField = Auth.getIdField(data);
+          userId = data[idField].toString();
+          publishChannels.push(app.channel(`userIds/${userId}`));
+          if (isDebug) Channel.showChannelInfo(app, 'app.service(\'users\').on(\'patched\')');
+        }
+        if (contextMethod === 'remove') {
+          leaveChannels(data);
+          if (isDebug) Channel.showChannelInfo(app, 'app.service(\'users\').on(\'removed\')');
+        }
+        break;
+      case 'user-profiles':
+        user = auth.getAuthUser();
+        idField = Auth.getIdField(user);
+        userId = user[idField].toString();
         publishChannels.push(app.channel(`userIds/${userId}`));
-        if (isDebug) Channel.showChannelInfo(app, 'app.service(\'users\').on(\'patched\')');
-      }
-      if (contextMethod === 'remove') {
-        leaveChannels(data);
-        if (isDebug) Channel.showChannelInfo(app, 'app.service(\'users\').on(\'removed\')');
-      }
-      break;
-    case 'user-profiles':
-      user = auth.getAuthUser();
-      idField = Auth.getIdField(user);
-      userId = user[idField].toString();
-      publishChannels.push(app.channel(`userIds/${userId}`));
-      break;
-    case 'user-teams':
-      if (contextMethod === 'create') {
-        const user = await app.service('users').get(data.userId);
-        await updateChannels(user);
-        if (isDebug) Channel.showChannelInfo(app, 'app.service(\'user-teams\').on(\'created\')');
-      }
-      if (contextMethod === 'remove') {
-        const user = await app.service('users').get(data.userId);
-        await updateChannels(user);
-        if (isDebug) Channel.showChannelInfo(app, 'app.service(\'user-teams\').on(\'removed\')');
-      }
-      userId = data.userId.toString();
-      publishChannels.push(app.channel(`userIds/${userId}`));
-      break;
-    case 'roles':
-      if (contextMethod === 'patch') {
-        idField = Auth.getIdField(data);
-        roleId = data[idField].toString();
-        users = await app.service('users').find({query: {roleId: roleId}});
-        userIds = users.data.map(user => user[idField].toString());
-        userIds.forEach(userId => publishChannels.push(app.channel(`userIds/${userId}`)));
-      }
-      break;
-    case 'teams':
-      idField = Auth.getIdField(data);
-      teamId = data[idField].toString();
-      // debug('app.publish.teams.teamId:', teamId);
-      userTeams = await app.service('user-teams').find({query: {teamId: teamId, $sort: {userId: 1}}});
-      userIds = userTeams.data.map(userTeam => userTeam.userId.toString());
-      userIds.forEach(userId => publishChannels.push(app.channel(`userIds/${userId}`)));
-      break;
-    case 'log-messages':
-      userId = data.userId.toString();
-      publishChannels.push(app.channel(`userIds/${userId}`));
-      break;
-    case 'chat-messages':
-      if (data.userId !== dbNullIdValue()) {
+        break;
+      case 'user-teams':
+        if (contextMethod === 'create') {
+          const user = await app.service('users').get(data.userId);
+          await updateChannels(user);
+          if (isDebug) Channel.showChannelInfo(app, 'app.service(\'user-teams\').on(\'created\')');
+        }
+        if (contextMethod === 'remove') {
+          const user = await app.service('users').get(data.userId);
+          await updateChannels(user);
+          if (isDebug) Channel.showChannelInfo(app, 'app.service(\'user-teams\').on(\'removed\')');
+        }
         userId = data.userId.toString();
         publishChannels.push(app.channel(`userIds/${userId}`));
-      }
-      if (data.teamId !== dbNullIdValue()) {
-        teamId = data.teamId.toString();
-        publishChannels.push(app.channel(`teams/${teamId}`));
-      }
-      if (data.roleId !== dbNullIdValue()) {
-        roleId = data.roleId.toString();
-        publishChannels.push(app.channel(`roles/${roleId}`));
-      }
-      break;
-    default:
-      break;
+        break;
+      case 'roles':
+        if (contextMethod === 'patch') {
+          idField = Auth.getIdField(data);
+          roleId = data[idField].toString();
+          users = await app.service('users').find({ query: { roleId: roleId } });
+          userIds = users.data.map(user => user[idField].toString());
+          userIds.forEach(userId => publishChannels.push(app.channel(`userIds/${userId}`)));
+        }
+        break;
+      case 'teams':
+        idField = Auth.getIdField(data);
+        teamId = data[idField].toString();
+        // debug('app.publish.teams.teamId:', teamId);
+        userTeams = await app.service('user-teams').find({ query: { teamId: teamId, $sort: { userId: 1 } } });
+        userIds = userTeams.data.map(userTeam => userTeam.userId.toString());
+        userIds.forEach(userId => publishChannels.push(app.channel(`userIds/${userId}`)));
+        break;
+      case 'log-messages':
+        userId = data.userId.toString();
+        publishChannels.push(app.channel(`userIds/${userId}`));
+        break;
+      case 'chat-messages':
+        if (data.userId !== dbNullIdValue()) {
+          userId = data.userId.toString();
+          publishChannels.push(app.channel(`userIds/${userId}`));
+        }
+        if (data.teamId !== dbNullIdValue()) {
+          teamId = data.teamId.toString();
+          publishChannels.push(app.channel(`teams/${teamId}`));
+        }
+        if (data.roleId !== dbNullIdValue()) {
+          roleId = data.roleId.toString();
+          publishChannels.push(app.channel(`roles/${roleId}`));
+        }
+        break;
+      default:
+        break;
     }
     const channelsWithReadAbility = getChannelsWithReadAbility(app, data, hook, caslOptions);
-    if(true && channelsWithReadAbility) debug('app.publish.channelsWithReadAbility:', channelsWithReadAbility);
-    if(true && publishChannels) debug('app.publish.publishChannels:', publishChannels);
-    return loConcat(publishChannels, channelsWithReadAbility);
+    // if(isDebug && channelsWithReadAbility) debug('app.publish.channelsWithReadAbility:', channelsWithReadAbility);
+    if (isDebug && publishChannels.length) debug('app.publish.publishChannels:', publishChannels);
+    // return loConcat(publishChannels, channelsWithReadAbility);
+    return publishChannels;
   });
 };

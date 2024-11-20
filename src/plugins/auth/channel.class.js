@@ -2,7 +2,7 @@ const errors = require('@feathersjs/errors');
 const {inspector } = require('../lib');
 const AuthServer = require('./auth-server.class');
 
-const debug = require('debug')('app:plugins.auth.channel.class');
+const debug = require('debug')('app:channel.class');
 const isDebug = false;
 
 class Channel {
@@ -56,7 +56,8 @@ class Channel {
       return `${channelName}(${app.channel(channelName).length})`;
     });// showConnections
     if(showConnections && connections.length) info.connections = connections;
-    inspector(`${comment}::showChanelInfo:`, info);
+    // inspector(`${comment}::showChanelInfo:`, info);
+    debug(`${comment}::showChanelInfo:`, info);
   }
 
   /**
