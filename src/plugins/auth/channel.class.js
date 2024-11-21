@@ -36,28 +36,35 @@ class Channel {
    * Show channel info
    * @param app {Object}
    * @param comment {String}
-   * @param showConnections {Boolean}
    */
-  static showChannelInfo(app, comment = 'ChanelClass', showConnections = false) {
-    let info = {};
-    let connections = [];
-    let channel;
-    info.channels = app.channels.map(channelName => {//  || channelName === 'anonymous'
-      if(showConnections && (channelName === 'authenticated')){
-        channel = {
-          channelName,
-          connections: app.channel(channelName).connections.map(connect => Object.assign({}, {
-            provider: connect.provider,
-            payload: connect.payload? connect.payload : null
-          }))
-        };
-        connections.push(channel);
-      }
-      return `${channelName}(${app.channel(channelName).length})`;
-    });// showConnections
-    if(showConnections && connections.length) info.connections = connections;
-    // inspector(`${comment}::showChanelInfo:`, info);
+  static showChannelInfo(app, comment = 'ChanelClass') {
+    let info = [];
+    //------------
+    info = app.channels.map(channelName => `${channelName}(${app.channel(channelName).length})`);
     debug(`${comment}::showChanelInfo:`, info);
+  }
+
+  /**
+   * Show connections info
+   * @param app {Object}
+   * @param aChannelName {String}
+   */
+  static showConnectionsInfo(app, aChannelName = '', aComment = '') {
+    let info = {};
+    //-------------------------------------------------------
+    const connections = (channelName) => app.channel(channelName).connections.map(connect => Object.assign({}, {
+      provider: connect.provider,
+      user: connect.user? connect.user : null
+    }));    
+    
+    if(aChannelName && app.channels.includes(aChannelName)){
+      info[aChannelName] = connections(aChannelName);
+    } else {
+      app.channels.map(channelName => {//  || channelName === 'anonymous'
+        info[channelName] = connections(channelName);
+      });
+    }
+    aComment? debug(`${aComment}::showConnectionsInfo:`, info) :  debug('showConnectionsInfo:', info);
   }
 
   /**
