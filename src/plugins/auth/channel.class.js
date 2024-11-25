@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const errors = require('@feathersjs/errors');
 const {inspector } = require('../lib');
 const AuthServer = require('./auth-server.class');
@@ -65,6 +66,93 @@ class Channel {
       });
     }
     aComment? debug(`${aComment}::showConnectionsInfo:`, info) :  debug('showConnectionsInfo:', info);
+  }
+
+  /**
+   * @method getAllChannelNames
+   *  Returns a list of all existing channel names
+   * @returns {String[]}
+   */
+  getAllChannelNames() {
+    return this.app.channels;
+  }
+
+  /**
+   * @method getChannel
+   * Will return a channel with all connections
+   * @param  {...String} names 
+   * e.g. app.channel(name1, name2, ... nameN) -> Channel
+   * @returns {Object}
+   */
+  getChannel(...names) {
+    return (names === undefined)? this.app.channel(this.app.channels) : this.app.channel(names);
+  }
+
+  /**
+   * @method getChannelConnections
+   * Contains a list of all connections in this channel
+   * @param  {...String} names 
+   * e.g. channel.connections -> [ object ]
+   * @returns {Object[]}
+   */
+  getChannelConnections(...names) {
+    return (names === undefined)? this.app.channel(this.app.channels).connections : this.app.channel(names).connections;
+  }
+
+  /**
+   * @method getChannelLength
+   * Integer returns the total number of connections in this channel
+   * @param  {...String} names 
+   * e.g. channel.length -> Number
+   * @returns {Number}
+   */
+  getChannelLength(...names) {
+    return (names === undefined)? this.app.channel(this.app.channels).length : this.app.channel(names).length;
+  }
+
+  /**
+   * @method channelJoin
+   * Adds a connection to this channel
+   * @param {Object} connection 
+   * @param  {...String} names 
+   */
+  channelJoin(connection, ...names) {
+    (names === undefined)? this.app.channel(this.app.channels).join(connection) : this.app.channel(names).join(connection);
+  }
+
+  /**
+   * @method channelLeave
+   * Removes a connection from this channel
+   * @param {Object|Function} leaveArg 
+   * e.g. leaveValue -> connection|fn
+   * e.g. app.channel('admins').leave(connection);
+   * e.g. app.channel('admins').leave(connection => { return connection.user._id === 5; });
+   * @param  {...String} names 
+   */
+  channelLeave(leaveArg, ...names) {
+    (names === undefined)? this.app.channel(this.app.channels).leave(leaveArg) : this.app.channel(names).leave(leaveArg);
+  }
+
+  /**
+   * @method channelJoin
+   * Returns a new channel filtered by a given function which gets passed the connection.
+   * @param {Function} fn
+   * e.g. const userFive = app.channel(app.channels).filter(connection => connection.user._id === 5);
+   * @param  {...String} names 
+   */
+  channelFilter(fn, ...names) {
+    return (names === undefined)? this.app.channel(this.app.channels).filter(fn) : this.app.channel(names).filter(fn);
+  }
+
+  /**
+   * @method channelSend
+   * Returns a copy of this channel with customized data that should be sent for this event
+   * @param {Object} data
+   * e.g. app.service('users').publish('created', data => { return app.channel('anonymous').send({ name: data.name }); });
+   * @param  {...String} names 
+   */
+  channelSend(data, ...names) {
+    return (names === undefined)? this.app.channel(this.app.channels).send(data) : this.app.channel(names).send(data);
   }
 
   /**
