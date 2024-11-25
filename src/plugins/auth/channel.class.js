@@ -16,6 +16,7 @@ class Channel {
     this.app = Object.assign({}, app);
     // Get connection.user
     this.user = (this.connection && this.connection.user)? this.connection.user : null;
+    this.idField = this.user? 'id' in this.user ? 'id' : '_id' : '';
     // Get connection.authenticated
     this.authenticated = this.connection && this.connection.authenticated? this.connection.authenticated : undefined;
     // Get connection.payload
@@ -25,12 +26,13 @@ class Channel {
     // Get connection.provider
     this.provider = this.connection && this.connection.provider ? this.connection.provider : '';
     // Get payload.userId
-    this.userId = this.payload && this.payload.userId? this.payload.userId.toString() : '';
+    this.userId = this.user? this.user[this.idField].toString() : '';
     // Get role name
     this.roleName = this.payload? this.payload.role : '';
     // Get roleId
     this.roleId = this.user && this.user.roleId? this.user.roleId.toString() : '';
-    if(isDebug) debug('Channel.constructor OK; connection:', this.connection);
+    // if(isDebug) debug('Channel.constructor OK; connection:', this.connection);
+    // debug('Channel.constructor OK; payload:', this.payload);
   }
 
   /**
@@ -71,88 +73,96 @@ class Channel {
   /**
    * @method getAllChannelNames
    *  Returns a list of all existing channel names
+   * @param app {Object}
    * @returns {String[]}
    */
-  getAllChannelNames() {
-    return this.app.channels;
+  static getAllChannelNames(app) {
+    return app.channels;
   }
 
   /**
    * @method getChannel
    * Will return a channel with all connections
+   * @param app {Object}
    * @param  {...String} names 
    * e.g. app.channel(name1, name2, ... nameN) -> Channel
    * @returns {Object}
    */
-  getChannel(...names) {
-    return (names === undefined)? this.app.channel(this.app.channels) : this.app.channel(names);
+  static getChannel(app, ...names) {
+    return (names === undefined)? app.channel(app.channels) : app.channel(names);
   }
 
   /**
    * @method getChannelConnections
    * Contains a list of all connections in this channel
+   * @param app {Object}
    * @param  {...String} names 
    * e.g. channel.connections -> [ object ]
    * @returns {Object[]}
    */
-  getChannelConnections(...names) {
-    return (names === undefined)? this.app.channel(this.app.channels).connections : this.app.channel(names).connections;
+  static getChannelConnections(app, ...names) {
+    return (names === undefined)? app.channel(app.channels).connections : app.channel(names).connections;
   }
 
   /**
    * @method getChannelLength
    * Integer returns the total number of connections in this channel
+   * @param app {Object}
    * @param  {...String} names 
    * e.g. channel.length -> Number
    * @returns {Number}
    */
-  getChannelLength(...names) {
-    return (names === undefined)? this.app.channel(this.app.channels).length : this.app.channel(names).length;
+  static getChannelLength(app, ...names) {
+    return (names === undefined)? app.channel(app.channels).length : app.channel(names).length;
   }
 
   /**
    * @method channelJoin
    * Adds a connection to this channel
+   * @param app {Object}
    * @param {Object} connection 
    * @param  {...String} names 
    */
-  channelJoin(connection, ...names) {
-    (names === undefined)? this.app.channel(this.app.channels).join(connection) : this.app.channel(names).join(connection);
+  static channelJoin(app, connection, ...names) {
+    (names === undefined)? app.channel(app.channels).join(connection) : app.channel(names).join(connection);
   }
 
   /**
    * @method channelLeave
    * Removes a connection from this channel
+   * @param app {Object}
    * @param {Object|Function} leaveArg 
    * e.g. leaveValue -> connection|fn
    * e.g. app.channel('admins').leave(connection);
    * e.g. app.channel('admins').leave(connection => { return connection.user._id === 5; });
    * @param  {...String} names 
    */
-  channelLeave(leaveArg, ...names) {
-    (names === undefined)? this.app.channel(this.app.channels).leave(leaveArg) : this.app.channel(names).leave(leaveArg);
+  static channelLeave(app, leaveArg, ...names) {
+    (names === undefined)? app.channel(app.channels).leave(leaveArg) : app.channel(names).leave(leaveArg);
   }
 
   /**
    * @method channelJoin
    * Returns a new channel filtered by a given function which gets passed the connection.
+   * @param app {Object}
    * @param {Function} fn
    * e.g. const userFive = app.channel(app.channels).filter(connection => connection.user._id === 5);
    * @param  {...String} names 
    */
-  channelFilter(fn, ...names) {
-    return (names === undefined)? this.app.channel(this.app.channels).filter(fn) : this.app.channel(names).filter(fn);
+  static channelFilter(app, fn, ...names) {
+    return (names === undefined)? app.channel(app.channels).filter(fn) : app.channel(names).filter(fn);
   }
 
   /**
    * @method channelSend
    * Returns a copy of this channel with customized data that should be sent for this event
+   * @param app {Object}
    * @param {Object} data
    * e.g. app.service('users').publish('created', data => { return app.channel('anonymous').send({ name: data.name }); });
    * @param  {...String} names 
    */
-  channelSend(data, ...names) {
-    return (names === undefined)? this.app.channel(this.app.channels).send(data) : this.app.channel(names).send(data);
+  static channelSend(app, data, ...names) {
+    return (names === undefined)? app.channel(app.channels).send(data) : app.channel(names).send(data);
   }
 
   /**

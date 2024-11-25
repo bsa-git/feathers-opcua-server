@@ -27,6 +27,7 @@ module.exports = function (app) {
   const joinChannels = async (connection) => {
 
     if (connection && connection.user) {
+
       // Get object of Channel
       const channel = new Channel(app, connection);
 
@@ -113,7 +114,7 @@ module.exports = function (app) {
     if (connection) {
       // app.channel('anonymous').leave(connection);
       app.channel('anonymous').join(connection);
-      if (isDebug && connection) debug('app.on(\'connection\') for SocketIo transport');
+      // if (isDebug && connection) debug('app.on(\'connection\') for SocketIo transport');
       if (isDebug && connection) Channel.showChannelInfo(app, 'app.on(\'connection\')');
     } else {
       if (isDebug && connection) debug('app.on(\'connection\') for Rest transport');
@@ -131,7 +132,7 @@ module.exports = function (app) {
       // Join channels for user
       await joinChannels(connection);
 
-      if (isDebug && connection) debug('app.on(\'login\') for SocketIo transport');
+      // if (isDebug && connection) debug('app.on(\'login\') for SocketIo transport');
       if (isDebug && connection) Channel.showChannelInfo(app, 'app.on(\'login\')');
 
     } else {
@@ -143,7 +144,7 @@ module.exports = function (app) {
     if (connection) {
       app.channel('anonymous').join(connection);
 
-      if (isDebug && connection) debug('app.on(\'logout\') for SocketIo transport');
+      // if (isDebug && connection) debug('app.on(\'logout\') for SocketIo transport');
       if (isDebug && connection) Channel.showChannelInfo(app, 'app.on(\'logout\')');
     } else {
       if (isDebug) debug('app.on(\'logout\') for Rest transport');
@@ -154,98 +155,126 @@ module.exports = function (app) {
     let publishChannels = [];
     let paths = Channel.getServicePaths();
     let idField, userId, roleId, teamId, user, users, userIds, userTeams;
+    let aboutPublish = '';
     //-----------------------------------------------------------------------
     const auth = new Auth(hook);
     const contextPath = auth.contextPath;
     const contextMethod = auth.contextMethod;
     const contextType = auth.contextType;
+    
+    const publishChannelsPush = (channelName) => {
+      if(Channel.getAllChannelNames.includes(channelName) && Channel.getChannelLength(app, channelName)){
+        publishChannels.push(app.channel(channelName));
+      }
+    }
 
     if (!paths.includes(contextPath)) return;
 
-    if (isDebug && auth) debug(`app.publish::${contextPath}.${contextMethod}.${contextType}`);
+    aboutPublish = `app.publish::"${contextPath}".${contextMethod}.${contextType})`;
+    // if (isDebug && auth) debug(aboutPublish);
+
+
 
     // Publish events to admins channel
     if (contextPath !== 'chat-messages') {
-      publishChannels.push(app.channel('admins'));
+      // publishChannels.push(app.channel('admins'));
+      publishChannelsPush('admins');
     }
 
     // Publish events to users channel
     switch (`${contextPath}`) {
-      case 'users':
-        if (contextMethod === 'patch') {
-          await updateChannels(data);
-          idField = Auth.getIdField(data);
-          userId = data[idField].toString();
-          publishChannels.push(app.channel(`userIds/${userId}`));
-          if (isDebug) Channel.showChannelInfo(app, 'app.service(\'users\').on(\'patched\')');
-        }
-        if (contextMethod === 'remove') {
-          leaveChannels(data);
-          if (isDebug) Channel.showChannelInfo(app, 'app.service(\'users\').on(\'removed\')');
-        }
-        break;
-      case 'user-profiles':
-        user = auth.getAuthUser();
-        idField = Auth.getIdField(user);
-        userId = user[idField].toString();
-        publishChannels.push(app.channel(`userIds/${userId}`));
-        break;
-      case 'user-teams':
-        if (contextMethod === 'create') {
-          const user = await app.service('users').get(data.userId);
-          await updateChannels(user);
-          if (isDebug) Channel.showChannelInfo(app, 'app.service(\'user-teams\').on(\'created\')');
-        }
-        if (contextMethod === 'remove') {
-          const user = await app.service('users').get(data.userId);
-          await updateChannels(user);
-          if (isDebug) Channel.showChannelInfo(app, 'app.service(\'user-teams\').on(\'removed\')');
-        }
-        userId = data.userId.toString();
-        publishChannels.push(app.channel(`userIds/${userId}`));
-        break;
-      case 'roles':
-        if (contextMethod === 'patch') {
-          idField = Auth.getIdField(data);
-          roleId = data[idField].toString();
-          users = await app.service('users').find({ query: { roleId: roleId } });
-          userIds = users.data.map(user => user[idField].toString());
-          userIds.forEach(userId => publishChannels.push(app.channel(`userIds/${userId}`)));
-        }
-        break;
-      case 'teams':
+    case 'users':
+      if (contextMethod === 'patch') {
+        await updateChannels(data);
         idField = Auth.getIdField(data);
-        teamId = data[idField].toString();
-        // debug('app.publish.teams.teamId:', teamId);
-        userTeams = await app.service('user-teams').find({ query: { teamId: teamId, $sort: { userId: 1 } } });
-        userIds = userTeams.data.map(userTeam => userTeam.userId.toString());
-        userIds.forEach(userId => publishChannels.push(app.channel(`userIds/${userId}`)));
-        break;
-      case 'log-messages':
+        userId = data[idField].toString();
+        // publishChannels.push(app.channel(`userIds/${userId}`));
+        publishChannelsPush(`userIds/${userId}`);
+        // aboutPublish = 'app.service("users").on("patched")';
+        // if (isDebug) Channel.showChannelInfo(app, 'app.service(\'users\').on(\'patched\')');
+      }
+      if (contextMethod === 'remove') {
+        leaveChannels(data);
+        // aboutPublish = 'app.service("users").on("removed")';
+        // if (isDebug) Channel.showChannelInfo(app, 'app.service(\'users\').on(\'removed\')');
+      }
+      break;
+    case 'user-profiles':
+      user = auth.getAuthUser();
+      idField = Auth.getIdField(user);
+      userId = user[idField].toString();
+      // publishChannels.push(app.channel(`userIds/${userId}`));
+      publishChannelsPush(`userIds/${userId}`);
+      // aboutPublish = 'app.service("user-profiles").on("all")';
+      break;
+    case 'user-teams':
+      if (contextMethod === 'create') {
+        const user = await app.service('users').get(data.userId);
+        await updateChannels(user);
+        // if (isDebug) Channel.showChannelInfo(app, 'app.service(\'user-teams\').on(\'created\')');
+        // aboutPublish = 'app.service("user-teams").on("created")';
+      }
+      if (contextMethod === 'remove') {
+        const user = await app.service('users').get(data.userId);
+        await updateChannels(user);
+        if (isDebug) Channel.showChannelInfo(app, 'app.service(\'user-teams\').on(\'removed\')');
+        // aboutPublish = 'app.service("user-teams").on("removed")';
+      }
+      userId = data.userId.toString();
+      // publishChannels.push(app.channel(`userIds/${userId}`));
+      publishChannelsPush(`userIds/${userId}`);
+      break;
+    case 'roles':
+      if (contextMethod === 'patch') {
+        idField = Auth.getIdField(data);
+        roleId = data[idField].toString();
+        users = await app.service('users').find({ query: { roleId: roleId } });
+        userIds = users.data.map(user => user[idField].toString());
+        userIds.forEach(userId => publishChannelsPush(`userIds/${userId}`));
+        // aboutPublish = 'app.service("roles").on("patch")';
+      }
+      break;
+    case 'teams':
+      idField = Auth.getIdField(data);
+      teamId = data[idField].toString();
+      // debug('app.publish.teams.teamId:', teamId);
+      userTeams = await app.service('user-teams').find({ query: { teamId: teamId, $sort: { userId: 1 } } });
+      userIds = userTeams.data.map(userTeam => userTeam.userId.toString());
+      userIds.forEach(userId => publishChannelsPush(`userIds/${userId}`));
+      // aboutPublish = 'app.service("teams").on("all")';
+      break;
+    case 'log-messages':
+      userId = data.userId.toString();
+      // publishChannels.push(app.channel(`userIds/${userId}`));
+      publishChannelsPush(`userIds/${userId}`);
+      // aboutPublish = 'app.service("log-messages").on("all")';
+      break;
+    case 'chat-messages':
+      if (data.userId !== dbNullIdValue()) {
         userId = data.userId.toString();
-        publishChannels.push(app.channel(`userIds/${userId}`));
-        break;
-      case 'chat-messages':
-        if (data.userId !== dbNullIdValue()) {
-          userId = data.userId.toString();
-          publishChannels.push(app.channel(`userIds/${userId}`));
-        }
-        if (data.teamId !== dbNullIdValue()) {
-          teamId = data.teamId.toString();
-          publishChannels.push(app.channel(`teams/${teamId}`));
-        }
-        if (data.roleId !== dbNullIdValue()) {
-          roleId = data.roleId.toString();
-          publishChannels.push(app.channel(`roles/${roleId}`));
-        }
-        break;
-      default:
-        break;
+        // publishChannels.push(app.channel(`userIds/${userId}`));
+        publishChannelsPush(`userIds/${userId}`);
+      }
+      if (data.teamId !== dbNullIdValue()) {
+        teamId = data.teamId.toString();
+        // publishChannels.push(app.channel(`teams/${teamId}`));
+        publishChannelsPush(`teams/${teamId}`);
+      }
+      if (data.roleId !== dbNullIdValue()) {
+        roleId = data.roleId.toString();
+        // publishChannels.push(app.channel(`roles/${roleId}`));
+        publishChannelsPush(`roles/${roleId}`);
+      }
+      // aboutPublish = 'app.service("chat-messages").on("all")';
+      break;
+    default:
+      break;
     }
     const channelsWithReadAbility = getChannelsWithReadAbility(app, data, hook, caslOptions);
     // if(isDebug && channelsWithReadAbility) debug('app.publish.channelsWithReadAbility:', channelsWithReadAbility);
-    if (isDebug && publishChannels.length) debug('app.publish.publishChannels:', publishChannels);
+    // if (isDebug && publishChannels.length) debug('app.publish.publishChannels:', publishChannels);
     // return loConcat(publishChannels, channelsWithReadAbility);
+    if (isDebug && publishChannels.length) Channel.showChannelInfo(app, aboutPublish);
     return publishChannels;
   });
 };
