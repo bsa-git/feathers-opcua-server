@@ -27,12 +27,10 @@ class Channel {
     this.provider = this.connection && this.connection.provider ? this.connection.provider : '';
     // Get payload.userId
     this.userId = this.user? this.user[this.idField].toString() : '';
-    // Get role name
-    this.roleName = this.payload? this.payload.role : '';
+    // Get role alias
+    this.roleAlias = this.user? this.user.roleAlias : '';
     // Get roleId
-    this.roleId = this.user && this.user.roleId? this.user.roleId.toString() : '';
-    // if(isDebug) debug('Channel.constructor OK; connection:', this.connection);
-    // debug('Channel.constructor OK; payload:', this.payload);
+    this.roleId = this.user? this.user.roleId.toString() : '';
   }
 
   /**
@@ -44,7 +42,7 @@ class Channel {
     let info = [];
     //------------
     info = app.channels.map(channelName => `${channelName}(${app.channel(channelName).length})`);
-    debug(`${comment}::showChanelInfo:`, info);
+    debug(`${comment}`, info);
   }
 
   /**
@@ -67,7 +65,7 @@ class Channel {
         info[channelName] = connections(channelName);
       });
     }
-    aComment? debug(`${aComment}::showConnectionsInfo:`, info) :  debug('showConnectionsInfo:', info);
+    aComment? debug(`${aComment}`, info) :  debug('showConnectionsInfo:', info);
   }
 
   /**
@@ -175,7 +173,7 @@ class Channel {
 
   /**
    * Get auth user
-   * @return {null}
+   * @return {Object|null}
    */
   getAuthUser() {
     return this.isAuth() ? this.user : null;
@@ -183,8 +181,9 @@ class Channel {
 
   /**
    * Get role
+   * @async
    * @param id
-   * @return {Promise.<*>}
+   * @return {Object}
    */
   async getRole(id) {
     const role = await this.app.service('roles').get(id);
@@ -194,21 +193,19 @@ class Channel {
 
   /**
    * Get role name
-   * @return {Promise.<*>}
+   * @async
+   * @return {String}
    */
   async getRoleName() {
-    if (!this.roleName) {
-      const user = this.getAuthUser();
-      const myRole = (this.isAuth() && user) ? await this.getRole(user.roleId) : null;
-      this.roleName = myRole ? myRole.name : '';
-    }
-    return this.roleName;
+    const myRole = this.roleId? await this.getRole(this.roleId) : null;
+    return myRole ? myRole.name : '';
   }
 
   /**
    * Get roleId
-   * @param isRole
-   * @return {Promise.<string>}
+   * @async
+   * @param {String} isRole 
+   * @return {String}
    */
   async getRoleId(isRole = '') {
     let roleId = '';
@@ -229,9 +226,10 @@ class Channel {
 
   /**
    * Get roles
-   * e.g. { isAdministrator: 'Administrator', isUser: 'User', isSuperRole: 'superRole' }
    * @param isRole
    * @return {Object||String}
+   * e.g. { isAdministrator: 'Administrator', isUser: 'User', isSuperRole: 'superRole' }
+   * e.g. 'Administrator'
    */
   static getRoles(isRole = '') {
     return AuthServer.getRoles(isRole);

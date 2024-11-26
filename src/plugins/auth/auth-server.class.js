@@ -408,9 +408,10 @@ class AuthServer {
 
   /**
    * Get env roles
-   * e.g. { isAdministrator: 'Administrator', isUser: 'User', isSuperRole: 'superRole' }
    * @param isRole
    * @return {Object||String}
+   * e.g. { isAdministrator: 'Administrator', isUser: 'User', isSuperRole: 'superRole' }
+   * e.g. 'Administrator'
    */
   static getRoles(isRole = '') {
     const _roles = {};
