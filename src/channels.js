@@ -29,7 +29,7 @@ module.exports = function (app) {
       app.channel('authenticated').join(connection);
 
       // Join connection for admins
-      if (channel.isAdmin()) {
+      if (await channel.isAdmin()) {
         app.channel('admins').join(connection);
       }
 
@@ -106,9 +106,7 @@ module.exports = function (app) {
   app.on('connection', (connection) => {
     // On a new real-time connection, add it to the anonymous channel
     if (connection) {
-      // app.channel('anonymous').leave(connection);
       app.channel('anonymous').join(connection);
-      // if (isDebug && connection) debug('app.on(\'connection\') for SocketIo transport');
       if (isDebug && connection) Channel.showChannelInfo(app, 'app.on(\'connection\')');
     } else {
       if (isDebug && connection) debug('app.on(\'connection\') for Rest transport');
@@ -125,10 +123,7 @@ module.exports = function (app) {
 
       // Join channels for user
       await joinChannels(connection);
-
-      // if (isDebug && connection) debug('app.on(\'login\') for SocketIo transport');
       if (isDebug && connection) Channel.showChannelInfo(app, 'app.on(\'login\')');
-
     } else {
       if (isDebug && connection) debug('app.on(\'login\') for Rest transport');
     }
@@ -137,8 +132,6 @@ module.exports = function (app) {
   app.on('logout', (payload, { connection }) => {
     if (connection) {
       app.channel('anonymous').join(connection);
-
-      // if (isDebug && connection) debug('app.on(\'logout\') for SocketIo transport');
       if (isDebug && connection) Channel.showChannelInfo(app, 'app.on(\'logout\')');
     } else {
       if (isDebug) debug('app.on(\'logout\') for Rest transport');
