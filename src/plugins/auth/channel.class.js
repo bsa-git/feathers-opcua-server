@@ -49,13 +49,26 @@ class Channel {
    * Show connections info
    * @param app {Object}
    * @param aChannelName {String}
+   * @param aComment {String}
    */
   static showConnectionsInfo(app, aChannelName = '', aComment = '') {
+    const info = Channel.getConnectionsInfo(app, aChannelName);
+    aComment? inspector(`${aComment}`, info) :  inspector('showConnectionsInfo:', info);
+  }
+
+  /**
+   * Get connections info
+   * @param app {Object}
+   * @param aChannelName {String}
+   * @returns {Object}
+   */
+  static getConnectionsInfo(app, aChannelName = '') {
     let info = {};
     //-------------------------------------------------------
     const connections = (channelName) => app.channel(channelName).connections.map(connect => Object.assign({}, {
       provider: connect.provider,
-      user: connect.user? connect.user : null
+      user: connect.user? connect.user : null,
+      ability: connect.ability? connect.ability : null
     }));    
     
     if(aChannelName && app.channels.includes(aChannelName)){
@@ -65,7 +78,7 @@ class Channel {
         info[channelName] = connections(channelName);
       });
     }
-    aComment? debug(`${aComment}`, info) :  debug('showConnectionsInfo:', info);
+    return info;
   }
 
   /**

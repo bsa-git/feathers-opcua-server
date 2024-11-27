@@ -156,6 +156,10 @@ module.exports = function (app) {
     const contextMethod = auth.contextMethod;
     const contextType = auth.contextType;
     
+    /**
+     * Push channel to list for publish
+     * @param {String} channelName 
+     */
     const publishChannelsPush = (channelName) => {
       const isChannelName = Channel.getAllChannelNames(app).includes(channelName);
       const channelLength = Channel.getChannelLength(app, channelName);
@@ -241,14 +245,15 @@ module.exports = function (app) {
       break;
     case 'opcua-tags':
     case 'opcua-values':  
-        publishChannelsPush('authenticated');
-        break;    
+      publishChannelsPush('authenticated');
+      break;    
     default:
       break;
     }
 
     aboutPublish = `app.publish:: "${contextPath}.${contextMethod}"`;
     if (isDebug && publishChannels.length) debug(aboutPublish, publishChannelNames);
+    // if (isDebug && publishChannels.length) Channel.showConnectionsInfo(app, 'admins');
     return publishChannels;
   });
 };
