@@ -17,7 +17,7 @@ const {
 } = require('node-opcua');
 
 const debug = require('debug')('app:opcua-client.mixins');
-const isDebug = true;
+const isDebug = false;
 
 let result = null;
 

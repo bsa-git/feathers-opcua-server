@@ -14,7 +14,7 @@ const {
 const fakes = fakeNormalize();
 
 const debug = require('debug')('app:opcua-tags.test');
-const isDebug = true;
+const isDebug = false;
 
 describe('<<=== Opcua-Tags Service Test (opcua-tags.test.js) ===>>', () => {
   

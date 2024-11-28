@@ -8,7 +8,7 @@ const {
 } = require('../../plugins/db-helpers');
 
 const debug = require('debug')('app:mssql-datasets.mixins');
-const isDebug = true;
+const isDebug = false;
 
 let result;
 
